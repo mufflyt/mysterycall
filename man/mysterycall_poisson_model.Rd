@@ -123,6 +123,7 @@ Other outcomes:
 \code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
 \code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
 \code{\link[=.wait_stats]{.wait_stats()}},
+\code{\link[=.wilson_ci]{.wilson_ci()}},
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
 \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
 \code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},

@@ -49,7 +49,6 @@
 #'   plot_title = "Example Scatter Plot",
 #'   verbose = FALSE
 #' )
-
 mysterycall_plot_scatter <- function(plot_data,
                                 x_var,
                                 y_var,

@@ -11,31 +11,31 @@ load_dataset <- function(name) {
   get(name, envir = e)
 }
 
-# ── ACOG_Districts (52 rows, 4 cols) ─────────────────────────────────────────
+# ── acog_districts (52 rows, 4 cols) ─────────────────────────────────────────
 
-test_that("ACOG_Districts - exact row count is 52 (50 states + DC + territories)", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - exact row count is 52 (50 states + DC + territories)", {
+  d <- load_dataset("acog_districts")
   expect_equal(nrow(d), 52L)
 })
 
-test_that("ACOG_Districts - required columns are present", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - required columns are present", {
+  d <- load_dataset("acog_districts")
   expect_true(all(c("State", "ACOG_District", "Subregion", "State_Abbreviations") %in% names(d)))
 })
 
-test_that("ACOG_Districts - exactly 11 unique districts (I-XII, no District X)", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - exactly 11 unique districts (I-XII, no District X)", {
+  d <- load_dataset("acog_districts")
   n_distinct <- length(unique(d$ACOG_District))
   expect_equal(n_distinct, 11L)
 })
 
-test_that("ACOG_Districts - District X does not exist (ACOG renumbered)", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - District X does not exist (ACOG renumbered)", {
+  d <- load_dataset("acog_districts")
   expect_false("District X" %in% d$ACOG_District)
 })
 
-test_that("ACOG_Districts - all known districts are present", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - all known districts are present", {
+  d <- load_dataset("acog_districts")
   expected <- c(
     "District I", "District II", "District III", "District IV",
     "District V",  "District VI", "District VII", "District VIII",
@@ -44,13 +44,13 @@ test_that("ACOG_Districts - all known districts are present", {
   expect_setequal(unique(d$ACOG_District), expected)
 })
 
-test_that("ACOG_Districts - no missing ACOG_District values", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - no missing ACOG_District values", {
+  d <- load_dataset("acog_districts")
   expect_equal(sum(is.na(d$ACOG_District)), 0L)
 })
 
-test_that("ACOG_Districts - State_Abbreviations contains CO for Colorado", {
-  d <- load_dataset("ACOG_Districts")
+test_that("acog_districts - State_Abbreviations contains CO for Colorado", {
+  d <- load_dataset("acog_districts")
   expect_true("CO" %in% d$State_Abbreviations)
 })
 
@@ -143,32 +143,32 @@ test_that("fips - no duplicate state abbreviations", {
   expect_equal(length(unique(d$state)), nrow(d))
 })
 
-# ── cityStateToLatLong (31,909 rows) ──────────────────────────────────────────
+# ── city_state_to_lat_long (31,909 rows) ──────────────────────────────────────────
 
-test_that("cityStateToLatLong - row count is 31909", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - row count is 31909", {
+  d <- load_dataset("city_state_to_lat_long")
   expect_equal(nrow(d), 31909L)
 })
 
-test_that("cityStateToLatLong - required columns: state, city, latitude, longitude", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - required columns: state, city, latitude, longitude", {
+  d <- load_dataset("city_state_to_lat_long")
   expect_true(all(c("state", "city", "latitude", "longitude") %in% names(d)))
 })
 
-test_that("cityStateToLatLong - latitude values are in valid range [-90, 90]", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - latitude values are in valid range [-90, 90]", {
+  d <- load_dataset("city_state_to_lat_long")
   lats <- d$latitude[!is.na(d$latitude)]
   expect_true(all(lats >= -90 & lats <= 90))
 })
 
-test_that("cityStateToLatLong - longitude values are in valid range [-180, 180]", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - longitude values are in valid range [-180, 180]", {
+  d <- load_dataset("city_state_to_lat_long")
   lons <- d$longitude[!is.na(d$longitude)]
   expect_true(all(lons >= -180 & lons <= 180))
 })
 
-test_that("cityStateToLatLong - continental US cities have negative longitude", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - continental US cities have negative longitude", {
+  d <- load_dataset("city_state_to_lat_long")
   # All 50 states except HI/AK have western longitudes (negative)
   # Denver, CO should be around -104.9
   denver <- d[tolower(d$city) == "denver" & d$state == "CO", ]
@@ -180,13 +180,13 @@ test_that("cityStateToLatLong - continental US cities have negative longitude", 
   }
 })
 
-test_that("cityStateToLatLong - has expected columns", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - has expected columns", {
+  d <- load_dataset("city_state_to_lat_long")
   expect_true(all(c("city", "state", "latitude", "longitude") %in% names(d)))
 })
 
-test_that("cityStateToLatLong - covers all 50 states by full name", {
-  d <- load_dataset("cityStateToLatLong")
+test_that("city_state_to_lat_long - covers all 50 states by full name", {
+  d <- load_dataset("city_state_to_lat_long")
   # state column uses full state names, not abbreviations
   expect_true(all(c("California", "Texas", "New York", "Florida") %in% unique(d$state)))
 })

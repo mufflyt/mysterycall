@@ -205,6 +205,15 @@ mysterycall_assign_region <- function(state,
   unname(result)
 }
 
+#' Convert a string to title case while preserving small words
+#'
+#' Internal helper to normalize state names for lookup matching.
+#'
+#' @param s Character scalar.
+#'
+#' @return Character scalar in title case.
+#' @family utilities
+#' @keywords internal
 .title_case <- function(s) {
   # Prepositions/conjunctions kept lowercase so "District of Columbia" matches
   # the lookup table key exactly.

@@ -17,19 +17,19 @@
 #'
 #' @examples
 #' # Load the ACOG Districts Data
-#' data(ACOG_Districts)
+#' data(acog_districts)
 #'
 #' # Inspect the dataset
-#' print(ACOG_Districts)
+#' print(acog_districts)
 #'
 #' # Get a summary of the dataset
-#' summary(ACOG_Districts)
+#' summary(acog_districts)
 #'
 #' # Perform data analysis and exploration
 #'
 #' @keywords dataset
 #' @family datasets
-#' @name ACOG_Districts
+#' @name acog_districts
 #' @docType data
 #' @family datasets
 NULL

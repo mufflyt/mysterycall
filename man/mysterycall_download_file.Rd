@@ -40,7 +40,9 @@ mysterycall_download_file(
 \code{\link[utils:download.file]{utils::download.file()}}
 
 Other utilities:
+\code{\link[=.title_case]{.title_case()}},
 \code{\link{\%>\%}},
+\code{\link[=format_phone_number]{format_phone_number()}},
 \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}},
 \code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}},
 \code{\link[=mysterycall_check_data_completeness]{mysterycall_check_data_completeness()}},

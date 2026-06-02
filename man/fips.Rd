@@ -28,9 +28,9 @@ Information Processing Standards (FIPS) codes for states and counties:
 }
 \seealso{
 Other datasets:
-\code{\link{ACOG_Districts}},
 \code{\link{acgme}},
-\code{\link{cityStateToLatLong}},
+\code{\link{acog_districts}},
+\code{\link{city_state_to_lat_long}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}

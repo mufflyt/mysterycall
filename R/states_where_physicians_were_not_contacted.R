@@ -45,7 +45,6 @@
 #' # Example with default all_states
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
 #' mysterycall_not_contacted_states(filtered_data)
-#'
 mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
 
   # Helper to coerce character responses such as "Yes"/"No" into logical

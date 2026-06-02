@@ -134,15 +134,6 @@
 #'   [mysterycall_run_workflow()] which orchestrates both phases.
 #' @family workflow
 #' @export
-
-# library(dplyr)
-# library(janitor)
-# library(readr)
-# library(stringr)
-# library(humaniformat)
-# library(openxlsx)
-# library(fs)
-
 mysterycall_clean_phase1 <- function(phase1_data,
                                   output_directory = tempdir(),
                                   verbose = TRUE,
@@ -531,6 +522,15 @@ mysterycall_clean_phase1 <- function(phase1_data,
 }
 
 
+#' Format phone numbers to (XXX) XXX-XXXX or XXX-XXXX
+#'
+#' Internal helper to standardize phone number formats in Phase 1 cleaning.
+#'
+#' @param phone_values Character or numeric vector of phone numbers.
+#'
+#' @return Character vector of formatted phone numbers.
+#' @family utilities
+#' @keywords internal
 format_phone_number <- function(phone_values) {
   phone_chr <- as.character(phone_values)
   digits <- gsub("[^0-9]", "", phone_chr)

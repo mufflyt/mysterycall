@@ -45,7 +45,6 @@
 #'   plot_title = "Example Density Plot",
 #'   verbose = FALSE
 #' )
-
 mysterycall_plot_density <- function(data,
                                 x_var,
                                 fill_var,

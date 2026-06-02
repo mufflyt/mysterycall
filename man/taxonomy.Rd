@@ -28,9 +28,9 @@ print(taxonomy[1:3, ])
 codes from the NPI registry; \link{acgme} for ACGME residency program data.
 
 Other datasets:
-\code{\link{ACOG_Districts}},
 \code{\link{acgme}},
-\code{\link{cityStateToLatLong}},
+\code{\link{acog_districts}},
+\code{\link{city_state_to_lat_long}},
 \code{\link{fips}}
 }
 \concept{datasets}

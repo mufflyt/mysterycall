@@ -9,7 +9,7 @@ mysterycall_map_acog_districts(acog_districts_file = NULL)
 \arguments{
 \item{acog_districts_file}{Optional path to a CSV containing the mapping of
 states to ACOG districts. Defaults to the packaged
-\code{inst/extdata/ACOG_Districts.csv}.}
+\code{inst/extdata/acog_districts.csv}.}
 }
 \value{
 An \code{sf} object with one row per ACOG district and columns:
@@ -32,7 +32,7 @@ or for further spatial analysis.
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_map_acog_districts()
-mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
+mysterycall_map_acog_districts("inst/extdata/acog_districts.csv")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

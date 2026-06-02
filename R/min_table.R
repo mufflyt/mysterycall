@@ -17,7 +17,6 @@
 #' @family table helpers
 #' @seealso [mysterycall_max_table()]
 #' @export
-
 mysterycall_min_table <- function(InVec, mult = FALSE) {
   if (length(InVec) == 0) {
     return(character(0))

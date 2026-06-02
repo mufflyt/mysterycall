@@ -11,7 +11,6 @@
   groups,
   group_col_names,
   include_overall,
-  include_na,
   digits,
   emit_pvalue,
   min_cell
@@ -29,8 +28,6 @@
 \item{group_col_names}{Column names for groups.}
 
 \item{include_overall}{Logical; include overall column.}
-
-\item{include_na}{Logical; include NA row.}
 
 \item{digits}{Number of digits.}
 

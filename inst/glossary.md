@@ -61,7 +61,7 @@ dataset. One of seven values (Gynecologic Oncology, Maternal-Fetal Medicine, etc
 **ACOG District**
 One of 11 geographic regions defined by the American College of Obstetricians and
 Gynecologists. Used for stratified sampling and reporting. Stored in
-`mysterycall::ACOG_Districts`.
+`mysterycall::acog_districts`.
 
 ---
 

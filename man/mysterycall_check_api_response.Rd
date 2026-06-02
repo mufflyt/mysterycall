@@ -45,7 +45,9 @@ mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocod
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate API keys before the workflow.
 
 Other utilities:
+\code{\link[=.title_case]{.title_case()}},
 \code{\link{\%>\%}},
+\code{\link[=format_phone_number]{format_phone_number()}},
 \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}},
 \code{\link[=mysterycall_check_data_completeness]{mysterycall_check_data_completeness()}},
 \code{\link[=mysterycall_check_dependencies]{mysterycall_check_dependencies()}},

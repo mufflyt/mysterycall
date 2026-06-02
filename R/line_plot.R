@@ -44,7 +44,6 @@
 #'   file_prefix = "demo_line",
 #'   verbose = FALSE
 #' )
-
 mysterycall_plot_line <- function(plot_data,
                              x_var,
                              y_var,

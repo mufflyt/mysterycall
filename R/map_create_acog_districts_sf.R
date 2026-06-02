@@ -7,7 +7,7 @@
 #'
 #' @param acog_districts_file Optional path to a CSV containing the mapping of
 #'   states to ACOG districts. Defaults to the packaged
-#'   `inst/extdata/ACOG_Districts.csv`.
+#'   `inst/extdata/acog_districts.csv`.
 #'
 #' @return An `sf` object with one row per ACOG district and columns:
 #'   \describe{
@@ -24,14 +24,14 @@
 #' @export
 #' @examplesIf interactive()
 #' mysterycall_map_acog_districts()
-#' mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
+#' mysterycall_map_acog_districts("inst/extdata/acog_districts.csv")
 mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (is.null(acog_districts_file)) {
-    acog_districts_file <- system.file("extdata", "ACOG_Districts.csv", package = "mysterycall")
+    acog_districts_file <- system.file("extdata", "acog_districts.csv", package = "mysterycall")
   }
 
   if (!nzchar(acog_districts_file) || !file.exists(acog_districts_file)) {

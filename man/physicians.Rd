@@ -34,7 +34,7 @@ head(physicians)
 }
 \seealso{
 Other datasets:
-\code{\link{ACOG_Districts}},
+\code{\link{acog_districts}},
 \code{\link{acgme}},
 \code{\link{acog_presidents}}
 }

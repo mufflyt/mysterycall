@@ -52,13 +52,13 @@ test_that("taxonomy has correct column names", {
                ignore.order = FALSE)
 })
 
-test_that("ACOG_Districts has 52 rows and exactly 4 columns", {
-  expect_equal(nrow(mysterycall::ACOG_Districts), 52L)
-  expect_equal(ncol(mysterycall::ACOG_Districts), 4L)
+test_that("acog_districts has 52 rows and exactly 4 columns", {
+  expect_equal(nrow(mysterycall::acog_districts), 52L)
+  expect_equal(ncol(mysterycall::acog_districts), 4L)
 })
 
-test_that("ACOG_Districts has correct column names", {
-  expect_named(mysterycall::ACOG_Districts,
+test_that("acog_districts has correct column names", {
+  expect_named(mysterycall::acog_districts,
                c("State", "ACOG_District", "Subregion", "State_Abbreviations"),
                ignore.order = FALSE)
 })
@@ -78,13 +78,13 @@ test_that("fips has correct column names", {
                ignore.order = FALSE)
 })
 
-test_that("cityStateToLatLong has 31909 rows", {
-  expect_equal(nrow(mysterycall::cityStateToLatLong), 31909L)
+test_that("city_state_to_lat_long has 31909 rows", {
+  expect_equal(nrow(mysterycall::city_state_to_lat_long), 31909L)
 })
 
-test_that("cityStateToLatLong has expected columns (state, city, latitude, longitude)", {
+test_that("city_state_to_lat_long has expected columns (state, city, latitude, longitude)", {
   expect_true(all(c("state", "city", "latitude", "longitude") %in%
-                    names(mysterycall::cityStateToLatLong)))
+                    names(mysterycall::city_state_to_lat_long)))
 })
 
 # ---------------------------------------------------------------------------
@@ -188,16 +188,16 @@ test_that("taxonomy Classification column has no completely empty rows", {
 })
 
 # ---------------------------------------------------------------------------
-# 5. ACOG_Districts: 11 unique districts, no District X
+# 5. acog_districts: 11 unique districts, no District X
 # ---------------------------------------------------------------------------
 
-test_that("ACOG_Districts has exactly 11 unique district values", {
-  districts <- unique(mysterycall::ACOG_Districts$ACOG_District)
+test_that("acog_districts has exactly 11 unique district values", {
+  districts <- unique(mysterycall::acog_districts$ACOG_District)
   expect_equal(length(districts), 11L)
 })
 
-test_that("ACOG_Districts contains Districts I through XII but NOT District X", {
-  districts <- unique(mysterycall::ACOG_Districts$ACOG_District)
+test_that("acog_districts contains Districts I through XII but NOT District X", {
+  districts <- unique(mysterycall::acog_districts$ACOG_District)
   expected_present <- c(
     "District I", "District II", "District III", "District IV",
     "District V", "District VI", "District VII", "District VIII",
@@ -207,11 +207,11 @@ test_that("ACOG_Districts contains Districts I through XII but NOT District X", 
   expect_equal(length(missing_from_data), 0L,
                label = paste("Missing districts:", paste(missing_from_data, collapse = ", ")))
   expect_false("District X" %in% districts,
-               label = "District X should not exist in ACOG_Districts")
+               label = "District X should not exist in acog_districts")
 })
 
-test_that("ACOG_Districts State column has no NA or empty values", {
-  states <- mysterycall::ACOG_Districts$State
+test_that("acog_districts State column has no NA or empty values", {
+  states <- mysterycall::acog_districts$State
   expect_equal(sum(is.na(states)), 0L)
   expect_equal(sum(states == ""), 0L)
 })
@@ -239,18 +239,18 @@ test_that("acgme director_date_appointed column exists", {
 })
 
 # ---------------------------------------------------------------------------
-# 7. Property: cityStateToLatLong lat/lon within world bounds
+# 7. Property: city_state_to_lat_long lat/lon within world bounds
 # ---------------------------------------------------------------------------
 
-test_that("cityStateToLatLong latitude is within world bounds (-90 to 90)", {
-  lats <- mysterycall::cityStateToLatLong$latitude
+test_that("city_state_to_lat_long latitude is within world bounds (-90 to 90)", {
+  lats <- mysterycall::city_state_to_lat_long$latitude
   non_na <- lats[!is.na(lats)]
   expect_true(all(non_na >= -90), label = paste("Min lat:", min(non_na)))
   expect_true(all(non_na <=  90), label = paste("Max lat:", max(non_na)))
 })
 
-test_that("cityStateToLatLong longitude is within world bounds (-180 to 180)", {
-  lons <- mysterycall::cityStateToLatLong$longitude
+test_that("city_state_to_lat_long longitude is within world bounds (-180 to 180)", {
+  lons <- mysterycall::city_state_to_lat_long$longitude
   non_na <- lons[!is.na(lons)]
   expect_true(all(non_na >= -180), label = paste("Min lon:", min(non_na)))
   expect_true(all(non_na <=  180), label = paste("Max lon:", max(non_na)))

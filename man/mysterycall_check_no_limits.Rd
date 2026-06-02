@@ -46,7 +46,9 @@ mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 10
 \code{\link[=mysterycall_scan_for_limits]{mysterycall_scan_for_limits()}} for related sanity-check utilities.
 
 Other utilities:
+\code{\link[=.title_case]{.title_case()}},
 \code{\link{\%>\%}},
+\code{\link[=format_phone_number]{format_phone_number()}},
 \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}},
 \code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}},
 \code{\link[=mysterycall_check_data_completeness]{mysterycall_check_data_completeness()}},

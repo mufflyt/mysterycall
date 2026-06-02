@@ -2,6 +2,18 @@
 pagetitle: "mysterycall — Mystery Caller Study Tools"
 ---
 
+<!-- badges: start -->
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R ≥ 4.1](https://img.shields.io/badge/R-%E2%89%A54.1-276DC3?logo=r&logoColor=white)](https://cran.r-project.org/)
+[![R-CMD-check](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml)
+[![Codecov test coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/mysterycall)](https://CRAN.R-project.org/package=mysterycall)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2044--1693-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2044-1693)
+<!-- badges: end -->
+
 ```{=html}
 <!-- Hero -->
 <div class="mc-hero">
@@ -453,7 +465,7 @@ print(prop_df)</pre>
 <tbody>
 <tr><td><code>taxonomy</code></td>
     <td>NUCC taxonomy codes (v23.1) for OBGYN subspecialties</td><td>~900</td></tr>
-<tr><td><code>ACOG_Districts</code></td>
+<tr><td><code>acog_districts</code></td>
     <td>State → ACOG district + Census subregion crosswalk</td><td>51</td></tr>
 <tr><td><code>acgme</code></td>
     <td>All 318 ACGME-accredited OBGYN residency programs</td><td>318</td></tr>

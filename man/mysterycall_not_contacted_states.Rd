@@ -50,7 +50,6 @@ mysterycall_not_contacted_states(filtered_data, all_states)
 # Example with default all_states
 filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
 mysterycall_not_contacted_states(filtered_data)
-
 }
 \seealso{
 \code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}}, \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}}, \code{\link[=mysterycall_clean_phase1]{mysterycall_clean_phase1()}}

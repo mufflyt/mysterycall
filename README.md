@@ -6,11 +6,14 @@
 
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R ≥ 4.1](https://img.shields.io/badge/R-%E2%89%A54.1-276DC3?logo=r&logoColor=white)](https://cran.r-project.org/)
 [![R-CMD-check](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/mysterycall)](https://CRAN.R-project.org/package=mysterycall)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/mysterycall)](https://cran.r-project.org/package=mysterycall)
 [![Codecov test coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2044--1693-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2044-1693)
 [![GitHub last commit](https://img.shields.io/github/last-commit/mufflyt/mysterycall)](https://github.com/mufflyt/mysterycall/commits/main)
 [![GitHub issues](https://img.shields.io/github/issues/mufflyt/mysterycall)](https://github.com/mufflyt/mysterycall/issues)
 [![pkgdown docs](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://mufflyt.github.io/mysterycall/)
@@ -289,11 +292,11 @@ with audit trails, coverage guards, and publication-ready output.
 | Dataset | Description |
 |---|---|
 | `taxonomy` | NUCC taxonomy codes (v23.1) for all OBGYN subspecialties |
-| `ACOG_Districts` | State → ACOG district + Census subregion crosswalk |
+| `acog_districts` | State → ACOG district + Census subregion crosswalk |
 | `acgme` | All 318 ACGME-accredited OBGYN residency programs |
 | `physicians` | Sample roster of 4,659 OBGYN subspecialists with coordinates |
 | `fips` | State FIPS codes and abbreviations |
-| `cityStateToLatLong` | City/state → lat/lon lookup table |
+| `city_state_to_lat_long` | City/state → lat/lon lookup table |
 | `acog_presidents` | Historical ACOG presidents data |
 | `census_summaries` | Pre-computed Census block-group demographics |
 

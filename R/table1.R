@@ -180,7 +180,6 @@ NULL
 #' @param groups Unique groups.
 #' @param group_col_names Column names for groups.
 #' @param include_overall Logical; include overall column.
-#' @param include_na Logical; include NA row.
 #' @param digits Number of digits.
 #' @param emit_pvalue Logical; include p-value.
 #' @param min_cell Minimum cell size.
@@ -189,7 +188,7 @@ NULL
 #' @family table
 #' @keywords internal
 .t1_rows_categorical <- function(x, label, group_vec, groups, group_col_names,
-                                 include_overall, include_na, digits,
+                                 include_overall, digits,
                                  emit_pvalue, min_cell) {
   x_chr <- as.character(x)
   lvls  <- if (is.factor(x)) levels(x) else sort(unique(x_chr[!is.na(x_chr)]))

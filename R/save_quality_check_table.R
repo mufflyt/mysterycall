@@ -25,7 +25,6 @@
 #' @export
 #' @examplesIf interactive()
 #' mysterycall_save_quality_table(my_data, "qc.csv")
-
 mysterycall_save_quality_table <- function(data, filepath, output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
   required_cols <- c("npi", "name")

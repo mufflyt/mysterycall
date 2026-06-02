@@ -165,8 +165,8 @@ print(acgme[1:3, 1:5])
 }
 \seealso{
 Other datasets:
-\code{\link{ACOG_Districts}},
-\code{\link{cityStateToLatLong}},
+\code{\link{acog_districts}},
+\code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
 \code{\link{taxonomy}}
 }

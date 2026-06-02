@@ -55,7 +55,15 @@ NULL
   )
 }
 
-# Internal: Wilson score confidence interval for a proportion.
+#' Wilson score confidence interval for a proportion
+#'
+#' @param k Number of successes.
+#' @param n Total number of trials.
+#' @param conf_level Confidence level.
+#'
+#' @return A numeric vector of length 2 (lower, upper).
+#' @family outcomes
+#' @keywords internal
 .wilson_ci <- function(k, n, conf_level) {
   if (n == 0L) return(c(NA_real_, NA_real_))
   as.numeric(suppressWarnings(

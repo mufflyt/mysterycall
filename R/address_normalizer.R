@@ -77,13 +77,6 @@ NULL
 #' normalization to ensure consistent character encoding.
 #'
 #' @param x Character vector of strings to normalize.
-#' Normalize ASCII Characters and Whitespace
-#'
-#' Converts non-ASCII characters to spaces and collapses multiple whitespace
-#' characters into single spaces. This is the first step in address
-#' normalization to ensure consistent character encoding.
-#'
-#' @param x Character vector of strings to normalize.
 #'
 #' @return Character vector with non-ASCII characters replaced by spaces and
 #'   all whitespace collapsed to single spaces.

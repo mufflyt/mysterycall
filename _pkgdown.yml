@@ -52,15 +52,17 @@ footer:
       <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md">Changelog</a>
       &nbsp;·&nbsp;
       <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE">MIT License</a>
+      &nbsp;·&nbsp;
+      <a href="https://orcid.org/0000-0002-2044-1693">ORCID: 0000-0002-2044-1693</a>
 
 reference:
   - title: "Data and Datasets"
     contents:
-      - ACOG_Districts
+      - acog_districts
       - acgme
       - acog_presidents
       - census_summaries
-      - cityStateToLatLong
+      - city_state_to_lat_long
       - fips
       - physicians
       - taxonomy

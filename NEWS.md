@@ -1,3 +1,64 @@
+# mysterycall 1.4.0
+
+Released 2026-06-02.
+
+## 💥 Breaking changes
+
+* **Data objects renamed to snake_case** to align with package style:
+  * `cityStateToLatLong` → `city_state_to_lat_long`
+  * `ACOG_Districts` → `acog_districts`
+  Update code that referenced these objects directly. The .rda files in
+  `data/` were renamed accordingly.
+
+* **Many internal helpers removed from the public API.** 79 functions were
+  demoted from exported to internal as part of rOpenSci submission prep —
+  logging helpers (`mysterycall_log_*`), progress-bar primitives
+  (`mysterycall_progress_*`, `mysterycall_multi_*`, `mysterycall_spinner_*`),
+  address-normalizer field helpers (now wrapped by
+  `mysterycall_normalize_address_df()`), sanity-check internals, and
+  unprefixed deprecation shims. Total exports dropped from 230 to 152.
+  If your code used any of these, switch to a `mysterycall:::name()` call
+  or refactor to use the higher-level wrappers.
+
+* **`provider` package dependency removed.** The optional GitHub-only
+  `provider` package is no longer listed in `Suggests`.
+  `mysterycall_get_clinician_data()` still detects it dynamically if
+  installed.
+
+## ✨ Improvements
+
+* **CRAN-readiness fixes.** `R CMD check --as-cran` now passes with zero
+  errors, zero warnings, and only the standard "New submission" NOTE.
+  Highlights:
+  * Stripped `install.packages('X')` instructions from ~70 error messages.
+  * Replaced `ggforce::geom_circle` in `mysterycall_plot_source_venn()`
+    with a base-ggplot2 `geom_polygon` implementation (no `ggforce` dep).
+  * Replaced `tigris::fips_codes` example with a hardcoded vector (no
+    `tigris` dep).
+  * Fixed 301/404 URLs (HERE developer portal, ACGME, USDA ERS).
+  * Soft-fail in `mysterycall_preflight_check()` when optional Suggests
+    are missing.
+  * Vignettes guard chunks that use Suggests-only deps with
+    `requireNamespace()`.
+
+* **rOpenSci alignment.** R/ filenames lowercased (`ACOG_Districts.R`,
+  `Splitting_dataframe_to_send_to_callers.R`, `cityStateToLatLong.R`,
+  `states_where_physicians_were_NOT_contacted.R` →
+  snake_case equivalents). All 12 publication/green-journal theme and
+  palette functions now carry the `mysterycall_` prefix (e.g.,
+  `mysterycall_theme_green_journal()`,
+  `mysterycall_palette_publication()`).
+
+* **Suggests dependency reduction.** Dropped four unused packages
+  (`imager`, `leaflet.extras`, `tmap`, `tigris`) plus `ggforce`. Suggests
+  count: 48 → 43.
+
+* **Documentation hygiene.** `devtools::document()` now runs cleanly;
+  data documentation converted from the trailing-string-literal pattern
+  to the universal `@name + NULL` pattern. New tests added for
+  `R/academic_indicators.R` and `R/audit-verify.R`. ORCID and R-version
+  badges added to README and pkgdown index.
+
 # mysterycall 1.3.0
 
 Released 2026-05-08.
