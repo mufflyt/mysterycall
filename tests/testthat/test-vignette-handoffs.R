@@ -224,6 +224,7 @@ test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
 
 test_that("Vignette handoff: geocode.Rmd examples", {
   skip_on_cran()
+  skip_if_not_installed("ggmap")
 
   # Test geocoding examples
   test_addresses <- c(
@@ -243,6 +244,7 @@ test_that("Vignette handoff: geocode.Rmd examples", {
 
   with_mocked_bindings(
     geocode = mock_geocode,
+    .package = "ggmap",
     {
       # Test geocoding workflow
       geocoded <- mysterycall_geocode(test_addresses)

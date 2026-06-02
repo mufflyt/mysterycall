@@ -21,6 +21,7 @@ make_abb_data <- function() {
 
 test_that("map_acceptance_rate: returns a ggplot object", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   df <- make_state_data()
   p  <- mysterycall_map_acceptance_rate(df, region_col = "state",
                                          rate_col   = "rate")
@@ -29,6 +30,7 @@ test_that("map_acceptance_rate: returns a ggplot object", {
 
 test_that("map_acceptance_rate: works with full state names", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   df <- make_state_data()
   expect_no_error(
     mysterycall_map_acceptance_rate(df, region_col = "state", rate_col = "rate")
@@ -37,6 +39,7 @@ test_that("map_acceptance_rate: works with full state names", {
 
 test_that("map_acceptance_rate: works with 2-letter state abbreviations", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   df <- make_abb_data()
   p  <- mysterycall_map_acceptance_rate(df, region_col = "st", rate_col = "rate")
   expect_s3_class(p, "ggplot")
@@ -44,6 +47,7 @@ test_that("map_acceptance_rate: works with 2-letter state abbreviations", {
 
 test_that("map_acceptance_rate: save_path writes a file", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   skip_if_not_installed("mapproj")
   df   <- make_state_data()
   path <- tempfile(fileext = ".png")
@@ -64,6 +68,7 @@ test_that("map_acceptance_rate: region_type = 'hrr' errors", {
 
 test_that("map_acceptance_rate: errors on missing region column", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   df <- make_state_data()
   expect_error(
     mysterycall_map_acceptance_rate(df, region_col = "no_such_col",
@@ -74,6 +79,7 @@ test_that("map_acceptance_rate: errors on missing region column", {
 
 test_that("map_acceptance_rate: errors on missing rate column", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("maps")
   df <- make_state_data()
   expect_error(
     mysterycall_map_acceptance_rate(df, region_col = "state",

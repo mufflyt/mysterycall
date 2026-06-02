@@ -58,6 +58,7 @@ Suggests:
     jsonlite,
     knitr,
     leaflet,
+    maps,
     lme4,
     lwgeom,
     memoise,

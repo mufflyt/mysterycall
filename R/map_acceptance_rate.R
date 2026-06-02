@@ -55,7 +55,7 @@ NULL
 #' @family mapping
 #' @export
 #'
-#' @examples
+#' @examplesIf requireNamespace("maps", quietly = TRUE)
 #' set.seed(7)
 #' df <- data.frame(
 #'   state = c("Colorado", "California", "Texas", "New York", "Florida"),
@@ -77,6 +77,10 @@ mysterycall_map_acceptance_rate <- function(data,
                                              dpi          = 300L) {
 
   region_type <- match.arg(region_type)
+
+  if (!requireNamespace("maps", quietly = TRUE)) {
+    stop("Package 'maps' is required for state choropleth maps.", call. = FALSE)
+  }
 
   # ---- HRR guard -------------------------------------------------------------
   if (region_type == "hrr") {
