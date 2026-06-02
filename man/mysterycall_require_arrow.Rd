@@ -29,11 +29,13 @@ Other utilities:
 \code{\link[=mysterycall_normalize_file_format]{mysterycall_normalize_file_format()}},
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}},
 \code{\link[=mysterycall_quality_tier]{mysterycall_quality_tier()}},
+\code{\link[=mysterycall_read_table]{mysterycall_read_table()}},
 \code{\link[=mysterycall_resolve_path]{mysterycall_resolve_path()}},
 \code{\link[=mysterycall_save_quality_table]{mysterycall_save_quality_table()}},
 \code{\link[=mysterycall_scan_for_limits]{mysterycall_scan_for_limits()}},
 \code{\link[=mysterycall_standard_labels]{mysterycall_standard_labels()}},
-\code{\link[=mysterycall_standard_palette]{mysterycall_standard_palette()}}
+\code{\link[=mysterycall_standard_palette]{mysterycall_standard_palette()}},
+\code{\link[=mysterycall_write_table]{mysterycall_write_table()}}
 }
 \concept{utilities}
 \keyword{internal}

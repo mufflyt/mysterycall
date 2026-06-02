@@ -33,7 +33,7 @@ test_that("Reads input file correctly and processes data", {
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
-  expect_output(mysterycall_table_overall(temp_rds, output_dir))
+  expect_message(mysterycall_table_overall(temp_rds, output_dir))
 
   # Check that the output file was created
   output_files <- list.files(output_dir, pattern = "^arsenal_overall_table_.*\\.pdf$")
@@ -45,9 +45,9 @@ test_that("Generates overall table correctly", {
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
-  expect_output(mysterycall_table_overall(temp_rds, output_dir))
+  expect_message(mysterycall_table_overall(temp_rds, output_dir))
 
-  overall_summary <- capture.output(mysterycall_table_overall(temp_rds, output_dir))
+  overall_summary <- capture.output(mysterycall_table_overall(temp_rds, output_dir), type = "message")
   expect_true(length(overall_summary) > 0)
 })
 
@@ -79,7 +79,7 @@ test_that("Handles missing label translations correctly", {
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
-  expect_output(mysterycall_table_overall(temp_rds, output_dir))
+  expect_message(mysterycall_table_overall(temp_rds, output_dir))
 })
 
 # Test if the function handles invalid input types
@@ -111,6 +111,6 @@ test_that("Handles label translations correctly", {
   output_dir <- tempdir()
   label_translations <- list(age = "Age in years", gender = "Gender (M/F)", height = "Height in cm", weight = "Weight in kg")
 
-  expect_output(mysterycall_table_overall(temp_rds, output_dir, label_translations = label_translations))
+  expect_message(mysterycall_table_overall(temp_rds, output_dir, label_translations = label_translations))
 })
 

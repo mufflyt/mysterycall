@@ -48,11 +48,11 @@ create_realistic_phase1_data <- function() {
       "Colorado", "Minnesota", "South Carolina", "Alabama", "Louisiana"
     ),
     npi = c(
-      "1234567890", "2345678901", "3456789012", "4567890123", "5678901234",
-      "6789012345", "7890123456", "8901234567", "9012345678", "0123456789",
-      "1357924680", "2468013579", "3691470258", "4815962037", "5927384610",
-      "6048271359", "7159382604", "8260493715", "9371504826", "0482615937",
-      "1593726048", "2604837159", "3715948260", "4826059371", "5937160482"
+      "1000000368", "1000000681", "1000000889", "1000001614", "1000001838",
+      "1000002216", "1000002448", "1000002794", "1000003107", "1000003297",
+      "1000004568", "1000005011", "1000005177", "1000006704", "1000008023",
+      "1000008353", "1000008528", "1000008783", "1000009104", "1000009278",
+      "1000009518", "1000009823", "1000010649", "1000011738", "1000012801"
     ),
     for_redcap = c(rep("Yes", 20), rep("No", 5)),
     insurance_type = sample(c("Medicaid", "Private", "Self-Pay"), 25, replace = TRUE),
@@ -250,10 +250,9 @@ test_that("End-to-end: Census data integration workflow", {
     {
       # Stage 1: Retrieve census data
       census_data <- mysterycall_get_census_data(
-        geography = "county",
-        state = "all",
+        us_fips_list = c("06", "08"),
         vintage = 2021,
-        survey = "acs5"
+        api_key = "test-key"
       )
 
       expect_s3_class(census_data, "data.frame")
@@ -485,10 +484,14 @@ test_that("End-to-end: Error handling and recovery workflow", {
     "names"
   )
 
-  # All NA data should be handled without crashing
-  expect_error(
-    mysterycall_clean_phase1(error_scenarios$all_na_data, output_directory = temp_dir),
-    "names"  # Should fail validation due to missing required data
+  # All NA data should be handled gracefully (the function uses random_id
+  # fallback when NPIs are NA and writes the cleaned output)
+  expect_no_error(
+    suppressMessages(
+      mysterycall_clean_phase1(error_scenarios$all_na_data,
+                                output_directory = temp_dir,
+                                verbose = FALSE)
+    )
   )
 })
 

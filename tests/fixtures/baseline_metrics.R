@@ -90,6 +90,10 @@ BASELINE_METRICS <- list(
     us_lat_range = c(24.396308, 49.384358),  # Contiguous US
     us_lon_range = c(-125.0, -66.93457),
 
+    # Fraction of geocoded coordinates expected to fall within US bounds
+    us_bounds_rate = 0.90,
+    us_bounds_tolerance = 0.05,
+
     # Census block group join success
     blockgroup_join_rate = 0.90,
     blockgroup_join_tolerance = 0.05,

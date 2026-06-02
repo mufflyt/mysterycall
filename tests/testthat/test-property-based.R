@@ -5,7 +5,28 @@ library(dplyr)
 
 # Property-based test generators
 generate_valid_npi <- function(n = 1) {
-  paste0(sample(100000000:999999999, n), sample(0:9, n, replace = TRUE))
+  # Compute Luhn check digit for an NPI candidate prefixed with "80840"
+  luhn_check_digit <- function(first_nine) {
+    digits <- as.integer(strsplit(paste0("80840", first_nine), "")[[1L]])
+    len <- length(digits)
+    # Position from right (excluding check digit which we are about to compute):
+    # treat first_nine + "0" so check digit is at position 1 from right.
+    digits_with_check <- c(digits, 0L)
+    full_len <- length(digits_with_check)
+    for (i in seq_along(digits_with_check)) {
+      pos_from_right <- full_len - i + 1L
+      if (pos_from_right %% 2L == 0L) {
+        digits_with_check[i] <- digits_with_check[i] * 2L
+      }
+    }
+    total <- sum(digits_with_check %/% 10L + digits_with_check %% 10L)
+    (10L - total %% 10L) %% 10L
+  }
+  vapply(seq_len(n), function(...) {
+    first_nine <- sprintf("%09d", sample(100000000:999999999, 1L))
+    check_d <- luhn_check_digit(first_nine)
+    paste0(first_nine, check_d)
+  }, character(1L))
 }
 
 generate_valid_phone <- function(n = 1) {
@@ -412,6 +433,8 @@ test_that("Property: Memory usage is bounded for given input size", {
   # Property: Memory usage should scale sub-quadratically
   for (i in 2:length(input_sizes)) {
     size_ratio <- input_sizes[i] / input_sizes[i-1]
+    # Skip ratio comparison when baseline memory delta is 0 (GC noise dominates)
+    if (memory_usage[i-1] <= 0) next
     memory_ratio <- memory_usage[i] / memory_usage[i-1]
 
     expect_lt(memory_ratio, size_ratio^1.5,

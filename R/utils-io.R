@@ -48,6 +48,21 @@ mysterycall_require_arrow <- function() {
   }
 }
 
+#' Read a tabular data file (CSV or Parquet)
+#'
+#' Transparently reads a dataset from disk using either [readr::read_csv()] or
+#' [arrow::read_parquet()] based on the file extension or the `format` argument.
+#' If an `npi` column is present and numeric, it is automatically coerced to
+#' character to prevent loss of leading zeros or precision.
+#'
+#' @param path Character scalar. Path to the file.
+#' @param format Optional character scalar: `"csv"` or `"parquet"`. If `NULL`,
+#'   the format is inferred from the `path` extension.
+#' @param ... Additional arguments passed to the underlying reader.
+#'
+#' @return A data frame (tibble).
+#' @family utilities
+#' @export
 mysterycall_read_table <- function(path, format = NULL, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   df <- if (identical(fmt, "csv")) {
@@ -74,6 +89,26 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
   df
 }
 
+#' Write a data frame to a tabular file (CSV or Parquet)
+#'
+#' Transparently writes a data frame to disk using either [readr::read_csv()]
+#' or [arrow::write_parquet()]. For CSV format, writes are performed atomically
+#' to a temporary file then renamed to reduce the risk of file corruption
+#' during concurrent access.
+#'
+#' @param data A data frame to save.
+#' @param path Character scalar. Destination path.
+#' @param format Optional character scalar: `"csv"` or `"parquet"`. If `NULL`,
+#'   the format is inferred from the `path` extension.
+#' @param append Logical. If `TRUE`, appends to the existing file. Only
+#'   supported for CSV; for Parquet, this reads the existing file and re-writes
+#'   the combined dataset.
+#' @param col_names Logical. Whether to write column names. Default `TRUE`.
+#' @param ... Additional arguments passed to the underlying writer.
+#'
+#' @return The input `path` (invisibly).
+#' @family utilities
+#' @export
 mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   if (identical(fmt, "csv")) {

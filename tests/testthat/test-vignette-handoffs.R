@@ -60,6 +60,7 @@ test_that("Vignette handoff: my-vignette.Rmd taxonomy search examples", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       # Test the exact code from my-vignette.Rmd
       taxonomy_descriptions <- c("Hospice and Palliative Medicine")
@@ -156,13 +157,13 @@ test_that("Vignette handoff: mysterycall_get_census_data.Rmd examples", {
 
   with_mocked_bindings(
     getCensus = mock_get_census,
+    .package = "censusapi",
     {
       # Test census data retrieval as shown in vignette
       census_data <- mysterycall_get_census_data(
-        geography = "county",
-        state = "all",
+        us_fips_list = c("06", "08"),
         vintage = 2021,
-        survey = "acs5"
+        api_key = "test-key"
       )
 
       expect_s3_class(census_data, "data.frame")
@@ -207,6 +208,7 @@ test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
 
     with_mocked_bindings(
       isoline = mock_isoline,
+      .package = "hereR",
       {
         # Test mysterycall_create_isochrones function
         result <- mysterycall_create_isochrones(
@@ -327,6 +329,7 @@ test_that("Vignette handoff: Cross-vignette data compatibility", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       # Get provider data
       provider_data <- mysterycall_search_taxonomy("Obstetrics & Gynecology",

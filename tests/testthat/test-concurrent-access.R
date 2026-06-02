@@ -130,7 +130,13 @@ test_that("CONCURRENT: Can read existing files while writing new ones", {
     if (length(files_before) > 0) {
       file_path <- file.path(temp_dir, files_before[1])
       if (file.exists(file_path)) {
-        existing_data <- read.csv(file_path)
+        # phase1 output may include row-index column; use readr to bypass
+        # base read.csv's duplicate row.names check
+        existing_data <- if (requireNamespace("readr", quietly = TRUE)) {
+          suppressMessages(readr::read_csv(file_path, show_col_types = FALSE))
+        } else {
+          read.csv(file_path, row.names = NULL)
+        }
       }
     }
 

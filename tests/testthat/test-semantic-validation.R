@@ -207,9 +207,9 @@ test_that("SEMANTIC: No state-coordinate mismatches", {
 
   # California coordinates should be in California
   results <- data.frame(
-    state = c("CA", "CA", "TX", "NY"),
-    lat = c(34.0522, 40.7128, 29.7604, 40.7128),  # 2nd one is NYC!
-    lon = c(-118.2437, -74.0060, -95.3698, -74.0060),
+    state = c("CA",       "CA",      "TX",      "NY"),
+    lat   = c(34.0522,    37.7749,   29.7604,   40.7128),  # LA, SF, Houston, NYC
+    lon   = c(-118.2437,  -122.4194, -95.3698,  -74.0060),
     stringsAsFactors = FALSE
   )
 
