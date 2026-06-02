@@ -1,31 +1,43 @@
-# Pipe operator
+# Read a tabular data file (CSV or Parquet)
 
-See `magrittr::%>%` for details.
+Transparently reads a dataset from disk using either
+[`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
+or
+[`arrow::read_parquet()`](https://arrow.apache.org/docs/r/reference/read_parquet.html)
+based on the file extension or the `format` argument. If an `npi` column
+is present and numeric, it is automatically coerced to character to
+prevent loss of leading zeros or precision.
 
 ## Usage
 
 ``` r
-lhs %>% rhs
+mysterycall_read_table(path, format = NULL, ...)
 ```
 
 ## Arguments
 
-- lhs:
+- path:
 
-  A value or the magrittr placeholder.
+  Character scalar. Path to the file.
 
-- rhs:
+- format:
 
-  A function call using the magrittr semantics.
+  Optional character scalar: `"csv"` or `"parquet"`. If `NULL`, the
+  format is inferred from the `path` extension.
+
+- ...:
+
+  Additional arguments passed to the underlying reader.
 
 ## Value
 
-The result of calling `rhs(lhs)`.
+A data frame (tibble).
 
 ## See also
 
 Other utilities:
 [`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
+`%>%`,
 [`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
@@ -39,7 +51,6 @@ Other utilities:
 [`mysterycall_normalize_file_format()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_file_format.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_read_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_read_table.md),
 [`mysterycall_require_arrow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_require_arrow.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),

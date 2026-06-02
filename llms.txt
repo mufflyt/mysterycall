@@ -1002,7 +1002,7 @@ output tables.
 ## Progress and Spinners
 
 - [`mysterycall_progress_tracker()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_tracker.md)
-  : Track multi-stage workflow progress
+  : Progress tracker for long-running workflows
 - [`mysterycall_progress_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_start.md)
   : Mark a step as started
 - [`mysterycall_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_finish.md)
@@ -1096,6 +1096,12 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 
 - [`mysterycall_format_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_duration.md)
   : Format duration in human-readable form
+
+- [`mysterycall_read_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_read_table.md)
+  : Read a tabular data file (CSV or Parquet)
+
+- [`mysterycall_write_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table.md)
+  : Write a data frame to a tabular file (CSV or Parquet)
 
 - [`utility_library`](https://mufflyt.github.io/mysterycall/reference/utility_library.md)
   : Utility helpers for mysterycall workflows

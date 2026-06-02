@@ -3,12 +3,6 @@
 Latitude/longitude lookup table assembled from a public GitHub gist for
 aligning caller workbooks with geospatial tooling.
 
-## Usage
-
-``` r
-city_state_to_lat_long
-```
-
 ## Format
 
 A tibble with four variables:
@@ -37,3 +31,11 @@ A tibble with four variables:
 
 A tibble mapping U.S. cities and states to their latitude and longitude
 coordinates.
+
+## See also
+
+Other datasets:
+[`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
+[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
