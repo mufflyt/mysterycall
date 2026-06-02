@@ -407,6 +407,8 @@ reference:
       - mysterycall_quality_tier
       - mysterycall_download_file
       - mysterycall_format_duration
+      - mysterycall_read_table
+      - mysterycall_write_table
       - utility_library
       - mysterycall_tempdir
 
