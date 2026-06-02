@@ -2,7 +2,7 @@
 
 ## Data and Datasets
 
-- [`ACOG_Districts`](https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.md)
+- [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md)
   : ACOG Districts Data
 - [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md) :
   ACGME OBGYN Residency Data
@@ -10,7 +10,7 @@
   : ACOG Presidents Data
 - [`census_summaries`](https://mufflyt.github.io/mysterycall/reference/census_summaries.md)
   : Summarize Census Block Group Demographics
-- [`cityStateToLatLong`](https://mufflyt.github.io/mysterycall/reference/cityStateToLatLong.md)
+- [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md)
   : City/state latitude and longitude reference data
 - [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md) :
   Data of FIPS codes

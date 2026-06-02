@@ -46,7 +46,7 @@ and geographic coordinates.
 ## See also
 
 Other datasets:
-[`ACOG_Districts`](https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.md),
+[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
 [`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md)
 

@@ -45,7 +45,10 @@ Invisible TRUE if within tolerance, errors otherwise
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
 to validate API keys before the workflow.
 
-Other utilities: `%>%`,
+Other utilities:
+[`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
+`%>%`,
+[`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_data_completeness()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_data_completeness.md),
 [`mysterycall_check_dependencies()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_dependencies.md),

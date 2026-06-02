@@ -151,7 +151,8 @@ Time:** 4 hours (to deprecate or document properly)
 `genderize_fetch()` helper undocumented 2. `search_and_process_npi.R` -
 [`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
 nested function (115 lines) completely undocumented 3.
-`clean_phase_1_results.R` - `format_phone_number()`,
+`clean_phase_1_results.R` -
+[`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 `generate_random_ids()` undocumented 4. `clean_phase_2_results.R` -
 [`rename_columns_by_substring()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
 minimal documentation 5. `create_isochrones_for_dataframe.R` -

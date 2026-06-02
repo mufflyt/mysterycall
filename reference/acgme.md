@@ -583,8 +583,8 @@ A data frame with 142 columns:
 ## See also
 
 Other datasets:
-[`ACOG_Districts`](https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.md),
-[`cityStateToLatLong`](https://mufflyt.github.io/mysterycall/reference/cityStateToLatLong.md),
+[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 

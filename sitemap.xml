@@ -37,7 +37,6 @@
 <url><loc>https://mufflyt.github.io/mysterycall/news/index.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/ACGME_PROGRAM_INDICATORS.html</loc></url>
-<url><loc>https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/COTH_TEACHING_INDICATORS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/MEDICAL_SCHOOL_INDICATORS.html</loc></url>
@@ -46,6 +45,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/academic_indicators.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/acgme.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/acog_districts.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/acog_presidents.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/address_normalizer.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/address_utils.html</loc></url>
@@ -54,7 +54,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/caps.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/census_summaries.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/check_academic_name_patterns.html</loc></url>
-<url><loc>https://mufflyt.github.io/mysterycall/reference/cityStateToLatLong.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/classify_academic_affiliation.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/compose_map_density.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.html</loc></url>
@@ -88,12 +88,15 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-t1_fmt_pval.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-t1_rows_categorical.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-t1_rows_continuous.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/dot-title_case.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-to_title.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-wait_stats.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/dot-wilson_ci.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-write_join_report.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/factor_utils.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/fips.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/format_phone_number.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/get_academic_indicators_summary.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/get_acs_adults_18_90.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/get_acs_women_18_90.html</loc></url>

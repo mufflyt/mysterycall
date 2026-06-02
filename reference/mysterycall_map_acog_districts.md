@@ -16,7 +16,7 @@ mysterycall_map_acog_districts(acog_districts_file = NULL)
 - acog_districts_file:
 
   Optional path to a CSV containing the mapping of states to ACOG
-  districts. Defaults to the packaged `inst/extdata/ACOG_Districts.csv`.
+  districts. Defaults to the packaged `inst/extdata/acog_districts.csv`.
 
 ## Value
 
@@ -64,6 +64,6 @@ Other mapping:
 ``` r
 if (FALSE) { # interactive()
 mysterycall_map_acog_districts()
-mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
+mysterycall_map_acog_districts("inst/extdata/acog_districts.csv")
 }
 ```

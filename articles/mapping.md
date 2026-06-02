@@ -52,7 +52,7 @@ The American College of Obstetricians and Gynecologists (ACOG) divides
 the United States into eleven geographic districts that govern regional
 governance and continuing-education activities.
 [`map_create_acog_districts_sf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-joins the packaged `ACOG_Districts` lookup table to Natural Earth state
+joins the packaged `acog_districts` lookup table to Natural Earth state
 geometries and returns a dissolved `sf` polygon object — one row per
 district — that is ready for mapping or spatial joins.
 
@@ -74,7 +74,7 @@ names(districts_sf)
 print(districts_sf[, c("ACOG_District", "States")], n = 5)
 ```
 
-The bundled `ACOG_Districts` data frame contains the underlying
+The bundled `acog_districts` data frame contains the underlying
 state-to-district mapping and can be inspected without building the sf
 object:
 
@@ -82,8 +82,8 @@ object:
 
 library(mysterycall)
 
-data(ACOG_Districts)
-head(ACOG_Districts)
+data(acog_districts)
+head(acog_districts)
 #> # A tibble: 6 × 4
 #>   State      ACOG_District Subregion     State_Abbreviations
 #>   <chr>      <chr>         <chr>         <chr>              
@@ -99,8 +99,8 @@ The table below summarises how many states each district covers:
 
 ``` r
 
-data(ACOG_Districts)
-dist_summary <- aggregate(State ~ ACOG_District, data = ACOG_Districts, FUN = length)
+data(acog_districts)
+dist_summary <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_summary)[2] <- "n_states"
 dist_summary <- dist_summary[order(dist_summary$ACOG_District), ]
 knitr::kable(
@@ -129,8 +129,8 @@ Number of US states (and territories) in each ACOG district. {.table}
 
 ``` r
 
-data(ACOG_Districts)
-dist_counts <- aggregate(State ~ ACOG_District, data = ACOG_Districts, FUN = length)
+data(acog_districts)
+dist_counts <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_counts)[2] <- "n_states"
 dist_counts$ACOG_District <- factor(
   dist_counts$ACOG_District,

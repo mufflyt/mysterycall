@@ -419,7 +419,7 @@ Built-in datasets
 | Dataset | Description | Rows |
 |----|----|----|
 | `taxonomy` | NUCC taxonomy codes (v23.1) for OBGYN subspecialties | ~900 |
-| `ACOG_Districts` | State → ACOG district + Census subregion crosswalk | 51 |
+| `acog_districts` | State → ACOG district + Census subregion crosswalk | 51 |
 | `acgme` | All 318 ACGME-accredited OBGYN residency programs | 318 |
 | `physicians` | Sample roster of OBGYN subspecialists with coordinates | 4,659 |
 | `fips` | State FIPS codes and abbreviations | 51 |

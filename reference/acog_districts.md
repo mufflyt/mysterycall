@@ -38,7 +38,7 @@ corresponding two-letter abbreviation and full state name.
 
 Other datasets:
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
-[`cityStateToLatLong`](https://mufflyt.github.io/mysterycall/reference/cityStateToLatLong.md),
+[`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
@@ -46,10 +46,10 @@ Other datasets:
 
 ``` r
 # Load the ACOG Districts Data
-data(ACOG_Districts)
+data(acog_districts)
 
 # Inspect the dataset
-print(ACOG_Districts)
+print(acog_districts)
 #> # A tibble: 52 × 4
 #>    State                ACOG_District Subregion     State_Abbreviations
 #>    <chr>                <chr>         <chr>         <chr>              
@@ -66,7 +66,7 @@ print(ACOG_Districts)
 #> # ℹ 42 more rows
 
 # Get a summary of the dataset
-summary(ACOG_Districts)
+summary(acog_districts)
 #>        State      ACOG_District     Subregion  State_Abbreviations
 #>  Length   :52   Length   :52    Length   :52   Length   :52       
 #>  N.unique :52   N.unique :11    N.unique :11   N.unique :52       

@@ -12,7 +12,6 @@ Build Categorical Rows for Table 1
   groups,
   group_col_names,
   include_overall,
-  include_na,
   digits,
   emit_pvalue,
   min_cell
@@ -44,10 +43,6 @@ Build Categorical Rows for Table 1
 - include_overall:
 
   Logical; include overall column.
-
-- include_na:
-
-  Logical; include NA row.
 
 - digits:
 

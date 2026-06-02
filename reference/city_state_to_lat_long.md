@@ -6,7 +6,7 @@ aligning caller workbooks with geospatial tooling.
 ## Usage
 
 ``` r
-cityStateToLatLong
+city_state_to_lat_long
 ```
 
 ## Format

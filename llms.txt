@@ -419,7 +419,7 @@ Built-in datasets
 | Dataset | Description | Rows |
 |----|----|----|
 | `taxonomy` | NUCC taxonomy codes (v23.1) for OBGYN subspecialties | ~900 |
-| `ACOG_Districts` | State → ACOG district + Census subregion crosswalk | 51 |
+| `acog_districts` | State → ACOG district + Census subregion crosswalk | 51 |
 | `acgme` | All 318 ACGME-accredited OBGYN residency programs | 318 |
 | `physicians` | Sample roster of OBGYN subspecialists with coordinates | 4,659 |
 | `fips` | State FIPS codes and abbreviations | 51 |
@@ -452,7 +452,7 @@ citation("mysterycall")
 
 ## Data and Datasets
 
-- [`ACOG_Districts`](https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.md)
+- [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md)
   : ACOG Districts Data
 - [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md) :
   ACGME OBGYN Residency Data
@@ -460,7 +460,7 @@ citation("mysterycall")
   : ACOG Presidents Data
 - [`census_summaries`](https://mufflyt.github.io/mysterycall/reference/census_summaries.md)
   : Summarize Census Block Group Demographics
-- [`cityStateToLatLong`](https://mufflyt.github.io/mysterycall/reference/cityStateToLatLong.md)
+- [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md)
   : City/state latitude and longitude reference data
 - [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md) :
   Data of FIPS codes
