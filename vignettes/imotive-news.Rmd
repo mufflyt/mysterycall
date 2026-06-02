@@ -27,7 +27,7 @@ latest development cycle and surfaces the helpers that changed.
 The `run_mystery_caller_workflow()` wrapper continues to be the recommended entry
 point for Imotive projects. Recent documentation improvements clarify how it:
 
-- Pulls and deduplicates provider rosters via `mysterycall_search_by_taxonomy()` and
+- Pulls and deduplicates provider rosters via `mysterycall_search_taxonomy()` and
   `mysterycall_search_and_process_npi()`.
 - Validates NPIs with `mysterycall_validate_npi()` before call prep
   begins.

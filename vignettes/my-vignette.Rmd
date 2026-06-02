@@ -29,11 +29,11 @@ knitr::opts_chunk$set(
 ```
 
 # Overview
-The `mysterycall::taxonomy` data and `mysterycall_search_by_taxonomy` function in the R package offers a convenient and efficient way to query the NPI Database for healthcare providers based on their taxonomy descriptions. This vignette provides a comprehensive guide on how to effectively utilize this function, explores its various capabilities, and offers illustrative use cases.
+The `mysterycall::taxonomy` data and `mysterycall_search_taxonomy` function in the R package offers a convenient and efficient way to query the NPI Database for healthcare providers based on their taxonomy descriptions. This vignette provides a comprehensive guide on how to effectively utilize this function, explores its various capabilities, and offers illustrative use cases.
 
 ## Installation
 
-Before you can harness the power of the `mysterycall_search_by_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
+Before you can harness the power of the `mysterycall_search_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
 
 ```{r setup, include = FALSE}
 if (eval_vignettes) {
@@ -47,7 +47,7 @@ Taxonomy descriptions, derived from the National Physician Taxonomy Codes and th
 
 In particular, the `mysterycall::taxonomy` data frame contains NUCC taxonomy codes utilized in NPPES data files. Each Taxonomy Code comprises a unique ten-character identifier that aids in the identification of healthcare provider types and their areas of expertise. Notably, the OBGYN taxonomy codes are sourced from Version 23.1 dated July 1, 2023.
 
-Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the `mysterycall_search_by_taxonomy` function.
+Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the `mysterycall_search_taxonomy` function.
 
 ```{r, include = FALSE}
 # Load required packages when evaluating examples
@@ -85,7 +85,7 @@ Code       Specialization
 
 ## Search by Taxonomy Description
 
-`mysterycall_search_by_taxonomy()` queries the NPI Registry for individual
+`mysterycall_search_taxonomy()` queries the NPI Registry for individual
 providers whose self-reported taxonomy description matches your search string.
 It is most useful for:
 
@@ -108,7 +108,7 @@ taxonomy_descriptions <- c(
   "Gynecologic Oncology"
 )
 
-data <- mysterycall_search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
+data <- mysterycall_search_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
 Inspect the distribution of results:
@@ -126,7 +126,7 @@ dplyr::count(data, npi, sort = TRUE) |> dplyr::filter(n > 1)
 
 ## Cleaning and standardizing the result
 
-The raw output from `mysterycall_search_by_taxonomy()` uses NPPES column names
+The raw output from `mysterycall_search_taxonomy()` uses NPPES column names
 (`basic_*`, `addresses_*`). The snippet below renames the key columns to
 match the names expected by `mysterycall_get_clinician_data()` and other
 downstream functions, then derives a short subspecialty code.
@@ -218,7 +218,7 @@ combination, deduplicated on NPI before returning.
 
 # Conclusion
 
-`mysterycall_search_by_taxonomy()` is the taxonomy-first entry point for roster
+`mysterycall_search_taxonomy()` is the taxonomy-first entry point for roster
 creation. Pair it with `mysterycall_search_and_process_npi()` (name-first) to
 cross-validate provider counts, and with `mysterycall_validate_phone()` and
 `mysterycall_safe_left_join()` to build a fully audited enrichment pipeline.

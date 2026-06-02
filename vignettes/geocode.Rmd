@@ -17,7 +17,7 @@ The `geocode` function is designed to help you geocode datasets containing addre
 
 ## Step 1
 ### Installation
-Before you can harness the power of the `mysterycall_search_by_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
+Before you can harness the power of the `mysterycall_search_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
 
 ```{r setup, include = FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
@@ -177,7 +177,7 @@ the isochrone step.
 
 `mysterycall_geocode()` converts raw practice addresses into latitude/longitude
 coordinates suitable for mapping, drive-time modeling, and spatial joins.
-Combine it with `mysterycall_search_by_taxonomy()` to build a fully enriched
+Combine it with `mysterycall_search_taxonomy()` to build a fully enriched
 provider roster — from NPI retrieval through geocoded locations — in a single
 reproducible pipeline. Next, pass the geocoded file into
 `create_isochrones_for_dataframe()` to build drive-time polygons

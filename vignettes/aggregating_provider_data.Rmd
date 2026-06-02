@@ -50,7 +50,7 @@ change; NPI is usually the most stable identifier across roster creation,
 enrichment, and call outcome files.
 
 ```{r eval=FALSE}
-roster <- mysterycall_search_by_taxonomy(
+roster <- mysterycall_search_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
   write_snapshot = FALSE,

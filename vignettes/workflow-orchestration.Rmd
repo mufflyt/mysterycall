@@ -42,7 +42,7 @@ data set.
 
 ```
   ┌─────────────────────┐
-  │   NPI Search        │  mysterycall_search_npi() / NPPES API
+  │   NPI Search        │  mysterycall_search_and_process_npi() / NPPES API
   │  (taxonomy terms)   │
   └──────────┬──────────┘
              │  raw provider roster
