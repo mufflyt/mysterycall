@@ -132,5 +132,4 @@ df <- data.frame(
   rate  = c(0.55, 0.72, 0.48, 0.63, 0.81)
 )
 mysterycall_map_acceptance_rate(df, region_col = "state", rate_col = "rate")
-#> Error in ggplot2::map_data("state"): The package "maps" is required for `map_data()`.
 ```
