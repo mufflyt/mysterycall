@@ -25,6 +25,7 @@ mysterycall:::mysterycall_ascii_norm("456   Oak    Avenue")
 }
 \seealso{
 Other address-normalization:
+\code{\link[=map_token]{map_token()}},
 \code{\link[=mysterycall_caps]{mysterycall_caps()}},
 \code{\link[=mysterycall_has_street_number]{mysterycall_has_street_number()}},
 \code{\link[=mysterycall_is_po_box]{mysterycall_is_po_box()}},

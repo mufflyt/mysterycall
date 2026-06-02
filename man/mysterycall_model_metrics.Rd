@@ -38,6 +38,11 @@ mysterycall_model_metrics(m)
 objects; \code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}} for AIC/BIC-based selection.
 
 Other outcomes:
+\code{\link[=.as_positive_logical]{.as_positive_logical()}},
+\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
+\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
+\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
+\code{\link[=.wait_stats]{.wait_stats()}},
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
 \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
 \code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},

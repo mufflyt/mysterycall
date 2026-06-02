@@ -175,7 +175,9 @@ mysterycall_is_po_box <- function(x) {
   stringr::str_detect(y, "\\bP\\s*O\\s*BOX\\b|\\bPO\\s*BOX\\b|\\bPOST\\s*OFFICE\\s*BOX\\b")
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_is_po_box
+#' @param ... Arguments passed to mysterycall_is_po_box
+#' @return See mysterycall_is_po_box
 #' @keywords internal
 #' @name is_po_box
 is_po_box <- function(...) { .Deprecated("mysterycall_is_po_box"); mysterycall_is_po_box(...) }
@@ -200,7 +202,9 @@ mysterycall_has_street_number <- function(x) {
   stringr::str_detect(y, "^\\s*\\d+\\b")
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_has_street_number
+#' @param ... Arguments passed to mysterycall_has_street_number
+#' @return See mysterycall_has_street_number
 #' @keywords internal
 #' @name has_street_number
 has_street_number <- function(...) { .Deprecated("mysterycall_has_street_number"); mysterycall_has_street_number(...) }
@@ -227,7 +231,9 @@ mysterycall_normalize_state <- function(state) {
   dplyr::if_else(stringr::str_detect(s, "^[A-Z]{2}$"), s, map_token(s, .state_map))
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_normalize_state
+#' @param ... Arguments passed to mysterycall_normalize_state
+#' @return See mysterycall_normalize_state
 #' @keywords internal
 #' @name normalize_state
 normalize_state <- function(...) { .Deprecated("mysterycall_normalize_state"); mysterycall_normalize_state(...) }
@@ -257,7 +263,9 @@ mysterycall_normalize_directionals <- function(addr) {
   a
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_normalize_directionals
+#' @param ... Arguments passed to mysterycall_normalize_directionals
+#' @return See mysterycall_normalize_directionals
 #' @keywords internal
 #' @name normalize_directionals
 normalize_directionals <- function(...) { .Deprecated("mysterycall_normalize_directionals"); mysterycall_normalize_directionals(...) }
@@ -286,7 +294,9 @@ mysterycall_normalize_suffix <- function(addr) {
   a
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_normalize_suffix
+#' @param ... Arguments passed to mysterycall_normalize_suffix
+#' @return See mysterycall_normalize_suffix
 #' @keywords internal
 #' @name normalize_suffix
 normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix"); mysterycall_normalize_suffix(...) }
@@ -332,7 +342,9 @@ mysterycall_normalize_units <- function(addr1, addr2 = NA_character_) {
   list(addr1 = a1, addr2 = a2)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_normalize_units
+#' @param ... Arguments passed to mysterycall_normalize_units
+#' @return See mysterycall_normalize_units
 #' @keywords internal
 #' @name normalize_units
 normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); mysterycall_normalize_units(...) }
@@ -362,7 +374,9 @@ mysterycall_normalize_zip5 <- function(zip) {
   ifelse(is.na(z), NA_character_, z)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_normalize_zip5
+#' @param ... Arguments passed to mysterycall_normalize_zip5
+#' @return See mysterycall_normalize_zip5
 #' @keywords internal
 #' @name normalize_zip5
 normalize_zip5 <- function(...) { .Deprecated("mysterycall_normalize_zip5"); mysterycall_normalize_zip5(...) }
@@ -390,7 +404,9 @@ mysterycall_strip_suite <- function(addr) {
   stringr::str_squish(a)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_strip_suite
+#' @param ... Arguments passed to mysterycall_strip_suite
+#' @return See mysterycall_strip_suite
 #' @keywords internal
 #' @name strip_suite
 strip_suite <- function(...) { .Deprecated("mysterycall_strip_suite"); mysterycall_strip_suite(...) }

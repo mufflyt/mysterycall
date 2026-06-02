@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{normalize_suffix}
 \alias{normalize_suffix}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_normalize_suffix}
 \usage{
 normalize_suffix(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_normalize_suffix}
+}
+\value{
+See mysterycall_normalize_suffix
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_normalize_suffix
 }
 \keyword{internal}

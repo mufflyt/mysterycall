@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{ascii_norm}
 \alias{ascii_norm}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_ascii_norm}
 \usage{
 ascii_norm(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_ascii_norm}
+}
+\value{
+See mysterycall_ascii_norm
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_ascii_norm
 }
 \keyword{internal}

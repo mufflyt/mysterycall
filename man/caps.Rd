@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{caps}
 \alias{caps}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_caps}
 \usage{
 caps(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_caps}
+}
+\value{
+See mysterycall_caps
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_caps
 }
 \keyword{internal}

@@ -72,6 +72,11 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
 
 Other outcomes:
+\code{\link[=.as_positive_logical]{.as_positive_logical()}},
+\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
+\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
+\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
+\code{\link[=.wait_stats]{.wait_stats()}},
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
 \code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
 \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},

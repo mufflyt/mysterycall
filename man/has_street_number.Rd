@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{has_street_number}
 \alias{has_street_number}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_has_street_number}
 \usage{
 has_street_number(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_has_street_number}
+}
+\value{
+See mysterycall_has_street_number
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_has_street_number
 }
 \keyword{internal}

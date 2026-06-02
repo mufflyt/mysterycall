@@ -126,7 +126,23 @@ NULL
 }
 
 # -- One-variable row builder --------------------------------------------------
-#' @noRd
+
+#' Build Continuous Rows for Table 1
+#'
+#' @param x Numeric vector.
+#' @param label Variable label.
+#' @param group_vec Grouping vector.
+#' @param groups Unique groups.
+#' @param group_col_names Column names for groups.
+#' @param include_overall Logical; include overall column.
+#' @param cont_stats Stats to include (median_iqr, mean_sd).
+#' @param digits Number of digits.
+#' @param emit_pvalue Logical; include p-value.
+#' @param min_cell Minimum cell size.
+#'
+#' @return A list of rows.
+#' @family table
+#' @keywords internal
 .t1_rows_continuous <- function(x, label, group_vec, groups, group_col_names,
                                 include_overall, cont_stats, digits,
                                 emit_pvalue, min_cell) {
@@ -156,10 +172,25 @@ NULL
 
   do.call(rbind, stat_rows)
 }
-
-#' @noRd
+#' Build Categorical Rows for Table 1
+#'
+#' @param x Vector.
+#' @param label Variable label.
+#' @param group_vec Grouping vector.
+#' @param groups Unique groups.
+#' @param group_col_names Column names for groups.
+#' @param include_overall Logical; include overall column.
+#' @param include_na Logical; include NA row.
+#' @param digits Number of digits.
+#' @param emit_pvalue Logical; include p-value.
+#' @param min_cell Minimum cell size.
+#'
+#' @return A list of rows.
+#' @family table
+#' @keywords internal
 .t1_rows_categorical <- function(x, label, group_vec, groups, group_col_names,
-                                  include_overall, digits, emit_pvalue, min_cell) {
+                                 include_overall, include_na, digits,
+                                 emit_pvalue, min_cell) {
   x_chr <- as.character(x)
   lvls  <- if (is.factor(x)) levels(x) else sort(unique(x_chr[!is.na(x_chr)]))
 

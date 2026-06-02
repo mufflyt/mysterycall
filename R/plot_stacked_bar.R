@@ -3,10 +3,21 @@
 #' @name mysterycall_plot_stacked_bar
 NULL
 
-# Internal helper -- apply %||% for default label substitution
+#' Null Coalesce
+#'
+#' @param a Object to check if null.
+#' @param b Default object.
+#'
+#' @return `a` if not null, else `b`.
+#' @keywords internal
 .null_coalesce <- function(a, b) if (!is.null(a)) a else b
 
-# Internal helper -- convert snake_case to Title Case
+#' Convert snake_case to Title Case
+#'
+#' @param x Character vector.
+#'
+#' @return Character vector in Title Case.
+#' @keywords internal
 .to_title <- function(x) {
   x <- gsub("_", " ", x, fixed = TRUE)
   # capitalise each word

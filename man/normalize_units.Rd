@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{normalize_units}
 \alias{normalize_units}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_normalize_units}
 \usage{
 normalize_units(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_normalize_units}
+}
+\value{
+See mysterycall_normalize_units
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_normalize_units
 }
 \keyword{internal}

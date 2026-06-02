@@ -2,11 +2,17 @@
 % Please edit documentation in R/academic_indicators.R
 \name{classify_academic_affiliation}
 \alias{classify_academic_affiliation}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_classify_academic_affiliation}
 \usage{
 classify_academic_affiliation(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_classify_academic_affiliation}
+}
+\value{
+See mysterycall_classify_academic_affiliation
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_classify_academic_affiliation
 }
 \keyword{internal}

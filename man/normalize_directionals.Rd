@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{normalize_directionals}
 \alias{normalize_directionals}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_normalize_directionals}
 \usage{
 normalize_directionals(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_normalize_directionals}
+}
+\value{
+See mysterycall_normalize_directionals
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_normalize_directionals
 }
 \keyword{internal}

@@ -2,11 +2,17 @@
 % Please edit documentation in R/acs_adults_18_90.R
 \name{get_acs_adults_18_90}
 \alias{get_acs_adults_18_90}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_get_acs_adults_18_90}
 \usage{
 get_acs_adults_18_90(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_get_acs_adults_18_90}
+}
+\value{
+See mysterycall_get_acs_adults_18_90
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_get_acs_adults_18_90
 }
 \keyword{internal}

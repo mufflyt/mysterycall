@@ -9,6 +9,15 @@ NULL
 .nanp_cache_env$lookup <- NULL
 .nanp_cache_env$path   <- NULL
 
+#' Load NANP Area Code Lookup Table
+#'
+#' Loads and caches the mapping between US area codes and states.
+#'
+#' @param nanp_path Optional path to custom NANP CSV.
+#'
+#' @return Data frame with `area_code` and `state` columns.
+#' @family validation
+#' @keywords internal
 .load_nanp_lookup <- function(nanp_path = NULL) {
   path <- if (!is.null(nanp_path)) {
     nanp_path

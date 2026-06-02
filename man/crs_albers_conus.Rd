@@ -2,11 +2,17 @@
 % Please edit documentation in R/green_journal.R
 \name{crs_albers_conus}
 \alias{crs_albers_conus}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_crs_albers_conus}
 \usage{
 crs_albers_conus(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_crs_albers_conus}
+}
+\value{
+See mysterycall_crs_albers_conus
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_crs_albers_conus
 }
 \keyword{internal}

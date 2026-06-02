@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{is_po_box}
 \alias{is_po_box}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_is_po_box}
 \usage{
 is_po_box(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_is_po_box}
+}
+\value{
+See mysterycall_is_po_box
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_is_po_box
 }
 \keyword{internal}

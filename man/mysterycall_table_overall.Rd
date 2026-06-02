@@ -43,6 +43,14 @@ mysterycall_table_overall("data/Table1.rds", "output_tables")
 \code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}
 
 Other table:
+\code{\link[=.t1_cat_pvalue]{.t1_cat_pvalue()}},
+\code{\link[=.t1_cont_pvalue]{.t1_cont_pvalue()}},
+\code{\link[=.t1_fmt_mean_sd]{.t1_fmt_mean_sd()}},
+\code{\link[=.t1_fmt_median_iqr]{.t1_fmt_median_iqr()}},
+\code{\link[=.t1_fmt_pct]{.t1_fmt_pct()}},
+\code{\link[=.t1_fmt_pval]{.t1_fmt_pval()}},
+\code{\link[=.t1_rows_categorical]{.t1_rows_categorical()}},
+\code{\link[=.t1_rows_continuous]{.t1_rows_continuous()}},
 \code{\link[=mysterycall_table1]{mysterycall_table1()}},
 \code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}},
 \code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},

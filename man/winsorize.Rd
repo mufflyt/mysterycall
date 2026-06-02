@@ -2,11 +2,17 @@
 % Please edit documentation in R/green_journal.R
 \name{winsorize}
 \alias{winsorize}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_winsorize}
 \usage{
 winsorize(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_winsorize}
+}
+\value{
+See mysterycall_winsorize
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_winsorize
 }
 \keyword{internal}

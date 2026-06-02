@@ -6,6 +6,9 @@
 \usage{
 .audit_volatile_fields
 }
+\value{
+Character vector of field names.
+}
 \description{
 The canonical list of audit JSON fields that change between runs and are
 therefore excluded when computing \code{artifact_id}. Any field that appears here
@@ -15,4 +18,12 @@ must NOT influence the content-addressable identity of an artifact.
 Keeping this constant in one place ensures that \code{mysterycall_verify_artifact()}
 and \code{mysterycall_clean_phase1()} use identical canonicalization logic.
 }
+\seealso{
+Other validation:
+\code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
+\code{\link[=validate_dataframe]{validate_dataframe()}},
+\code{\link[=validate_required_columns]{validate_required_columns()}},
+\code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
+}
+\concept{validation}
 \keyword{internal}

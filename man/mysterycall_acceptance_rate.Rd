@@ -73,6 +73,11 @@ mysterycall_acceptance_rate(df, group_by = "insurance")
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}
 
 Other outcomes:
+\code{\link[=.as_positive_logical]{.as_positive_logical()}},
+\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
+\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
+\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
+\code{\link[=.wait_stats]{.wait_stats()}},
 \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
 \code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
 \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},

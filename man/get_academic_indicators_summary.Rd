@@ -2,11 +2,17 @@
 % Please edit documentation in R/academic_indicators.R
 \name{get_academic_indicators_summary}
 \alias{get_academic_indicators_summary}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_get_academic_indicators_summary}
 \usage{
 get_academic_indicators_summary(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_get_academic_indicators_summary}
+}
+\value{
+See mysterycall_get_academic_indicators_summary
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_get_academic_indicators_summary
 }
 \keyword{internal}

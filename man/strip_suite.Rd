@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{strip_suite}
 \alias{strip_suite}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_strip_suite}
 \usage{
 strip_suite(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_strip_suite}
+}
+\value{
+See mysterycall_strip_suite
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_strip_suite
 }
 \keyword{internal}

@@ -23,6 +23,7 @@ mysterycall:::mysterycall_is_po_box("123 Main Street")
 }
 \seealso{
 Other address-normalization:
+\code{\link[=map_token]{map_token()}},
 \code{\link[=mysterycall_ascii_norm]{mysterycall_ascii_norm()}},
 \code{\link[=mysterycall_caps]{mysterycall_caps()}},
 \code{\link[=mysterycall_has_street_number]{mysterycall_has_street_number()}},

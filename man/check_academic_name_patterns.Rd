@@ -2,11 +2,17 @@
 % Please edit documentation in R/academic_indicators.R
 \name{check_academic_name_patterns}
 \alias{check_academic_name_patterns}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_check_academic_name_patterns}
 \usage{
 check_academic_name_patterns(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_check_academic_name_patterns}
+}
+\value{
+See mysterycall_check_academic_name_patterns
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_check_academic_name_patterns
 }
 \keyword{internal}

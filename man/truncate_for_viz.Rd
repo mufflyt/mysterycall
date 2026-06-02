@@ -2,11 +2,17 @@
 % Please edit documentation in R/green_journal.R
 \name{truncate_for_viz}
 \alias{truncate_for_viz}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_truncate_for_viz}
 \usage{
 truncate_for_viz(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_truncate_for_viz}
+}
+\value{
+See mysterycall_truncate_for_viz
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_truncate_for_viz
 }
 \keyword{internal}

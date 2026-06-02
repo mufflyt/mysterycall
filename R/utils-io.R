@@ -10,6 +10,15 @@ NULL
 
 # nocov start
 
+#' Normalize File Format for I/O
+#'
+#' @param format Optional character scalar: "csv" or "parquet".
+#' @param path Optional character scalar. File path to infer format from.
+#' @param default Character scalar to return if format cannot be inferred.
+#'
+#' @return Character scalar: "csv" or "parquet".
+#' @family utilities
+#' @keywords internal
 mysterycall_normalize_file_format <- function(format = NULL, path = NULL, default = "csv") {
   choices <- c("csv", "parquet")
   if (!is.null(format)) {
@@ -24,6 +33,11 @@ mysterycall_normalize_file_format <- function(format = NULL, path = NULL, defaul
   default
 }
 
+#' Require arrow Package for Parquet Support
+#'
+#' @return `invisible(NULL)`; stops if arrow is missing.
+#' @family utilities
+#' @keywords internal
 mysterycall_require_arrow <- function() {
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop(

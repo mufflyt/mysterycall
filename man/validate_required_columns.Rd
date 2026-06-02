@@ -21,6 +21,8 @@ Validate Required Columns in a Data Frame
 }
 \seealso{
 Other validation:
+\code{\link{.audit_volatile_fields}},
+\code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
 }

@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{normalize_state}
 \alias{normalize_state}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_normalize_state}
 \usage{
 normalize_state(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_normalize_state}
+}
+\value{
+See mysterycall_normalize_state
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_normalize_state
 }
 \keyword{internal}

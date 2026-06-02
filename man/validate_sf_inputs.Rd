@@ -37,4 +37,5 @@ contain the expected geometry types, possess sensible bounding boxes, and
 do not contain empty geometries. Invalid geometries are repaired with
 \code{sf::st_make_valid()} when possible.
 }
+\concept{geospatial}
 \keyword{internal}

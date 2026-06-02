@@ -2,11 +2,17 @@
 % Please edit documentation in R/address_normalizer.R
 \name{normalize_zip5}
 \alias{normalize_zip5}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_normalize_zip5}
 \usage{
 normalize_zip5(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_normalize_zip5}
+}
+\value{
+See mysterycall_normalize_zip5
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_normalize_zip5
 }
 \keyword{internal}

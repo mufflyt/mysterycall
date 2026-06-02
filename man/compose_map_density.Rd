@@ -2,11 +2,17 @@
 % Please edit documentation in R/green_journal.R
 \name{compose_map_density}
 \alias{compose_map_density}
-\title{Deprecated.}
+\title{Deprecated version of mysterycall_compose_map_density}
 \usage{
 compose_map_density(...)
 }
+\arguments{
+\item{...}{Arguments passed to mysterycall_compose_map_density}
+}
+\value{
+See mysterycall_compose_map_density
+}
 \description{
-Deprecated.
+Deprecated version of mysterycall_compose_map_density
 }
 \keyword{internal}
