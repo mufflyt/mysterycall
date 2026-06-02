@@ -149,7 +149,7 @@
 #'   \item{rotation_months_y4_18}{Months at site 18 during year 4.}
 #' }
 #'
-#' @source \url{https://apps.acgme.org/ads/Public/Programs/Search}
+#' @source \url{https://www.acgme.org/}
 #'
 #' @examples
 #' data(acgme)
@@ -157,4 +157,7 @@
 #'
 #' @keywords dataset
 #' @family datasets
-"acgme"
+#' @name acgme
+#' @docType data
+#' @family datasets
+NULL

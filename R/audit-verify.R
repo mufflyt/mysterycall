@@ -7,6 +7,8 @@
 #' Keeping this constant in one place ensures that `mysterycall_verify_artifact()`
 #' and `mysterycall_clean_phase1()` use identical canonicalization logic.
 #'
+#' @return Character vector of field names.
+#' @family validation
 #' @keywords internal
 .audit_volatile_fields <- c(
   "start_time", "end_time", "duration_seconds",
@@ -53,7 +55,7 @@
 #' mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
 mysterycall_verify_artifact <- function(audit_path) {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
-    stop("Package 'jsonlite' is required. Install with install.packages('jsonlite').",
+    stop("Package 'jsonlite' is required",
          call. = FALSE)
   }
   if (!is.character(audit_path) || length(audit_path) != 1L || !nzchar(audit_path)) {

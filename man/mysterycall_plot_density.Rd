@@ -74,21 +74,21 @@ mysterycall_plot_density(
 \seealso{
 \code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}} for jittered point plots;
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots;
-\code{\link[=save_green_journal_figure]{save_green_journal_figure()}} to export at journal resolution.
+\code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}} to export at journal resolution.
 
-Other mapping: 
-\code{\link{mysterycall_clear_isochrone_cache}()},
-\code{\link{mysterycall_create_isochrones}()},
-\code{\link{mysterycall_hrr_maps}()},
-\code{\link{mysterycall_isochrones_for_df}()},
-\code{\link{mysterycall_map_acceptance_rate}()},
-\code{\link{mysterycall_map_acog_districts}()},
-\code{\link{mysterycall_map_base}()},
-\code{\link{mysterycall_map_block_group}()},
-\code{\link{mysterycall_map_leaflet}()},
-\code{\link{mysterycall_map_physicians}()},
-\code{\link{mysterycall_plot_isochrones}()},
-\code{\link{mysterycall_plot_line}()},
-\code{\link{mysterycall_plot_scatter}()}
+Other mapping:
+\code{\link[=mysterycall_clear_isochrone_cache]{mysterycall_clear_isochrone_cache()}},
+\code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}},
+\code{\link[=mysterycall_hrr_maps]{mysterycall_hrr_maps()}},
+\code{\link[=mysterycall_isochrones_for_df]{mysterycall_isochrones_for_df()}},
+\code{\link[=mysterycall_map_acceptance_rate]{mysterycall_map_acceptance_rate()}},
+\code{\link[=mysterycall_map_acog_districts]{mysterycall_map_acog_districts()}},
+\code{\link[=mysterycall_map_base]{mysterycall_map_base()}},
+\code{\link[=mysterycall_map_block_group]{mysterycall_map_block_group()}},
+\code{\link[=mysterycall_map_leaflet]{mysterycall_map_leaflet()}},
+\code{\link[=mysterycall_map_physicians]{mysterycall_map_physicians()}},
+\code{\link[=mysterycall_plot_isochrones]{mysterycall_plot_isochrones()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}},
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}}
 }
 \concept{mapping}

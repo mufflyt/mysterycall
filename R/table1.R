@@ -308,6 +308,15 @@ mysterycall_table1 <- function(data,
 #'   [mysterycall_table1_gtsummary()] for a publication-ready `gtsummary` alternative.
 #' @family table
 #' @export
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   age = c(25, 30, 35, 40),
+#'   sex = c("M", "F", "F", "M")
+#' )
+#' t1 <- mysterycall_table1(df, vars = c("age", "sex"))
+#' print(t1)
+#' }
 print.mysterycall_table1 <- function(x, ...) {
   ns_str <- paste(sprintf("%s N=%d", names(x$column_ns), x$column_ns),
                   collapse = ", ")

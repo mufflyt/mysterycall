@@ -15,7 +15,7 @@
 #' mysterycall_write_arsenal_table(my_table, "output_table")
 mysterycall_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for mysterycall_write_arsenal_table(). Install with: install.packages('arsenal')", call. = FALSE)
+    stop("Package 'arsenal' is required for mysterycall_write_arsenal_table()", call. = FALSE)
   }
   if (!is.data.frame(object)) {
     stop("Error: 'object' must be a data frame object.", call. = FALSE)

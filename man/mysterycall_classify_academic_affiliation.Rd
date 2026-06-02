@@ -35,12 +35,24 @@ and optional specialty-based adjustments to classify academic vs.
 non-academic practice settings using a weighted scoring system.
 }
 \examples{
-classify_academic_affiliation("University of Michigan Medical Center")
-classify_academic_affiliation("Community Regional Hospital")
+mysterycall:::mysterycall_classify_academic_affiliation("University of Michigan Medical Center")
+mysterycall:::mysterycall_classify_academic_affiliation("Community Regional Hospital")
 
 }
 \seealso{
 \code{\link{mysterycall_check_academic_name_patterns}},
 \code{\link{mysterycall_get_academic_indicators_summary}}
+
+Other academic-indicators:
+\code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{KNOWN_ACADEMIC_INSTITUTIONS}},
+\code{\link{MEDICAL_SCHOOL_INDICATORS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NCI_CANCER_CENTERS}},
+\code{\link{NIH_CTSA_HUBS}},
+\code{\link[=mysterycall_check_academic_name_patterns]{mysterycall_check_academic_name_patterns()}},
+\code{\link[=mysterycall_get_academic_indicators_summary]{mysterycall_get_academic_indicators_summary()}}
 }
-\concept{classification}
+\concept{academic-indicators}

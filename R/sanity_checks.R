@@ -25,7 +25,7 @@
 #' @seealso [mysterycall_check_no_data_loss()], [mysterycall_check_api_response()],
 #'   [mysterycall_scan_for_limits()] for related sanity-check utilities.
 #' @family utilities
-#' @export
+#' @keywords internal
 mysterycall_check_no_limits <- function(data,
                                    context = "dataset",
                                    min_expected = NULL,
@@ -137,7 +137,7 @@ mysterycall_check_no_limits <- function(data,
 #' @seealso [mysterycall_check_no_limits()] to validate row counts at runtime;
 #'   [mysterycall_check_no_data_loss()], [mysterycall_check_api_response()].
 #' @family utilities
-#' @export
+#' @keywords internal
 mysterycall_scan_for_limits <- function(path = "R",
                                    recursive = TRUE,
                                    exclude_pattern = NULL) {
@@ -294,7 +294,7 @@ mysterycall_scan_for_limits <- function(path = "R",
 #' @seealso [mysterycall_check_no_limits()], [mysterycall_check_no_data_loss()],
 #'   [mysterycall_preflight_check()] to validate API keys before the workflow.
 #' @family utilities
-#' @export
+#' @keywords internal
 mysterycall_check_api_response <- function(result,
                                      expected,
                                      api_name = "API",
@@ -356,7 +356,7 @@ mysterycall_check_api_response <- function(result,
 #' @seealso [mysterycall_check_no_limits()], [mysterycall_check_api_response()],
 #'   [mysterycall_scan_for_limits()] for related sanity-check utilities.
 #' @family utilities
-#' @export
+#' @keywords internal
 mysterycall_check_no_data_loss <- function(before,
                                      after,
                                      operation = "operation",

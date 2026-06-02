@@ -152,10 +152,7 @@ A data frame with 142 columns:
 }
 }
 \source{
-\url{https://apps.acgme.org/ads/Public/Programs/Search}
-}
-\usage{
-acgme
+\url{https://www.acgme.org/}
 }
 \description{
 Information about Obstetricians and Gynecologists (OBGYN) residency programs
@@ -167,7 +164,7 @@ print(acgme[1:3, 1:5])
 
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{ACOG_Districts}},
 \code{\link{cityStateToLatLong}},
 \code{\link{fips}},

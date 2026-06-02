@@ -90,7 +90,7 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
                  rds = readRDS(file_path),
                  xlsx = {
                    if (!requireNamespace("readxl", quietly = TRUE)) {
-                     stop("Package 'readxl' is required to read Excel files. Install with: install.packages('readxl')", call. = FALSE)
+                     stop("Package 'readxl' is required to read Excel files", call. = FALSE)
                    }
                    readxl::read_excel(file_path)
                  },
@@ -101,7 +101,7 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
   }
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
-    stop("Package 'ggmap' is required for mysterycall_geocode(). Install with: install.packages('ggmap')", call. = FALSE)
+    stop("Package 'ggmap' is required for mysterycall_geocode()", call. = FALSE)
   }
   ggmap::register_google(key = google_maps_api_key)
 

@@ -58,13 +58,13 @@ subspecialists once locations are validated;
 \code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for row-level NPI validation before
 location assignment.
 
-Other data management: 
-\code{\link{mysterycall_check_duplicates}()},
-\code{\link{mysterycall_extract_zip5}()},
-\code{\link{mysterycall_luhn_check}()},
-\code{\link{mysterycall_merge_with_prefix}()},
-\code{\link{mysterycall_prepare_table1_vars}()},
-\code{\link{mysterycall_rename_columns}()},
-\code{\link{mysterycall_stratified_sample}()}
+Other data management:
+\code{\link[=mysterycall_check_duplicates]{mysterycall_check_duplicates()}},
+\code{\link[=mysterycall_extract_zip5]{mysterycall_extract_zip5()}},
+\code{\link[=mysterycall_luhn_check]{mysterycall_luhn_check()}},
+\code{\link[=mysterycall_merge_with_prefix]{mysterycall_merge_with_prefix()}},
+\code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}},
+\code{\link[=mysterycall_rename_columns]{mysterycall_rename_columns()}},
+\code{\link[=mysterycall_stratified_sample]{mysterycall_stratified_sample()}}
 }
 \concept{data management}

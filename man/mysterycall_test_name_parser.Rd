@@ -27,9 +27,10 @@ tbl$quality_issue       # per-case quality codes
 \code{\link[=mysterycall_parse_physician_name]{mysterycall_parse_physician_name()}},
 \code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}}
 
-Other name-parsing: 
-\code{\link{mysterycall_format_physician_name}()},
-\code{\link{mysterycall_parse_physician_name}()},
-\code{\link{mysterycall_validate_parsed_names}()}
+Other name-parsing:
+\code{\link[=mysterycall_format_physician_name]{mysterycall_format_physician_name()}},
+\code{\link[=mysterycall_parse_physician_name]{mysterycall_parse_physician_name()}},
+\code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}}
 }
 \concept{name-parsing}
+\keyword{internal}

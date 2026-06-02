@@ -21,7 +21,7 @@
 #' mysterycall_map_base("<strong>Custom title</strong>")
 mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for mysterycall_map_base(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_base()", call. = FALSE)
   }
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
@@ -36,7 +36,7 @@ mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zo
 
   if (!is.null(title) && nzchar(title)) {
     if (!requireNamespace("htmltools", quietly = TRUE)) {
-      stop("Package 'htmltools' is required for this function. Install with: install.packages('htmltools')", call. = FALSE)
+      stop("Package 'htmltools' is required for this function", call. = FALSE)
     }
     map <- leaflet::addControl(
       map,
@@ -89,16 +89,16 @@ mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zo
 #' @export
 mysterycall_map_physicians <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for mysterycall_map_physicians(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_physicians()", call. = FALSE)
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
-    stop("Package 'webshot' is required for mysterycall_map_physicians(). Install with: install.packages('webshot')", call. = FALSE)
+    stop("Package 'webshot' is required for mysterycall_map_physicians()", call. = FALSE)
   }
   if (!requireNamespace("viridis", quietly = TRUE)) {
-    stop("Package 'viridis' is required for this function. Install with: install.packages('viridis')", call. = FALSE)
+    stop("Package 'viridis' is required for this function", call. = FALSE)
   }
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
-    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
+    stop("Package 'htmlwidgets' is required for this function", call. = FALSE)
   }
   if (is.null(output_dir)) {
     output_dir <- mysterycall_tempdir("physician_maps", create = TRUE)

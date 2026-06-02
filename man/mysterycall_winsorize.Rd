@@ -28,14 +28,14 @@ distribution.
 }
 \examples{
 x <- c(0, 5, 10, 50, 90, 95, 100)
-mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
+mysterycall:::mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
 }
 \seealso{
 \code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}}
 
-Other green-journal-spatial: 
-\code{\link{mysterycall_compose_map_density}()},
-\code{\link{mysterycall_crs_albers_conus}()},
-\code{\link{mysterycall_truncate_for_viz}()}
+Other green-journal-spatial:
+\code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}},
+\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}},
+\code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}}
 }
 \concept{green-journal-spatial}

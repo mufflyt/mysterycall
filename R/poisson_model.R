@@ -112,7 +112,7 @@ mysterycall_poisson_model <- function(data,
   # -- Require lme4 -------------------------------------------------------------
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop(
-      "Package 'lme4' is required. Install with: install.packages('lme4')",
+      "Package 'lme4' is required",
       call. = FALSE
     )
   }
@@ -315,6 +315,13 @@ mysterycall_poisson_model <- function(data,
 #'   [mysterycall_irr_plot()] to visualise the same IRR estimates.
 #' @family outcomes
 #' @export
+#' @examples
+#' \dontrun{
+#' model <- mysterycall_poisson_model(data, outcome_col = "wait_days",
+#'                                     predictor_col = "insurance",
+#'                                     random_intercept = "physician_id")
+#' print(model)
+#' }
 print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
   cat(sprintf(
     "Poisson GLMER  n = %d  physicians = %d  AIC = %.1f  BIC = %.1f\n",

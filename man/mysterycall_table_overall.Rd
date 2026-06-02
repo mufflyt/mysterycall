@@ -42,11 +42,11 @@ mysterycall_table_overall("data/Table1.rds", "output_tables")
 \seealso{
 \code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}
 
-Other table: 
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_table1}()}
+Other table:
+\code{\link[=mysterycall_table1]{mysterycall_table1()}},
+\code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}},
+\code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},
+\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}},
+\code{\link[=print.mysterycall_table1]{print.mysterycall_table1()}}
 }
 \concept{table}

@@ -21,7 +21,7 @@
 #'
 #' @seealso [mysterycall_plot_scatter()] for jittered point plots;
 #'   [mysterycall_plot_line()] for median-trend line plots;
-#'   [save_green_journal_figure()] to export at journal resolution.
+#'   [mysterycall_save_green_journal_figure()] to export at journal resolution.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
 #' @importFrom rlang sym .data

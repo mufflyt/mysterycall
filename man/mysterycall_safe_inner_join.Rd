@@ -50,7 +50,7 @@ names. Default \code{c(".x", ".y")}.}
 A data frame: the inner-join result.
 }
 \description{
-Wraps \code{\link[dplyr:mutate-joins]{dplyr::inner_join()}} with key-type harmonisation, optional
+Wraps \code{\link[dplyr:inner_join]{dplyr::inner_join()}} with key-type harmonisation, optional
 uniqueness assertion on both tables, coverage enforcement, and an optional
 CSV audit record.
 }
@@ -79,10 +79,10 @@ result <- mysterycall_safe_inner_join(
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}}, \code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}},
 \code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}}, \code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}}
 
-Other safe-joins: 
-\code{\link{mysterycall_assert_unique_keys}()},
-\code{\link{mysterycall_safe_anti_join}()},
-\code{\link{mysterycall_safe_left_join}()},
-\code{\link{mysterycall_safe_semi_join}()}
+Other safe-joins:
+\code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}},
+\code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}},
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}},
+\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}
 }
 \concept{safe-joins}

@@ -23,14 +23,14 @@ uses data-driven quantiles, this forces exact bounds for clean legend breaks
 numbers regardless of the data range.
 }
 \examples{
-mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
+mysterycall:::mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
 }
 \seealso{
 \code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 
-Other green-journal-spatial: 
-\code{\link{mysterycall_compose_map_density}()},
-\code{\link{mysterycall_crs_albers_conus}()},
-\code{\link{mysterycall_winsorize}()}
+Other green-journal-spatial:
+\code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}},
+\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}},
+\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 }
 \concept{green-journal-spatial}

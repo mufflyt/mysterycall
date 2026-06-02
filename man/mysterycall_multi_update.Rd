@@ -15,28 +15,29 @@ mysterycall_multi_update(tracker, amount = 1, status = NULL)
 \item{status}{Optional status message to display.}
 }
 \value{
-Invisible NULL.
+\code{invisible(NULL)}.
 }
 \description{
 Increments the inner progress bar for the current step.
 }
 \examples{
-tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
-mysterycall_multi_step(tr, 1, total = 5)
-for (i in seq_len(5)) mysterycall_multi_update(tr)
+tr <- mysterycall:::mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall:::mysterycall_multi_step(tr, 1, total = 5)
+for (i in seq_len(5)) mysterycall:::mysterycall_multi_update(tr)
 }
 \seealso{
-Other progress-bars: 
-\code{\link{mysterycall_multi_complete}()},
-\code{\link{mysterycall_multi_done}()},
-\code{\link{mysterycall_multi_progress}()},
-\code{\link{mysterycall_multi_step}()},
-\code{\link{mysterycall_progress_bar}()},
-\code{\link{mysterycall_progress_done}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_map}()},
-\code{\link{mysterycall_progress_update}()},
-\code{\link{mysterycall_spinner_start}()},
-\code{\link{mysterycall_spinner_stop}()}
+Other progress:
+\code{\link[=mysterycall_multi_complete]{mysterycall_multi_complete()}},
+\code{\link[=mysterycall_multi_done]{mysterycall_multi_done()}},
+\code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}},
+\code{\link[=mysterycall_multi_step]{mysterycall_multi_step()}},
+\code{\link[=mysterycall_progress_bar]{mysterycall_progress_bar()}},
+\code{\link[=mysterycall_progress_done]{mysterycall_progress_done()}},
+\code{\link[=mysterycall_progress_fail]{mysterycall_progress_fail()}},
+\code{\link[=mysterycall_progress_map]{mysterycall_progress_map()}},
+\code{\link[=mysterycall_progress_update]{mysterycall_progress_update()}},
+\code{\link[=mysterycall_spinner_start]{mysterycall_spinner_start()}},
+\code{\link[=mysterycall_spinner_stop]{mysterycall_spinner_stop()}}
 }
-\concept{progress-bars}
+\concept{progress}
+\keyword{internal}

@@ -27,16 +27,12 @@
 #'
 #' @examplesIf interactive()
 #' mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
-#'
-
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom checkmate assert_class assert_number assert_string assert_function
 #' @importFrom dplyr .data
 #' @importFrom stats quantile na.omit
-#'
 #' @family geospatial helpers
 #' @export
-#'
 mysterycall_calculate_overlap <- function(block_groups,
                                                     isochrones_joined,
                                                     drive_time_minutes,
@@ -44,7 +40,7 @@ mysterycall_calculate_overlap <- function(block_groups,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   orient_geometries <- function(x) {

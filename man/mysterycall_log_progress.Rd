@@ -16,35 +16,37 @@ mysterycall_log_progress(current, total, status = NULL, show_percent = TRUE)
 \item{show_percent}{Whether to show percentage (default TRUE)}
 }
 \value{
-Invisible NULL
+\code{invisible(NULL)}.
 }
 \description{
 Log progress for batch operations
 }
 \examples{
-mysterycall_log_progress(50, 100)
-mysterycall_log_progress(50, 100, status = "geocoding")
+mysterycall:::mysterycall_log_progress(50, 100)
+mysterycall:::mysterycall_log_progress(50, 100, status = "geocoding")
 }
 \seealso{
-Other logging: 
-\code{\link{mysterycall_format_duration}()},
-\code{\link{mysterycall_log_cache_hit}()},
-\code{\link{mysterycall_log_error}()},
-\code{\link{mysterycall_log_info}()},
-\code{\link{mysterycall_log_save}()},
-\code{\link{mysterycall_log_step}()},
-\code{\link{mysterycall_log_step_complete}()},
-\code{\link{mysterycall_log_success}()},
-\code{\link{mysterycall_log_warning}()},
-\code{\link{mysterycall_progress_callback}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_tracker_fail}()},
-\code{\link{mysterycall_tracker_update}()},
-\code{\link{mysterycall_use_quiet_logging}()},
-\code{\link{mysterycall_workflow_end}()},
-\code{\link{mysterycall_workflow_start}()}
+Other logging:
+\code{\link[=mysterycall_format_duration]{mysterycall_format_duration()}},
+\code{\link[=mysterycall_log_cache_hit]{mysterycall_log_cache_hit()}},
+\code{\link[=mysterycall_log_error]{mysterycall_log_error()}},
+\code{\link[=mysterycall_log_info]{mysterycall_log_info()}},
+\code{\link[=mysterycall_log_save]{mysterycall_log_save()}},
+\code{\link[=mysterycall_log_step]{mysterycall_log_step()}},
+\code{\link[=mysterycall_log_step_complete]{mysterycall_log_step_complete()}},
+\code{\link[=mysterycall_log_success]{mysterycall_log_success()}},
+\code{\link[=mysterycall_log_to_file]{mysterycall_log_to_file()}},
+\code{\link[=mysterycall_log_warning]{mysterycall_log_warning()}},
+\code{\link[=mysterycall_progress_callback]{mysterycall_progress_callback()}},
+\code{\link[=mysterycall_progress_finish]{mysterycall_progress_finish()}},
+\code{\link[=mysterycall_progress_start]{mysterycall_progress_start()}},
+\code{\link[=mysterycall_progress_summary]{mysterycall_progress_summary()}},
+\code{\link[=mysterycall_progress_tracker]{mysterycall_progress_tracker()}},
+\code{\link[=mysterycall_tracker_fail]{mysterycall_tracker_fail()}},
+\code{\link[=mysterycall_tracker_update]{mysterycall_tracker_update()}},
+\code{\link[=mysterycall_use_quiet_logging]{mysterycall_use_quiet_logging()}},
+\code{\link[=mysterycall_workflow_end]{mysterycall_workflow_end()}},
+\code{\link[=mysterycall_workflow_start]{mysterycall_workflow_start()}}
 }
 \concept{logging}
+\keyword{internal}

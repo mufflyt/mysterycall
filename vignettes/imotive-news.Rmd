@@ -64,7 +64,9 @@ triage follow-up calls.
 
 ## Release timeline
 
-For a chronological list of package changes, consult [`NEWS.md`](../NEWS.html).
+For a chronological list of package changes, consult the `NEWS.md` file
+distributed with the package or visit the
+[changelog](https://mufflyt.github.io/mysterycall/news/index.html).
 The Imotive vignette will continue to summarize high-level updates each time new
 features land in the development branch.
 

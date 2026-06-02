@@ -15,9 +15,6 @@ A data frame with three columns:
 \source{
 \url{https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf}
 }
-\usage{
-taxonomy
-}
 \description{
 This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
 }
@@ -30,11 +27,10 @@ print(taxonomy[1:3, ])
 \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}} to look up provider taxonomy
 codes from the NPI registry; \link{acgme} for ACGME residency program data.
 
-Other datasets: 
+Other datasets:
 \code{\link{ACOG_Districts}},
 \code{\link{acgme}},
 \code{\link{cityStateToLatLong}},
 \code{\link{fips}}
 }
 \concept{datasets}
-\keyword{datasets}

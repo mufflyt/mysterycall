@@ -11,11 +11,23 @@ NULL
 
 # -- Internal calendar helpers (no lubridate) ----------------------------------
 
-# Returns 1=Sun, 2=Mon, ..., 7=Sat  (same convention as lubridate::wday)
+#' Get Day of Week
+#'
+#' Returns 1=Sun, 2=Mon, ..., 7=Sat (same convention as lubridate::wday).
+#'
+#' @param d Date object or string.
+#' @return Integer (1-7).
+#' @keywords internal
 .mc_wday <- function(d) as.integer(format(as.Date(d), "%w")) + 1L
 
-# nth occurrence of a weekday in a given month/year
-# weekday: 1=Sun, 2=Mon, ..., 7=Sat
+#' Get nth Occurrence of a Weekday
+#'
+#' @param year Integer year.
+#' @param month Integer month (1-12).
+#' @param weekday Integer weekday (1=Sun, ..., 7=Sat).
+#' @param n Integer occurrence (1st, 2nd, etc.).
+#' @return Date object.
+#' @keywords internal
 .mc_nth_weekday <- function(year, month, weekday, n) {
   first     <- as.Date(paste(year, month, "01", sep = "-"))
   first_dow <- .mc_wday(first)
@@ -23,7 +35,13 @@ NULL
   first     + offset + (n - 1L) * 7L
 }
 
-# Last occurrence of a weekday in a given month/year
+#' Get Last Occurrence of a Weekday
+#'
+#' @param year Integer year.
+#' @param month Integer month (1-12).
+#' @param weekday Integer weekday (1=Sun, ..., 7=Sat).
+#' @return Date object.
+#' @keywords internal
 .mc_last_weekday <- function(year, month, weekday) {
   last <- if (month == 12L) {
     as.Date(paste(year + 1L, "01", "01", sep = "-")) - 1L
@@ -34,7 +52,14 @@ NULL
   last - (last_dow - weekday) %% 7L
 }
 
-# Shift a fixed-date holiday to its observed weekday (Fri if Sat, Mon if Sun)
+#' Shift Holiday to Observed Weekday
+#'
+#' Shifts a fixed-date holiday to its observed weekday (Friday if Saturday,
+#' Monday if Sunday).
+#'
+#' @param d Date object.
+#' @return Date object (possibly shifted).
+#' @keywords internal
 .mc_observe <- function(d) {
   dow <- .mc_wday(d)
   if (dow == 7L) return(d - 1L)   # Saturday -> Friday
@@ -79,7 +104,7 @@ mysterycall_us_federal_calendar <- function(
     end_year   = as.integer(format(Sys.Date(), "%Y")) + 10L) {
 
   if (!requireNamespace("bizdays", quietly = TRUE)) {
-    stop("Package 'bizdays' is required. Install with: install.packages('bizdays')",
+    stop("Package 'bizdays' is required",
          call. = FALSE)
   }
   if (!is.numeric(start_year) || !is.numeric(end_year) ||
@@ -164,7 +189,7 @@ mysterycall_count_business_days <- function(start_date,
                                             end_date,
                                             calendar = NULL) {
   if (!requireNamespace("bizdays", quietly = TRUE)) {
-    stop("Package 'bizdays' is required. Install with: install.packages('bizdays')",
+    stop("Package 'bizdays' is required",
          call. = FALSE)
   }
   if (is.null(calendar)) calendar <- mysterycall_us_federal_calendar()
@@ -245,7 +270,7 @@ mysterycall_business_days <- function(data,
                                       result_col = "business_days_until_appointment",
                                       calendar   = NULL) {
   if (!requireNamespace("bizdays", quietly = TRUE)) {
-    stop("Package 'bizdays' is required. Install with: install.packages('bizdays')",
+    stop("Package 'bizdays' is required",
          call. = FALSE)
   }
 

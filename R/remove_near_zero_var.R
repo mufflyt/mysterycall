@@ -23,7 +23,7 @@
 #' @export
 mysterycall_remove_near_zero <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   if (!requireNamespace("caret", quietly = TRUE)) {
-    stop("Package 'caret' is required for mysterycall_remove_near_zero(). Install with: install.packages('caret')", call. = FALSE)
+    stop("Package 'caret' is required for mysterycall_remove_near_zero()", call. = FALSE)
   }
 
   if (nrow(data_frame) == 0 || ncol(data_frame) == 0) {

@@ -32,14 +32,14 @@ mysterycall_isochrones_for_df <- function(
     output_dir = NULL,
     save_interval = 240) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (!requireNamespace("hereR", quietly = TRUE)) {
-    stop("Package 'hereR' is required for mysterycall_isochrones_for_df(). Install with: install.packages('hereR')", call. = FALSE)
+    stop("Package 'hereR' is required for mysterycall_isochrones_for_df()", call. = FALSE)
   }
   if (!requireNamespace("easyr", quietly = TRUE)) {
-    stop("Package 'easyr' is required for mysterycall_isochrones_for_df(). Install with: install.packages('easyr')", call. = FALSE)
+    stop("Package 'easyr' is required for mysterycall_isochrones_for_df()", call. = FALSE)
   }
   if (is.na(api_key) || !nzchar(api_key)) stop("routing API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 

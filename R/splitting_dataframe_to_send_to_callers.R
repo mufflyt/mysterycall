@@ -65,7 +65,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
                            recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
   if (!requireNamespace("openxlsx", quietly = TRUE)) {
-    stop("Package 'openxlsx' is required for this function. Install with: install.packages('openxlsx')", call. = FALSE)
+    stop("Package 'openxlsx' is required for this function", call. = FALSE)
   }
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
@@ -79,7 +79,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
       data <- readRDS(data_or_path)
     } else if (ext %in% c("xls", "xlsx")) {
       if (!requireNamespace("readxl", quietly = TRUE)) {
-        stop("Reading Excel workbooks requires the 'readxl' package. Install it with install.packages('readxl').", call. = FALSE)
+        stop("Reading Excel workbooks requires the 'readxl' package", call. = FALSE)
       }
       data <- readxl::read_excel(data_or_path)
     } else {

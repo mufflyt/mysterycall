@@ -28,7 +28,7 @@ pattern lists to determine academic affiliation probability. Returns the
 highest confidence match found.
 }
 \examples{
-check_academic_name_patterns(c("Johns Hopkins Hospital",
+mysterycall:::mysterycall_check_academic_name_patterns(c("Johns Hopkins Hospital",
                                "Community Hospital",
                                "University of Michigan Medical Center"))
 
@@ -36,24 +36,16 @@ check_academic_name_patterns(c("Johns Hopkins Hospital",
 \seealso{
 \code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}}
 
-Other provider characteristics: 
-\code{\link{mysterycall_academic_patterns}()},
-\code{\link{mysterycall_age_category}()},
-\code{\link{mysterycall_assign_region}()},
-\code{\link{mysterycall_classify_medical_school}()},
-\code{\link{mysterycall_classify_practice_setting}()},
-\code{\link{mysterycall_classify_ruca}()},
-\code{\link{mysterycall_collapse_rare}()},
-\code{\link{mysterycall_extract_physician_name}()},
-\code{\link{mysterycall_genderize}()},
-\code{\link{mysterycall_get_academic_indicators_summary}()},
-\code{\link{mysterycall_government_patterns}()},
-\code{\link{mysterycall_impute_age}()},
-\code{\link{mysterycall_most_common_gender}()},
-\code{\link{mysterycall_parse_certification_subspecialty}()},
-\code{\link{mysterycall_physician_age}()},
-\code{\link{mysterycall_recode_credentials}()},
-\code{\link{mysterycall_reconcile_specialty}()},
-\code{\link{mysterycall_reorder_by_freq}()}
+Other academic-indicators:
+\code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{KNOWN_ACADEMIC_INSTITUTIONS}},
+\code{\link{MEDICAL_SCHOOL_INDICATORS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NCI_CANCER_CENTERS}},
+\code{\link{NIH_CTSA_HUBS}},
+\code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}},
+\code{\link[=mysterycall_get_academic_indicators_summary]{mysterycall_get_academic_indicators_summary()}}
 }
-\concept{provider characteristics}
+\concept{academic-indicators}

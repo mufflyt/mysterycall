@@ -27,8 +27,8 @@
 #' Publication-quality theme conforming to *Obstetrics & Gynecology*
 #' (Green Journal, Wolters Kluwer) 2024 author guidelines: white background,
 #' Arial/sans font, black axes with tick marks, minimal gridlines, bottom
-#' legend. Pair with [palette_green_journal()] and
-#' [save_green_journal_figure()] for a complete submission workflow.
+#' legend. Pair with [mysterycall_palette_green_journal()] and
+#' [mysterycall_save_green_journal_figure()] for a complete submission workflow.
 #'
 #' @param base_size Numeric. Base font size in points (default 10; Green
 #'   Journal range 8-12 pt, minimum 6 pt for labels).
@@ -37,14 +37,14 @@
 #' @return A [ggplot2::theme()] object.
 #' @export
 #' @family green-journal-themes
-#' @seealso [theme_green_journal_map()], [theme_green_journal_faceted()],
-#'   [save_green_journal_figure()]
+#' @seealso [mysterycall_theme_green_journal_map()], [mysterycall_theme_green_journal_faceted()],
+#'   [mysterycall_save_green_journal_figure()]
 #' @examples
 #' library(ggplot2)
 #' ggplot(mtcars, aes(wt, mpg)) +
 #'   geom_point() +
-#'   theme_green_journal()
-theme_green_journal <- function(base_size = 10, base_family = "Arial") {
+#'   mysterycall:::mysterycall_theme_green_journal()
+mysterycall_theme_green_journal <- function(base_size = 10, base_family = "Arial") {
   if (!base_family %in% c("sans", "serif", "mono")) {
     avail <- tryCatch(base_family %in% names(grDevices::pdfFonts()),
                      error = function(e) FALSE)
@@ -88,7 +88,7 @@ theme_green_journal <- function(base_size = 10, base_family = "Arial") {
 
 #' Green Journal map theme
 #'
-#' Variant of [theme_green_journal()] for choropleth maps, isochrone
+#' Variant of [mysterycall_theme_green_journal()] for choropleth maps, isochrone
 #' coverage maps, and other spatial figures. Removes all axis elements,
 #' centers the title, and adds a framed legend. Use with
 #' [ggplot2::coord_sf()] and [mysterycall_crs_albers_conus()] for equal-area projection.
@@ -105,9 +105,9 @@ theme_green_journal <- function(base_size = 10, base_family = "Arial") {
 #' ggplot(counties_sf) +
 #'   geom_sf(aes(fill = rate)) +
 #'   coord_sf(crs = mysterycall_crs_albers_conus()) +
-#'   theme_green_journal_map()
-theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
-  theme_green_journal(base_size = base_size) +
+#'   mysterycall_theme_green_journal_map()
+mysterycall_theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
+  mysterycall_theme_green_journal(base_size = base_size) +
     ggplot2::theme(
       axis.text    = ggplot2::element_blank(),
       axis.title   = ggplot2::element_blank(),
@@ -134,14 +134,14 @@ theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
 
 #' Green Journal faceted map theme
 #'
-#' Variant of [theme_green_journal_map()] for small-multiple map panels
+#' Variant of [mysterycall_theme_green_journal_map()] for small-multiple map panels
 #' (e.g., maps by year or drive-time threshold). Uses negative panel spacing
 #' to eliminate white gaps between tightly tiled map panels.
 #'
 #' @param base_size Numeric. Base font size (default 9, smaller for panels).
 #' @return A [ggplot2::theme()] object.
-#' @seealso [theme_green_journal_map()] for single-panel maps;
-#'   [theme_green_journal()] for non-spatial plots.
+#' @seealso [mysterycall_theme_green_journal_map()] for single-panel maps;
+#'   [mysterycall_theme_green_journal()] for non-spatial plots.
 #' @export
 #' @family green-journal-themes
 #' @examplesIf interactive()
@@ -149,9 +149,9 @@ theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
 #' ggplot(tracts_sf) +
 #'   geom_sf(aes(fill = rate)) +
 #'   facet_wrap(~year) +
-#'   theme_green_journal_faceted()
-theme_green_journal_faceted <- function(base_size = 9) {
-  theme_green_journal_map(base_size = base_size, legend_position = "bottom") +
+#'   mysterycall_theme_green_journal_faceted()
+mysterycall_theme_green_journal_faceted <- function(base_size = 9) {
+  mysterycall_theme_green_journal_map(base_size = base_size, legend_position = "bottom") +
     ggplot2::theme(
       strip.text        = ggplot2::element_text(face = "bold", size = ggplot2::rel(0.9)),
       strip.background  = ggplot2::element_rect(fill = "gray95", color = "gray80"),
@@ -179,14 +179,14 @@ theme_green_journal_faceted <- function(base_size = 9) {
 #' @return Character vector of hex color codes.
 #' @export
 #' @family green-journal-colors
-#' @seealso [scale_color_green_journal()], [scale_fill_green_journal()]
+#' @seealso [mysterycall_scale_color_green_journal()], [mysterycall_scale_fill_green_journal()]
 #' @references
 #'   Wong B (2011). Color blindness. \emph{Nature Methods}, 8(6), 441.
 #'   \doi{10.1038/nmeth.1618}
 #' @examples
-#' palette_green_journal(5)
-#' palette_green_journal(10, type = "sequential")
-palette_green_journal <- function(n = NULL, type = c("qualitative", "sequential", "diverging")) {
+#' mysterycall:::mysterycall_palette_green_journal(5)
+#' mysterycall:::mysterycall_palette_green_journal(10, type = "sequential")
+mysterycall_palette_green_journal <- function(n = NULL, type = c("qualitative", "sequential", "diverging")) {
   type <- match.arg(type)
 
   if (type == "sequential") {
@@ -216,42 +216,42 @@ palette_green_journal <- function(n = NULL, type = c("qualitative", "sequential"
 #' Green Journal discrete color scale
 #'
 #' Convenience wrapper for [ggplot2::scale_color_manual()] using the
-#' Okabe-Ito palette from [palette_green_journal()]. Handles up to 8 groups.
+#' Okabe-Ito palette from [mysterycall_palette_green_journal()]. Handles up to 8 groups.
 #'
 #' @param ... Arguments passed to [ggplot2::scale_color_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
-#' @seealso [scale_fill_green_journal()] for fill aesthetics;
-#'   [palette_green_journal()] for the underlying colour values.
+#' @seealso [mysterycall_scale_fill_green_journal()] for fill aesthetics;
+#'   [mysterycall_palette_green_journal()] for the underlying colour values.
 #' @export
 #' @family green-journal-colors
 #' @examples
 #' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 #'   geom_point() +
-#'   scale_color_green_journal()
-scale_color_green_journal <- function(...) {
-  ggplot2::scale_color_manual(values = palette_green_journal(), ...)
+#'   mysterycall:::mysterycall_scale_color_green_journal()
+mysterycall_scale_color_green_journal <- function(...) {
+  ggplot2::scale_color_manual(values = mysterycall_palette_green_journal(), ...)
 }
 
 
 #' Green Journal discrete fill scale
 #'
 #' Convenience wrapper for [ggplot2::scale_fill_manual()] using the
-#' Okabe-Ito palette from [palette_green_journal()].
+#' Okabe-Ito palette from [mysterycall_palette_green_journal()].
 #'
 #' @param ... Arguments passed to [ggplot2::scale_fill_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
-#' @seealso [scale_color_green_journal()] for colour aesthetics;
-#'   [palette_green_journal()] for the underlying colour values.
+#' @seealso [mysterycall_scale_color_green_journal()] for colour aesthetics;
+#'   [mysterycall_palette_green_journal()] for the underlying colour values.
 #' @export
 #' @family green-journal-colors
 #' @examples
 #' library(ggplot2)
 #' ggplot(mpg, aes(class, fill = drv)) +
 #'   geom_bar() +
-#'   scale_fill_green_journal()
-scale_fill_green_journal <- function(...) {
-  ggplot2::scale_fill_manual(values = palette_green_journal(), ...)
+#'   mysterycall:::mysterycall_scale_fill_green_journal()
+mysterycall_scale_fill_green_journal <- function(...) {
+  ggplot2::scale_fill_manual(values = mysterycall_palette_green_journal(), ...)
 }
 
 
@@ -284,16 +284,16 @@ scale_fill_green_journal <- function(...) {
 #' @param csv Logical. Export CSV (default `TRUE`).
 #' @return Invisible character vector of file paths written (PNG, PDF, and/or
 #'   CSV depending on arguments).
-#' @seealso [theme_green_journal()], [theme_green_journal_map()] for themes
-#'   to apply before saving; [palette_green_journal()] for the colour palette.
+#' @seealso [mysterycall_theme_green_journal()], [mysterycall_theme_green_journal_map()] for themes
+#'   to apply before saving; [mysterycall_palette_green_journal()] for the colour palette.
 #' @export
 #' @family green-journal-output
 #' @examplesIf interactive()
-#' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_green_journal()
-#' save_green_journal_figure(p, "figures/fig1", layout = "double_column")
+#' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + mysterycall_theme_green_journal()
+#' mysterycall_save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 #' # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png
 #' #          figures/fig1_data.csv
-save_green_journal_figure <- function(plot,
+mysterycall_save_green_journal_figure <- function(plot,
                                       path_stem,
                                       layout    = c("double_column", "single_column"),
                                       height    = NULL,
@@ -378,26 +378,26 @@ save_green_journal_figure <- function(plot,
 #' @return An `sf::st_crs` object (EPSG:5070).
 #' @export
 #' @family green-journal-spatial
-#' @seealso [theme_green_journal_map()]
+#' @seealso [mysterycall_theme_green_journal_map()]
 #' @examplesIf interactive()
 #' library(ggplot2)
 #' ggplot(counties_sf) +
 #'   geom_sf(aes(fill = rate)) +
 #'   coord_sf(crs = mysterycall_crs_albers_conus()) +
-#'   theme_green_journal_map()
+#'   mysterycall_theme_green_journal_map()
 mysterycall_crs_albers_conus <- function() {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required for crs_albers_conus(). Install with: install.packages('sf')",
+    stop("Package 'sf' is required for crs_albers_conus()",
          call. = FALSE)
   }
   sf::st_crs(5070)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_crs_albers_conus
+#' @param ... Arguments passed to mysterycall_crs_albers_conus
+#' @return See mysterycall_crs_albers_conus
 #' @keywords internal
-#' @export
 #' @name crs_albers_conus
-#' @export
 crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus"); mysterycall_crs_albers_conus(...) }
 
 
@@ -420,7 +420,7 @@ crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus");
 #' @seealso [mysterycall_truncate_for_viz()]
 #' @examples
 #' x <- c(0, 5, 10, 50, 90, 95, 100)
-#' mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
+#' mysterycall:::mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
 mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE) {
   stopifnot(is.numeric(x), lower >= 0, upper <= 1, lower < upper)
   bounds      <- stats::quantile(x, probs = c(lower, upper), na.rm = na.rm)
@@ -429,11 +429,11 @@ mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
   x
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_winsorize
+#' @param ... Arguments passed to mysterycall_winsorize
+#' @return See mysterycall_winsorize
 #' @keywords internal
-#' @export
 #' @name winsorize
-#' @export
 winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_winsorize(...) }
 
 
@@ -452,16 +452,16 @@ winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_w
 #' @family green-journal-spatial
 #' @seealso [mysterycall_winsorize()]
 #' @examples
-#' mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
+#' mysterycall:::mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
 mysterycall_truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
   pmin(pmax(x, floor, na.rm = TRUE), ceiling, na.rm = TRUE)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_truncate_for_viz
+#' @param ... Arguments passed to mysterycall_truncate_for_viz
+#' @return See mysterycall_truncate_for_viz
 #' @keywords internal
-#' @export
 #' @name truncate_for_viz
-#' @export
 truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz"); mysterycall_truncate_for_viz(...) }
 
 
@@ -469,7 +469,7 @@ truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz");
 #'
 #' Arranges a choropleth map above a marginal density/histogram plot in a
 #' 7:2 height ratio. Returns a grob suitable for [ggplot2::ggsave()] or
-#' [save_green_journal_figure()].
+#' [mysterycall_save_green_journal_figure()].
 #'
 #' @param map_plot A `ggplot` object. The choropleth / spatial map (upper panel).
 #' @param density_plot A `ggplot` object. The density or histogram (lower panel).
@@ -477,35 +477,35 @@ truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz");
 #' @param density_weight Integer. Relative height for the density panel
 #'   (default 2).
 #' @return A `gridExtra` grob (gtable). Pass to `ggsave(plot = result)` or
-#'   [save_green_journal_figure()].
+#'   [mysterycall_save_green_journal_figure()].
 #' @export
 #' @family green-journal-spatial
-#' @seealso [save_green_journal_figure()], [theme_green_journal_map()]
+#' @seealso [mysterycall_save_green_journal_figure()], [mysterycall_theme_green_journal_map()]
 #' @examplesIf interactive()
 #' library(ggplot2)
 #' p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
-#'   theme_green_journal_map()
+#'   mysterycall_theme_green_journal_map()
 #' p_den <- ggplot(tracts, aes(access)) +
 #'   geom_density(fill = "#56B4E9", alpha = 0.6) +
-#'   theme_green_journal()
+#'   mysterycall_theme_green_journal()
 #' composite <- mysterycall_compose_map_density(p_map, p_den)
-#' save_green_journal_figure(composite, "figures/fig3")
+#' mysterycall_save_green_journal_figure(composite, "figures/fig3")
 mysterycall_compose_map_density <- function(map_plot, density_plot,
                                 map_weight = 7L, density_weight = 2L) {
   stopifnot(inherits(map_plot, "ggplot"), inherits(density_plot, "ggplot"))
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("Package 'gridExtra' is required for compose_map_density(). ",
-         "Install with: install.packages('gridExtra')", call. = FALSE)
+         "", call. = FALSE)
   }
   layout <- matrix(c(rep(1L, map_weight), rep(2L, density_weight)), ncol = 1L)
   gridExtra::arrangeGrob(map_plot, density_plot, layout_matrix = layout)
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_compose_map_density
+#' @param ... Arguments passed to mysterycall_compose_map_density
+#' @return See mysterycall_compose_map_density
 #' @keywords internal
-#' @export
 #' @name compose_map_density
-#' @export
 compose_map_density <- function(...) { .Deprecated("mysterycall_compose_map_density"); mysterycall_compose_map_density(...) }
 
 
@@ -513,22 +513,22 @@ compose_map_density <- function(...) { .Deprecated("mysterycall_compose_map_dens
 # BACKWARD-COMPATIBILITY ALIASES
 # =============================================================================
 
-#' @rdname theme_green_journal
-#' @export
-theme_publication <- theme_green_journal
+#' @rdname mysterycall_theme_green_journal
+#' @keywords internal
+mysterycall_theme_publication <- mysterycall_theme_green_journal
 
-#' @rdname theme_green_journal_map
-#' @export
-theme_publication_map <- theme_green_journal_map
+#' @rdname mysterycall_theme_green_journal_map
+#' @keywords internal
+mysterycall_theme_publication_map <- mysterycall_theme_green_journal_map
 
-#' @rdname theme_green_journal_faceted
-#' @export
-theme_publication_faceted <- theme_green_journal_faceted
+#' @rdname mysterycall_theme_green_journal_faceted
+#' @keywords internal
+mysterycall_theme_publication_faceted <- mysterycall_theme_green_journal_faceted
 
-#' @rdname palette_green_journal
-#' @export
-palette_publication <- palette_green_journal
+#' @rdname mysterycall_palette_green_journal
+#' @keywords internal
+mysterycall_palette_publication <- mysterycall_palette_green_journal
 
-#' @rdname save_green_journal_figure
-#' @export
-save_publication_figure <- save_green_journal_figure
+#' @rdname mysterycall_save_green_journal_figure
+#' @keywords internal
+mysterycall_save_publication_figure <- mysterycall_save_green_journal_figure

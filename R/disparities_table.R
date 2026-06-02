@@ -224,7 +224,18 @@ mysterycall_disparities_table <- function(
 
 # ---- internal helpers -------------------------------------------------------
 
-#' @noRd
+#' Calculate Confidence Interval for Proportion
+#'
+#' @param n_acc Number of successes.
+#' @param n Total number of trials.
+#' @param method CI method: "wilson", "exact", or "wald".
+#' @param conf_level Confidence level (e.g., 0.95).
+#' @param rate Observed proportion (n_acc / n).
+#' @param alpha Significance level (1 - conf_level).
+#'
+#' @return Numeric vector of length 2 (lower, upper).
+#' @family outcomes
+#' @keywords internal
 .disp_rate_ci <- function(n_acc, n, method, conf_level, rate, alpha) {
   if (n == 0L) return(c(NA_real_, NA_real_))
   switch(method,
@@ -245,7 +256,13 @@ mysterycall_disparities_table <- function(
   )
 }
 
-#' @noRd
+#' Format P-Value for Display
+#'
+#' @param p Numeric p-value.
+#'
+#' @return Formatted character string (e.g., "<0.001").
+#' @family outcomes
+#' @keywords internal
 .fmt_pvalue <- function(p) {
   if (is.na(p))      return(NA_character_)
   if (p < 0.001)     return("<0.001")
@@ -269,6 +286,17 @@ mysterycall_disparities_table <- function(
 #' @seealso [mysterycall_disparities_table()]
 #' @family table helpers
 #' @export
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   group   = c("Medicaid", "Private", "Uninsured"),
+#'   success = c(40L, 80L, 30L),
+#'   total   = c(100L, 100L, 100L)
+#' )
+#' disp_table <- mysterycall_disparities_table(df, "group", "success", "total",
+#'                                              ref_group = "Private")
+#' print(disp_table)
+#' }
 print.mysterycall_disparities_table <- function(x, ...) {
   ref    <- attr(x, "ref_group") %||% x$group[[1L]]
   method <- attr(x, "ci_method") %||% "wilson"

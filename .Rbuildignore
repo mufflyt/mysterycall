@@ -1,4 +1,5 @@
 ^tyler\.Rproj$
+^mysterycall\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^revdep$
@@ -51,3 +52,8 @@
 ^index\.md$
 ^tables$
 ^Rplots\.pdf$
+
+# Local audit artifacts
+^check_docs\.R$
+^check_internal\.R$
+^roxygen_tags_summary\.txt$

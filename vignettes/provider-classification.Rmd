@@ -252,7 +252,7 @@ This three-tier mapping is the standard used in most healthcare access studies a
 
 The USDA ERS publishes a ZIP-to-RUCA crosswalk at:
 
-> https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/
+> https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes
 
 Download the **ZIP code file** (not the census tract file). As of 2023, the file is named something like `ruca2010revised.xlsx`. Export it to CSV. The two columns you need are the ZIP code column (typically `ZIP_CODE`) and the primary RUCA code column (typically `RUCA1`).
 

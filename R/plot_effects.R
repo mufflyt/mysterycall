@@ -36,10 +36,10 @@ mysterycall_plot_effect <- function(model,
                                      y_label = NULL) {
   type <- match.arg(type)
   if (!requireNamespace("effects", quietly = TRUE)) {
-    stop("effects is required. Install with install.packages('effects').", call. = FALSE)
+    stop("effects is required", call. = FALSE)
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required. Install with install.packages('ggplot2').", call. = FALSE)
+    stop("ggplot2 is required", call. = FALSE)
   }
   if (!is.character(term) || length(term) != 1L) {
     stop("`term` must be a single character string.", call. = FALSE)
@@ -94,7 +94,7 @@ mysterycall_plot_effect <- function(model,
 #' )
 mysterycall_plot_sjplot_interaction <- function(model, terms, title = NULL, ...) {
   if (!requireNamespace("sjPlot", quietly = TRUE)) {
-    stop("sjPlot is required. Install with install.packages('sjPlot').", call. = FALSE)
+    stop("sjPlot is required", call. = FALSE)
   }
   if (!is.character(terms) || length(terms) < 1L) {
     stop("`terms` must be a non-empty character vector.", call. = FALSE)

@@ -19,21 +19,22 @@ Extracts the first 5 digits from a ZIP code string, handling ZIP+4 formats
 and various input types.
 }
 \examples{
-mysterycall_normalize_zip5("80111-1234")
-mysterycall_normalize_zip5(90210)
+mysterycall:::mysterycall_normalize_zip5("80111-1234")
+mysterycall:::mysterycall_normalize_zip5(90210)
 
 }
 \seealso{
-Other address-normalization: 
-\code{\link{mysterycall_ascii_norm}()},
-\code{\link{mysterycall_caps}()},
-\code{\link{mysterycall_has_street_number}()},
-\code{\link{mysterycall_is_po_box}()},
-\code{\link{mysterycall_normalize_directionals}()},
-\code{\link{mysterycall_normalize_state}()},
-\code{\link{mysterycall_normalize_suffix}()},
-\code{\link{mysterycall_normalize_units}()},
-\code{\link{mysterycall_strip_suite}()},
-\code{\link{normalize_address_df}()}
+Other address-normalization:
+\code{\link[=mysterycall_ascii_norm]{mysterycall_ascii_norm()}},
+\code{\link[=mysterycall_caps]{mysterycall_caps()}},
+\code{\link[=mysterycall_has_street_number]{mysterycall_has_street_number()}},
+\code{\link[=mysterycall_is_po_box]{mysterycall_is_po_box()}},
+\code{\link[=mysterycall_normalize_address_df]{mysterycall_normalize_address_df()}},
+\code{\link[=mysterycall_normalize_directionals]{mysterycall_normalize_directionals()}},
+\code{\link[=mysterycall_normalize_state]{mysterycall_normalize_state()}},
+\code{\link[=mysterycall_normalize_suffix]{mysterycall_normalize_suffix()}},
+\code{\link[=mysterycall_normalize_units]{mysterycall_normalize_units()}},
+\code{\link[=mysterycall_strip_suite]{mysterycall_strip_suite()}}
 }
 \concept{address-normalization}
+\keyword{internal}

@@ -27,6 +27,7 @@ test_that("plot_inclexcl: subspecialty_breakdown accepted", {
 })
 
 test_that("plot_inclexcl: fewer than 2 phases errors", {
+  skip_if_not_installed("DiagrammeR")
   expect_error(
     mysterycall_plot_inclexcl(counts = c(Only = 100)),
     "at least 2"
@@ -34,6 +35,7 @@ test_that("plot_inclexcl: fewer than 2 phases errors", {
 })
 
 test_that("plot_inclexcl: exclusion name not in counts errors", {
+  skip_if_not_installed("DiagrammeR")
   expect_error(
     mysterycall_plot_inclexcl(
       counts     = c(A = 100, B = 50),

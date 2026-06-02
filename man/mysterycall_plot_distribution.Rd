@@ -19,7 +19,7 @@ A named list with two \code{ggplot2::ggplot} objects:
 \describe{
 \item{\code{raw}}{Histogram of \code{x} with raw counts on the y-axis.}
 \item{\code{sqrt_transformed}}{Same histogram with a square-root-transformed
-y-axis via \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_sqrt()}}, improving visibility of
+y-axis via \code{\link[ggplot2:scale_y_sqrt]{ggplot2::scale_y_sqrt()}}, improving visibility of
 right-skewed count distributions.}
 }
 Both plots use the same \code{bins} value. Access elements with \verb{$raw} and
@@ -35,22 +35,22 @@ plots <- mysterycall_plot_distribution(rpois(200, 14), title = "Wait days")
 plots$raw
 }
 \seealso{
-Other outcomes: 
-\code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_irr_plot}()},
-\code{\link{mysterycall_marginal_effects}()},
-\code{\link{mysterycall_model_metrics}()},
-\code{\link{mysterycall_plot_effect}()},
-\code{\link{mysterycall_plot_emmeans_full}()},
-\code{\link{mysterycall_plot_emmeans_interaction}()},
-\code{\link{mysterycall_plot_inclexcl}()},
-\code{\link{mysterycall_plot_residuals}()},
-\code{\link{mysterycall_plot_sjplot_interaction}()},
-\code{\link{mysterycall_plot_stacked_bar}()},
-\code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_screen_interactions}()},
-\code{\link{mysterycall_select_best_model}()},
-\code{\link{mysterycall_wait_time_summary}()},
-\code{\link{print.mysterycall_poisson_model}()}
+Other outcomes:
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
+\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
+\code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
+\code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
+\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}},
+\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}},
+\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}},
+\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}},
+\code{\link[=mysterycall_plot_residuals]{mysterycall_plot_residuals()}},
+\code{\link[=mysterycall_plot_sjplot_interaction]{mysterycall_plot_sjplot_interaction()}},
+\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}},
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}},
+\code{\link[=mysterycall_screen_interactions]{mysterycall_screen_interactions()}},
+\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}},
+\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
+\code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
 }
 \concept{outcomes}

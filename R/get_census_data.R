@@ -31,7 +31,7 @@
 #' census_df <- mysterycall_get_census_data(us_fips_list)
 mysterycall_get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("CENSUS_API_KEY")) {
   if (!requireNamespace("censusapi", quietly = TRUE)) {
-    stop("Package 'censusapi' is required for mysterycall_get_census_data(). Install with: install.packages('censusapi')", call. = FALSE)
+    stop("Package 'censusapi' is required for mysterycall_get_census_data()", call. = FALSE)
   }
   if (is.null(us_fips_list)) {
     stop("`us_fips_list` must be a character vector of FIPS codes.", call. = FALSE)

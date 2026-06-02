@@ -14,28 +14,29 @@ mysterycall_progress_done(pb, result = NULL, status = "done")
 \item{status}{Final status label (default: \code{"done"}).}
 }
 \value{
-Invisible NULL.
+\code{invisible(NULL)}.
 }
 \description{
 Marks a progress bar as complete with an optional summary message.
 }
 \examples{
-pb <- mysterycall_progress_bar("Processing", total = 5)
-for (i in seq_len(5)) mysterycall_progress_update(pb)
-mysterycall_progress_done(pb, result = "5 items processed")
+pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 5)
+for (i in seq_len(5)) mysterycall:::mysterycall_progress_update(pb)
+mysterycall:::mysterycall_progress_done(pb, result = "5 items processed")
 }
 \seealso{
-Other progress-bars: 
-\code{\link{mysterycall_multi_complete}()},
-\code{\link{mysterycall_multi_done}()},
-\code{\link{mysterycall_multi_progress}()},
-\code{\link{mysterycall_multi_step}()},
-\code{\link{mysterycall_multi_update}()},
-\code{\link{mysterycall_progress_bar}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_map}()},
-\code{\link{mysterycall_progress_update}()},
-\code{\link{mysterycall_spinner_start}()},
-\code{\link{mysterycall_spinner_stop}()}
+Other progress:
+\code{\link[=mysterycall_multi_complete]{mysterycall_multi_complete()}},
+\code{\link[=mysterycall_multi_done]{mysterycall_multi_done()}},
+\code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}},
+\code{\link[=mysterycall_multi_step]{mysterycall_multi_step()}},
+\code{\link[=mysterycall_multi_update]{mysterycall_multi_update()}},
+\code{\link[=mysterycall_progress_bar]{mysterycall_progress_bar()}},
+\code{\link[=mysterycall_progress_fail]{mysterycall_progress_fail()}},
+\code{\link[=mysterycall_progress_map]{mysterycall_progress_map()}},
+\code{\link[=mysterycall_progress_update]{mysterycall_progress_update()}},
+\code{\link[=mysterycall_spinner_start]{mysterycall_spinner_start()}},
+\code{\link[=mysterycall_spinner_stop]{mysterycall_spinner_stop()}}
 }
-\concept{progress-bars}
+\concept{progress}
+\keyword{internal}

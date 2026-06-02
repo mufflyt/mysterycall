@@ -157,7 +157,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
       !requireNamespace("readr", quietly = TRUE) ||
       !requireNamespace("stringr", quietly = TRUE) ||
       !requireNamespace("humaniformat", quietly = TRUE)) {
-    stop("Required packages are not installed. Please install them using install.packages().", call. = FALSE)
+    stop("Required packages are not installed", call. = FALSE)
   }
 
   announce <- function(...) {

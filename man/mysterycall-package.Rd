@@ -22,6 +22,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (\href{https://orcid.org/0000-0002-2044-1693}{ORCID})
 
+Authors:
+\itemize{
+  \item Tyler Muffly \email{tyler.muffly@dhha.org} (\href{https://orcid.org/0000-0002-2044-1693}{ORCID})
+}
+
 }
 \keyword{NPI}
 \keyword{NPPES}

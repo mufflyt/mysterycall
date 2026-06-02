@@ -119,7 +119,7 @@ mysterycall_marginal_effects <- function(model,
   # -- Load lme4 if needed -----------------------------------------------------
   if (is_glmer && !requireNamespace("lme4", quietly = TRUE)) {
     stop(
-      "Package 'lme4' is required for glmerMod objects. Install with: install.packages('lme4')",
+      "Package 'lme4' is required for glmerMod objects",
       call. = FALSE
     )
   }

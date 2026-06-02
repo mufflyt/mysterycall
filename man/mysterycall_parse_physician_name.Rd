@@ -85,9 +85,9 @@ mysterycall_parse_physician_name(c(
 checks; \code{\link[=mysterycall_format_physician_name]{mysterycall_format_physician_name()}} to reconstruct display
 names; \code{\link[=mysterycall_test_name_parser]{mysterycall_test_name_parser()}} for the built-in accuracy suite.
 
-Other name-parsing: 
-\code{\link{mysterycall_format_physician_name}()},
-\code{\link{mysterycall_test_name_parser}()},
-\code{\link{mysterycall_validate_parsed_names}()}
+Other name-parsing:
+\code{\link[=mysterycall_format_physician_name]{mysterycall_format_physician_name()}},
+\code{\link[=mysterycall_test_name_parser]{mysterycall_test_name_parser()}},
+\code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}}
 }
 \concept{name-parsing}

@@ -17,6 +17,7 @@
 #'   error messages.
 #'
 #' @return A named list of validated sf objects.
+#' @family geospatial
 #' @keywords internal
 validate_sf_inputs <- function(...,
                                expected_types = NULL,
@@ -24,7 +25,7 @@ validate_sf_inputs <- function(...,
                                target_crs = NULL,
                                context = "geospatial operation") {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   objects <- list(...)

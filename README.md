@@ -350,8 +350,19 @@ citation("mysterycall")
 > Access Research* (R package version 1.3.0).
 > <https://github.com/mufflyt/mysterycall>
 
+## Contributing
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
+the development workflow, coding style, and pull-request process. Bug reports
+and feature requests are best filed as
+[GitHub issues](https://github.com/mufflyt/mysterycall/issues).
+
 ## Code of conduct
 
 Please note that this project is released with a
 [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating you agree
 to abide by its terms.
+
+## License
+
+MIT © Tyler Muffly. See [LICENSE.md](LICENSE.md) for the full text.

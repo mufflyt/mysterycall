@@ -165,7 +165,7 @@ mysterycall_plot_census_age <- function(census_df,
                                           dpi = 600,
                                           verbose = TRUE) {
   if (!requireNamespace("tidyr", quietly = TRUE)) {
-    stop("Package 'tidyr' is required for this function. Install with: install.packages('tidyr')", call. = FALSE)
+    stop("Package 'tidyr' is required for this function", call. = FALSE)
   }
 
   if (!is.data.frame(census_df)) {

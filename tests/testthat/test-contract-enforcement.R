@@ -246,33 +246,33 @@ test_that("Contract: run_workflow always returns workflow_summary", {
 })
 
 # ---------------------------------------------------------------------------
-# mysterycall_format_duration() contracts
+# mysterycall:::mysterycall_format_duration() contracts
 # ---------------------------------------------------------------------------
 
 test_that("Contract: format_duration is deterministic", {
-  expect_equal(mysterycall_format_duration(45),  mysterycall_format_duration(45))
-  expect_equal(mysterycall_format_duration(125), mysterycall_format_duration(125))
+  expect_equal(mysterycall:::mysterycall_format_duration(45),  mysterycall:::mysterycall_format_duration(45))
+  expect_equal(mysterycall:::mysterycall_format_duration(125), mysterycall:::mysterycall_format_duration(125))
 })
 
 test_that("Contract: format_duration returns character string", {
-  expect_true(is.character(mysterycall_format_duration(90)))
+  expect_true(is.character(mysterycall:::mysterycall_format_duration(90)))
 })
 
 test_that("Contract: format_duration handles zero seconds", {
-  result <- mysterycall_format_duration(0)
+  result <- mysterycall:::mysterycall_format_duration(0)
   expect_true(is.character(result))
   expect_true(nchar(result) > 0L)
 })
 
 # ---------------------------------------------------------------------------
-# mysterycall_progress_summary() contracts
+# mysterycall:::mysterycall_progress_summary() contracts
 # ---------------------------------------------------------------------------
 
 test_that("Contract: progress_summary returns a data frame (tibble)", {
-  tr <- mysterycall_progress_tracker(c("Step A", "Step B"), update_every = 1e9)
-  mysterycall_progress_start(tr, "Step A")
-  mysterycall_progress_finish(tr, "Step A", score = 0.9)
-  result <- mysterycall_progress_summary(tr)
+  tr <- mysterycall:::mysterycall_progress_tracker(c("Step A", "Step B"), update_every = 1e9)
+  mysterycall:::mysterycall_progress_start(tr, "Step A")
+  mysterycall:::mysterycall_progress_finish(tr, "Step A", score = 0.9)
+  result <- mysterycall:::mysterycall_progress_summary(tr)
   expect_s3_class(result, "data.frame")
   expect_true("step" %in% names(result) || ncol(result) > 0L,
               label = "Summary must have at least one column")

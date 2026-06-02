@@ -308,24 +308,36 @@ mysterycall_preflight_check <- function(input_data,
   message("")
   message("\U0001F4E6 Checking dependencies...")
 
-  required_packages <- c("dplyr", "tidyr", "sf", "ggmap", "npi")
-  missing_packages <- character()
+  core_packages <- c("dplyr", "npi")
+  optional_packages <- c("tidyr", "sf", "ggmap")
+  missing_core <- character()
+  missing_optional <- character()
 
-  for (pkg in required_packages) {
+  for (pkg in core_packages) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
-      missing_packages <- c(missing_packages, pkg)
+      missing_core <- c(missing_core, pkg)
+    }
+  }
+  for (pkg in optional_packages) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      missing_optional <- c(missing_optional, pkg)
     }
   }
 
-  if (length(missing_packages) > 0) {
+  if (length(missing_core) > 0) {
     errors <- c(errors, sprintf(
-      "Missing required packages: %s. Install with: install.packages(c(%s))",
-      paste(missing_packages, collapse = ", "),
-      paste(sprintf("'%s'", missing_packages), collapse = ", ")
+      "Missing required packages: %s",
+      paste(missing_core, collapse = ", ")
     ))
   } else {
-    message(sprintf("  \u2713 All required packages installed (%d checked)",
-                   length(required_packages)))
+    message(sprintf("  \u2713 Core packages installed (%d checked)",
+                   length(core_packages)))
+  }
+  if (length(missing_optional) > 0) {
+    warnings <- c(warnings, sprintf(
+      "Optional packages not installed (only needed for specific workflows): %s",
+      paste(missing_optional, collapse = ", ")
+    ))
   }
 
   # ==================== Summary ====================
@@ -414,7 +426,7 @@ mysterycall_preflight_check <- function(input_data,
 #' @keywords internal
 mysterycall_validate_google_api <- function(api_key) {
   if (!requireNamespace("ggmap", quietly = TRUE)) {
-    return(list(valid = FALSE, error = "Package 'ggmap' is required to validate the Google Maps API key. Install with: install.packages('ggmap')"))
+    return(list(valid = FALSE, error = "Package 'ggmap' is required to validate the Google Maps API key"))
   }
   tryCatch({
     # Try a simple geocoding request

@@ -44,6 +44,7 @@ test_that("map_acceptance_rate: works with 2-letter state abbreviations", {
 
 test_that("map_acceptance_rate: save_path writes a file", {
   skip_if_not_installed("ggplot2")
+  skip_if_not_installed("mapproj")
   df   <- make_state_data()
   path <- tempfile(fileext = ".png")
   on.exit(unlink(path))

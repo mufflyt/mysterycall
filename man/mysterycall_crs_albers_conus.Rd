@@ -21,15 +21,15 @@ library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +
   coord_sf(crs = mysterycall_crs_albers_conus()) +
-  theme_green_journal_map()
+  mysterycall_theme_green_journal_map()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=theme_green_journal_map]{theme_green_journal_map()}}
+\code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 
-Other green-journal-spatial: 
-\code{\link{mysterycall_compose_map_density}()},
-\code{\link{mysterycall_truncate_for_viz}()},
-\code{\link{mysterycall_winsorize}()}
+Other green-journal-spatial:
+\code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}},
+\code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}},
+\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 }
 \concept{green-journal-spatial}

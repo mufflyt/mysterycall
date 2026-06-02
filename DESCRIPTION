@@ -8,12 +8,9 @@ Description: Provides utilities for mystery caller and audit studies evaluating 
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 License: MIT + file LICENSE
 URL: https://mufflyt.github.io/mysterycall/, https://github.com/mufflyt/mysterycall
 BugReports: https://github.com/mufflyt/mysterycall/issues
-Date: 2026-05-08
-Additional_repositories: https://github.com/andrewallenbruce/provider
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -51,7 +48,6 @@ Suggests:
     effects,
     emmeans,
     ggmap (>= 3.0.0),
-    ggforce,
     gtsummary,
     ggspatial,
     grid,
@@ -59,11 +55,9 @@ Suggests:
     hereR,
     htmltools,
     htmlwidgets,
-    imager,
     jsonlite,
     knitr,
     leaflet,
-    leaflet.extras,
     lme4,
     lwgeom,
     memoise,
@@ -71,7 +65,6 @@ Suggests:
     openxlsx,
     patchwork,
     progress,
-    provider,
     readxl,
     rmarkdown,
     rnaturalearth,
@@ -79,11 +72,10 @@ Suggests:
     testthat,
     tidycensus,
     tidyr,
-    tigris,
-    tmap,
     covr,
     sf,
     viridis,
     webshot
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

@@ -21,16 +21,28 @@ rates, Wilson confidence intervals, absolute risk differences, relative risks,
 and p-values versus the reference group.  Column headers are labelled using
 the \code{ci_method} and \code{alpha} attributes stored on the object.
 }
+\examples{
+\dontrun{
+df <- data.frame(
+  group   = c("Medicaid", "Private", "Uninsured"),
+  success = c(40L, 80L, 30L),
+  total   = c(100L, 100L, 100L)
+)
+disp_table <- mysterycall_disparities_table(df, "group", "success", "total",
+                                             ref_group = "Private")
+print(disp_table)
+}
+}
 \seealso{
 \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
 
-Other table helpers: 
-\code{\link{mysterycall_disparities_table}()},
-\code{\link{mysterycall_format_pct}()},
-\code{\link{mysterycall_max_table}()},
-\code{\link{mysterycall_min_table}()},
-\code{\link{mysterycall_model_table}()},
-\code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_table_proportion}()}
+Other table helpers:
+\code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}},
+\code{\link[=mysterycall_format_pct]{mysterycall_format_pct()}},
+\code{\link[=mysterycall_max_table]{mysterycall_max_table()}},
+\code{\link[=mysterycall_min_table]{mysterycall_min_table()}},
+\code{\link[=mysterycall_model_table]{mysterycall_model_table()}},
+\code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}},
+\code{\link[=mysterycall_table_proportion]{mysterycall_table_proportion()}}
 }
 \concept{table helpers}

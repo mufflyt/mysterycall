@@ -44,8 +44,8 @@ clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 \code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for row-level NPI filtering;
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach clinician data to a roster.
 
-Other npi: 
-\code{\link{mysterycall_search_and_process_npi}()},
-\code{\link{mysterycall_search_taxonomy}()}
+Other npi:
+\code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}},
+\code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}}
 }
 \concept{npi}

@@ -59,24 +59,22 @@ print(result)
 categorical variable; \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for upstream
 gender standardisation.
 
-Other provider characteristics: 
-\code{\link{mysterycall_academic_patterns}()},
-\code{\link{mysterycall_age_category}()},
-\code{\link{mysterycall_assign_region}()},
-\code{\link{mysterycall_check_academic_name_patterns}()},
-\code{\link{mysterycall_classify_medical_school}()},
-\code{\link{mysterycall_classify_practice_setting}()},
-\code{\link{mysterycall_classify_ruca}()},
-\code{\link{mysterycall_collapse_rare}()},
-\code{\link{mysterycall_extract_physician_name}()},
-\code{\link{mysterycall_genderize}()},
-\code{\link{mysterycall_get_academic_indicators_summary}()},
-\code{\link{mysterycall_government_patterns}()},
-\code{\link{mysterycall_impute_age}()},
-\code{\link{mysterycall_parse_certification_subspecialty}()},
-\code{\link{mysterycall_physician_age}()},
-\code{\link{mysterycall_recode_credentials}()},
-\code{\link{mysterycall_reconcile_specialty}()},
-\code{\link{mysterycall_reorder_by_freq}()}
+Other provider characteristics:
+\code{\link[=mysterycall_academic_patterns]{mysterycall_academic_patterns()}},
+\code{\link[=mysterycall_age_category]{mysterycall_age_category()}},
+\code{\link[=mysterycall_assign_region]{mysterycall_assign_region()}},
+\code{\link[=mysterycall_classify_medical_school]{mysterycall_classify_medical_school()}},
+\code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}},
+\code{\link[=mysterycall_classify_ruca]{mysterycall_classify_ruca()}},
+\code{\link[=mysterycall_collapse_rare]{mysterycall_collapse_rare()}},
+\code{\link[=mysterycall_extract_physician_name]{mysterycall_extract_physician_name()}},
+\code{\link[=mysterycall_genderize]{mysterycall_genderize()}},
+\code{\link[=mysterycall_government_patterns]{mysterycall_government_patterns()}},
+\code{\link[=mysterycall_impute_age]{mysterycall_impute_age()}},
+\code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}},
+\code{\link[=mysterycall_physician_age]{mysterycall_physician_age()}},
+\code{\link[=mysterycall_recode_credentials]{mysterycall_recode_credentials()}},
+\code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}},
+\code{\link[=mysterycall_reorder_by_freq]{mysterycall_reorder_by_freq()}}
 }
 \concept{provider characteristics}

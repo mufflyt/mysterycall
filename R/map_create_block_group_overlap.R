@@ -15,27 +15,24 @@
 #'
 #' # Create and export the map with a custom output directory
 #' mysterycall_map_block_group(block_groups, isochrones_joined_map, "custom_output/")
-#'
-
-#'
 #' @family mapping
 #' @export
 mysterycall_map_block_group <- function(bg_data, isochrones_data, output_dir = "figures/") {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for mysterycall_map_block_group(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_block_group()", call. = FALSE)
   }
   if (!requireNamespace("lwgeom", quietly = TRUE)) {
-    stop("Package 'lwgeom' is required for mysterycall_map_block_group(). Install with: install.packages('lwgeom')", call. = FALSE)
+    stop("Package 'lwgeom' is required for mysterycall_map_block_group()", call. = FALSE)
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
-    stop("Package 'webshot' is required for mysterycall_map_block_group(). Install with: install.packages('webshot')", call. = FALSE)
+    stop("Package 'webshot' is required for mysterycall_map_block_group()", call. = FALSE)
   }
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
-    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
+    stop("Package 'htmlwidgets' is required for this function", call. = FALSE)
   }
   checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
   if (!inherits(bg_data, "sf")) {

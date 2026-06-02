@@ -1,5 +1,6 @@
 library(testthat)
 testthat::skip_if_not_installed("dplyr")
+testthat::skip_if_not_installed("caret")
 library(dplyr)
 
 test_that("mysterycall_remove_near_zero removes near-zero variance variables correctly", {

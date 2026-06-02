@@ -27,21 +27,22 @@ abbreviations. Handles both inline units in address line 1 and separate
 units in address line 2.
 }
 \examples{
-mysterycall_normalize_units("123 Main St Suite 100", NA_character_)
-mysterycall_normalize_units("456 Oak Avenue", "Apartment 4B")
+mysterycall:::mysterycall_normalize_units("123 Main St Suite 100", NA_character_)
+mysterycall:::mysterycall_normalize_units("456 Oak Avenue", "Apartment 4B")
 
 }
 \seealso{
-Other address-normalization: 
-\code{\link{mysterycall_ascii_norm}()},
-\code{\link{mysterycall_caps}()},
-\code{\link{mysterycall_has_street_number}()},
-\code{\link{mysterycall_is_po_box}()},
-\code{\link{mysterycall_normalize_directionals}()},
-\code{\link{mysterycall_normalize_state}()},
-\code{\link{mysterycall_normalize_suffix}()},
-\code{\link{mysterycall_normalize_zip5}()},
-\code{\link{mysterycall_strip_suite}()},
-\code{\link{normalize_address_df}()}
+Other address-normalization:
+\code{\link[=mysterycall_ascii_norm]{mysterycall_ascii_norm()}},
+\code{\link[=mysterycall_caps]{mysterycall_caps()}},
+\code{\link[=mysterycall_has_street_number]{mysterycall_has_street_number()}},
+\code{\link[=mysterycall_is_po_box]{mysterycall_is_po_box()}},
+\code{\link[=mysterycall_normalize_address_df]{mysterycall_normalize_address_df()}},
+\code{\link[=mysterycall_normalize_directionals]{mysterycall_normalize_directionals()}},
+\code{\link[=mysterycall_normalize_state]{mysterycall_normalize_state()}},
+\code{\link[=mysterycall_normalize_suffix]{mysterycall_normalize_suffix()}},
+\code{\link[=mysterycall_normalize_zip5]{mysterycall_normalize_zip5()}},
+\code{\link[=mysterycall_strip_suite]{mysterycall_strip_suite()}}
 }
 \concept{address-normalization}
+\keyword{internal}

@@ -23,31 +23,31 @@ mysterycall_compose_map_density(
 }
 \value{
 A \code{gridExtra} grob (gtable). Pass to \code{ggsave(plot = result)} or
-\code{\link[=save_green_journal_figure]{save_green_journal_figure()}}.
+\code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}.
 }
 \description{
 Arranges a choropleth map above a marginal density/histogram plot in a
 7:2 height ratio. Returns a grob suitable for \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} or
-\code{\link[=save_green_journal_figure]{save_green_journal_figure()}}.
+\code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
-  theme_green_journal_map()
+  mysterycall_theme_green_journal_map()
 p_den <- ggplot(tracts, aes(access)) +
   geom_density(fill = "#56B4E9", alpha = 0.6) +
-  theme_green_journal()
+  mysterycall_theme_green_journal()
 composite <- mysterycall_compose_map_density(p_map, p_den)
-save_green_journal_figure(composite, "figures/fig3")
+mysterycall_save_green_journal_figure(composite, "figures/fig3")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=save_green_journal_figure]{save_green_journal_figure()}}, \code{\link[=theme_green_journal_map]{theme_green_journal_map()}}
+\code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}, \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 
-Other green-journal-spatial: 
-\code{\link{mysterycall_crs_albers_conus}()},
-\code{\link{mysterycall_truncate_for_viz}()},
-\code{\link{mysterycall_winsorize}()}
+Other green-journal-spatial:
+\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}},
+\code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}},
+\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 }
 \concept{green-journal-spatial}

@@ -1,13 +1,12 @@
-#' Internal helpers for validating user inputs
+#' Validate a Data Frame
 #'
-#' These utilities provide consistent, human-friendly validation
-#' messages across the package. They are kept internal so that
-#' exported functions can depend on them without bloating the public
-#' API surface area.
+#' @param x Object to validate.
+#' @param name Character scalar naming the object for error messages.
+#' @param allow_null Logical flag. When `TRUE`, `NULL` is accepted without error.
+#' @param allow_zero_rows Logical flag. When `FALSE`, an error is thrown if `nrow(x) == 0`.
 #'
-#' @return These helpers return the validated object (invisibly) so they can
-#'   be used inline while performing assertions.
-#'
+#' @return The validated object (invisibly).
+#' @family validation
 #' @keywords internal
 validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_rows = TRUE) {
   checkmate::assert_string(name, min.chars = 1, .var.name = "name")
@@ -32,6 +31,14 @@ validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_
 }
 
 
+#' Validate a Scalar Positive Numeric Value
+#'
+#' @param x Numeric scalar to validate.
+#' @param name Character scalar naming the object for error messages.
+#' @param allow_null Logical flag. When `TRUE`, `NULL` is accepted without error.
+#'
+#' @return The validated object (invisibly).
+#' @family validation
 #' @keywords internal
 validate_scalar_positive_numeric <- function(x, name, allow_null = TRUE) {
   checkmate::assert_string(name, min.chars = 1, .var.name = "name")
@@ -54,6 +61,14 @@ validate_scalar_positive_numeric <- function(x, name, allow_null = TRUE) {
   invisible(x)
 }
 
+#' Validate Required Columns in a Data Frame
+#'
+#' @param x Data frame to check.
+#' @param required Character vector of required column names.
+#' @param name Character scalar naming the data frame for error messages.
+#'
+#' @return The validated data frame (invisibly).
+#' @family validation
 #' @keywords internal
 validate_required_columns <- function(x, required, name = "data") {
   checkmate::assert_data_frame(x, .var.name = "x")

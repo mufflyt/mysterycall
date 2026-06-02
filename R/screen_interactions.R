@@ -50,7 +50,7 @@ mysterycall_screen_interactions <- function(data,
   }
   if (!is.null(random_intercept)) {
     if (!requireNamespace("lme4", quietly = TRUE)) {
-      stop("lme4 is required when `random_intercept` is supplied. Install with install.packages('lme4').",
+      stop("lme4 is required when `random_intercept` is supplied",
            call. = FALSE)
     }
     if (!random_intercept %in% names(data)) {

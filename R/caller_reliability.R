@@ -236,6 +236,15 @@ mysterycall_caller_reliability <- function(
 #' @param x A `mysterycall_reliability` object.
 #' @param ... Ignored.
 #' @return `invisible(x)`.
+#' @examples
+#' \dontrun{
+#' df <- data.frame(
+#'   caller  = c("A", "A", "B", "B"),
+#'   outcome = c(1L, 0L, 1L, 1L)
+#' )
+#' res <- mysterycall_caller_reliability(df, "caller", "outcome")
+#' print(res)
+#' }
 #' @method print mysterycall_reliability
 #' @family caller-management
 #' @export

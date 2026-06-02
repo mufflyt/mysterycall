@@ -17,15 +17,13 @@
 #'   Additional columns from the raw shapefile may be present.
 #' @seealso [ensure_hrr_shapefile()], [mysterycall_hrr_maps()], [mysterycall_map_base()]
 #' @family geospatial helpers
-
 #' @importFrom dplyr filter
-#'
 #' @export
 #' @examplesIf interactive()
 #' mysterycall_hrr()
 mysterycall_hrr <- function(remove_HI_AK = TRUE) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   message("Loading necessary packages...")
@@ -78,7 +76,6 @@ mysterycall_hrr <- function(remove_HI_AK = TRUE) {
 #' @seealso [mysterycall_hrr()] to obtain the HRR `sf` object;
 #'   [mysterycall_map_base()], [mysterycall_map_block_group()]
 #' @family mapping
-
 #' @importFrom dplyr mutate group_by summarize filter n
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
 #' @importFrom stringr str_detect
@@ -96,20 +93,20 @@ mysterycall_hrr_maps <- function(
     height = 5
 ) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (!requireNamespace("ggspatial", quietly = TRUE)) {
-    stop("Package 'ggspatial' is required for mysterycall_hrr_maps(). Install with: install.packages('ggspatial')", call. = FALSE)
+    stop("Package 'ggspatial' is required for mysterycall_hrr_maps()", call. = FALSE)
   }
   if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
-    stop("Package 'rnaturalearth' is required for mysterycall_hrr_maps(). Install with: install.packages('rnaturalearth')", call. = FALSE)
+    stop("Package 'rnaturalearth' is required for mysterycall_hrr_maps()", call. = FALSE)
   }
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
-    stop("Package 'gridExtra' is required for this function. Install with: install.packages('gridExtra')", call. = FALSE)
+    stop("Package 'gridExtra' is required for this function", call. = FALSE)
   }
   if (!requireNamespace("grid", quietly = TRUE)) {
-    stop("Package 'grid' is required for this function. Install with: install.packages('grid')", call. = FALSE)
+    stop("Package 'grid' is required for this function", call. = FALSE)
   }
   sf::sf_use_s2(FALSE)
 

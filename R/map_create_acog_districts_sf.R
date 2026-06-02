@@ -27,7 +27,7 @@
 #' mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
 mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (is.null(acog_districts_file)) {
@@ -59,7 +59,7 @@ mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   )
 
   if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
-    stop("Package 'rnaturalearth' is required for mysterycall_map_acog_districts(). Install with: install.packages('rnaturalearth')", call. = FALSE)
+    stop("Package 'rnaturalearth' is required for mysterycall_map_acog_districts()", call. = FALSE)
   }
   states_sf <- rnaturalearth::ne_states(country = "united states of america", returnclass = "sf")
   states_sf <- dplyr::transmute(

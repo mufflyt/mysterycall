@@ -18,4 +18,5 @@
 #'
 #' @family datasets
 #' @name taxonomy
-"taxonomy"
+#' @docType data
+NULL

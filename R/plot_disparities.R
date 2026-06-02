@@ -84,7 +84,7 @@ mysterycall_plot_disparities <- function(
     title      = NULL
 ) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required. Install with: install.packages('ggplot2')",
+    stop("Package 'ggplot2' is required",
          call. = FALSE)
   }
 

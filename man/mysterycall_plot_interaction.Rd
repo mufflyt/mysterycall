@@ -96,8 +96,8 @@ result <- mysterycall_plot_interaction(
 \seealso{
 \code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}}, \code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}}
 
-Other modeling helpers: 
-\code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_create_formula}()}
+Other modeling helpers:
+\code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}},
+\code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}}
 }
 \concept{modeling helpers}

@@ -57,7 +57,7 @@ When \code{write_report = TRUE}, a one-row CSV audit record is written to the
 working directory using \code{report_prefix} as the filename stem.
 }
 \description{
-Wraps \code{\link[dplyr:mutate-joins]{dplyr::left_join()}} with:
+Wraps \code{\link[dplyr:left_join]{dplyr::left_join()}} with:
 \itemize{
 \item Key-type harmonisation (prevents silent 0-match joins after type
 coercion from RDS or Parquet round-trips).
@@ -103,10 +103,10 @@ result <- mysterycall_safe_left_join(
 \code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}}, \code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}},
 \code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}}, \code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}}
 
-Other safe-joins: 
-\code{\link{mysterycall_assert_unique_keys}()},
-\code{\link{mysterycall_safe_anti_join}()},
-\code{\link{mysterycall_safe_inner_join}()},
-\code{\link{mysterycall_safe_semi_join}()}
+Other safe-joins:
+\code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}},
+\code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}},
+\code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
+\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}
 }
 \concept{safe-joins}

@@ -69,8 +69,8 @@ mysterycall_bootstrap_ci(df, "accepted", group_col = "insurance", seed = 1)
 for model-based outcome summaries; \code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}} for
 cross-wave significance testing.
 
-Other inference: 
-\code{\link{mysterycall_compare_waves}()},
-\code{\link{mysterycall_multiple_comparison_adjust}()}
+Other inference:
+\code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}},
+\code{\link[=mysterycall_multiple_comparison_adjust]{mysterycall_multiple_comparison_adjust()}}
 }
 \concept{inference}

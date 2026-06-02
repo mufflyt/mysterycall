@@ -16,29 +16,30 @@ mysterycall_progress_update(pb, amount = 1, status = NULL, set = NULL)
 \item{set}{Set to a specific absolute value instead of incrementing.}
 }
 \value{
-Invisible NULL.
+\code{invisible(NULL)}.
 }
 \description{
 Increments the progress bar by a specified amount and optionally updates the
 status message.
 }
 \examples{
-pb <- mysterycall_progress_bar("Processing", total = 10)
-for (i in seq_len(10)) mysterycall_progress_update(pb)
-mysterycall_progress_done(pb)
+pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 10)
+for (i in seq_len(10)) mysterycall:::mysterycall_progress_update(pb)
+mysterycall:::mysterycall_progress_done(pb)
 }
 \seealso{
-Other progress-bars: 
-\code{\link{mysterycall_multi_complete}()},
-\code{\link{mysterycall_multi_done}()},
-\code{\link{mysterycall_multi_progress}()},
-\code{\link{mysterycall_multi_step}()},
-\code{\link{mysterycall_multi_update}()},
-\code{\link{mysterycall_progress_bar}()},
-\code{\link{mysterycall_progress_done}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_map}()},
-\code{\link{mysterycall_spinner_start}()},
-\code{\link{mysterycall_spinner_stop}()}
+Other progress:
+\code{\link[=mysterycall_multi_complete]{mysterycall_multi_complete()}},
+\code{\link[=mysterycall_multi_done]{mysterycall_multi_done()}},
+\code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}},
+\code{\link[=mysterycall_multi_step]{mysterycall_multi_step()}},
+\code{\link[=mysterycall_multi_update]{mysterycall_multi_update()}},
+\code{\link[=mysterycall_progress_bar]{mysterycall_progress_bar()}},
+\code{\link[=mysterycall_progress_done]{mysterycall_progress_done()}},
+\code{\link[=mysterycall_progress_fail]{mysterycall_progress_fail()}},
+\code{\link[=mysterycall_progress_map]{mysterycall_progress_map()}},
+\code{\link[=mysterycall_spinner_start]{mysterycall_spinner_start()}},
+\code{\link[=mysterycall_spinner_stop]{mysterycall_spinner_stop()}}
 }
-\concept{progress-bars}
+\concept{progress}
+\keyword{internal}

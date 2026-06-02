@@ -53,8 +53,8 @@ mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
 \code{\link[=mysterycall_isochrones_for_df]{mysterycall_isochrones_for_df()}} to generate the \code{isochrones_joined}
 input; \code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} for single-point isochrone creation.
 
-Other geospatial helpers: 
-\code{\link{mysterycall_geocode}()},
-\code{\link{mysterycall_hrr}()}
+Other geospatial helpers:
+\code{\link[=mysterycall_geocode]{mysterycall_geocode()}},
+\code{\link[=mysterycall_hrr]{mysterycall_hrr()}}
 }
 \concept{geospatial helpers}

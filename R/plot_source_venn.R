@@ -53,13 +53,11 @@
 #'   mysterycall_plot_source_venn(d)
 #'   ```
 #'
-#' @seealso [ggforce::geom_circle()]
-#' @importFrom ggplot2 ggplot annotate coord_fixed theme_void theme element_text
-#'   margin ggsave labs
+#' @importFrom ggplot2 ggplot annotate coord_fixed theme_void theme element_text margin ggsave labs geom_polygon
 #' @family plotting
 #' @export
 #'
-#' @examplesIf interactive() && requireNamespace("ggforce", quietly = TRUE)
+#' @examplesIf interactive()
 #' d <- list(
 #'   npis  = as.character(1:100),
 #'   nppes = as.character(1:70),
@@ -87,13 +85,14 @@ mysterycall_plot_source_venn <- function(
     dpi           = 300L,
     bg            = "white") {
 
-  if (!requireNamespace("ggforce", quietly = TRUE)) {
-    stop("Package 'ggforce' is required. Install with: install.packages('ggforce')",
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required",
          call. = FALSE)
   }
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required. Install with: install.packages('ggplot2')",
-         call. = FALSE)
+
+  circle_path <- function(x0, y0, r, n = 200L) {
+    theta <- seq(0, 2 * pi, length.out = n)
+    data.frame(x = x0 + r * cos(theta), y = y0 + r * sin(theta))
   }
 
   # -- Load data --------------------------------------------------------------
@@ -171,20 +170,21 @@ mysterycall_plot_source_venn <- function(
   }
 
   # -- Build plot -------------------------------------------------------------
+  circle_A <- circle_path(circles$x0[1L], circles$y0[1L], circles$r[1L])
+  circle_B <- circle_path(circles$x0[2L], circles$y0[2L], circles$r[2L])
+  circle_C <- circle_path(circles$x0[3L], circles$y0[3L], circles$r[3L])
+
   p <- ggplot2::ggplot() +
-    ggforce::geom_circle(
-      data = circles[1L, ],
-      ggplot2::aes(x0 = x0, y0 = y0, r = r),
+    ggplot2::geom_polygon(
+      data = circle_A, ggplot2::aes(x = .data$x, y = .data$y),
       fill = fills[1L], alpha = 0.2, color = border_colors[1L], linewidth = 0.8
     ) +
-    ggforce::geom_circle(
-      data = circles[2L, ],
-      ggplot2::aes(x0 = x0, y0 = y0, r = r),
+    ggplot2::geom_polygon(
+      data = circle_B, ggplot2::aes(x = .data$x, y = .data$y),
       fill = fills[2L], alpha = 0.2, color = border_colors[2L], linewidth = 0.8
     ) +
-    ggforce::geom_circle(
-      data = circles[3L, ],
-      ggplot2::aes(x0 = x0, y0 = y0, r = r),
+    ggplot2::geom_polygon(
+      data = circle_C, ggplot2::aes(x = .data$x, y = .data$y),
       fill = fills[3L], alpha = 0.2, color = border_colors[3L], linewidth = 0.8
     ) +
 

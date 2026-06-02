@@ -94,7 +94,7 @@ mysterycall_plot_source_venn(d)
 }
 
 \examples{
-\dontshow{if (interactive() && requireNamespace("ggforce", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 d <- list(
   npis  = as.character(1:100),
   nppes = as.character(1:70),
@@ -106,10 +106,8 @@ print(p)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[ggforce:geom_circle]{ggforce::geom_circle()}}
-
-Other plotting: 
-\code{\link{mysterycall_plot_disparities}()},
-\code{\link{mysterycall_plot_emmeans}()}
+Other plotting:
+\code{\link[=mysterycall_plot_disparities]{mysterycall_plot_disparities()}},
+\code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}}
 }
 \concept{plotting}

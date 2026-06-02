@@ -18,21 +18,22 @@ from an address string. Useful for creating a base street address for
 matching.
 }
 \examples{
-mysterycall_strip_suite("123 Main St Suite 100")
-mysterycall_strip_suite("456 Oak Ave APT 4B #200")
+mysterycall:::mysterycall_strip_suite("123 Main St Suite 100")
+mysterycall:::mysterycall_strip_suite("456 Oak Ave APT 4B #200")
 
 }
 \seealso{
-Other address-normalization: 
-\code{\link{mysterycall_ascii_norm}()},
-\code{\link{mysterycall_caps}()},
-\code{\link{mysterycall_has_street_number}()},
-\code{\link{mysterycall_is_po_box}()},
-\code{\link{mysterycall_normalize_directionals}()},
-\code{\link{mysterycall_normalize_state}()},
-\code{\link{mysterycall_normalize_suffix}()},
-\code{\link{mysterycall_normalize_units}()},
-\code{\link{mysterycall_normalize_zip5}()},
-\code{\link{normalize_address_df}()}
+Other address-normalization:
+\code{\link[=mysterycall_ascii_norm]{mysterycall_ascii_norm()}},
+\code{\link[=mysterycall_caps]{mysterycall_caps()}},
+\code{\link[=mysterycall_has_street_number]{mysterycall_has_street_number()}},
+\code{\link[=mysterycall_is_po_box]{mysterycall_is_po_box()}},
+\code{\link[=mysterycall_normalize_address_df]{mysterycall_normalize_address_df()}},
+\code{\link[=mysterycall_normalize_directionals]{mysterycall_normalize_directionals()}},
+\code{\link[=mysterycall_normalize_state]{mysterycall_normalize_state()}},
+\code{\link[=mysterycall_normalize_suffix]{mysterycall_normalize_suffix()}},
+\code{\link[=mysterycall_normalize_units]{mysterycall_normalize_units()}},
+\code{\link[=mysterycall_normalize_zip5]{mysterycall_normalize_zip5()}}
 }
 \concept{address-normalization}
+\keyword{internal}

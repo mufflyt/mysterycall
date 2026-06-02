@@ -97,8 +97,8 @@ result <- mysterycall_geocode("addresses.csv", "my_api_key")
 workflow; \code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} to compute drive-time polygons
 from geocoded coordinates.
 
-Other geospatial helpers: 
-\code{\link{mysterycall_calculate_overlap}()},
-\code{\link{mysterycall_hrr}()}
+Other geospatial helpers:
+\code{\link[=mysterycall_calculate_overlap]{mysterycall_calculate_overlap()}},
+\code{\link[=mysterycall_hrr]{mysterycall_hrr()}}
 }
 \concept{geospatial helpers}

@@ -19,13 +19,13 @@ NULL
 #' @param force Whether to force progress bar even if not in terminal (default: FALSE)
 #'
 #' @return Progress bar ID (invisible)
-#' @family progress-bars
-#' @export
+#' @family progress
 #'
 #' @examplesIf interactive()
 #' pb_id <- mysterycall_progress_bar("Processing", total = 10)
 #' for (i in 1:10) mysterycall_progress_update(pb_id)
 #' mysterycall_progress_done(pb_id)
+#' @keywords internal
 mysterycall_progress_bar <- function(name,
                                 total,
                                 format = NULL,
@@ -93,13 +93,13 @@ mysterycall_progress_bar <- function(name,
 #' @param status Optional status message to display.
 #' @param set Set to a specific absolute value instead of incrementing.
 #'
-#' @return Invisible NULL.
-#' @family progress-bars
-#' @export
+#' @return `invisible(NULL)`.
+#' @family progress
 #' @examples
-#' pb <- mysterycall_progress_bar("Processing", total = 10)
-#' for (i in seq_len(10)) mysterycall_progress_update(pb)
-#' mysterycall_progress_done(pb)
+#' pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 10)
+#' for (i in seq_len(10)) mysterycall:::mysterycall_progress_update(pb)
+#' mysterycall:::mysterycall_progress_done(pb)
+#' @keywords internal
 mysterycall_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
   if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
@@ -150,13 +150,13 @@ mysterycall_progress_update <- function(pb, amount = 1, status = NULL, set = NUL
 #' @param result Optional result message to display on completion.
 #' @param status Final status label (default: \code{"done"}).
 #'
-#' @return Invisible NULL.
-#' @family progress-bars
-#' @export
+#' @return `invisible(NULL)`.
+#' @family progress
 #' @examples
-#' pb <- mysterycall_progress_bar("Processing", total = 5)
-#' for (i in seq_len(5)) mysterycall_progress_update(pb)
-#' mysterycall_progress_done(pb, result = "5 items processed")
+#' pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 5)
+#' for (i in seq_len(5)) mysterycall:::mysterycall_progress_update(pb)
+#' mysterycall:::mysterycall_progress_done(pb, result = "5 items processed")
+#' @keywords internal
 mysterycall_progress_done <- function(pb, result = NULL, status = "done") {
   if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
@@ -184,12 +184,12 @@ mysterycall_progress_done <- function(pb, result = NULL, status = "done") {
 #' @param pb Progress bar object from \code{mysterycall_progress_bar()}.
 #' @param msg Optional error message string displayed alongside the failure.
 #'
-#' @return Invisible NULL.
-#' @family progress-bars
-#' @export
+#' @return `invisible(NULL)`.
+#' @family progress
 #' @examples
-#' pb <- mysterycall_progress_bar("Processing", total = 10)
-#' mysterycall_progress_fail(pb, msg = "Geocoding API unreachable")
+#' pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 10)
+#' mysterycall:::mysterycall_progress_fail(pb, msg = "Geocoding API unreachable")
+#' @keywords internal
 mysterycall_progress_fail <- function(pb, msg = NULL) {
   if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
@@ -224,8 +224,7 @@ mysterycall_progress_fail <- function(pb, msg = NULL) {
 #' @param show_overall Whether to show overall progress bar (default: TRUE)
 #'
 #' @return Multi-progress tracker object
-#' @family progress-bars
-#' @export
+#' @family progress
 #'
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
@@ -233,6 +232,7 @@ mysterycall_progress_fail <- function(pb, msg = NULL) {
 #' for (i in 1:5) mysterycall_multi_update(tracker)
 #' mysterycall_multi_complete(tracker)
 #' mysterycall_multi_done(tracker)
+#' @keywords internal
 mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
   env <- new.env(parent = emptyenv())
   env$steps <- steps
@@ -258,12 +258,12 @@ mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
 #' @param total Total number of items to process in this step.
 #' @param detail Optional detail message shown beneath the step header.
 #'
-#' @return Invisible NULL.
-#' @family progress-bars
-#' @export
+#' @return `invisible(NULL)`.
+#' @family progress
 #' @examples
-#' tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
-#' mysterycall_multi_step(tr, 1, total = 10)
+#' tr <- mysterycall:::mysterycall_multi_progress(c("Geocode", "Validate"))
+#' mysterycall:::mysterycall_multi_step(tr, 1, total = 10)
+#' @keywords internal
 mysterycall_multi_step <- function(tracker, step_num, total, detail = NULL) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
@@ -309,13 +309,13 @@ mysterycall_multi_step <- function(tracker, step_num, total, detail = NULL) {
 #' @param amount Amount to increment (default: 1).
 #' @param status Optional status message to display.
 #'
-#' @return Invisible NULL.
-#' @family progress-bars
-#' @export
+#' @return `invisible(NULL)`.
+#' @family progress
 #' @examples
-#' tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
-#' mysterycall_multi_step(tr, 1, total = 5)
-#' for (i in seq_len(5)) mysterycall_multi_update(tr)
+#' tr <- mysterycall:::mysterycall_multi_progress(c("Geocode", "Validate"))
+#' mysterycall:::mysterycall_multi_step(tr, 1, total = 5)
+#' for (i in seq_len(5)) mysterycall:::mysterycall_multi_update(tr)
+#' @keywords internal
 mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
@@ -334,13 +334,13 @@ mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
 #' @param tracker Multi-progress tracker object
 #' @param result Optional result message
 #'
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
 #' mysterycall_multi_step(tracker, 1, total = 5)
 #' mysterycall_multi_complete(tracker, result = "ok")
-#' @family progress-bars
-#' @export
+#' @family progress
+#' @keywords internal
 mysterycall_multi_complete <- function(tracker, result = NULL) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
@@ -359,12 +359,12 @@ mysterycall_multi_complete <- function(tracker, result = NULL) {
 #'
 #' @param tracker Multi-progress tracker object
 #'
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
 #' mysterycall_multi_done(tracker)
-#' @family progress-bars
-#' @export
+#' @family progress
+#' @keywords internal
 mysterycall_multi_done <- function(tracker) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
@@ -392,8 +392,7 @@ mysterycall_multi_done <- function(tracker) {
 #' @param parallel Whether processing is parallel (affects ETA calculation)
 #'
 #' @return List of results from fn
-#' @family progress-bars
-#' @export
+#' @family progress
 #'
 #' @examplesIf interactive()
 #' results <- mysterycall_progress_map(
@@ -401,6 +400,7 @@ mysterycall_multi_done <- function(tracker) {
 #'   fn    = function(x) x^2,
 #'   name  = "Computing squares"
 #' )
+#' @keywords internal
 mysterycall_progress_map <- function(items,
                                 fn,
                                 name = "Processing items",
@@ -443,11 +443,11 @@ mysterycall_progress_map <- function(items,
 #' @param msg Optional message to display
 #'
 #' @return Spinner ID (a `cli` progress bar ID, or `NULL` if cli is unavailable).
-#' @family progress-bars
+#' @family progress
 #' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
 #' mysterycall_spinner_stop(id)
-#' @export
+#' @keywords internal
 mysterycall_spinner_start <- function(name, msg = NULL) {
   if (requireNamespace("cli", quietly = TRUE) && cli::is_ansi_tty()) {
     if (is.null(msg)) {
@@ -472,11 +472,11 @@ mysterycall_spinner_start <- function(name, msg = NULL) {
 #' @param result Result message
 #'
 #' @return `invisible(NULL)`
-#' @family progress-bars
+#' @family progress
 #' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
 #' mysterycall_spinner_stop(id, result = "done")
-#' @export
+#' @keywords internal
 mysterycall_spinner_stop <- function(id, result = "done") {
   if (!is.null(id) && requireNamespace("cli", quietly = TRUE)) {
     cli::cli_progress_done(id = id, result = result)

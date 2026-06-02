@@ -17,8 +17,18 @@
 \description{
 Print method for mysterycall_reliability objects
 }
+\examples{
+\dontrun{
+df <- data.frame(
+  caller  = c("A", "A", "B", "B"),
+  outcome = c(1L, 0L, 1L, 1L)
+)
+res <- mysterycall_caller_reliability(df, "caller", "outcome")
+print(res)
+}
+}
 \seealso{
-Other caller-management: 
-\code{\link{mysterycall_caller_reliability}()}
+Other caller-management:
+\code{\link[=mysterycall_caller_reliability]{mysterycall_caller_reliability()}}
 }
 \concept{caller-management}

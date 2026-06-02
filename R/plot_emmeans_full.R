@@ -74,7 +74,7 @@ mysterycall_plot_emmeans_full <- function(model,
                                            height     = 6,
                                            dpi        = 300L) {
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("emmeans is required. Install with install.packages('emmeans').", call. = FALSE)
+    stop("emmeans is required", call. = FALSE)
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("ggplot2 is required.", call. = FALSE)

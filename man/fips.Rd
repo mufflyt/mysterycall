@@ -23,18 +23,14 @@ Information Processing Standards (FIPS) codes for states and counties:
 \source{
 \url{https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv}
 }
-\usage{
-fips
-}
 \description{
 3 columns with 51 observations.
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{ACOG_Districts}},
 \code{\link{acgme}},
 \code{\link{cityStateToLatLong}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}
-\keyword{datasets}

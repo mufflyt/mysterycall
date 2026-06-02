@@ -27,11 +27,11 @@ mysterycall_write_table_pdf(overall_summary, "table.pdf")
 \seealso{
 \code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}}
 
-Other table: 
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{print.mysterycall_table1}()}
+Other table:
+\code{\link[=mysterycall_table1]{mysterycall_table1()}},
+\code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}},
+\code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}},
+\code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},
+\code{\link[=print.mysterycall_table1]{print.mysterycall_table1()}}
 }
 \concept{table}

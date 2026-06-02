@@ -5,15 +5,32 @@ NULL
 
 # -- Internal helpers ----------------------------------------------------------
 
-# Converts "Linda Smith D.O." -> "Linda Smith, D.O."
-# Leaves "Linda Do" (Vietnamese surname, title-case) untouched.
+#' Standardize DO credential format
+#'
+#' Converts "Linda Smith D.O." -> "Linda Smith, D.O." while leaving
+#' "Linda Do" (Vietnamese surname) untouched.
+#'
+#' @param names_raw Character vector of raw physician names.
+#'
+#' @return Character vector with standardized DO credentials.
+#' @family name-parsing
+#' @keywords internal
 .handle_do_credential <- function(names_raw) {
   names_raw |>
     stringr::str_replace_all("\\b([A-Z][a-z]+)\\s+D\\.O\\.\\s*$",  "\\1, D.O.") |>
     stringr::str_replace_all("\\b([A-Z][a-z]+\\s+[A-Z][a-z]+)\\s+DO\\s*$", "\\1, DO")
 }
 
-# Converts "Smith, John, Jr." -> "John Smith, Jr." so humaniformat handles it.
+#' Reorder three-part comma-separated names
+#'
+#' Converts "Smith, John, Jr." -> "John Smith, Jr." so humaniformat handles it
+#' correctly.
+#'
+#' @param x Character vector of physician names.
+#'
+#' @return Character vector with reordered name components.
+#' @family name-parsing
+#' @keywords internal
 .handle_three_part_comma <- function(x) {
   pat <- "^([^,]+),\\s*([^,]+),\\s*(Jr\\.?|Sr\\.?|II|III|IV|V|2nd|3rd|4th)\\s*$"
   is_three <- stringr::str_detect(x, pat)
@@ -23,6 +40,16 @@ NULL
 
 # -- Core implementation (uncached) -------------------------------------------
 
+#' Core implementation of physician name parsing
+#'
+#' Internal workhorse function for [mysterycall_parse_physician_name()].
+#'
+#' @param physician_name Character vector of physician name strings.
+#' @param remove_titles Logical scalar. Whether to strip leading titles.
+#'
+#' @return A [tibble::tibble()] with parsed name components.
+#' @family name-parsing
+#' @keywords internal
 .parse_physician_name_impl <- function(physician_name, remove_titles) {
 
   if (length(physician_name) == 0L) {
@@ -367,7 +394,7 @@ mysterycall_format_physician_name <- function(first_name,
 #' @seealso [mysterycall_parse_physician_name()],
 #'   [mysterycall_validate_parsed_names()]
 #' @family name-parsing
-#' @export
+#' @keywords internal
 mysterycall_test_name_parser <- function() {
   test_cases <- c(
     "John Smith",

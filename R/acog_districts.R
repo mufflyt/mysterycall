@@ -29,4 +29,7 @@
 #'
 #' @keywords dataset
 #' @family datasets
-"ACOG_Districts"
+#' @name ACOG_Districts
+#' @docType data
+#' @family datasets
+NULL

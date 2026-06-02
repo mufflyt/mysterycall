@@ -25,12 +25,12 @@ NULL
 #'   [mysterycall_progress_summary()].
 #' @importFrom tibble tibble
 #' @family logging
-#' @export
 #' @examples
-#' tracker <- mysterycall_progress_tracker(c("Geocode", "Validate", "Export"))
-#' mysterycall_progress_start(tracker, "Geocode")
+#' tracker <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate", "Export"))
+#' mysterycall:::mysterycall_progress_start(tracker, "Geocode")
 #' Sys.sleep(1)
-#' mysterycall_progress_finish(tracker, "Geocode", score = 0.95)
+#' mysterycall:::mysterycall_progress_finish(tracker, "Geocode", score = 0.95)
+#' @keywords internal
 mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getOption("mysterycall.quiet", FALSE)) {
   if (!is.character(steps) || !length(steps)) {
     stop("`steps` must be a non-empty character vector.", call. = FALSE)
@@ -114,10 +114,10 @@ mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getO
 #'
 #' @return The tracker object, invisibly.
 #' @family logging
-#' @export
 #' @examples
-#' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
-#' mysterycall_progress_start(tr, "Geocode")
+#' tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
+#' mysterycall:::mysterycall_progress_start(tr, "Geocode")
+#' @keywords internal
 mysterycall_progress_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
@@ -150,11 +150,11 @@ mysterycall_progress_start <- function(tracker, step, note = NULL) {
 #'
 #' @return The tracker object, invisibly.
 #' @family logging
-#' @export
 #' @examples
-#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
-#' mysterycall_progress_start(tr, "Geocode")
-#' mysterycall_progress_finish(tr, "Geocode", score = 0.92)
+#' tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall:::mysterycall_progress_start(tr, "Geocode")
+#' mysterycall:::mysterycall_progress_finish(tr, "Geocode", score = 0.92)
+#' @keywords internal
 mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
@@ -178,11 +178,11 @@ mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = N
 #'
 #' @return The tracker object, invisibly.
 #' @family logging
-#' @export
 #' @examples
-#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
-#' mysterycall_progress_start(tr, "Geocode")
-#' mysterycall_tracker_fail(tr, "Geocode", reason = "API timeout")
+#' tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall:::mysterycall_progress_start(tr, "Geocode")
+#' mysterycall:::mysterycall_tracker_fail(tr, "Geocode", reason = "API timeout")
+#' @keywords internal
 mysterycall_tracker_fail <- function(tracker, step, reason = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
@@ -204,10 +204,10 @@ mysterycall_tracker_fail <- function(tracker, step, reason = NULL) {
 #'
 #' @return The tracker object, invisibly.
 #' @family logging
-#' @export
 #' @examples
-#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
-#' mysterycall_tracker_update(tr, force = TRUE)
+#' tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall:::mysterycall_tracker_update(tr, force = TRUE)
+#' @keywords internal
 mysterycall_tracker_update <- function(tracker, force = FALSE) {
   .tracker_emit_update(tracker, force = force)
   invisible(tracker)
@@ -221,11 +221,11 @@ mysterycall_tracker_update <- function(tracker, force = FALSE) {
 #' @importFrom tibble as_tibble
 #' @family logging
 #' @examples
-#' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
-#' mysterycall_progress_start(tr, "Geocode")
-#' mysterycall_progress_finish(tr, "Geocode", score = 0.95)
-#' mysterycall_progress_summary(tr)
-#' @export
+#' tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
+#' mysterycall:::mysterycall_progress_start(tr, "Geocode")
+#' mysterycall:::mysterycall_progress_finish(tr, "Geocode", score = 0.95)
+#' mysterycall:::mysterycall_progress_summary(tr)
+#' @keywords internal
 mysterycall_progress_summary <- function(tracker) {
   env <- tracker$env
   tibble::as_tibble(env$records)

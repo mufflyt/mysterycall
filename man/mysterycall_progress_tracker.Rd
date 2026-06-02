@@ -27,8 +27,9 @@ An object of class \code{mysterycall_progress_tracker}.  Pass it to
 \code{\link{mysterycall_progress_summary}()}.
 }
 \examples{
-tracker <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 10)
-mysterycall_progress_start(tracker, "Geocode")
-mysterycall_progress_finish(tracker, "Geocode", score = 0.92)
-mysterycall_progress_summary(tracker)
+tracker <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 10)
+mysterycall:::mysterycall_progress_start(tracker, "Geocode")
+mysterycall:::mysterycall_progress_finish(tracker, "Geocode", score = 0.92)
+mysterycall:::mysterycall_progress_summary(tracker)
 }
+\keyword{internal}

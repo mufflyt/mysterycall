@@ -64,7 +64,7 @@ mysterycall_plot_inclexcl <- function(counts,
                                        font_size              = 10L) {
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
     stop(
-      "DiagrammeR is required. Install with install.packages('DiagrammeR').",
+      "DiagrammeR is required",
       call. = FALSE
     )
   }

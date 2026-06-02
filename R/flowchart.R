@@ -61,7 +61,7 @@ mysterycall_flowchart <- function(steps,
                                    font_size  = 10L) {
 
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
-    stop("Package 'DiagrammeR' is required. Install with: install.packages('DiagrammeR')",
+    stop("Package 'DiagrammeR' is required",
          call. = FALSE)
   }
 

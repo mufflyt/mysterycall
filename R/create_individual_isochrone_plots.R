@@ -8,11 +8,8 @@
 #' @param output_dir Directory where HTML maps and shapefiles are saved.
 #'   Defaults to a session-specific folder inside [tempdir()].
 #' @return Called for its side effect of writing per-drive-time map HTML files and shapefiles to disk. Returns `NULL` invisibly.
-#'
-
 #' @importFrom dplyr filter tibble
 #' @importFrom grDevices rainbow
-#'
 #' @examplesIf interactive()
 #' # Load required libraries
 #' library(sf)
@@ -32,14 +29,14 @@
 #' @export
 mysterycall_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for mysterycall_plot_isochrones(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_plot_isochrones()", call. = FALSE)
   }
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
-    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
+    stop("Package 'htmlwidgets' is required for this function", call. = FALSE)
   }
 
   if (is.null(output_dir)) {

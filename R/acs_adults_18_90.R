@@ -41,7 +41,7 @@
 #' @export
 mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
   if (!requireNamespace("tidycensus", quietly = TRUE)) {
-    stop("Package 'tidycensus' is required. Install with: install.packages('tidycensus')", call. = FALSE)
+    stop("Package 'tidycensus' is required", call. = FALSE)
   }
   if (is.null(year)) {
     stop("year parameter is required for mysterycall_get_acs_adults_18_90().\n",
@@ -141,11 +141,11 @@ mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose
   result
 }
 
-#' Deprecated.
+#' Deprecated version of mysterycall_get_acs_adults_18_90
+#' @param ... Arguments passed to mysterycall_get_acs_adults_18_90
+#' @return See mysterycall_get_acs_adults_18_90
 #' @keywords internal
-#' @export
 #' @name get_acs_adults_18_90
-#' @export
 get_acs_adults_18_90 <- function(...) {
   .Deprecated("mysterycall_get_acs_adults_18_90")
   mysterycall_get_acs_adults_18_90(...)

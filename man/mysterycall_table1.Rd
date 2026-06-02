@@ -87,11 +87,11 @@ result$table
 \code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}}, \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}
 
-Other table: 
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_table1}()}
+Other table:
+\code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}},
+\code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}},
+\code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},
+\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}},
+\code{\link[=print.mysterycall_table1]{print.mysterycall_table1()}}
 }
 \concept{table}

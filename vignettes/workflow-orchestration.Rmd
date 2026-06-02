@@ -19,7 +19,7 @@ vignette: >
 ```{r setup, include=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = eval_vignettes)
-if (eval_vignettes) library(mysterycall)
+library(mysterycall)
 ```
 
 ```{r load-pkg, eval=FALSE}
@@ -929,7 +929,7 @@ federal holidays are excluded. `mysterycall_count_business_days()` counts
 business days between two dates; `mysterycall_business_days()` applies the
 calculation to every row of a data frame.
 
-```{r business-days-scalar, echo=TRUE, eval=TRUE}
+```{r business-days-scalar, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE)}
 # How many business days between a call on a Monday and an appointment on
 # Friday of the following week?  (Calendar days = 11; business days = 10)
 bd <- mysterycall_count_business_days(
@@ -939,7 +939,7 @@ bd <- mysterycall_count_business_days(
 cat("Business days:", bd, "\n")
 ```
 
-```{r business-days-df, echo=TRUE, eval=TRUE}
+```{r business-days-df, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE)}
 # Apply to a data frame of completed calls
 calls_df <- data.frame(
   npi       = paste0("NPI-", 1:6),

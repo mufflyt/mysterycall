@@ -28,7 +28,7 @@ mysterycall_require_arrow <- function() {
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop(
       "The 'arrow' package is required to read or write Parquet files. ",
-      "Install it with install.packages('arrow').",
+      "",
       call. = FALSE
     )
   }

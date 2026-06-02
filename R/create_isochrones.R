@@ -11,7 +11,7 @@
 #' @param posix_time A `POSIXct` scalar giving the departure time used by the
 #'   routing engine.  Defaults to `"2023-10-20 08:00:00"` (a weekday morning).
 #' @param api_key HERE API key.  Defaults to the `HERE_API_KEY` environment
-#'   variable.  Obtain a free key at <https://developer.here.com/>.
+#'   variable.  Obtain a free key at <https://www.here.com/developer>.
 #'
 #' @return A named `list`. On success: one element per value in `range`,
 #'   named by the drive-time threshold in seconds (e.g., `"1800"`), each
@@ -39,17 +39,17 @@ mysterycall_create_isochrones <- function(location,
                                                       format = "%Y-%m-%d %H:%M:%S"),
                               api_key = Sys.getenv("HERE_API_KEY")) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required", call. = FALSE)
   }
 
   if (!requireNamespace("hereR", quietly = TRUE)) {
-    stop("Package 'hereR' is required for mysterycall_create_isochrones(). Install with: install.packages('hereR')", call. = FALSE)
+    stop("Package 'hereR' is required for mysterycall_create_isochrones()", call. = FALSE)
   }
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required for mysterycall_create_isochrones(). Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required for mysterycall_create_isochrones()", call. = FALSE)
   }
   if (!requireNamespace("lwgeom", quietly = TRUE)) {
-    stop("Package 'lwgeom' is required for mysterycall_create_isochrones(). Install with: install.packages('lwgeom')", call. = FALSE)
+    stop("Package 'lwgeom' is required for mysterycall_create_isochrones()", call. = FALSE)
   }
 
   if (is.null(.isochrone_memo)) {

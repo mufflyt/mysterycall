@@ -16,7 +16,7 @@
 #' @export
 mysterycall_write_table_pdf <- function(object, filename) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
+    stop("Package 'arsenal' is required for this function", call. = FALSE)
   }
   message("Function Sanity Check: Creating Arsenal Table as a PDF")
   output_file <- if (grepl("\\.pdf$", filename, ignore.case = TRUE)) {
@@ -54,7 +54,7 @@ mysterycall_write_table_pdf <- function(object, filename) {
 #' mysterycall_table_overall("data/Table1.rds", "output_tables")
 mysterycall_table_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
+    stop("Package 'arsenal' is required for this function", call. = FALSE)
   }
   message("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining consistency of data types and factor orderings.")
   # Log function start

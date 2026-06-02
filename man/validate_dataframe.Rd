@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-validation.R
 \name{validate_dataframe}
 \alias{validate_dataframe}
-\title{Internal helpers for validating user inputs}
+\title{Validate a Data Frame}
 \usage{
 validate_dataframe(
   x,
@@ -11,14 +11,25 @@ validate_dataframe(
   allow_zero_rows = TRUE
 )
 }
+\arguments{
+\item{x}{Object to validate.}
+
+\item{name}{Character scalar naming the object for error messages.}
+
+\item{allow_null}{Logical flag. When \code{TRUE}, \code{NULL} is accepted without error.}
+
+\item{allow_zero_rows}{Logical flag. When \code{FALSE}, an error is thrown if \code{nrow(x) == 0}.}
+}
 \value{
-These helpers return the validated object (invisibly) so they can
-be used inline while performing assertions.
+The validated object (invisibly).
 }
 \description{
-These utilities provide consistent, human-friendly validation
-messages across the package. They are kept internal so that
-exported functions can depend on them without bloating the public
-API surface area.
+Validate a Data Frame
 }
+\seealso{
+Other validation:
+\code{\link[=validate_required_columns]{validate_required_columns()}},
+\code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
+}
+\concept{validation}
 \keyword{internal}

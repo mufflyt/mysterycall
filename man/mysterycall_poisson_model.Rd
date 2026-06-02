@@ -117,22 +117,22 @@ result$irr_table
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_table1]{mysterycall_table1()}},
 \code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}}
 
-Other outcomes: 
-\code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_irr_plot}()},
-\code{\link{mysterycall_marginal_effects}()},
-\code{\link{mysterycall_model_metrics}()},
-\code{\link{mysterycall_plot_distribution}()},
-\code{\link{mysterycall_plot_effect}()},
-\code{\link{mysterycall_plot_emmeans_full}()},
-\code{\link{mysterycall_plot_emmeans_interaction}()},
-\code{\link{mysterycall_plot_inclexcl}()},
-\code{\link{mysterycall_plot_residuals}()},
-\code{\link{mysterycall_plot_sjplot_interaction}()},
-\code{\link{mysterycall_plot_stacked_bar}()},
-\code{\link{mysterycall_screen_interactions}()},
-\code{\link{mysterycall_select_best_model}()},
-\code{\link{mysterycall_wait_time_summary}()},
-\code{\link{print.mysterycall_poisson_model}()}
+Other outcomes:
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
+\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
+\code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
+\code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
+\code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}},
+\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}},
+\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}},
+\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}},
+\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}},
+\code{\link[=mysterycall_plot_residuals]{mysterycall_plot_residuals()}},
+\code{\link[=mysterycall_plot_sjplot_interaction]{mysterycall_plot_sjplot_interaction()}},
+\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}},
+\code{\link[=mysterycall_screen_interactions]{mysterycall_screen_interactions()}},
+\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}},
+\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
+\code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
 }
 \concept{outcomes}

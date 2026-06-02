@@ -5,13 +5,29 @@ NULL
 
 # -- Internal helpers ----------------------------------------------------------
 
-# Avoids division-by-zero; returns `default` when denominator is 0 or NA.
+#' Safe Division
+#'
+#' Avoids division-by-zero; returns `default` when denominator is 0 or NA.
+#'
+#' @param numerator Numeric vector.
+#' @param denominator Numeric vector.
+#' @param default Numeric scalar to return if denominator is 0 or NA.
+#'
+#' @return Numeric vector.
+#' @keywords internal
 .safe_divide <- function(numerator, denominator, default = NA_real_) {
   if (is.na(denominator) || denominator == 0) default else numerator / denominator
 }
 
-# Resolves `by` to a list(left = char, right = char) for both named and
-# unnamed character vectors and dplyr::join_by() objects.
+#' Resolve Join Keys
+#'
+#' Resolves `by` to a list(left = char, right = char) for both named and
+#' unnamed character vectors and dplyr::join_by() objects.
+#'
+#' @param by Character vector or dplyr::join_by object.
+#'
+#' @return A named list with "left" and "right" character vectors.
+#' @keywords internal
 .resolve_by <- function(by) {
   if (inherits(by, "dplyr_join_by")) {
     return(list(left = by$x, right = by$y))
@@ -26,7 +42,14 @@ NULL
   list(left = left_cols, right = right_cols)
 }
 
-# Formats `by` as a human-readable string for messages.
+#' Format Join Keys for Messages
+#'
+#' Formats `by` as a human-readable string for messages.
+#'
+#' @param by Character vector or dplyr::join_by object.
+#'
+#' @return Character scalar.
+#' @keywords internal
 .format_by <- function(by) {
   if (is.null(by) || (is.character(by) && length(by) == 0L)) return("<none specified>")
   cols <- .resolve_by(by)
@@ -37,8 +60,19 @@ NULL
   paste(parts, collapse = ", ")
 }
 
-# Coerces mismatched key column types to character on both sides to prevent
-# silent 0-match joins after RDS/Parquet round-trips (e.g. integer -> double).
+#' Harmonize Key Column Types
+#'
+#' Coerces mismatched key column types to character on both sides to prevent
+#' silent 0-match joins after RDS/Parquet round-trips (e.g. integer -> double).
+#'
+#' @param left Data frame.
+#' @param right Data frame.
+#' @param by Join keys.
+#' @param label_left Label for left table.
+#' @param label_right Label for right table.
+#'
+#' @return A named list with "left" and "right" data frames.
+#' @keywords internal
 .harmonize_key_types <- function(left, right, by,
                                   label_left = "left", label_right = "right") {
   cols <- .resolve_by(by)
@@ -58,7 +92,15 @@ NULL
   list(left = left, right = right)
 }
 
-# Writes a one-row CSV audit record; atomic (write to .tmp, then rename).
+#' Write Join Audit Report
+#'
+#' Writes a one-row CSV audit record; atomic (write to .tmp, then rename).
+#'
+#' @param metrics Data frame with join metrics.
+#' @param report_prefix Character scalar for filename.
+#'
+#' @return `invisible(NULL)`.
+#' @keywords internal
 .write_join_report <- function(metrics, report_prefix) {
   report_dir <- Sys.getenv("JOIN_REPORT_DIR", unset = "")
   if (!nzchar(report_dir)) {
