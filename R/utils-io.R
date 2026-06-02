@@ -63,6 +63,14 @@ mysterycall_require_arrow <- function() {
 #' @return A data frame (tibble).
 #' @family utilities
 #' @export
+#' @examples
+#' \dontrun{
+#' # Read a CSV file
+#' df <- mysterycall_read_table("providers.csv")
+#'
+#' # Read a Parquet file
+#' df <- mysterycall_read_table("data.parquet")
+#' }
 mysterycall_read_table <- function(path, format = NULL, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   df <- if (identical(fmt, "csv")) {
@@ -109,6 +117,17 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
 #' @return The input `path` (invisibly).
 #' @family utilities
 #' @export
+#' @examples
+#' \dontrun{
+#' # Write to CSV
+#' mysterycall_write_table(mtcars, "cars.csv")
+#'
+#' # Write to Parquet
+#' mysterycall_write_table(mtcars, "cars.parquet")
+#'
+#' # Append to an existing CSV
+#' mysterycall_write_table(new_data, "combined.csv", append = TRUE)
+#' }
 mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   if (identical(fmt, "csv")) {
