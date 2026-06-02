@@ -239,9 +239,27 @@ test_that("End-to-end: NPI search and provider enrichment workflow", {
 test_that("End-to-end: Census data integration workflow", {
   skip_on_cran()
 
-  # Mock census API
-  mock_get_census <- function(name, vintage, key, vars, region, ...) {
-    create_realistic_census_data()
+  # Mock censusapi::getCensus() — returns block-group level data shaped the
+  # way mysterycall_get_census_data expects.
+  mock_get_census <- function(name, vintage, key, vars, region, regionin, ...) {
+    state_fips <- sub("^state:", "",
+                       regmatches(regionin,
+                                  regexpr("state:[0-9]+", regionin)))
+    out <- data.frame(
+      NAME = sprintf("Block Group 1, Tract 020100, County 001, State %s", state_fips),
+      state = state_fips,
+      county = "001",
+      tract = "020100",
+      stringsAsFactors = FALSE,
+      check.names = FALSE
+    )
+    out[["block group"]] <- "1"
+    var_names <- grep("^B01001_", vars, value = TRUE)
+    if (!length(var_names)) {
+      var_names <- c("B01001_001E", "B01001_002E", "B01001_026E")
+    }
+    for (v in var_names) out[[v]] <- sample(50:5000, 1L)
+    out
   }
 
   with_mocked_bindings(

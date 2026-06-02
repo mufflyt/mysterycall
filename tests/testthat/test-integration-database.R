@@ -106,22 +106,33 @@ test_that("Integration: Census data retrieval and summarization", {
 
   test_census_db <- create_test_census_db()
 
-  # Mock census API calls
-  mock_get_census <- function(name, vintage, key, vars, region, ...) {
-    if (region == "county:*") {
-      # Return all counties
-      result <- data.frame()
-      for (state_code in names(test_census_db)) {
-        for (county_code in names(test_census_db[[state_code]])) {
-          county_data <- test_census_db[[state_code]][[county_code]]
-          county_data$state <- state_code
-          county_data$county <- county_code
-          result <- rbind(result, county_data)
-        }
-      }
-      return(result)
+  # Mock censusapi::getCensus() — mysterycall_get_census_data calls it with
+  # region = "block group:*" and expects state/county/tract/`block group` plus
+  # the B01001_* sex-by-age variables.
+  mock_get_census <- function(name, vintage, key, vars, region, regionin, ...) {
+    # Extract the state FIPS from regionin (e.g. "state:06&in=county:*&in=tract:*")
+    state_match <- regmatches(regionin,
+                              regexpr("state:[0-9]+", regionin))
+    state_fips  <- sub("^state:", "", state_match)
+    out <- data.frame(
+      NAME = sprintf("Block Group 1, Tract 020100, County 001, State %s", state_fips),
+      state = state_fips,
+      county = "001",
+      tract = "020100",
+      stringsAsFactors = FALSE,
+      check.names = FALSE
+    )
+    # The literal " " in the column name matches what censusapi returns
+    out[["block group"]] <- "1"
+    # Required population variables (B01001_001E, B01001_002E, B01001_026E..049E)
+    var_names <- grep("^B01001_", vars, value = TRUE)
+    if (!length(var_names)) {
+      var_names <- c("B01001_001E", "B01001_002E", "B01001_026E")
     }
-    data.frame()
+    for (v in var_names) {
+      out[[v]] <- sample(50:5000, 1L)
+    }
+    out
   }
 
   with_mocked_bindings(

@@ -139,20 +139,28 @@ test_that("Vignette handoff: mysterycall_search_and_process_npi.Rmd examples", {
 test_that("Vignette handoff: mysterycall_get_census_data.Rmd examples", {
   skip_on_cran()
 
-  # Mock census API for vignette testing
-  mock_get_census <- function(name, vintage, key, vars, region, ...) {
-    # Return mock census data structure
-    data.frame(
-      NAME = c("Example County, State", "Another County, State"),
-      state = c("01", "06"),
-      county = c("001", "075"),
-      B01001_001E = c(50000, 75000),  # Total population
-      B01001_002E = c(24500, 36750),  # Male
-      B01001_026E = c(25500, 38250),  # Female
-      B01001_030E = c(1000, 1500),    # Female 15-17
-      B01001_031E = c(800, 1200),     # Female 18-19
-      stringsAsFactors = FALSE
+  # Mock censusapi::getCensus() — shape matches what
+  # mysterycall_get_census_data expects (block-group level with literal
+  # "block group" column).
+  mock_get_census <- function(name, vintage, key, vars, region, regionin, ...) {
+    state_fips <- sub("^state:", "",
+                       regmatches(regionin,
+                                  regexpr("state:[0-9]+", regionin)))
+    out <- data.frame(
+      NAME = sprintf("Block Group 1, Tract 020100, County 001, State %s", state_fips),
+      state = state_fips,
+      county = "001",
+      tract = "020100",
+      B01001_001E = 50000L,
+      B01001_002E = 24500L,
+      B01001_026E = 25500L,
+      B01001_030E = 1000L,
+      B01001_031E =  800L,
+      stringsAsFactors = FALSE,
+      check.names = FALSE
     )
+    out[["block group"]] <- "1"
+    out
   }
 
   with_mocked_bindings(
@@ -217,8 +225,10 @@ test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
           api_key = "test_key"
         )
 
-        expect_s3_class(result, "sf")
-        expect_true("range" %in% names(result))
+        # mysterycall_create_isochrones returns a named list keyed by range
+        expect_type(result, "list")
+        expect_true(all(c("1800", "3600") %in% names(result)))
+        expect_s3_class(result[["1800"]], "sf")
       }
     )
   }
@@ -228,18 +238,25 @@ test_that("Vignette handoff: geocode.Rmd examples", {
   skip_on_cran()
   skip_if_not_installed("ggmap")
 
-  # Test geocoding examples
-  test_addresses <- c(
-    "123 Main St, San Francisco, CA",
-    "456 Oak Ave, Los Angeles, CA",
-    "789 Pine St, Sacramento, CA"
+  # Write test addresses to a CSV — mysterycall_geocode reads from disk
+  test_addresses <- data.frame(
+    address = c(
+      "123 Main St, San Francisco, CA",
+      "456 Oak Ave, Los Angeles, CA",
+      "789 Pine St, Sacramento, CA"
+    ),
+    stringsAsFactors = FALSE
   )
+  csv_path <- tempfile(fileext = ".csv")
+  on.exit(unlink(csv_path), add = TRUE)
+  utils::write.csv(test_addresses, csv_path, row.names = FALSE)
 
-  # Mock geocoding function
+  # Mock ggmap::geocode to return one row per input address
   mock_geocode <- function(location, ...) {
+    n <- length(location)
     data.frame(
-      lon = c(-122.4194, -118.2437, -121.4694),
-      lat = c(37.7749, 34.0522, 38.5816),
+      lon = rep(-120.0, n),
+      lat = rep(37.0, n),
       stringsAsFactors = FALSE
     )
   }
@@ -249,7 +266,7 @@ test_that("Vignette handoff: geocode.Rmd examples", {
     .package = "ggmap",
     {
       # Test geocoding workflow
-      geocoded <- mysterycall_geocode(test_addresses)
+      geocoded <- mysterycall_geocode(csv_path, google_maps_api_key = "test-key")
 
       expect_s3_class(geocoded, "data.frame")
       expect_true("lat" %in% names(geocoded) || "latitude" %in% names(geocoded))

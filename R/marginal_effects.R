@@ -285,10 +285,17 @@ mysterycall_marginal_effects <- function(model,
 
 # -- Internal helpers ----------------------------------------------------------
 
-# Reconstruct a data frame with original variable names from model.frame.
-# Used as a fallback when model$data is not available.
-# Renames columns by extracting variable names from wrapped expressions,
-# e.g. "factor(cyl)" becomes "cyl".
+#' Reconstruct Original Data from Model Frame
+#'
+#' Fallback when `model$data` is not available. Renames columns by extracting
+#' variable names from wrapped expressions (e.g., `"factor(cyl)"` becomes
+#' `"cyl"`).
+#'
+#' @param model A fitted model object.
+#'
+#' @return A data frame with original variable names.
+#' @family outcomes
+#' @keywords internal
 .me_mf_to_orig <- function(model) {
   mf  <- stats::model.frame(model)
   nms <- names(mf)
@@ -306,8 +313,17 @@ mysterycall_marginal_effects <- function(model,
 }
 
 
-# Find the model-frame column name that corresponds to a plain variable name.
-# E.g. term = "cyl", mf_names = c("wt", "factor(cyl)") -> "factor(cyl)"
+#' Find Model Frame Column Name
+#'
+#' Maps a plain variable name to the possibly-wrapped column name in the
+#' model frame (e.g., `"cyl"` -> `"factor(cyl)"`).
+#'
+#' @param term Plain variable name.
+#' @param mf_names Names of the model frame.
+#'
+#' @return Character scalar.
+#' @family outcomes
+#' @keywords internal
 .me_find_mf_col <- function(term, mf_names) {
   # Direct match first
   if (term %in% mf_names) return(term)
