@@ -54,6 +54,5 @@ mysterycall_map_block_group(block_groups, isochrones_joined_map)
 
 # Create and export the map with a custom output directory
 mysterycall_map_block_group(block_groups, isochrones_joined_map, "custom_output/")
-
 }
 ```

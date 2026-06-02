@@ -87,7 +87,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisible NULL</p>
+    <p><code>invisible(NULL)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -100,6 +100,7 @@
 <code><a href="mysterycall_log_step.html">mysterycall_log_step()</a></code>,
 <code><a href="mysterycall_log_step_complete.html">mysterycall_log_step_complete()</a></code>,
 <code><a href="mysterycall_log_success.html">mysterycall_log_success()</a></code>,
+<code><a href="mysterycall_log_to_file.html">mysterycall_log_to_file()</a></code>,
 <code><a href="mysterycall_log_warning.html">mysterycall_log_warning()</a></code>,
 <code><a href="mysterycall_progress_callback.html">mysterycall_progress_callback()</a></code>,
 <code><a href="mysterycall_progress_finish.html">mysterycall_progress_finish()</a></code>,
@@ -115,8 +116,8 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall_log_save</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span>, n_rows <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   💾 Saved to: /tmp/RtmpC5jqYe/file23287254d285.csv (42 rows)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_log_save</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span>, n_rows <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   💾 Saved to: /tmp/Rtmp66URLQ/file261b170bd12f.csv (42 rows)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

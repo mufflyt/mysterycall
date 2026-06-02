@@ -99,11 +99,11 @@ progress bar for that step's items.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisible NULL.</p>
+    <p><code>invisible(NULL)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other progress-bars:
+    <div class="dont-index"><p>Other progress:
 <code><a href="mysterycall_multi_complete.html">mysterycall_multi_complete()</a></code>,
 <code><a href="mysterycall_multi_done.html">mysterycall_multi_done()</a></code>,
 <code><a href="mysterycall_multi_progress.html">mysterycall_multi_progress()</a></code>,
@@ -119,8 +119,8 @@ progress bar for that step's items.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_multi_progress.html">mysterycall_multi_progress</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Geocode"</span>, <span class="st">"Validate"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">mysterycall_multi_step</span><span class="op">(</span><span class="va">tr</span>, <span class="fl">1</span>, total <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_multi_progress.html">mysterycall_multi_progress</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Geocode"</span>, <span class="st">"Validate"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_multi_step</span><span class="op">(</span><span class="va">tr</span>, <span class="fl">1</span>, total <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Step 1/2: Geocode</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>

@@ -28,7 +28,7 @@ mysterycall_log_progress(current, total, status = NULL, show_percent = TRUE)
 
 ## Value
 
-Invisible NULL
+`invisible(NULL)`.
 
 ## See also
 
@@ -41,6 +41,7 @@ Other logging:
 [`mysterycall_log_step()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step.md),
 [`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
 [`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
+[`mysterycall_log_to_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_to_file.md),
 [`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
 [`mysterycall_progress_callback()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_callback.md),
 [`mysterycall_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_finish.md),
@@ -56,8 +57,8 @@ Other logging:
 ## Examples
 
 ``` r
-mysterycall_log_progress(50, 100)
+mysterycall:::mysterycall_log_progress(50, 100)
 #>   ▸ Progress: 50/100 (50.0%)
-mysterycall_log_progress(50, 100, status = "geocoding")
+mysterycall:::mysterycall_log_progress(50, 100, status = "geocoding")
 #>   ▸ Progress: 50/100 (50.0%) - geocoding
 ```

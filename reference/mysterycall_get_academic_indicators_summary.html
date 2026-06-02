@@ -106,30 +106,22 @@ institutions in the bundled lookup.</p></dd>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code>,
 <code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code></p>
-<p>Other provider characteristics:
-<code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
-<code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
-<code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
+<p>Other academic-indicators:
+<code><a href="ACADEMIC_HOSPITAL_PATTERNS.html">ACADEMIC_HOSPITAL_PATTERNS</a></code>,
+<code><a href="ACGME_PROGRAM_INDICATORS.html">ACGME_PROGRAM_INDICATORS</a></code>,
+<code><a href="COTH_TEACHING_INDICATORS.html">COTH_TEACHING_INDICATORS</a></code>,
+<code><a href="KNOWN_ACADEMIC_INSTITUTIONS.html">KNOWN_ACADEMIC_INSTITUTIONS</a></code>,
+<code><a href="MEDICAL_SCHOOL_INDICATORS.html">MEDICAL_SCHOOL_INDICATORS</a></code>,
+<code><a href="MEDICARE_GME_INDICATORS.html">MEDICARE_GME_INDICATORS</a></code>,
+<code><a href="NCI_CANCER_CENTERS.html">NCI_CANCER_CENTERS</a></code>,
+<code><a href="NIH_CTSA_HUBS.html">NIH_CTSA_HUBS</a></code>,
 <code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
-<code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
-<code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
-<code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>,
-<code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
-<code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
-<code><a href="mysterycall_genderize.html">mysterycall_genderize()</a></code>,
-<code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
-<code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>,
-<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
-<code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>,
-<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
-<code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
-<code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
-<code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>
+<code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_get_academic_indicators_summary</span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_get_academic_indicators_summary</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">summary</span><span class="op">$</span><span class="va">total_known_institutions</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 21</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">summary</span><span class="op">$</span><span class="va">indicators</span><span class="op">)</span></span></span>

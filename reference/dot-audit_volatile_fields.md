@@ -10,9 +10,9 @@ here must NOT influence the content-addressable identity of an artifact.
 .audit_volatile_fields
 ```
 
-## Format
+## Value
 
-An object of class `character` of length 7.
+Character vector of field names.
 
 ## Details
 
@@ -21,3 +21,11 @@ Keeping this constant in one place ensures that
 and
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
 use identical canonicalization logic.
+
+## See also
+
+Other validation:
+[`.load_nanp_lookup()`](https://mufflyt.github.io/mysterycall/reference/dot-load_nanp_lookup.md),
+[`validate_dataframe()`](https://mufflyt.github.io/mysterycall/reference/validate_dataframe.md),
+[`validate_required_columns()`](https://mufflyt.github.io/mysterycall/reference/validate_required_columns.md),
+[`validate_scalar_positive_numeric()`](https://mufflyt.github.io/mysterycall/reference/validate_scalar_positive_numeric.md)

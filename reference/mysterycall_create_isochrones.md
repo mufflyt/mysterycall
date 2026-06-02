@@ -37,7 +37,7 @@ mysterycall_create_isochrones(
 - api_key:
 
   HERE API key. Defaults to the `HERE_API_KEY` environment variable.
-  Obtain a free key at <https://developer.here.com/>.
+  Obtain a free key at <https://www.here.com/developer>.
 
 ## Value
 

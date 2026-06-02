@@ -20,9 +20,9 @@ must accept to reach any ob-gyn specialist from their home?”*
 
 You will need:
 
-1.  **A HERE API key** — register at <https://developer.here.com/> (free
-    tier allows ~250,000 isochrone requests/month). Store the key before
-    running:
+1.  **A HERE API key** — register at <https://www.here.com/developer>
+    (free tier allows ~250,000 isochrone requests/month). Store the key
+    before running:
 
 ``` r
 

@@ -186,6 +186,7 @@ roster_enriched <- mysterycall_safe_left_join(
 ## Next step
 
 If your project begins from a specialty rather than a name list, see the
-taxonomy-search vignette for `mysterycall_search_by_taxonomy()`. For
-phone validation, name parsing, and safe joins see
+taxonomy-search vignette for
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md).
+For phone validation, name parsing, and safe joins see
 [`vignette("data-quality", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/data-quality.md).

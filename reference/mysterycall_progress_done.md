@@ -25,11 +25,11 @@ mysterycall_progress_done(pb, result = NULL, status = "done")
 
 ## Value
 
-Invisible NULL.
+`invisible(NULL)`.
 
 ## See also
 
-Other progress-bars:
+Other progress:
 [`mysterycall_multi_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_complete.md),
 [`mysterycall_multi_done()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_done.md),
 [`mysterycall_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_progress.md),
@@ -45,14 +45,14 @@ Other progress-bars:
 ## Examples
 
 ``` r
-pb <- mysterycall_progress_bar("Processing", total = 5)
+pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 5)
 #> Starting: Processing (5 items)
-for (i in seq_len(5)) mysterycall_progress_update(pb)
+for (i in seq_len(5)) mysterycall:::mysterycall_progress_update(pb)
 #>   Progress: 1/5 (20%) - ETA: 0.0s
 #>   Progress: 2/5 (40%) - ETA: 0.0s
 #>   Progress: 3/5 (60%) - ETA: 0.0s
 #>   Progress: 4/5 (80%) - ETA: 0.0s
 #>   Progress: 5/5 (100%) - ETA: 0.0s
-mysterycall_progress_done(pb, result = "5 items processed")
+mysterycall:::mysterycall_progress_done(pb, result = "5 items processed")
 #>   ✓ 5 items processed
 ```

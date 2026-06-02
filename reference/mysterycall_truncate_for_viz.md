@@ -42,6 +42,6 @@ Other green-journal-spatial:
 ## Examples
 
 ``` r
-mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
+mysterycall:::mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
 #> [1]   0   0  50 100
 ```

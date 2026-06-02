@@ -111,7 +111,7 @@ MD</h4>
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The <code><a href="../reference/taxonomy.html">mysterycall::taxonomy</a></code> data and
-<code>mysterycall_search_by_taxonomy</code> function in the R package
+<code>mysterycall_search_taxonomy</code> function in the R package
 offers a convenient and efficient way to query the NPI Database for
 healthcare providers based on their taxonomy descriptions. This vignette
 provides a comprehensive guide on how to effectively utilize this
@@ -121,7 +121,7 @@ cases.</p>
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
 <p>Before you can harness the power of the
-<code>mysterycall_search_by_taxonomy</code> function, it is essential to
+<code>mysterycall_search_taxonomy</code> function, it is essential to
 ensure that you have the <code>mysterycall</code> package installed. You
 can effortlessly install it using the following command:</p>
 </div>
@@ -149,7 +149,7 @@ Committee (NUCC) website here. You can employ these codes to pinpoint
 specific taxonomy descriptions for your search. For instance, if you are
 interested in finding taxonomy codes that include the string
 <code>"GYN"</code> you can use this code to facilitate your search in
-the <code>mysterycall_search_by_taxonomy</code> function.</p>
+the <code>mysterycall_search_taxonomy</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obgyn_taxonomy</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">::</span><span class="va"><a href="../reference/taxonomy.html">taxonomy</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">`Classification`</span>, <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/modifiers.html" class="external-link">fixed</a></span><span class="op">(</span><span class="st">"GYN"</span>, ignore_case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -171,9 +171,9 @@ the <code>mysterycall_search_by_taxonomy</code> function.</p>
 <div class="section level3">
 <h3 id="search-by-taxonomy-description">Search by Taxonomy Description<a class="anchor" aria-label="anchor" href="#search-by-taxonomy-description"></a>
 </h3>
-<p><code>mysterycall_search_by_taxonomy()</code> queries the NPI
-Registry for individual providers whose self-reported taxonomy
-description matches your search string. It is most useful for:</p>
+<p><code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> queries the NPI Registry
+for individual providers whose self-reported taxonomy description
+matches your search string. It is most useful for:</p>
 <ul>
 <li>Building a complete national roster of a subspecialty (e.g.,
 Gynecologic Oncology) when you don’t have existing name lists.</li>
@@ -196,7 +196,7 @@ datasets.</p>
 <span>  <span class="st">"Gynecologic Oncology"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_search_by_taxonomy</span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy</a></span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
 <p>Inspect the distribution of results:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Providers by gender and state</span></span>
@@ -211,10 +211,9 @@ datasets.</p>
 <div class="section level3">
 <h3 id="cleaning-and-standardizing-the-result">Cleaning and standardizing the result<a class="anchor" aria-label="anchor" href="#cleaning-and-standardizing-the-result"></a>
 </h3>
-<p>The raw output from <code>mysterycall_search_by_taxonomy()</code>
-uses NPPES column names (<code>basic_*</code>,
-<code>addresses_*</code>). The snippet below renames the key columns to
-match the names expected by
+<p>The raw output from <code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> uses
+NPPES column names (<code>basic_*</code>, <code>addresses_*</code>). The
+snippet below renames the key columns to match the names expected by
 <code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code> and other downstream
 functions, then derives a short subspecialty code.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -334,7 +333,7 @@ returning.</p>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p><code>mysterycall_search_by_taxonomy()</code> is the taxonomy-first
+<p><code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> is the taxonomy-first
 entry point for roster creation. Pair it with
 <code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code> (name-first) to
 cross-validate provider counts, and with

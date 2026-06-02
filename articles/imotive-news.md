@@ -16,7 +16,8 @@ wrapper continues to be the recommended entry point for Imotive
 projects. Recent documentation improvements clarify how it:
 
 - Pulls and deduplicates provider rosters via
-  `mysterycall_search_by_taxonomy()` and
+  [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+  and
   [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md).
 - Validates NPIs with
   [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)
@@ -63,7 +64,8 @@ to triage follow-up calls.
 
 ## Release timeline
 
-For a chronological list of package changes, consult
-[`NEWS.md`](https://mufflyt.github.io/mysterycall/NEWS.md). The Imotive
-vignette will continue to summarize high-level updates each time new
-features land in the development branch.
+For a chronological list of package changes, consult the `NEWS.md` file
+distributed with the package or visit the
+[changelog](https://mufflyt.github.io/mysterycall/news/index.html). The
+Imotive vignette will continue to summarize high-level updates each time
+new features land in the development branch.

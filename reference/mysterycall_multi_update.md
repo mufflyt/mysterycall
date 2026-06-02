@@ -25,11 +25,11 @@ mysterycall_multi_update(tracker, amount = 1, status = NULL)
 
 ## Value
 
-Invisible NULL.
+`invisible(NULL)`.
 
 ## See also
 
-Other progress-bars:
+Other progress:
 [`mysterycall_multi_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_complete.md),
 [`mysterycall_multi_done()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_done.md),
 [`mysterycall_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_progress.md),
@@ -45,13 +45,13 @@ Other progress-bars:
 ## Examples
 
 ``` r
-tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
-mysterycall_multi_step(tr, 1, total = 5)
+tr <- mysterycall:::mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall:::mysterycall_multi_step(tr, 1, total = 5)
 #> 
 #> ── Step 1/2: Geocode ──
 #> 
 #> Starting: Geocode (5 items)
-for (i in seq_len(5)) mysterycall_multi_update(tr)
+for (i in seq_len(5)) mysterycall:::mysterycall_multi_update(tr)
 #>   Progress: 1/5 (20%) - ETA: 0.0s
 #>   Progress: 2/5 (40%) - ETA: 0.0s
 #>   Progress: 3/5 (60%) - ETA: 0.0s

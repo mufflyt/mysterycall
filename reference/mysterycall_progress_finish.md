@@ -53,6 +53,7 @@ Other logging:
 [`mysterycall_log_step()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step.md),
 [`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
 [`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
+[`mysterycall_log_to_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_to_file.md),
 [`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
 [`mysterycall_progress_callback()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_callback.md),
 [`mysterycall_progress_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_start.md),
@@ -67,11 +68,11 @@ Other logging:
 ## Examples
 
 ``` r
-tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
-mysterycall_progress_start(tr, "Geocode")
-#> [18:58:46] Started Geocode
-#> [18:58:46] Progress: 0/1 steps complete (0.0%)
-mysterycall_progress_finish(tr, "Geocode", score = 0.92)
-#> [18:58:46] Completed Geocode (high)
-#> [18:58:46] Progress: 1/1 steps complete (100.0%)
+tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+mysterycall:::mysterycall_progress_start(tr, "Geocode")
+#> [17:08:59] Started Geocode
+#> [17:08:59] Progress: 0/1 steps complete (0.0%)
+mysterycall:::mysterycall_progress_finish(tr, "Geocode", score = 0.92)
+#> [17:08:59] Completed Geocode (high)
+#> [17:08:59] Progress: 1/1 steps complete (100.0%)
 ```

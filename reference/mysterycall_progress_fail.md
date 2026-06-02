@@ -21,11 +21,11 @@ mysterycall_progress_fail(pb, msg = NULL)
 
 ## Value
 
-Invisible NULL.
+`invisible(NULL)`.
 
 ## See also
 
-Other progress-bars:
+Other progress:
 [`mysterycall_multi_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_complete.md),
 [`mysterycall_multi_done()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_done.md),
 [`mysterycall_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_progress.md),
@@ -41,8 +41,8 @@ Other progress-bars:
 ## Examples
 
 ``` r
-pb <- mysterycall_progress_bar("Processing", total = 10)
+pb <- mysterycall:::mysterycall_progress_bar("Processing", total = 10)
 #> Starting: Processing (10 items)
-mysterycall_progress_fail(pb, msg = "Geocoding API unreachable")
+mysterycall:::mysterycall_progress_fail(pb, msg = "Geocoding API unreachable")
 #>   ✗ Processing failed: Geocoding API unreachable
 ```

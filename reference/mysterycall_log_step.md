@@ -38,6 +38,7 @@ Other logging:
 [`mysterycall_log_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_save.md),
 [`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
 [`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
+[`mysterycall_log_to_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_to_file.md),
 [`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
 [`mysterycall_progress_callback()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_callback.md),
 [`mysterycall_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_finish.md),
@@ -53,14 +54,14 @@ Other logging:
 ## Examples
 
 ``` r
-mysterycall_workflow_start("Demo", total_steps = 2)
+mysterycall:::mysterycall_workflow_start("Demo", total_steps = 2)
 #> ============================================================
 #>   Demo
-#>   Started: 2026-05-17 18:58:20
+#>   Started: 2026-06-02 17:08:35
 #>   Total Steps: 2
 #> ============================================================
 #> 
-mysterycall_log_step("Step 1: Geocode", n_items = 50)
+mysterycall:::mysterycall_log_step("Step 1: Geocode", n_items = 50)
 #> ▶ Step 1/2: Step 1: Geocode
 #>   Processing 50 item(s)...
 ```

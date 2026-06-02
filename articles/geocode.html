@@ -122,7 +122,7 @@ longitude.</p>
 <h4 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h4>
 <p>Before you can harness the power of the
-<code>mysterycall_search_by_taxonomy</code> function, it is essential to
+<code>mysterycall_search_taxonomy</code> function, it is essential to
 ensure that you have the <code>mysterycall</code> package installed. You
 can effortlessly install it using the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -365,7 +365,7 @@ meaningful spatial error that compounds in the isochrone step.</p>
 <p><code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> converts raw practice addresses
 into latitude/longitude coordinates suitable for mapping, drive-time
 modeling, and spatial joins. Combine it with
-<code>mysterycall_search_by_taxonomy()</code> to build a fully enriched
+<code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> to build a fully enriched
 provider roster — from NPI retrieval through geocoded locations — in a
 single reproducible pipeline. Next, pass the geocoded file into
 <code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> to build drive-time

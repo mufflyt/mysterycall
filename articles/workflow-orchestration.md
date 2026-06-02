@@ -20,7 +20,7 @@ through writing the final analysis-ready data set.
 ### 1.1 The full pipeline as a directed acyclic graph
 
       ┌─────────────────────┐
-      │   NPI Search        │  mysterycall_search_npi() / NPPES API
+      │   NPI Search        │  mysterycall_search_and_process_npi() / NPPES API
       │  (taxonomy terms)   │
       └──────────┬──────────┘
                  │  raw provider roster

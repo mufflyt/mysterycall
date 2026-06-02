@@ -39,6 +39,11 @@ which produces this object;
 to visualise the same IRR estimates.
 
 Other outcomes:
+[`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),
+[`.disp_rate_ci()`](https://mufflyt.github.io/mysterycall/reference/dot-disp_rate_ci.md),
+[`.fmt_model_pval()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_model_pval.md),
+[`.fmt_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_pvalue.md),
+[`.wait_stats()`](https://mufflyt.github.io/mysterycall/reference/dot-wait_stats.md),
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
@@ -55,3 +60,14 @@ Other outcomes:
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+model <- mysterycall_poisson_model(data, outcome_col = "wait_days",
+                                    predictor_col = "insurance",
+                                    random_intercept = "physician_id")
+print(model)
+} # }
+```

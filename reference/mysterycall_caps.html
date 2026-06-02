@@ -91,23 +91,24 @@ standard format for USPS address comparison.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other address-normalization:
+<code><a href="map_token.html">map_token()</a></code>,
 <code><a href="mysterycall_ascii_norm.html">mysterycall_ascii_norm()</a></code>,
 <code><a href="mysterycall_has_street_number.html">mysterycall_has_street_number()</a></code>,
 <code><a href="mysterycall_is_po_box.html">mysterycall_is_po_box()</a></code>,
+<code><a href="mysterycall_normalize_address_df.html">mysterycall_normalize_address_df()</a></code>,
 <code><a href="mysterycall_normalize_directionals.html">mysterycall_normalize_directionals()</a></code>,
 <code><a href="mysterycall_normalize_state.html">mysterycall_normalize_state()</a></code>,
 <code><a href="mysterycall_normalize_suffix.html">mysterycall_normalize_suffix()</a></code>,
 <code><a href="mysterycall_normalize_units.html">mysterycall_normalize_units()</a></code>,
 <code><a href="mysterycall_normalize_zip5.html">mysterycall_normalize_zip5()</a></code>,
-<code><a href="mysterycall_strip_suite.html">mysterycall_strip_suite()</a></code>,
-<code><a href="normalize_address_df.html">normalize_address_df()</a></code></p></div>
+<code><a href="mysterycall_strip_suite.html">mysterycall_strip_suite()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall_caps</span><span class="op">(</span><span class="st">"123 main street"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_caps</span><span class="op">(</span><span class="st">"123 main street"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "123 MAIN STREET"</span>
-<span class="r-in"><span><span class="fu">mysterycall_caps</span><span class="op">(</span><span class="st">"456 oak ave #100"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_caps</span><span class="op">(</span><span class="st">"456 oak ave #100"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "456 OAK AVE #100"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

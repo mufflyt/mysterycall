@@ -4,12 +4,6 @@ Information about Obstetricians and Gynecologists (OBGYN) residency
 programs accredited by the Accreditation Council for Graduate Medical
 Education (ACGME).
 
-## Usage
-
-``` r
-acgme
-```
-
 ## Format
 
 A data frame with 142 columns:
@@ -584,7 +578,7 @@ A data frame with 142 columns:
 
 ## Source
 
-<https://apps.acgme.org/ads/Public/Programs/Search>
+<https://www.acgme.org/>
 
 ## See also
 

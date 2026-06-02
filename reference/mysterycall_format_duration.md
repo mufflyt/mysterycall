@@ -29,6 +29,7 @@ Other logging:
 [`mysterycall_log_step()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step.md),
 [`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
 [`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
+[`mysterycall_log_to_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_to_file.md),
 [`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
 [`mysterycall_progress_callback()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_callback.md),
 [`mysterycall_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_finish.md),
@@ -44,10 +45,10 @@ Other logging:
 ## Examples
 
 ``` r
-mysterycall_format_duration(45)
+mysterycall:::mysterycall_format_duration(45)
 #> [1] "45.0s"
-mysterycall_format_duration(125)
+mysterycall:::mysterycall_format_duration(125)
 #> [1] "2m 5s"
-mysterycall_format_duration(3700)
+mysterycall:::mysterycall_format_duration(3700)
 #> [1] "1h 1m 40s"
 ```

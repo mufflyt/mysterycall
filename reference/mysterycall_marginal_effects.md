@@ -13,7 +13,7 @@ mysterycall_marginal_effects(
   term = NULL,
   data = NULL,
   type = c("response", "link"),
-  eps = 1e-07
+  eps = 0.0000001
 )
 ```
 
@@ -119,6 +119,11 @@ The function resolves the original column automatically.
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md)
 
 Other outcomes:
+[`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),
+[`.disp_rate_ci()`](https://mufflyt.github.io/mysterycall/reference/dot-disp_rate_ci.md),
+[`.fmt_model_pval()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_model_pval.md),
+[`.fmt_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_pvalue.md),
+[`.wait_stats()`](https://mufflyt.github.io/mysterycall/reference/dot-wait_stats.md),
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),

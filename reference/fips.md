@@ -2,12 +2,6 @@
 
 3 columns with 51 observations.
 
-## Usage
-
-``` r
-fips
-```
-
 ## Format
 
 A tibble with 243 rows and 10 variables containing Federal Information

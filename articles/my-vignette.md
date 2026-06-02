@@ -4,16 +4,15 @@
 
 The
 [`mysterycall::taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
-data and `mysterycall_search_by_taxonomy` function in the R package
-offers a convenient and efficient way to query the NPI Database for
-healthcare providers based on their taxonomy descriptions. This vignette
-provides a comprehensive guide on how to effectively utilize this
-function, explores its various capabilities, and offers illustrative use
-cases.
+data and `mysterycall_search_taxonomy` function in the R package offers
+a convenient and efficient way to query the NPI Database for healthcare
+providers based on their taxonomy descriptions. This vignette provides a
+comprehensive guide on how to effectively utilize this function,
+explores its various capabilities, and offers illustrative use cases.
 
 ### Installation
 
-Before you can harness the power of the `mysterycall_search_by_taxonomy`
+Before you can harness the power of the `mysterycall_search_taxonomy`
 function, it is essential to ensure that you have the `mysterycall`
 package installed. You can effortlessly install it using the following
 command:
@@ -42,7 +41,7 @@ Taxonomy codes can be obtained from the National Uniform Claim Committee
 taxonomy descriptions for your search. For instance, if you are
 interested in finding taxonomy codes that include the string `"GYN"` you
 can use this code to facilitate your search in the
-`mysterycall_search_by_taxonomy` function.
+`mysterycall_search_taxonomy` function.
 
 ``` r
 
@@ -69,9 +68,9 @@ Code       Specialization
 
 ### Search by Taxonomy Description
 
-`mysterycall_search_by_taxonomy()` queries the NPI Registry for
-individual providers whose self-reported taxonomy description matches
-your search string. It is most useful for:
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+queries the NPI Registry for individual providers whose self-reported
+taxonomy description matches your search string. It is most useful for:
 
 - Building a complete national roster of a subspecialty (e.g.,
   Gynecologic Oncology) when you don’t have existing name lists.
@@ -94,7 +93,7 @@ taxonomy_descriptions <- c(
   "Gynecologic Oncology"
 )
 
-data <- mysterycall_search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
+data <- mysterycall_search_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
 Inspect the distribution of results:
@@ -113,9 +112,10 @@ dplyr::count(data, npi, sort = TRUE) |> dplyr::filter(n > 1)
 
 ### Cleaning and standardizing the result
 
-The raw output from `mysterycall_search_by_taxonomy()` uses NPPES column
-names (`basic_*`, `addresses_*`). The snippet below renames the key
-columns to match the names expected by
+The raw output from
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+uses NPPES column names (`basic_*`, `addresses_*`). The snippet below
+renames the key columns to match the names expected by
 [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
 and other downstream functions, then derives a short subspecialty code.
 
@@ -208,8 +208,8 @@ NPI–taxonomy–address combination, deduplicated on NPI before returning.
 
 ## Conclusion
 
-`mysterycall_search_by_taxonomy()` is the taxonomy-first entry point for
-roster creation. Pair it with
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+is the taxonomy-first entry point for roster creation. Pair it with
 [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
 (name-first) to cross-validate provider counts, and with
 [`mysterycall_validate_phone()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_phone.md)

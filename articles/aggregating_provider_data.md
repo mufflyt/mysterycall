@@ -22,7 +22,7 @@ roster creation, enrichment, and call outcome files.
 
 ``` r
 
-roster <- mysterycall_search_by_taxonomy(
+roster <- mysterycall_search_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
   write_snapshot = FALSE,

@@ -19,7 +19,7 @@ object (EPSG:5070).
 
 ## See also
 
-[`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
+[`mysterycall_theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_map.md)
 
 Other green-journal-spatial:
 [`mysterycall_compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md),
@@ -34,6 +34,6 @@ library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +
   coord_sf(crs = mysterycall_crs_albers_conus()) +
-  theme_green_journal_map()
+  mysterycall_theme_green_journal_map()
 }
 ```

@@ -4,7 +4,7 @@ Arranges a choropleth map above a marginal density/histogram plot in a
 7:2 height ratio. Returns a grob suitable for
 [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
 or
-[`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md).
+[`mysterycall_save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md).
 
 ## Usage
 
@@ -38,12 +38,12 @@ mysterycall_compose_map_density(
 ## Value
 
 A `gridExtra` grob (gtable). Pass to `ggsave(plot = result)` or
-[`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md).
+[`mysterycall_save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md).
 
 ## See also
 
-[`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md),
-[`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
+[`mysterycall_save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md),
+[`mysterycall_theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_map.md)
 
 Other green-journal-spatial:
 [`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md),
@@ -56,11 +56,11 @@ Other green-journal-spatial:
 if (FALSE) { # interactive()
 library(ggplot2)
 p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
-  theme_green_journal_map()
+  mysterycall_theme_green_journal_map()
 p_den <- ggplot(tracts, aes(access)) +
   geom_density(fill = "#56B4E9", alpha = 0.6) +
-  theme_green_journal()
+  mysterycall_theme_green_journal()
 composite <- mysterycall_compose_map_density(p_map, p_den)
-save_green_journal_figure(composite, "figures/fig3")
+mysterycall_save_green_journal_figure(composite, "figures/fig3")
 }
 ```

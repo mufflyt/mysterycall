@@ -663,7 +663,7 @@ statistics, three for p-values, confidence intervals in brackets).
 ``` r
 
 paragraph <- mysterycall_write_results_paragraph(
-  model_result    = poisson_model_result,   # output of mysterycall_fit_model()
+  model_result    = poisson_model_result,   # output of mysterycall_poisson_model()
   disparity_table = disp_tbl,              # output of mysterycall_disparities_table()
   outcome_label   = "appointment acceptance",
   insurance_var   = "insurance_type",
@@ -770,7 +770,7 @@ the number of columns exceeds 6.
 ``` r
 
 # First compute the disparity estimates
-# (assumes mysterycall_fit_model() has already been run — see stats vignette)
+# (assumes mysterycall_poisson_model() has already been run — see stats vignette)
 disparity_result <- mysterycall_disparities_table(
   data          = analysis_data[!is.na(analysis_data$appt_offered), ],
   outcome_var   = "appt_offered_binary",
@@ -815,7 +815,7 @@ write.csv(
 ``` r
 
 # Summarise wait times by insurance type using the Poisson model summary
-# (assumes mysterycall_fit_wait_model() has been run — see stats vignette)
+# (assumes mysterycall_poisson_model() has been run — see stats vignette)
 wait_summary <- analysis_data |>
   dplyr::filter(!is.na(wait_days)) |>
   dplyr::group_by(insurance_type) |>

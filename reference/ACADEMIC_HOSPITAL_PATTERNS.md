@@ -38,15 +38,7 @@ Other academic-indicators:
 [`MEDICAL_SCHOOL_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICAL_SCHOOL_INDICATORS.md),
 [`MEDICARE_GME_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.md),
 [`NCI_CANCER_CENTERS`](https://mufflyt.github.io/mysterycall/reference/NCI_CANCER_CENTERS.md),
-[`NIH_CTSA_HUBS`](https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.md)
-
-## Examples
-
-``` r
-names(ACADEMIC_HOSPITAL_PATTERNS)
-#> [1] "very_high" "high"      "moderate" 
-ACADEMIC_HOSPITAL_PATTERNS$very_high
-#> [1] "UNIVERSITY OF"           "MEDICAL SCHOOL"         
-#> [3] "SCHOOL OF MEDICINE"      "TEACHING HOSPITAL"      
-#> [5] "ACADEMIC MEDICAL CENTER" "ACADEMIC HEALTH CENTER" 
-```
+[`NIH_CTSA_HUBS`](https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.md),
+[`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
+[`mysterycall_classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md),
+[`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)

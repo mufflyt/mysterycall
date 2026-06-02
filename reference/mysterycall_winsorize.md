@@ -46,6 +46,6 @@ Other green-journal-spatial:
 
 ``` r
 x <- c(0, 5, 10, 50, 90, 95, 100)
-mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
+mysterycall:::mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
 #> [1]  3  5 10 50 90 95 97
 ```

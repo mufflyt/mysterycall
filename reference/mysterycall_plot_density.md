@@ -94,7 +94,7 @@ filenames of the form `<file_prefix>_<timestamp>.tiff/.png`.
 for jittered point plots;
 [`mysterycall_plot_line()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_line.md)
 for median-trend line plots;
-[`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
+[`mysterycall_save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md)
 to export at journal resolution.
 
 Other mapping:

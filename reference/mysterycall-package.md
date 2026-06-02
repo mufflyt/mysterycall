@@ -19,3 +19,8 @@ Useful links:
 
 **Maintainer**: Tyler Muffly <tyler.muffly@dhha.org>
 ([ORCID](https://orcid.org/0000-0002-2044-1693))
+
+Authors:
+
+- Tyler Muffly <tyler.muffly@dhha.org>
+  ([ORCID](https://orcid.org/0000-0002-2044-1693))

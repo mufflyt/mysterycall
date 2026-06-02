@@ -106,6 +106,14 @@ A list of class `mysterycall_table1` with:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
 
 Other table:
+[`.t1_cat_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_cat_pvalue.md),
+[`.t1_cont_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_cont_pvalue.md),
+[`.t1_fmt_mean_sd()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_fmt_mean_sd.md),
+[`.t1_fmt_median_iqr()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_fmt_median_iqr.md),
+[`.t1_fmt_pct()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_fmt_pct.md),
+[`.t1_fmt_pval()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_fmt_pval.md),
+[`.t1_rows_categorical()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_rows_categorical.md),
+[`.t1_rows_continuous()`](https://mufflyt.github.io/mysterycall/reference/dot-t1_rows_continuous.md),
 [`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md),
 [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
 [`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md),
@@ -127,14 +135,7 @@ result <- mysterycall_table1(
   covariates   = c("gender", "academic", "wait_days"),
   stratify_by  = "insurance"
 )
+#> Error in .t1_rows_categorical(x, label, group_vec, groups, group_col_names,     include_overall, digits, emit_pvalue, min_cell): argument "min_cell" is missing, with no default
 result$table
-#> # A tibble: 6 × 6
-#>   variable  level            Overall       `BCBS (N=3)` `Medicaid (N=3)` p_value
-#>   <chr>     <chr>            <chr>         <chr>        <chr>            <chr>  
-#> 1 gender    Female           3 (50.0%)     2 (66.7%)    1 (33.3%)        1.000  
-#> 2 gender    Male             3 (50.0%)     1 (33.3%)    2 (66.7%)        NA     
-#> 3 academic  Private Practice 3 (50.0%)     1 (33.3%)    2 (66.7%)        1.000  
-#> 4 academic  University       3 (50.0%)     2 (66.7%)    1 (33.3%)        NA     
-#> 5 wait_days Median [IQR]     17.5 [11.0-2… 25.0 [23.0-… 10.0 [8.5-12.0]  0.081  
-#> 6 wait_days Mean (SD)        17.8 (9.0)    25.3 (4.5)   10.3 (3.5)       NA     
+#> Error: object 'result' not found
 ```

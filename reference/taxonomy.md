@@ -3,12 +3,6 @@
 This dataset contains taxonomy codes for Obstetricians and Gynecologists
 among other healthcare providers.
 
-## Usage
-
-``` r
-taxonomy
-```
-
 ## Format
 
 A data frame with three columns:

@@ -91,11 +91,11 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisible NULL.</p>
+    <p><code>invisible(NULL)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other progress-bars:
+    <div class="dont-index"><p>Other progress:
 <code><a href="mysterycall_multi_complete.html">mysterycall_multi_complete()</a></code>,
 <code><a href="mysterycall_multi_done.html">mysterycall_multi_done()</a></code>,
 <code><a href="mysterycall_multi_progress.html">mysterycall_multi_progress()</a></code>,
@@ -111,15 +111,15 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_progress_bar.html">mysterycall_progress_bar</a></span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_bar.html">mysterycall_progress_bar</a></span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Processing (5 items)</span>
-<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 1/5 (20%) - ETA: 0.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 2/5 (40%) - ETA: 0.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 3/5 (60%) - ETA: 0.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 4/5 (80%) - ETA: 0.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 5/5 (100%) - ETA: 0.0s</span>
-<span class="r-in"><span><span class="fu">mysterycall_progress_done</span><span class="op">(</span><span class="va">pb</span>, result <span class="op">=</span> <span class="st">"5 items processed"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_progress_done</span><span class="op">(</span><span class="va">pb</span>, result <span class="op">=</span> <span class="st">"5 items processed"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   ✓ 5 items processed</span>
 </code></pre></div>
     </div>

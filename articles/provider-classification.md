@@ -310,7 +310,7 @@ studies and by the Federal Office of Rural Health Policy.
 
 The USDA ERS publishes a ZIP-to-RUCA crosswalk at:
 
-> <https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/>
+> <https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes>
 
 Download the **ZIP code file** (not the census tract file). As of 2023,
 the file is named something like `ruca2010revised.xlsx`. Export it to

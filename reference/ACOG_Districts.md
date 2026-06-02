@@ -4,12 +4,6 @@ This dataset contains information about American College of
 Obstetricians and Gynecologists (ACOG) districts, including their
 two-letter state abbreviations and full state names.
 
-## Usage
-
-``` r
-ACOG_Districts
-```
-
 ## Format
 
 A data frame with the following columns:

@@ -79,7 +79,7 @@ state codes, ZIP extraction, and full data-frame normalization.
   : Extract 5-Digit ZIP Code
 - [`mysterycall_strip_suite()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.md)
   : Remove Unit Designators from Address
-- [`normalize_address_df()`](https://mufflyt.github.io/mysterycall/reference/normalize_address_df.md)
+- [`mysterycall_normalize_address_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_address_df.md)
   : Normalize All Address Fields in a Data Frame
 
 ## Academic Classification
@@ -594,24 +594,24 @@ ggplot2 themes, colorblind-safe palettes, and figure-export helpers
 conforming to Obstetrics & Gynecology (Green Journal) 2024 author
 guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 
-- [`theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md)
-  [`theme_publication()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md)
+- [`mysterycall_theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal.md)
+  [`mysterycall_theme_publication()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal.md)
   : Green Journal ggplot2 theme
-- [`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
-  [`theme_publication_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
+- [`mysterycall_theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_map.md)
+  [`mysterycall_theme_publication_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_map.md)
   : Green Journal map theme
-- [`theme_green_journal_faceted()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_faceted.md)
-  [`theme_publication_faceted()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_faceted.md)
+- [`mysterycall_theme_green_journal_faceted()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_faceted.md)
+  [`mysterycall_theme_publication_faceted()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_faceted.md)
   : Green Journal faceted map theme
-- [`palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/palette_green_journal.md)
-  [`palette_publication()`](https://mufflyt.github.io/mysterycall/reference/palette_green_journal.md)
+- [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md)
+  [`mysterycall_palette_publication()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md)
   : Colorblind-safe publication palette (Okabe-Ito)
-- [`scale_color_green_journal()`](https://mufflyt.github.io/mysterycall/reference/scale_color_green_journal.md)
+- [`mysterycall_scale_color_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scale_color_green_journal.md)
   : Green Journal discrete color scale
-- [`scale_fill_green_journal()`](https://mufflyt.github.io/mysterycall/reference/scale_fill_green_journal.md)
+- [`mysterycall_scale_fill_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scale_fill_green_journal.md)
   : Green Journal discrete fill scale
-- [`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
-  [`save_publication_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
+- [`mysterycall_save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md)
+  [`mysterycall_save_publication_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_green_journal_figure.md)
   : Save a figure in Green Journal submission format
 - [`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
   : Albers Equal-Area CRS for the continental United States

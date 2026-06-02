@@ -119,21 +119,26 @@ same length as <code>org_name</code> if provided. Default: <code>NULL</code>.</p
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns</a></code>,
-<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary</a></code></p></div>
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary</a></code></p>
+<p>Other academic-indicators:
+<code><a href="ACADEMIC_HOSPITAL_PATTERNS.html">ACADEMIC_HOSPITAL_PATTERNS</a></code>,
+<code><a href="ACGME_PROGRAM_INDICATORS.html">ACGME_PROGRAM_INDICATORS</a></code>,
+<code><a href="COTH_TEACHING_INDICATORS.html">COTH_TEACHING_INDICATORS</a></code>,
+<code><a href="KNOWN_ACADEMIC_INSTITUTIONS.html">KNOWN_ACADEMIC_INSTITUTIONS</a></code>,
+<code><a href="MEDICAL_SCHOOL_INDICATORS.html">MEDICAL_SCHOOL_INDICATORS</a></code>,
+<code><a href="MEDICARE_GME_INDICATORS.html">MEDICARE_GME_INDICATORS</a></code>,
+<code><a href="NCI_CANCER_CENTERS.html">NCI_CANCER_CENTERS</a></code>,
+<code><a href="NIH_CTSA_HUBS.html">NIH_CTSA_HUBS</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="classify_academic_affiliation.html">classify_academic_affiliation</a></span><span class="op">(</span><span class="st">"University of Michigan Medical Center"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'classify_academic_affiliation' is deprecated.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'mysterycall_classify_academic_affiliation' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_classify_academic_affiliation</span><span class="op">(</span><span class="st">"University of Michigan Medical Center"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   academic_classification confidence_score               matched_pattern</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                Academic             0.99 KNOWN_ACADEMIC: UNIVERSITY OF</span>
-<span class="r-in"><span><span class="fu"><a href="classify_academic_affiliation.html">classify_academic_affiliation</a></span><span class="op">(</span><span class="st">"Community Regional Hospital"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'classify_academic_affiliation' is deprecated.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'mysterycall_classify_academic_affiliation' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_classify_academic_affiliation</span><span class="op">(</span><span class="st">"Community Regional Hospital"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   academic_classification confidence_score matched_pattern</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            Non-Academic                0            &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>

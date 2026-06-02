@@ -9,7 +9,7 @@ containing addresses and change them to latitude and longitude.
 
 #### Installation
 
-Before you can harness the power of the `mysterycall_search_by_taxonomy`
+Before you can harness the power of the `mysterycall_search_taxonomy`
 function, it is essential to ensure that you have the `mysterycall`
 package installed. You can effortlessly install it using the following
 command:
@@ -211,9 +211,11 @@ error that compounds in the isochrone step.
 [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
 converts raw practice addresses into latitude/longitude coordinates
 suitable for mapping, drive-time modeling, and spatial joins. Combine it
-with `mysterycall_search_by_taxonomy()` to build a fully enriched
-provider roster — from NPI retrieval through geocoded locations — in a
-single reproducible pipeline. Next, pass the geocoded file into
+with
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+to build a fully enriched provider roster — from NPI retrieval through
+geocoded locations — in a single reproducible pipeline. Next, pass the
+geocoded file into
 [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
 to build drive-time polygons (see
 [`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md)).

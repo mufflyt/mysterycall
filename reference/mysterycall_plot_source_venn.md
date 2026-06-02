@@ -122,8 +122,6 @@ are vectors of provider identifiers (typically NPI strings). Example:
 
 ## See also
 
-[`ggforce::geom_circle()`](https://ggforce.data-imaginist.com/reference/geom_circle.html)
-
 Other plotting:
 [`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md),
 [`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md)
@@ -131,7 +129,7 @@ Other plotting:
 ## Examples
 
 ``` r
-if (FALSE) { # interactive() && requireNamespace("ggforce", quietly = TRUE)
+if (FALSE) { # interactive()
 d <- list(
   npis  = as.character(1:100),
   nppes = as.character(1:70),

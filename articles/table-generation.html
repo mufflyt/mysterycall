@@ -800,7 +800,7 @@ for p-values, confidence intervals in brackets).</p>
 </h3>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">paragraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph</a></span><span class="op">(</span></span>
-<span>  model_result    <span class="op">=</span> <span class="va">poisson_model_result</span>,   <span class="co"># output of mysterycall_fit_model()</span></span>
+<span>  model_result    <span class="op">=</span> <span class="va">poisson_model_result</span>,   <span class="co"># output of mysterycall_poisson_model()</span></span>
 <span>  disparity_table <span class="op">=</span> <span class="va">disp_tbl</span>,              <span class="co"># output of mysterycall_disparities_table()</span></span>
 <span>  outcome_label   <span class="op">=</span> <span class="st">"appointment acceptance"</span>,</span>
 <span>  insurance_var   <span class="op">=</span> <span class="st">"insurance_type"</span>,</span>
@@ -915,7 +915,7 @@ type<a class="anchor" aria-label="anchor" href="#step-2-table-2-appointment-acce
 </h3>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># First compute the disparity estimates</span></span>
-<span><span class="co"># (assumes mysterycall_fit_model() has already been run — see stats vignette)</span></span>
+<span><span class="co"># (assumes mysterycall_poisson_model() has already been run — see stats vignette)</span></span>
 <span><span class="va">disparity_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data          <span class="op">=</span> <span class="va">analysis_data</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">analysis_data</span><span class="op">$</span><span class="va">appt_offered</span><span class="op">)</span>, <span class="op">]</span>,</span>
 <span>  outcome_var   <span class="op">=</span> <span class="st">"appt_offered_binary"</span>,</span>
@@ -959,7 +959,7 @@ type<a class="anchor" aria-label="anchor" href="#step-2-table-2-appointment-acce
 </h3>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarise wait times by insurance type using the Poisson model summary</span></span>
-<span><span class="co"># (assumes mysterycall_fit_wait_model() has been run — see stats vignette)</span></span>
+<span><span class="co"># (assumes mysterycall_poisson_model() has been run — see stats vignette)</span></span>
 <span><span class="va">wait_summary</span> <span class="op">&lt;-</span> <span class="va">analysis_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">wait_days</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">insurance_type</span><span class="op">)</span> <span class="op">|&gt;</span></span>
