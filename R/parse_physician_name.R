@@ -394,7 +394,7 @@ mysterycall_format_physician_name <- function(first_name,
 #' @seealso [mysterycall_parse_physician_name()],
 #'   [mysterycall_validate_parsed_names()]
 #' @family name-parsing
-#' @keywords internal
+#' @export
 mysterycall_test_name_parser <- function() {
   test_cases <- c(
     "John Smith",
