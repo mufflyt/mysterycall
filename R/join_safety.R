@@ -115,7 +115,19 @@ NULL
   message("Join report: ", path)
 }
 
-# Enforces coverage >= min_coverage and output rows <= left_n (no fan-out).
+#' Enforce Join Coverage Thresholds
+#'
+#' Enforces coverage >= min_coverage and output rows <= left_n (no fan-out).
+#'
+#' @param left_n Number of rows in left table.
+#' @param matched_n Number of rows that found a match.
+#' @param label_left Label for left table.
+#' @param label_right Label for right table.
+#' @param min_coverage Minimum allowed coverage (0-1).
+#' @param by Join keys.
+#'
+#' @return `invisible(TRUE)` on success; stops on failure.
+#' @keywords internal
 .check_coverage <- function(left_n, matched_n, label_left, label_right,
                              min_coverage, by) {
   if (left_n == 0L) {

@@ -9,8 +9,15 @@
 #' @name mysterycall_outcomes
 NULL
 
-# Internal: coerce an acceptance column to logical.
-# Accepts logical, numeric, or character ("yes"/"y"/"true"/"1").
+#' Coerce Acceptance Column to Logical
+#'
+#' Accepts logical, numeric, or character ("yes"/"y"/"true"/"1").
+#'
+#' @param x Vector to coerce.
+#'
+#' @return Logical vector.
+#' @family outcomes
+#' @keywords internal
 .as_positive_logical <- function(x) {
   if (is.logical(x)) return(!is.na(x) & x)
   if (is.numeric(x)) return(!is.na(x) & x != 0)
@@ -18,7 +25,13 @@ NULL
   !is.na(normalized) & normalized %in% c("yes", "y", "true", "1")
 }
 
-# Internal: per-group descriptive stats for a numeric vector.
+#' Calculate Descriptive Statistics for Wait Times
+#'
+#' @param x Numeric vector of wait times.
+#'
+#' @return A tibble with descriptive statistics (n, mean, sd, median, etc.).
+#' @family outcomes
+#' @keywords internal
 .wait_stats <- function(x) {
   x <- x[!is.na(x)]
   n <- length(x)

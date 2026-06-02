@@ -10,7 +10,13 @@
 #' @name mysterycall_poisson_model
 NULL
 
-# -- Internal helper: format a p-value for display -----------------------------
+#' Format Model P-Value for Display
+#'
+#' @param p Numeric p-value.
+#'
+#' @return Formatted character string (e.g., "<0.001").
+#' @family outcomes
+#' @keywords internal
 .fmt_model_pval <- function(p) {
   ifelse(is.na(p), NA_character_,
          ifelse(p < 0.001, "<0.001", sprintf("%.3f", p)))

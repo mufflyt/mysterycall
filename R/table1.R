@@ -11,13 +11,29 @@
 NULL
 
 # -- Internal formatters -------------------------------------------------------
-#' @noRd
+
+#' Format n (%)
+#'
+#' @param k Count.
+#' @param n Total.
+#' @param digits Number of digits for percentage.
+#'
+#' @return Formatted character string.
+#' @family table
+#' @keywords internal
 .t1_fmt_pct <- function(k, n, digits) {
   if (n == 0L) return("0 (--%)")
   sprintf(paste0("%d (%.", digits, "f%%)"), k, k / n * 100)
 }
 
-#' @noRd
+#' Format Median [IQR]
+#'
+#' @param x Numeric vector.
+#' @param digits Number of digits.
+#'
+#' @return Formatted character string.
+#' @family table
+#' @keywords internal
 .t1_fmt_median_iqr <- function(x, digits) {
   x <- x[!is.na(x)]
   if (!length(x)) return(NA_character_)
@@ -27,7 +43,14 @@ NULL
           stats::median(x), qs[[1L]], qs[[2L]])
 }
 
-#' @noRd
+#' Format Mean (SD)
+#'
+#' @param x Numeric vector.
+#' @param digits Number of digits.
+#'
+#' @return Formatted character string.
+#' @family table
+#' @keywords internal
 .t1_fmt_mean_sd <- function(x, digits) {
   x <- x[!is.na(x)]
   if (!length(x)) return(NA_character_)
@@ -35,14 +58,30 @@ NULL
   sprintf(paste0(fmt, " (", fmt, ")"), mean(x), stats::sd(x))
 }
 
-#' @noRd
+#' Format P-Value for Table 1
+#'
+#' @param p Numeric p-value.
+#'
+#' @return Formatted character string (e.g., "<0.001").
+#' @family table
+#' @keywords internal
 .t1_fmt_pval <- function(p) {
   if (is.na(p)) return(NA_character_)
   if (p < 0.001) "<0.001" else sprintf("%.3f", p)
 }
 
 # -- Internal tests ------------------------------------------------------------
-#' @noRd
+
+#' Calculate P-Value for Continuous Variables
+#'
+#' Uses Wilcoxon rank-sum or Kruskal-Wallis test.
+#'
+#' @param x Numeric vector.
+#' @param g Grouping vector.
+#'
+#' @return Numeric p-value or NA.
+#' @family table
+#' @keywords internal
 .t1_cont_pvalue <- function(x, g) {
   groups <- sort(unique(g[!is.na(g)]))
   if (length(groups) < 2L) return(NA_real_)
@@ -60,7 +99,17 @@ NULL
   if (is.null(res)) NA_real_ else res$p.value
 }
 
-#' @noRd
+#' Calculate P-Value for Categorical Variables
+#'
+#' Uses Fisher's exact or chi-square test.
+#'
+#' @param x Vector.
+#' @param g Grouping vector.
+#' @param min_cell Minimum cell size for chi-square.
+#'
+#' @return Numeric p-value or NA.
+#' @family table
+#' @keywords internal
 .t1_cat_pvalue <- function(x, g, min_cell = 5L) {
   ct <- table(x, g, useNA = "no")
   if (nrow(ct) < 2L || ncol(ct) < 2L) return(NA_real_)

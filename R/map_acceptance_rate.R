@@ -3,7 +3,11 @@
 #' @name mysterycall_map_acceptance_rate
 NULL
 
-# Internal helper -- build abb-to-name lookup from datasets package
+#' Build State Abbreviation to Name Lookup
+#'
+#' @return Named character vector where names are 2-letter abbreviations and
+#'   values are full state names.
+#' @keywords internal
 .abb_to_name <- function() {
   stats::setNames(datasets::state.name, datasets::state.abb)
 }
