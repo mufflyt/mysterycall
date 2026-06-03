@@ -47,12 +47,12 @@ mysterycall_irr_plot(
 
 - color_sig:
 
-  Character. Colour for terms with `p_value < 0.05`. Default `"#C0392B"`
+  Character. Color for terms with `p_value < 0.05`. Default `"#C0392B"`
   (red). Only applied when the `p_value` column is present.
 
 - color_ns:
 
-  Character. Colour for non-significant terms (or when `p_value` is
+  Character. Color for non-significant terms (or when `p_value` is
   absent). Default `"#2C3E50"` (dark navy).
 
 - x_label:

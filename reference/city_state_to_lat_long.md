@@ -37,5 +37,23 @@ coordinates.
 Other datasets:
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
+
+## Examples
+
+``` r
+data(city_state_to_lat_long)
+head(city_state_to_lat_long)
+#> # A tibble: 6 × 4
+#>   state   city       latitude longitude
+#>   <chr>   <chr>         <dbl>     <dbl>
+#> 1 Alabama Abanda         33.1     -85.5
+#> 2 Alabama Abbeville      31.6     -85.3
+#> 3 Alabama Adamsville     33.6     -87.0
+#> 4 Alabama Addison        34.2     -87.2
+#> 5 Alabama Akron          32.9     -87.7
+#> 6 Alabama Alabaster      33.2     -86.8
+```

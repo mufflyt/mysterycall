@@ -48,7 +48,7 @@ mysterycall_map_acceptance_rate(
 
 - palette:
 
-  Character scalar. Viridis colour-scale option passed to
+  Character scalar. Viridis color-scale option passed to
   [`ggplot2::scale_fill_viridis_c()`](https://ggplot2.tidyverse.org/reference/scale_viridis.html).
   Default `"viridis"`.
 
@@ -68,7 +68,7 @@ mysterycall_map_acceptance_rate(
 
 - na_color:
 
-  Character scalar. Fill colour for states with no data. Default
+  Character scalar. Fill color for states with no data. Default
   `"grey80"`.
 
 - save_path:

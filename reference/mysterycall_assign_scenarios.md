@@ -81,7 +81,7 @@ Generalists in locations that have no matching subspecialists receive
 [`mysterycall_check_generalist_presence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_generalist_presence.md)
 to validate paired generalist coverage before assigning scenarios;
 [`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md)
-for specialty harmonisation.
+for specialty harmonization.
 
 ## Examples
 

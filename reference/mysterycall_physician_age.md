@@ -1,4 +1,4 @@
-# Summarise physician age as median (IQR) text
+# Summarize physician age as median (IQR) text
 
 Computes the median, Q1, and Q3 of a numeric age column (ignoring `NA`)
 and returns a ready-to-paste sentence for manuscript methods or results

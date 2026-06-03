@@ -76,7 +76,7 @@ site_table <- analysis_base |>
 
 After geocoding and travel-time modelling, join the geography back. The
 safe join warns if site addresses don’t round-trip cleanly — a common
-problem when the geocoder normalises whitespace or abbreviations
+problem when the geocoder normalizes whitespace or abbreviations
 differently from the original roster.
 
 ``` r

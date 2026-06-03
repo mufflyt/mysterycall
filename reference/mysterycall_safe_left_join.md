@@ -4,7 +4,7 @@ Wraps
 [`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
 with:
 
-- Key-type harmonisation (prevents silent 0-match joins after type
+- Key-type harmonization (prevents silent 0-match joins after type
   coercion from RDS or Parquet round-trips).
 
 - Right-side uniqueness assertion (blocks accidental many-to-many

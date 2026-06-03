@@ -27,6 +27,7 @@ written to output_dir with a timestamp in the filename."><meta property="og:imag
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -162,7 +163,7 @@ API documentation at <a href="https://genderize.io/#docs" class="external-link">
 <p>Output filenames include a timestamp from <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time()</a></code>, which uses the
 <strong>local system timezone</strong> (not UTC). Files produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment. To standardise to UTC:</p>
+wall-clock moment. To standardize to UTC:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_timezone.html" class="external-link">with_timezone</a></span><span class="op">(</span><span class="st">"UTC"</span>, <span class="fu"><a href="../reference/mysterycall_genderize.html">mysterycall_genderize</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>Alternatively, supply a meaningful <code>output_dir</code> path that encodes the
 study date rather than relying on the auto-generated timestamp.</p>

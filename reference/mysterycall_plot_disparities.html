@@ -27,6 +27,7 @@ call mysterycall_disparities_table() first, then pipe the result here."><meta pr
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -134,17 +135,17 @@ annotated to the right of each non-reference point.</p></dd>
 
 
 <dt id="arg-color-sig">color_sig<a class="anchor" aria-label="anchor" href="#arg-color-sig"></a></dt>
-<dd><p>Character. Colour for groups whose <code>p_value &lt; 0.05</code>.
+<dd><p>Character. Color for groups whose <code>p_value &lt; 0.05</code>.
 Default <code>"#C0392B"</code> (red).</p></dd>
 
 
 <dt id="arg-color-ns">color_ns<a class="anchor" aria-label="anchor" href="#arg-color-ns"></a></dt>
-<dd><p>Character. Colour for non-significant groups (or when
+<dd><p>Character. Color for non-significant groups (or when
 <code>p_value</code> is absent). Default <code>"#2C3E50"</code> (dark navy).</p></dd>
 
 
 <dt id="arg-color-ref">color_ref<a class="anchor" aria-label="anchor" href="#arg-color-ref"></a></dt>
-<dd><p>Character. Colour for the reference group point.
+<dd><p>Character. Color for the reference group point.
 Default <code>"#2166AC"</code> (blue).</p></dd>
 
 
@@ -178,7 +179,7 @@ the x-axis is formatted as a percentage. Ignored when <code>metric = "rel_risk"<
 
 <dt><code>"abs_diff"</code></dt>
 <dd><p><code>group</code>, <code>abs_diff</code>, <code>lower_ci</code>, <code>upper_ci</code>
-(CIs are re-centred automatically)</p></dd>
+(CIs are re-centered automatically)</p></dd>
 
 <dt><code>"rel_risk"</code></dt>
 <dd><p><code>group</code>, <code>rel_risk</code>, <code>rr_lower</code>, <code>rr_upper</code></p></dd>
@@ -187,7 +188,7 @@ the x-axis is formatted as a percentage. Ignored when <code>metric = "rel_risk"<
 </dl><p>When <code>x</code> is a <code>mysterycall_disparities_table</code> object the reference group
 and significance attributes are read directly from the object's attributes.
 When <code>x</code> is a plain data frame, a <code>p_value</code> column is used for significance
-colouring if present, and the first row is treated as the reference group
+coloring if present, and the first row is treated as the reference group
 when <code>show_ref = TRUE</code>.</p>
     </div>
     <div class="section level2">

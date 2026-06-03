@@ -95,7 +95,7 @@ Output filenames include a timestamp from
 [`Sys.time()`](https://rdrr.io/r/base/Sys.time.html), which uses the
 **local system timezone** (not UTC). Files produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment. To standardise to UTC:
+wall-clock moment. To standardize to UTC:
 
     withr::with_timezone("UTC", mysterycall_genderize(data))
 

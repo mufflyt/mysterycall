@@ -1,9 +1,9 @@
-# Standardise demographic variables for Table 1
+# Standardize demographic variables for Table 1
 
-Convenience wrapper that applies age imputation, age categorisation, and
-gender standardisation in one call. All output columns are **added** to
+Convenience wrapper that applies age imputation, age categorization, and
+gender standardization in one call. All output columns are **added** to
 the input data frame - originals are never replaced or removed.
-Arguments set to `NULL` are silently skipped so you can standardise only
+Arguments set to `NULL` are silently skipped so you can standardize only
 the variables your dataset contains.
 
 ## Usage
@@ -62,7 +62,7 @@ mysterycall_prepare_table1_vars(
 
 ## Value
 
-`data` with zero or more additional standardised columns appended (only
+`data` with zero or more additional standardized columns appended (only
 columns whose source `*_col` parameter was non-`NULL` are created):
 
 - `age_imputed`:
@@ -78,7 +78,7 @@ columns whose source `*_col` parameter was non-`NULL` are created):
 
 - `gender_std`:
 
-  Character. Standardised gender: `"Male"`, `"Female"`, or `"Unknown"`.
+  Character. Standardized gender: `"Male"`, `"Female"`, or `"Unknown"`.
   Only added when `gender_col` is supplied.
 
 - `setting_std`:
@@ -91,7 +91,7 @@ columns whose source `*_col` parameter was non-`NULL` are created):
   Character. Region, copied from the source column. Only added when
   `region_col` is supplied.
 
-## Gender standardisation
+## Gender standardization
 
 The `gender_std` column is produced by a binary lookup applied
 case-insensitively after whitespace trimming:

@@ -61,7 +61,7 @@ with `prefix_y` prepended. Row order follows base R
 [`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
 for joins with duplicate-key warnings;
 [`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md)
-for post-join specialty harmonisation.
+for post-join specialty harmonization.
 
 Other data management:
 [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md),

@@ -42,6 +42,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -172,7 +173,7 @@ this fixed order:</p>
 <pre><code>Input data frame
       │
       ▼
-janitor::clean_names()          ← normalise column names
+janitor::clean_names()          ← normalize column names
       │
       ▼
 type_convert()                  ← coerce column types
@@ -206,7 +207,7 @@ Return annotated data frame</code></pre>
 <p><strong>Deterministic cleaning:</strong>
 <code><a href="../reference/mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code> applied to the same input with
 the same parameters always produces byte-identical output. Column
-reordering, name normalisation via <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code>,
+reordering, name normalization via <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code>,
 and NPI formatting are all deterministic.</p>
 <p><strong>Snapshot-based replay:</strong>
 <code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> writes an <code>.rds</code>

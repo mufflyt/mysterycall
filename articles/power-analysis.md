@@ -129,8 +129,8 @@ directory grows — the finite-population correction becomes negligible.
 
 ### Mathematical basis
 
-Wait times (business days until appointment) are count data analysed
-with a Poisson generalised linear model (or mixed model when physicians
+Wait times (business days until appointment) are count data analyzed
+with a Poisson generalized linear model (or mixed model when physicians
 are called with both insurance types). The parameter of interest is the
 **incidence rate ratio** (IRR): how many times longer is the Medicaid
 wait compared with the private-insurance wait?

@@ -77,7 +77,7 @@ Output directories are created recursively as needed.
 [`mysterycall_theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_theme_green_journal_map.md)
 for themes to apply before saving;
 [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md)
-for the colour palette.
+for the color palette.
 
 ## Examples
 

@@ -27,7 +27,7 @@ A named list with two character elements:
 
 - `addr1`:
 
-  Character. Primary address with unit designators standardised to USPS
+  Character. Primary address with unit designators standardized to USPS
   abbreviations (STE, APT, UNIT, FL, RM).
 
 - `addr2`:

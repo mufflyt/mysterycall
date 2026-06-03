@@ -3,7 +3,7 @@
 Wraps
 [`dplyr::anti_join()`](https://dplyr.tidyverse.org/reference/filter-joins.html)
 (return left rows with **no** match in right) with key validation, type
-harmonisation, and an optional cap on how many rows may be matched away.
+harmonization, and an optional cap on how many rows may be matched away.
 
 ## Usage
 

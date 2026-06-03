@@ -51,6 +51,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -121,14 +122,14 @@ or correspondence study) is a controlled experiment used to detect
 discrimination in health-care access. The central idea is elegantly
 simple: trained research callers—posing as prospective
 patients—telephone physician offices and attempt to schedule a
-new-patient appointment. Because the callers follow a standardised
+new-patient appointment. Because the callers follow a standardized
 script, vary only the characteristic under investigation (most commonly
 insurance type), and record the outcome of each call, the design
 provides a direct, high-fidelity measure of real-world access
 disparities that surveys and claims data cannot replicate.</p>
 <p>The method was pioneered in health disparities research by Asplin and
 colleagues (2005) and has since been applied to dozens of specialty
-access questions: do Medicaid patients wait longer for an orthopaedic
+access questions: do Medicaid patients wait longer for an orthopedic
 consultation? Are uninsured callers offered fewer same-month
 appointments than commercially insured callers? The
 <code>mysterycall</code> package implements all of the statistical
@@ -150,8 +151,8 @@ This is the primary disparity outcome.</p></li>
 calls that resulted in an offered appointment
 (<code>appointment_offered == 1</code>), how many business days elapsed
 between the date of the call and the earliest available appointment?
-This is a non-negative integer count and is analysed with a Poisson
-generalised linear model.</p></li>
+This is a non-negative integer count and is analyzed with a Poisson
+generalized linear model.</p></li>
 </ol>
 <p>It is important to understand that these two outcomes measure
 <em>different</em> barriers. A Medicaid patient might face a
@@ -173,7 +174,7 @@ privately insured patient, once as a Medicare patient, and once as an
 uninsured patient—producing four observations per physician.</p>
 <p>This means that observations are <em>not</em> independent. Two calls
 to the same physician share the physician’s baseline acceptance
-behaviour, scheduling culture, and practice-level factors (urban
+behavior, scheduling culture, and practice-level factors (urban
 vs. rural, solo vs. group practice, etc.). If you fit an ordinary
 logistic or Poisson regression that treats every call as an independent
 observation, you will:</p>
@@ -192,7 +193,7 @@ intercept</strong> to the model. The random intercept absorbs each
 physician’s baseline tendency to offer appointments (or their baseline
 wait-time level), leaving the fixed effects to estimate the pure
 insurance-type contrast within physicians. This is a standard
-generalised linear mixed-effects model (GLMM) approach, implemented in R
+generalized linear mixed-effects model (GLMM) approach, implemented in R
 by the <code>lme4</code> package.</p>
 </div>
 <div class="section level3">
@@ -515,7 +516,7 @@ distorting the modal value.
 <p>As described in Section 1, the same physician is called multiple
 times. The random intercept γ_j for physician j captures that
 physician’s baseline tendency to have long or short wait times—whatever
-drives their scheduling behaviour that is <em>not</em> explained by the
+drives their scheduling behavior that is <em>not</em> explained by the
 covariates. Formally, the model is:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><msub><mtext mathvariant="normal">wait_days</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>γ</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">]</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicaid</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicare</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Uninsured</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>γ</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>γ</mi><mi>j</mi></msub><mo>∼</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><msubsup><mi>σ</mi><mtext mathvariant="normal">physician</mtext><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 \log\!\bigl(E[\text{wait\_days}_{ij} \mid \gamma_j]\bigr)
@@ -767,7 +768,7 @@ identically—which would mean the random intercept is unnecessary).</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Option 2: If random variance is truly near zero, consider dropping the random</span></span>
-<span><span class="co"># intercept and using a GEE (generalised estimating equation) approach instead.</span></span>
+<span><span class="co"># intercept and using a GEE (generalized estimating equation) approach instead.</span></span>
 <span><span class="co"># Note that GEE estimates population-average effects rather than subject-specific</span></span>
 <span><span class="co"># effects—a meaningful difference in multilevel studies.</span></span></code></pre></div>
 <p><strong>Choosing nAGQ:</strong> For most mystery-caller datasets (≥
@@ -830,7 +831,7 @@ ballpark (the IRR for Medicaid should be consistent with the ratio of
 median wait times in the summary table).</li>
 </ol>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summarise wait times by insurance type</span></span>
+<code class="sourceCode R"><span><span class="co"># Summarize wait times by insurance type</span></span>
 <span><span class="va">wait_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data          <span class="op">=</span> <span class="va">mc_data</span>,</span>
 <span>  wait_col      <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
@@ -863,7 +864,7 @@ median wait times in the summary table).</li>
 distribution of wait times among calls that <em>received</em> an
 appointment (<code>n_offered</code>). The <code>pct_offered</code>
 column shows the percentage of calls resulting in an offered
-appointment—a preview of the binary disparity outcome analysed in
+appointment—a preview of the binary disparity outcome analyzed in
 Section 5.</p>
 <p>Notice that median wait times are consistent with the IRR estimates
 from the model: Medicaid patients had a median wait of 18–21 days
@@ -877,7 +878,7 @@ models the <em>conditional mean</em>, whereas the table shows the
 <h3 id="combining-the-summary-table-with-irr-results">Combining the Summary Table With IRR Results<a class="anchor" aria-label="anchor" href="#combining-the-summary-table-with-irr-results"></a>
 </h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summarise at the insurance-type level (no subspecialty stratification)</span></span>
+<code class="sourceCode R"><span><span class="co"># Summarize at the insurance-type level (no subspecialty stratification)</span></span>
 <span><span class="va">wait_summ_top</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data         <span class="op">=</span> <span class="va">mc_data</span>,</span>
 <span>  wait_col     <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
@@ -1101,7 +1102,7 @@ for Private, a 37-percentage-point absolute gap.</li>
 <p>Using Medicaid as the reference highlights that uninsured patients
 face <em>even lower</em> acceptance rates than Medicaid patients—an
 important finding that a Private-reference table would not
-emphasise.</p>
+emphasize.</p>
 </div>
 <div class="section level3">
 <h3 id="common-mistake-non-01-outcome-column">5.5 Common Mistake: Non-0/1 Outcome Column<a class="anchor" aria-label="anchor" href="#common-mistake-non-01-outcome-column"></a>
@@ -1315,11 +1316,11 @@ statistics.</p>
 <span><span class="va">boot_plot_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>diff <span class="op">=</span> <span class="va">boot_diffs</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">boot_plot_df</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">diff</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, fill <span class="op">=</span> <span class="st">"#4393c3"</span>, colour <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, fill <span class="op">=</span> <span class="st">"#4393c3"</span>, color <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>                           linewidth <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">obs_diff</span>, linewidth <span class="op">=</span> <span class="fl">1</span>, colour <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">obs_diff</span>, linewidth <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ci_lo</span>, <span class="va">ci_hi</span><span class="op">)</span>,</span>
-<span>                       linewidth <span class="op">=</span> <span class="fl">0.8</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"#333333"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                       linewidth <span class="op">=</span> <span class="fl">0.8</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"#333333"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent_format</a></span><span class="op">(</span>accuracy <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="st">"Medicaid - Private appointment-rate difference"</span>,</span>
@@ -1453,7 +1454,7 @@ for observational health disparities research.</p>
 <span><span class="co">#&gt; after Holm-Bonferroni correction (p = .034).</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Among callers offered appointments, we modelled wait time in business days</span></span>
-<span><span class="co">#&gt; using a Poisson generalised linear mixed-effects model with a physician-level</span></span>
+<span><span class="co">#&gt; using a Poisson generalized linear mixed-effects model with a physician-level</span></span>
 <span><span class="co">#&gt; random intercept to account for within-physician correlation (40 physicians;</span></span>
 <span><span class="co">#&gt; intraclass correlation coefficient 0.089). The Pearson chi-squared</span></span>
 <span><span class="co">#&gt; overdispersion ratio was 1.08, indicating adequate model fit. Medicaid</span></span>
@@ -1805,7 +1806,7 @@ chunks.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">results_para</span><span class="op">)</span></span>
-<span><span class="co">#&gt; We conducted 160 standardised mystery-caller calls to 40 unique physicians</span></span>
+<span><span class="co">#&gt; We conducted 160 standardized mystery-caller calls to 40 unique physicians</span></span>
 <span><span class="co">#&gt; (4 calls per physician, one per insurance type). Of calls to privately</span></span>
 <span><span class="co">#&gt; insured patients (reference group), 92.5% resulted in an offered appointment</span></span>
 <span><span class="co">#&gt; (95% Wilson CI: 80.2%-97.7%). Medicaid callers were offered appointments at</span></span>
@@ -1820,8 +1821,8 @@ chunks.</p>
 <span><span class="co">#&gt; Holm-adjusted p = .037).</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Among callers who were offered appointments (n = 119 observations from</span></span>
-<span><span class="co">#&gt; 40 physicians), we analysed wait time in business days using a Poisson</span></span>
-<span><span class="co">#&gt; generalised linear mixed-effects model with a physician-level random</span></span>
+<span><span class="co">#&gt; 40 physicians), we analyzed wait time in business days using a Poisson</span></span>
+<span><span class="co">#&gt; generalized linear mixed-effects model with a physician-level random</span></span>
 <span><span class="co">#&gt; intercept to account for within-physician clustering (intraclass correlation</span></span>
 <span><span class="co">#&gt; coefficient 0.073). The Pearson chi-squared overdispersion ratio was 1.12,</span></span>
 <span><span class="co">#&gt; indicating acceptable model fit. Medicaid callers waited 40% longer than</span></span>
@@ -1887,7 +1888,7 @@ margin.</caption>
 <div class="section level3">
 <h3 id="poisson-power-for-wait-time-disparities">10.2 Poisson Power for Wait-Time Disparities<a class="anchor" aria-label="anchor" href="#poisson-power-for-wait-time-disparities"></a>
 </h3>
-<p>For the <strong>count outcome</strong> (wait days) analysed with a
+<p>For the <strong>count outcome</strong> (wait days) analyzed with a
 Poisson GLMM, power depends on the minimum detectable IRR, the
 reference-arm mean
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\lambda_0</annotation></semantics></math>),
@@ -1996,13 +1997,13 @@ lambda_ref = 14 days.</caption>
 <span><span class="va">curve_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="va">irr_seq</span>, n_per_arm <span class="op">=</span> <span class="va">n_seq</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">curve_df</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">irr</span>, y <span class="op">=</span> <span class="va">n_per_arm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"#2166ac"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"#2166ac"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2166ac"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2166ac"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1.40</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
-<span>                       colour <span class="op">=</span> <span class="st">"#c0392b"</span>, linewidth <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                       color <span class="op">=</span> <span class="st">"#c0392b"</span>, linewidth <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">1.42</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">n_seq</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.9</span>,</span>
 <span>                     label <span class="op">=</span> <span class="st">"IRR = 1.40\n(typical Medicaid gap)"</span>,</span>
-<span>                     hjust <span class="op">=</span> <span class="fl">0</span>, size <span class="op">=</span> <span class="fl">3</span>, colour <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                     hjust <span class="op">=</span> <span class="fl">0</span>, size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">2.0</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="st">"Minimum detectable IRR"</span>,</span>

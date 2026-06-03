@@ -11,7 +11,7 @@ library(dplyr)
 ## 1. Overview
 
 A mystery-caller study begins with a **provider roster**: a list of
-physicians whose appointment-scheduling behaviour will be tested. Before
+physicians whose appointment-scheduling behavior will be tested. Before
 any statistical model can be estimated, that roster must be enriched
 with demographic, geographic, and practice-setting variables. Raw data
 from the National Provider Identifier (NPI) registry and related sources
@@ -53,7 +53,7 @@ data frame.
     [8] mysterycall_genderize()                   -- API gender backfill for ~5% missing
             |
             v
-    [9] mysterycall_prepare_table1_vars()         -- standardise and combine all vars
+    [9] mysterycall_prepare_table1_vars()         -- standardize and combine all vars
             |
             v
     [10] Analysis-ready data frame
@@ -62,7 +62,7 @@ Each step is independent enough to be run on its own, but the order
 matters: you cannot classify RUCA codes until you have joined the
 crosswalk, and you cannot call
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
-until you have raw gender values to standardise.
+until you have raw gender values to standardize.
 
 **Target audience:** Physician researchers who will execute this code
 themselves. No prior experience with the NPPES API or USDA geographic
@@ -76,7 +76,7 @@ data systems is assumed.
 
 In mystery-caller research, **practice setting** is one of the strongest
 predictors of appointment availability and wait time. Academic medical
-centres have complex scheduling systems, residents who share patient
+centers have complex scheduling systems, residents who share patient
 loads, and often longer wait times. Government facilities (VA, military)
 operate under federal mandates and may have different referral patterns.
 Private practices behave differently again.
@@ -131,9 +131,9 @@ The built-in academic list includes broad institutional keywords like
 `"health sciences center"`, as well as named institutions that are
 academically affiliated even when the word “university” does not appear
 in their name: `"mayo clinic"`, `"cleveland clinic"`, `"johns hopkins"`,
-`"memorial sloan"`, `"md anderson"`, and flagship programmes at
-`"duke"`, `"stanford"`, `"ucsf"`, `"yale"`, `"upmc"`, `"vanderbilt"`,
-and dozens more.
+`"memorial sloan"`, `"md anderson"`, and flagship programs at `"duke"`,
+`"stanford"`, `"ucsf"`, `"yale"`, `"upmc"`, `"vanderbilt"`, and dozens
+more.
 
 ``` r
 
@@ -180,7 +180,7 @@ roster <- roster |>
 ```
 
 **Option 2 — Replace:** Supply your own complete pattern vectors. Do
-this only if your study uses a highly specialised provider population
+this only if your study uses a highly specialized provider population
 (e.g., only correctional health facilities) where the built-in patterns
 are likely to produce false positives.
 
@@ -277,7 +277,7 @@ classification system developed by the USDA Economic Research Service
 (ERS). They assign a numeric code to each US ZIP code based on the
 population density of the area and the proportion of workers who commute
 to an urban core. RUCA codes are widely used in health services research
-to characterise provider practice locations on an urban-to-rural
+to characterize provider practice locations on an urban-to-rural
 continuum.
 
 RUCA codes range from 1 to 10:
@@ -632,7 +632,7 @@ graduated from a US osteopathic school is classified as `"US_DO"`. But a
 physician with an `"MD"` credential who graduated from a school matching
 the IMG pattern is classified as `"IMG"` — international medical
 graduates who obtained USMLE equivalence and a US medical license still
-practise with MD credentials in the US.
+practice with MD credentials in the US.
 
 Do not substitute the credential column (`basic_credential`) for the
 medical school column. They measure different things. A physician can be
@@ -883,7 +883,7 @@ genderized <- genderized |>
     )
   )
 
-# Summarise coverage improvement
+# Summarize coverage improvement
 before <- mean(is.na(roster$basic_gender))
 after  <- mean(is.na(genderized$gender_combined))
 message(sprintf(
@@ -900,16 +900,16 @@ message(sprintf(
 
 Once you have run all the enrichment steps above, the resulting data
 frame contains a mix of raw NPPES values, API outputs, and
-custom-classified columns — often with inconsistent capitalisation and
+custom-classified columns — often with inconsistent capitalization and
 coding.
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
-is a convenience wrapper that standardises all demographic columns in a
+is a convenience wrapper that standardizes all demographic columns in a
 single call, producing consistently named output columns ready for Table
 1.
 
 It does four things: 1. Imputes age from graduation year (if
 `grad_year_col` is supplied and `age_col` is not). 2. Creates
-decade-bracket age categories. 3. Standardises gender to `"Male"` /
+decade-bracket age categories. 3. Standardizes gender to `"Male"` /
 `"Female"` / `"Unknown"`. 4. Passes through practice setting and region
 columns under standard names.
 
@@ -919,12 +919,12 @@ columns under standard names.
 |----|----|----|
 | `age_col` | `NULL` | Name of an existing age column; skips imputation if supplied |
 | `grad_year_col` | `NULL` | Graduation year column for age imputation |
-| `gender_col` | `NULL` | Raw gender column to standardise |
+| `gender_col` | `NULL` | Raw gender column to standardize |
 | `setting_col` | `NULL` | Practice setting column (passed through as `setting_std`) |
 | `region_col` | `NULL` | Region column (passed through as `region_std`) |
 | `ref_year` | current year | Reference year for age imputation — pin this to your data year |
 
-### Gender standardisation and the binary warning
+### Gender standardization and the binary warning
 
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
 maps gender values to a **binary classification**: `"Male"`, `"Female"`,
@@ -943,7 +943,7 @@ for unexpected values:
 
 ``` r
 
-# Always inspect before standardising
+# Always inspect before standardizing
 table(roster$gender_combined, useNA = "always")
 #>    F    M    NA
 #>  142  155    3
@@ -956,7 +956,7 @@ This is a deliberate design choice for mystery-caller research: studies
 typically report binary sex assigned at registry registration, not
 gender identity. If your study protocol requires tracking non-binary
 providers separately, do not use this wrapper — handle gender
-standardisation manually.
+standardization manually.
 
 ### Complete example
 
@@ -998,12 +998,12 @@ provides this.
 | `n_per_group` | integer   | Target rows per group                          |
 | `seed`        | integer   | Random seed for reproducibility                |
 
-### Behaviour when a group is smaller than `n_per_group`
+### Behavior when a group is smaller than `n_per_group`
 
 Groups with fewer rows than `n_per_group` are **returned in full without
 upsampling**. Upsampling (returning a group with replacement) would
 duplicate physician records, creating artificial inflation of the study
-denominator. If you have only 15 paediatric otolaryngologists in your
+denominator. If you have only 15 pediatric otolaryngologists in your
 roster and request `n_per_group = 30`, all 15 will be returned.
 
 ``` r
@@ -1281,7 +1281,7 @@ roster_with_ruca <- roster_with_ruca |>
 table(roster_with_ruca$med_school_type)
 ```
 
-### Step 6: Impute age and categorise
+### Step 6: Impute age and categorize
 
 ``` r
 

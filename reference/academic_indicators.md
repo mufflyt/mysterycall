@@ -25,3 +25,11 @@ Evidence-based indicators with calibrated confidence scores:
 - NCI cancer center designations (0.98)
 
 - Medicare GME payments (0.95)
+
+## Examples
+
+``` r
+# Topic group; see individual constant/function help pages for examples.
+head(KNOWN_ACADEMIC_INSTITUTIONS)
+#> Error: object 'KNOWN_ACADEMIC_INSTITUTIONS' not found
+```

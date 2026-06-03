@@ -36,7 +36,7 @@ method can be used in pipes without printing twice).
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
 which produces this object;
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md)
-to visualise the same IRR estimates.
+to visualize the same IRR estimates.
 
 Other outcomes:
 [`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),

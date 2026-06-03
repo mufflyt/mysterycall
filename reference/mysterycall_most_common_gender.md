@@ -37,7 +37,7 @@ column.
 [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
 for tabulating any single categorical variable;
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
-for upstream gender standardisation.
+for upstream gender standardization.
 
 Other provider characteristics:
 [`mysterycall_academic_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_academic_patterns.md),

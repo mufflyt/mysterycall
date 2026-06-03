@@ -189,7 +189,7 @@ a public API for downstream reproducibility tooling.
 
 ## Performance
 
-O(n) in number of rows. String normalisation via
+O(n) in number of rows. String normalization via
 [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
 and `stringr` dominates; expect \< 1 s for 1,000 rows on modern
 hardware.

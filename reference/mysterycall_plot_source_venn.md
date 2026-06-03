@@ -1,7 +1,7 @@
 # Three-circle Venn diagram for data-source overlap
 
-Visualises how three data sources (A, B, C) cover a universe of
-providers, labelling each region with its count and the centre with the
+Visualizes how three data sources (A, B, C) cover a universe of
+providers, labelling each region with its count and the center with the
 three-way intersection count and percentage. The result is a
 [`ggplot2::ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
 object, optionally written to disk.
@@ -61,12 +61,12 @@ mysterycall_plot_source_venn(
 
 - fills:
 
-  Character vector of length 3. Fill colours for circles A, B, C (hex or
-  R colour names).
+  Character vector of length 3. Fill colors for circles A, B, C (hex or
+  R color names).
 
 - border_colors:
 
-  Character vector of length 3. Border and text colours matching each
+  Character vector of length 3. Border and text colors matching each
   circle.
 
 - title, subtitle, caption:
@@ -93,7 +93,7 @@ mysterycall_plot_source_venn(
 
 - bg:
 
-  Character scalar. Background colour passed to
+  Character scalar. Background color passed to
   [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html).
   Default `"white"`.
 

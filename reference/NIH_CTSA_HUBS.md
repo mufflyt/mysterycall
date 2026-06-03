@@ -34,3 +34,10 @@ Other academic-indicators:
 [`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
 [`mysterycall_classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md),
 [`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
+
+## Examples
+
+``` r
+NIH_CTSA_HUBS
+#> Error: object 'NIH_CTSA_HUBS' not found
+```

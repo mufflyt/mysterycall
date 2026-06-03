@@ -16,7 +16,7 @@ study) is a controlled experiment used to detect discrimination in
 health-care access. The central idea is elegantly simple: trained
 research callers—posing as prospective patients—telephone physician
 offices and attempt to schedule a new-patient appointment. Because the
-callers follow a standardised script, vary only the characteristic under
+callers follow a standardized script, vary only the characteristic under
 investigation (most commonly insurance type), and record the outcome of
 each call, the design provides a direct, high-fidelity measure of
 real-world access disparities that surveys and claims data cannot
@@ -24,7 +24,7 @@ replicate.
 
 The method was pioneered in health disparities research by Asplin and
 colleagues (2005) and has since been applied to dozens of specialty
-access questions: do Medicaid patients wait longer for an orthopaedic
+access questions: do Medicaid patients wait longer for an orthopedic
 consultation? Are uninsured callers offered fewer same-month
 appointments than commercially insured callers? The `mysterycall`
 package implements all of the statistical routines needed to answer
@@ -46,7 +46,7 @@ different dimensions of access:
     resulted in an offered appointment (`appointment_offered == 1`), how
     many business days elapsed between the date of the call and the
     earliest available appointment? This is a non-negative integer count
-    and is analysed with a Poisson generalised linear model.
+    and is analyzed with a Poisson generalized linear model.
 
 It is important to understand that these two outcomes measure
 *different* barriers. A Medicaid patient might face a **binary** access
@@ -65,7 +65,7 @@ patient, once as a Medicare patient, and once as an uninsured
 patient—producing four observations per physician.
 
 This means that observations are *not* independent. Two calls to the
-same physician share the physician’s baseline acceptance behaviour,
+same physician share the physician’s baseline acceptance behavior,
 scheduling culture, and practice-level factors (urban vs. rural, solo
 vs. group practice, etc.). If you fit an ordinary logistic or Poisson
 regression that treats every call as an independent observation, you
@@ -84,7 +84,7 @@ The solution is to add a **physician-level random intercept** to the
 model. The random intercept absorbs each physician’s baseline tendency
 to offer appointments (or their baseline wait-time level), leaving the
 fixed effects to estimate the pure insurance-type contrast within
-physicians. This is a standard generalised linear mixed-effects model
+physicians. This is a standard generalized linear mixed-effects model
 (GLMM) approach, implemented in R by the `lme4` package.
 
 ### Preflight Validation
@@ -294,8 +294,8 @@ tail visible without distorting the modal value.
 As described in Section 1, the same physician is called multiple times.
 The random intercept γ_j for physician j captures that physician’s
 baseline tendency to have long or short wait times—whatever drives their
-scheduling behaviour that is *not* explained by the covariates.
-Formally, the model is:
+scheduling behavior that is *not* explained by the covariates. Formally,
+the model is:
 
 ``` math
 \log\!\bigl(E[\text{wait\_days}_{ij} \mid \gamma_j]\bigr)
@@ -535,7 +535,7 @@ poisson_fit_agq <- mysterycall_poisson_model(
 )
 
 # Option 2: If random variance is truly near zero, consider dropping the random
-# intercept and using a GEE (generalised estimating equation) approach instead.
+# intercept and using a GEE (generalized estimating equation) approach instead.
 # Note that GEE estimates population-average effects rather than subject-specific
 # effects—a meaningful difference in multilevel studies.
 ```
@@ -598,7 +598,7 @@ of raw wait times by insurance group. This serves two purposes:
 
 ``` r
 
-# Summarise wait times by insurance type
+# Summarize wait times by insurance type
 wait_summary <- mysterycall_wait_time_summary(
   data          = mc_data,
   wait_col      = "wait_days",
@@ -632,7 +632,7 @@ print(wait_summary)
 columns describe the distribution of wait times among calls that
 *received* an appointment (`n_offered`). The `pct_offered` column shows
 the percentage of calls resulting in an offered appointment—a preview of
-the binary disparity outcome analysed in Section 5.
+the binary disparity outcome analyzed in Section 5.
 
 Notice that median wait times are consistent with the IRR estimates from
 the model: Medicaid patients had a median wait of 18–21 days vs. 6–7
@@ -646,7 +646,7 @@ median*—these are different statistics.
 
 ``` r
 
-# Summarise at the insurance-type level (no subspecialty stratification)
+# Summarize at the insurance-type level (no subspecialty stratification)
 wait_summ_top <- mysterycall_wait_time_summary(
   data         = mc_data,
   wait_col     = "wait_days",
@@ -852,7 +852,7 @@ print(disparities_med_ref)
 
 Using Medicaid as the reference highlights that uninsured patients face
 *even lower* acceptance rates than Medicaid patients—an important
-finding that a Private-reference table would not emphasise.
+finding that a Private-reference table would not emphasize.
 
 ### 5.5 Common Mistake: Non-0/1 Outcome Column
 
@@ -1069,11 +1069,11 @@ ci_hi <- quantile(boot_diffs, 0.975)
 boot_plot_df <- data.frame(diff = boot_diffs)
 
 ggplot2::ggplot(boot_plot_df, ggplot2::aes(x = diff)) +
-  ggplot2::geom_histogram(bins = 50, fill = "#4393c3", colour = "white",
+  ggplot2::geom_histogram(bins = 50, fill = "#4393c3", color = "white",
                            linewidth = 0.2, alpha = 0.85) +
-  ggplot2::geom_vline(xintercept = obs_diff, linewidth = 1, colour = "#c0392b") +
+  ggplot2::geom_vline(xintercept = obs_diff, linewidth = 1, color = "#c0392b") +
   ggplot2::geom_vline(xintercept = c(ci_lo, ci_hi),
-                       linewidth = 0.8, linetype = "dashed", colour = "#333333") +
+                       linewidth = 0.8, linetype = "dashed", color = "#333333") +
   ggplot2::scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
   ggplot2::labs(
     x = "Medicaid - Private appointment-rate difference",
@@ -1212,7 +1212,7 @@ cat(results_text)
 #> after Holm-Bonferroni correction (p = .034).
 #>
 #> Among callers offered appointments, we modelled wait time in business days
-#> using a Poisson generalised linear mixed-effects model with a physician-level
+#> using a Poisson generalized linear mixed-effects model with a physician-level
 #> random intercept to account for within-physician correlation (40 physicians;
 #> intraclass correlation coefficient 0.089). The Pearson chi-squared
 #> overdispersion ratio was 1.08, indicating adequate model fit. Medicaid
@@ -1573,7 +1573,7 @@ results_para <- mysterycall_write_results_paragraph(
 )
 
 cat(results_para)
-#> We conducted 160 standardised mystery-caller calls to 40 unique physicians
+#> We conducted 160 standardized mystery-caller calls to 40 unique physicians
 #> (4 calls per physician, one per insurance type). Of calls to privately
 #> insured patients (reference group), 92.5% resulted in an offered appointment
 #> (95% Wilson CI: 80.2%-97.7%). Medicaid callers were offered appointments at
@@ -1588,8 +1588,8 @@ cat(results_para)
 #> Holm-adjusted p = .037).
 #>
 #> Among callers who were offered appointments (n = 119 observations from
-#> 40 physicians), we analysed wait time in business days using a Poisson
-#> generalised linear mixed-effects model with a physician-level random
+#> 40 physicians), we analyzed wait time in business days using a Poisson
+#> generalized linear mixed-effects model with a physician-level random
 #> intercept to account for within-physician clustering (intraclass correlation
 #> coefficient 0.073). The Pearson chi-squared overdispersion ratio was 1.12,
 #> indicating acceptable model fit. Medicaid callers waited 40% longer than
@@ -1645,7 +1645,7 @@ Cochran sample-size calculation for N = 800 providers, ±5 % margin.
 
 ### 10.2 Poisson Power for Wait-Time Disparities
 
-For the **count outcome** (wait days) analysed with a Poisson GLMM,
+For the **count outcome** (wait days) analyzed with a Poisson GLMM,
 power depends on the minimum detectable IRR, the reference-arm mean
 ($`\lambda_0`$), type I error, and whether each provider is called once
 (unpaired) or twice (paired with both insurance types):
@@ -1726,13 +1726,13 @@ n_seq    <- vapply(irr_seq, function(irr) {
 curve_df <- data.frame(irr = irr_seq, n_per_arm = n_seq)
 
 ggplot2::ggplot(curve_df, ggplot2::aes(x = irr, y = n_per_arm)) +
-  ggplot2::geom_line(colour = "#2166ac", linewidth = 1) +
-  ggplot2::geom_point(colour = "#2166ac", size = 2) +
+  ggplot2::geom_line(color = "#2166ac", linewidth = 1) +
+  ggplot2::geom_point(color = "#2166ac", size = 2) +
   ggplot2::geom_vline(xintercept = 1.40, linetype = "dashed",
-                       colour = "#c0392b", linewidth = 0.7) +
+                       color = "#c0392b", linewidth = 0.7) +
   ggplot2::annotate("text", x = 1.42, y = max(n_seq, na.rm = TRUE) * 0.9,
                      label = "IRR = 1.40\n(typical Medicaid gap)",
-                     hjust = 0, size = 3, colour = "#c0392b") +
+                     hjust = 0, size = 3, color = "#c0392b") +
   ggplot2::scale_x_continuous(breaks = seq(1.1, 2.0, 0.1)) +
   ggplot2::labs(
     x = "Minimum detectable IRR",

@@ -1,22 +1,16 @@
-# Physicians Dataset
+# Physician Location and Specialty Data
 
-This dataset contains information about physicians, including their NPI
-numbers, names, subspecialties, and geographic coordinates for mapping
-and analysis purposes.
-
-## Usage
-
-``` r
-physicians
-```
+This dataset contains a sample of physicians with their National
+Provider Identifier (NPI), name, subspecialty, and geographic
+coordinates.
 
 ## Format
 
-A data frame with 4659 rows and 5 columns:
+A data frame with 4659 observations and 5 variables:
 
 - NPI:
 
-  National Provider Identifier number.
+  National Provider Identifier (numeric).
 
 - name:
 
@@ -24,31 +18,25 @@ A data frame with 4659 rows and 5 columns:
 
 - subspecialty:
 
-  Subspecialty of the physician (e.g., Maternal-Fetal Medicine).
+  Physician's subspecialty.
 
 - lat:
 
-  Latitude coordinate of the physician's practice location.
+  Latitude coordinate of the physician's location.
 
 - long:
 
-  Longitude coordinate of the physician's practice location.
-
-## Source
-
-National Provider Identifier (NPI) registry data.
-
-## Value
-
-A tibble of physician records with NPI numbers, names, subspecialties,
-and geographic coordinates.
+  Longitude coordinate of the physician's location.
 
 ## See also
 
 Other datasets:
-[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
-[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md)
+[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
+[`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
+[`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
 ## Examples
 

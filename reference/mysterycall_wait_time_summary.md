@@ -1,4 +1,4 @@
-# Summarise appointment wait times
+# Summarize appointment wait times
 
 Computes descriptive statistics (n, mean, SD, median, IQR, range) for a
 numeric wait-time column and runs an appropriate non-parametric test

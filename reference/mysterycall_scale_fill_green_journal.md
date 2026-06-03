@@ -27,9 +27,9 @@ object.
 ## See also
 
 [`mysterycall_scale_color_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scale_color_green_journal.md)
-for colour aesthetics;
+for color aesthetics;
 [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md)
-for the underlying colour values.
+for the underlying color values.
 
 Other green-journal-colors:
 [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md),

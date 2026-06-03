@@ -2,7 +2,9 @@
 
 This dataset contains information about American College of
 Obstetricians and Gynecologists (ACOG) districts, including their
-two-letter state abbreviations and full state names.
+two-letter state abbreviations and full state names. It is useful for
+grouping states into regional districts for subgroup analysis in mystery
+caller studies.
 
 ## Format
 
@@ -38,8 +40,10 @@ corresponding two-letter abbreviation and full state name.
 
 Other datasets:
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
 ## Examples
@@ -49,30 +53,24 @@ Other datasets:
 data(acog_districts)
 
 # Inspect the dataset
-print(acog_districts)
-#> # A tibble: 52 × 4
-#>    State                ACOG_District Subregion     State_Abbreviations
-#>    <chr>                <chr>         <chr>         <chr>              
-#>  1 Alabama              District VII  District VII  AL                 
-#>  2 Alaska               District VIII District VIII AK                 
-#>  3 Arizona              District VIII District VIII AZ                 
-#>  4 Arkansas             District VII  District VII  AR                 
-#>  5 California           District IX   District IX   CA                 
-#>  6 Colorado             District VIII District VIII CO                 
-#>  7 Connecticut          District I    District I    CT                 
-#>  8 Delaware             District IV   District IV   DE                 
-#>  9 District of Columbia District IV   District IV   DC                 
-#> 10 Florida              District XII  District XII  FL                 
-#> # ℹ 42 more rows
+head(acog_districts)
+#> # A tibble: 6 × 4
+#>   State      ACOG_District Subregion     State_Abbreviations
+#>   <chr>      <chr>         <chr>         <chr>              
+#> 1 Alabama    District VII  District VII  AL                 
+#> 2 Alaska     District VIII District VIII AK                 
+#> 3 Arizona    District VIII District VIII AZ                 
+#> 4 Arkansas   District VII  District VII  AR                 
+#> 5 California District IX   District IX   CA                 
+#> 6 Colorado   District VIII District VIII CO                 
 
-# Get a summary of the dataset
-summary(acog_districts)
-#>        State      ACOG_District     Subregion  State_Abbreviations
-#>  Length   :52   Length   :52    Length   :52   Length   :52       
-#>  N.unique :52   N.unique :11    N.unique :11   N.unique :52       
-#>  N.blank  : 0   N.blank  : 0    N.blank  : 0   N.blank  : 0       
-#>  Min.nchar: 4   Min.nchar:10    Min.nchar:10   Min.nchar: 2       
-#>  Max.nchar:20   Max.nchar:13    Max.nchar:13   Max.nchar: 2       
-
-# Perform data analysis and exploration
+# Group by district
+table(acog_districts$ACOG_District)
+#> 
+#>    District I   District II  District III   District IV   District IX 
+#>             6             1             2             9             1 
+#>    District V   District VI  District VII District VIII   District XI 
+#>             4             7             8            12             1 
+#>  District XII 
+#>             1 
 ```

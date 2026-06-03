@@ -1,57 +1,50 @@
-# ACOG Presidents Data
+# ACOG Past Presidents
 
-This dataset contains information about past presidents of the American
-College of Obstetricians and Gynecologists (ACOG).
-
-## Usage
-
-``` r
-acog_presidents
-```
+This dataset contains historical records of American College of
+Obstetricians and Gynecologists (ACOG) past presidents.
 
 ## Format
 
-A data frame with 71 rows and 6 columns:
+A data frame with past presidents information:
 
 - first:
 
-  First name of the ACOG president.
+  First name of the president.
 
 - last:
 
-  Last name of the ACOG president.
+  Last name of the president.
 
 - middle:
 
-  Middle name or initial of the ACOG president.
+  Middle name or initial.
 
 - President:
 
-  Full name of the ACOG president.
+  Full name as originally formatted.
 
 - honorrific:
 
-  Honorific or credential (e.g., MD).
+  Honorific titles (e.g., MD, FACOG).
 
 - Presidency:
 
-  Year of presidency.
+  Year their presidency began.
 
 ## Source
 
-American College of Obstetricians and Gynecologists (ACOG) historical
-records.
-
-## Value
-
-A tibble listing ACOG presidents with their names and year of service.
+Scraped from the official ACOG website:
+<https://www.acog.org/about/leadership-and-governance/board-of-directors/past-presidents>
 
 ## See also
 
 Other datasets:
-[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
-[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md)
+[`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
+[`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
+[`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
 ## Examples
 

@@ -55,10 +55,10 @@ through writing the final analysis-ready data set.
                  ▼
       ┌─────────────────────┐
       │  Phase 2 Cleaning   │  mysterycall_rename_columns()
-      │  · harmonise cols   │  mysterycall_clean_phase2()
+      │  · harmonize cols   │  mysterycall_clean_phase2()
       │  · parse outcomes   │
       └──────────┬──────────┘
-                 │  standardised outcome data
+                 │  standardized outcome data
                  ▼
       ┌─────────────────────┐
       │  Quality Check      │  mysterycall_save_quality_table()
@@ -79,7 +79,7 @@ turn a raw export from NPPES (or a similar roster) into a clean,
 validated list that is ready to be handed to field callers. Concretely,
 Phase 1:
 
-- Strips whitespace and normalises letter case in provider names.
+- Strips whitespace and normalizes letter case in provider names.
 - Validates and formats phone numbers.
 - Assigns a reproducible random study ID to every row, including rows
   where the NPI is missing.
@@ -92,8 +92,8 @@ Phase 1:
   traceable.
 
 **Phase 2** happens *after* callers return their completed workbooks.
-Its job is to harmonise the heterogeneous column names that inevitably
-accumulate across five or ten individual Excel files and to normalise
+Its job is to harmonize the heterogeneous column names that inevitably
+accumulate across five or ten individual Excel files and to normalize
 the free-text outcome values (e.g., “yes”, “YES”, “Y”, “offered” → a
 single canonical code) so that the merged file is analysis-ready.
 
@@ -422,7 +422,7 @@ scenarios appear within each workbook. If a provider appears once for
 Medicaid and once for Private insurance (because `duplicate_rows = TRUE`
 was used in Phase 1), the caller will see the Medicaid row first and the
 Private row second within their workbook. This is useful for
-standardising the call script order.
+standardizing the call script order.
 
 **`seed = 1978`** — the default seed has been the package default since
 version 1.0 and is the recommended value for all studies unless your
@@ -511,7 +511,7 @@ if (any(npi_counts > 1)) {
 ## 5. Phase 2 Cleaning: `mysterycall_clean_phase2()` and `mysterycall_rename_columns()`
 
 After field callers return their completed workbooks, the returned files
-must be merged and standardised. This is Phase 2. The core challenge is
+must be merged and standardized. This is Phase 2. The core challenge is
 that callers — despite receiving identical templates — often rename
 columns, insert their own columns, or spell outcome values differently.
 Phase 2 handles all of this programmatically.
@@ -530,14 +530,14 @@ Even with a rigid Excel template, callers rename columns in practice:
 
 [`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md)
 resolves this via **fuzzy substring matching**. You provide a list of
-target substrings to look for and the standardised names to replace them
+target substrings to look for and the standardized names to replace them
 with.
 
 ### 5.2 `mysterycall_rename_columns()`: fuzzy column name matching
 
 ``` r
 
-# Standardise column names across all returned workbooks
+# Standardize column names across all returned workbooks
 renamed <- mysterycall_rename_columns(
   data           = raw_returned_workbook,
   target_strings = c("appt", "wait", "insurance", "outcome", "caller"),
@@ -551,7 +551,7 @@ renamed <- mysterycall_rename_columns(
 function looks for each substring anywhere in the column name.
 
 **`new_names`** — a character vector of the same length as
-`target_strings`. Each element is the standardised name to assign when
+`target_strings`. Each element is the standardized name to assign when
 the corresponding substring is found.
 
 If a target substring does not match any column in the data, the
@@ -594,7 +594,7 @@ When `data` is already a **data frame**, it is processed directly. This
 is useful when you have already combined the workbooks manually or want
 to process a single file.
 
-A complete example showing messy column normalisation:
+A complete example showing messy column normalization:
 
 ``` r
 
@@ -614,7 +614,7 @@ bob_wb <- data.frame(
   wait_days           = c(7L, 21L)
 )
 
-# Phase 2 standardises both:
+# Phase 2 standardizes both:
 # After mysterycall_rename_columns() each workbook will have:
 #   npi, provider_last_name_legal_name, appointment_offered, wait_days
 ```
@@ -699,7 +699,7 @@ only those 12 codes. The function computes the set difference between
 `all_states` and the states present in `data` where `call_outcome` is
 non-missing.
 
-### 7.2 Visualising contacted vs not-contacted states
+### 7.2 Visualizing contacted vs not-contacted states
 
 ``` r
 
@@ -719,7 +719,7 @@ print(table(status_vec))
 #>         43             7
 ```
 
-### 7.3 Filtering for follow-up prioritisation
+### 7.3 Filtering for follow-up prioritization
 
 ``` r
 
@@ -754,7 +754,7 @@ intermediate and final artifacts.
 | Parameter | Type | Default | Description |
 |----|----|----|----|
 | `taxonomy_terms` | `character` | required | NUCC taxonomy codes for NPI search |
-| `name_data` | `data.frame` | required | Provider name crosswalk (for name standardisation) |
+| `name_data` | `data.frame` | required | Provider name crosswalk (for name standardization) |
 | `phase1_data` | `data.frame` or path | required | Raw roster for Phase 1 |
 | `lab_assistant_names` | `character` | required | Caller names for workbook splitting |
 | `output_directory` | `character` | required | Root output directory (Phase 1 and workbooks) |
@@ -864,7 +864,7 @@ knitr::kable(
 
 The 0.4% row drop between split_workbooks and phase2_clean (6 rows) is
 typical: it reflects rows that callers deleted from their workbooks,
-possibly because they realised a phone number was a fax line or the
+possibly because they realized a phone number was a fax line or the
 provider had retired. Document these exclusions in your CONSORT
 flowchart.
 

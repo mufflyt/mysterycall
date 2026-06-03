@@ -1,6 +1,6 @@
 # Recode raw physician credential strings to MD, DO, or Other
 
-Normalises the messy free-text values found in NPPES
+Normalizes the messy free-text values found in NPPES
 `Provider.Credential.Text` (and similar fields) to one of three
 canonical labels. Matching is case-insensitive; MD is checked before DO
 so that `"MD/PhD"` maps to `"MD"` rather than falling through.

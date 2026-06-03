@@ -49,6 +49,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -99,7 +100,7 @@
 <div class="section level2">
 <h2 id="statement-of-need">Statement of Need<a class="anchor" aria-label="anchor" href="#statement-of-need"></a>
 </h2>
-<p>Measuring patient access to healthcare requires assembling a provider roster, placing calls under a standardised script, recording wait times and refusal rates, and then modelling disparities by insurance type, race, or geography. Each step involves bespoke data-engineering work that research teams currently solve ad hoc: custom scripts to loop around the NPI API’s 1,200-record cap, manual regular expressions to parse name fields, silent <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> calls that multiply rows when a lookup table has duplicates, and hand-crafted Poisson models that lack overdispersion diagnostics.</p>
+<p>Measuring patient access to healthcare requires assembling a provider roster, placing calls under a standardized script, recording wait times and refusal rates, and then modelling disparities by insurance type, race, or geography. Each step involves bespoke data-engineering work that research teams currently solve ad hoc: custom scripts to loop around the NPI API’s 1,200-record cap, manual regular expressions to parse name fields, silent <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> calls that multiply rows when a lookup table has duplicates, and hand-crafted Poisson models that lack overdispersion diagnostics.</p>
 <p><strong>mysterycall</strong> consolidates this work into a single, tested, documented pipeline. It provides taxonomy-based NPI search that bypasses the record cap, NANP phone validation with state-geography checks, physician name parsing with credential and surname disambiguation, safe join wrappers that enforce coverage and uniqueness guarantees, drive-time isochrone generation, Census demographic overlay, Poisson mixed-effects modelling with IRR reporting, and publication-ready table and map export. The target users are clinical researchers and health-services researchers who conduct mystery-caller or audit studies and need reproducible, auditable workflows rather than one-off scripts.</p>
 <hr>
 <p><strong>mysterycall</strong> provides a toolkit for mystery caller and audit studies that evaluate patient access to healthcare. It handles the full workflow: finding providers in the NPI registry, validating and geocoding their addresses, generating drive-time isochrones, overlaying Census demographics, and producing publication-ready tables and maps.</p>
@@ -405,7 +406,7 @@
 <tr>
 <td><strong>Maps</strong></td>
 <td><code><a href="reference/mysterycall_map_physicians.html">mysterycall_map_physicians()</a></code></td>
-<td>Interactive Leaflet dot map coloured by ACOG district</td>
+<td>Interactive Leaflet dot map colored by ACOG district</td>
 </tr>
 <tr>
 <td></td>

@@ -21,6 +21,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -100,8 +101,8 @@
 <p>Released 2026-05-08.</p>
 <div class="section level3">
 <h3 id="collision-breaking-changes-with-backward-compatibility-1-3-0">💥 Breaking changes (with backward compatibility)<a class="anchor" aria-label="anchor" href="#collision-breaking-changes-with-backward-compatibility-1-3-0"></a></h3>
-<ul><li>Package renamed from <code>tyler</code> to <code>mysterycall</code>. <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(tyler)</a></code> will no longer work; use <code><a href="https://mufflyt.github.io/mysterycall/">library(mysterycall)</a></code>.</li>
-<li>All 100 exported functions now carry the <code>mysterycall_</code> prefix (e.g., <code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code>, <code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>). The previous <code>tyler_</code> prefix names are retained as deprecated shims that emit a warning and forward to the new name. The even-older unprefixed names (e.g., <code><a href="../reference/mysterycall-deprecated.html">check_normality()</a></code>) continue to work as double-deprecated shims.</li>
+<ul><li>Package renamed from <code>mysterycall</code> to <code>mysterycall</code>. <code><a href="https://mufflyt.github.io/mysterycall/">library(mysterycall)</a></code> will no longer work; use <code><a href="https://mufflyt.github.io/mysterycall/">library(mysterycall)</a></code>.</li>
+<li>All 100 exported functions now carry the <code>mysterycall_</code> prefix (e.g., <code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code>, <code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>). The previous <code>mysterycall_</code> prefix names are retained as deprecated shims that emit a warning and forward to the new name. The even-older unprefixed names (e.g., <code><a href="../reference/mysterycall-deprecated.html">check_normality()</a></code>) continue to work as double-deprecated shims.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="sparkles-new-functions-1-3-0">✨ New functions<a class="anchor" aria-label="anchor" href="#sparkles-new-functions-1-3-0"></a></h3>
@@ -142,7 +143,7 @@
 <p>Released 2026-05-04.</p>
 <div class="section level3">
 <h3 id="bug-bug-fixes-1-2-2">🐛 Bug fixes<a class="anchor" aria-label="anchor" href="#bug-bug-fixes-1-2-2"></a></h3>
-<ul><li><p><code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(tyler)</a></code> no longer crashes R or causes system memory exhaustion. Seven heavy packages (<code>ggmap</code>, <code>ggspatial</code>, <code>hereR</code>, <code>leaflet</code>, <code>leaflet.extras</code>, <code>lme4</code>, <code>censusapi</code>) were moved from <code>Imports</code> to <code>Suggests</code> so their compiled spatial libraries (GDAL, GEOS, PROJ) are loaded <strong>only when the relevant function is first called</strong>, not on package attach. Two packages declared in <code>Imports</code> but never called (<code>tigris</code>, <code>effects</code>) were removed entirely.</p></li>
+<ul><li><p><code><a href="https://mufflyt.github.io/mysterycall/">library(mysterycall)</a></code> no longer crashes R or causes system memory exhaustion. Seven heavy packages (<code>ggmap</code>, <code>ggspatial</code>, <code>hereR</code>, <code>leaflet</code>, <code>leaflet.extras</code>, <code>lme4</code>, <code>censusapi</code>) were moved from <code>Imports</code> to <code>Suggests</code> so their compiled spatial libraries (GDAL, GEOS, PROJ) are loaded <strong>only when the relevant function is first called</strong>, not on package attach. Two packages declared in <code>Imports</code> but never called (<code>tigris</code>, <code>effects</code>) were removed entirely.</p></li>
 <li><p><code><a href="../reference/mysterycall-deprecated.html">create_isochrones()</a></code> no longer accumulates memoized results in RAM indefinitely. The internal memoization object is now exposed through <code><a href="../reference/mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>. Call it after processing a large batch to reclaim memory.</p></li>
 <li><p><code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> and <code><a href="../reference/mysterycall-deprecated.html">create_individual_isochrone_plots()</a></code> previously called <code><a href="https://rdrr.io/pkg/beepr/man/beep.html" class="external-link">beepr::beep()</a></code> unconditionally even though <code>beepr</code> is a suggested package. Both calls are now guarded with <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace()</a></code>.</p></li>
 </ul></div>
@@ -166,7 +167,7 @@
 <div class="section level3">
 <h3 id="pencil-documentation-1-2-1">📝 Documentation<a class="anchor" aria-label="anchor" href="#pencil-documentation-1-2-1"></a></h3>
 <ul><li>Released to align all metadata artifacts with the package website and codemeta specification.</li>
-<li>Introduced an <strong>Imotive News &amp; Changelog</strong> vignette centralising release notes.</li>
+<li>Introduced an <strong>Imotive News &amp; Changelog</strong> vignette centralizing release notes.</li>
 <li>Documented how <code><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> coordinates roster creation, validation, call preparation, and QA for Imotive projects.</li>
 </ul></div>
 <div class="section level3">

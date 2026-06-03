@@ -1,4 +1,4 @@
-# Visualise estimated marginal means for an interaction
+# Visualize estimated marginal means for an interaction
 
 Calls
 [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html)
@@ -23,7 +23,7 @@ mysterycall_plot_emmeans_interaction(model, specs, variable, use_color = TRUE)
 
   Character vector of marginal mean specifications passed to `emmeans`.
   Typically `c("exposure", "moderator")`. The first element maps to the
-  x-axis; the second (if present) maps to the grouping/colour aesthetic.
+  x-axis; the second (if present) maps to the grouping/color aesthetic.
 
 - variable:
 
@@ -31,7 +31,7 @@ mysterycall_plot_emmeans_interaction(model, specs, variable, use_color = TRUE)
 
 - use_color:
 
-  Logical. If `TRUE` (default), groups are distinguished by colour. If
+  Logical. If `TRUE` (default), groups are distinguished by color. If
   `FALSE`, a greyscale bar chart is drawn instead.
 
 ## Value

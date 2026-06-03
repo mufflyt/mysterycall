@@ -14,7 +14,7 @@ mysterycall_plot_distribution(x, title = NULL, bins = 30L)
 
 - x:
 
-  Numeric vector to visualise.
+  Numeric vector to visualize.
 
 - title:
 

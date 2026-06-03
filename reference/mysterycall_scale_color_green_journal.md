@@ -30,7 +30,7 @@ object.
 [`mysterycall_scale_fill_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scale_fill_green_journal.md)
 for fill aesthetics;
 [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md)
-for the underlying colour values.
+for the underlying color values.
 
 Other green-journal-colors:
 [`mysterycall_palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_palette_green_journal.md),

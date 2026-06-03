@@ -27,7 +27,7 @@ docs](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://mufflyt.githu
 ## Statement of Need
 
 Measuring patient access to healthcare requires assembling a provider
-roster, placing calls under a standardised script, recording wait times
+roster, placing calls under a standardized script, recording wait times
 and refusal rates, and then modelling disparities by insurance type,
 race, or geography. Each step involves bespoke data-engineering work
 that research teams currently solve ad hoc: custom scripts to loop
@@ -166,7 +166,7 @@ output.
 |  | [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md) | Release the in-session memoization cache |
 | **Census** | [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md) | ACS block-group demographics by state FIPS |
 |  | [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md) | Overlap area between isochrones and block groups |
-| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map coloured by ACOG district |
+| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map colored by ACOG district |
 |  | [`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md) | Block-group overlap map exported to HTML + PNG |
 |  | [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md) | Hexagon density map by Hospital Referral Region |
 | **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |

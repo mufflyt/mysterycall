@@ -2,7 +2,7 @@
 
 Wraps
 [`dplyr::inner_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
-with key-type harmonisation, optional uniqueness assertion on both
+with key-type harmonization, optional uniqueness assertion on both
 tables, coverage enforcement, and an optional CSV audit record.
 
 ## Usage

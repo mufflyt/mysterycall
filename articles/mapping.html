@@ -42,6 +42,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -184,7 +185,7 @@ building the sf object:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Arkansas   District VII  District VII  AR                 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> California District IX   District IX   CA                 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Colorado   District VIII District VIII CO</span></span></code></pre></div>
-<p>The table below summarises how many states each district covers:</p>
+<p>The table below summarizes how many states each district covers:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">acog_districts</span><span class="op">)</span></span>
 <span><span class="va">dist_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">State</span> <span class="op">~</span> <span class="va">ACOG_District</span>, data <span class="op">=</span> <span class="va">acog_districts</span>, FUN <span class="op">=</span> <span class="va">length</span><span class="op">)</span></span>

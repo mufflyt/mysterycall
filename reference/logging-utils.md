@@ -13,3 +13,11 @@ each function's own help page for its return value.
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_progress.md)
+
+## Examples
+
+``` r
+# Topic group; see individual function help pages for runnable examples.
+NULL
+#> NULL
+```

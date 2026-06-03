@@ -1,10 +1,12 @@
 # Data of FIPS codes
 
-3 columns with 51 observations.
+This dataset maps state and county names to Federal Information
+Processing Standards (FIPS) codes, which are essential for merging
+spatial and census data in healthcare access research.
 
 ## Format
 
-A tibble with 243 rows and 10 variables containing Federal Information
+A tibble with 3142 rows and 10 variables containing Federal Information
 Processing Standards (FIPS) codes for states and counties:
 
 - state:
@@ -56,5 +58,21 @@ Processing Standards (FIPS) codes for states and counties:
 Other datasets:
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
+
+## Examples
+
+``` r
+data(fips)
+head(fips)
+#>     state state_code state_name
+#> 1      AL         01    Alabama
+#> 68     AK         02     Alaska
+#> 97     AZ         04    Arizona
+#> 112    AR         05   Arkansas
+#> 187    CA         06 California
+#> 245    CO         08   Colorado
+```

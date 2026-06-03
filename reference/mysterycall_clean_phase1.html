@@ -27,6 +27,7 @@ NPI numbers are handled by generating a unique random_id."><meta property="og:im
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -223,7 +224,7 @@ for downstream reproducibility tooling.</p>
     <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a></h2>
 
 
-<p>O(n) in number of rows. String normalisation via <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code> and
+<p>O(n) in number of rows. String normalization via <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code> and
 <code>stringr</code> dominates; expect &lt; 1 s for 1,000 rows on modern hardware.</p>
     </div>
     <div class="section level2">

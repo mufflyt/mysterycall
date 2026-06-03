@@ -27,7 +27,7 @@ docs](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://mufflyt.githu
 ## Statement of Need
 
 Measuring patient access to healthcare requires assembling a provider
-roster, placing calls under a standardised script, recording wait times
+roster, placing calls under a standardized script, recording wait times
 and refusal rates, and then modelling disparities by insurance type,
 race, or geography. Each step involves bespoke data-engineering work
 that research teams currently solve ad hoc: custom scripts to loop
@@ -166,7 +166,7 @@ output.
 |  | [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md) | Release the in-session memoization cache |
 | **Census** | [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md) | ACS block-group demographics by state FIPS |
 |  | [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md) | Overlap area between isochrones and block groups |
-| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map coloured by ACOG district |
+| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map colored by ACOG district |
 |  | [`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md) | Block-group overlap map exported to HTML + PNG |
 |  | [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md) | Hexagon density map by Hospital Referral Region |
 | **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |
@@ -276,7 +276,7 @@ full text.
 - [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md) :
   ACGME OBGYN Residency Data
 - [`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md)
-  : ACOG Presidents Data
+  : ACOG Past Presidents
 - [`census_summaries`](https://mufflyt.github.io/mysterycall/reference/census_summaries.md)
   : Summarize Census Block Group Demographics
 - [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md)
@@ -284,7 +284,7 @@ full text.
 - [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md) :
   Data of FIPS codes
 - [`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md)
-  : Physicians Dataset
+  : Physician Location and Specialty Data
 - [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
   : Taxonomy Codes for Obstetricians and Gynecologists
 
@@ -534,7 +534,7 @@ missing values.
 - [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md)
   : Flag physicians called more than the allowed number of times
 - [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
-  : Standardise demographic variables for Table 1
+  : Standardize demographic variables for Table 1
 - [`mysterycall_assign_scenarios()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_scenarios.md)
   : Assign call scenarios to generalist providers
 - [`data_utils`](https://mufflyt.github.io/mysterycall/reference/data_utils.md)
@@ -568,7 +568,7 @@ Poisson modeling.
 - [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
   : Compute appointment acceptance rates
 - [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
-  : Summarise appointment wait times
+  : Summarize appointment wait times
 - [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
   : Fit a Poisson GLMER for mystery caller wait-time analysis
 - [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md)
@@ -606,7 +606,7 @@ marginal effects, and wave-over-wave comparisons.
 - [`mysterycall_plot_emmeans_full()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_full.md)
   : Full emmeans interaction plot with optional file save
 - [`mysterycall_plot_emmeans_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_interaction.md)
-  : Visualise estimated marginal means for an interaction
+  : Visualize estimated marginal means for an interaction
 - [`mysterycall_plot_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_effect.md)
   : Plot marginal effects for a single model term
 - [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md)
@@ -757,7 +757,7 @@ output tables.
 - [`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md)
   : Summarize States Where Physicians Were NOT Contacted
 - [`mysterycall_physician_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physician_age.md)
-  : Summarise physician age as median (IQR) text
+  : Summarize physician age as median (IQR) text
 - [`mysterycall_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_most_common_gender.md)
   : Generate a Summary Sentence for the Most Common Gender, Specialty,
   Training, and Academic Affiliation
@@ -922,9 +922,6 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 - [`mysterycall_write_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table.md)
   : Write a data frame to a tabular file (CSV or Parquet)
 
-- [`utility_library`](https://mufflyt.github.io/mysterycall/reference/utility_library.md)
-  : Utility helpers for mysterycall workflows
-
 - [`mysterycall_tempdir()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_tempdir.md)
   : Internal helper for package-specific temporary directories
 
@@ -988,105 +985,13 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
   [`progress_tracker_update()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   [`progress_tracker_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   : Deprecated functions in mysterycall
-- [`tyler_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_data_completeness()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_dependencies()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_no_data_loss()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_no_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_check_normality()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_create_formula()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_download_file()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_format_duration()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_format_pct()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_genderize()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_geocode()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_hrr()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_error()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_info()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_progress()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_save()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_step()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_success()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_log_warning()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_map_base()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_map_leaflet()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_max_table()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_min_table()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_multi_complete()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_multi_done()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_multi_step()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_multi_update()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_physician_age()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_density()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_isochrones()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_line()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_plot_scatter()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_bar()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_callback()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_done()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_fail()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_map()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_start()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_summary()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_tracker()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_progress_update()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_spinner_start()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_spinner_stop()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_standard_labels()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_standard_palette()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_summarize_census()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_table_overall()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_use_quiet_logging()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_workflow_end()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_workflow_start()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  [`tyler_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)
-  : Deprecated tyler\_ prefix functions
 
 # Articles
 
 ### Getting Started
+
+- [Getting Started with
+  mysterycall](https://mufflyt.github.io/mysterycall/articles/getting_started.md):
 
 - [Searching the NPI Database Starting with Taxonomy
   Codes](https://mufflyt.github.io/mysterycall/articles/my-vignette.md):

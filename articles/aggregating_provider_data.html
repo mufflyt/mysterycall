@@ -51,6 +51,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -180,7 +181,7 @@ the coordinates back.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">npi</span>, <span class="va">address</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>After geocoding and travel-time modelling, join the geography back.
 The safe join warns if site addresses don’t round-trip cleanly — a
-common problem when the geocoder normalises whitespace or abbreviations
+common problem when the geocoder normalizes whitespace or abbreviations
 differently from the original roster.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysis_with_geo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>

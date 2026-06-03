@@ -2,7 +2,8 @@
 
 Information about Obstetricians and Gynecologists (OBGYN) residency
 programs accredited by the Accreditation Council for Graduate Medical
-Education (ACGME).
+Education (ACGME). This data is often used as a gold-standard indicator
+for academic practice settings when classifying provider locations.
 
 ## Format
 
@@ -584,8 +585,10 @@ A data frame with 142 columns:
 
 Other datasets:
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
 ## Examples

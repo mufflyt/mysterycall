@@ -51,6 +51,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -435,7 +436,7 @@ render names in a consistent house style:</p>
 </h3>
 <p>The function ships with 13 known-difficult cases (DO credential,
 Vietnamese surnames, three-part comma, hyphenated names) that you can
-run at any time to verify parser behaviour after an upgrade:</p>
+run at any time to verify parser behavior after an upgrade:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_test_name_parser.html">mysterycall_test_name_parser</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -572,7 +573,7 @@ these failures loud.</p>
 <span><span class="co">#&gt; 3 3333333333 2025-01-12   &lt;NA&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="key-type-harmonisation">Key-type harmonisation<a class="anchor" aria-label="anchor" href="#key-type-harmonisation"></a>
+<h3 id="key-type-harmonization">Key-type harmonization<a class="anchor" aria-label="anchor" href="#key-type-harmonization"></a>
 </h3>
 <p>If one table stores NPI as integer and the other as character, a
 plain join silently returns zero matches. The safe join coerces both

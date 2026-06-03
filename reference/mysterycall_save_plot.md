@@ -50,7 +50,7 @@ mysterycall_save_plot(
 
 - bg:
 
-  Character scalar. Background colour. Default `"white"`.
+  Character scalar. Background color. Default `"white"`.
 
 - ...:
 

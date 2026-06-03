@@ -27,7 +27,7 @@ mysterycall_check_generalist_presence(
 - location_cols:
 
   Character vector of column names that together define a unique
-  location (e.g. `c("city", "state_code")`). Values are normalised to
+  location (e.g. `c("city", "state_code")`). Values are normalized to
   lower-case before joining.
 
 - specialty_col:

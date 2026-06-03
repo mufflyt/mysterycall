@@ -51,6 +51,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -136,7 +137,7 @@ confidence intervals. An adjusted odds ratio or risk ratio from a
 logistic or Poisson regression model appears alongside.</p>
 <p><strong>Table 3 — Wait times by subspecialty (or insurance
 type)</strong> For studies that record how many days until the next
-available appointment, Table 3 summarises the wait-time distribution.
+available appointment, Table 3 summarizes the wait-time distribution.
 Because wait times are right-skewed and often overdispersed, medians and
 interquartile ranges are more appropriate than means and standard
 deviations, and Poisson or negative binomial model summaries are often
@@ -149,7 +150,7 @@ the journal’s online supplement.</p>
 <p><strong>Prerequisite:</strong>
 <code><a href="../reference/mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> (documented in the
 provider-classification vignette) must be run before calling any of the
-table functions in this vignette. That function creates the standardised
+table functions in this vignette. That function creates the standardized
 columns (<code>age_category</code>, <code>gender_std</code>,
 <code>ruca_category</code>, <code>region_std</code>) that the table
 functions expect.</p>
@@ -246,7 +247,7 @@ generate an unstratified table with a single “Overall” column.</p>
 stratification columns, showing counts and percentages across the full
 sample regardless of stratum.</p>
 <p><strong><code>cont_stats</code></strong> — controls how continuous
-variables (e.g., <code>wait_days</code>) are summarised: *
+variables (e.g., <code>wait_days</code>) are summarized: *
 <code>"mean_sd"</code>: Mean ± SD, appropriate when the distribution is
 approximately normal. * <code>"median_iqr"</code>: Median [IQR],
 appropriate for right-skewed variables like wait times. *
@@ -626,7 +627,7 @@ without parsing formatted strings.</p>
 <h2 id="disparity-table-for-a-manuscript-mysterycall_disparities_table">7. Disparity Table for a Manuscript:
 <code>mysterycall_disparities_table()</code><a class="anchor" aria-label="anchor" href="#disparity-table-for-a-manuscript-mysterycall_disparities_table"></a>
 </h2>
-<p>The disparity table is the centrepiece of a mystery-caller
+<p>The disparity table is the centerpiece of a mystery-caller
 manuscript. It reports the primary statistical comparison — whether
 Medicaid callers were significantly less likely to be offered an
 appointment than private-insurance callers — with full model-based
@@ -958,12 +959,12 @@ type<a class="anchor" aria-label="anchor" href="#step-2-table-2-appointment-acce
 <h3 id="step-3-table-3-median-wait-days-by-insurance-type">10.4 Step 3 — Table 3: Median wait days by insurance type<a class="anchor" aria-label="anchor" href="#step-3-table-3-median-wait-days-by-insurance-type"></a>
 </h3>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summarise wait times by insurance type using the Poisson model summary</span></span>
+<code class="sourceCode R"><span><span class="co"># Summarize wait times by insurance type using the Poisson model summary</span></span>
 <span><span class="co"># (assumes mysterycall_poisson_model() has been run — see stats vignette)</span></span>
 <span><span class="va">wait_summary</span> <span class="op">&lt;-</span> <span class="va">analysis_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">wait_days</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">insurance_type</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
 <span>    n            <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    median_days  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">wait_days</span><span class="op">)</span>,</span>
 <span>    q1           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">wait_days</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>

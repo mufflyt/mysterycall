@@ -48,17 +48,17 @@ mysterycall_normalize_address_df(
 
 ## Value
 
-The input data frame with the original address columns normalised
+The input data frame with the original address columns normalized
 in-place plus five new derived columns:
 
 - `address1_norm`:
 
-  Character. Fully normalised primary address (ASCII, directionals,
-  suffixes, and units standardised).
+  Character. Fully normalized primary address (ASCII, directionals,
+  suffixes, and units standardized).
 
 - `address2_norm`:
 
-  Character or `NA_character_`. Normalised secondary address.
+  Character or `NA_character_`. Normalized secondary address.
 
 - `address1_no_unit`:
 

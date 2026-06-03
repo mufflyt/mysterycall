@@ -1,6 +1,6 @@
 # Compute per-caller productivity metrics
 
-Summarises call volume, scheduling rates, and time metrics for each
+Summarizes call volume, scheduling rates, and time metrics for each
 caller in a mystery caller dataset.
 
 ## Usage

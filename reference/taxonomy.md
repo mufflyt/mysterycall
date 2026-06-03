@@ -33,8 +33,10 @@ ACGME residency program data.
 Other datasets:
 [`acgme`](https://mufflyt.github.io/mysterycall/reference/acgme.md),
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
+[`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
-[`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md)
+[`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md)
 
 ## Examples
 

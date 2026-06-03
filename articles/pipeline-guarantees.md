@@ -79,7 +79,7 @@ applies transformations in this fixed order:
     Input data frame
           │
           ▼
-    janitor::clean_names()          ← normalise column names
+    janitor::clean_names()          ← normalize column names
           │
           ▼
     type_convert()                  ← coerce column types
@@ -114,7 +114,7 @@ Each stage is idempotent when re-run on already-flagged data.
 **Deterministic cleaning:**
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
 applied to the same input with the same parameters always produces
-byte-identical output. Column reordering, name normalisation via
+byte-identical output. Column reordering, name normalization via
 [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html),
 and NPI formatting are all deterministic.
 

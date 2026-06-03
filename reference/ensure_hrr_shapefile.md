@@ -21,3 +21,13 @@ ensure_hrr_shapefile(quiet = TRUE)
 ## Value
 
 The absolute path to the HRR boundary shapefile.
+
+## Examples
+
+``` r
+# \donttest{
+mysterycall:::ensure_hrr_shapefile()
+#> Downloading HRR boundary shapefile (~8 MB). This is a one-time operation.
+#> Error: Failed to retrieve the HRR boundary shapefile. Please try again or download it manually from https://data.dartmouthatlas.org/supplemental/.
+# }
+```

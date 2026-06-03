@@ -39,7 +39,7 @@ Also emits a histogram + density plot and a Q-Q plot via side effects.
 ## See also
 
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
-for downstream variable standardisation;
+for downstream variable standardization;
 [`mysterycall_physician_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physician_age.md)
 for age summary statistics.
 

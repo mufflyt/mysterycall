@@ -34,12 +34,12 @@ mysterycall_plot_emmeans_full(
 
   Character vector of marginal mean specifications. The first element is
   the x-axis variable; the second (if present) becomes the grouping
-  variable for colour / shape.
+  variable for color / shape.
 
 - variable:
 
   Character scalar used as the x-axis label (underscores are replaced
-  with spaces and the first letter is capitalised).
+  with spaces and the first letter is capitalized).
 
 - group_col:
 
@@ -55,7 +55,7 @@ mysterycall_plot_emmeans_full(
 
 - use_color:
 
-  Logical. `TRUE` (default) uses colour to distinguish groups; `FALSE`
+  Logical. `TRUE` (default) uses color to distinguish groups; `FALSE`
   uses shapes and linetypes for greyscale output.
 
 - save_path:

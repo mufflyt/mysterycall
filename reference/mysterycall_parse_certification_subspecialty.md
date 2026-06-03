@@ -38,7 +38,7 @@ Character vector the same length as `cert_type`. Values are one of
 
 ## Authoritative subspecialty source
 
-This function is the **only authorised way** to derive subspecialty
+This function is the **only authorized way** to derive subspecialty
 labels in the mysterycall workflow. NPPES (`taxonomies_desc`) and DAC
 (Data at CMS) taxonomy codes reflect broad specialty groupings and must
 not be used to assign subspecialty. Pass the output of this function as

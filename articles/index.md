@@ -2,6 +2,9 @@
 
 ### Getting Started
 
+- [Getting Started with
+  mysterycall](https://mufflyt.github.io/mysterycall/articles/getting_started.md):
+
 - [Searching the NPI Database Starting with Taxonomy
   Codes](https://mufflyt.github.io/mysterycall/articles/my-vignette.md):
 

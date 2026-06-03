@@ -264,7 +264,7 @@ mysterycall_format_physician_name(
 
 The function ships with 13 known-difficult cases (DO credential,
 Vietnamese surnames, three-part comma, hyphenated names) that you can
-run at any time to verify parser behaviour after an upgrade:
+run at any time to verify parser behavior after an upgrade:
 
 ``` r
 
@@ -397,7 +397,7 @@ result
 #> 3 3333333333 2025-01-12   <NA>
 ```
 
-### Key-type harmonisation
+### Key-type harmonization
 
 If one table stores NPI as integer and the other as character, a plain
 join silently returns zero matches. The safe join coerces both sides to

@@ -3,7 +3,7 @@
 Wraps
 [`dplyr::semi_join()`](https://dplyr.tidyverse.org/reference/filter-joins.html)
 (filter left to matching rows, no right columns added) with key
-validation, type harmonisation, and a minimum keep-rate threshold.
+validation, type harmonization, and a minimum keep-rate threshold.
 
 ## Usage
 

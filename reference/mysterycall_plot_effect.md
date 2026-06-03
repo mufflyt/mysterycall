@@ -25,7 +25,7 @@ mysterycall_plot_effect(
 
 - term:
 
-  Character scalar. The term to visualise (must match a fixed effect in
+  Character scalar. The term to visualize (must match a fixed effect in
   the model, e.g. `"insurance"`, `"age"`, or `"insurance:gender"` for an
   interaction).
 

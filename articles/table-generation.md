@@ -34,7 +34,7 @@ appears alongside.
 
 **Table 3 — Wait times by subspecialty (or insurance type)** For studies
 that record how many days until the next available appointment, Table 3
-summarises the wait-time distribution. Because wait times are
+summarizes the wait-time distribution. Because wait times are
 right-skewed and often overdispersed, medians and interquartile ranges
 are more appropriate than means and standard deviations, and Poisson or
 negative binomial model summaries are often reported alongside.
@@ -49,7 +49,7 @@ journal’s online supplement.
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
 (documented in the provider-classification vignette) must be run before
 calling any of the table functions in this vignette. That function
-creates the standardised columns (`age_category`, `gender_std`,
+creates the standardized columns (`age_category`, `gender_std`,
 `ruca_category`, `region_std`) that the table functions expect.
 
 ------------------------------------------------------------------------
@@ -152,7 +152,7 @@ prepended to the stratification columns, showing counts and percentages
 across the full sample regardless of stratum.
 
 **`cont_stats`** — controls how continuous variables (e.g., `wait_days`)
-are summarised: \* `"mean_sd"`: Mean ± SD, appropriate when the
+are summarized: \* `"mean_sd"`: Mean ± SD, appropriate when the
 distribution is approximately normal. \* `"median_iqr"`: Median \[IQR\],
 appropriate for right-skewed variables like wait times. \*
 `c("mean_sd", "median_iqr")`: Both rows are printed. Useful in
@@ -472,7 +472,7 @@ knitr::kable(
 
 ## 7. Disparity Table for a Manuscript: `mysterycall_disparities_table()`
 
-The disparity table is the centrepiece of a mystery-caller manuscript.
+The disparity table is the centerpiece of a mystery-caller manuscript.
 It reports the primary statistical comparison — whether Medicaid callers
 were significantly less likely to be offered an appointment than
 private-insurance callers — with full model-based adjustment for
@@ -814,12 +814,12 @@ write.csv(
 
 ``` r
 
-# Summarise wait times by insurance type using the Poisson model summary
+# Summarize wait times by insurance type using the Poisson model summary
 # (assumes mysterycall_poisson_model() has been run — see stats vignette)
 wait_summary <- analysis_data |>
   dplyr::filter(!is.na(wait_days)) |>
   dplyr::group_by(insurance_type) |>
-  dplyr::summarise(
+  dplyr::summarize(
     n            = dplyr::n(),
     median_days  = median(wait_days),
     q1           = quantile(wait_days, 0.25),

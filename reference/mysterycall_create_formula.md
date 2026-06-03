@@ -56,7 +56,7 @@ mysterycall_create_formula(df, "days", random_effect = "name")
 #> Formula string with random effect: days ~ `age` + (1 | name )
 #> Final formula object created: days ~ age + (1 | name)
 #> days ~ age + (1 | name)
-#> <environment: 0x55b2197da2f0>
+#> <environment: 0x5587a69fd678>
 mysterycall_create_formula(df, "days")  # fixed-effects only
 #> Creating formula with response variable: days
 #> Predictor variables identified: age, name
@@ -64,5 +64,5 @@ mysterycall_create_formula(df, "days")  # fixed-effects only
 #> Initial formula string: days ~ `age` + `name`
 #> Final formula object created: days ~ age + name
 #> days ~ age + name
-#> <environment: 0x55b2195a1c40>
+#> <environment: 0x5587a6335e28>
 ```

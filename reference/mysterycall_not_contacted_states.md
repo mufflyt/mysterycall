@@ -26,7 +26,7 @@ mysterycall_not_contacted_states(filtered_data, all_states = NULL)
 
 ## Value
 
-A length-1 character string summarising the states not contacted and the
+A length-1 character string summarizing the states not contacted and the
 number of unique physicians successfully reached.
 
 ## Details

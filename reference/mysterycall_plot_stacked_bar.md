@@ -1,6 +1,6 @@
 # Stacked bar chart of appointment acceptance by group
 
-Summarises a binary 0/1 outcome column by a grouping variable and draws
+Summarizes a binary 0/1 outcome column by a grouping variable and draws
 a 100-percent stacked bar chart using `ggplot2`. Groups are laid out
 horizontally (via
 [`ggplot2::coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html))
@@ -48,7 +48,7 @@ mysterycall_plot_stacked_bar(
 
 - colors:
 
-  Character vector of length \>= 2. Fill colours mapped to `fill_labels`
+  Character vector of length \>= 2. Fill colors mapped to `fill_labels`
   in order. Default `c("#E05C6A", "#4A9F70")`.
 
 - title:

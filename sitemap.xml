@@ -9,6 +9,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/articles/data-quality.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/geocode.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/get_census_data.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/articles/getting_started.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/imotive-news.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/index.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/mapping.html</loc></url>
@@ -331,7 +332,6 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/taxonomy.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/truncate_for_viz.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.html</loc></url>
-<url><loc>https://mufflyt.github.io/mysterycall/reference/utility_library.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_dataframe.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_required_columns.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_scalar_positive_numeric.html</loc></url>

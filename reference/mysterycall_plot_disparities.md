@@ -66,17 +66,17 @@ mysterycall_plot_disparities(
 
 - color_sig:
 
-  Character. Colour for groups whose `p_value < 0.05`. Default
+  Character. Color for groups whose `p_value < 0.05`. Default
   `"#C0392B"` (red).
 
 - color_ns:
 
-  Character. Colour for non-significant groups (or when `p_value` is
+  Character. Color for non-significant groups (or when `p_value` is
   absent). Default `"#2C3E50"` (dark navy).
 
 - color_ref:
 
-  Character. Colour for the reference group point. Default `"#2166AC"`
+  Character. Color for the reference group point. Default `"#2166AC"`
   (blue).
 
 - point_size:
@@ -116,7 +116,7 @@ to save.
 
 - `"abs_diff"`:
 
-  `group`, `abs_diff`, `lower_ci`, `upper_ci` (CIs are re-centred
+  `group`, `abs_diff`, `lower_ci`, `upper_ci` (CIs are re-centered
   automatically)
 
 - `"rel_risk"`:
@@ -126,7 +126,7 @@ to save.
 When `x` is a `mysterycall_disparities_table` object the reference group
 and significance attributes are read directly from the object's
 attributes. When `x` is a plain data frame, a `p_value` column is used
-for significance colouring if present, and the first row is treated as
+for significance coloring if present, and the first row is treated as
 the reference group when `show_ref = TRUE`.
 
 ## See also

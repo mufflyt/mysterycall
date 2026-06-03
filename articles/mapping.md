@@ -95,7 +95,7 @@ head(acog_districts)
 #> 6 Colorado   District VIII District VIII CO
 ```
 
-The table below summarises how many states each district covers:
+The table below summarizes how many states each district covers:
 
 ``` r
 

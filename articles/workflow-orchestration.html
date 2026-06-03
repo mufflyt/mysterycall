@@ -51,6 +51,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
@@ -160,10 +161,10 @@ set.</p>
              ▼
   ┌─────────────────────┐
   │  Phase 2 Cleaning   │  mysterycall_rename_columns()
-  │  · harmonise cols   │  mysterycall_clean_phase2()
+  │  · harmonize cols   │  mysterycall_clean_phase2()
   │  · parse outcomes   │
   └──────────┬──────────┘
-             │  standardised outcome data
+             │  standardized outcome data
              ▼
   ┌─────────────────────┐
   │  Quality Check      │  mysterycall_save_quality_table()
@@ -185,7 +186,7 @@ phone. Its job is to turn a raw export from NPPES (or a similar roster)
 into a clean, validated list that is ready to be handed to field
 callers. Concretely, Phase 1:</p>
 <ul>
-<li>Strips whitespace and normalises letter case in provider names.</li>
+<li>Strips whitespace and normalizes letter case in provider names.</li>
 <li>Validates and formats phone numbers.</li>
 <li>Assigns a reproducible random study ID to every row, including rows
 where the NPI is missing.</li>
@@ -198,9 +199,9 @@ disparity studies.</li>
 is traceable.</li>
 </ul>
 <p><strong>Phase 2</strong> happens <em>after</em> callers return their
-completed workbooks. Its job is to harmonise the heterogeneous column
+completed workbooks. Its job is to harmonize the heterogeneous column
 names that inevitably accumulate across five or ten individual Excel
-files and to normalise the free-text outcome values (e.g., “yes”, “YES”,
+files and to normalize the free-text outcome values (e.g., “yes”, “YES”,
 “Y”, “offered” → a single canonical code) so that the merged file is
 analysis-ready.</p>
 </div>
@@ -588,7 +589,7 @@ order in which insurance scenarios appear within each workbook. If a
 provider appears once for Medicaid and once for Private insurance
 (because <code>duplicate_rows = TRUE</code> was used in Phase 1), the
 caller will see the Medicaid row first and the Private row second within
-their workbook. This is useful for standardising the call script
+their workbook. This is useful for standardizing the call script
 order.</p>
 <p><strong><code>seed = 1978</code></strong> — the default seed has been
 the package default since version 1.0 and is the recommended value for
@@ -672,7 +673,7 @@ appears in exactly one workbook:</p>
 <code>mysterycall_rename_columns()</code><a class="anchor" aria-label="anchor" href="#phase-2-cleaning-mysterycall_clean_phase2-and-mysterycall_rename_columns"></a>
 </h2>
 <p>After field callers return their completed workbooks, the returned
-files must be merged and standardised. This is Phase 2. The core
+files must be merged and standardized. This is Phase 2. The core
 challenge is that callers — despite receiving identical templates —
 often rename columns, insert their own columns, or spell outcome values
 differently. Phase 2 handles all of this programmatically.</p>
@@ -718,7 +719,7 @@ practice:</p>
 </table>
 <p><code><a href="../reference/mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code> resolves this via
 <strong>fuzzy substring matching</strong>. You provide a list of target
-substrings to look for and the standardised names to replace them
+substrings to look for and the standardized names to replace them
 with.</p>
 </div>
 <div class="section level3">
@@ -726,7 +727,7 @@ with.</p>
 matching<a class="anchor" aria-label="anchor" href="#mysterycall_rename_columns-fuzzy-column-name-matching"></a>
 </h3>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Standardise column names across all returned workbooks</span></span>
+<code class="sourceCode R"><span><span class="co"># Standardize column names across all returned workbooks</span></span>
 <span><span class="va">renamed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_rename_columns.html">mysterycall_rename_columns</a></span><span class="op">(</span></span>
 <span>  data           <span class="op">=</span> <span class="va">raw_returned_workbook</span>,</span>
 <span>  target_strings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"appt"</span>, <span class="st">"wait"</span>, <span class="st">"insurance"</span>, <span class="st">"outcome"</span>, <span class="st">"caller"</span><span class="op">)</span>,</span>
@@ -739,7 +740,7 @@ substrings (case-insensitive) to search for in the column names of
 column name.</p>
 <p><strong><code>new_names</code></strong> — a character vector of the
 same length as <code>target_strings</code>. Each element is the
-standardised name to assign when the corresponding substring is
+standardized name to assign when the corresponding substring is
 found.</p>
 <p>If a target substring does not match any column in the data, the
 function emits a <strong>warning</strong> rather than an error. This is
@@ -775,7 +776,7 @@ approach for the standard workflow.</p>
 <p>When <code>data</code> is already a <strong>data frame</strong>, it
 is processed directly. This is useful when you have already combined the
 workbooks manually or want to process a single file.</p>
-<p>A complete example showing messy column normalisation:</p>
+<p>A complete example showing messy column normalization:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simulate two messy returned workbooks</span></span>
 <span><span class="va">alice_wb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -793,7 +794,7 @@ workbooks manually or want to process a single file.</p>
 <span>  wait_days           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7L</span>, <span class="fl">21L</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Phase 2 standardises both:</span></span>
+<span><span class="co"># Phase 2 standardizes both:</span></span>
 <span><span class="co"># After mysterycall_rename_columns() each workbook will have:</span></span>
 <span><span class="co">#   npi, provider_last_name_legal_name, appointment_offered, wait_days</span></span></code></pre></div>
 <hr>
@@ -901,7 +902,7 @@ present in <code>data</code> where <code>call_outcome</code> is
 non-missing.</p>
 </div>
 <div class="section level3">
-<h3 id="visualising-contacted-vs-not-contacted-states">7.2 Visualising contacted vs not-contacted states<a class="anchor" aria-label="anchor" href="#visualising-contacted-vs-not-contacted-states"></a>
+<h3 id="visualizing-contacted-vs-not-contacted-states">7.2 Visualizing contacted vs not-contacted states<a class="anchor" aria-label="anchor" href="#visualizing-contacted-vs-not-contacted-states"></a>
 </h3>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Quick cross-tabulation of states by contact status</span></span>
@@ -920,7 +921,7 @@ non-missing.</p>
 <span><span class="co">#&gt;         43             7</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="filtering-for-follow-up-prioritisation">7.3 Filtering for follow-up prioritisation<a class="anchor" aria-label="anchor" href="#filtering-for-follow-up-prioritisation"></a>
+<h3 id="filtering-for-follow-up-prioritization">7.3 Filtering for follow-up prioritization<a class="anchor" aria-label="anchor" href="#filtering-for-follow-up-prioritization"></a>
 </h3>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Which specific states need follow-up?</span></span>
@@ -976,7 +977,7 @@ artifacts.</p>
 <td><code>name_data</code></td>
 <td><code>data.frame</code></td>
 <td>required</td>
-<td>Provider name crosswalk (for name standardisation)</td>
+<td>Provider name crosswalk (for name standardization)</td>
 </tr>
 <tr class="odd">
 <td><code>phase1_data</code></td>
@@ -1159,7 +1160,7 @@ frame with one row per pipeline stage:</p>
 </table>
 <p>The 0.4% row drop between split_workbooks and phase2_clean (6 rows)
 is typical: it reflects rows that callers deleted from their workbooks,
-possibly because they realised a phone number was a fax line or the
+possibly because they realized a phone number was a fax line or the
 provider had retired. Document these exclusions in your CONSORT
 flowchart.</p>
 <p><strong>Before proceeding to analysis, confirm:</strong></p>
