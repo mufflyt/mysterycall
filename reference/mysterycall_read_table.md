@@ -58,3 +58,15 @@ Other utilities:
 [`mysterycall_standard_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_labels.md),
 [`mysterycall_standard_palette()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_palette.md),
 [`mysterycall_write_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# Read a CSV file
+df <- mysterycall_read_table("providers.csv")
+
+# Read a Parquet file
+df <- mysterycall_read_table("data.parquet")
+} # }
+```

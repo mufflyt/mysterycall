@@ -151,6 +151,20 @@ the combined dataset.</p></dd>
 <code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Write to CSV</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_write_table</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cars.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Write to Parquet</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_write_table</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cars.parquet"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Append to an existing CSV</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_write_table</span><span class="op">(</span><span class="va">new_data</span>, <span class="st">"combined.csv"</span>, append <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

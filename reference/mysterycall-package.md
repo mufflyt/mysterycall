@@ -1,9 +1,10 @@
 # mysterycall: Mystery Caller Study Tools for Healthcare Access Research
 
-Provides utilities for mystery caller and audit studies evaluating
-patient access to healthcare. Functions help search and process National
-Provider Identifier (NPI) records, summarize provider demographics, and
-generate tables and maps for analysis and reporting.
+A comprehensive toolkit for conducting and analyzing mystery caller
+studies in healthcare research. Includes tools for provider roster
+creation via NPI registry searches, address normalization, geospatial
+analysis (isochrones), and multivariable Poisson regression for
+wait-time analysis.
 
 ## See also
 

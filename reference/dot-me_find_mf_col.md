@@ -1,63 +1,35 @@
-# Compare and rank competing fitted models
+# Find Model Frame Column Name
 
-Accepts a named list of fitted model objects (e.g. output from repeated
-calls to
-[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
-with different predictor sets) and returns a ranked summary table.
+Maps a plain variable name to the possibly-wrapped column name in the
+model frame (e.g., `"cyl"` -\> `"factor(cyl)"`).
 
 ## Usage
 
 ``` r
-mysterycall_select_best_model(models, criterion = c("aic", "bic", "lrt"))
+.me_find_mf_col(term, mf_names)
 ```
 
 ## Arguments
 
-- models:
+- term:
 
-  Named list of fitted model objects. Any object with an
-  [`AIC()`](https://rdrr.io/r/stats/AIC.html) or
-  [`BIC()`](https://rdrr.io/r/stats/AIC.html) method is accepted (glm,
-  glmerMod, lm, lmerMod, ...).
+  Plain variable name.
 
-- criterion:
+- mf_names:
 
-  One of:
-
-  `"aic"`
-
-  :   Rank by Akaike Information Criterion (default).
-
-  `"bic"`
-
-  :   Rank by Bayesian Information Criterion.
-
-  `"lrt"`
-
-  :   Sequential likelihood-ratio tests between consecutive models.
-      Requires `lme4` for mixed models.
+  Names of the model frame.
 
 ## Value
 
-For `"aic"` and `"bic"`: a data frame with columns `model`, `AIC`/`BIC`,
-`delta_AIC`/`delta_BIC`, `winner`. For `"lrt"`: a data frame with
-columns `comparison`, `Chisq`, `df`, `p_value`.
+Character scalar.
 
 ## See also
-
-[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
-to fit the models being compared;
-[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md)
-to build predictor sets;
-[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md)
-for post-selection inference.
 
 Other outcomes:
 [`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),
 [`.disp_rate_ci()`](https://mufflyt.github.io/mysterycall/reference/dot-disp_rate_ci.md),
 [`.fmt_model_pval()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_model_pval.md),
 [`.fmt_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_pvalue.md),
-[`.me_find_mf_col()`](https://mufflyt.github.io/mysterycall/reference/dot-me_find_mf_col.md),
 [`.me_mf_to_orig()`](https://mufflyt.github.io/mysterycall/reference/dot-me_mf_to_orig.md),
 [`.wait_stats()`](https://mufflyt.github.io/mysterycall/reference/dot-wait_stats.md),
 [`.wilson_ci()`](https://mufflyt.github.io/mysterycall/reference/dot-wilson_ci.md),
@@ -76,16 +48,6 @@ Other outcomes:
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
+[`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),
 [`print.mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_poisson_model.md)
-
-## Examples
-
-``` r
-m1 <- glm(mpg ~ wt, data = mtcars, family = gaussian())
-m2 <- glm(mpg ~ wt + hp, data = mtcars, family = gaussian())
-mysterycall_select_best_model(list(base = m1, full = m2))
-#>   model      AIC delta_AIC winner
-#> 2  full 156.6523   0.00000   TRUE
-#> 1  base 166.0294   9.37709  FALSE
-```

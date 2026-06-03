@@ -78,3 +78,18 @@ Other utilities:
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),
 [`mysterycall_standard_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_labels.md),
 [`mysterycall_standard_palette()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_palette.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# Write to CSV
+mysterycall_write_table(mtcars, "cars.csv")
+
+# Write to Parquet
+mysterycall_write_table(mtcars, "cars.parquet")
+
+# Append to an existing CSV
+mysterycall_write_table(new_data, "combined.csv", append = TRUE)
+} # }
+```
