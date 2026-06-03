@@ -67,7 +67,7 @@ mysterycall_save_green_journal_figure(p, "figures/fig1", layout = "double_column
 }
 \seealso{
 \code{\link[=mysterycall_theme_green_journal]{mysterycall_theme_green_journal()}}, \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}} for themes
-to apply before saving; \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the colour palette.
+to apply before saving; \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the color palette.
 }
 \concept{green-journal-output}
 \keyword{internal}

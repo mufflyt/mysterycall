@@ -157,6 +157,8 @@ A data frame with 142 columns:
 \description{
 Information about Obstetricians and Gynecologists (OBGYN) residency programs
 accredited by the Accreditation Council for Graduate Medical Education (ACGME).
+This data is often used as a gold-standard indicator for academic practice
+settings when classifying provider locations.
 }
 \examples{
 data(acgme)
@@ -166,8 +168,10 @@ print(acgme[1:3, 1:5])
 \seealso{
 Other datasets:
 \code{\link{acog_districts}},
+\code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
+\code{\link{physicians}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}

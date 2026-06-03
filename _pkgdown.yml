@@ -415,7 +415,7 @@ reference:
   - title: "Deprecated"
     contents:
       - mysterycall-deprecated
-      - tyler-deprecated
+      - mysterycall-deprecated
 
 articles:
   - title: "Getting Started"

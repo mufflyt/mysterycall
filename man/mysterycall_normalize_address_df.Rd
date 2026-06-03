@@ -32,12 +32,12 @@ Default: \code{"practice_state"}.}
 Default: \code{"practice_zip"}.}
 }
 \value{
-The input data frame with the original address columns normalised
+The input data frame with the original address columns normalized
 in-place plus five new derived columns:
 \describe{
-\item{\code{address1_norm}}{Character. Fully normalised primary address
-(ASCII, directionals, suffixes, and units standardised).}
-\item{\code{address2_norm}}{Character or \code{NA_character_}. Normalised
+\item{\code{address1_norm}}{Character. Fully normalized primary address
+(ASCII, directionals, suffixes, and units standardized).}
+\item{\code{address2_norm}}{Character or \code{NA_character_}. Normalized
 secondary address.}
 \item{\code{address1_no_unit}}{Character. Primary address with all unit
 designators stripped.}

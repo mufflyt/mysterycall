@@ -92,7 +92,7 @@ utils::globalVariables(c(
   ".x",
   ".xmin",
   ".xmax",
-  ".colour",
+  ".color",
   ".shape",
   ".p_label",
   "abs_diff",

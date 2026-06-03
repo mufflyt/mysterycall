@@ -152,7 +152,7 @@ for downstream reproducibility tooling.
 
 \section{Performance}{
 
-O(n) in number of rows. String normalisation via \code{janitor::clean_names()} and
+O(n) in number of rows. String normalization via \code{janitor::clean_names()} and
 \code{stringr} dominates; expect < 1 s for 1,000 rows on modern hardware.
 }
 

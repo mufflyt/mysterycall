@@ -5,7 +5,7 @@
 \alias{fips}
 \title{Data of FIPS codes}
 \format{
-A tibble with 243 rows and 10 variables containing Federal
+A tibble with 3142 rows and 10 variables containing Federal
 Information Processing Standards (FIPS) codes for states and counties:
 \describe{
 \item{state}{Two-letter postal abbreviation.}
@@ -24,13 +24,22 @@ Information Processing Standards (FIPS) codes for states and counties:
 \url{https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv}
 }
 \description{
-3 columns with 51 observations.
+This dataset maps state and county names to Federal Information Processing
+Standards (FIPS) codes, which are essential for merging spatial and census
+data in healthcare access research.
+}
+\examples{
+data(fips)
+head(fips)
+
 }
 \seealso{
 Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
+\code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},
+\code{\link{physicians}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}

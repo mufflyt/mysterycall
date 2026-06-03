@@ -22,7 +22,7 @@
 ## Statement of Need
 
 Measuring patient access to healthcare requires assembling a provider roster,
-placing calls under a standardised script, recording wait times and refusal
+placing calls under a standardized script, recording wait times and refusal
 rates, and then modelling disparities by insurance type, race, or geography.
 Each step involves bespoke data-engineering work that research teams currently
 solve ad hoc: custom scripts to loop around the NPI API's 1,200-record cap,
@@ -281,7 +281,7 @@ with audit trails, coverage guards, and publication-ready output.
 | | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
 | **Census** | `mysterycall_get_census_data()` | ACS block-group demographics by state FIPS |
 | | `mysterycall_calculate_overlap()` | Overlap area between isochrones and block groups |
-| **Maps** | `mysterycall_map_physicians()` | Interactive Leaflet dot map coloured by ACOG district |
+| **Maps** | `mysterycall_map_physicians()` | Interactive Leaflet dot map colored by ACOG district |
 | | `mysterycall_map_block_group()` | Block-group overlap map exported to HTML + PNG |
 | | `mysterycall_hrr_maps()` | Hexagon density map by Hospital Referral Region |
 | **Tables** | `mysterycall_table_overall()` | Table 1 summary (via `arsenal`) |

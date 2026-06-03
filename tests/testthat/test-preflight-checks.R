@@ -39,7 +39,7 @@ test_that("mysterycall_assess_data_quality detects missing values", {
   expect_true(result$penalties > 0)
 
   # Check that issue was reported
-  issue_messages <- sapply(result$issues, function(x) x$message)
+  issue_messages <- vapply(result$issues, function(x) x$message, character(1))
   expect_true(any(grepl("missing values", issue_messages)))
 })
 
@@ -57,7 +57,7 @@ test_that("mysterycall_assess_data_quality detects duplicates", {
   expect_true(result$score < 1.0)
   expect_true(length(result$issues) > 0)
 
-  issue_messages <- sapply(result$issues, function(x) x$message)
+  issue_messages <- vapply(result$issues, function(x) x$message, character(1))
   expect_true(any(grepl("duplicate", issue_messages)))
 })
 
@@ -72,7 +72,7 @@ test_that("mysterycall_assess_data_quality checks data types", {
   result <- mysterycall_assess_data_quality(bad_types, required_columns = c("first", "last"))
 
   expect_true(result$score < 1.0)
-  issue_messages <- sapply(result$issues, function(x) x$message)
+  issue_messages <- vapply(result$issues, function(x) x$message, character(1))
   expect_true(any(grepl("should be character", issue_messages)))
 })
 
@@ -102,7 +102,7 @@ test_that("mysterycall_assess_data_quality severity levels work", {
 
   result <- mysterycall_assess_data_quality(high_na_data, required_columns = c("first", "last"))
 
-  severities <- sapply(result$issues, function(x) x$severity)
+  severities <- vapply(result$issues, function(x) x$severity, character(1))
   expect_true("error" %in% severities)
   expect_true(result$penalties >= 3)
 })

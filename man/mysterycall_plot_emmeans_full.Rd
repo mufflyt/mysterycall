@@ -22,10 +22,10 @@ mysterycall_plot_emmeans_full(
 
 \item{specs}{Character vector of marginal mean specifications. The first
 element is the x-axis variable; the second (if present) becomes the
-grouping variable for colour / shape.}
+grouping variable for color / shape.}
 
 \item{variable}{Character scalar used as the x-axis label (underscores
-are replaced with spaces and the first letter is capitalised).}
+are replaced with spaces and the first letter is capitalized).}
 
 \item{group_col}{Optional character scalar naming the grouping column.
 Overrides the second element of \code{specs} when supplied.}
@@ -34,7 +34,7 @@ Overrides the second element of \code{specs} when supplied.}
 \code{type} argument. Use \code{"response"} (default) for Poisson models so
 values are on the count/rate scale; use \code{"link"} for the log scale.}
 
-\item{use_color}{Logical. \code{TRUE} (default) uses colour to distinguish
+\item{use_color}{Logical. \code{TRUE} (default) uses color to distinguish
 groups; \code{FALSE} uses shapes and linetypes for greyscale output.}
 
 \item{save_path}{Optional character scalar. Full file path (e.g.

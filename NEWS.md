@@ -65,11 +65,11 @@ Released 2026-05-08.
 
 ## 💥 Breaking changes (with backward compatibility)
 
-* Package renamed from `tyler` to `mysterycall`. `library(tyler)` will no longer
+* Package renamed from `mysterycall` to `mysterycall`. `library(mysterycall)` will no longer
   work; use `library(mysterycall)`.
 * All 100 exported functions now carry the `mysterycall_` prefix (e.g.,
   `mysterycall_geocode()`, `mysterycall_search_and_process_npi()`).
-  The previous `tyler_` prefix names are retained as deprecated shims that
+  The previous `mysterycall_` prefix names are retained as deprecated shims that
   emit a warning and forward to the new name. The even-older unprefixed names
   (e.g., `check_normality()`) continue to work as double-deprecated shims.
 
@@ -154,7 +154,7 @@ Released 2026-05-04.
 
 ## 🐛 Bug fixes
 
-* `library(tyler)` no longer crashes R or causes system memory exhaustion.
+* `library(mysterycall)` no longer crashes R or causes system memory exhaustion.
   Seven heavy packages (`ggmap`, `ggspatial`, `hereR`, `leaflet`,
   `leaflet.extras`, `lme4`, `censusapi`) were moved from `Imports` to
   `Suggests` so their compiled spatial libraries (GDAL, GEOS, PROJ) are
@@ -194,7 +194,7 @@ Released 2025-10-23.
 
 * Released to align all metadata artifacts with the package website and
   codemeta specification.
-* Introduced an **Imotive News & Changelog** vignette centralising release notes.
+* Introduced an **Imotive News & Changelog** vignette centralizing release notes.
 * Documented how `mysterycall_run_workflow()` coordinates roster creation,
   validation, call preparation, and QA for Imotive projects.
 

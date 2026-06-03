@@ -17,7 +17,7 @@ subspecialists combined).}
 
 \item{location_cols}{Character vector of column names that together define
 a unique location (e.g. \code{c("city", "state_code")}). Values are
-normalised to lower-case before joining.}
+normalized to lower-case before joining.}
 
 \item{specialty_col}{Character scalar naming the specialty column.}
 

@@ -24,7 +24,7 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 }
 \seealso{
 \code{\link[=mysterycall_scale_fill_green_journal]{mysterycall_scale_fill_green_journal()}} for fill aesthetics;
-\code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the underlying colour values.
+\code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the underlying color values.
 
 Other green-journal-colors:
 \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}},

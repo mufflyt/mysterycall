@@ -54,7 +54,7 @@ The attribute \code{total_calls_all} (integer) is set on the returned data
 frame recording the grand total across all callers.
 }
 \description{
-Summarises call volume, scheduling rates, and time metrics for each
+Summarizes call volume, scheduling rates, and time metrics for each
 caller in a mystery caller dataset.
 }
 \examples{

@@ -35,7 +35,7 @@ rates between 0 and 1. Values are multiplied by 100 for display.}
 \code{"hrr"} immediately raises an error with instructions to use the sf-based
 workflow.}
 
-\item{palette}{Character scalar. Viridis colour-scale option passed to
+\item{palette}{Character scalar. Viridis color-scale option passed to
 \code{\link[ggplot2:scale_fill_viridis_c]{ggplot2::scale_fill_viridis_c()}}. Default \code{"viridis"}.}
 
 \item{title}{Character scalar. Plot title. Default
@@ -47,7 +47,7 @@ workflow.}
 \item{limits}{Numeric vector of length 2 or \code{NULL}. Explicit limits for
 the fill scale. \code{NULL} (default) lets ggplot2 choose.}
 
-\item{na_color}{Character scalar. Fill colour for states with no data.
+\item{na_color}{Character scalar. Fill color for states with no data.
 Default \code{"grey80"}.}
 
 \item{save_path}{Character scalar or \code{NULL}. When not \code{NULL}, the plot is

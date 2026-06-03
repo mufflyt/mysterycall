@@ -51,7 +51,7 @@ mysterycall_create_formula <- function(data, response_var, random_effect = NULL)
   ))
 
   # Enclose predictor variables in backticks to handle special characters or spaces
-  predictor_vars <- sapply(predictor_vars, function(x) paste0("`", x, "`"))
+  predictor_vars <- vapply(predictor_vars, function(x) paste0("`", x, "`"), character(1L))
   message(sprintf(
     "Predictor variables after formatting: %s",
     paste(predictor_vars, collapse = ", ")

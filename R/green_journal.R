@@ -221,7 +221,7 @@ mysterycall_palette_green_journal <- function(n = NULL, type = c("qualitative", 
 #' @param ... Arguments passed to [ggplot2::scale_color_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
 #' @seealso [mysterycall_scale_fill_green_journal()] for fill aesthetics;
-#'   [mysterycall_palette_green_journal()] for the underlying colour values.
+#'   [mysterycall_palette_green_journal()] for the underlying color values.
 #' @export
 #' @family green-journal-colors
 #' @examples
@@ -241,8 +241,8 @@ mysterycall_scale_color_green_journal <- function(...) {
 #'
 #' @param ... Arguments passed to [ggplot2::scale_fill_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
-#' @seealso [mysterycall_scale_color_green_journal()] for colour aesthetics;
-#'   [mysterycall_palette_green_journal()] for the underlying colour values.
+#' @seealso [mysterycall_scale_color_green_journal()] for color aesthetics;
+#'   [mysterycall_palette_green_journal()] for the underlying color values.
 #' @export
 #' @family green-journal-colors
 #' @examples
@@ -285,7 +285,7 @@ mysterycall_scale_fill_green_journal <- function(...) {
 #' @return Invisible character vector of file paths written (PNG, PDF, and/or
 #'   CSV depending on arguments).
 #' @seealso [mysterycall_theme_green_journal()], [mysterycall_theme_green_journal_map()] for themes
-#'   to apply before saving; [mysterycall_palette_green_journal()] for the colour palette.
+#'   to apply before saving; [mysterycall_palette_green_journal()] for the color palette.
 #' @export
 #' @family green-journal-output
 #' @examplesIf interactive()

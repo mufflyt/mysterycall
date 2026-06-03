@@ -190,11 +190,11 @@ test_that("Regression: NPI validation accuracy", {
   )
 
   test_data <- data.frame(
-    id = 1:length(test_npis),
+    id = seq_along(test_npis),
     npi = test_npis,
-    names = paste("Provider", 1:length(test_npis)),
-    practice_name = paste("Practice", 1:length(test_npis)),
-    phone_number = paste0("555-000-", sprintf("%04d", 1:length(test_npis))),
+    names = paste("Provider", seq_along(test_npis)),
+    practice_name = paste("Practice", seq_along(test_npis)),
+    phone_number = paste0("555-000-", sprintf("%04d", seq_along(test_npis))),
     state_name = rep("California", length(test_npis)),
     for_redcap = rep("Yes", length(test_npis)),
     stringsAsFactors = FALSE

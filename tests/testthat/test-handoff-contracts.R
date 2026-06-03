@@ -126,7 +126,7 @@ test_that("HANDOFF: Phase 1 output meets Phase 2 requirements", {
   }
 
   # Contract: Names should contain dr_name
-  for (i in 1:nrow(phase1_output)) {
+  for (i in seq_len(nrow(phase1_output))) {
     if (!is.na(phase1_output$dr_name[i])) {
       name_match <- grepl(phase1_output$dr_name[i], phase1_output$names[i], fixed = TRUE)
       expect_true(name_match,

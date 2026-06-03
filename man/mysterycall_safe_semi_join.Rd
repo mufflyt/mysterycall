@@ -39,7 +39,7 @@ A data frame: the filtered subset of \code{left}.
 }
 \description{
 Wraps \code{\link[dplyr:semi_join]{dplyr::semi_join()}} (filter left to matching rows, no right columns
-added) with key validation, type harmonisation, and a minimum keep-rate
+added) with key validation, type harmonization, and a minimum keep-rate
 threshold.
 }
 \details{

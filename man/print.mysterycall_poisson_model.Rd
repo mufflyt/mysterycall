@@ -33,7 +33,7 @@ print(model)
 }
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces this object;
-\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}} to visualise the same IRR estimates.
+\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}} to visualize the same IRR estimates.
 
 Other outcomes:
 \code{\link[=.as_positive_logical]{.as_positive_logical()}},

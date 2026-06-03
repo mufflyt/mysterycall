@@ -79,7 +79,7 @@ API documentation at \url{https://genderize.io/#docs} for the current schema.
 Output filenames include a timestamp from \code{\link[=Sys.time]{Sys.time()}}, which uses the
 \strong{local system timezone} (not UTC). Files produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment. To standardise to UTC:
+wall-clock moment. To standardize to UTC:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{withr::with_timezone("UTC", mysterycall_genderize(data))
 }\if{html}{\out{</div>}}

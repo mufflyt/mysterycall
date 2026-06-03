@@ -91,7 +91,7 @@ After 3 failures the function returns a zero-row data frame, never an error.
 Input data frame
       │
       ▼
-janitor::clean_names()          ← normalise column names
+janitor::clean_names()          ← normalize column names
       │
       ▼
 type_convert()                  ← coerce column types
@@ -126,7 +126,7 @@ Each stage is idempotent when re-run on already-flagged data.
 
 **Deterministic cleaning:** `mysterycall_clean_phase1()` applied to the same input
 with the same parameters always produces byte-identical output. Column reordering,
-name normalisation via `janitor::clean_names()`, and NPI formatting are all
+name normalization via `janitor::clean_names()`, and NPI formatting are all
 deterministic.
 
 **Snapshot-based replay:** `mysterycall_search_taxonomy()` writes an `.rds` snapshot

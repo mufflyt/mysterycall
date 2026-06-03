@@ -29,7 +29,7 @@ NULL
 #'
 #' @seealso [mysterycall_safe_left_join()] for joins with duplicate-key
 #'   warnings; [mysterycall_reconcile_specialty()] for post-join specialty
-#'   harmonisation.
+#'   harmonization.
 #' @family data management
 #' @export
 #'

@@ -57,7 +57,7 @@ print(result)
 \seealso{
 \code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}} for tabulating any single
 categorical variable; \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for upstream
-gender standardisation.
+gender standardization.
 
 Other provider characteristics:
 \code{\link[=mysterycall_academic_patterns]{mysterycall_academic_patterns()}},

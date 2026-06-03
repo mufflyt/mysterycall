@@ -45,7 +45,7 @@
 #'
 #' @seealso [mysterycall_table_percentages()] for tabulating any single
 #'   categorical variable; [mysterycall_prepare_table1_vars()] for upstream
-#'   gender standardisation.
+#'   gender standardization.
 #' @importFrom dplyr filter count arrange desc slice
 #' @importFrom rlang sym
 #' @family provider characteristics

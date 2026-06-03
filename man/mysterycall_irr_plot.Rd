@@ -29,10 +29,10 @@ line. Default \code{1} (IRR = 1).}
 
 \item{point_size}{Numeric. Size of the IRR point. Default \code{3}.}
 
-\item{color_sig}{Character. Colour for terms with \code{p_value < 0.05}. Default
+\item{color_sig}{Character. Color for terms with \code{p_value < 0.05}. Default
 \code{"#C0392B"} (red). Only applied when the \code{p_value} column is present.}
 
-\item{color_ns}{Character. Colour for non-significant terms (or when
+\item{color_ns}{Character. Color for non-significant terms (or when
 \code{p_value} is absent). Default \code{"#2C3E50"} (dark navy).}
 
 \item{x_label}{Character. X-axis label. Default \code{"Incidence Rate Ratio (IRR)"}.}

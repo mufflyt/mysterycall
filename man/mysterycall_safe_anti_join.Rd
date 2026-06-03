@@ -41,7 +41,7 @@ A data frame: the unmatched subset of \code{left}.
 }
 \description{
 Wraps \code{\link[dplyr:anti_join]{dplyr::anti_join()}} (return left rows with \strong{no} match in right)
-with key validation, type harmonisation, and an optional cap on how many
+with key validation, type harmonization, and an optional cap on how many
 rows may be matched away.
 }
 \details{

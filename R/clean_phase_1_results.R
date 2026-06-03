@@ -119,7 +119,7 @@
 #' for downstream reproducibility tooling.
 #'
 #' @section Performance:
-#' O(n) in number of rows. String normalisation via `janitor::clean_names()` and
+#' O(n) in number of rows. String normalization via `janitor::clean_names()` and
 #' `stringr` dominates; expect < 1 s for 1,000 rows on modern hardware.
 #'
 #' @section Called By:

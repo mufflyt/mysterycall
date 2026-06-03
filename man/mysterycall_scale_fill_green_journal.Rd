@@ -23,8 +23,8 @@ ggplot(mpg, aes(class, fill = drv)) +
   mysterycall:::mysterycall_scale_fill_green_journal()
 }
 \seealso{
-\code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}} for colour aesthetics;
-\code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the underlying colour values.
+\code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}} for color aesthetics;
+\code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the underlying color values.
 
 Other green-journal-colors:
 \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}},

@@ -23,11 +23,11 @@
 #'   included in the plot, drawn with `color_ref` and a diamond shape.
 #' @param show_p Logical. When `TRUE` (default) the formatted p-value is
 #'   annotated to the right of each non-reference point.
-#' @param color_sig Character. Colour for groups whose `p_value < 0.05`.
+#' @param color_sig Character. Color for groups whose `p_value < 0.05`.
 #'   Default `"#C0392B"` (red).
-#' @param color_ns Character. Colour for non-significant groups (or when
+#' @param color_ns Character. Color for non-significant groups (or when
 #'   `p_value` is absent). Default `"#2C3E50"` (dark navy).
-#' @param color_ref Character. Colour for the reference group point.
+#' @param color_ref Character. Color for the reference group point.
 #'   Default `"#2166AC"` (blue).
 #' @param point_size Numeric. Diameter of the estimate point. Default `3`.
 #' @param x_label Character or `NULL`. X-axis label. `NULL` (default) picks a
@@ -45,13 +45,13 @@
 #' \describe{
 #'   \item{`"rate"`}{`group`, `rate`, `lower_ci`, `upper_ci`}
 #'   \item{`"abs_diff"`}{`group`, `abs_diff`, `lower_ci`, `upper_ci`
-#'     (CIs are re-centred automatically)}
+#'     (CIs are re-centered automatically)}
 #'   \item{`"rel_risk"`}{`group`, `rel_risk`, `rr_lower`, `rr_upper`}
 #' }
 #' When `x` is a `mysterycall_disparities_table` object the reference group
 #' and significance attributes are read directly from the object's attributes.
 #' When `x` is a plain data frame, a `p_value` column is used for significance
-#' colouring if present, and the first row is treated as the reference group
+#' coloring if present, and the first row is treated as the reference group
 #' when `show_ref = TRUE`.
 #'
 #' @family plotting
@@ -132,7 +132,7 @@ mysterycall_plot_disparities <- function(
     auto_pct   <- TRUE
   } else if (metric == "abs_diff") {
     tbl$.x    <- tbl$abs_diff
-    # CI half-width from the rate CI, re-centred on abs_diff
+    # CI half-width from the rate CI, re-centered on abs_diff
     hw        <- (tbl$upper_ci - tbl$lower_ci) / 2
     tbl$.xmin <- tbl$abs_diff - hw
     tbl$.xmax <- tbl$abs_diff + hw
@@ -151,16 +151,16 @@ mysterycall_plot_disparities <- function(
   if (is.null(x_label)) x_label <- auto_label
   if (is.null(x_pct))   x_pct   <- auto_pct
 
-  # ---- significance colouring ------------------------------------------------
+  # ---- significance coloring ------------------------------------------------
   is_ref_row <- tbl$group == ref_group
 
   if ("p_value" %in% names(tbl) && is.numeric(tbl$p_value)) {
-    tbl$.colour <- ifelse(
+    tbl$.color <- ifelse(
       is_ref_row, color_ref,
       ifelse(!is.na(tbl$p_value) & tbl$p_value < alpha_val, color_sig, color_ns)
     )
   } else {
-    tbl$.colour <- ifelse(is_ref_row, color_ref, color_ns)
+    tbl$.color <- ifelse(is_ref_row, color_ref, color_ns)
   }
   tbl$.shape <- ifelse(is_ref_row, 18L, 16L)  # diamond for ref, circle for others
 
@@ -197,19 +197,19 @@ mysterycall_plot_disparities <- function(
     p <- p + ggplot2::geom_vline(
       xintercept = ref_line,
       linetype   = "dashed",
-      colour     = "grey55",
+      color     = "grey55",
       linewidth  = 0.5
     )
   }
 
   p <- p +
     ggplot2::geom_errorbarh(
-      ggplot2::aes(colour = I(.colour)),
+      ggplot2::aes(color = I(.color)),
       height    = 0.18,
       linewidth = 0.8
     ) +
     ggplot2::geom_point(
-      ggplot2::aes(colour = I(.colour), shape = I(.shape)),
+      ggplot2::aes(color = I(.color), shape = I(.shape)),
       size = point_size
     )
 
@@ -220,7 +220,7 @@ mysterycall_plot_disparities <- function(
       ggplot2::aes(x = .xmax + x_expand_right, label = .p_label),
       hjust  = 0,
       size   = 3,
-      colour = "grey35"
+      color = "grey35"
     )
   }
 

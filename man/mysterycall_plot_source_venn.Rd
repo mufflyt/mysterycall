@@ -43,10 +43,10 @@ the intersection region annotations (e.g. \code{"NPPES + PC"}).}
 \item{source_long}{Character vector of length 3.  Full labels used in the
 bold header annotations above/below each circle.}
 
-\item{fills}{Character vector of length 3.  Fill colours for circles A, B,
-C (hex or R colour names).}
+\item{fills}{Character vector of length 3.  Fill colors for circles A, B,
+C (hex or R color names).}
 
-\item{border_colors}{Character vector of length 3.  Border and text colours
+\item{border_colors}{Character vector of length 3.  Border and text colors
 matching each circle.}
 
 \item{title, subtitle, caption}{Character scalars for plot text.  When
@@ -62,7 +62,7 @@ from the counts.}
 
 \item{dpi}{Integer.  Resolution for raster output.  Default \code{300}.}
 
-\item{bg}{Character scalar.  Background colour passed to
+\item{bg}{Character scalar.  Background color passed to
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.  Default \code{"white"}.}
 }
 \value{
@@ -73,8 +73,8 @@ side effect); assign the return value to capture the object for further
 modification.
 }
 \description{
-Visualises how three data sources (A, B, C) cover a universe of providers,
-labelling each region with its count and the centre with the three-way
+Visualizes how three data sources (A, B, C) cover a universe of providers,
+labelling each region with its count and the center with the three-way
 intersection count and percentage.  The result is a \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
 object, optionally written to disk.
 }

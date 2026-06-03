@@ -2,7 +2,7 @@
 % Please edit documentation in R/outcome_analysis.R
 \name{mysterycall_wait_time_summary}
 \alias{mysterycall_wait_time_summary}
-\title{Summarise appointment wait times}
+\title{Summarize appointment wait times}
 \usage{
 mysterycall_wait_time_summary(
   data,

@@ -16,7 +16,7 @@ Default is \code{NA_character_}.}
 A named list with two character elements:
 \describe{
 \item{\code{addr1}}{Character. Primary address with unit designators
-standardised to USPS abbreviations (STE, APT, UNIT, FL, RM).}
+standardized to USPS abbreviations (STE, APT, UNIT, FL, RM).}
 \item{\code{addr2}}{Character or \code{NA_character_}. Normalized secondary
 address line; \code{NA_character_} when \code{addr2} was \code{NA_character_}.}
 }

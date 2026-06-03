@@ -1,0 +1,144 @@
+---
+title: "Getting Started with mysterycall"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with mysterycall}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The `mysterycall` package provides a comprehensive, end-to-end toolkit for conducting mystery caller studies in healthcare research. This vignette walks you through a simplified, reproducible example of the entire workflow: from generating a provider roster, to preparing the data for callers, to analyzing the results.
+
+```{r setup}
+library(mysterycall)
+library(dplyr)
+```
+
+## Step 1: Building a Provider Roster
+
+In a real study, you would likely use `mysterycall_search_taxonomy()` or `mysterycall_search_and_process_npi()` to query the NPPES registry. For this example, we will use a small subset of the bundled `physicians` dataset.
+
+```{r roster}
+# Load bundled physician data
+data(physicians)
+
+# Select a small sample for our dummy study
+roster <- physicians %>%
+  head(10) %>%
+  mutate(
+    phone_number = "555-555-1212", # Dummy phone
+    practice_name = paste("Clinic", row_number()),
+    state = "CO"
+  )
+
+print(roster)
+```
+
+## Step 2: Preparing Data for Callers
+
+Before handing off the data, we need to ensure it is clean and properly formatted. We can use the package's normalization utilities.
+
+```{r prepare}
+# Normalize names and practice locations
+clean_roster <- roster %>%
+  mutate(
+    # In a real workflow, you might use mysterycall_normalize_address_df here
+    practice_name = toupper(practice_name),
+    # Assign random scenarios (e.g., Medicaid vs. Private Insurance)
+    insurance_scenario = sample(c("Medicaid", "Private"), nrow(.), replace = TRUE)
+  )
+
+# Verify the cleaned data
+head(clean_roster)
+```
+
+## Step 3: The Handoff
+
+You can use `mysterycall_split_and_save()` to divide the roster among your research assistants.
+
+```{r split, eval=FALSE}
+# Example of splitting the roster (not evaluated here to prevent file creation)
+# mysterycall_split_and_save(
+#   clean_roster, 
+#   output_directory = tempdir(), 
+#   lab_assistant_names = c("Caller A", "Caller B")
+# )
+```
+
+## Step 4: Analyzing Results
+
+After your callers return the completed spreadsheets, you would clean them using `mysterycall_clean_phase1()` and `mysterycall_clean_phase2()`. 
+
+Let's simulate the results of the calls:
+
+```{r simulate}
+# Simulate caller responses
+results <- clean_roster %>%
+  mutate(
+    able_to_contact_office = "Yes",
+    are_we_including = "Yes",
+    appointment_date = sample(seq(as.Date('2024-01-01'), as.Date('2024-03-01'), by="day"), nrow(.), replace=TRUE),
+    call_time = "09:00",
+    hold_time = "00:02",
+    # Simulate that Private insurance has a higher acceptance rate
+    accepted = ifelse(insurance_scenario == "Private", 
+                     sample(c(TRUE, FALSE), nrow(.), replace = TRUE, prob = c(0.8, 0.2)),
+                     sample(c(TRUE, FALSE), nrow(.), replace = TRUE, prob = c(0.4, 0.6)))
+  )
+```
+
+### Table 1: Demographics
+
+Generate a quick Table 1 of your provider sample.
+
+```{r table1}
+# Prepare variables for Table 1
+t1_data <- mysterycall_prepare_table1_vars(results)
+
+# Generate the table
+t1 <- mysterycall_table1(
+  data = t1_data,
+  variables = c("insurance_scenario"),
+  stratify_by = "accepted",
+  include_overall = TRUE
+)
+
+print(t1)
+```
+
+### Multivariable Modeling
+
+Finally, run a Poisson regression with robust standard errors to analyze the primary outcome (appointment acceptance rate).
+
+```{r model}
+# Fit the Poisson model
+model <- mysterycall_poisson_model(
+  data = results,
+  formula = accepted ~ insurance_scenario,
+  cluster_var = "NPI"
+)
+
+# Print the incidence rate ratios (IRR)
+print(model)
+
+# Generate a manuscript-ready results paragraph
+mysterycall_write_results_paragraph(
+  model_result = model,
+  ref_group = "Private",
+  exposure_col = "insurance_scenario",
+  outcome_label = "appointment acceptance"
+)
+```
+
+## Conclusion
+
+This vignette covered the basic lifecycle of a mystery caller study. For deep dives into specific topics like geospatial routing, Census integration, or power analysis, please explore the other vignettes provided with the package.

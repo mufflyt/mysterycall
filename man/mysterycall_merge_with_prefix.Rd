@@ -54,7 +54,7 @@ mysterycall_merge_with_prefix(registry, abohns, by = "npi",
 \seealso{
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} for joins with duplicate-key
 warnings; \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for post-join specialty
-harmonisation.
+harmonization.
 
 Other data management:
 \code{\link[=mysterycall_check_duplicates]{mysterycall_check_duplicates()}},

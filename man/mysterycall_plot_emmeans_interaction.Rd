@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_emmeans_interaction.R
 \name{mysterycall_plot_emmeans_interaction}
 \alias{mysterycall_plot_emmeans_interaction}
-\title{Visualise estimated marginal means for an interaction}
+\title{Visualize estimated marginal means for an interaction}
 \usage{
 mysterycall_plot_emmeans_interaction(model, specs, variable, use_color = TRUE)
 }
@@ -11,14 +11,14 @@ mysterycall_plot_emmeans_interaction(model, specs, variable, use_color = TRUE)
 
 \item{specs}{Character vector of marginal mean specifications passed to
 \code{emmeans}. Typically \code{c("exposure", "moderator")}. The first element
-maps to the x-axis; the second (if present) maps to the grouping/colour
+maps to the x-axis; the second (if present) maps to the grouping/color
 aesthetic.}
 
 \item{variable}{Character scalar. Y-axis label (typically the outcome
 variable name).}
 
 \item{use_color}{Logical. If \code{TRUE} (default), groups are distinguished by
-colour. If \code{FALSE}, a greyscale bar chart is drawn instead.}
+color. If \code{FALSE}, a greyscale bar chart is drawn instead.}
 }
 \value{
 A \code{ggplot} object.

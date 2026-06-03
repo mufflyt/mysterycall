@@ -21,26 +21,29 @@ A tibble where each row represents an ACOG district with its
 corresponding two-letter abbreviation and full state name.
 }
 \description{
-This dataset contains information about American College of Obstetricians and Gynecologists (ACOG) districts, including their two-letter state abbreviations and full state names.
+This dataset contains information about American College of Obstetricians and
+Gynecologists (ACOG) districts, including their two-letter state abbreviations
+and full state names. It is useful for grouping states into regional districts
+for subgroup analysis in mystery caller studies.
 }
 \examples{
 # Load the ACOG Districts Data
 data(acog_districts)
 
 # Inspect the dataset
-print(acog_districts)
+head(acog_districts)
 
-# Get a summary of the dataset
-summary(acog_districts)
-
-# Perform data analysis and exploration
+# Group by district
+table(acog_districts$ACOG_District)
 
 }
 \seealso{
 Other datasets:
 \code{\link{acgme}},
+\code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
+\code{\link{physicians}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}

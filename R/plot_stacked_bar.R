@@ -20,13 +20,13 @@ NULL
 #' @keywords internal
 .to_title <- function(x) {
   x <- gsub("_", " ", x, fixed = TRUE)
-  # capitalise each word
+  # capitalize each word
   gsub("(^|\\s)(\\S)", "\\1\\U\\2", x, perl = TRUE)
 }
 
 #' Plot a horizontal stacked bar chart of binary outcome proportions
 #'
-#' Summarises a binary 0/1 outcome column by a grouping variable and draws a
+#' Summarizes a binary 0/1 outcome column by a grouping variable and draws a
 #' 100-percent stacked bar chart using `ggplot2`. Groups are laid out
 #' horizontally (via [ggplot2::coord_flip()]) with the "accepted" bar segment
 #' always on the right so high-acceptance groups stand out.
@@ -39,7 +39,7 @@ NULL
 #' @param fill_labels Character vector of length 2. Display labels for the two
 #'   bar segments. First element = 0-outcome label, second = 1-outcome label.
 #'   Default `c("Not Accepted", "Accepted")`.
-#' @param colors Character vector of length >= 2. Fill colours mapped to
+#' @param colors Character vector of length >= 2. Fill colors mapped to
 #'   `fill_labels` in order. Default `c("#E05C6A", "#4A9F70")`.
 #' @param title Character scalar. Plot title. `NULL` (default) produces no
 #'   title.
@@ -114,7 +114,7 @@ mysterycall_plot_stacked_bar <- function(data,
     stop("No non-NA rows remain in `data` after filtering.", call. = FALSE)
   }
 
-  # ---- Summarise per group ---------------------------------------------------
+  # ---- Summarize per group ---------------------------------------------------
   groups        <- as.character(data[[group_col]])
   outcomes      <- as.integer(data[[outcome_col]])
   unique_groups <- sort(unique(groups))
@@ -205,7 +205,7 @@ mysterycall_plot_stacked_bar <- function(data,
     p <- p +
       ggplot2::geom_text(
         ggplot2::aes(label = .data[["n"]], y = .data[["y_mid"]]),
-        colour   = "white",
+        color   = "white",
         fontface = "bold",
         size     = 3.5
       )

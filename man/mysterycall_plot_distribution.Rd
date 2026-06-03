@@ -7,7 +7,7 @@
 mysterycall_plot_distribution(x, title = NULL, bins = 30L)
 }
 \arguments{
-\item{x}{Numeric vector to visualise.}
+\item{x}{Numeric vector to visualize.}
 
 \item{title}{Character scalar used as the base plot title. If \code{NULL}
 (default), the deparsed expression of \code{x} is used.}

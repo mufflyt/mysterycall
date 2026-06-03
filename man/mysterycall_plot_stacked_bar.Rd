@@ -30,7 +30,7 @@ mysterycall_plot_stacked_bar(
 bar segments. First element = 0-outcome label, second = 1-outcome label.
 Default \code{c("Not Accepted", "Accepted")}.}
 
-\item{colors}{Character vector of length >= 2. Fill colours mapped to
+\item{colors}{Character vector of length >= 2. Fill colors mapped to
 \code{fill_labels} in order. Default \code{c("#E05C6A", "#4A9F70")}.}
 
 \item{title}{Character scalar. Plot title. \code{NULL} (default) produces no
@@ -55,7 +55,7 @@ A \code{ggplot} object of class \code{c("gg", "ggplot")}. Pass to
 \code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} or \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} to write to disk.
 }
 \description{
-Summarises a binary 0/1 outcome column by a grouping variable and draws a
+Summarizes a binary 0/1 outcome column by a grouping variable and draws a
 100-percent stacked bar chart using \code{ggplot2}. Groups are laid out
 horizontally (via \code{\link[ggplot2:coord_flip]{ggplot2::coord_flip()}}) with the "accepted" bar segment
 always on the right so high-acceptance groups stand out.

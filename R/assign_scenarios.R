@@ -42,7 +42,7 @@ NULL
 #'
 #' @seealso [mysterycall_check_generalist_presence()] to validate paired
 #'   generalist coverage before assigning scenarios;
-#'   [mysterycall_reconcile_specialty()] for specialty harmonisation.
+#'   [mysterycall_reconcile_specialty()] for specialty harmonization.
 #' @family study design
 #' @export
 #'

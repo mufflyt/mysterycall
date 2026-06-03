@@ -65,17 +65,17 @@
 
 <div id="comprehensive-logging-system---user-guide" class="section level1">
 
-<p><strong>Date:</strong> 2025-10-29 <strong>Version:</strong> Added in tyler v1.2.2</p>
+<p><strong>Date:</strong> 2025-10-29 <strong>Version:</strong> Added in mysterycall v1.2.2</p>
 <hr><div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a></h2>
-<p>The tyler package now includes a comprehensive logging system that provides <strong>plain-language progress updates</strong> throughout long-running workflows. This dramatically improves user experience by showing exactly what’s happening, how long it’s taking, and what the success rates are.</p>
+<p>The mysterycall package now includes a comprehensive logging system that provides <strong>plain-language progress updates</strong> throughout long-running workflows. This dramatically improves user experience by showing exactly what’s happening, how long it’s taking, and what the success rates are.</p>
 <hr></div>
 <div class="section level2">
 <h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a></h2>
 <div class="section level3">
 <h3 id="option-1-use-the-enhanced-workflow-recommended">Option 1: Use the Enhanced Workflow (Recommended)<a class="anchor" aria-label="anchor" href="#option-1-use-the-enhanced-workflow-recommended"></a></h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/tyler" class="external-link">tyler</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow with beautiful logging</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging</a></span><span class="op">(</span></span>
@@ -132,67 +132,67 @@
 <h2 id="option-2-add-logging-to-custom-workflows">Option 2: Add Logging to Custom Workflows<a class="anchor" aria-label="anchor" href="#option-2-add-logging-to-custom-workflows"></a></h2>
 <p>You can use the logging functions in your own scripts:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/tyler" class="external-link">tyler</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Start workflow tracking</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_workflow_start</a></span><span class="op">(</span></span>
 <span>  workflow_name <span class="op">=</span> <span class="st">"My Custom Analysis"</span>,</span>
 <span>  total_steps <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="st">"my_workflow.log"</span>  <span class="co"># Optional: save to file</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="st">"Loaded 1,000 records"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_success</a></span><span class="op">(</span><span class="st">"Loaded 1,000 records"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 2</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Processing Data"</span>, detail <span class="op">=</span> <span class="st">"Cleaning and validating"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Processing Data"</span>, detail <span class="op">=</span> <span class="st">"Cleaning and validating"</span><span class="op">)</span></span>
 <span><span class="va">clean_data</span> <span class="op">&lt;-</span> <span class="fu">clean_my_data</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 3</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Saving Results"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Saving Results"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">clean_data</span>, <span class="st">"output.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_save</a></span><span class="op">(</span><span class="st">"output.csv"</span>, n_rows <span class="op">=</span> <span class="fl">950</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_save</a></span><span class="op">(</span><span class="st">"output.csv"</span>, n_rows <span class="op">=</span> <span class="fl">950</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># End with summary</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 <div class="section level2">
 <h2 id="available-logging-functions">Available Logging Functions<a class="anchor" aria-label="anchor" href="#available-logging-functions"></a></h2>
 <div class="section level3">
 <h3 id="workflow-control">Workflow Control<a class="anchor" aria-label="anchor" href="#workflow-control"></a></h3>
 <ul><li>
-<strong><code>tyler_workflow_start(name, total_steps, log_file)</code></strong> - Initialize workflow</li>
+<strong><code>mysterycall_workflow_start(name, total_steps, log_file)</code></strong> - Initialize workflow</li>
 <li>
-<strong><code>tyler_workflow_end(final_n, input_n)</code></strong> - Print summary</li>
+<strong><code>mysterycall_workflow_end(final_n, input_n)</code></strong> - Print summary</li>
 <li>
-<strong><code>tyler_log_step(name, detail, n_items)</code></strong> - Start a new step</li>
+<strong><code>mysterycall_log_step(name, detail, n_items)</code></strong> - Start a new step</li>
 <li>
-<strong><code>tyler_log_step_complete(success_rate, n_success, n_total)</code></strong> - Complete step</li>
+<strong><code>mysterycall_log_step_complete(success_rate, n_success, n_total)</code></strong> - Complete step</li>
 </ul></div>
 <div class="section level3">
 <h3 id="message-types">Message Types<a class="anchor" aria-label="anchor" href="#message-types"></a></h3>
 <ul><li>
-<strong><code>tyler_log_info(msg)</code></strong> - ℹ Informational message</li>
+<strong><code>mysterycall_log_info(msg)</code></strong> - ℹ Informational message</li>
 <li>
-<strong><code>tyler_log_success(msg, details)</code></strong> - ✓ Success message (green)</li>
+<strong><code>mysterycall_log_success(msg, details)</code></strong> - ✓ Success message (green)</li>
 <li>
-<strong><code>tyler_log_warning(msg, fix)</code></strong> - ⚠ Warning message (yellow)</li>
+<strong><code>mysterycall_log_warning(msg, fix)</code></strong> - ⚠ Warning message (yellow)</li>
 <li>
-<strong><code>tyler_log_error(msg, cause, fix)</code></strong> - ✗ Error with cause and fix</li>
+<strong><code>mysterycall_log_error(msg, cause, fix)</code></strong> - ✗ Error with cause and fix</li>
 <li>
-<strong><code>tyler_log_progress(current, total, status)</code></strong> - Progress update</li>
+<strong><code>mysterycall_log_progress(current, total, status)</code></strong> - Progress update</li>
 </ul></div>
 <div class="section level3">
 <h3 id="special-messages">Special Messages<a class="anchor" aria-label="anchor" href="#special-messages"></a></h3>
 <ul><li>
-<strong><code>tyler_log_cache_hit(what, n_items)</code></strong> - ↻ Loaded from cache</li>
+<strong><code>mysterycall_log_cache_hit(what, n_items)</code></strong> - ↻ Loaded from cache</li>
 <li>
-<strong><code>tyler_log_save(path, n_rows)</code></strong> - 💾 File saved</li>
+<strong><code>mysterycall_log_save(path, n_rows)</code></strong> - 💾 File saved</li>
 </ul><hr></div>
 </div>
 <div class="section level2">
@@ -218,7 +218,7 @@
 <h2 id="log-files">Log Files<a class="anchor" aria-label="anchor" href="#log-files"></a></h2>
 <p>All logs can be saved to a file for later review:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_workflow_start</a></span><span class="op">(</span></span>
 <span>  <span class="st">"My Workflow"</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="st">"logs/workflow_20251029.txt"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -249,7 +249,7 @@
 <h3 id="q-i-dont-see-any-log-messages">Q: I don’t see any log messages<a class="anchor" aria-label="anchor" href="#q-i-dont-see-any-log-messages"></a></h3>
 <p><strong>A:</strong> Check that you’re not using <code>quiet = TRUE</code> mode. Try:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tyler.quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>mysterycall.quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="q-unicode-symbols-dont-display-correctly">Q: Unicode symbols don’t display correctly<a class="anchor" aria-label="anchor" href="#q-unicode-symbols-dont-display-correctly"></a></h3>
@@ -259,7 +259,7 @@
 <h3 id="q-how-do-i-disable-logging">Q: How do I disable logging?<a class="anchor" aria-label="anchor" href="#q-how-do-i-disable-logging"></a></h3>
 <p><strong>A:</strong> Use <code>quiet = TRUE</code> in function arguments, or set:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tyler.quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>mysterycall.quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 </div>
 <div class="section level2">
@@ -267,30 +267,30 @@
 <div class="section level3">
 <h3 id="example-1-simple-workflow">Example 1: Simple Workflow<a class="anchor" aria-label="anchor" href="#example-1-simple-workflow"></a></h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span><span class="st">"Quick Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_workflow_start</a></span><span class="op">(</span><span class="st">"Quick Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"input.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Loaded %d rows"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_success</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Loaded %d rows"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Analyzing"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Analyzing"</span><span class="op">)</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">analyze</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, input_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, input_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-with-error-handling">Example 2: With Error Handling<a class="anchor" aria-label="anchor" href="#example-2-with-error-handling"></a></h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Risky Operation"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Risky Operation"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">risky_function</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="st">"Operation succeeded!"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_success</a></span><span class="op">(</span><span class="st">"Operation succeeded!"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_error</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_error</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Operation failed"</span>,</span>
 <span>    cause <span class="op">=</span> <span class="va">e</span><span class="op">$</span><span class="va">message</span>,</span>
 <span>    fix <span class="op">=</span> <span class="st">"Check your input data format"</span></span>
@@ -301,18 +301,18 @@
 <div class="section level3">
 <h3 id="example-3-progress-tracking">Example 3: Progress Tracking<a class="anchor" aria-label="anchor" href="#example-3-progress-tracking"></a></h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Processing Items"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step</a></span><span class="op">(</span><span class="st">"Processing Items"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Do work...</span></span>
 <span></span>
 <span>  <span class="co"># Report progress every 100 items</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">100</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_progress</a></span><span class="op">(</span><span class="va">i</span>, <span class="fl">1000</span>, status <span class="op">=</span> <span class="st">"Processing..."</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_progress</a></span><span class="op">(</span><span class="va">i</span>, <span class="fl">1000</span>, status <span class="op">=</span> <span class="st">"Processing..."</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 </div>
 <div class="section level2">
@@ -320,9 +320,9 @@
 <ul><li>
 <code><a href="reference/mysterycall-deprecated.html">?run_mystery_caller_workflow_with_logging</a></code> - Enhanced workflow wrapper</li>
 <li>
-<code><a href="reference/tyler-deprecated.html">?tyler_workflow_start</a></code> - Workflow control functions</li>
+<code><a href="reference/mysterycall-deprecated.html">?mysterycall_workflow_start</a></code> - Workflow control functions</li>
 <li>
-<code><a href="reference/tyler-deprecated.html">?tyler_log_info</a></code> - Message logging functions</li>
+<code><a href="reference/mysterycall-deprecated.html">?mysterycall_log_info</a></code> - Message logging functions</li>
 <li>
 <code>PRODUCTION_95_PERCENT_SUCCESS_PLAN.md</code> - Production readiness plan</li>
 </ul><hr><p><strong>Feedback?</strong> This logging system addresses Risk #9 (Insufficient Logging) from the production readiness analysis. Please report any issues or suggestions!</p>

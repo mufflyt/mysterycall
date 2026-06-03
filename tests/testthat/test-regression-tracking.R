@@ -357,7 +357,7 @@ test_that("REGRESSION: No widespread NAs across all columns", {
 
   # Calculate overall NA rate
   total_cells <- nrow(results) * ncol(results)
-  total_nas <- sum(sapply(results, function(x) sum(is.na(x))))
+  total_nas <- sum(vapply(results, function(x) sum(is.na(x)), numeric(1)))
   overall_na_rate <- total_nas / total_cells
 
   # Should not have more than 30% NAs overall

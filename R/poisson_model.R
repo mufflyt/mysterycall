@@ -318,7 +318,7 @@ mysterycall_poisson_model <- function(data,
 #' @return `invisible(x)` (the original model list, returned silently so
 #'   the print method can be used in pipes without printing twice).
 #' @seealso [mysterycall_poisson_model()] which produces this object;
-#'   [mysterycall_irr_plot()] to visualise the same IRR estimates.
+#'   [mysterycall_irr_plot()] to visualize the same IRR estimates.
 #' @family outcomes
 #' @export
 #' @examples

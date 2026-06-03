@@ -19,7 +19,7 @@ NULL
 #' @param width Numeric. Width in inches. Default `8`.
 #' @param height Numeric. Height in inches. Default `6`.
 #' @param dpi Integer. Dots per inch. Default `300` (publication quality).
-#' @param bg Character scalar. Background colour. Default `"white"`.
+#' @param bg Character scalar. Background color. Default `"white"`.
 #' @param ... Additional arguments forwarded to [ggplot2::ggsave()].
 #'
 #' @return The output `path` (character scalar), invisibly. Assign the return

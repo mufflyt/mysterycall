@@ -13,9 +13,9 @@
 
 ## Package rename
 
-This submission renames the package from `tyler` to `mysterycall`. The previous
-`tyler` package was never accepted to CRAN. All exported functions now carry the
-`mysterycall_` prefix. The former `tyler_` and unprefixed names are retained as
+This submission renames the package from `mysterycall` to `mysterycall`. The previous
+`mysterycall` package was never accepted to CRAN. All exported functions now carry the
+`mysterycall_` prefix. The former `mysterycall_` and unprefixed names are retained as
 deprecated backward-compatibility shims via `.Deprecated()`.
 
 ## Suggests

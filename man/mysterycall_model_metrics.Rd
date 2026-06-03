@@ -17,7 +17,7 @@ A named list with two numeric scalar elements:
 mean(|observed - fitted|). Measures average prediction error in the
 original response units.}
 \item{\code{rmse}}{Numeric scalar (or \code{NA_real_}). Root-mean-square error:
-sqrt(mean((observed - fitted)^2)). Penalises large errors more
+sqrt(mean((observed - fitted)^2)). Penalizes large errors more
 heavily than MAE.}
 }
 Both elements are \code{NA_real_} when fitted values cannot be extracted

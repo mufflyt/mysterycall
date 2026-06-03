@@ -50,7 +50,7 @@ names. Default \code{c(".x", ".y")}.}
 A data frame: the inner-join result.
 }
 \description{
-Wraps \code{\link[dplyr:inner_join]{dplyr::inner_join()}} with key-type harmonisation, optional
+Wraps \code{\link[dplyr:inner_join]{dplyr::inner_join()}} with key-type harmonization, optional
 uniqueness assertion on both tables, coverage enforcement, and an optional
 CSV audit record.
 }

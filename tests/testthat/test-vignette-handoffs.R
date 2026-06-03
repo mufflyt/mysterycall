@@ -129,10 +129,10 @@ test_that("Vignette handoff: mysterycall_search_and_process_npi.Rmd examples", {
     # This simulates the vignette workflow
     valid_npis <- c("1234567890", "2345678901")
     results <- mock_process_npi(valid_npis)
-    results <- results[!sapply(results, is.null)]
+    results <- results[!vapply(results, is.null, logical(1))]
 
     expect_gt(length(results), 0)
-    expect_true(all(sapply(results, function(x) "npi" %in% names(x))))
+    expect_true(all(vapply(results, function(x) "npi" %in% names(x), logical(1))))
   }
 })
 

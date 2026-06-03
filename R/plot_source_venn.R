@@ -1,7 +1,7 @@
 #' Three-circle Venn diagram for data-source overlap
 #'
-#' Visualises how three data sources (A, B, C) cover a universe of providers,
-#' labelling each region with its count and the centre with the three-way
+#' Visualizes how three data sources (A, B, C) cover a universe of providers,
+#' labelling each region with its count and the center with the three-way
 #' intersection count and percentage.  The result is a [ggplot2::ggplot()]
 #' object, optionally written to disk.
 #'
@@ -18,9 +18,9 @@
 #'   the intersection region annotations (e.g. `"NPPES + PC"`).
 #' @param source_long Character vector of length 3.  Full labels used in the
 #'   bold header annotations above/below each circle.
-#' @param fills Character vector of length 3.  Fill colours for circles A, B,
-#'   C (hex or R colour names).
-#' @param border_colors Character vector of length 3.  Border and text colours
+#' @param fills Character vector of length 3.  Fill colors for circles A, B,
+#'   C (hex or R color names).
+#' @param border_colors Character vector of length 3.  Border and text colors
 #'   matching each circle.
 #' @param title,subtitle,caption Character scalars for plot text.  When
 #'   `subtitle` or `caption` is `NULL` a sensible default is auto-generated
@@ -31,7 +31,7 @@
 #' @param width,height Numeric.  Plot dimensions in inches passed to
 #'   [ggplot2::ggsave()].  Defaults `11` x `9`.
 #' @param dpi Integer.  Resolution for raster output.  Default `300`.
-#' @param bg Character scalar.  Background colour passed to
+#' @param bg Character scalar.  Background color passed to
 #'   [ggplot2::ggsave()].  Default `"white"`.
 #'
 #' @return A [ggplot2::ggplot()] object. Returned visibly when `output_path`

@@ -13,7 +13,7 @@ mysterycall_not_contacted_states(filtered_data, all_states = NULL)
 If not provided, a default set of states will be used.}
 }
 \value{
-A length-1 character string summarising the states not contacted and
+A length-1 character string summarizing the states not contacted and
 the number of unique physicians successfully reached.
 }
 \description{

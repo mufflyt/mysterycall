@@ -202,7 +202,7 @@ test_that("STRESS: Efficiently detects duplicates in large datasets", {
   )
 
   # Add 500 exact duplicates
-  dup_data <- base_data[sample(1:nrow(base_data), 500), ]
+  dup_data <- base_data[sample(seq_len(nrow(base_data)), 500), ]
   large_data <- rbind(base_data, dup_data)
 
   temp_dir <- tempfile()

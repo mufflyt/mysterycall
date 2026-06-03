@@ -135,8 +135,8 @@
 <p><strong>Failure Modes:</strong> - 2022 provider data joined to 2010 Census boundaries - Block group boundaries changed between vintages - Population counts from wrong year - Crosswalk function not provided</p>
 <p><strong>Current State:</strong> - ✅ Year alignment validation exists - ✅ Requires crosswalk function for 2010↔︎2020 - ❌ Only handles 2010 and 2020 (what about 2015-2019, 2021+?) - ❌ No built-in crosswalk functions</p>
 <p><strong>Mitigation Plan:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fl">1.</span> Create <span class="fu">tyler_crosswalk_2010_to_2020</span>() <span class="cf">function</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fl">2.</span> Create <span class="fu">tyler_crosswalk_2020_to_2010</span>() <span class="cf">function</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fl">1.</span> Create <span class="fu">mysterycall_crosswalk_2010_to_2020</span>() <span class="cf">function</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fl">2.</span> Create <span class="fu">mysterycall_crosswalk_2020_to_2010</span>() <span class="cf">function</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fl">3.</span> Add support <span class="cf">for</span> intermediate <span class="fu">years</span> (interpolation)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fl">4.</span> Document crosswalk methodology</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fl">5.</span> Validate crosswalk accuracy with known test cases</span></code></pre></div>
@@ -149,7 +149,7 @@
 <p><strong>Failure Modes:</strong> - Loading entire NPI search results into memory - Creating isochrones for 10,000+ providers simultaneously - Joining large spatial datasets - Progress tracking objects accumulate</p>
 <p><strong>Current State:</strong> - ✅ Some checkpointing exists (isochrones save to disk periodically) - ❌ No memory monitoring - ❌ No chunking for large operations - ❌ No guidance on maximum dataset size</p>
 <p><strong>Mitigation Plan:</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fl">1.</span> Add <span class="fu">tyler_estimate_memory_usage</span>() <span class="cf">function</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fl">1.</span> Add <span class="fu">mysterycall_estimate_memory_usage</span>() <span class="cf">function</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fl">2.</span> Process data <span class="cf">in</span> <span class="fu">chunks</span> (<span class="dv">1000</span> rows at a time)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fl">3.</span> Stream results to disk instead of accumulating <span class="cf">in</span> memory</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fl">4.</span> Add <span class="sc">--</span>max<span class="sc">-</span>batch<span class="sc">-</span>size parameter</span>
@@ -165,7 +165,7 @@
 <p><strong>Mitigation Plan:</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fl">1.</span> All API functions support resume<span class="ot">=</span><span class="cn">TRUE</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fl">2.</span> Save progress after every N <span class="fu">operations</span> (<span class="at">N=</span><span class="dv">10</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fl">3.</span> Add <span class="fu">tyler_resume_workflow</span>() <span class="cf">function</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fl">3.</span> Add <span class="fu">mysterycall_resume_workflow</span>() <span class="cf">function</span></span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fl">4.</span> Atomic writes <span class="cf">for</span> all checkpoints</span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fl">5.</span> Lock files prevent concurrent runs</span></code></pre></div>
 <p><strong>Test Plan:</strong> - Deliberately kill process mid-run - Validate resume continues from last checkpoint - Test concurrent execution attempts</p>
@@ -177,7 +177,7 @@
 <p><strong>Failure Modes:</strong> - Same provider listed multiple times with slight name variations - Same NPI with different addresses - Multiple NPIs for same physician (MD + DO credentials) - Duplicate rows in Phase 2 data</p>
 <p><strong>Current State:</strong> - ✅ NPI deduplication logic exists - ❌ No name fuzzy matching for duplicates - ❌ No deduplication summary reported - ❌ No handling of same provider, different locations</p>
 <p><strong>Mitigation Plan:</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fl">1.</span> Add <span class="fu">tyler_deduplicate_providers</span>() <span class="cf">function</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fl">1.</span> Add <span class="fu">mysterycall_deduplicate_providers</span>() <span class="cf">function</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fl">2.</span> Fuzzy matching <span class="fu">on</span> (first_name, last_name, city)</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fl">3.</span> Report deduplication statistics</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fl">4.</span> Flag suspicious cases <span class="cf">for</span> manual review</span>
@@ -189,7 +189,7 @@
 <h3 id="id_9-warning-insufficient-logging-risk-high">9. ⚠️ Insufficient Logging (Risk: HIGH)<a class="anchor" aria-label="anchor" href="#id_9-warning-insufficient-logging-risk-high"></a></h3>
 <p><strong>Concern:</strong> Failed production runs can’t be debugged</p>
 <p><strong>Current Failure Modes:</strong> - Silent failures (function returns empty result) - Generic error messages (“Error: something went wrong”) - No trace of what data was processed - No performance metrics</p>
-<p><strong>Current State:</strong> - ❌ Inconsistent logging across functions - ❌ No structured logging format - ❌ No log aggregation - ❌ tyler_log_info() exists but underutilized</p>
+<p><strong>Current State:</strong> - ❌ Inconsistent logging across functions - ❌ No structured logging format - ❌ No log aggregation - ❌ mysterycall_log_info() exists but underutilized</p>
 <p><strong>Mitigation Plan:</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Implement comprehensive logging:</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
@@ -229,7 +229,7 @@
 <p><strong>Concern:</strong> Broken code reaches production</p>
 <p><strong>Current State:</strong> - ❌ No pre-flight checks before workflow - ❌ No test data validation - ❌ No dependency verification</p>
 <p><strong>Mitigation Plan:</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Add tyler_preflight_check() function:</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Add mysterycall_preflight_check() function:</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fl">1.</span> Check all dependencies installed</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fl">2.</span> Validate API keys present and valid</span>
@@ -375,7 +375,7 @@
 <span><span class="co">#' @param context Description of where data came from</span></span>
 <span><span class="co">#' @return Invisible TRUE if passes, stops with error if limits found</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">tyler_check_no_limits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">context</span> <span class="op">=</span> <span class="st">"dataset"</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">mysterycall_check_no_limits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">context</span> <span class="op">=</span> <span class="st">"dataset"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Check for suspiciously round numbers</span></span>
@@ -406,7 +406,7 @@
 <span><span class="co">#' @param path Directory to scan (defaults to R/)</span></span>
 <span><span class="co">#' @return Data frame of found issues</span></span>
 <span><span class="co">#' @export</span></span>
-<span><span class="va">tyler_scan_for_limits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">path</span> <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">mysterycall_scan_for_limits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">path</span> <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Patterns to search for</span></span>
 <span>  <span class="va">patterns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"slice_head\\s*\\(\\s*n\\s*="</span>,</span>
@@ -461,14 +461,14 @@
 <p><strong>Usage:</strong></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># At start of workflow:</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_scan_for_limits</a></span><span class="op">(</span><span class="st">"R/"</span><span class="op">)</span>  <span class="co"># Scan all R files once</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_scan_for_limits</a></span><span class="op">(</span><span class="st">"R/"</span><span class="op">)</span>  <span class="co"># Scan all R files once</span></span>
 <span></span>
 <span><span class="co"># Before each major operation:</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"providers.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_check_no_limits</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"provider input"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_check_no_limits</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"provider input"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">npi_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">search_and_process_npi</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_check_no_limits</a></span><span class="op">(</span><span class="va">npi_results</span>, <span class="st">"NPI search results"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/mysterycall-deprecated.html">mysterycall_check_no_limits</a></span><span class="op">(</span><span class="va">npi_results</span>, <span class="st">"NPI search results"</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 <div class="section level2">
 <h2 id="chart_with_upwards_trend-success-metrics">📈 SUCCESS METRICS<a class="anchor" aria-label="anchor" href="#chart_with_upwards_trend-success-metrics"></a></h2>

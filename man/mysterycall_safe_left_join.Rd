@@ -59,7 +59,7 @@ working directory using \code{report_prefix} as the filename stem.
 \description{
 Wraps \code{\link[dplyr:left_join]{dplyr::left_join()}} with:
 \itemize{
-\item Key-type harmonisation (prevents silent 0-match joins after type
+\item Key-type harmonization (prevents silent 0-match joins after type
 coercion from RDS or Parquet round-trips).
 \item Right-side uniqueness assertion (blocks accidental many-to-many
 fan-outs).

@@ -9,7 +9,7 @@ NULL
 #' panel shows raw counts; the second applies a square-root y-axis transform,
 #' which makes right-skewed count data easier to read.
 #'
-#' @param x Numeric vector to visualise.
+#' @param x Numeric vector to visualize.
 #' @param title Character scalar used as the base plot title. If `NULL`
 #'   (default), the deparsed expression of `x` is used.
 #' @param bins Integer number of histogram bins. Default `30L`.

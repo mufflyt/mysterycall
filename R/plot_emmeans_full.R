@@ -22,15 +22,15 @@ NULL
 #' @param model A fitted model accepted by [emmeans::emmeans()].
 #' @param specs Character vector of marginal mean specifications. The first
 #'   element is the x-axis variable; the second (if present) becomes the
-#'   grouping variable for colour / shape.
+#'   grouping variable for color / shape.
 #' @param variable Character scalar used as the x-axis label (underscores
-#'   are replaced with spaces and the first letter is capitalised).
+#'   are replaced with spaces and the first letter is capitalized).
 #' @param group_col Optional character scalar naming the grouping column.
 #'   Overrides the second element of `specs` when supplied.
 #' @param type Character scalar passed to [emmeans::emmeans()] as the
 #'   `type` argument. Use `"response"` (default) for Poisson models so
 #'   values are on the count/rate scale; use `"link"` for the log scale.
-#' @param use_color Logical. `TRUE` (default) uses colour to distinguish
+#' @param use_color Logical. `TRUE` (default) uses color to distinguish
 #'   groups; `FALSE` uses shapes and linetypes for greyscale output.
 #' @param save_path Optional character scalar. Full file path (e.g.
 #'   `"figures/emmeans_insurance.png"`). When non-`NULL`,

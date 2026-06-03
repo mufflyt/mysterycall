@@ -1,4 +1,4 @@
-#' Visualise estimated marginal means for an interaction
+#' Visualize estimated marginal means for an interaction
 #'
 #' @name mysterycall_plot_emmeans_interaction
 NULL
@@ -12,12 +12,12 @@ NULL
 #' @param model A fitted model accepted by [emmeans::emmeans()].
 #' @param specs Character vector of marginal mean specifications passed to
 #'   `emmeans`. Typically `c("exposure", "moderator")`. The first element
-#'   maps to the x-axis; the second (if present) maps to the grouping/colour
+#'   maps to the x-axis; the second (if present) maps to the grouping/color
 #'   aesthetic.
 #' @param variable Character scalar. Y-axis label (typically the outcome
 #'   variable name).
 #' @param use_color Logical. If `TRUE` (default), groups are distinguished by
-#'   colour. If `FALSE`, a greyscale bar chart is drawn instead.
+#'   color. If `FALSE`, a greyscale bar chart is drawn instead.
 #'
 #' @return A `ggplot` object.
 #'

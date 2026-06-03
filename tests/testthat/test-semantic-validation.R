@@ -154,7 +154,7 @@ test_that("SEMANTIC: Final output has adequate completeness for analysis", {
 
   # Overall quality check
   total_cells <- nrow(final_data) * ncol(final_data)
-  total_nas <- sum(sapply(final_data, function(x) sum(is.na(x))))
+  total_nas <- sum(vapply(final_data, function(x) sum(is.na(x)), numeric(1)))
   overall_na_rate <- total_nas / total_cells
 
   expect_lte(overall_na_rate, 0.30,

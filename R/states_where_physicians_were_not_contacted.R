@@ -9,7 +9,7 @@
 #' @param all_states A character vector of all possible states including Washington, DC.
 #' If not provided, a default set of states will be used.
 #'
-#' @return A length-1 character string summarising the states not contacted and
+#' @return A length-1 character string summarizing the states not contacted and
 #'   the number of unique physicians successfully reached.
 #' @details
 #' If `contact_office` and/or `included_in_study` exist, they are interpreted as

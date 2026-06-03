@@ -27,7 +27,7 @@ NULL
 #' @param region_type Character scalar. Either `"state"` (default) or `"hrr"`.
 #'   `"hrr"` immediately raises an error with instructions to use the sf-based
 #'   workflow.
-#' @param palette Character scalar. Viridis colour-scale option passed to
+#' @param palette Character scalar. Viridis color-scale option passed to
 #'   [ggplot2::scale_fill_viridis_c()]. Default `"viridis"`.
 #' @param title Character scalar. Plot title. Default
 #'   `"Appointment Acceptance Rate (%)"`.
@@ -35,7 +35,7 @@ NULL
 #'   `"Acceptance\\nRate (%)"`.
 #' @param limits Numeric vector of length 2 or `NULL`. Explicit limits for
 #'   the fill scale. `NULL` (default) lets ggplot2 choose.
-#' @param na_color Character scalar. Fill colour for states with no data.
+#' @param na_color Character scalar. Fill color for states with no data.
 #'   Default `"grey80"`.
 #' @param save_path Character scalar or `NULL`. When not `NULL`, the plot is
 #'   written to this path via [mysterycall_save_plot()].
@@ -130,7 +130,7 @@ mysterycall_map_acceptance_rate <- function(data,
   # ---- Build plot ------------------------------------------------------------
   p <- ggplot2::ggplot(merged,
          ggplot2::aes(x = long, y = lat, group = group, fill = rate_pct)) +
-    ggplot2::geom_polygon(colour = "white", linewidth = 0.2) +
+    ggplot2::geom_polygon(color = "white", linewidth = 0.2) +
     ggplot2::coord_map("albers", lat0 = 39, lat1 = 45) +
     ggplot2::scale_fill_viridis_c(
       option   = palette,

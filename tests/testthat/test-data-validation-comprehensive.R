@@ -147,9 +147,9 @@ test_that("Data validation: Phone number format validation", {
 
     if (length(valid_phones) > 0) {
       # Check against valid phone patterns
-      pattern_matches <- sapply(DATA_VALIDATION_RULES$phone$patterns, function(pattern) {
+      pattern_matches <- vapply(DATA_VALIDATION_RULES$phone$patterns, function(pattern) {
         sum(grepl(pattern, valid_phones))
-      })
+      }, numeric(1L))
 
       total_valid <- sum(pattern_matches)
       validation_rate <- total_valid / length(valid_phones)

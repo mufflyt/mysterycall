@@ -15,7 +15,7 @@ mysterycall_plot_effect(
 \arguments{
 \item{model}{A fitted model object.}
 
-\item{term}{Character scalar. The term to visualise (must match a fixed
+\item{term}{Character scalar. The term to visualize (must match a fixed
 effect in the model, e.g. \code{"insurance"}, \code{"age"}, or
 \code{"insurance:gender"} for an interaction).}
 

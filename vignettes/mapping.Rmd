@@ -93,7 +93,7 @@ data(acog_districts)
 head(acog_districts)
 ```
 
-The table below summarises how many states each district covers:
+The table below summarizes how many states each district covers:
 
 ```{r acog-summary-table, eval=TRUE}
 data(acog_districts)

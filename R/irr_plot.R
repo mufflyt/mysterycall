@@ -20,9 +20,9 @@ NULL
 #' @param reference_line Numeric. X-axis position for the null-effect vertical
 #'   line. Default `1` (IRR = 1).
 #' @param point_size Numeric. Size of the IRR point. Default `3`.
-#' @param color_sig Character. Colour for terms with `p_value < 0.05`. Default
+#' @param color_sig Character. Color for terms with `p_value < 0.05`. Default
 #'   `"#C0392B"` (red). Only applied when the `p_value` column is present.
-#' @param color_ns Character. Colour for non-significant terms (or when
+#' @param color_ns Character. Color for non-significant terms (or when
 #'   `p_value` is absent). Default `"#2C3E50"` (dark navy).
 #' @param x_label Character. X-axis label. Default `"Incidence Rate Ratio (IRR)"`.
 #' @param title Character. Plot title. `NULL` (default) produces no title.
@@ -85,7 +85,7 @@ mysterycall_irr_plot <- function(x,
          call. = FALSE)
   }
 
-  # -- Significance colouring -------------------------------------------------
+  # -- Significance coloring -------------------------------------------------
   if ("p_value" %in% names(tbl) && is.numeric(tbl$p_value)) {
     tbl$.sig <- ifelse(!is.na(tbl$p_value) & tbl$p_value < 0.05,
                        color_sig, color_ns)
@@ -99,16 +99,16 @@ mysterycall_irr_plot <- function(x,
   # -- Build plot -------------------------------------------------------------
   p <- ggplot2::ggplot(tbl, ggplot2::aes(x = irr, y = term)) +
     ggplot2::geom_vline(xintercept = reference_line,
-                        linetype = "dashed", colour = "grey60", linewidth = 0.5) +
+                        linetype = "dashed", color = "grey60", linewidth = 0.5) +
     ggplot2::geom_errorbarh(
       ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
       height    = 0.25,
-      colour    = tbl$.sig[order(as.integer(tbl$term))],
+      color    = tbl$.sig[order(as.integer(tbl$term))],
       linewidth = 0.7
     ) +
     ggplot2::geom_point(
       size   = point_size,
-      colour = tbl$.sig[order(as.integer(tbl$term))],
+      color = tbl$.sig[order(as.integer(tbl$term))],
       shape  = 18
     ) +
     ggplot2::labs(

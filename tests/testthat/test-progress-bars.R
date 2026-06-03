@@ -456,7 +456,7 @@ test_that("Functional programming workflow", {
   )
 
   expect_equal(length(results), 50)
-  expect_true(all(sapply(results, function(x) "lat" %in% names(x))))
+  expect_true(all(vapply(results, function(x) "lat" %in% names(x), logical(1))))
 })
 
 test_that("Error handling with progress", {
@@ -528,7 +528,7 @@ test_that("Progress map handles NULL results", {
   results <- mysterycall:::mysterycall_progress_map(items, fn, name = "Null results")
 
   expect_equal(length(results), 5)
-  expect_true(all(sapply(results, is.null)))
+  expect_true(all(vapply(results, is.null, logical(1))))
 })
 
 # ==============================================================================

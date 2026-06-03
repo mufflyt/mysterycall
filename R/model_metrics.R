@@ -19,7 +19,7 @@ NULL
 #'       mean(|observed - fitted|). Measures average prediction error in the
 #'       original response units.}
 #'     \item{`rmse`}{Numeric scalar (or `NA_real_`). Root-mean-square error:
-#'       sqrt(mean((observed - fitted)^2)). Penalises large errors more
+#'       sqrt(mean((observed - fitted)^2)). Penalizes large errors more
 #'       heavily than MAE.}
 #'   }
 #'   Both elements are `NA_real_` when fitted values cannot be extracted

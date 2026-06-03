@@ -2,7 +2,7 @@
 % Please edit documentation in R/physician_age.R
 \name{mysterycall_physician_age}
 \alias{mysterycall_physician_age}
-\title{Summarise physician age as median (IQR) text}
+\title{Summarize physician age as median (IQR) text}
 \usage{
 mysterycall_physician_age(data, age_column)
 }

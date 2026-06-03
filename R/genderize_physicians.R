@@ -65,7 +65,7 @@
 #'   Output filenames include a timestamp from [Sys.time()], which uses the
 #'   **local system timezone** (not UTC). Files produced on systems in
 #'   different timezones will reflect different local times for the same
-#'   wall-clock moment. To standardise to UTC:
+#'   wall-clock moment. To standardize to UTC:
 #'   ```r
 #'   withr::with_timezone("UTC", mysterycall_genderize(data))
 #'   ```

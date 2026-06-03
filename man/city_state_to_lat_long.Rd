@@ -24,11 +24,18 @@ longitude coordinates.
 Latitude/longitude lookup table assembled from a public GitHub gist for
 aligning caller workbooks with geospatial tooling.
 }
+\examples{
+data(city_state_to_lat_long)
+head(city_state_to_lat_long)
+
+}
 \seealso{
 Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
+\code{\link{acog_presidents}},
 \code{\link{fips}},
+\code{\link{physicians}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}

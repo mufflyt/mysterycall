@@ -14,7 +14,7 @@
 #'   Also emits a histogram + density plot and a Q-Q plot via side effects.
 #'
 #' @seealso [mysterycall_prepare_table1_vars()] for downstream variable
-#'   standardisation; [mysterycall_physician_age()] for age summary statistics.
+#'   standardization; [mysterycall_physician_age()] for age summary statistics.
 #' @family modeling helpers
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line

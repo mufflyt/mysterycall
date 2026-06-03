@@ -36,13 +36,13 @@ generate_valid_phone <- function(n = 1) {
     "%03d.%03d.%04d"
   )
 
-  sapply(1:n, function(i) {
+  vapply(seq_len(n), function(i) {
     format <- sample(formats, 1)
     sprintf(format,
             sample(200:999, 1),
             sample(200:999, 1),
             sample(1000:9999, 1))
-  })
+  }, character(1L))
 }
 
 generate_valid_state <- function(n = 1) {
@@ -340,9 +340,9 @@ test_that("Property: String operations preserve UTF-8 encoding", {
   )
 
   test_data <- data.frame(
-    id = 1:length(international_names),
+    id = seq_along(international_names),
     names = international_names,
-    practice_name = paste("Practice", 1:length(international_names)),
+    practice_name = paste("Practice", seq_along(international_names)),
     phone_number = generate_valid_phone(length(international_names)),
     state_name = sample(state.name[1:5], length(international_names), replace = TRUE),
     npi = generate_valid_npi(length(international_names)),

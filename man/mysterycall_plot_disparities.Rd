@@ -41,13 +41,13 @@ included in the plot, drawn with \code{color_ref} and a diamond shape.}
 \item{show_p}{Logical. When \code{TRUE} (default) the formatted p-value is
 annotated to the right of each non-reference point.}
 
-\item{color_sig}{Character. Colour for groups whose \code{p_value < 0.05}.
+\item{color_sig}{Character. Color for groups whose \code{p_value < 0.05}.
 Default \code{"#C0392B"} (red).}
 
-\item{color_ns}{Character. Colour for non-significant groups (or when
+\item{color_ns}{Character. Color for non-significant groups (or when
 \code{p_value} is absent). Default \code{"#2C3E50"} (dark navy).}
 
-\item{color_ref}{Character. Colour for the reference group point.
+\item{color_ref}{Character. Color for the reference group point.
 Default \code{"#2166AC"} (blue).}
 
 \item{point_size}{Numeric. Diameter of the estimate point. Default \code{3}.}
@@ -75,13 +75,13 @@ call \code{mysterycall_disparities_table()} first, then pipe the result here.
 \describe{
 \item{\code{"rate"}}{\code{group}, \code{rate}, \code{lower_ci}, \code{upper_ci}}
 \item{\code{"abs_diff"}}{\code{group}, \code{abs_diff}, \code{lower_ci}, \code{upper_ci}
-(CIs are re-centred automatically)}
+(CIs are re-centered automatically)}
 \item{\code{"rel_risk"}}{\code{group}, \code{rel_risk}, \code{rr_lower}, \code{rr_upper}}
 }
 When \code{x} is a \code{mysterycall_disparities_table} object the reference group
 and significance attributes are read directly from the object's attributes.
 When \code{x} is a plain data frame, a \code{p_value} column is used for significance
-colouring if present, and the first row is treated as the reference group
+coloring if present, and the first row is treated as the reference group
 when \code{show_ref = TRUE}.
 }
 \examples{

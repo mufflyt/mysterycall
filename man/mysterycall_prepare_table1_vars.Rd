@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_utils.R
 \name{mysterycall_prepare_table1_vars}
 \alias{mysterycall_prepare_table1_vars}
-\title{Standardise demographic variables for Table 1}
+\title{Standardize demographic variables for Table 1}
 \usage{
 mysterycall_prepare_table1_vars(
   data,
@@ -40,7 +40,7 @@ through as \code{region_std}.}
 calendar year.}
 }
 \value{
-\code{data} with zero or more additional standardised columns appended
+\code{data} with zero or more additional standardized columns appended
 (only columns whose source \verb{*_col} parameter was non-\code{NULL} are created):
 \describe{
 \item{\code{age_imputed}}{Numeric. Estimated age derived from \code{grad_year_col}
@@ -48,7 +48,7 @@ as \code{ref_year - grad_year}. Only added when \code{grad_year_col} is supplied
 \item{\code{age_category}}{Character. Age group binned from \code{age_col} or
 \code{age_imputed} (e.g., \code{"<35"}, \code{"35-44"}, \code{"45-54"}, \code{"55-64"},
 \code{">=65"}). Only added when \code{age_col} or \code{grad_year_col} is supplied.}
-\item{\code{gender_std}}{Character. Standardised gender: \code{"Male"}, \code{"Female"},
+\item{\code{gender_std}}{Character. Standardized gender: \code{"Male"}, \code{"Female"},
 or \code{"Unknown"}. Only added when \code{gender_col} is supplied.}
 \item{\code{setting_std}}{Character. Practice setting, copied from the source
 column. Only added when \code{setting_col} is supplied.}
@@ -57,13 +57,13 @@ Only added when \code{region_col} is supplied.}
 }
 }
 \description{
-Convenience wrapper that applies age imputation, age categorisation, and
-gender standardisation in one call.  All output columns are \strong{added} to
+Convenience wrapper that applies age imputation, age categorization, and
+gender standardization in one call.  All output columns are \strong{added} to
 the input data frame - originals are never replaced or removed.  Arguments
-set to \code{NULL} are silently skipped so you can standardise only the
+set to \code{NULL} are silently skipped so you can standardize only the
 variables your dataset contains.
 }
-\section{Gender standardisation}{
+\section{Gender standardization}{
 
 The \code{gender_std} column is produced by a binary lookup applied
 case-insensitively after whitespace trimming:

@@ -246,7 +246,7 @@ mysterycall_clean_phase2 <- function(
     message("Summary of applied renames:")
     for (line in utils::capture.output(print(rename_log))) message(line)
   }
-  message("Standardised Phase 2 column names based on required patterns.")
+  message("Standardized Phase 2 column names based on required patterns.")
 
   # Validate post-rename schema: every standard_name must be present
   missing_after_rename <- setdiff(standard_names, names(data))

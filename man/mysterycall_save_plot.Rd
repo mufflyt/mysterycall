@@ -27,7 +27,7 @@ where the plot should be saved. Common extensions: \code{.png}, \code{.pdf},
 
 \item{dpi}{Integer. Dots per inch. Default \code{300} (publication quality).}
 
-\item{bg}{Character scalar. Background colour. Default \code{"white"}.}
+\item{bg}{Character scalar. Background color. Default \code{"white"}.}
 
 \item{...}{Additional arguments forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.}
 }

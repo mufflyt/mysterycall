@@ -18,7 +18,7 @@ free-text strings.}
 Character vector the same length as \code{x}. \code{NA} inputs return \code{NA}.
 }
 \description{
-Normalises the messy free-text values found in NPPES
+Normalizes the messy free-text values found in NPPES
 \code{Provider.Credential.Text} (and similar fields) to one of three canonical
 labels. Matching is case-insensitive; MD is checked before DO so that
 \code{"MD/PhD"} maps to \code{"MD"} rather than falling through.

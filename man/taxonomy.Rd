@@ -30,7 +30,9 @@ codes from the NPI registry; \link{acgme} for ACGME residency program data.
 Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
+\code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},
-\code{\link{fips}}
+\code{\link{fips}},
+\code{\link{physicians}}
 }
 \concept{datasets}

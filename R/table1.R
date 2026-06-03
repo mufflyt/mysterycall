@@ -2,7 +2,7 @@
 #'
 #' Produces a publication-ready summary table describing physician and study
 #' characteristics, optionally stratified by a grouping variable (typically
-#' `"insurance"`). Continuous variables are summarised with median \[IQR\]
+#' `"insurance"`). Continuous variables are summarized with median \[IQR\]
 #' and/or mean (SD); categorical variables with n (%). Statistical tests are
 #' chosen automatically: Wilcoxon rank-sum or Kruskal-Wallis for continuous
 #' variables, chi-square or Fisher's exact for categorical.

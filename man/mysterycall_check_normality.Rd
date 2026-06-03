@@ -31,7 +31,7 @@ mysterycall_check_normality(sample_data, "business_days_until_appointment")
 }
 \seealso{
 \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream variable
-standardisation; \code{\link[=mysterycall_physician_age]{mysterycall_physician_age()}} for age summary statistics.
+standardization; \code{\link[=mysterycall_physician_age]{mysterycall_physician_age()}} for age summary statistics.
 
 Other modeling helpers:
 \code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}},

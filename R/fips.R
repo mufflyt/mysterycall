@@ -1,8 +1,10 @@
 #' Data of FIPS codes
 #'
-#' 3 columns with 51 observations.
+#' This dataset maps state and county names to Federal Information Processing 
+#' Standards (FIPS) codes, which are essential for merging spatial and census
+#' data in healthcare access research.
 #'
-#' @format A tibble with 243 rows and 10 variables containing Federal
+#' @format A tibble with 3142 rows and 10 variables containing Federal
 #'   Information Processing Standards (FIPS) codes for states and counties:
 #' \describe{
 #'   \item{state}{Two-letter postal abbreviation.}
@@ -17,8 +19,11 @@
 #'   \item{state_ansi}{State ANSI code.}
 #' }
 #' @source \url{https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv}
+#' @examples
+#' data(fips)
+#' head(fips)
+#'
 #' @family datasets
 #' @name fips
 #' @docType data
-#' @family datasets
 NULL

@@ -2,6 +2,8 @@
 #'
 #' Information about Obstetricians and Gynecologists (OBGYN) residency programs
 #' accredited by the Accreditation Council for Graduate Medical Education (ACGME).
+#' This data is often used as a gold-standard indicator for academic practice
+#' settings when classifying provider locations.
 #'
 #' @format A data frame with 142 columns:
 #' \describe{

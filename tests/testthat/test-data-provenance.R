@@ -415,7 +415,7 @@ test_that("PROVENANCE: Identify where NA values were introduced", {
   dir.create(temp_dir)
 
   # Count NAs before
-  na_counts_before <- sapply(test_data, function(x) sum(is.na(x)))
+  na_counts_before <- vapply(test_data, function(x) sum(is.na(x)), numeric(1))
 
   results <- mysterycall_clean_phase1(
     phase1_data = test_data,
@@ -425,7 +425,7 @@ test_that("PROVENANCE: Identify where NA values were introduced", {
   )
 
   # Count NAs after
-  na_counts_after <- sapply(results, function(x) sum(is.na(x)))
+  na_counts_after <- vapply(results, function(x) sum(is.na(x)), numeric(1))
 
   # Track NA introduction
   common_cols <- intersect(names(na_counts_before), names(na_counts_after))
