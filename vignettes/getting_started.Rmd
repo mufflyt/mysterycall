@@ -31,16 +31,18 @@ In a real study, you would likely use `mysterycall_search_taxonomy()` or `myster
 # Load bundled physician data
 data(physicians)
 
-# Select a small sample for our dummy study
+# Select a sample for our dummy study (50 rows so the demo model has
+# enough within-group variation across subspecialties)
+set.seed(1978)
 roster <- physicians %>%
-  head(10) %>%
+  dplyr::slice_sample(n = 50) %>%
   mutate(
     phone_number = "555-555-1212", # Dummy phone
-    practice_name = paste("Clinic", row_number()),
+    practice_name = paste("Clinic", dplyr::row_number()),
     state = "CO"
   )
 
-print(roster)
+head(roster)
 ```
 
 ## Step 2: Preparing Data for Callers
@@ -89,10 +91,12 @@ results <- clean_roster %>%
     appointment_date = sample(seq(as.Date('2024-01-01'), as.Date('2024-03-01'), by="day"), nrow(.), replace=TRUE),
     call_time = "09:00",
     hold_time = "00:02",
-    # Simulate that Private insurance has a higher acceptance rate
-    accepted = ifelse(insurance_scenario == "Private", 
-                     sample(c(TRUE, FALSE), nrow(.), replace = TRUE, prob = c(0.8, 0.2)),
-                     sample(c(TRUE, FALSE), nrow(.), replace = TRUE, prob = c(0.4, 0.6)))
+    # Simulate that Private insurance has a higher acceptance rate;
+    # store as integer (0/1) because mysterycall_poisson_model requires
+    # a numeric outcome >= 0.
+    accepted = as.integer(ifelse(insurance_scenario == "Private",
+                     sample(c(1, 0), nrow(.), replace = TRUE, prob = c(0.8, 0.2)),
+                     sample(c(1, 0), nrow(.), replace = TRUE, prob = c(0.4, 0.6))))
   )
 ```
 
@@ -107,7 +111,7 @@ t1_data <- mysterycall_prepare_table1_vars(results)
 # Generate the table
 t1 <- mysterycall_table1(
   data = t1_data,
-  variables = c("insurance_scenario"),
+  covariates = c("insurance_scenario"),
   stratify_by = "accepted",
   include_overall = TRUE
 )
@@ -119,12 +123,14 @@ print(t1)
 
 Finally, run a Poisson regression with robust standard errors to analyze the primary outcome (appointment acceptance rate).
 
-```{r model}
-# Fit the Poisson model
+```{r model, eval = requireNamespace("lme4", quietly = TRUE)}
+# Fit a Poisson mixed model: subspecialty as random intercept allows
+# the demo model to converge with this small simulated sample.
 model <- mysterycall_poisson_model(
-  data = results,
-  formula = accepted ~ insurance_scenario,
-  cluster_var = "NPI"
+  data             = results,
+  outcome          = "accepted",
+  predictors       = "insurance_scenario",
+  random_intercept = "subspecialty"
 )
 
 # Print the incidence rate ratios (IRR)
