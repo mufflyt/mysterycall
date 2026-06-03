@@ -495,7 +495,7 @@ output tables.
 - [`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)
   : Verify the content-addressable identity of an audit trail JSON file
 - [`preflight-checks`](https://mufflyt.github.io/mysterycall/reference/preflight-checks.md)
-  : Preflight Checks for Tyler Workflows
+  : Preflight Checks for Mysterycall Workflows
 - [`mysterycall_validate_google_api()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_google_api.md)
   : Validate Google Maps API key
 - [`mysterycall_validate_here_api()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_here_api.md)

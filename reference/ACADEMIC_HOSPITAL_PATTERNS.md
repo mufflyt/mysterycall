@@ -26,6 +26,11 @@ Named list with three character vector elements:
 
   Patterns at confidence 0.80 (e.g., "MEDICAL CENTER").
 
+## Value
+
+A named list of character vectors of hospital name patterns, grouped by
+confidence tier.
+
 ## See also
 
 [`mysterycall_check_academic_name_patterns`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),

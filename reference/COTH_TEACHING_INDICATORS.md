@@ -13,6 +13,11 @@ COTH_TEACHING_INDICATORS
 
 Character vector of COTH-related text patterns.
 
+## Value
+
+A character vector of patterns indicating Council of Teaching Hospitals
+membership.
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)

@@ -12,6 +12,10 @@ MEDICAL_SCHOOL_INDICATORS
 
 Character vector of medical school text patterns.
 
+## Value
+
+A character vector of patterns indicating medical school affiliation.
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)

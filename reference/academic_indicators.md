@@ -5,6 +5,11 @@ practice settings. Includes pattern-based name matching, known
 institution lists, and a weighted scoring system across multiple
 evidence tiers.
 
+## Value
+
+No return value. Documentation topic grouping related indicator
+constants and helpers; see each function or data object's own help page.
+
 ## Details
 
 Evidence-based indicators with calibrated confidence scores:

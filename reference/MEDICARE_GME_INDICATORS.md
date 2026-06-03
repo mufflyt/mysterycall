@@ -13,6 +13,11 @@ MEDICARE_GME_INDICATORS
 
 Character vector of Medicare GME text patterns.
 
+## Value
+
+A character vector of patterns indicating Graduate Medical Education
+payments (only teaching hospitals receive these).
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)

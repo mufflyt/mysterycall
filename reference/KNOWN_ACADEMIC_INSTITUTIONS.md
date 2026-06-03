@@ -15,6 +15,11 @@ KNOWN_ACADEMIC_INSTITUTIONS
 Character vector of institution name patterns. Matches are performed
 case-insensitively using `grepl(fixed = TRUE)`.
 
+## Value
+
+A character vector of institution name patterns used for academic
+affiliation classification.
+
 ## See also
 
 [`mysterycall_check_academic_name_patterns`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),

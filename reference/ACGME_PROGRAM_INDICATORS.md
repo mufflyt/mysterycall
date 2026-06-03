@@ -13,6 +13,11 @@ ACGME_PROGRAM_INDICATORS
 
 Character vector of ACGME-related text patterns.
 
+## Value
+
+A character vector of ACGME-related patterns indicating accredited
+residency or fellowship programs.
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)

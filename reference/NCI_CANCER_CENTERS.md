@@ -13,6 +13,10 @@ NCI_CANCER_CENTERS
 
 Character vector of NCI cancer center text patterns.
 
+## Value
+
+A character vector of patterns indicating NCI-designated cancer centers.
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)

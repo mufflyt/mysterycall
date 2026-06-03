@@ -3,6 +3,11 @@
 Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.
 
+## Value
+
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+
 ## See also
 
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),

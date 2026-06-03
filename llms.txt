@@ -1,443 +1,242 @@
-v1.3.0  ·  R package
+![](https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57)
 
-End-to-end toolkit for mystery caller and audit studies evaluating
-patient access to healthcare — from NPI roster building to drive-time
-isochrones, Census demographics, and publication-ready maps and tables.
+[![Project Status:
+Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R ≥
+4.1](https://img.shields.io/badge/R-%E2%89%A54.1-276DC3?logo=r&logoColor=white)](https://cran.r-project.org/)
+[![R-CMD-check](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/mysterycall)](https://CRAN.R-project.org/package=mysterycall)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/mysterycall)](https://cran.r-project.org/package=mysterycall)
+[![Codecov test
+coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=main)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2044--1693-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2044-1693)
+[![GitHub last
+commit](https://img.shields.io/github/last-commit/mufflyt/mysterycall)](https://github.com/mufflyt/mysterycall/commits/main)
+[![GitHub
+issues](https://img.shields.io/github/issues/mufflyt/mysterycall)](https://github.com/mufflyt/mysterycall/issues)
+[![pkgdown
+docs](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://mufflyt.github.io/mysterycall/)
 
-[Function
-reference](https://mufflyt.github.io/mysterycall/reference/index.md)
-[Vignettes](https://mufflyt.github.io/mysterycall/articles/index.md)
-[GitHub](https://github.com/mufflyt/mysterycall)
+## Statement of Need
 
-\# Install from GitHub  
-pak::pkg_install("mufflyt/mysterycall")  
-  
-\# Optional geospatial/modelling packages (loaded on demand)  
-install.packages(c("hereR", "sf", "leaflet", "censusapi", "lme4"))
+Measuring patient access to healthcare requires assembling a provider
+roster, placing calls under a standardised script, recording wait times
+and refusal rates, and then modelling disparities by insurance type,
+race, or geography. Each step involves bespoke data-engineering work
+that research teams currently solve ad hoc: custom scripts to loop
+around the NPI API’s 1,200-record cap, manual regular expressions to
+parse name fields, silent
+[`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+calls that multiply rows when a lookup table has duplicates, and
+hand-crafted Poisson models that lack overdispersion diagnostics.
 
-Four-stage workflow
+**mysterycall** consolidates this work into a single, tested, documented
+pipeline. It provides taxonomy-based NPI search that bypasses the record
+cap, NANP phone validation with state-geography checks, physician name
+parsing with credential and surname disambiguation, safe join wrappers
+that enforce coverage and uniqueness guarantees, drive-time isochrone
+generation, Census demographic overlay, Poisson mixed-effects modelling
+with IRR reporting, and publication-ready table and map export. The
+target users are clinical researchers and health-services researchers
+who conduct mystery-caller or audit studies and need reproducible,
+auditable workflows rather than one-off scripts.
 
-1
+------------------------------------------------------------------------
 
-#### Build roster
+**mysterycall** provides a toolkit for mystery caller and audit studies
+that evaluate patient access to healthcare. It handles the full
+workflow: finding providers in the NPI registry, validating and
+geocoding their addresses, generating drive-time isochrones, overlaying
+Census demographics, and producing publication-ready tables and maps.
 
-Search the NPI registry by taxonomy across all 50 states, bypass the
-1,200-record API cap, and enrich with CMS demographics.
+## Installation
 
-2
+``` r
 
-#### Geocode
+# install.packages("pak")
+pak::pkg_install("mufflyt/mysterycall")
+```
 
-Convert provider addresses to lat/lon via the Google Maps API,
-deduplicating so each unique address is only looked up once.
+The package loads quickly. Geospatial and modelling packages are
+optional and loaded only when first needed:
 
-3
+``` r
 
-#### Drive-time isochrones
+install.packages(c("hereR", "sf", "lwgeom"))  # drive-time isochrones
+install.packages("leaflet")                            # interactive maps
+install.packages("ggmap")                              # Google Maps geocoding
+install.packages(c("ggspatial", "rnaturalearth"))      # HRR hex maps
+install.packages("lme4")                               # mixed-effects models
+install.packages("censusapi")                          # Census block-group data
+```
 
-Generate drive-time polygons (30 / 60 / 120 / 180 min) using the
-drive-time routing service, with built-in memoization for large batches.
+## Quick start
 
-4
+A typical mystery caller study moves through four stages:
 
-#### Analyse & report
+``` r
 
-Overlay Census block-group demographics, compute overlap areas, and
-produce Leaflet maps and `arsenal` summary tables.
-
-Key functions
-
-🔍
-
-#### Provider search
-
-[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)  
-[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)  
-[`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)  
-[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
-
-📍
-
-#### Geocoding & isochrones
-
-[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)  
-[`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)  
-[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)  
-[`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md)
-
-🗺️
-
-#### Mapping
-
-[`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md)  
-[`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md)  
-[`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md)  
-[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md)
-
-📊
-
-#### Census & tables
-
-[`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)  
-[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md)  
-[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md)  
-[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
-
-Example figures
-
-![OBGYN subspecialist counts bar
-chart](reference/figures/fig-subspecialty-counts.png)
-
-**Provider roster** — subspecialist counts from the built-in
-`physicians` dataset
-
-``` mc-gallery-code
 library(mysterycall)
+library(dplyr)
 
-# Search NPI registry by taxonomy
-providers <- mysterycall_search_taxonomy(
-  "Gynecologic Oncology",
-  states = c("CA", "TX", "NY", "FL")
+# ── 1. Build a provider roster ────────────────────────────────────────────────
+
+# Search by taxonomy across all 50 states (bypasses the 1,200-record API cap)
+all_states <- c(
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN",
+  "IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV",
+  "NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN",
+  "TX","UT","VT","VA","WA","WV","WI","WY"
 )
 
-# Built-in dataset has 4,659 providers
-count(physicians, subspecialty)
-```
+gyn_onc <- mysterycall_search_taxonomy("Gynecologic Oncology", states = all_states)
 
-![US map of OBGYN
-subspecialists](reference/figures/fig-physician-map.png)
+# Validate NPI numbers before downstream lookups
+gyn_onc_valid <- mysterycall_validate_npi(gyn_onc)
 
-**Geographic distribution** — dot map of providers coloured by
-subspecialty
+# Enrich with CMS Physician Compare demographics
+gyn_onc_enriched <- mysterycall_get_clinician_data(gyn_onc_valid)
 
-``` mc-gallery-code
-# physicians dataset includes lat/long
-mysterycall_map_physicians(
-  physicians,
-  popup_var = "name"
-)
-```
+# ── 2. Geocode ────────────────────────────────────────────────────────────────
 
-![100% stacked bar of acceptance
-rates](reference/figures/fig-stacked-bar.png)
-
-**100% stacked bar** — acceptance vs. rejection proportions with call
-counts
-
-``` mc-gallery-code
-mysterycall_plot_stacked_bar(
-  data          = call_data,
-  outcome_col   = "accepted",
-  group_col     = "subspecialty",
-  fill_labels   = c("Not Accepted", "Accepted"),
-  order_by_rate = TRUE
-)
-```
-
-![Grouped bar chart of acceptance rates by
-insurance](reference/figures/fig-acceptance-rates.png)
-
-**Acceptance rates** — Medicaid vs. private insurance by subspecialty
-
-``` mc-gallery-code
-call_data |>
-  group_by(subspecialty, insurance) |>
-  summarise(rate = mean(accepted)) |>
-  ggplot(aes(subspecialty, rate * 100,
-             fill = insurance)) +
-  geom_col(position = "dodge") +
-  coord_flip()
-```
-
-![US choropleth of acceptance rates by
-state](reference/figures/fig-acceptance-map.png)
-
-**Choropleth map** — appointment acceptance rate by state
-
-``` mc-gallery-code
-state_rates <- call_data |>
-  group_by(state) |>
-  summarise(rate = mean(accepted))
-
-mysterycall_map_acceptance_rate(
-  state_rates,
-  region_col = "state",
-  rate_col   = "rate",
-  palette    = "viridis"
-)
-```
-
-![Wilson CI disparity plot](reference/figures/fig-disparities.png)
-
-**Insurance disparity** — Wilson 95% CIs via
-`mysterycall_disparities_table`
-
-``` mc-gallery-code
-disp <- mysterycall_disparities_table(
-  call_data,
-  outcome_col = "accepted",
-  group_col   = "insurance",
-  ref_group   = "Private",
-  ci_method   = "wilson"
-)
-print(disp)
-```
-
-![IRR forest plot from Poisson
-GLMM](reference/figures/fig-irr-forest.png)
-
-**IRR forest plot** — incidence rate ratios from a Poisson GLMM
-
-``` mc-gallery-code
-model <- mysterycall_poisson_model(
-  call_data,
-  outcome       = "wait_days",
-  predictors    = c("insurance", "subspecialty"),
-  random_effect = "physician"
-)
-mysterycall_irr_plot(model, x_log = TRUE)
-```
-
-![Estimated marginal means interaction
-plot](reference/figures/fig-emmeans-interaction.png)
-
-**Estimated marginal means** — Medicaid vs. private wait days by
-subspecialty
-
-``` mc-gallery-code
-m <- lm(
-  wait_days ~ insurance * subspecialty,
-  data = call_data
-)
-mysterycall_plot_emmeans_interaction(
-  model    = m,
-  specs    = c("subspecialty", "insurance"),
-  variable = "Estimated Wait Days"
-)
-```
-
-![Overlapping density curves by insurance
-type](reference/figures/fig-wait-density.png)
-
-**Wait-time density** — overlapping distributions with group medians
-
-``` mc-gallery-code
-mysterycall_plot_density(
-  data       = call_data,
-  x_var      = "wait_days",
-  fill_var   = "insurance",
-  plot_title = "Days Until Appointment",
-  output_dir = NULL
-)
-```
-
-![Jittered scatter plot of wait days by
-subspecialty](reference/figures/fig-scatter.png)
-
-**Jittered scatter** — raw wait-day observations by subspecialty
-
-``` mc-gallery-code
-mysterycall_plot_scatter(
-  plot_data  = call_data,
-  x_var      = "subspecialty",
-  y_var      = "wait_days",
-  output_dir = NULL,
-  verbose    = FALSE
-)
-```
-
-![Sqrt-scaled histogram of wait
-times](reference/figures/fig-distribution.png)
-
-**Wait-time histogram** — sqrt-scaled count distribution
-
-``` mc-gallery-code
-mysterycall_plot_distribution(
-  x     = call_data$wait_days,
-  title = "Appointment Wait Time (days)",
-  bins  = 25L
-)
-```
-
-![Sample size vs IRR power curve](reference/figures/fig-power-curve.png)
-
-**Power curve** — providers per arm needed to detect a given IRR
-
-``` mc-gallery-code
-mysterycall_equation_figure(
-  lambda0   = 14,        # baseline wait (days)
-  irr_seq   = seq(1.1, 1.8, by = 0.05),
-  power     = 0.80,
-  both_arms = TRUE
-)
-```
-
-![CONSORT flow diagram](reference/figures/fig-flowchart.png)
-
-**CONSORT flowchart** — sequential inclusion/exclusion for audit studies
-
-``` mc-gallery-code
-mysterycall_flowchart(
-  steps = c(
-    "NPI Registry"     = "4,659",
-    "Valid phone"      = "4,201",
-    "Call completed"   = "3,872",
-    "Final sample"     = "3,547"
-  ),
-  exclusions = c(
-    "Valid phone"    = "458: no valid phone",
-    "Call completed" = "329: unanswered",
-    "Final sample"   = "325: incomplete data"
-  )
-)
-```
-
-![Three-panel residual diagnostics](reference/figures/fig-residuals.png)
-
-**Residual diagnostics** — three-panel model check for Poisson GLMM fit
-
-``` mc-gallery-code
-model <- mysterycall_poisson_model(
-  call_data,
-  outcome       = "wait_days",
-  predictors    = c("insurance", "subspecialty"),
-  random_effect = "physician"
-)
-mysterycall_plot_residuals(model)
-```
-
-Example tables
-
-![gtsummary Table 1 by insurance type](reference/figures/tbl-table1.png)
-
-**Table 1 — Provider characteristics** stratified by insurance type via
-[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md)
-
-``` mc-gallery-code
-tbl1 <- mysterycall_table1_gtsummary(
-  data       = call_data,
-  vars       = c("subspecialty", "gender",
-                 "academic", "wait_days", "accepted"),
-  strata_col = "insurance",
-  label_list = list(
-    subspecialty = "Subspecialty",
-    wait_days    = "Wait days (median [IQR])",
-    accepted     = "Appointment accepted, n (%)"
-  )
-)
-tbl1 |>
-  gtsummary::bold_labels() |>
-  gtsummary::as_gt()
-```
-
-![Appointment acceptance disparity table by
-insurance](reference/figures/tbl-disparities.png)
-
-**Disparities table** — acceptance rates, Wilson CIs, absolute
-difference, and relative risk via
-[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md)
-
-``` mc-gallery-code
-disp <- mysterycall_disparities_table(
-  call_data,
-  outcome_col = "accepted",
-  group_col   = "insurance",
-  ref_group   = "Private",
-  ci_method   = "wilson"
-)
-print(disp)
-```
-
-![Poisson GLMM incidence rate ratio
-table](reference/figures/tbl-model.png)
-
-**Model table — Incidence rate ratios** from a Poisson GLMM via
-[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md)
-
-``` mc-gallery-code
-model <- mysterycall_poisson_model(
-  call_data,
-  outcome          = "wait_days",
-  predictors       = c("insurance", "subspecialty"),
-  random_intercept = "physician"
+# Requires a Google Maps API key in GOOGLE_API_KEY env var
+geocoded <- mysterycall_geocode(
+  gyn_onc_enriched,
+  google_maps_api_key = Sys.getenv("GOOGLE_API_KEY")
 )
 
-# Extract print-ready IRR table
-mysterycall_model_table(model)
-```
+# ── 3. Drive-time isochrones ──────────────────────────────────────────────────
 
-![Wait-time summary statistics by insurance
-type](reference/figures/tbl-wait-time.png)
-
-**Wait-time summary** — median, IQR, min/max, and Wilcoxon test via
-[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
-
-``` mc-gallery-code
-wts <- mysterycall_wait_time_summary(
-  call_data,
-  wait_col = "wait_days",
-  group_by = "insurance"
+# Requires a routing API key in HERE_API_KEY env var
+isochrones <- mysterycall_isochrones_for_df(
+  geocoded,
+  breaks = c(1800, 3600, 7200, 10800)   # 30 / 60 / 120 / 180 min
 )
 
-# Summary statistics data frame
-wts$summary
+# Free the in-memory isochrone cache after a large batch
+mysterycall_clear_isochrone_cache()
 
-# Test result
-wts$interpretation
+# ── 4. Map ────────────────────────────────────────────────────────────────────
+
+mysterycall_map_physicians(geocoded, popup_var = "name")
 ```
 
-![Subspecialty frequency and percentage
-table](reference/figures/tbl-frequency.png)
+## Gallery
 
-**Frequency table** — counts and column percentages for a categorical
-variable via
-[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
+[TABLE]
 
-``` mc-gallery-code
-freq_df <- mysterycall_table_percentages(
-  call_data,
-  "subspecialty"
-)
-print(freq_df)
-```
+## How mysterycall compares to alternatives
 
-![Subspecialty proportion table](reference/figures/tbl-proportion.png)
+| Capability | mysterycall | `npi` package | `humaniformat` | Manual `dplyr` |
+|----|----|----|----|----|
+| NPI search — state-looping to bypass 1,200-record cap | ✅ | ❌ | ❌ | ❌ |
+| NANP phone validation + state-geography check | ✅ | ❌ | ❌ | ❌ |
+| Physician name parsing with DO/Vietnamese disambiguation | ✅ | ❌ | Partial | ❌ |
+| Safe joins with coverage enforcement | ✅ | ❌ | ❌ | ❌ |
+| Drive-time isochrone generation (HERE API) | ✅ | ❌ | ❌ | ❌ |
+| Census demographic overlay on isochrones | ✅ | ❌ | ❌ | ❌ |
+| Poisson GLMM with IRR reporting | ✅ | ❌ | ❌ | ❌ |
+| Disparities table with Wilson CIs | ✅ | ❌ | ❌ | ❌ |
+| Green Journal–compliant figure export | ✅ | ❌ | ❌ | ❌ |
 
-**Proportion table** — n and % of total calls per group via
-[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
+`npi` and `humaniformat` are excellent single-purpose packages.
+`mysterycall` integrates them into a validated, end-to-end study
+pipeline with audit trails, coverage guards, and publication-ready
+output.
 
-``` mc-gallery-code
-prop_df <- mysterycall_table_proportion(
-  call_data,
-  subspecialty        # unquoted column name
-)
-print(prop_df)
-```
+## Core functions
 
-Built-in datasets
-
-| Dataset | Description | Rows |
+| Stage | Function | Description |
 |----|----|----|
-| `taxonomy` | NUCC taxonomy codes (v23.1) for OBGYN subspecialties | ~900 |
-| `acog_districts` | State → ACOG district + Census subregion crosswalk | 51 |
-| `acgme` | All 318 ACGME-accredited OBGYN residency programs | 318 |
-| `physicians` | Sample roster of OBGYN subspecialists with coordinates | 4,659 |
-| `fips` | State FIPS codes and abbreviations | 51 |
-| `acog_presidents` | Historical ACOG presidents | — |
-| `census_summaries` | Pre-computed Census block-group demographics | — |
+| **Find providers** | [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md) | NPI search by taxonomy; loops over states to bypass the 1,200-record cap |
+|  | [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md) | NPI search by first/last name |
+|  | [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md) | Remove invalid NPI numbers before enrichment |
+|  | [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md) | Pull demographics from CMS Physician Compare |
+|  | [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md) | Estimate physician gender via the Genderize.io API |
+| **Geocode** | [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md) | Convert addresses to lat/lon via Google Maps |
+| **Isochrones** | [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md) | Drive-time polygons for every row using a drive-time routing service |
+|  | [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md) | Single-location drive-time polygon |
+|  | [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md) | Release the in-session memoization cache |
+| **Census** | [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md) | ACS block-group demographics by state FIPS |
+|  | [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md) | Overlap area between isochrones and block groups |
+| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map coloured by ACOG district |
+|  | [`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md) | Block-group overlap map exported to HTML + PNG |
+|  | [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md) | Hexagon density map by Hospital Referral Region |
+| **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |
+|  | [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md) | Column-percentage tables |
 
-Learn more
+## Built-in datasets
 
-| Vignette | Topic |
+| Dataset | Description |
 |----|----|
-| [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md) | Drive-time polygons from geocoded addresses |
-| [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.md) | Address → lat/lon with Google Maps |
-| [Get Census Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.md) | ACS block-group demographics |
-| [Search & Process NPI](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.md) | Name-based provider lookup |
-| [Aggregating Provider Data](https://mufflyt.github.io/mysterycall/articles/aggregating_provider_data.md) | Combining taxonomy + NPI data |
-| [News & Changelog](https://mufflyt.github.io/mysterycall/articles/imotive-news.md) | Release notes |
+| `taxonomy` | NUCC taxonomy codes (v23.1) for all OBGYN subspecialties |
+| `acog_districts` | State → ACOG district + Census subregion crosswalk |
+| `acgme` | All 318 ACGME-accredited OBGYN residency programs |
+| `physicians` | Sample roster of 4,659 OBGYN subspecialists with coordinates |
+| `fips` | State FIPS codes and abbreviations |
+| `city_state_to_lat_long` | City/state → lat/lon lookup table |
+| `acog_presidents` | Historical ACOG presidents data |
+| `census_summaries` | Pre-computed Census block-group demographics |
 
-Citation
+``` r
+
+# Example: find all OBGYN taxonomy codes
+library(mysterycall)
+library(dplyr)
+library(stringr)
+
+taxonomy |>
+  filter(str_detect(Classification, fixed("GYN", ignore_case = TRUE))) |>
+  select(Code, Specialization)
+#> # A tibble: 11 × 2
+#>    Code       Specialization
+#>    <chr>      <chr>
+#>  1 207V00000X Obstetrics & Gynecology
+#>  2 207VF0040X Female Pelvic Medicine and Reconstructive Surgery
+#>  3 207VX0201X Gynecologic Oncology
+#>  4 207VM0101X Maternal & Fetal Medicine
+#>  5 207VE0102X Reproductive Endocrinology
+#>  ...
+```
+
+## Learn more
+
+Full documentation, function reference, and worked vignettes:
+**<https://mufflyt.github.io/mysterycall/>**
+
+**Getting started** - [Searching the NPI Database by
+Taxonomy](https://mufflyt.github.io/mysterycall/articles/my-vignette.html) -
+[Search & Process
+NPI](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html) -
+[Workflow
+Orchestration](https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html)
+
+**Data quality** - [Phone Validation, Name Parsing, and Safe
+Joins](https://mufflyt.github.io/mysterycall/articles/data-quality.html)
+
+**Geospatial** -
+[Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.html) -
+[Create
+Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html)
+
+**Analysis and reporting** - [Statistical Analysis (Poisson GLMMs,
+disparities, bootstrap
+CIs)](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html) -
+[Provider Classification (RUCA, practice setting, census
+region)](https://mufflyt.github.io/mysterycall/articles/provider-classification.html) -
+[Table
+Generation](https://mufflyt.github.io/mysterycall/articles/table-generation.html) -
+[Get Census
+Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
+
+## Citing mysterycall
 
 ``` r
 
@@ -447,6 +246,26 @@ citation("mysterycall")
 > Muffly, T. (2026). *mysterycall: Mystery Caller Study Tools for
 > Healthcare Access Research* (R package version 1.3.0).
 > <https://github.com/mufflyt/mysterycall>
+
+## Contributing
+
+Contributions are welcome. Please read
+[CONTRIBUTING.md](https://mufflyt.github.io/mysterycall/CONTRIBUTING.md)
+for the development workflow, coding style, and pull-request process.
+Bug reports and feature requests are best filed as [GitHub
+issues](https://github.com/mufflyt/mysterycall/issues).
+
+## Code of conduct
+
+Please note that this project is released with a [Contributor Code of
+Conduct](https://mufflyt.github.io/mysterycall/CODE_OF_CONDUCT.md). By
+participating you agree to abide by its terms.
+
+## License
+
+MIT © Tyler Muffly. See
+[LICENSE.md](https://mufflyt.github.io/mysterycall/LICENSE.md) for the
+full text.
 
 # Package index
 
@@ -945,7 +764,7 @@ output tables.
 - [`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)
   : Verify the content-addressable identity of an audit trail JSON file
 - [`preflight-checks`](https://mufflyt.github.io/mysterycall/reference/preflight-checks.md)
-  : Preflight Checks for Tyler Workflows
+  : Preflight Checks for Mysterycall Workflows
 - [`mysterycall_validate_google_api()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_google_api.md)
   : Validate Google Maps API key
 - [`mysterycall_validate_here_api()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_here_api.md)

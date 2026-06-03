@@ -14,6 +14,11 @@ NIH_CTSA_HUBS
 
 Character vector of CTSA-related text patterns.
 
+## Value
+
+A character vector of patterns indicating NIH Clinical and Translational
+Science Award hub institutions.
+
 ## See also
 
 [`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
