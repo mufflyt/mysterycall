@@ -409,7 +409,6 @@ reference:
       - mysterycall_format_duration
       - mysterycall_read_table
       - mysterycall_write_table
-      - utility_library
       - mysterycall_tempdir
 
   - title: "Deprecated"
@@ -421,6 +420,7 @@ articles:
   - title: "Getting Started"
     navbar: Getting Started
     contents:
+      - getting_started
       - my-vignette
       - aggregating_provider_data
       - pipeline-guarantees
