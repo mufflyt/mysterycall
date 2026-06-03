@@ -133,8 +133,7 @@ no additional dependencies.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_reorder_by_freq</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] B    A    A    C    B    B    C    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: B A C</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mysterycall_reorder_by_freq(x):</span> could not find function "mysterycall_reorder_by_freq"</span>
 <span class="r-in"><span><span class="co"># levels: B (3), A (2), C (2), then by appearance for ties</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Useful in ggplot2:</span></span></span>

@@ -62,8 +62,7 @@ Other provider characteristics:
 ``` r
 x <- c("B", "A", "A", "C", "B", "B", "C", NA)
 mysterycall_reorder_by_freq(x)
-#> [1] B    A    A    C    B    B    C    <NA>
-#> Levels: B A C
+#> Error in mysterycall_reorder_by_freq(x): could not find function "mysterycall_reorder_by_freq"
 # levels: B (3), A (2), C (2), then by appearance for ties
 
 # Useful in ggplot2:

@@ -85,7 +85,5 @@ Other outcomes:
 m1 <- glm(mpg ~ wt, data = mtcars, family = gaussian())
 m2 <- glm(mpg ~ wt + hp, data = mtcars, family = gaussian())
 mysterycall_select_best_model(list(base = m1, full = m2))
-#>   model      AIC delta_AIC winner
-#> 2  full 156.6523   0.00000   TRUE
-#> 1  base 166.0294   9.37709  FALSE
+#> Error in mysterycall_select_best_model(list(base = m1, full = m2)): could not find function "mysterycall_select_best_model"
 ```

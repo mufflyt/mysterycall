@@ -86,17 +86,5 @@ Other utilities:
 ``` r
 df <- tibble::tibble(id = 1:3, value = c(1, NA, 3))
 mysterycall_check_data_completeness(df, required = c("id", "value"))
-#> $summary
-#> # A tibble: 2 × 3
-#>   column completeness missing
-#>   <chr>         <dbl>   <dbl>
-#> 1 id            1       0    
-#> 2 value         0.667   0.333
-#> 
-#> $quality
-#> [1] "medium"
-#> 
-#> $score
-#> [1] 0.8333333
-#> 
+#> Error in mysterycall_check_data_completeness(df, required = c("id", "value")): could not find function "mysterycall_check_data_completeness"
 ```

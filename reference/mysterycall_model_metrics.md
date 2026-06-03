@@ -76,10 +76,5 @@ Other outcomes:
 ``` r
 m <- glm(mpg ~ wt, data = mtcars, family = gaussian())
 mysterycall_model_metrics(m)
-#> $mae
-#> [1] 2.340642
-#> 
-#> $rmse
-#> [1] 2.949163
-#> 
+#> Error in mysterycall_model_metrics(m): could not find function "mysterycall_model_metrics"
 ```

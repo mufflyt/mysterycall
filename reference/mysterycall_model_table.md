@@ -88,6 +88,5 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 #> Fitting Poisson GLMER: wait_days ~ insurance + (1 | physician)
 #> boundary (singular) fit: see help('isSingular')
 #> Model fitted: n=40, physicians=8, AIC=229.1, overdispersion=0.89
-#>                Term     IRR (95% CI) p-value
-#> 1 insuranceMedicaid 1.01 (0.87-1.17)   0.883
+#> Error in mysterycall_model_table(result): could not find function "mysterycall_model_table"
 ```

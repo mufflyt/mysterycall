@@ -150,15 +150,9 @@ Other outcomes:
 ``` r
 m <- glm(vs ~ wt + factor(cyl), data = mtcars, family = poisson())
 mysterycall_marginal_effects(m)
-#>   term level        ame variable_type
-#> 1   wt  <NA>  0.1560597    continuous
-#> 2  cyl     6 -0.6971847   categorical
-#> 3  cyl     8 -1.3230068   categorical
+#> Error in mysterycall_marginal_effects(m): could not find function "mysterycall_marginal_effects"
 mysterycall_marginal_effects(m, term = "wt")
-#>   term level       ame variable_type
-#> 1   wt  <NA> 0.1560597    continuous
+#> Error in mysterycall_marginal_effects(m, term = "wt"): could not find function "mysterycall_marginal_effects"
 mysterycall_marginal_effects(m, term = "cyl")
-#>   term level        ame variable_type
-#> 1  cyl     6 -0.6971847   categorical
-#> 2  cyl     8 -1.3230068   categorical
+#> Error in mysterycall_marginal_effects(m, term = "cyl"): could not find function "mysterycall_marginal_effects"
 ```
