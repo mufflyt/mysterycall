@@ -38,6 +38,18 @@ or \code{\link[arrow:write_parquet]{arrow::write_parquet()}}. For CSV format, wr
 to a temporary file then renamed to reduce the risk of file corruption
 during concurrent access.
 }
+\examples{
+\dontrun{
+# Write to CSV
+mysterycall_write_table(mtcars, "cars.csv")
+
+# Write to Parquet
+mysterycall_write_table(mtcars, "cars.parquet")
+
+# Append to an existing CSV
+mysterycall_write_table(new_data, "combined.csv", append = TRUE)
+}
+}
 \seealso{
 Other utilities:
 \code{\link[=.title_case]{.title_case()}},

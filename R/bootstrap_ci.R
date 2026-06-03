@@ -43,6 +43,7 @@
 #' @seealso [mysterycall_acceptance_rate()], [mysterycall_wait_time_summary()]
 #'   for model-based outcome summaries; [mysterycall_compare_waves()] for
 #'   cross-wave significance testing.
+#' @family outcomes
 #' @family inference
 #' @export
 mysterycall_bootstrap_ci <- function(

@@ -240,7 +240,8 @@ test_that("End-to-end: Census data integration workflow", {
   skip_on_cran()
 
   # Mock censusapi::getCensus() — returns block-group level data shaped the
-  # way mysterycall_get_census_data expects.
+  # way mysterycall_get_census_data expects.  Population estimates use a
+  # consistent age/sex breakdown so derived percentages stay in [0, 100].
   mock_get_census <- function(name, vintage, key, vars, region, regionin, ...) {
     state_fips <- sub("^state:", "",
                        regmatches(regionin,
@@ -254,11 +255,25 @@ test_that("End-to-end: Census data integration workflow", {
       check.names = FALSE
     )
     out[["block group"]] <- "1"
-    var_names <- grep("^B01001_", vars, value = TRUE)
-    if (!length(var_names)) {
-      var_names <- c("B01001_001E", "B01001_002E", "B01001_026E")
+    # Realistic populations: total = male + female; reproductive-age females
+    # (B01001_030..038) are a fraction of total female (B01001_026)
+    total_pop <- 2000L
+    male_pop  <- 980L
+    female_pop <- total_pop - male_pop  # 1020
+    # Reproductive-age (15-44) ≈ 45% of female population
+    repro_share <- 0.45
+    age_buckets <- c(0.02, 0.02, 0.03, 0.03, 0.06, 0.09, 0.09, 0.06, 0.05)
+    age_buckets <- age_buckets / sum(age_buckets) * repro_share
+    out$B01001_001E <- total_pop
+    out$B01001_002E <- male_pop
+    out$B01001_026E <- female_pop
+    for (i in seq_along(age_buckets)) {
+      v <- sprintf("B01001_%03dE", 29L + i)  # 030..038
+      out[[v]] <- as.integer(round(female_pop * age_buckets[i]))
     }
-    for (v in var_names) out[[v]] <- sample(50:5000, 1L)
+    # Any extra requested vars get a zero fallback
+    requested <- grep("^B01001_", vars, value = TRUE)
+    for (v in setdiff(requested, names(out))) out[[v]] <- 0L
     out
   }
 

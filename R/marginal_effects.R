@@ -18,7 +18,7 @@ NULL
 #' the reference level, holding all other predictors constant.
 #'
 #' Standard errors and confidence intervals are NOT computed by this function.
-#' Use `mysterycall_bootstrap_ci()` for bootstrap-based confidence intervals.
+#' Use [mysterycall_bootstrap_ci()] for bootstrap-based confidence intervals.
 #'
 #' @param model A fitted `glm` (with `family = poisson`), a `glmerMod` object
 #'   from lme4, or a `mysterycall_poisson_model` object. For

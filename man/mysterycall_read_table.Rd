@@ -23,6 +23,15 @@ Transparently reads a dataset from disk using either \code{\link[readr:read_csv]
 If an \code{npi} column is present and numeric, it is automatically coerced to
 character to prevent loss of leading zeros or precision.
 }
+\examples{
+\dontrun{
+# Read a CSV file
+df <- mysterycall_read_table("providers.csv")
+
+# Read a Parquet file
+df <- mysterycall_read_table("data.parquet")
+}
+}
 \seealso{
 Other utilities:
 \code{\link[=.title_case]{.title_case()}},

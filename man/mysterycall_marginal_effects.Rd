@@ -67,7 +67,7 @@ level is the average difference in predicted values between that level and
 the reference level, holding all other predictors constant.
 
 Standard errors and confidence intervals are NOT computed by this function.
-Use \code{mysterycall_bootstrap_ci()} for bootstrap-based confidence intervals.
+Use \code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}} for bootstrap-based confidence intervals.
 }
 \section{Standard errors}{
 
@@ -104,9 +104,12 @@ Other outcomes:
 \code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
 \code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
 \code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
+\code{\link[=.me_find_mf_col]{.me_find_mf_col()}},
+\code{\link[=.me_mf_to_orig]{.me_mf_to_orig()}},
 \code{\link[=.wait_stats]{.wait_stats()}},
 \code{\link[=.wilson_ci]{.wilson_ci()}},
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
+\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
 \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
 \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
 \code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}},
