@@ -21,7 +21,6 @@ Imports:
     httr,
     humaniformat,
     janitor,
-    magrittr,
     methods,
     npi (>= 0.2.0),
     readr,
