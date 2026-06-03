@@ -1,55 +1,55 @@
-# ── mysterycall_recode_credentials ───────────────────────────────────────────
+# ── mysterycall:::mysterycall_recode_credentials ───────────────────────────────────────────
 
 test_that("recode_credentials: MD variants → 'MD'", {
-  expect_equal(mysterycall_recode_credentials("MD"),     "MD")
-  expect_equal(mysterycall_recode_credentials("M.D."),   "MD")
-  expect_equal(mysterycall_recode_credentials("MD/PhD"), "MD")
-  expect_equal(mysterycall_recode_credentials("MD-PhD"), "MD")
-  expect_equal(mysterycall_recode_credentials("doctor of medicine"), "MD")
-  expect_equal(mysterycall_recode_credentials("Allopathic"), "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("MD"),     "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("M.D."),   "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("MD/PhD"), "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("MD-PhD"), "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("doctor of medicine"), "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("Allopathic"), "MD")
 })
 
 test_that("recode_credentials: DO variants → 'DO'", {
-  expect_equal(mysterycall_recode_credentials("DO"),    "DO")
-  expect_equal(mysterycall_recode_credentials("D.O."),  "DO")
-  expect_equal(mysterycall_recode_credentials("osteopathic"), "DO")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("DO"),    "DO")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("D.O."),  "DO")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("osteopathic"), "DO")
 })
 
 test_that("recode_credentials: MD takes priority over DO in combined string", {
   # "MD/DO" contains both; MD should win (checked first)
-  expect_equal(mysterycall_recode_credentials("MD/DO"), "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("MD/DO"), "MD")
 })
 
 test_that("recode_credentials: non-MD/DO → 'Other'", {
-  expect_equal(mysterycall_recode_credentials("PA-C"),  "Other")
-  expect_equal(mysterycall_recode_credentials("MBBS"),  "Other")
-  expect_equal(mysterycall_recode_credentials("NP"),    "Other")
-  expect_equal(mysterycall_recode_credentials("RN"),    "Other")
-  expect_equal(mysterycall_recode_credentials("DDS"),   "Other")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("PA-C"),  "Other")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("MBBS"),  "Other")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("NP"),    "Other")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("RN"),    "Other")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("DDS"),   "Other")
 })
 
 test_that("recode_credentials: NA → NA", {
-  expect_true(is.na(mysterycall_recode_credentials(NA_character_)))
+  expect_true(is.na(mysterycall:::mysterycall_recode_credentials(NA_character_)))
 })
 
 test_that("recode_credentials: custom other_label", {
-  expect_equal(mysterycall_recode_credentials("NP", other_label = "Non-Physician"), "Non-Physician")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("NP", other_label = "Non-Physician"), "Non-Physician")
 })
 
 test_that("recode_credentials: case-insensitive", {
-  expect_equal(mysterycall_recode_credentials("md"),  "MD")
-  expect_equal(mysterycall_recode_credentials("DO"),  "DO")
-  expect_equal(mysterycall_recode_credentials("d.O."), "DO")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("md"),  "MD")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("DO"),  "DO")
+  expect_equal(mysterycall:::mysterycall_recode_credentials("d.O."), "DO")
 })
 
 test_that("recode_credentials: vectorized", {
-  res <- mysterycall_recode_credentials(c("M.D.", "D.O.", "PA", NA))
+  res <- mysterycall:::mysterycall_recode_credentials(c("M.D.", "D.O.", "PA", NA))
   expect_equal(res, c("MD", "DO", "Other", NA))
   expect_length(res, 4L)
 })
 
 test_that("recode_credentials: returns character vector", {
-  expect_type(mysterycall_recode_credentials("MD"), "character")
+  expect_type(mysterycall:::mysterycall_recode_credentials("MD"), "character")
 })
 
 # ── mysterycall_reorder_by_freq ───────────────────────────────────────────────

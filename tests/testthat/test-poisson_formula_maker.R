@@ -13,7 +13,7 @@ sample_data <- data.frame(
 # Test cases
 test_that("Creates formula without random effect", {
   cat("Running test: Creates formula without random effect\n")
-  result <- mysterycall_create_formula(sample_data, "days")
+  result <- mysterycall:::mysterycall_create_formula(sample_data, "days")
 
   expected_formula <- as.formula("days ~ `age` + `name`")
 
@@ -22,7 +22,7 @@ test_that("Creates formula without random effect", {
 
 test_that("Creates formula with random effect", {
   cat("Running test: Creates formula with random effect\n")
-  result <- mysterycall_create_formula(sample_data, "days", "name")
+  result <- mysterycall:::mysterycall_create_formula(sample_data, "days", "name")
 
   expected_formula <- as.formula("days ~ `age` + (1 | name)")  # random_effect var excluded from fixed effects
 

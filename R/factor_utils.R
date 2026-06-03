@@ -32,7 +32,7 @@ NULL
 #' @return Character vector the same length as `x`. `NA` inputs return `NA`.
 #'
 #' @family provider characteristics
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' creds <- c("M.D.", "DO", "MD/PhD", "D.O.", "PA-C", "MBBS", NA)

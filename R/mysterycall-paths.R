@@ -11,7 +11,7 @@
 #'
 #' @return A normalized path as a character string.
 #' @family utilities
-#' @export
+#' @keywords internal
 #' @examples
 #' mysterycall_resolve_path("output.csv", type = "tables", create = FALSE)
 mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("mysterycall.base_dir", getwd()), create = FALSE) {
@@ -63,7 +63,7 @@ mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("mys
 #' @importFrom ggplot2 ggsave
 #' @importFrom utils write.table
 #' @family utilities
-#' @export
+#' @keywords internal
 #' @examples
 #' tmp <- tempfile(fileext = ".csv")
 #' mysterycall_export_with_backup(mtcars, tmp)

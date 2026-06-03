@@ -25,7 +25,7 @@
 #' mysterycall_create_formula(df, "days")  # fixed-effects only
 #'
 #' @family modeling helpers
-#' @export
+#' @keywords internal
 mysterycall_create_formula <- function(data, response_var, random_effect = NULL) {
   if (!is.data.frame(data)) {
     stop("`data` must be a data frame.", call. = FALSE)

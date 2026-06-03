@@ -53,44 +53,44 @@ test_that("parse_cert: vectorized", {
   expect_true(is.na(res[[4L]]))
 })
 
-# ── mysterycall_extract_physician_name ────────────────────────────────────────
+# ── mysterycall:::mysterycall_extract_physician_name ────────────────────────────────────────
 
 test_that("extract_physician_name: 'First Last MD' → 'Dr. Last'", {
-  expect_equal(mysterycall_extract_physician_name("John Smith MD"), "Dr. Smith")
+  expect_equal(mysterycall:::mysterycall_extract_physician_name("John Smith MD"), "Dr. Smith")
 })
 
 test_that("extract_physician_name: 'Dr. First Last' → 'Dr. Last'", {
-  expect_equal(mysterycall_extract_physician_name("Dr. Jane Doe"), "Dr. Doe")
+  expect_equal(mysterycall:::mysterycall_extract_physician_name("Dr. Jane Doe"), "Dr. Doe")
 })
 
 test_that("extract_physician_name: 'Last, First' format", {
-  expect_equal(mysterycall_extract_physician_name("JONES, Robert"), "Dr. JONES")
+  expect_equal(mysterycall:::mysterycall_extract_physician_name("JONES, Robert"), "Dr. JONES")
 })
 
 test_that("extract_physician_name: multiple credentials stripped", {
   expect_equal(
-    mysterycall_extract_physician_name("Mary Williams, MD, FACS"),
+    mysterycall:::mysterycall_extract_physician_name("Mary Williams, MD, FACS"),
     "Dr. Williams"
   )
 })
 
 test_that("extract_physician_name: format='last' returns surname only", {
-  expect_equal(mysterycall_extract_physician_name("John Smith MD", format = "last"), "Smith")
+  expect_equal(mysterycall:::mysterycall_extract_physician_name("John Smith MD", format = "last"), "Smith")
 })
 
 test_that("extract_physician_name: format='full_clean' strips creds+title", {
-  res <- mysterycall_extract_physician_name("Dr. John Smith, MD", format = "full_clean")
+  res <- mysterycall:::mysterycall_extract_physician_name("Dr. John Smith, MD", format = "full_clean")
   expect_false(grepl("MD", res))
   expect_false(grepl("Dr\\.", res))
 })
 
 test_that("extract_physician_name: NA → NA", {
-  expect_true(is.na(mysterycall_extract_physician_name(NA_character_)))
+  expect_true(is.na(mysterycall:::mysterycall_extract_physician_name(NA_character_)))
 })
 
 test_that("extract_physician_name: vectorized", {
   nms <- c("John Smith MD", "Dr. Jane Doe, PhD", NA)
-  res <- mysterycall_extract_physician_name(nms)
+  res <- mysterycall:::mysterycall_extract_physician_name(nms)
   expect_length(res, 3L)
   expect_equal(res[[1L]], "Dr. Smith")
   expect_equal(res[[2L]], "Dr. Doe")

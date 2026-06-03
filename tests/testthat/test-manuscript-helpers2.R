@@ -1,41 +1,41 @@
-# ── mysterycall_methods_paragraph ────────────────────────────────────────────
+# ── mysterycall:::mysterycall_methods_paragraph ────────────────────────────────────────────
 
 test_that("methods_paragraph: returns single character string", {
-  res <- mysterycall_methods_paragraph(300, 25, c("Otolaryngology"))
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, c("Otolaryngology"))
   expect_type(res, "character")
   expect_length(res, 1L)
 })
 
 test_that("methods_paragraph: contains physician count", {
-  res <- mysterycall_methods_paragraph(300, 25, "Otolaryngology")
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, "Otolaryngology")
   expect_match(res, "300")
 })
 
 test_that("methods_paragraph: contains city count", {
-  res <- mysterycall_methods_paragraph(300, 25, "Otolaryngology")
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, "Otolaryngology")
   expect_match(res, "25")
 })
 
 test_that("methods_paragraph: multiple specialties joined with 'and'", {
-  res <- mysterycall_methods_paragraph(300, 25, c("Otolaryngology","Urology","Dermatology"))
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, c("Otolaryngology","Urology","Dermatology"))
   expect_match(res, "and Dermatology")
 })
 
 test_that("methods_paragraph: insurance types appear in paragraph", {
-  res <- mysterycall_methods_paragraph(300, 25, "ENT",
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, "ENT",
                                         insurance_types = c("Medicaid","BCBS"))
   expect_match(res, "Medicaid")
   expect_match(res, "BCBS")
 })
 
 test_that("methods_paragraph: custom outcome label", {
-  res <- mysterycall_methods_paragraph(300, 25, "ENT",
+  res <- mysterycall:::mysterycall_methods_paragraph(300, 25, "ENT",
                                         outcome = "wait time in days")
   expect_match(res, "wait time in days")
 })
 
 test_that("methods_paragraph: invalid n_physicians errors", {
-  expect_error(mysterycall_methods_paragraph(0, 25, "ENT"), "positive")
+  expect_error(mysterycall:::mysterycall_methods_paragraph(0, 25, "ENT"), "positive")
 })
 
 # ── mysterycall_format_results_table ─────────────────────────────────────────

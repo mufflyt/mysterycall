@@ -22,7 +22,7 @@ NULL
 #'   5-character string of digits or `NA_character_`.
 #'
 #' @family data management
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))

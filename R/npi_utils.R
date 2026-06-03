@@ -25,7 +25,7 @@ NULL
 #'   filtering; [mysterycall_get_clinician_data()] to retrieve clinician detail
 #'   records for validated NPIs.
 #' @family data management
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' mysterycall_luhn_check(c("1234567893", "9999999999", NA))

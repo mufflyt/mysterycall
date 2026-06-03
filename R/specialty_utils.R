@@ -90,7 +90,7 @@ mysterycall_parse_certification_subspecialty <- function(cert_type,
 #' @return Character vector the same length as `x`. `NA` for blank/`NA` inputs.
 #'
 #' @family provider characteristics
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' nms <- c("John Smith MD", "Dr. Jane Doe, PhD", "JONES, Robert",

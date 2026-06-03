@@ -23,7 +23,7 @@ NULL
 #' @seealso [mysterycall_reorder_by_freq()] to reorder factor levels by
 #'   frequency; [mysterycall_recode_credentials()] for credential grouping.
 #' @family provider characteristics
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' x <- c(rep("Otolaryngology", 80), rep("Urology", 30), rep("Dermatology", 5))

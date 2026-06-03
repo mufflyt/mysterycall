@@ -39,6 +39,8 @@ NULL
 #' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
 #' @family academic-indicators
+#' @export
+#' @export
 KNOWN_ACADEMIC_INSTITUTIONS <- c(
   "JOHNS HOPKINS", "MAYO CLINIC", "CLEVELAND CLINIC", "MASSACHUSETTS GENERAL",
   "BRIGHAM", "STANFORD", "UCLA", "UCSF", "M D ANDERSON", "MEMORIAL SLOAN",
@@ -97,6 +99,8 @@ ACADEMIC_HOSPITAL_PATTERNS <- list(
 #' ACGME_PROGRAM_INDICATORS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
+#' @export
 ACGME_PROGRAM_INDICATORS <- c(
   "RESIDENCY PROGRAM", "FELLOWSHIP PROGRAM", "GRADUATE MEDICAL EDUCATION",
   "GME PROGRAM", "TRAINING PROGRAM"
@@ -115,6 +119,7 @@ ACGME_PROGRAM_INDICATORS <- c(
 #' COTH_TEACHING_INDICATORS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
 COTH_TEACHING_INDICATORS <- c(
   "TEACHING HOSPITAL", "COUNCIL OF TEACHING HOSPITALS",
   "COTH MEMBER", "AAMC MEMBER"
@@ -132,6 +137,8 @@ COTH_TEACHING_INDICATORS <- c(
 #' MEDICAL_SCHOOL_INDICATORS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
+#' @export
 MEDICAL_SCHOOL_INDICATORS <- c(
   "SCHOOL OF MEDICINE", "MEDICAL SCHOOL", "COLLEGE OF MEDICINE",
   "MEDICAL COLLEGE", "AFFILIATED WITH.*MEDICAL SCHOOL",
@@ -152,6 +159,8 @@ MEDICAL_SCHOOL_INDICATORS <- c(
 #' NIH_CTSA_HUBS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
+#' @export
 NIH_CTSA_HUBS <- c(
   "CTSA HUB",
   "CLINICAL AND TRANSLATIONAL SCIENCE AWARD",
@@ -171,6 +180,7 @@ NIH_CTSA_HUBS <- c(
 #' NCI_CANCER_CENTERS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
 NCI_CANCER_CENTERS <- c(
   "NCI-DESIGNATED", "COMPREHENSIVE CANCER CENTER",
   "CANCER CENTER", "CANCER INSTITUTE"
@@ -189,6 +199,8 @@ NCI_CANCER_CENTERS <- c(
 #' MEDICARE_GME_INDICATORS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
+#' @export
 #' @export
 MEDICARE_GME_INDICATORS <- c(
   "GME PAYMENTS", "GRADUATE MEDICAL EDUCATION PAYMENTS",

@@ -14,6 +14,10 @@ BugReports: https://github.com/mufflyt/mysterycall/issues
 Depends:
     R (>= 4.1.0)
 Imports:
+    httr,
+    janitor,
+    readr,
+    scales,
     checkmate,
     dplyr,
     ggplot2,
@@ -28,6 +32,7 @@ Imports:
     utils
 LazyData: true
 Suggests:
+    magrittr,
     arsenal,
     arrow,
     beepr,
@@ -49,9 +54,7 @@ Suggests:
     hereR,
     htmltools,
     htmlwidgets,
-    httr,
     humaniformat,
-    janitor,
     jsonlite,
     knitr,
     leaflet,
@@ -63,11 +66,9 @@ Suggests:
     openxlsx,
     patchwork,
     progress,
-    readr,
     readxl,
     rmarkdown,
     rnaturalearth,
-    scales,
     sjPlot,
     testthat,
     tidycensus,

@@ -23,7 +23,7 @@ NULL
 #' @seealso [mysterycall_cochran_n()] for the underlying sample-size formula;
 #'   [mysterycall_methods_paragraph()] to generate the full methods paragraph.
 #' @family manuscript
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' mysterycall_sample_size_text(369)
@@ -127,7 +127,7 @@ mysterycall_summarize_demographics <- function(data,
 #'   [mysterycall_summarize_demographics()] for the demographics summary;
 #'   [mysterycall_write_results_paragraph()] for the results section.
 #' @family manuscript
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' mysterycall_methods_paragraph(

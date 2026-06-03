@@ -1,24 +1,24 @@
-# ── mysterycall_sample_size_text ──────────────────────────────────────────────
+# ── mysterycall:::mysterycall_sample_size_text ──────────────────────────────────────────────
 
 test_that("sample_size_text: returns single character string", {
-  res <- mysterycall_sample_size_text(369)
+  res <- mysterycall:::mysterycall_sample_size_text(369)
   expect_type(res, "character")
   expect_length(res, 1L)
 })
 
 test_that("sample_size_text: contains sample size number", {
-  res <- mysterycall_sample_size_text(369)
+  res <- mysterycall:::mysterycall_sample_size_text(369)
   # Cochran n for N=369, e=0.05 → 192
   expect_match(res, "192")
 })
 
 test_that("sample_size_text: contains population size", {
-  res <- mysterycall_sample_size_text(369)
+  res <- mysterycall:::mysterycall_sample_size_text(369)
   expect_match(res, "369")
 })
 
 test_that("sample_size_text: mentions margin of error percentage", {
-  res <- mysterycall_sample_size_text(369, margin_of_error = 0.10)
+  res <- mysterycall:::mysterycall_sample_size_text(369, margin_of_error = 0.10)
   expect_match(res, "10%")
 })
 

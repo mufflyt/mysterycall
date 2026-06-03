@@ -117,7 +117,7 @@ mysterycall_run_workflow_logged <- function(
 #'
 #' @return Invisible NULL.
 #' @family workflow
-#' @export
+#' @keywords internal
 #' @examplesIf interactive()
 #' results <- mysterycall_run_workflow_logged(phase1_data = my_data)
 #' mysterycall_print_dashboard(results)
