@@ -28,7 +28,7 @@ NULL
 #' @seealso [mysterycall_poisson_model()] which produces compatible model
 #'   objects; [mysterycall_select_best_model()] for AIC/BIC-based selection.
 #' @family outcomes
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' m <- glm(mpg ~ wt, data = mtcars, family = gaussian())

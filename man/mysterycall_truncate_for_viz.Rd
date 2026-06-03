@@ -34,3 +34,4 @@ Other green-journal-spatial:
 \code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 }
 \concept{green-journal-spatial}
+\keyword{internal}

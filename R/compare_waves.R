@@ -34,7 +34,7 @@
 #'   for detailed single-wave outcome analysis; [mysterycall_bootstrap_ci()]
 #'   for non-parametric confidence intervals.
 #' @family inference
-#' @export
+#' @keywords internal
 mysterycall_compare_waves <- function(
     data,
     wave_col,

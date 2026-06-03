@@ -31,7 +31,7 @@ NULL
 #'   warnings; [mysterycall_reconcile_specialty()] for post-join specialty
 #'   harmonization.
 #' @family data management
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' registry <- data.frame(npi = c("A","B"), state = c("CO","TX"),

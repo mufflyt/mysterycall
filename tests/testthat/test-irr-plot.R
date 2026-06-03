@@ -73,35 +73,35 @@ test_that("irr_plot: custom x_label used", {
   expect_equal(p$labels$x, "Rate Ratio")
 })
 
-# ── mysterycall_model_table ───────────────────────────────────────────────────
+# ── mysterycall:::mysterycall_model_table ───────────────────────────────────────────────────
 
 test_that("model_table: returns a data frame", {
-  out <- mysterycall_model_table(model_res)
+  out <- mysterycall:::mysterycall_model_table(model_res)
   expect_s3_class(out, "data.frame")
 })
 
 test_that("model_table: excludes intercept by default", {
-  out <- mysterycall_model_table(model_res)
+  out <- mysterycall:::mysterycall_model_table(model_res)
   expect_false(any(grepl("Intercept", out[[1L]], ignore.case = TRUE)))
 })
 
 test_that("model_table: includes intercept when requested", {
-  out <- mysterycall_model_table(model_res, include_intercept = TRUE)
+  out <- mysterycall:::mysterycall_model_table(model_res, include_intercept = TRUE)
   expect_true(any(grepl("Intercept", out[[1L]], ignore.case = TRUE)))
 })
 
 test_that("model_table: has exactly 3 columns", {
-  out <- mysterycall_model_table(model_res)
+  out <- mysterycall:::mysterycall_model_table(model_res)
   expect_equal(ncol(out), 3L)
 })
 
 test_that("model_table: default column names are correct", {
-  out <- mysterycall_model_table(model_res)
+  out <- mysterycall:::mysterycall_model_table(model_res)
   expect_equal(names(out), c("Term", "IRR (95% CI)", "p-value"))
 })
 
 test_that("model_table: custom column names respected", {
-  out <- mysterycall_model_table(model_res,
+  out <- mysterycall:::mysterycall_model_table(model_res,
                                   term_col = "Predictor",
                                   irr_col  = "IRR [CI]",
                                   p_col    = "P")
@@ -109,22 +109,22 @@ test_that("model_table: custom column names respected", {
 })
 
 test_that("model_table: IRR column contains dash separator", {
-  out <- mysterycall_model_table(model_res)
+  out <- mysterycall:::mysterycall_model_table(model_res)
   # Combined IRR (95% CI) column uses em-dash
   expect_true(all(grepl("–", out[["IRR (95% CI)"]]) | grepl("\\(", out[["IRR (95% CI)"]])))
 })
 
 test_that("model_table: p-value column matches p_value_fmt from irr_table", {
-  out    <- mysterycall_model_table(model_res, include_intercept = TRUE)
+  out    <- mysterycall:::mysterycall_model_table(model_res, include_intercept = TRUE)
   n_rows <- nrow(model_res$irr_table)
   expect_equal(nrow(out), n_rows)
   expect_equal(out[["p-value"]], model_res$irr_table$p_value_fmt)
 })
 
 test_that("model_table: non-model input errors", {
-  expect_error(mysterycall_model_table(list(a = 1)), "mysterycall_poisson_model")
+  expect_error(mysterycall:::mysterycall_model_table(list(a = 1)), "mysterycall_poisson_model")
 })
 
 test_that("model_table: negative digits errors", {
-  expect_error(mysterycall_model_table(model_res, digits = -1), "digits")
+  expect_error(mysterycall:::mysterycall_model_table(model_res, digits = -1), "digits")
 })

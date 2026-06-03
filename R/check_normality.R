@@ -16,7 +16,7 @@
 #' @seealso [mysterycall_prepare_table1_vars()] for downstream variable
 #'   standardization; [mysterycall_physician_age()] for age summary statistics.
 #' @family modeling helpers
-#' @export
+#' @keywords internal
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
 #' @importFrom rlang sym
 #' @importFrom stats shapiro.test IQR median

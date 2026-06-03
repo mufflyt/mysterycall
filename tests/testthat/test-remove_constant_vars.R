@@ -12,7 +12,7 @@ test_that("Constant variables are removed correctly", {
   )
 
   # Run the function
-  result <- mysterycall_remove_constants(data_frame)
+  result <- mysterycall:::mysterycall_remove_constants(data_frame)
 
   # Check that the constant column is removed
   expect_false("constant_col" %in% names(result))
@@ -29,7 +29,7 @@ test_that("No constant variables are unchanged", {
   )
 
   # Run the function
-  result <- mysterycall_remove_constants(data_frame)
+  result <- mysterycall:::mysterycall_remove_constants(data_frame)
 
   # Check that no columns are removed
   expect_equal(ncol(result), ncol(data_frame))
@@ -41,7 +41,7 @@ test_that("Empty data frame is handled correctly", {
   data_frame <- data.frame()
 
   # Run the function
-  result <- mysterycall_remove_constants(data_frame)
+  result <- mysterycall:::mysterycall_remove_constants(data_frame)
 
   # Check that the result is also an empty data frame
   expect_equal(ncol(result), 0)
@@ -57,7 +57,7 @@ test_that("Data frame with all constant variables is empty afterwards", {
   )
 
   # Run the function
-  result <- mysterycall_remove_constants(data_frame)
+  result <- mysterycall:::mysterycall_remove_constants(data_frame)
 
   # Check that all columns are removed
   expect_equal(ncol(result), 0)

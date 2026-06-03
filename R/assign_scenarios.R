@@ -44,7 +44,7 @@ NULL
 #'   generalist coverage before assigning scenarios;
 #'   [mysterycall_reconcile_specialty()] for specialty harmonization.
 #' @family study design
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' df <- data.frame(

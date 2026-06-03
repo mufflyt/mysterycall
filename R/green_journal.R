@@ -415,7 +415,7 @@ crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus");
 #'   percentile).
 #' @param na.rm Logical. Remove NAs before computing quantiles (default `TRUE`).
 #' @return Numeric vector, same length as `x`.
-#' @export
+#' @keywords internal
 #' @family green-journal-spatial
 #' @seealso [mysterycall_truncate_for_viz()]
 #' @examples
@@ -448,7 +448,7 @@ winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_w
 #' @param floor Numeric. Minimum value (default 0).
 #' @param ceiling Numeric. Maximum value (default 100).
 #' @return Numeric vector clipped to `[floor, ceiling]`.
-#' @export
+#' @keywords internal
 #' @family green-journal-spatial
 #' @seealso [mysterycall_winsorize()]
 #' @examples

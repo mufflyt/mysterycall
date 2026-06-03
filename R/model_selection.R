@@ -28,7 +28,7 @@ NULL
 #'   [mysterycall_create_formula()] to build predictor sets;
 #'   [mysterycall_bootstrap_ci()] for post-selection inference.
 #' @family outcomes
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' m1 <- glm(mpg ~ wt, data = mtcars, family = gaussian())

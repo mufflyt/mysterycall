@@ -25,9 +25,9 @@ test_that("mysterycall_quality_tier() tier boundaries are stable", {
   })
 })
 
-test_that("mysterycall_check_data_completeness() summary structure is stable", {
+test_that("mysterycall:::mysterycall_check_data_completeness() summary structure is stable", {
   df <- tibble::tibble(id = 1:5, value = c(1, NA, 3, NA, 5))
-  result <- mysterycall_check_data_completeness(df, required = c("id", "value"))
+  result <- mysterycall:::mysterycall_check_data_completeness(df, required = c("id", "value"))
   expect_snapshot(result$summary)
   expect_snapshot(result$quality)
 })

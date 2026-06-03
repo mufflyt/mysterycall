@@ -84,7 +84,7 @@ mysterycall_recode_credentials <- function(x, other_label = "Other") {
 #' @return A factor with levels sorted by frequency.
 #'
 #' @family provider characteristics
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' x <- c("B", "A", "A", "C", "B", "B", "C", NA)

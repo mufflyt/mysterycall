@@ -38,7 +38,7 @@ test_that("methods_paragraph: invalid n_physicians errors", {
   expect_error(mysterycall:::mysterycall_methods_paragraph(0, 25, "ENT"), "positive")
 })
 
-# ── mysterycall_format_results_table ─────────────────────────────────────────
+# ── mysterycall:::mysterycall_format_results_table ─────────────────────────────────────────
 
 make_irr_tbl <- function() {
   data.frame(
@@ -52,34 +52,34 @@ make_irr_tbl <- function() {
 }
 
 test_that("format_results_table: returns data frame", {
-  res <- mysterycall_format_results_table(make_irr_tbl())
+  res <- mysterycall:::mysterycall_format_results_table(make_irr_tbl())
   expect_s3_class(res, "data.frame")
 })
 
 test_that("format_results_table: intercept excluded by default", {
-  res <- mysterycall_format_results_table(make_irr_tbl())
+  res <- mysterycall:::mysterycall_format_results_table(make_irr_tbl())
   expect_false("(Intercept)" %in% res$Term)
 })
 
 test_that("format_results_table: intercept included when requested", {
-  res <- mysterycall_format_results_table(make_irr_tbl(), include_intercept = TRUE)
+  res <- mysterycall:::mysterycall_format_results_table(make_irr_tbl(), include_intercept = TRUE)
   expect_true("(Intercept)" %in% res$Term)
 })
 
 test_that("format_results_table: has expected column names", {
-  res <- mysterycall_format_results_table(make_irr_tbl())
+  res <- mysterycall:::mysterycall_format_results_table(make_irr_tbl())
   expect_true(all(c("Term", "IRR", "95% CI", "p-value") %in% names(res)))
 })
 
 test_that("format_results_table: p < 0.001 shown as '< 0.001'", {
   tbl <- make_irr_tbl()
   tbl$p_value[[2L]] <- 0.0001
-  res <- mysterycall_format_results_table(tbl)
+  res <- mysterycall:::mysterycall_format_results_table(tbl)
   expect_equal(res[res$Term == "insuranceMedicaid", "p-value"], "< 0.001")
 })
 
 test_that("format_results_table: significant_rows attribute set", {
-  res <- mysterycall_format_results_table(make_irr_tbl())
+  res <- mysterycall:::mysterycall_format_results_table(make_irr_tbl())
   expect_true(!is.null(attr(res, "significant_rows")))
   expect_true(length(attr(res, "significant_rows")) > 0L)
 })
@@ -94,6 +94,6 @@ test_that("format_results_table: accepts mysterycall_poisson_model", {
     stringsAsFactors = FALSE
   )
   mod <- mysterycall_poisson_model(df, "wait", "ins", "phys")
-  res <- mysterycall_format_results_table(mod)
+  res <- mysterycall:::mysterycall_format_results_table(mod)
   expect_s3_class(res, "data.frame")
 })

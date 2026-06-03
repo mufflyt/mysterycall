@@ -43,3 +43,4 @@ Other manuscript:
 \code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}}
 }
 \concept{manuscript}
+\keyword{internal}

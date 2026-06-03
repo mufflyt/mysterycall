@@ -72,7 +72,7 @@ NULL
 #' @importFrom stats model.frame model.matrix predict formula terms
 #' @family outcomes
 #' @seealso [mysterycall_poisson_model()], [mysterycall_model_metrics()]
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' m <- glm(vs ~ wt + factor(cyl), data = mtcars, family = poisson())

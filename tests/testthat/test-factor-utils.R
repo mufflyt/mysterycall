@@ -52,57 +52,57 @@ test_that("recode_credentials: returns character vector", {
   expect_type(mysterycall:::mysterycall_recode_credentials("MD"), "character")
 })
 
-# ── mysterycall_reorder_by_freq ───────────────────────────────────────────────
+# ── mysterycall:::mysterycall_reorder_by_freq ───────────────────────────────────────────────
 
 test_that("reorder_by_freq: most frequent level is first", {
   x   <- c("B","A","A","C","B","B","C")
-  res <- mysterycall_reorder_by_freq(x)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x)
   expect_equal(levels(res)[[1L]], "B")
 })
 
 test_that("reorder_by_freq: returns a factor", {
   x   <- c("A","B","B")
-  res <- mysterycall_reorder_by_freq(x)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x)
   expect_s3_class(res, "factor")
 })
 
 test_that("reorder_by_freq: works on character input", {
   x   <- c("X","Y","Y","Z")
-  res <- mysterycall_reorder_by_freq(x)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x)
   expect_equal(levels(res)[[1L]], "Y")
 })
 
 test_that("reorder_by_freq: works on factor input", {
   x   <- factor(c("A","B","B","C"))
-  res <- mysterycall_reorder_by_freq(x)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x)
   expect_s3_class(res, "factor")
   expect_equal(levels(res)[[1L]], "B")
 })
 
 test_that("reorder_by_freq: decreasing=FALSE reverses order", {
   x   <- c("A","A","A","B","B","C")
-  res <- mysterycall_reorder_by_freq(x, decreasing = FALSE)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x, decreasing = FALSE)
   expect_equal(levels(res)[[1L]], "C")
 })
 
 test_that("reorder_by_freq: na_level includes NAs as last level", {
   x   <- c("A","A","B", NA)
-  res <- mysterycall_reorder_by_freq(x, na_level = "Unknown")
+  res <- mysterycall:::mysterycall_reorder_by_freq(x, na_level = "Unknown")
   expect_true("Unknown" %in% levels(res))
   expect_equal(tail(levels(res), 1L), "Unknown")
 })
 
 test_that("reorder_by_freq: NAs without na_level remain NA", {
   x   <- c("A","B", NA)
-  res <- mysterycall_reorder_by_freq(x)
+  res <- mysterycall:::mysterycall_reorder_by_freq(x)
   expect_true(any(is.na(res)))
 })
 
 test_that("reorder_by_freq: non-character/factor input errors", {
-  expect_error(mysterycall_reorder_by_freq(1:5), "character or factor")
+  expect_error(mysterycall:::mysterycall_reorder_by_freq(1:5), "character or factor")
 })
 
 test_that("reorder_by_freq: preserves length", {
   x <- c("A","B","B","C")
-  expect_length(mysterycall_reorder_by_freq(x), length(x))
+  expect_length(mysterycall:::mysterycall_reorder_by_freq(x), length(x))
 })

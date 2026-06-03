@@ -28,7 +28,7 @@ NULL
 #'   [mysterycall_select_best_model()] to rank models by AIC/BIC/LRT;
 #'   [mysterycall_multiple_comparison_adjust()] for correcting resulting p-values.
 #' @family outcomes
-#' @export
+#' @keywords internal
 #'
 #' @examplesIf interactive()
 #' mysterycall_screen_interactions(

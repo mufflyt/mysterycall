@@ -22,7 +22,7 @@ smap <- c("Neurotology"              = "Neurotology",
 
 test_that("assign_scenarios: returns data frame with new column", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap)
   )
   expect_s3_class(out, "data.frame")
@@ -31,7 +31,7 @@ test_that("assign_scenarios: returns data frame with new column", {
 
 test_that("assign_scenarios: non-generalists keep their own specialty", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap)
   )
   neuro_rows <- out[out$specialty_primary == "Neurotology", ]
@@ -42,7 +42,7 @@ test_that("assign_scenarios: non-generalists keep their own specialty", {
 
 test_that("assign_scenarios: generalists in Denver get alternating scenarios", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap, id_col = "id")
   )
   denver_gen <- out[out$city == "Denver" & out$specialty_primary == "General Otolaryngology", ]
@@ -53,7 +53,7 @@ test_that("assign_scenarios: generalists in Denver get alternating scenarios", {
 
 test_that("assign_scenarios: Boulder generalist gets Neurotology only (no Pediatric there)", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap)
   )
   boulder_gen <- out[out$city == "Boulder" & out$specialty_primary == "General Otolaryngology", ]
@@ -62,7 +62,7 @@ test_that("assign_scenarios: Boulder generalist gets Neurotology only (no Pediat
 
 test_that("assign_scenarios: generalists with no local subspecialist get NA", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap)
   )
   aspen_gen <- out[out$city == "Aspen" & out$specialty_primary == "General Otolaryngology", ]
@@ -71,7 +71,7 @@ test_that("assign_scenarios: generalists with no local subspecialist get NA", {
 
 test_that("assign_scenarios: custom scenario_col name is used", {
   out <- suppressMessages(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = smap, scenario_col = "call_type")
   )
   expect_true("call_type" %in% names(out))
@@ -81,7 +81,7 @@ test_that("assign_scenarios: custom scenario_col name is used", {
 test_that("assign_scenarios: original columns preserved", {
   orig <- make_oto()
   out  <- suppressMessages(
-    mysterycall_assign_scenarios(orig, generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(orig, generalist_level = "General Otolaryngology",
                                   scenario_map = smap)
   )
   expect_true(all(names(orig) %in% names(out)))
@@ -91,7 +91,7 @@ test_that("assign_scenarios: original columns preserved", {
 
 test_that("assign_scenarios: non-dataframe errors", {
   expect_error(
-    mysterycall_assign_scenarios(list(a = 1), generalist_level = "X", scenario_map = c(Y = "Y")),
+    mysterycall:::mysterycall_assign_scenarios(list(a = 1), generalist_level = "X", scenario_map = c(Y = "Y")),
     "data frame"
   )
 })
@@ -99,7 +99,7 @@ test_that("assign_scenarios: non-dataframe errors", {
 test_that("assign_scenarios: missing location column errors", {
   df <- make_oto()
   expect_error(
-    mysterycall_assign_scenarios(df, location_cols = c("city", "no_such"),
+    mysterycall:::mysterycall_assign_scenarios(df, location_cols = c("city", "no_such"),
                                   generalist_level = "General Otolaryngology",
                                   scenario_map = smap),
     "no_such"
@@ -109,7 +109,7 @@ test_that("assign_scenarios: missing location column errors", {
 test_that("assign_scenarios: missing specialty column errors", {
   df <- make_oto()
   expect_error(
-    mysterycall_assign_scenarios(df, specialty_col = "no_such",
+    mysterycall:::mysterycall_assign_scenarios(df, specialty_col = "no_such",
                                   generalist_level = "General Otolaryngology",
                                   scenario_map = smap),
     "no_such"
@@ -118,7 +118,7 @@ test_that("assign_scenarios: missing specialty column errors", {
 
 test_that("assign_scenarios: empty scenario_map errors", {
   expect_error(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = character(0)),
     "scenario_map"
   )
@@ -126,7 +126,7 @@ test_that("assign_scenarios: empty scenario_map errors", {
 
 test_that("assign_scenarios: unnamed scenario_map errors", {
   expect_error(
-    mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
+    mysterycall:::mysterycall_assign_scenarios(make_oto(), generalist_level = "General Otolaryngology",
                                   scenario_map = c("Neurotology")),
     "named"
   )
@@ -141,7 +141,7 @@ test_that("assign_scenarios: round-robin wraps for three scenarios", {
     stringsAsFactors  = FALSE
   )
   out <- suppressMessages(
-    mysterycall_assign_scenarios(df,
+    mysterycall:::mysterycall_assign_scenarios(df,
                                   generalist_level = "Generalist",
                                   scenario_map = c("Sub_A" = "A", "Sub_B" = "B", "Sub_C" = "C"),
                                   id_col = "id")

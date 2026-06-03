@@ -127,3 +127,4 @@ Other outcomes:
 \code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
 }
 \concept{outcomes}
+\keyword{internal}

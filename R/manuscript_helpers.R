@@ -198,7 +198,7 @@ mysterycall_methods_paragraph <- function(n_physicians,
 #' @seealso [mysterycall_poisson_model()] which produces the model input;
 #'   [mysterycall_write_results_paragraph()] to generate a prose summary.
 #' @family manuscript
-#' @export
+#' @keywords internal
 #'
 #' @examplesIf interactive()
 #' tbl <- mysterycall_format_results_table(model_result)

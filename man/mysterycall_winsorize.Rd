@@ -39,3 +39,4 @@ Other green-journal-spatial:
 \code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}}
 }
 \concept{green-journal-spatial}
+\keyword{internal}

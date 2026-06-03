@@ -38,3 +38,4 @@ Other modeling helpers:
 \code{\link[=mysterycall_plot_interaction]{mysterycall_plot_interaction()}}
 }
 \concept{modeling helpers}
+\keyword{internal}

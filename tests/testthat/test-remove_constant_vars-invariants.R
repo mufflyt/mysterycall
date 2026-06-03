@@ -1,6 +1,6 @@
-# test-mysterycall_remove_constants-invariants.R
+# test-mysterycall:::mysterycall_remove_constants-invariants.R
 #
-# Tests mysterycall_remove_constants() against invariants, gold-standard cases,
+# Tests mysterycall:::mysterycall_remove_constants() against invariants, gold-standard cases,
 # boundary conditions, and metamorphic properties.
 #
 # Testing tenets satisfied:
@@ -16,15 +16,15 @@ library(testthat)
 library(mysterycall)
 
 # ---------------------------------------------------------------------------
-# Helper: suppress the messages from mysterycall_remove_constants
+# Helper: suppress the messages from mysterycall:::mysterycall_remove_constants
 # ---------------------------------------------------------------------------
-quiet_rcv <- function(df) suppressMessages(mysterycall_remove_constants(df))
+quiet_rcv <- function(df) suppressMessages(mysterycall:::mysterycall_remove_constants(df))
 
 # ---------------------------------------------------------------------------
 # 1. Gold standard: exact column preservation
 # ---------------------------------------------------------------------------
 
-test_that("mysterycall_remove_constants removes exactly the constant column and keeps varying columns", {
+test_that("mysterycall:::mysterycall_remove_constants removes exactly the constant column and keeps varying columns", {
   df <- data.frame(
     varying1  = c(1, 2, 3),
     constant  = c(5, 5, 5),
@@ -36,7 +36,7 @@ test_that("mysterycall_remove_constants removes exactly the constant column and 
   expect_equal(ncol(result), 2L)
 })
 
-test_that("mysterycall_remove_constants preserves exact column names of varying columns", {
+test_that("mysterycall:::mysterycall_remove_constants preserves exact column names of varying columns", {
   df <- data.frame(
     alpha   = 1:5,
     bravo   = rep("x", 5),
@@ -110,10 +110,10 @@ test_that("output nrow equals input nrow for various sizes", {
 })
 
 # ---------------------------------------------------------------------------
-# 5. Idempotency: mysterycall_remove_constants(mysterycall_remove_constants(df)) == mysterycall_remove_constants(df)
+# 5. Idempotency: mysterycall:::mysterycall_remove_constants(mysterycall:::mysterycall_remove_constants(df)) == mysterycall:::mysterycall_remove_constants(df)
 # ---------------------------------------------------------------------------
 
-test_that("mysterycall_remove_constants is idempotent", {
+test_that("mysterycall:::mysterycall_remove_constants is idempotent", {
   df <- data.frame(
     varying  = 1:5,
     constant = rep("z", 5),

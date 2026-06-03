@@ -69,3 +69,4 @@ Other table helpers:
 \code{\link[=print.mysterycall_disparities_table]{print.mysterycall_disparities_table()}}
 }
 \concept{table helpers}
+\keyword{internal}
