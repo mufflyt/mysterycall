@@ -9,6 +9,10 @@ Character vector of CTSA-related text patterns.
 \usage{
 NIH_CTSA_HUBS
 }
+\value{
+A character vector of patterns indicating NIH Clinical and
+Translational Science Award hub institutions.
+}
 \description{
 String patterns for NIH Clinical and Translational Science Award hub
 institutions. All CTSA hubs are academic medical centers.

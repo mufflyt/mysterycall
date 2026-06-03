@@ -3,6 +3,10 @@
 \name{data_utils}
 \alias{data_utils}
 \title{Data utilities for mystery-caller study management}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Data utilities for mystery-caller study management
 }

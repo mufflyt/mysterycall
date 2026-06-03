@@ -6,6 +6,8 @@
 #' distribution of female populations across block groups or higher-level
 #' geographies.
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name census_summaries
 NULL
 

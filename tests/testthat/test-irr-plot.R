@@ -1,7 +1,8 @@
 skip_if_not_installed("lme4")
 
 set.seed(1978)
-n_doc <- 8; n_per <- 6
+n_doc <- 8
+n_per <- 6
 mock <- data.frame(
   wait_days = c(rpois(n_doc * n_per / 2, lambda = 22),
                 rpois(n_doc * n_per / 2, lambda = 14)),

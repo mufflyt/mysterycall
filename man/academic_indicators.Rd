@@ -3,6 +3,10 @@
 \name{academic_indicators}
 \alias{academic_indicators}
 \title{Academic Practice Indicators for Institution Classification}
+\value{
+No return value. Documentation topic grouping related indicator
+constants and helpers; see each function or data object's own help page.
+}
 \description{
 High-confidence indicators for distinguishing academic vs. non-academic
 practice settings. Includes pattern-based name matching, known institution

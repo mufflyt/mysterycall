@@ -1,5 +1,7 @@
 #' Safe join wrappers with coverage validation
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name join_safety
 NULL
 
@@ -225,7 +227,7 @@ mysterycall_assert_unique_keys <- function(.data, key_cols,
 #'
 #' Wraps [dplyr::left_join()] with:
 #' \itemize{
-#'   \item Key-type harmonisation (prevents silent 0-match joins after type
+#'   \item Key-type harmonization (prevents silent 0-match joins after type
 #'     coercion from RDS or Parquet round-trips).
 #'   \item Right-side uniqueness assertion (blocks accidental many-to-many
 #'     fan-outs).
@@ -364,7 +366,7 @@ mysterycall_safe_left_join <- function(left, right, by,
 
 #' Safe inner join with cardinality checking
 #'
-#' Wraps [dplyr::inner_join()] with key-type harmonisation, optional
+#' Wraps [dplyr::inner_join()] with key-type harmonization, optional
 #' uniqueness assertion on both tables, coverage enforcement, and an optional
 #' CSV audit record.
 #'
@@ -468,7 +470,7 @@ mysterycall_safe_inner_join <- function(left, right, by,
 #' Safe semi join with keep-rate enforcement
 #'
 #' Wraps [dplyr::semi_join()] (filter left to matching rows, no right columns
-#' added) with key validation, type harmonisation, and a minimum keep-rate
+#' added) with key validation, type harmonization, and a minimum keep-rate
 #' threshold.
 #'
 #' Default `min_coverage = 0.50` intentionally differs from `safe_left_join`
@@ -552,7 +554,7 @@ mysterycall_safe_semi_join <- function(left, right, by,
 #' Safe anti join with over-exclusion guard
 #'
 #' Wraps [dplyr::anti_join()] (return left rows with **no** match in right)
-#' with key validation, type harmonisation, and an optional cap on how many
+#' with key validation, type harmonization, and an optional cap on how many
 #' rows may be matched away.
 #'
 #' `max_matched` is the maximum fraction of left rows that may be excluded.

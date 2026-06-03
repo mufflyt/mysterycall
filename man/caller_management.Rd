@@ -3,6 +3,10 @@
 \name{caller_management}
 \alias{caller_management}
 \title{Caller-management utilities for mystery-caller studies}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Caller-management utilities for mystery-caller studies
 }

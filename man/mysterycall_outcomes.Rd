@@ -3,6 +3,10 @@
 \name{mysterycall_outcomes}
 \alias{mysterycall_outcomes}
 \title{Primary outcome analysis for mystery caller studies}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Two complementary functions cover the headline results every mystery caller
 paper reports: appointment wait times and appointment acceptance rates.

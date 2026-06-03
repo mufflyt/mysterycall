@@ -1,5 +1,7 @@
 #' Data utilities for mystery-caller study management
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name data_utils
 NULL
 
@@ -88,12 +90,12 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 }
 
 
-#' Standardise demographic variables for Table 1
+#' Standardize demographic variables for Table 1
 #'
-#' Convenience wrapper that applies age imputation, age categorisation, and
-#' gender standardisation in one call.  All output columns are **added** to
+#' Convenience wrapper that applies age imputation, age categorization, and
+#' gender standardization in one call.  All output columns are **added** to
 #' the input data frame - originals are never replaced or removed.  Arguments
-#' set to `NULL` are silently skipped so you can standardise only the
+#' set to `NULL` are silently skipped so you can standardize only the
 #' variables your dataset contains.
 #'
 #' @param data A data frame.
@@ -114,7 +116,7 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #' @param ref_year Integer reference year for age imputation. Default: current
 #'   calendar year.
 #'
-#' @return `data` with zero or more additional standardised columns appended
+#' @return `data` with zero or more additional standardized columns appended
 #'   (only columns whose source `*_col` parameter was non-`NULL` are created):
 #'   \describe{
 #'     \item{`age_imputed`}{Numeric. Estimated age derived from `grad_year_col`
@@ -122,7 +124,7 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'     \item{`age_category`}{Character. Age group binned from `age_col` or
 #'       `age_imputed` (e.g., `"<35"`, `"35-44"`, `"45-54"`, `"55-64"`,
 #'       `">=65"`). Only added when `age_col` or `grad_year_col` is supplied.}
-#'     \item{`gender_std`}{Character. Standardised gender: `"Male"`, `"Female"`,
+#'     \item{`gender_std`}{Character. Standardized gender: `"Male"`, `"Female"`,
 #'       or `"Unknown"`. Only added when `gender_col` is supplied.}
 #'     \item{`setting_std`}{Character. Practice setting, copied from the source
 #'       column. Only added when `setting_col` is supplied.}
@@ -130,7 +132,7 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'       Only added when `region_col` is supplied.}
 #'   }
 #'
-#' @section Gender standardisation:
+#' @section Gender standardization:
 #'   The `gender_std` column is produced by a binary lookup applied
 #'   case-insensitively after whitespace trimming:
 #'   \tabular{ll}{
@@ -190,7 +192,7 @@ mysterycall_prepare_table1_vars <- function(data,
     }
   }
 
-  # Gender standardisation
+  # Gender standardization
   if (!is.null(gender_col)) {
     if (!gender_col %in% names(out)) {
       warning(sprintf("Column '%s' (gender_col) not found in data; gender_std will not be computed.", gender_col), call. = FALSE)

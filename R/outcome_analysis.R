@@ -6,6 +6,8 @@
 #' return a named list containing a tidy summary tibble, the raw test object,
 #' a p-value, and a plain-language interpretation sentence.
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name mysterycall_outcomes
 NULL
 
@@ -72,7 +74,7 @@ NULL
 }
 
 
-#' Summarise appointment wait times
+#' Summarize appointment wait times
 #'
 #' Computes descriptive statistics (n, mean, SD, median, IQR, range) for a
 #' numeric wait-time column and runs an appropriate non-parametric test when

@@ -1,5 +1,7 @@
 #' Marginal effect plots for fitted models
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name plot_effects
 NULL
 
@@ -11,7 +13,7 @@ NULL
 #' glmerMod, lmerMod, ...).
 #'
 #' @param model A fitted model object.
-#' @param term Character scalar. The term to visualise (must match a fixed
+#' @param term Character scalar. The term to visualize (must match a fixed
 #'   effect in the model, e.g. `"insurance"`, `"age"`, or
 #'   `"insurance:gender"` for an interaction).
 #' @param type Character scalar. `"response"` (default) plots on the

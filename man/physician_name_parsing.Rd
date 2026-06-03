@@ -3,6 +3,10 @@
 \name{physician_name_parsing}
 \alias{physician_name_parsing}
 \title{Parse and validate physician names}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Parse and validate physician names
 }

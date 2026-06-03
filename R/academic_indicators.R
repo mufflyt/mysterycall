@@ -15,6 +15,8 @@
 #'   \item Medicare GME payments (0.95)
 #' }
 #'
+#' @return No return value. Documentation topic grouping related indicator
+#'   constants and helpers; see each function or data object's own help page.
 #' @name academic_indicators
 NULL
 
@@ -27,6 +29,8 @@ NULL
 #' @format Character vector of institution name patterns. Matches are performed
 #'   case-insensitively using \code{grepl(fixed = TRUE)}.
 #'
+#' @return A character vector of institution name patterns used for academic
+#'   affiliation classification.
 #' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
 #' @family academic-indicators
@@ -52,6 +56,8 @@ KNOWN_ACADEMIC_INSTITUTIONS <- c(
 #'     \item{moderate}{Patterns at confidence 0.80 (e.g., "MEDICAL CENTER").}
 #'   }
 #'
+#' @return A named list of character vectors of hospital name patterns,
+#'   grouped by confidence tier.
 #' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
 #' @family academic-indicators
@@ -76,6 +82,8 @@ ACADEMIC_HOSPITAL_PATTERNS <- list(
 #'
 #' @format Character vector of ACGME-related text patterns.
 #'
+#' @return A character vector of ACGME-related patterns indicating accredited
+#'   residency or fellowship programs.
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 ACGME_PROGRAM_INDICATORS <- c(
@@ -90,6 +98,8 @@ ACGME_PROGRAM_INDICATORS <- c(
 #'
 #' @format Character vector of COTH-related text patterns.
 #'
+#' @return A character vector of patterns indicating Council of Teaching
+#'   Hospitals membership.
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 COTH_TEACHING_INDICATORS <- c(
@@ -103,6 +113,8 @@ COTH_TEACHING_INDICATORS <- c(
 #'
 #' @format Character vector of medical school text patterns.
 #'
+#' @return A character vector of patterns indicating medical school
+#'   affiliation.
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 MEDICAL_SCHOOL_INDICATORS <- c(
@@ -119,6 +131,8 @@ MEDICAL_SCHOOL_INDICATORS <- c(
 #'
 #' @format Character vector of CTSA-related text patterns.
 #'
+#' @return A character vector of patterns indicating NIH Clinical and
+#'   Translational Science Award hub institutions.
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 NIH_CTSA_HUBS <- c(
@@ -134,6 +148,8 @@ NIH_CTSA_HUBS <- c(
 #'
 #' @format Character vector of NCI cancer center text patterns.
 #'
+#' @return A character vector of patterns indicating NCI-designated cancer
+#'   centers.
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 NCI_CANCER_CENTERS <- c(
@@ -148,6 +164,8 @@ NCI_CANCER_CENTERS <- c(
 #'
 #' @format Character vector of Medicare GME text patterns.
 #'
+#' @return A character vector of patterns indicating Graduate Medical
+#'   Education payments (only teaching hospitals receive these).
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 MEDICARE_GME_INDICATORS <- c(

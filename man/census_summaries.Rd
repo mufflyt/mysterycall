@@ -3,6 +3,10 @@
 \name{census_summaries}
 \alias{census_summaries}
 \title{Summarize Census Block Group Demographics}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 These helpers aggregate American Community Survey (ACS) estimates returned by
 \code{\link[=mysterycall_get_census_data]{mysterycall_get_census_data()}} to produce tidy summary tables and visualizations. They

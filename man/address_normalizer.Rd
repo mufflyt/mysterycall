@@ -3,6 +3,10 @@
 \name{address_normalizer}
 \alias{address_normalizer}
 \title{USPS Address Normalization Utilities}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Functions for normalizing US postal addresses to USPS format. Handles
 directional prefixes/suffixes, street suffixes, unit designators, state

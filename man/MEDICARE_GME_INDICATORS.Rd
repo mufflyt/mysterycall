@@ -9,6 +9,10 @@ Character vector of Medicare GME text patterns.
 \usage{
 MEDICARE_GME_INDICATORS
 }
+\value{
+A character vector of patterns indicating Graduate Medical
+Education payments (only teaching hospitals receive these).
+}
 \description{
 String patterns for Graduate Medical Education payment indicators. Only
 teaching hospitals receive GME payments. Confidence: 0.95.

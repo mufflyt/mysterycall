@@ -3,6 +3,10 @@
 \name{factor_utils}
 \alias{factor_utils}
 \title{Factor and categorical-variable utilities}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Factor and categorical-variable utilities
 }

@@ -10,6 +10,10 @@ case-insensitively using \code{grepl(fixed = TRUE)}.
 \usage{
 KNOWN_ACADEMIC_INSTITUTIONS
 }
+\value{
+A character vector of institution name patterns used for academic
+affiliation classification.
+}
 \description{
 High-confidence list of major academic institution name patterns for string
 matching. Includes Tier 1 (major research universities), Tier 2 (university

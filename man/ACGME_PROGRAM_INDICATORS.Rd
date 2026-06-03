@@ -9,6 +9,10 @@ Character vector of ACGME-related text patterns.
 \usage{
 ACGME_PROGRAM_INDICATORS
 }
+\value{
+A character vector of ACGME-related patterns indicating accredited
+residency or fellowship programs.
+}
 \description{
 String patterns indicating ACGME-accredited residency or fellowship programs.
 Confidence: 0.98-0.99.

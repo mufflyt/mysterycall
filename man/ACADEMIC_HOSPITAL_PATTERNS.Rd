@@ -14,6 +14,10 @@ Named list with three character vector elements:
 \usage{
 ACADEMIC_HOSPITAL_PATTERNS
 }
+\value{
+A named list of character vectors of hospital name patterns,
+grouped by confidence tier.
+}
 \description{
 Tiered list of string patterns indicating academic hospital affiliation,
 organized by confidence level: very_high (0.95-0.99), high (0.85-0.94),

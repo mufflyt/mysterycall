@@ -3,6 +3,10 @@
 \name{mysterycall_age}
 \alias{mysterycall_age}
 \title{Physician age imputation and categorization}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Physician age imputation and categorization
 }

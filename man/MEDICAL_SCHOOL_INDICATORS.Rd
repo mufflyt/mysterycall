@@ -9,6 +9,10 @@ Character vector of medical school text patterns.
 \usage{
 MEDICAL_SCHOOL_INDICATORS
 }
+\value{
+A character vector of patterns indicating medical school
+affiliation.
+}
 \description{
 String patterns indicating medical school affiliation. Confidence: 0.97.
 }

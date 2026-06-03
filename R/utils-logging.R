@@ -3,6 +3,8 @@
 #' Provides plain-language logging with progress tracking, timing, and
 #' user-friendly output for long-running workflows.
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name logging-utils
 #' @seealso [mysterycall_run_workflow_logged()],
 #'   [mysterycall_preflight_check()], [mysterycall_multi_progress()]

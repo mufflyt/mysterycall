@@ -9,6 +9,10 @@ Character vector of NCI cancer center text patterns.
 \usage{
 NCI_CANCER_CENTERS
 }
+\value{
+A character vector of patterns indicating NCI-designated cancer
+centers.
+}
 \description{
 String patterns for National Cancer Institute designated cancer centers.
 Confidence: 0.98.

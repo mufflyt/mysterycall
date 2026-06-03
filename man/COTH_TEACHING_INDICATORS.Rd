@@ -9,6 +9,10 @@ Character vector of COTH-related text patterns.
 \usage{
 COTH_TEACHING_INDICATORS
 }
+\value{
+A character vector of patterns indicating Council of Teaching
+Hospitals membership.
+}
 \description{
 String patterns indicating Council of Teaching Hospitals membership.
 Confidence: 0.95.

@@ -3,6 +3,10 @@
 \name{logging-utils}
 \alias{logging-utils}
 \title{Comprehensive Logging Utilities for mysterycall}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.

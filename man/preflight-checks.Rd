@@ -2,7 +2,11 @@
 % Please edit documentation in R/preflight_checks.R
 \name{preflight-checks}
 \alias{preflight-checks}
-\title{Preflight Checks for Tyler Workflows}
+\title{Preflight Checks for Mysterycall Workflows}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Pre-flight validation system that checks all requirements before starting
 long-running workflows. Catches errors early, estimates resources, and

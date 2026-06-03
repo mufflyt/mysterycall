@@ -19,3 +19,26 @@ tests/testthat/_problems/
 *.Rcheck/
 ..Rcheck/
 /doc/
+
+# Scratch/working summary files (already in .Rbuildignore)
+ASSUMPTIONS_REQUIRING_REAL_DATA_TESTING.md
+COMPREHENSIVE_ANALYSIS_SUMMARY.md
+FINAL_SESSION_SUMMARY.md
+FIXES_SUMMARY.md
+GITHUB_REPOSITORIES_FOR_MYSTERY_CALLER_STUDY.md
+LOGGING_GUIDE.md
+PRODUCTION_95_PERCENT_SUCCESS_PLAN.md
+PROGRESS_BARS_GUIDE.md
+SESSION_SUMMARY.md
+TESTING_ACTION_PLAN.md
+TEST_RESULTS_SUMMARY.md
+WEAKEST_LINKS_ANALYSIS.md
+index.md
+install_log.txt
+To_amany.R
+Rplots.pdf
+find_detached.py
+check_docs.R
+check_internal.R
+roxygen_tags_summary.txt
+mysterycall_*.tar.gz

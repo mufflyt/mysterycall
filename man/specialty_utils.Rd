@@ -3,6 +3,10 @@
 \name{specialty_utils}
 \alias{specialty_utils}
 \title{Specialty parsing and physician name extraction utilities}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Specialty parsing and physician name extraction utilities
 }

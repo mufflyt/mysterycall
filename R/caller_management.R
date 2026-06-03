@@ -1,5 +1,7 @@
 #' Caller-management utilities for mystery-caller studies
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name caller_management
 NULL
 
@@ -15,7 +17,7 @@ NULL
 #'   subspecialists combined).
 #' @param location_cols Character vector of column names that together define
 #'   a unique location (e.g. `c("city", "state_code")`). Values are
-#'   normalised to lower-case before joining.
+#'   normalized to lower-case before joining.
 #' @param specialty_col Character scalar naming the specialty column.
 #' @param generalist_level Character scalar. The value in `specialty_col`
 #'   that identifies a generalist (e.g. `"General Otolaryngology"`).

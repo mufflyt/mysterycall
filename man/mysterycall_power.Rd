@@ -3,6 +3,10 @@
 \name{mysterycall_power}
 \alias{mysterycall_power}
 \title{Power and sample-size tools for mystery caller studies}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 Power and sample-size tools for mystery caller studies
 }

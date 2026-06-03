@@ -1,9 +1,11 @@
-#' Preflight Checks for Tyler Workflows
+#' Preflight Checks for Mysterycall Workflows
 #'
 #' Pre-flight validation system that checks all requirements before starting
 #' long-running workflows. Catches errors early, estimates resources, and
 #' gives users confidence before committing hours to processing.
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name preflight-checks
 NULL
 

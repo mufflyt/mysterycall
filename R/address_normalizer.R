@@ -4,6 +4,8 @@
 #' directional prefixes/suffixes, street suffixes, unit designators, state
 #' abbreviations, and ZIP codes for consistent address matching across datasets.
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name address_normalizer
 NULL
 
@@ -307,7 +309,7 @@ normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix");
 #' @return A named list with two character elements:
 #'   \describe{
 #'     \item{`addr1`}{Character. Primary address with unit designators
-#'       standardised to USPS abbreviations (STE, APT, UNIT, FL, RM).}
+#'       standardized to USPS abbreviations (STE, APT, UNIT, FL, RM).}
 #'     \item{`addr2`}{Character or `NA_character_`. Normalized secondary
 #'       address line; `NA_character_` when `addr2` was `NA_character_`.}
 #'   }
@@ -423,12 +425,12 @@ strip_suite <- function(...) { .Deprecated("mysterycall_strip_suite"); mysteryca
 #' @param zip_col Character name of the ZIP code column.
 #'   Default: `"practice_zip"`.
 #'
-#' @return The input data frame with the original address columns normalised
+#' @return The input data frame with the original address columns normalized
 #'   in-place plus five new derived columns:
 #'   \describe{
-#'     \item{`address1_norm`}{Character. Fully normalised primary address
-#'       (ASCII, directionals, suffixes, and units standardised).}
-#'     \item{`address2_norm`}{Character or `NA_character_`. Normalised
+#'     \item{`address1_norm`}{Character. Fully normalized primary address
+#'       (ASCII, directionals, suffixes, and units standardized).}
+#'     \item{`address2_norm`}{Character or `NA_character_`. Normalized
 #'       secondary address.}
 #'     \item{`address1_no_unit`}{Character. Primary address with all unit
 #'       designators stripped.}

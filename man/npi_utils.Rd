@@ -3,6 +3,10 @@
 \name{npi_utils}
 \alias{npi_utils}
 \title{NPI validation utilities}
+\value{
+No return value. Documentation topic grouping related functions; see
+each function's own help page for its return value.
+}
 \description{
 NPI validation utilities
 }

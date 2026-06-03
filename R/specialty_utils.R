@@ -1,5 +1,7 @@
 #' Specialty parsing and physician name extraction utilities
 #'
+#' @return No return value. Documentation topic grouping related functions; see
+#'   each function's own help page for its return value.
 #' @name specialty_utils
 NULL
 
@@ -21,7 +23,7 @@ NULL
 #' When none match, returns `default`.
 #'
 #' @section Authoritative subspecialty source:
-#'   This function is the **only authorised way** to derive subspecialty labels
+#'   This function is the **only authorized way** to derive subspecialty labels
 #'   in the mysterycall workflow. NPPES (`taxonomies_desc`) and DAC
 #'   (Data at CMS) taxonomy codes reflect broad specialty groupings and must
 #'   not be used to assign subspecialty. Pass the output of this function as
