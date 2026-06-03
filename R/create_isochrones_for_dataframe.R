@@ -34,6 +34,9 @@ mysterycall_isochrones_for_df <- function(
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required", call. = FALSE)
   }
+  if (!requireNamespace("janitor", quietly = TRUE)) {
+    stop("Package 'janitor' is required for mysterycall_isochrones_for_df().", call. = FALSE)
+  }
 
   if (!requireNamespace("hereR", quietly = TRUE)) {
     stop("Package 'hereR' is required for mysterycall_isochrones_for_df()", call. = FALSE)
@@ -136,7 +139,7 @@ mysterycall_isochrones_for_df <- function(
     }
 
     combined <- do.call(rbind, processed_isochrones)
-    readr::write_rds(combined, rds_path)
+    saveRDS(combined, rds_path)
     sf::write_sf(combined, gpkg_path, delete_dsn = TRUE)
 
     last_save <<- Sys.time()

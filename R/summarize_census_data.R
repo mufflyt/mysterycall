@@ -172,6 +172,9 @@ mysterycall_plot_census_age <- function(census_df,
   if (!requireNamespace("tidyr", quietly = TRUE)) {
     stop("Package 'tidyr' is required for this function", call. = FALSE)
   }
+  if (!requireNamespace("scales", quietly = TRUE)) {
+    stop("Package 'scales' is required for mysterycall_plot_census_age().", call. = FALSE)
+  }
 
   if (!is.data.frame(census_df)) {
     stop("`census_df` must be a data frame.", call. = FALSE)

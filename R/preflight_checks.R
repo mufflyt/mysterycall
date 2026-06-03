@@ -455,6 +455,9 @@ mysterycall_validate_google_api <- function(api_key) {
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
 mysterycall_validate_here_api <- function(api_key) {
+  if (!requireNamespace("httr", quietly = TRUE)) {
+    return(list(valid = FALSE, error = "Package 'httr' is required to validate the HERE API key"))
+  }
   tryCatch({
     # Use query parameters so the key is never embedded in the URL string and
     # cannot leak into logs, error messages, or httr verbose output.

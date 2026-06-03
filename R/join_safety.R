@@ -115,7 +115,7 @@ NULL
   ts   <- format(Sys.time(), "%Y%m%d_%H%M%OS3")
   path <- file.path(report_dir, sprintf("%s_%s.csv", report_prefix, ts))
   tmp  <- paste0(path, ".tmp")
-  readr::write_csv(metrics, tmp, na = "")
+  utils::write.csv(metrics, tmp, row.names = FALSE, na = "")
   file.rename(tmp, path)
   message("Join report: ", path)
 }

@@ -352,7 +352,7 @@ search_npi <- function(input_data, ...) {
   data <- if (is.data.frame(input_data)) {
     input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
-    readr::read_csv(input_data, show_col_types = FALSE)
+    utils::read.csv(input_data, stringsAsFactors = FALSE)
   } else {
     stop("`input_data` must be a data frame or a file path to a CSV.", call. = FALSE)
   }

@@ -68,7 +68,7 @@ mysterycall_table_overall <- function(input_file_path, output_directory, title =
 
   # Read the data
   message("Reading data from file: ", input_file_path)
-  data <- readr::read_rds(input_file_path)
+  data <- readRDS(input_file_path)
 
   # Check if the data is empty
   if (nrow(data) == 0 || ncol(data) == 0) {

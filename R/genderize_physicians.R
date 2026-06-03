@@ -78,6 +78,9 @@
 #' @family provider characteristics
 #' @export
 mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format = c("csv", "parquet")) {
+  if (!requireNamespace("httr", quietly = TRUE)) {
+    stop("Package 'httr' is required for mysterycall_genderize() (Genderize.io API).", call. = FALSE)
+  }
   output_format <- match.arg(output_format)
 
   if (is.data.frame(data_or_path)) {

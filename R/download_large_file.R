@@ -27,6 +27,9 @@
 #' @family utilities
 #' @seealso [utils::download.file()]
 mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
+  if (!requireNamespace("httr", quietly = TRUE)) {
+    stop("Package 'httr' is required for mysterycall_download_file(). Install it with install.packages('httr').", call. = FALSE)
+  }
   if (!is.character(url) || length(url) != 1L || !nzchar(url)) {
     stop("`url` must be a non-empty character string.", call. = FALSE)
   }

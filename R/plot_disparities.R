@@ -87,6 +87,9 @@ mysterycall_plot_disparities <- function(
     stop("Package 'ggplot2' is required",
          call. = FALSE)
   }
+  if (!requireNamespace("scales", quietly = TRUE)) {
+    stop("Package 'scales' is required for mysterycall_plot_disparities().", call. = FALSE)
+  }
 
   metric <- match.arg(metric)
 

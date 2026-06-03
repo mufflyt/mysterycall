@@ -95,6 +95,9 @@ mysterycall_hrr_maps <- function(
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required", call. = FALSE)
   }
+  if (!requireNamespace("scales", quietly = TRUE)) {
+    stop("Package 'scales' is required for mysterycall_hrr_maps()", call. = FALSE)
+  }
 
   if (!requireNamespace("ggspatial", quietly = TRUE)) {
     stop("Package 'ggspatial' is required for mysterycall_hrr_maps()", call. = FALSE)

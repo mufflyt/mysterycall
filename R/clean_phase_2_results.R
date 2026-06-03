@@ -203,6 +203,9 @@ mysterycall_clean_phase2 <- function(
   output_directory = NULL,
   output_format = c("csv", "parquet")
 ) {
+  if (!requireNamespace("janitor", quietly = TRUE)) {
+    stop("Package 'janitor' is required for mysterycall_clean_phase2().", call. = FALSE)
+  }
   output_format <- match.arg(output_format)
   # Data loading and initial checks
   if (is.character(data_or_path)) {

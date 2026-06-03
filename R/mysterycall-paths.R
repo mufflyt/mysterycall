@@ -61,7 +61,6 @@ mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("mys
 #'
 #' @return The resolved path (invisible).
 #' @importFrom ggplot2 ggsave
-#' @importFrom readr write_csv
 #' @importFrom utils write.table
 #' @family utilities
 #' @export
@@ -89,7 +88,7 @@ mysterycall_export_with_backup <- function(x, path, backup = TRUE, quiet = getOp
   if (inherits(x, "ggplot") && nzchar(ext)) {
     ggplot2::ggsave(filename = path, plot = x)
   } else if (is.data.frame(x) && identical(ext, "csv")) {
-    readr::write_csv(x, path)
+    utils::write.csv(x, path, row.names = FALSE)
   } else if (identical(ext, "rds")) {
     saveRDS(x, path)
   } else if (identical(ext, "rda")) {

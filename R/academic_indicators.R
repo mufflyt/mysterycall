@@ -69,6 +69,7 @@ KNOWN_ACADEMIC_INSTITUTIONS <- c(
 #' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
 #' @family academic-indicators
+#' @export
 ACADEMIC_HOSPITAL_PATTERNS <- list(
   very_high = c(
     "UNIVERSITY OF", "MEDICAL SCHOOL", "SCHOOL OF MEDICINE",
@@ -188,6 +189,7 @@ NCI_CANCER_CENTERS <- c(
 #' MEDICARE_GME_INDICATORS
 #' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
+#' @export
 MEDICARE_GME_INDICATORS <- c(
   "GME PAYMENTS", "GRADUATE MEDICAL EDUCATION PAYMENTS",
   "DIRECT GME", "INDIRECT MEDICAL EDUCATION", "IME PAYMENTS"

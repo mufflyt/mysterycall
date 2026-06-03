@@ -29,6 +29,9 @@ mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required", call. = FALSE)
   }
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("Package 'readr' is required for mysterycall_map_acog_districts().", call. = FALSE)
+  }
 
   if (is.null(acog_districts_file)) {
     acog_districts_file <- system.file("extdata", "acog_districts.csv", package = "mysterycall")

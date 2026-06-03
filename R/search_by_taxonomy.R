@@ -130,6 +130,9 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
                                write_snapshot = TRUE,
                                snapshot_dir = NULL,
                                notify = TRUE) {
+  if (isTRUE(write_snapshot) && !requireNamespace("readr", quietly = TRUE)) {
+    stop("Package 'readr' is required when write_snapshot = TRUE. Install it or pass write_snapshot = FALSE.", call. = FALSE)
+  }
   if (missing(taxonomy_to_search) || is.null(taxonomy_to_search)) {
     return(tibble::tibble())
   }
@@ -416,7 +419,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
       snapshot_dir,
       paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds")
     )
-    readr::write_rds(npi_data, filename)
+    saveRDS(npi_data, filename)
   }, error = function(e) {
     message("Error saving data to file:\n", e$message)
   })

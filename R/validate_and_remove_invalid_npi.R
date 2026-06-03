@@ -54,6 +54,9 @@ mysterycall_validate_npi <- function(input_data) {
     if (!file.exists(input_data)) {
       stop(sprintf("CSV file not found: %s", input_data), call. = FALSE)
     }
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("Package 'readr' is required to read CSV input. Install it with install.packages('readr'), or pass a data frame instead.", call. = FALSE)
+    }
 
     npi_df <- readr::read_csv(
       input_data,

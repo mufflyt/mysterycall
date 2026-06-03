@@ -86,7 +86,12 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
   # Read input based on extension
   ext <- tools::file_ext(file_path)
   data <- switch(tolower(ext),
-                 csv = readr::read_csv(file_path, show_col_types = FALSE),
+                 csv = {
+                   if (!requireNamespace("readr", quietly = TRUE)) {
+                     stop("Package 'readr' is required to read CSV input.", call. = FALSE)
+                   }
+                   readr::read_csv(file_path, show_col_types = FALSE)
+                 },
                  rds = readRDS(file_path),
                  xlsx = {
                    if (!requireNamespace("readxl", quietly = TRUE)) {

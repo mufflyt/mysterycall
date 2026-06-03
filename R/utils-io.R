@@ -74,6 +74,9 @@ mysterycall_require_arrow <- function() {
 mysterycall_read_table <- function(path, format = NULL, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   df <- if (identical(fmt, "csv")) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("Package 'readr' is required for CSV reading. Install it or write/read in Parquet via the 'arrow' package.", call. = FALSE)
+    }
     readr::read_csv(path, show_col_types = FALSE, ...)
   } else {
     mysterycall_require_arrow()
@@ -131,6 +134,9 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
 mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
   if (identical(fmt, "csv")) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("Package 'readr' is required for CSV writing. Install it or write in Parquet via the 'arrow' package.", call. = FALSE)
+    }
     # Atomic write for non-append mode to reduce race-condition risk when
     # multiple processes target the same path.
     if (!append) {

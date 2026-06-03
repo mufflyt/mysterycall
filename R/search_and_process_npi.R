@@ -89,6 +89,9 @@ mysterycall_search_and_process_npi <- function(data,
                                    progress_callback = NULL,
                                    heartbeat_seconds = NULL,
                                    progress_log_format = c("text", "csv")) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("Package 'readr' is required for mysterycall_search_and_process_npi(). Install it with install.packages('readr').", call. = FALSE)
+  }
   validate_dataframe(data, name = "data")
 
   progress_log_format <- match.arg(progress_log_format)
