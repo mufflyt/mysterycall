@@ -38,5 +38,5 @@ Other data management:
 
 ``` r
 mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
-#> [1] "80203" "80203" "08020" NA      NA     
+#> Error in mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc",     NA)): could not find function "mysterycall_extract_zip5"
 ```

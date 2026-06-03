@@ -71,4 +71,5 @@ Other utilities:
 ``` r
 tmp <- tempfile(fileext = ".csv")
 mysterycall_export_with_backup(mtcars, tmp)
+#> Error in mysterycall_export_with_backup(mtcars, tmp): could not find function "mysterycall_export_with_backup"
 ```

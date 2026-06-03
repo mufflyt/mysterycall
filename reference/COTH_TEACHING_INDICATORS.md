@@ -38,5 +38,6 @@ Other academic-indicators:
 
 ``` r
 COTH_TEACHING_INDICATORS
-#> Error: object 'COTH_TEACHING_INDICATORS' not found
+#> [1] "TEACHING HOSPITAL"             "COUNCIL OF TEACHING HOSPITALS"
+#> [3] "COTH MEMBER"                   "AAMC MEMBER"                  
 ```

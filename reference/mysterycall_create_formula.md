@@ -49,20 +49,7 @@ Other modeling helpers:
 ``` r
 df <- data.frame(days = c(5, 10, 15), age = c(30, 40, 50), name = c("A", "B", "C"))
 mysterycall_create_formula(df, "days", random_effect = "name")
-#> Creating formula with response variable: days
-#> Predictor variables identified: age
-#> Predictor variables after formatting: `age`
-#> Initial formula string: days ~ `age`
-#> Formula string with random effect: days ~ `age` + (1 | name )
-#> Final formula object created: days ~ age + (1 | name)
-#> days ~ age + (1 | name)
-#> <environment: 0x564ecac93f08>
+#> Error in mysterycall_create_formula(df, "days", random_effect = "name"): could not find function "mysterycall_create_formula"
 mysterycall_create_formula(df, "days")  # fixed-effects only
-#> Creating formula with response variable: days
-#> Predictor variables identified: age, name
-#> Predictor variables after formatting: `age`, `name`
-#> Initial formula string: days ~ `age` + `name`
-#> Final formula object created: days ~ age + name
-#> days ~ age + name
-#> <environment: 0x564ecaacc268>
+#> Error in mysterycall_create_formula(df, "days"): could not find function "mysterycall_create_formula"
 ```

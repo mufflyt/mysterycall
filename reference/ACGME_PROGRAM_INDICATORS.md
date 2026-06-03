@@ -38,5 +38,7 @@ Other academic-indicators:
 
 ``` r
 ACGME_PROGRAM_INDICATORS
-#> Error: object 'ACGME_PROGRAM_INDICATORS' not found
+#> [1] "RESIDENCY PROGRAM"          "FELLOWSHIP PROGRAM"        
+#> [3] "GRADUATE MEDICAL EDUCATION" "GME PROGRAM"               
+#> [5] "TRAINING PROGRAM"          
 ```

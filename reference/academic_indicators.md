@@ -31,5 +31,6 @@ Evidence-based indicators with calibrated confidence scores:
 ``` r
 # Topic group; see individual constant/function help pages for examples.
 head(KNOWN_ACADEMIC_INSTITUTIONS)
-#> Error: object 'KNOWN_ACADEMIC_INSTITUTIONS' not found
+#> [1] "JOHNS HOPKINS"         "MAYO CLINIC"           "CLEVELAND CLINIC"     
+#> [4] "MASSACHUSETTS GENERAL" "BRIGHAM"               "STANFORD"             
 ```

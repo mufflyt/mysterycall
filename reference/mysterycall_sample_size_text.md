@@ -43,5 +43,5 @@ Other manuscript:
 
 ``` r
 mysterycall_sample_size_text(369)
-#> [1] "Using the Cochran formula for finite populations (N = 369, margin of error = 5%), a minimum sample size of 192 participants is required."
+#> Error in mysterycall_sample_size_text(369): could not find function "mysterycall_sample_size_text"
 ```

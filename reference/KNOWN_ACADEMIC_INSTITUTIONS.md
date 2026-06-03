@@ -41,5 +41,6 @@ Other academic-indicators:
 
 ``` r
 head(KNOWN_ACADEMIC_INSTITUTIONS)
-#> Error: object 'KNOWN_ACADEMIC_INSTITUTIONS' not found
+#> [1] "JOHNS HOPKINS"         "MAYO CLINIC"           "CLEVELAND CLINIC"     
+#> [4] "MASSACHUSETTS GENERAL" "BRIGHAM"               "STANFORD"             
 ```

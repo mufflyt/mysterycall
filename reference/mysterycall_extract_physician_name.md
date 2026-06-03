@@ -66,7 +66,7 @@ Other provider characteristics:
 nms <- c("John Smith MD", "Dr. Jane Doe, PhD", "JONES, Robert",
          "Mary Williams, MD, FACS", NA)
 mysterycall_extract_physician_name(nms)
-#> [1] "Dr. Smith"    "Dr. Doe"      "Dr. JONES"    "Dr. Williams" NA            
+#> Error in mysterycall_extract_physician_name(nms): could not find function "mysterycall_extract_physician_name"
 mysterycall_extract_physician_name(nms, format = "last")
-#> [1] "Smith"    "Doe"      "JONES"    "Williams" NA        
+#> Error in mysterycall_extract_physician_name(nms, format = "last"): could not find function "mysterycall_extract_physician_name"
 ```

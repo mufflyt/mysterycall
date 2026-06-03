@@ -39,5 +39,7 @@ Other academic-indicators:
 
 ``` r
 NIH_CTSA_HUBS
-#> Error: object 'NIH_CTSA_HUBS' not found
+#> [1] "CTSA HUB"                                
+#> [2] "CLINICAL AND TRANSLATIONAL SCIENCE AWARD"
+#> [3] "TRANSLATIONAL SCIENCE CENTER"            
 ```

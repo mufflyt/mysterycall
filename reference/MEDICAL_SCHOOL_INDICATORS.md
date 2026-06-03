@@ -36,5 +36,7 @@ Other academic-indicators:
 
 ``` r
 MEDICAL_SCHOOL_INDICATORS
-#> Error: object 'MEDICAL_SCHOOL_INDICATORS' not found
+#> [1] "SCHOOL OF MEDICINE"              "MEDICAL SCHOOL"                 
+#> [3] "COLLEGE OF MEDICINE"             "MEDICAL COLLEGE"                
+#> [5] "AFFILIATED WITH.*MEDICAL SCHOOL" "AFFILIATED WITH.*UNIVERSITY"    
 ```

@@ -75,5 +75,5 @@ mysterycall_methods_paragraph(
   specialties   = c("otolaryngology", "neurotology"),
   insurance_types = c("Medicaid", "Blue Cross Blue Shield")
 )
-#> [1] "A mystery-caller audit methodology was employed. A total of 369 physicians representing otolaryngology and neurotology were identified from publicly available directories across 10 cities and states in the United States. Mystery callers posed as new patients insured with Medicaid and Blue Cross Blue Shield and contacted each physician's office to request the earliest available new-patient appointment. Calls were standardized and completed within one week of each other. The primary outcome was business days until a new-patient appointment. All analyses were performed using R (R Foundation for Statistical Computing)."
+#> Error in mysterycall_methods_paragraph(n_physicians = 369, n_cities = 10,     specialties = c("otolaryngology", "neurotology"), insurance_types = c("Medicaid",         "Blue Cross Blue Shield")): could not find function "mysterycall_methods_paragraph"
 ```

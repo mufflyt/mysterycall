@@ -68,5 +68,5 @@ Other utilities:
 
 ``` r
 mysterycall_resolve_path("output.csv", type = "tables", create = FALSE)
-#> [1] "/home/runner/work/mysterycall/mysterycall/docs/reference/tables/output.csv"
+#> Error in mysterycall_resolve_path("output.csv", type = "tables", create = FALSE): could not find function "mysterycall_resolve_path"
 ```

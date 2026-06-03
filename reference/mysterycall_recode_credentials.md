@@ -70,5 +70,5 @@ Other provider characteristics:
 ``` r
 creds <- c("M.D.", "DO", "MD/PhD", "D.O.", "PA-C", "MBBS", NA)
 mysterycall_recode_credentials(creds)
-#> [1] "MD"    "DO"    "MD"    "DO"    "Other" "Other" NA     
+#> Error in mysterycall_recode_credentials(creds): could not find function "mysterycall_recode_credentials"
 ```

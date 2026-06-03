@@ -37,5 +37,6 @@ Other academic-indicators:
 
 ``` r
 NCI_CANCER_CENTERS
-#> Error: object 'NCI_CANCER_CENTERS' not found
+#> [1] "NCI-DESIGNATED"              "COMPREHENSIVE CANCER CENTER"
+#> [3] "CANCER CENTER"               "CANCER INSTITUTE"           
 ```
