@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Parse and validate physician names
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

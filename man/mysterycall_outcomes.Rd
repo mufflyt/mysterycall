@@ -14,3 +14,7 @@ Both accept an optional grouping column (typically \code{"insurance"}) and
 return a named list containing a tidy summary tibble, the raw test object,
 a p-value, and a plain-language interpretation sentence.
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

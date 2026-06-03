@@ -12,3 +12,7 @@ Pre-flight validation system that checks all requirements before starting
 long-running workflows. Catches errors early, estimates resources, and
 gives users confidence before committing hours to processing.
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

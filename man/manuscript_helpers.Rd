@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Helpers for writing manuscript methods and results sections
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

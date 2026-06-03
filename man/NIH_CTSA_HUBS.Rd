@@ -18,6 +18,9 @@ String patterns for NIH Clinical and Translational Science Award hub
 institutions. All CTSA hubs are academic medical centers.
 Confidence: 0.99.
 }
+\examples{
+NIH_CTSA_HUBS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

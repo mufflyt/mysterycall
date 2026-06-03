@@ -16,6 +16,9 @@ affiliation.
 \description{
 String patterns indicating medical school affiliation. Confidence: 0.97.
 }
+\examples{
+MEDICAL_SCHOOL_INDICATORS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

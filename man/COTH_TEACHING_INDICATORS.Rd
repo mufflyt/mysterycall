@@ -17,6 +17,9 @@ Hospitals membership.
 String patterns indicating Council of Teaching Hospitals membership.
 Confidence: 0.95.
 }
+\examples{
+COTH_TEACHING_INDICATORS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

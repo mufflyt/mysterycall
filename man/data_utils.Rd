@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Data utilities for mystery-caller study management
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

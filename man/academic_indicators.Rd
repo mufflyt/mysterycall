@@ -23,3 +23,7 @@ Evidence-based indicators with calibrated confidence scores:
 \item Medicare GME payments (0.95)
 }
 }
+\examples{
+# Topic group; see individual constant/function help pages for examples.
+head(KNOWN_ACADEMIC_INSTITUTIONS)
+}

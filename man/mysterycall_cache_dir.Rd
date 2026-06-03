@@ -18,3 +18,7 @@ returning; the directory is not created in that case.
 \description{
 Determine the cache directory used for downloaded resources
 }
+\examples{
+mysterycall:::mysterycall_cache_dir()
+mysterycall:::mysterycall_cache_dir("hrr")
+}

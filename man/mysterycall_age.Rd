@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Physician age imputation and categorization
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

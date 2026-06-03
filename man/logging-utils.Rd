@@ -11,6 +11,10 @@ each function's own help page for its return value.
 Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}
 \seealso{
 \code{\link[=mysterycall_run_workflow_logged]{mysterycall_run_workflow_logged()}},
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}}, \code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}}

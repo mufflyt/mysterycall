@@ -23,6 +23,10 @@ Tiered list of string patterns indicating academic hospital affiliation,
 organized by confidence level: very_high (0.95-0.99), high (0.85-0.94),
 and moderate (0.75-0.84).
 }
+\examples{
+names(ACADEMIC_HOSPITAL_PATTERNS)
+ACADEMIC_HOSPITAL_PATTERNS$very_high
+}
 \seealso{
 \code{\link{mysterycall_check_academic_name_patterns}},
 \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}

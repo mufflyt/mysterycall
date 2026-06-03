@@ -18,6 +18,9 @@ NULL
 #'   is empty, returns the cache root (created automatically if absent). When
 #'   `...` supplies path components, they are appended via `file.path()` before
 #'   returning; the directory is not created in that case.
+#' @examples
+#' mysterycall:::mysterycall_cache_dir()
+#' mysterycall:::mysterycall_cache_dir("hrr")
 mysterycall_cache_dir <- function(...) {
   cache_root <- if (getRversion() >= "4.0.0") {
     tools::R_user_dir("mysterycall", which = "cache")
@@ -46,6 +49,10 @@ mysterycall_cache_dir <- function(...) {
 #'   underlying download tooling.
 #'
 #' @return The absolute path to the HRR boundary shapefile.
+#' @examples
+#' \donttest{
+#' mysterycall:::ensure_hrr_shapefile()
+#' }
 ensure_hrr_shapefile <- function(quiet = TRUE) {
   cache_root <- mysterycall_cache_dir()
   archive_path <- file.path(cache_root, "HRR_Bdry__AK_HI_unmodified.zip")

@@ -14,3 +14,7 @@ focus on the sex-by-age table (B01001) so that analysts can quickly spot the
 distribution of female populations across block groups or higher-level
 geographies.
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

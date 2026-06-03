@@ -18,3 +18,8 @@ Downloads the shapefile archive from the Dartmouth Atlas website when it is
 not already present in the user's cache directory. The archive is expanded
 in-place and the path to the \code{.shp} file is returned.
 }
+\examples{
+\donttest{
+mysterycall:::ensure_hrr_shapefile()
+}
+}

@@ -17,6 +17,9 @@ Education payments (only teaching hospitals receive these).
 String patterns for Graduate Medical Education payment indicators. Only
 teaching hospitals receive GME payments. Confidence: 0.95.
 }
+\examples{
+MEDICARE_GME_INDICATORS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

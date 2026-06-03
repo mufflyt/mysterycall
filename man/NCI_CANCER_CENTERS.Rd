@@ -17,6 +17,9 @@ centers.
 String patterns for National Cancer Institute designated cancer centers.
 Confidence: 0.98.
 }
+\examples{
+NCI_CANCER_CENTERS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

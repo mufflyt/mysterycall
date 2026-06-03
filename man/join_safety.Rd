@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Safe join wrappers with coverage validation
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

@@ -10,3 +10,7 @@ each function's own help page for its return value.
 \description{
 Address cleaning utilities
 }
+\examples{
+# Topic group; see individual function help pages for runnable examples.
+NULL
+}

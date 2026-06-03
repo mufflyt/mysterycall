@@ -17,6 +17,9 @@ residency or fellowship programs.
 String patterns indicating ACGME-accredited residency or fellowship programs.
 Confidence: 0.98-0.99.
 }
+\examples{
+ACGME_PROGRAM_INDICATORS
+}
 \seealso{
 \code{\link{mysterycall_classify_academic_affiliation}}
 

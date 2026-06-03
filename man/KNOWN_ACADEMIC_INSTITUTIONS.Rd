@@ -19,6 +19,9 @@ High-confidence list of major academic institution name patterns for string
 matching. Includes Tier 1 (major research universities), Tier 2 (university
 hospitals), and Tier 3 (academic medical centers).
 }
+\examples{
+head(KNOWN_ACADEMIC_INSTITUTIONS)
+}
 \seealso{
 \code{\link{mysterycall_check_academic_name_patterns}},
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
