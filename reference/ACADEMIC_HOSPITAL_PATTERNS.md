@@ -52,7 +52,9 @@ Other academic-indicators:
 
 ``` r
 names(ACADEMIC_HOSPITAL_PATTERNS)
-#> Error: object 'ACADEMIC_HOSPITAL_PATTERNS' not found
+#> [1] "very_high" "high"      "moderate" 
 ACADEMIC_HOSPITAL_PATTERNS$very_high
-#> Error: object 'ACADEMIC_HOSPITAL_PATTERNS' not found
+#> [1] "UNIVERSITY OF"           "MEDICAL SCHOOL"         
+#> [3] "SCHOOL OF MEDICINE"      "TEACHING HOSPITAL"      
+#> [5] "ACADEMIC MEDICAL CENTER" "ACADEMIC HEALTH CENTER" 
 ```

@@ -38,5 +38,7 @@ Other academic-indicators:
 
 ``` r
 MEDICARE_GME_INDICATORS
-#> Error: object 'MEDICARE_GME_INDICATORS' not found
+#> [1] "GME PAYMENTS"                        "GRADUATE MEDICAL EDUCATION PAYMENTS"
+#> [3] "DIRECT GME"                          "INDIRECT MEDICAL EDUCATION"         
+#> [5] "IME PAYMENTS"                       
 ```
