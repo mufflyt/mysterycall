@@ -69,13 +69,15 @@
 #' )
 #'
 #' @importFrom dplyr rename mutate group_by summarize
-#' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
 #' @seealso [mysterycall_plot_emmeans()], [mysterycall_create_formula()]
 #' @family modeling helpers
 #' @export
 mysterycall_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package 'lme4' is required for mysterycall_plot_interaction()", call. = FALSE)
+  }
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_interaction(). Install with: install.packages('ggplot2')", call. = FALSE)
   }
   # Read the data
   data <- readRDS(data_path)
@@ -157,17 +159,17 @@ mysterycall_plot_interaction <- function(data_path, response_variable, variable_
     dplyr::group_by(.data$int_var, .data$var_interest) %>%
     dplyr::summarize(mean_pred = mean(.data$pred, na.rm = TRUE), .groups = 'drop')
 
-  p <- ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
-    geom_point() +
-    geom_line(aes(group = var_interest)) +
-    labs(title = "Interaction Effect Plot", y = response_variable, x = interaction_variable) +
-    theme_minimal()
+  p <- ggplot2::ggplot(plot_data, ggplot2::aes(x = int_var, y = mean_pred, color = var_interest)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_line(ggplot2::aes(group = var_interest)) +
+    ggplot2::labs(title = "Interaction Effect Plot", y = response_variable, x = interaction_variable) +
+    ggplot2::theme_minimal()
 
   # Save the plot
   dir.create(output_path, recursive = TRUE, showWarnings = FALSE)
   plot_filename <- file.path(output_path, paste0("interaction_", interaction_variable, "_", variable_of_interest, ".png"))
   cat("Saving effects plot to:", plot_filename, "\n")
-  ggsave(plot_filename, plot = p, width = 6, height = 4, dpi = resolution)
+  ggplot2::ggsave(plot_filename, plot = p, width = 6, height = 4, dpi = resolution)
   cat("Effects plot saved successfully.\n\n")
 
   message(capture.output(glmer_model))

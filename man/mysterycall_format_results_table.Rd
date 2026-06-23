@@ -33,14 +33,14 @@ knitr::kable(tbl)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces the model input;
-\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} to generate a prose summary.
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} and \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} which
+produce the model input; \code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} to
+generate a prose summary.
 
-Other manuscript:
-\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
-\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
-\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
-\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}}
+Other manuscript: 
+\code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_save_plot}()},
+\code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}
-\keyword{internal}

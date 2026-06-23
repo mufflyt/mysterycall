@@ -27,7 +27,6 @@
 #' @seealso [mysterycall_plot_density()] for distribution density plots;
 #'   [mysterycall_plot_line()] for median-trend line plots.
 #' @importFrom dplyr filter mutate %>%
-#' @importFrom ggplot2 ggplot geom_jitter scale_y_log10 scale_y_sqrt labs theme_minimal element_rect element_blank ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
@@ -64,6 +63,9 @@ mysterycall_plot_scatter <- function(plot_data,
                                 plot_title = NULL,
                                 verbose = TRUE) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_scatter(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   y_transform <- match.arg(y_transform, c("none", "log", "sqrt"))
 
   # Filter out zero or negative values and NAs from the y_var column

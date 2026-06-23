@@ -35,7 +35,7 @@ names(summary$indicators)
 \code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}},
 \code{\link[=mysterycall_check_academic_name_patterns]{mysterycall_check_academic_name_patterns()}}
 
-Other academic-indicators:
+Other academic-indicators: 
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
 \code{\link{ACGME_PROGRAM_INDICATORS}},
 \code{\link{COTH_TEACHING_INDICATORS}},
@@ -44,7 +44,7 @@ Other academic-indicators:
 \code{\link{MEDICARE_GME_INDICATORS}},
 \code{\link{NCI_CANCER_CENTERS}},
 \code{\link{NIH_CTSA_HUBS}},
-\code{\link[=mysterycall_check_academic_name_patterns]{mysterycall_check_academic_name_patterns()}},
-\code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}}
+\code{\link{mysterycall_check_academic_name_patterns}()},
+\code{\link{mysterycall_classify_academic_affiliation}()}
 }
 \concept{academic-indicators}

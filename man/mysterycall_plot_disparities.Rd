@@ -100,8 +100,8 @@ mysterycall_plot_disparities(tbl, metric = "rel_risk")
 \seealso{
 \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}, \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}}
 
-Other plotting:
-\code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}},
-\code{\link[=mysterycall_plot_source_venn]{mysterycall_plot_source_venn()}}
+Other plotting: 
+\code{\link{mysterycall_plot_emmeans}()},
+\code{\link{mysterycall_plot_source_venn}()}
 }
 \concept{plotting}

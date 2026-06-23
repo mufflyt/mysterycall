@@ -37,9 +37,9 @@ mysterycall_create_formula(df, "days")  # fixed-effects only
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which uses this formula builder
 internally.
 
-Other modeling helpers:
-\code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}},
-\code{\link[=mysterycall_plot_interaction]{mysterycall_plot_interaction()}}
+Other modeling helpers: 
+\code{\link{mysterycall_check_normality}()},
+\code{\link{mysterycall_plot_interaction}()}
 }
 \concept{modeling helpers}
 \keyword{internal}

@@ -7,13 +7,13 @@
 mysterycall_scale_fill_green_journal(...)
 }
 \arguments{
-\item{...}{Arguments passed to \code{\link[ggplot2:scale_fill_manual]{ggplot2::scale_fill_manual()}}.}
+\item{...}{Arguments passed to \code{\link[ggplot2:scale_manual]{ggplot2::scale_fill_manual()}}.}
 }
 \value{
 A ggplot2 \link[ggplot2:Scale]{ggplot2::Scale} object.
 }
 \description{
-Convenience wrapper for \code{\link[ggplot2:scale_fill_manual]{ggplot2::scale_fill_manual()}} using the
+Convenience wrapper for \code{\link[ggplot2:scale_manual]{ggplot2::scale_fill_manual()}} using the
 Okabe-Ito palette from \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}}.
 }
 \examples{
@@ -26,8 +26,8 @@ ggplot(mpg, aes(class, fill = drv)) +
 \code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}} for color aesthetics;
 \code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}} for the underlying color values.
 
-Other green-journal-colors:
-\code{\link[=mysterycall_palette_green_journal]{mysterycall_palette_green_journal()}},
-\code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}}
+Other green-journal-colors: 
+\code{\link{mysterycall_palette_green_journal}()},
+\code{\link{mysterycall_scale_color_green_journal}()}
 }
 \concept{green-journal-colors}

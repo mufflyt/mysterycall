@@ -17,7 +17,6 @@
 #'   standardization; [mysterycall_physician_age()] for age summary statistics.
 #' @family modeling helpers
 #' @keywords internal
-#' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
 #' @importFrom rlang sym
 #' @importFrom stats shapiro.test IQR median
 #'
@@ -27,6 +26,9 @@
 #' )
 #' mysterycall_check_normality(sample_data, "business_days_until_appointment")
 mysterycall_check_normality <- function(data, variable) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_check_normality(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   # Start logging
   message("Starting normality check and summary calculation for variable: ", variable)
 

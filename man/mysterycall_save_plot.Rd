@@ -53,10 +53,10 @@ mysterycall_save_plot(p, "figures/mpg_vs_weight.png")
 \code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}}, \code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}},
 \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for functions that produce plots to pass here.
 
-Other manuscript:
-\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
-\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
-\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
-\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}}
+Other manuscript: 
+\code{\link{mysterycall_format_results_table}()},
+\code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}

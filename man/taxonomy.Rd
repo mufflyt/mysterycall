@@ -27,7 +27,7 @@ print(taxonomy[1:3, ])
 \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}} to look up provider taxonomy
 codes from the NPI registry; \link{acgme} for ACGME residency program data.
 
-Other datasets:
+Other datasets: 
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

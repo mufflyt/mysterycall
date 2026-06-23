@@ -87,8 +87,8 @@ result <- mysterycall_plot_emmeans(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other plotting:
-\code{\link[=mysterycall_plot_disparities]{mysterycall_plot_disparities()}},
-\code{\link[=mysterycall_plot_source_venn]{mysterycall_plot_source_venn()}}
+Other plotting: 
+\code{\link{mysterycall_plot_disparities}()},
+\code{\link{mysterycall_plot_source_venn}()}
 }
 \concept{plotting}

@@ -17,13 +17,13 @@ Converts "Linda Smith D.O." -> "Linda Smith, D.O." while leaving
 "Linda Do" (Vietnamese surname) untouched.
 }
 \seealso{
-Other name-parsing:
-\code{\link[=.handle_three_part_comma]{.handle_three_part_comma()}},
-\code{\link[=.parse_physician_name_impl]{.parse_physician_name_impl()}},
-\code{\link[=mysterycall_format_physician_name]{mysterycall_format_physician_name()}},
-\code{\link[=mysterycall_parse_physician_name]{mysterycall_parse_physician_name()}},
-\code{\link[=mysterycall_test_name_parser]{mysterycall_test_name_parser()}},
-\code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}}
+Other name-parsing: 
+\code{\link{.handle_three_part_comma}()},
+\code{\link{.parse_physician_name_impl}()},
+\code{\link{mysterycall_format_physician_name}()},
+\code{\link{mysterycall_parse_physician_name}()},
+\code{\link{mysterycall_test_name_parser}()},
+\code{\link{mysterycall_validate_parsed_names}()}
 }
 \concept{name-parsing}
 \keyword{internal}

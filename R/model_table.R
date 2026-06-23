@@ -13,8 +13,8 @@ NULL
 #' The returned data frame can be passed directly to `flextable::flextable()`
 #' or `knitr::kable()` for Word/HTML output.
 #'
-#' @param x A `mysterycall_poisson_model` object from
-#'   [mysterycall_poisson_model()].
+#' @param x A `mysterycall_poisson_model` object from [mysterycall_poisson_model()]
+#'   or a `mysterycall_nb_model` object from [mysterycall_nb_model()].
 #' @param include_intercept Logical. When `FALSE` (default) the `(Intercept)`
 #'   row is dropped.
 #' @param digits Integer. Decimal places for IRR and CI values. Default `2`.
@@ -51,8 +51,8 @@ mysterycall_model_table <- function(x,
                                      p_col             = "p-value",
                                      term_col          = "Term") {
 
-  if (!inherits(x, "mysterycall_poisson_model")) {
-    stop("`x` must be a `mysterycall_poisson_model` object.", call. = FALSE)
+  if (!inherits(x, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
+    stop("`x` must be a `mysterycall_poisson_model` or `mysterycall_nb_model` object.", call. = FALSE)
   }
   if (!is.numeric(digits) || length(digits) != 1L || digits < 0L) {
     stop("`digits` must be a non-negative integer scalar.", call. = FALSE)

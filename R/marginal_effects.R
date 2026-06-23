@@ -23,7 +23,9 @@ NULL
 #' @param model A fitted `glm` (with `family = poisson`), a `glmerMod` object
 #'   from lme4, or a `mysterycall_poisson_model` object. For
 #'   `mysterycall_poisson_model`, the `$model` component is extracted
-#'   automatically.
+#'   automatically. Note: `mysterycall_nb_model` objects (glmmTMB) are not
+#'   supported here because glmmTMB uses a different predict interface; use
+#'   the **marginaleffects** package for NB models.
 #' @param term Character vector of predictor names for which to compute
 #'   marginal effects. Pass the variable name (e.g. `"cyl"`), not the
 #'   dummy-encoded column name (e.g. `"factor(cyl)6"`). If `NULL` (default),
@@ -87,7 +89,14 @@ mysterycall_marginal_effects <- function(model,
 
   type <- match.arg(type)
 
-  # -- Unwrap mysterycall_poisson_model ----------------------------------------
+  # -- Unwrap package model objects --------------------------------------------
+  if (inherits(model, "mysterycall_nb_model")) {
+    stop(
+      "`mysterycall_nb_model` (glmmTMB) is not supported by this function. ",
+      "Use the marginaleffects package: marginaleffects::avg_slopes(model$model).",
+      call. = FALSE
+    )
+  }
   if (inherits(model, "mysterycall_poisson_model")) {
     model <- model$model
   }

@@ -93,13 +93,13 @@ mysterycall_prepare_table1_vars(df, grad_year_col = "grad_year",
 the raw \code{gender} column; \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate
 data quality before processing.
 
-Other data management:
-\code{\link[=mysterycall_check_duplicates]{mysterycall_check_duplicates()}},
-\code{\link[=mysterycall_check_generalist_presence]{mysterycall_check_generalist_presence()}},
-\code{\link[=mysterycall_extract_zip5]{mysterycall_extract_zip5()}},
-\code{\link[=mysterycall_luhn_check]{mysterycall_luhn_check()}},
-\code{\link[=mysterycall_merge_with_prefix]{mysterycall_merge_with_prefix()}},
-\code{\link[=mysterycall_rename_columns]{mysterycall_rename_columns()}},
-\code{\link[=mysterycall_stratified_sample]{mysterycall_stratified_sample()}}
+Other data management: 
+\code{\link{mysterycall_check_duplicates}()},
+\code{\link{mysterycall_check_generalist_presence}()},
+\code{\link{mysterycall_extract_zip5}()},
+\code{\link{mysterycall_luhn_check}()},
+\code{\link{mysterycall_merge_with_prefix}()},
+\code{\link{mysterycall_rename_columns}()},
+\code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

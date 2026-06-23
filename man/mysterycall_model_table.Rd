@@ -14,8 +14,8 @@ mysterycall_model_table(
 )
 }
 \arguments{
-\item{x}{A \code{mysterycall_poisson_model} object from
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}.}
+\item{x}{A \code{mysterycall_poisson_model} object from \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
+or a \code{mysterycall_nb_model} object from \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}.}
 
 \item{include_intercept}{Logical. When \code{FALSE} (default) the \code{(Intercept)}
 row is dropped.}
@@ -59,14 +59,14 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}}
 
-Other table helpers:
-\code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}},
-\code{\link[=mysterycall_format_pct]{mysterycall_format_pct()}},
-\code{\link[=mysterycall_max_table]{mysterycall_max_table()}},
-\code{\link[=mysterycall_min_table]{mysterycall_min_table()}},
-\code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}},
-\code{\link[=mysterycall_table_proportion]{mysterycall_table_proportion()}},
-\code{\link[=print.mysterycall_disparities_table]{print.mysterycall_disparities_table()}}
+Other table helpers: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
+\code{\link{mysterycall_max_table}()},
+\code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_table_percentages}()},
+\code{\link{mysterycall_table_proportion}()},
+\code{\link{print.mysterycall_disparities_table}()}
 }
 \concept{table helpers}
 \keyword{internal}

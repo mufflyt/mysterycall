@@ -24,9 +24,9 @@ NULL
 #'   For `"lrt"`: a data frame with columns `comparison`, `Chisq`, `df`,
 #'   `p_value`.
 #'
-#' @seealso [mysterycall_poisson_model()] to fit the models being compared;
-#'   [mysterycall_create_formula()] to build predictor sets;
-#'   [mysterycall_bootstrap_ci()] for post-selection inference.
+#' @seealso [mysterycall_poisson_model()] and [mysterycall_nb_model()] to fit
+#'   the models being compared; [mysterycall_create_formula()] to build
+#'   predictor sets; [mysterycall_bootstrap_ci()] for post-selection inference.
 #' @family outcomes
 #' @keywords internal
 #'
@@ -41,10 +41,19 @@ mysterycall_select_best_model <- function(models,
     stop("`models` must be a named list of fitted model objects.", call. = FALSE)
   }
 
+  # Unwrap mysterycall wrapper objects to their inner fitted model
+  .unwrap <- function(m) {
+    if (inherits(m, c("mysterycall_poisson_model", "mysterycall_nb_model"))) m$model else m
+  }
+
   if (criterion %in% c("aic", "bic")) {
-    ic_fn <- if (criterion == "aic") stats::AIC else stats::BIC
     scores <- vapply(models, function(m) {
-      tryCatch(ic_fn(m), error = function(e) NA_real_)
+      if (inherits(m, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
+        if (criterion == "aic") m$aic else m$bic
+      } else {
+        ic_fn <- if (criterion == "aic") stats::AIC else stats::BIC
+        tryCatch(ic_fn(m), error = function(e) NA_real_)
+      }
     }, numeric(1L))
 
     best  <- which.min(scores)
@@ -67,7 +76,7 @@ mysterycall_select_best_model <- function(models,
     results <- lapply(seq_len(n - 1L), function(i) {
       tryCatch({
         lrt <- as.data.frame(
-          stats::anova(models[[i]], models[[i + 1L]], test = "Chisq")
+          stats::anova(.unwrap(models[[i]]), .unwrap(models[[i + 1L]]), test = "Chisq")
         )
         if (nrow(lrt) < 2L) return(NULL)
         # Column names differ by model class: "Chisq"/"Deviance", "Df"/"Chi Df"

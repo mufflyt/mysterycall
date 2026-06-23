@@ -76,6 +76,9 @@ mysterycall_map_acceptance_rate <- function(data,
                                              height       = 7,
                                              dpi          = 300L) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_map_acceptance_rate(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   region_type <- match.arg(region_type)
 
   if (!requireNamespace("maps", quietly = TRUE)) {

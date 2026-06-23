@@ -54,9 +54,9 @@ mysterycall_not_contacted_states(filtered_data)
 \seealso{
 \code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}}, \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}}, \code{\link[=mysterycall_clean_phase1]{mysterycall_clean_phase1()}}
 
-Other data quality:
-\code{\link[=mysterycall_remove_constants]{mysterycall_remove_constants()}},
-\code{\link[=mysterycall_remove_near_zero]{mysterycall_remove_near_zero()}},
-\code{\link[=mysterycall_validate_phone]{mysterycall_validate_phone()}}
+Other data quality: 
+\code{\link{mysterycall_remove_constants}()},
+\code{\link{mysterycall_remove_near_zero}()},
+\code{\link{mysterycall_validate_phone}()}
 }
 \concept{data quality}

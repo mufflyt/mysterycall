@@ -77,7 +77,6 @@ mysterycall_hrr <- function(remove_HI_AK = TRUE) {
 #'   [mysterycall_map_base()], [mysterycall_map_block_group()]
 #' @family mapping
 #' @importFrom dplyr mutate group_by summarize filter n
-#' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
 #' @importFrom stringr str_detect
 #' @importFrom scales pretty_breaks label_number squish
 #' @export
@@ -110,6 +109,9 @@ mysterycall_hrr_maps <- function(
   }
   if (!requireNamespace("grid", quietly = TRUE)) {
     stop("Package 'grid' is required for this function", call. = FALSE)
+  }
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_hrr_maps(). Install with: install.packages('ggplot2')", call. = FALSE)
   }
   sf::sf_use_s2(FALSE)
 

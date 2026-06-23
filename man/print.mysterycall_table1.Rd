@@ -9,14 +9,14 @@
 \arguments{
 \item{x}{A \code{mysterycall_table1} object returned by \code{\link[=mysterycall_table1]{mysterycall_table1()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[tibble:print.tbl_df]{print.tbl_df()}}.}
+\item{...}{Additional arguments passed to \code{\link[tibble:formatting]{tibble::print.tbl_df()}}.}
 }
 \value{
 Invisibly returns \code{x}.
 }
 \description{
 Prints a formatted Table 1 with column sample sizes in the header and the
-underlying tibble displayed via \code{\link[tibble:print.tbl_df]{print.tbl_df()}}.
+underlying tibble displayed via \code{\link[tibble:formatting]{tibble::print.tbl_df()}}.
 }
 \examples{
 \dontrun{
@@ -32,19 +32,19 @@ print(t1)
 \code{\link[=mysterycall_table1]{mysterycall_table1()}} which produces this object;
 \code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}} for a publication-ready \code{gtsummary} alternative.
 
-Other table:
-\code{\link[=.t1_cat_pvalue]{.t1_cat_pvalue()}},
-\code{\link[=.t1_cont_pvalue]{.t1_cont_pvalue()}},
-\code{\link[=.t1_fmt_mean_sd]{.t1_fmt_mean_sd()}},
-\code{\link[=.t1_fmt_median_iqr]{.t1_fmt_median_iqr()}},
-\code{\link[=.t1_fmt_pct]{.t1_fmt_pct()}},
-\code{\link[=.t1_fmt_pval]{.t1_fmt_pval()}},
-\code{\link[=.t1_rows_categorical]{.t1_rows_categorical()}},
-\code{\link[=.t1_rows_continuous]{.t1_rows_continuous()}},
-\code{\link[=mysterycall_table1]{mysterycall_table1()}},
-\code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}},
-\code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}},
-\code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},
-\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}
+Other table: 
+\code{\link{.t1_cat_pvalue}()},
+\code{\link{.t1_cont_pvalue}()},
+\code{\link{.t1_fmt_mean_sd}()},
+\code{\link{.t1_fmt_median_iqr}()},
+\code{\link{.t1_fmt_pct}()},
+\code{\link{.t1_fmt_pval}()},
+\code{\link{.t1_rows_categorical}()},
+\code{\link{.t1_rows_continuous}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
+\code{\link{mysterycall_table_overall}()},
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()}
 }
 \concept{table}

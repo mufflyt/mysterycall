@@ -34,7 +34,7 @@ head(fips)
 
 }
 \seealso{
-Other datasets:
+Other datasets: 
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

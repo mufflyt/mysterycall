@@ -63,8 +63,8 @@ mysterycall_multiple_comparison_adjust(df, p_col = "p", label_col = "comparison"
 estimation; \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} whose coefficients typically
 feed this function; \code{\link[stats:p.adjust]{stats::p.adjust()}} for the underlying adjustment.
 
-Other inference:
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
-\code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}}
+Other inference: 
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_compare_waves}()}
 }
 \concept{inference}

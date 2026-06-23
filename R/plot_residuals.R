@@ -10,8 +10,8 @@ NULL
 #' with [mysterycall_poisson_model()] results, `glm`, `glmerMod`, or `lm`
 #' objects.
 #'
-#' @param model A `mysterycall_poisson_model` result, or a `glm`, `glmerMod`,
-#'   or `lm` object.
+#' @param model A `mysterycall_poisson_model` or `mysterycall_nb_model` result,
+#'   or a `glm`, `glmerMod`, `glmmTMB`, or `lm` object.
 #'
 #' @return A named list with three elements, each a `ggplot` object:
 #'   \describe{
@@ -35,13 +35,13 @@ mysterycall_plot_residuals <- function(model) {
     stop("ggplot2 is required for this function.", call. = FALSE)
   }
 
-  if (inherits(model, "mysterycall_poisson_model")) {
+  if (inherits(model, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
     fit <- model$model
-  } else if (inherits(model, c("glmerMod", "glm", "lm"))) {
+  } else if (inherits(model, c("glmerMod", "glmmTMB", "glm", "lm"))) {
     fit <- model
   } else {
     stop(
-      "`model` must be a `mysterycall_poisson_model`, glm, glmerMod, or lm object.",
+      "`model` must be a `mysterycall_poisson_model`, `mysterycall_nb_model`, glm, glmerMod, glmmTMB, or lm object.",
       call. = FALSE
     )
   }

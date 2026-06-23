@@ -23,7 +23,6 @@
 #'   [mysterycall_plot_line()] for median-trend line plots;
 #'   [mysterycall_save_green_journal_figure()] to export at journal resolution.
 #' @importFrom dplyr filter mutate %>%
-#' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
@@ -57,6 +56,9 @@ mysterycall_plot_density <- function(data,
                                 plot_title = NULL,
                                 verbose = TRUE) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_density(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   x_transform <- match.arg(x_transform, c("none", "log", "sqrt"))
 
   # Filter out zero or negative values and NAs from the x_var column

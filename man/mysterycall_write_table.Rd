@@ -33,7 +33,7 @@ the combined dataset.}
 The input \code{path} (invisibly).
 }
 \description{
-Transparently writes a data frame to disk using either \code{\link[readr:read_csv]{readr::read_csv()}}
+Transparently writes a data frame to disk using either \code{\link[readr:read_delim]{readr::read_csv()}}
 or \code{\link[arrow:write_parquet]{arrow::write_parquet()}}. For CSV format, writes are performed atomically
 to a temporary file then renamed to reduce the risk of file corruption
 during concurrent access.
@@ -51,28 +51,28 @@ mysterycall_write_table(new_data, "combined.csv", append = TRUE)
 }
 }
 \seealso{
-Other utilities:
-\code{\link[=.title_case]{.title_case()}},
-\code{\link{\%>\%}},
-\code{\link[=format_phone_number]{format_phone_number()}},
-\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}},
-\code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}},
-\code{\link[=mysterycall_check_data_completeness]{mysterycall_check_data_completeness()}},
-\code{\link[=mysterycall_check_dependencies]{mysterycall_check_dependencies()}},
-\code{\link[=mysterycall_check_no_data_loss]{mysterycall_check_no_data_loss()}},
-\code{\link[=mysterycall_check_no_limits]{mysterycall_check_no_limits()}},
-\code{\link[=mysterycall_download_file]{mysterycall_download_file()}},
-\code{\link[=mysterycall_estimate_resources]{mysterycall_estimate_resources()}},
-\code{\link[=mysterycall_export_with_backup]{mysterycall_export_with_backup()}},
-\code{\link[=mysterycall_normalize_file_format]{mysterycall_normalize_file_format()}},
-\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}},
-\code{\link[=mysterycall_quality_tier]{mysterycall_quality_tier()}},
-\code{\link[=mysterycall_read_table]{mysterycall_read_table()}},
-\code{\link[=mysterycall_require_arrow]{mysterycall_require_arrow()}},
-\code{\link[=mysterycall_resolve_path]{mysterycall_resolve_path()}},
-\code{\link[=mysterycall_save_quality_table]{mysterycall_save_quality_table()}},
-\code{\link[=mysterycall_scan_for_limits]{mysterycall_scan_for_limits()}},
-\code{\link[=mysterycall_standard_labels]{mysterycall_standard_labels()}},
-\code{\link[=mysterycall_standard_palette]{mysterycall_standard_palette()}}
+Other utilities: 
+\code{\link{.title_case}()},
+\code{\link{\%>\%}()},
+\code{\link{format_phone_number}()},
+\code{\link{mysterycall_assess_data_quality}()},
+\code{\link{mysterycall_check_api_response}()},
+\code{\link{mysterycall_check_data_completeness}()},
+\code{\link{mysterycall_check_dependencies}()},
+\code{\link{mysterycall_check_no_data_loss}()},
+\code{\link{mysterycall_check_no_limits}()},
+\code{\link{mysterycall_download_file}()},
+\code{\link{mysterycall_estimate_resources}()},
+\code{\link{mysterycall_export_with_backup}()},
+\code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_preflight_check}()},
+\code{\link{mysterycall_quality_tier}()},
+\code{\link{mysterycall_read_table}()},
+\code{\link{mysterycall_require_arrow}()},
+\code{\link{mysterycall_resolve_path}()},
+\code{\link{mysterycall_save_quality_table}()},
+\code{\link{mysterycall_scan_for_limits}()},
+\code{\link{mysterycall_standard_labels}()},
+\code{\link{mysterycall_standard_palette}()}
 }
 \concept{utilities}

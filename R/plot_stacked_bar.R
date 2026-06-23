@@ -82,6 +82,9 @@ mysterycall_plot_stacked_bar <- function(data,
                                           show_n         = TRUE,
                                           order_by_rate  = TRUE) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_stacked_bar(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   # ---- Validate inputs -------------------------------------------------------
   if (!is.data.frame(data)) {
     stop("`data` must be a data frame.", call. = FALSE)

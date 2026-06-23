@@ -20,7 +20,6 @@ Imports:
     scales,
     checkmate,
     dplyr,
-    ggplot2,
     grDevices,
     methods,
     npi (>= 0.2.0),
@@ -46,7 +45,10 @@ Suggests:
     easyr,
     effects,
     emmeans,
+    ggplot2,
     ggmap (>= 3.0.0),
+    ggforce,
+    glmmTMB,
     gtsummary,
     ggspatial,
     grid,
@@ -80,3 +82,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3

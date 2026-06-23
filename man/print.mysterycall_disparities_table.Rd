@@ -36,13 +36,13 @@ print(disp_table)
 \seealso{
 \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
 
-Other table helpers:
-\code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}},
-\code{\link[=mysterycall_format_pct]{mysterycall_format_pct()}},
-\code{\link[=mysterycall_max_table]{mysterycall_max_table()}},
-\code{\link[=mysterycall_min_table]{mysterycall_min_table()}},
-\code{\link[=mysterycall_model_table]{mysterycall_model_table()}},
-\code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}},
-\code{\link[=mysterycall_table_proportion]{mysterycall_table_proportion()}}
+Other table helpers: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
+\code{\link{mysterycall_max_table}()},
+\code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table_percentages}()},
+\code{\link{mysterycall_table_proportion}()}
 }
 \concept{table helpers}

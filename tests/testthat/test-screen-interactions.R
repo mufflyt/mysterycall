@@ -62,3 +62,79 @@ test_that("screen_interactions: with random_intercept uses glmer", {
   expect_s3_class(res, "data.frame")
   expect_equal(nrow(res), 1L)
 })
+
+# ── Negative binomial family ───────────────────────────────────────────────────
+
+make_nb_df <- function(seed = 42L) {
+  set.seed(seed)
+  n <- 60L
+  data.frame(
+    wait    = rnbinom(n, mu = 14, size = 1.5),
+    ins     = rep(c("BCBS", "Medicaid"), n / 2),
+    gender  = sample(c("Male", "Female"), n, replace = TRUE),
+    setting = sample(c("Academic", "Private"), n, replace = TRUE),
+    phys    = rep(paste0("D", seq_len(n / 5)), each = 5L),
+    stringsAsFactors = FALSE
+  )
+}
+
+test_that("screen_interactions NB: returns data frame", {
+  skip_if_not_installed("glmmTMB")
+  df  <- make_nb_df()
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", c("gender", "setting"),
+                                    family = "negative_binomial")
+  )
+  expect_s3_class(res, "data.frame")
+})
+
+test_that("screen_interactions NB: one row per candidate", {
+  skip_if_not_installed("glmmTMB")
+  df  <- make_nb_df()
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", c("gender", "setting"),
+                                    family = "negative_binomial")
+  )
+  expect_equal(nrow(res), 2L)
+})
+
+test_that("screen_interactions NB: expected column names", {
+  skip_if_not_installed("glmmTMB")
+  df  <- make_nb_df()
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", "gender",
+                                    family = "negative_binomial")
+  )
+  expect_true(all(c("candidate", "n_terms", "min_p_value", "significant") %in% names(res)))
+})
+
+test_that("screen_interactions NB: sorted by min_p_value ascending", {
+  skip_if_not_installed("glmmTMB")
+  df  <- make_nb_df()
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", c("gender", "setting"),
+                                    family = "negative_binomial")
+  )
+  p <- res$min_p_value[!is.na(res$min_p_value)]
+  expect_true(all(diff(p) >= 0))
+})
+
+test_that("screen_interactions NB: with random_intercept uses glmmTMB", {
+  skip_if_not_installed("glmmTMB")
+  df  <- make_nb_df()
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", "gender",
+                                    random_intercept = "phys",
+                                    family = "negative_binomial")
+  )
+  expect_s3_class(res, "data.frame")
+  expect_equal(nrow(res), 1L)
+})
+
+test_that("screen_interactions NB: invalid family rejected", {
+  expect_error(
+    mysterycall_screen_interactions(make_nb_df(), "wait", "ins", "gender",
+                                    family = "gamma"),
+    class = "error"
+  )
+})

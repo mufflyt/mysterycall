@@ -16,8 +16,8 @@ mysterycall_write_results_paragraph(
 )
 }
 \arguments{
-\item{model_result}{Either a \code{mysterycall_poisson_model} object (with
-element \verb{$irr_table}) or a data frame with columns \code{term},
+\item{model_result}{A \code{mysterycall_poisson_model} or \code{mysterycall_nb_model}
+object (with element \verb{$irr_table}), or a data frame with columns \code{term},
 \code{irr}, \code{ci_lower}, \code{ci_upper}, and \code{p_value}.}
 
 \item{ref_group}{Character scalar: the reference group label (e.g.

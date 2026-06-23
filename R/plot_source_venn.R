@@ -53,7 +53,7 @@
 #'   mysterycall_plot_source_venn(d)
 #'   ```
 #'
-#' @importFrom ggplot2 ggplot annotate coord_fixed theme_void theme element_text margin ggsave labs geom_polygon
+#' @seealso [ggforce::geom_circle()]
 #' @family plotting
 #' @export
 #'

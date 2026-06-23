@@ -38,7 +38,7 @@ table(acog_districts$ACOG_District)
 
 }
 \seealso{
-Other datasets:
+Other datasets: 
 \code{\link{acgme}},
 \code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},

@@ -45,9 +45,9 @@ mysterycall_save_green_journal_figure(composite, "figures/fig3")
 \seealso{
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}, \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 
-Other green-journal-spatial:
-\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}},
-\code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}},
-\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
+Other green-journal-spatial: 
+\code{\link{mysterycall_crs_albers_conus}()},
+\code{\link{mysterycall_truncate_for_viz}()},
+\code{\link{mysterycall_winsorize}()}
 }
 \concept{green-journal-spatial}

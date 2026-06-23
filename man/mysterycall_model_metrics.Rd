@@ -7,8 +7,8 @@
 mysterycall_model_metrics(model)
 }
 \arguments{
-\item{model}{A \code{mysterycall_poisson_model} result, or a \code{glm}, \code{glmerMod},
-or \code{lm} object.}
+\item{model}{A \code{mysterycall_poisson_model} or \code{mysterycall_nb_model} result,
+or a \code{glm}, \code{glmerMod}, \code{glmmTMB}, or \code{lm} object.}
 }
 \value{
 A named list with two numeric scalar elements:
@@ -37,32 +37,34 @@ mysterycall_model_metrics(m)
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces compatible model
 objects; \code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}} for AIC/BIC-based selection.
 
-Other outcomes:
-\code{\link[=.as_positive_logical]{.as_positive_logical()}},
-\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
-\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
-\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
-\code{\link[=.me_find_mf_col]{.me_find_mf_col()}},
-\code{\link[=.me_mf_to_orig]{.me_mf_to_orig()}},
-\code{\link[=.wait_stats]{.wait_stats()}},
-\code{\link[=.wilson_ci]{.wilson_ci()}},
-\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
-\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
-\code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
-\code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}},
-\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}},
-\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}},
-\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}},
-\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}},
-\code{\link[=mysterycall_plot_residuals]{mysterycall_plot_residuals()}},
-\code{\link[=mysterycall_plot_sjplot_interaction]{mysterycall_plot_sjplot_interaction()}},
-\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}},
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}},
-\code{\link[=mysterycall_screen_interactions]{mysterycall_screen_interactions()}},
-\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}},
-\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
-\code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
+Other outcomes: 
+\code{\link{.as_positive_logical}()},
+\code{\link{.disp_rate_ci}()},
+\code{\link{.fmt_model_pval}()},
+\code{\link{.fmt_pvalue}()},
+\code{\link{.me_find_mf_col}()},
+\code{\link{.me_mf_to_orig}()},
+\code{\link{.wait_stats}()},
+\code{\link{.wilson_ci}()},
+\code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_irr_plot}()},
+\code{\link{mysterycall_marginal_effects}()},
+\code{\link{mysterycall_nb_model}()},
+\code{\link{mysterycall_plot_distribution}()},
+\code{\link{mysterycall_plot_effect}()},
+\code{\link{mysterycall_plot_emmeans_full}()},
+\code{\link{mysterycall_plot_emmeans_interaction}()},
+\code{\link{mysterycall_plot_inclexcl}()},
+\code{\link{mysterycall_plot_residuals}()},
+\code{\link{mysterycall_plot_sjplot_interaction}()},
+\code{\link{mysterycall_plot_stacked_bar}()},
+\code{\link{mysterycall_poisson_model}()},
+\code{\link{mysterycall_screen_interactions}()},
+\code{\link{mysterycall_select_best_model}()},
+\code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_nb_model}()},
+\code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}
 \keyword{internal}

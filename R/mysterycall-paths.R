@@ -60,7 +60,6 @@ mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("mys
 #' @param quiet Logical flag controlling log output.
 #'
 #' @return The resolved path (invisible).
-#' @importFrom ggplot2 ggsave
 #' @importFrom utils write.table
 #' @family utilities
 #' @keywords internal
@@ -86,6 +85,9 @@ mysterycall_export_with_backup <- function(x, path, backup = TRUE, quiet = getOp
 
   ext <- tolower(tools::file_ext(path))
   if (inherits(x, "ggplot") && nzchar(ext)) {
+    if (!requireNamespace("ggplot2", quietly = TRUE)) {
+      stop("Package 'ggplot2' is required to save ggplot objects. Install with: install.packages('ggplot2')", call. = FALSE)
+    }
     ggplot2::ggsave(filename = path, plot = x)
   } else if (is.data.frame(x) && identical(ext, "csv")) {
     utils::write.csv(x, path, row.names = FALSE)

@@ -10,8 +10,8 @@ NULL
 #' [mysterycall_poisson_model()] results, bare `glm`, `glmerMod`, or `lm`
 #' objects.
 #'
-#' @param model A `mysterycall_poisson_model` result, or a `glm`, `glmerMod`,
-#'   or `lm` object.
+#' @param model A `mysterycall_poisson_model` or `mysterycall_nb_model` result,
+#'   or a `glm`, `glmerMod`, `glmmTMB`, or `lm` object.
 #'
 #' @return A named list with two numeric scalar elements:
 #'   \describe{
@@ -34,13 +34,13 @@ NULL
 #' m <- glm(mpg ~ wt, data = mtcars, family = gaussian())
 #' mysterycall_model_metrics(m)
 mysterycall_model_metrics <- function(model) {
-  if (inherits(model, "mysterycall_poisson_model")) {
+  if (inherits(model, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
     fit <- model$model
-  } else if (inherits(model, c("glmerMod", "glm", "lm"))) {
+  } else if (inherits(model, c("glmerMod", "glmmTMB", "glm", "lm"))) {
     fit <- model
   } else {
     stop(
-      "`model` must be a `mysterycall_poisson_model`, glm, glmerMod, or lm object.",
+      "`model` must be a `mysterycall_poisson_model`, `mysterycall_nb_model`, glm, glmerMod, glmmTMB, or lm object.",
       call. = FALSE
     )
   }

@@ -35,36 +35,38 @@ m2 <- glm(mpg ~ wt + hp, data = mtcars, family = gaussian())
 mysterycall_select_best_model(list(base = m1, full = m2))
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} to fit the models being compared;
-\code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}} to build predictor sets;
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}} for post-selection inference.
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} and \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} to fit
+the models being compared; \code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}} to build
+predictor sets; \code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}} for post-selection inference.
 
-Other outcomes:
-\code{\link[=.as_positive_logical]{.as_positive_logical()}},
-\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
-\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
-\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
-\code{\link[=.me_find_mf_col]{.me_find_mf_col()}},
-\code{\link[=.me_mf_to_orig]{.me_mf_to_orig()}},
-\code{\link[=.wait_stats]{.wait_stats()}},
-\code{\link[=.wilson_ci]{.wilson_ci()}},
-\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
-\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}},
-\code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
-\code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
-\code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}},
-\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}},
-\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}},
-\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}},
-\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}},
-\code{\link[=mysterycall_plot_residuals]{mysterycall_plot_residuals()}},
-\code{\link[=mysterycall_plot_sjplot_interaction]{mysterycall_plot_sjplot_interaction()}},
-\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}},
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}},
-\code{\link[=mysterycall_screen_interactions]{mysterycall_screen_interactions()}},
-\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
-\code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
+Other outcomes: 
+\code{\link{.as_positive_logical}()},
+\code{\link{.disp_rate_ci}()},
+\code{\link{.fmt_model_pval}()},
+\code{\link{.fmt_pvalue}()},
+\code{\link{.me_find_mf_col}()},
+\code{\link{.me_mf_to_orig}()},
+\code{\link{.wait_stats}()},
+\code{\link{.wilson_ci}()},
+\code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_irr_plot}()},
+\code{\link{mysterycall_marginal_effects}()},
+\code{\link{mysterycall_model_metrics}()},
+\code{\link{mysterycall_nb_model}()},
+\code{\link{mysterycall_plot_distribution}()},
+\code{\link{mysterycall_plot_effect}()},
+\code{\link{mysterycall_plot_emmeans_full}()},
+\code{\link{mysterycall_plot_emmeans_interaction}()},
+\code{\link{mysterycall_plot_inclexcl}()},
+\code{\link{mysterycall_plot_residuals}()},
+\code{\link{mysterycall_plot_sjplot_interaction}()},
+\code{\link{mysterycall_plot_stacked_bar}()},
+\code{\link{mysterycall_poisson_model}()},
+\code{\link{mysterycall_screen_interactions}()},
+\code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_nb_model}()},
+\code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}
 \keyword{internal}

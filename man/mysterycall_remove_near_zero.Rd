@@ -32,10 +32,10 @@ mysterycall_remove_near_zero(df)
 value is identical; \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} for pre-processing
 data quality checks.
 
-Other data quality:
-\code{\link[=mysterycall_not_contacted_states]{mysterycall_not_contacted_states()}},
-\code{\link[=mysterycall_remove_constants]{mysterycall_remove_constants()}},
-\code{\link[=mysterycall_validate_phone]{mysterycall_validate_phone()}}
+Other data quality: 
+\code{\link{mysterycall_not_contacted_states}()},
+\code{\link{mysterycall_remove_constants}()},
+\code{\link{mysterycall_validate_phone}()}
 }
 \concept{data quality}
 \keyword{internal}

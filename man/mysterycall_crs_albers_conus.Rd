@@ -27,9 +27,9 @@ ggplot(counties_sf) +
 \seealso{
 \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 
-Other green-journal-spatial:
-\code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}},
-\code{\link[=mysterycall_truncate_for_viz]{mysterycall_truncate_for_viz()}},
-\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
+Other green-journal-spatial: 
+\code{\link{mysterycall_compose_map_density}()},
+\code{\link{mysterycall_truncate_for_viz}()},
+\code{\link{mysterycall_winsorize}()}
 }
 \concept{green-journal-spatial}

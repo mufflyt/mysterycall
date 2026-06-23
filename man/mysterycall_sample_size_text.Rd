@@ -27,11 +27,10 @@ mysterycall_sample_size_text(369)
 \code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}} for the underlying sample-size formula;
 \code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}} to generate the full methods paragraph.
 
-Other manuscript:
-\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
-\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
-\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
-\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}}
+Other manuscript: 
+\code{\link{mysterycall_format_results_table}()},
+\code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_save_plot}()},
+\code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}
-\keyword{internal}

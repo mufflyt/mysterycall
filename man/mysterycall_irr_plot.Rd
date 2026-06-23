@@ -18,7 +18,8 @@ mysterycall_irr_plot(
 }
 \arguments{
 \item{x}{A \code{mysterycall_poisson_model} object from
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \strong{or} a data frame with columns \code{term},
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, a \code{mysterycall_nb_model} object from
+\code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}, \strong{or} a data frame with columns \code{term},
 \code{irr}, \code{ci_lower}, \code{ci_upper} (and optionally \code{p_value}).}
 
 \item{include_intercept}{Logical. When \code{FALSE} (default) the \code{(Intercept)}
@@ -49,8 +50,7 @@ A \code{ggplot} object. Print it or save with \code{\link[ggplot2:ggsave]{ggplot
 Produces a publication-ready forest plot showing each fixed-effect term as
 an incidence rate ratio (point) with its Wald confidence interval (horizontal
 bar). The intercept row is excluded by default. A vertical reference line
-marks IRR = 1 (no effect). Requires only \code{ggplot2}, which is already in
-the package Imports.
+marks IRR = 1 (no effect). Requires \code{ggplot2} (listed in Suggests).
 }
 \examples{
 if (requireNamespace("lme4", quietly = TRUE)) {
@@ -69,33 +69,35 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 }
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}
 
-Other outcomes:
-\code{\link[=.as_positive_logical]{.as_positive_logical()}},
-\code{\link[=.disp_rate_ci]{.disp_rate_ci()}},
-\code{\link[=.fmt_model_pval]{.fmt_model_pval()}},
-\code{\link[=.fmt_pvalue]{.fmt_pvalue()}},
-\code{\link[=.me_find_mf_col]{.me_find_mf_col()}},
-\code{\link[=.me_mf_to_orig]{.me_mf_to_orig()}},
-\code{\link[=.wait_stats]{.wait_stats()}},
-\code{\link[=.wilson_ci]{.wilson_ci()}},
-\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}},
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
-\code{\link[=mysterycall_marginal_effects]{mysterycall_marginal_effects()}},
-\code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
-\code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}},
-\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}},
-\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}},
-\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}},
-\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}},
-\code{\link[=mysterycall_plot_residuals]{mysterycall_plot_residuals()}},
-\code{\link[=mysterycall_plot_sjplot_interaction]{mysterycall_plot_sjplot_interaction()}},
-\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}},
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}},
-\code{\link[=mysterycall_screen_interactions]{mysterycall_screen_interactions()}},
-\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}},
-\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}},
-\code{\link[=print.mysterycall_poisson_model]{print.mysterycall_poisson_model()}}
+Other outcomes: 
+\code{\link{.as_positive_logical}()},
+\code{\link{.disp_rate_ci}()},
+\code{\link{.fmt_model_pval}()},
+\code{\link{.fmt_pvalue}()},
+\code{\link{.me_find_mf_col}()},
+\code{\link{.me_mf_to_orig}()},
+\code{\link{.wait_stats}()},
+\code{\link{.wilson_ci}()},
+\code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_marginal_effects}()},
+\code{\link{mysterycall_model_metrics}()},
+\code{\link{mysterycall_nb_model}()},
+\code{\link{mysterycall_plot_distribution}()},
+\code{\link{mysterycall_plot_effect}()},
+\code{\link{mysterycall_plot_emmeans_full}()},
+\code{\link{mysterycall_plot_emmeans_interaction}()},
+\code{\link{mysterycall_plot_inclexcl}()},
+\code{\link{mysterycall_plot_residuals}()},
+\code{\link{mysterycall_plot_sjplot_interaction}()},
+\code{\link{mysterycall_plot_stacked_bar}()},
+\code{\link{mysterycall_poisson_model}()},
+\code{\link{mysterycall_screen_interactions}()},
+\code{\link{mysterycall_select_best_model}()},
+\code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_nb_model}()},
+\code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

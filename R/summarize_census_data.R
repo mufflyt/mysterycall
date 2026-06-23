@@ -175,6 +175,9 @@ mysterycall_plot_census_age <- function(census_df,
   if (!requireNamespace("scales", quietly = TRUE)) {
     stop("Package 'scales' is required for mysterycall_plot_census_age().", call. = FALSE)
   }
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_census_age(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
 
   if (!is.data.frame(census_df)) {
     stop("`census_df` must be a data frame.", call. = FALSE)

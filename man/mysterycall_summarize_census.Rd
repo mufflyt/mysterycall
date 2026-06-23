@@ -56,10 +56,10 @@ census_example <- tibble::tibble(
 mysterycall_summarize_census(census_example, group_vars = c("statefp"))
 }
 \seealso{
-Other census:
-\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}},
-\code{\link[=mysterycall_get_acs_women_18_90]{mysterycall_get_acs_women_18_90()}},
-\code{\link[=mysterycall_get_census_data]{mysterycall_get_census_data()}},
-\code{\link[=mysterycall_plot_census_age]{mysterycall_plot_census_age()}}
+Other census: 
+\code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_women_18_90}()},
+\code{\link{mysterycall_get_census_data}()},
+\code{\link{mysterycall_plot_census_age}()}
 }
 \concept{census}

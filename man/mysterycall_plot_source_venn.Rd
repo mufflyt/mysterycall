@@ -106,8 +106,10 @@ print(p)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other plotting:
-\code{\link[=mysterycall_plot_disparities]{mysterycall_plot_disparities()}},
-\code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}}
+\code{\link[ggforce:geom_circle]{ggforce::geom_circle()}}
+
+Other plotting: 
+\code{\link{mysterycall_plot_disparities}()},
+\code{\link{mysterycall_plot_emmeans}()}
 }
 \concept{plotting}

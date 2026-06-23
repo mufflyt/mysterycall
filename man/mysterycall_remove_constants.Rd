@@ -27,10 +27,10 @@ mysterycall_remove_constants(df)
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to audit data quality before
 removal; \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for missingness scoring.
 
-Other data quality:
-\code{\link[=mysterycall_not_contacted_states]{mysterycall_not_contacted_states()}},
-\code{\link[=mysterycall_remove_near_zero]{mysterycall_remove_near_zero()}},
-\code{\link[=mysterycall_validate_phone]{mysterycall_validate_phone()}}
+Other data quality: 
+\code{\link{mysterycall_not_contacted_states}()},
+\code{\link{mysterycall_remove_near_zero}()},
+\code{\link{mysterycall_validate_phone}()}
 }
 \concept{data quality}
 \keyword{internal}

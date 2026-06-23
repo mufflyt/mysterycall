@@ -16,11 +16,11 @@ Data frame with \code{area_code} and \code{state} columns.
 Loads and caches the mapping between US area codes and states.
 }
 \seealso{
-Other validation:
+Other validation: 
 \code{\link{.audit_volatile_fields}},
-\code{\link[=validate_dataframe]{validate_dataframe()}},
-\code{\link[=validate_required_columns]{validate_required_columns()}},
-\code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
+\code{\link{validate_dataframe}()},
+\code{\link{validate_required_columns}()},
+\code{\link{validate_scalar_positive_numeric}()}
 }
 \concept{validation}
 \keyword{internal}

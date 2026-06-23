@@ -28,7 +28,7 @@ print(res)
 }
 }
 \seealso{
-Other caller-management:
-\code{\link[=mysterycall_caller_reliability]{mysterycall_caller_reliability()}}
+Other caller-management: 
+\code{\link{mysterycall_caller_reliability}()}
 }
 \concept{caller-management}

@@ -33,8 +33,8 @@ mysterycall_hrr()
 \seealso{
 \code{\link[=ensure_hrr_shapefile]{ensure_hrr_shapefile()}}, \code{\link[=mysterycall_hrr_maps]{mysterycall_hrr_maps()}}, \code{\link[=mysterycall_map_base]{mysterycall_map_base()}}
 
-Other geospatial helpers:
-\code{\link[=mysterycall_calculate_overlap]{mysterycall_calculate_overlap()}},
-\code{\link[=mysterycall_geocode]{mysterycall_geocode()}}
+Other geospatial helpers: 
+\code{\link{mysterycall_calculate_overlap}()},
+\code{\link{mysterycall_geocode}()}
 }
 \concept{geospatial helpers}

@@ -38,7 +38,7 @@ the audit report.}
 A data frame: the filtered subset of \code{left}.
 }
 \description{
-Wraps \code{\link[dplyr:semi_join]{dplyr::semi_join()}} (filter left to matching rows, no right columns
+Wraps \code{\link[dplyr:filter-joins]{dplyr::semi_join()}} (filter left to matching rows, no right columns
 added) with key validation, type harmonization, and a minimum keep-rate
 threshold.
 }
@@ -63,10 +63,10 @@ result <- mysterycall_safe_semi_join(
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}}, \code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
 \code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}}, \code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}}
 
-Other safe-joins:
-\code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}},
-\code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}},
-\code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
-\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}}
+Other safe-joins: 
+\code{\link{mysterycall_assert_unique_keys}()},
+\code{\link{mysterycall_safe_anti_join}()},
+\code{\link{mysterycall_safe_inner_join}()},
+\code{\link{mysterycall_safe_left_join}()}
 }
 \concept{safe-joins}

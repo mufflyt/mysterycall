@@ -44,10 +44,10 @@ Plot the distribution of female age groups
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other census:
-\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}},
-\code{\link[=mysterycall_get_acs_women_18_90]{mysterycall_get_acs_women_18_90()}},
-\code{\link[=mysterycall_get_census_data]{mysterycall_get_census_data()}},
-\code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}}
+Other census: 
+\code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_women_18_90}()},
+\code{\link{mysterycall_get_census_data}()},
+\code{\link{mysterycall_summarize_census}()}
 }
 \concept{census}

@@ -3,8 +3,8 @@
 #' Produces a ready-to-paste results sentence describing IRRs from a
 #' multivariable Poisson regression, formatted for clinical manuscripts.
 #'
-#' @param model_result Either a `mysterycall_poisson_model` object (with
-#'   element `$irr_table`) or a data frame with columns `term`,
+#' @param model_result A `mysterycall_poisson_model` or `mysterycall_nb_model`
+#'   object (with element `$irr_table`), or a data frame with columns `term`,
 #'   `irr`, `ci_lower`, `ci_upper`, and `p_value`.
 #' @param ref_group Character scalar: the reference group label (e.g.
 #'   `"commercial insurance"`).
@@ -50,16 +50,18 @@ mysterycall_write_results_paragraph <- function(
   required_cols <- c("term", "irr", "ci_lower", "ci_upper", "p_value")
 
   # ---- validate model_result --------------------------------------------------
-  if (inherits(model_result, "mysterycall_poisson_model")) {
+  is_nb <- inherits(model_result, "mysterycall_nb_model")
+  if (inherits(model_result, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
     if (is.null(model_result$irr_table)) {
       stop("model_result$irr_table is NULL.")
     }
     irr_table <- as.data.frame(model_result$irr_table)
   } else if (is.data.frame(model_result)) {
+    is_nb <- FALSE
     irr_table <- model_result
   } else {
     stop(
-      "model_result must be a 'mysterycall_poisson_model' object or a data frame ",
+      "model_result must be a 'mysterycall_poisson_model', 'mysterycall_nb_model', or a data frame ",
       "with columns: ", paste(required_cols, collapse = ", "), "."
     )
   }
@@ -94,8 +96,9 @@ mysterycall_write_results_paragraph <- function(
   }
 
   # ---- build sentences --------------------------------------------------------
+  model_type <- if (is_nb) "negative binomial regression" else "Poisson regression"
   intro <- paste0(
-    "In multivariable Poisson regression, ", exposure_col,
+    "In multivariable ", model_type, ", ", exposure_col,
     " was significantly associated with ", outcome_label, " (see Table X)."
   )
 

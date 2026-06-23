@@ -4,16 +4,16 @@
 NULL
 
 
-#' Plot incidence rate ratios from a fitted Poisson model
+#' Plot incidence rate ratios from a fitted Poisson or negative binomial model
 #'
 #' Produces a publication-ready forest plot showing each fixed-effect term as
 #' an incidence rate ratio (point) with its Wald confidence interval (horizontal
 #' bar). The intercept row is excluded by default. A vertical reference line
-#' marks IRR = 1 (no effect). Requires only `ggplot2`, which is already in
-#' the package Imports.
+#' marks IRR = 1 (no effect). Requires `ggplot2` (listed in Suggests).
 #'
 #' @param x A `mysterycall_poisson_model` object from
-#'   [mysterycall_poisson_model()], **or** a data frame with columns `term`,
+#'   [mysterycall_poisson_model()], a `mysterycall_nb_model` object from
+#'   [mysterycall_nb_model()], **or** a data frame with columns `term`,
 #'   `irr`, `ci_lower`, `ci_upper` (and optionally `p_value`).
 #' @param include_intercept Logical. When `FALSE` (default) the `(Intercept)`
 #'   row is dropped before plotting.
@@ -32,7 +32,7 @@ NULL
 #' @return A `ggplot` object. Print it or save with [ggplot2::ggsave()].
 #'
 #' @family outcomes
-#' @seealso [mysterycall_poisson_model()]
+#' @seealso [mysterycall_poisson_model()], [mysterycall_nb_model()]
 #' @export
 #'
 #' @examples
@@ -60,8 +60,12 @@ mysterycall_irr_plot <- function(x,
                                   title             = NULL,
                                   x_log             = FALSE) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_irr_plot(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
+
   # -- Extract table ----------------------------------------------------------
-  if (inherits(x, "mysterycall_poisson_model")) {
+  if (inherits(x, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
     tbl <- x$irr_table
   } else if (is.data.frame(x)) {
     required <- c("term", "irr", "ci_lower", "ci_upper")
@@ -72,7 +76,7 @@ mysterycall_irr_plot <- function(x,
     }
     tbl <- x
   } else {
-    stop("`x` must be a `mysterycall_poisson_model` object or a data frame.",
+    stop("`x` must be a `mysterycall_poisson_model`, `mysterycall_nb_model`, or a data frame.",
          call. = FALSE)
   }
 

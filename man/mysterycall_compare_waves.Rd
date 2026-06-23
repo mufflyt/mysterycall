@@ -57,9 +57,9 @@ mysterycall_compare_waves(df, "wave", "outcome")
 for detailed single-wave outcome analysis; \code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}}
 for non-parametric confidence intervals.
 
-Other inference:
-\code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}},
-\code{\link[=mysterycall_multiple_comparison_adjust]{mysterycall_multiple_comparison_adjust()}}
+Other inference: 
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_multiple_comparison_adjust}()}
 }
 \concept{inference}
 \keyword{internal}

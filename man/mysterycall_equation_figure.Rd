@@ -41,8 +41,8 @@ mystery-caller manuscript.
 mysterycall_equation_figure(lambda0 = 14, irr_seq = seq(1.1, 1.8, 0.1))
 }
 \seealso{
-Other power analysis:
-\code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}},
-\code{\link[=mysterycall_poisson_power]{mysterycall_poisson_power()}}
+Other power analysis: 
+\code{\link{mysterycall_cochran_n}()},
+\code{\link{mysterycall_poisson_power}()}
 }
 \concept{power analysis}

@@ -45,6 +45,9 @@
 #'   geom_point() +
 #'   mysterycall:::mysterycall_theme_green_journal()
 mysterycall_theme_green_journal <- function(base_size = 10, base_family = "Arial") {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_theme_green_journal(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   if (!base_family %in% c("sans", "serif", "mono")) {
     avail <- tryCatch(base_family %in% names(grDevices::pdfFonts()),
                      error = function(e) FALSE)
@@ -230,6 +233,9 @@ mysterycall_palette_green_journal <- function(n = NULL, type = c("qualitative", 
 #'   geom_point() +
 #'   mysterycall:::mysterycall_scale_color_green_journal()
 mysterycall_scale_color_green_journal <- function(...) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_scale_color_green_journal(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   ggplot2::scale_color_manual(values = mysterycall_palette_green_journal(), ...)
 }
 
@@ -251,6 +257,9 @@ mysterycall_scale_color_green_journal <- function(...) {
 #'   geom_bar() +
 #'   mysterycall:::mysterycall_scale_fill_green_journal()
 mysterycall_scale_fill_green_journal <- function(...) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_scale_fill_green_journal(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   ggplot2::scale_fill_manual(values = mysterycall_palette_green_journal(), ...)
 }
 
@@ -299,6 +308,9 @@ mysterycall_save_green_journal_figure <- function(plot,
                                       height    = NULL,
                                       plot_data = NULL,
                                       csv       = TRUE) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for save_green_journal_figure(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   stopifnot(inherits(plot, "ggplot"))
   stopifnot(is.character(path_stem), nzchar(path_stem))
   layout <- match.arg(layout)

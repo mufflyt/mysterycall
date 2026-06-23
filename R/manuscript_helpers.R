@@ -1,10 +1,5 @@
 #' Helpers for writing manuscript methods and results sections
 #'
-#' @return No return value. Documentation topic grouping related functions; see
-#'   each function's own help page for its return value.
-#' @examples
-#' # Topic group; see individual function help pages for runnable examples.
-#' NULL
 #' @name manuscript_helpers
 NULL
 
@@ -23,7 +18,7 @@ NULL
 #' @seealso [mysterycall_cochran_n()] for the underlying sample-size formula;
 #'   [mysterycall_methods_paragraph()] to generate the full methods paragraph.
 #' @family manuscript
-#' @keywords internal
+#' @export
 #'
 #' @examples
 #' mysterycall_sample_size_text(369)
@@ -127,7 +122,7 @@ mysterycall_summarize_demographics <- function(data,
 #'   [mysterycall_summarize_demographics()] for the demographics summary;
 #'   [mysterycall_write_results_paragraph()] for the results section.
 #' @family manuscript
-#' @keywords internal
+#' @export
 #'
 #' @examples
 #' mysterycall_methods_paragraph(
@@ -195,10 +190,11 @@ mysterycall_methods_paragraph <- function(n_physicians,
 #'   the row indices where `p_value < 0.05`, allowing downstream formatters
 #'   to apply bold styling.  Intercept row is excluded by default.
 #'
-#' @seealso [mysterycall_poisson_model()] which produces the model input;
-#'   [mysterycall_write_results_paragraph()] to generate a prose summary.
+#' @seealso [mysterycall_poisson_model()] and [mysterycall_nb_model()] which
+#'   produce the model input; [mysterycall_write_results_paragraph()] to
+#'   generate a prose summary.
 #' @family manuscript
-#' @keywords internal
+#' @export
 #'
 #' @examplesIf interactive()
 #' tbl <- mysterycall_format_results_table(model_result)
@@ -206,9 +202,9 @@ mysterycall_methods_paragraph <- function(n_physicians,
 mysterycall_format_results_table <- function(x,
                                               digits            = 2L,
                                               include_intercept = FALSE) {
-  if (inherits(x, "mysterycall_poisson_model")) x <- x$irr_table
+  if (inherits(x, c("mysterycall_poisson_model", "mysterycall_nb_model"))) x <- x$irr_table
   if (!is.data.frame(x))
-    stop("`x` must be a data frame or `mysterycall_poisson_model`.", call. = FALSE)
+    stop("`x` must be a data frame, `mysterycall_poisson_model`, or `mysterycall_nb_model`.", call. = FALSE)
   need <- c("term", "irr", "ci_lower", "ci_upper", "p_value")
   missing_cols <- setdiff(need, names(x))
   if (length(missing_cols) > 0L)
@@ -231,4 +227,38 @@ mysterycall_format_results_table <- function(x,
   attr(out, "significant_rows") <- which(out$sig)
   out$sig <- NULL
   out
+}
+
+
+mysterycall_write_results_paragraph <- function(model_result,
+                                                ref_group,
+                                                exposure_col,
+                                                outcome_label = "appointment acceptance") {
+  if (!inherits(model_result, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
+    stop("`model_result` must be a `mysterycall_poisson_model` or `mysterycall_nb_model` object.", call. = FALSE)
+  }
+  if (!is.character(ref_group)     || length(ref_group) != 1L)     stop("`ref_group` must be a single string.",     call. = FALSE)
+  if (!is.character(exposure_col)  || length(exposure_col) != 1L)  stop("`exposure_col` must be a single string.",  call. = FALSE)
+  if (!is.character(outcome_label) || length(outcome_label) != 1L) stop("`outcome_label` must be a single string.", call. = FALSE)
+
+  tbl      <- model_result$irr_table
+  exp_rows <- tbl[grepl(exposure_col, tbl$term, fixed = TRUE), ]
+
+  if (nrow(exp_rows) == 0L) {
+    stop("No coefficient found for exposure_col = '", exposure_col, "'.", call. = FALSE)
+  }
+
+  lines <- vapply(seq_len(nrow(exp_rows)), function(i) {
+    r   <- exp_rows[i, ]
+    lvl <- trimws(gsub(exposure_col, "", r$term, fixed = TRUE))
+    sig <- if (!is.na(r$p_value) && r$p_value < 0.05) "significantly" else "not significantly"
+    p_str <- if (!is.na(r$p_value) && r$p_value < 0.001) "< 0.001" else sprintf("= %.3f", r$p_value)
+    sprintf(
+      "Compared with %s, %s was %s associated with %s (IRR %.2f, 95%% CI %.2f-%.2f, p %s).",
+      ref_group, lvl, sig, outcome_label,
+      r$irr, r$ci_lower, r$ci_upper, p_str
+    )
+  }, character(1L))
+
+  paste(lines, collapse = " ")
 }

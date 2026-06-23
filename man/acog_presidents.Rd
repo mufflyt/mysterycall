@@ -28,7 +28,7 @@ head(acog_presidents)
 
 }
 \seealso{
-Other datasets:
+Other datasets: 
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{city_state_to_lat_long}},

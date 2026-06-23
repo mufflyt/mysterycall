@@ -25,7 +25,6 @@
 #' @seealso [mysterycall_plot_scatter()] for jittered point plots;
 #'   [mysterycall_plot_density()] for density distribution plots.
 #' @importFrom dplyr filter mutate %>%
-#' @importFrom ggplot2 ggplot geom_point geom_line stat_summary ylab theme_minimal element_rect element_blank ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
@@ -57,6 +56,9 @@ mysterycall_plot_line <- function(plot_data,
                              line_color = "viridis",
                              verbose = TRUE) {
 
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' is required for mysterycall_plot_line(). Install with: install.packages('ggplot2')", call. = FALSE)
+  }
   y_transform <- match.arg(y_transform, c("none", "log", "sqrt"))
 
   # Remove NA values from the y_var column

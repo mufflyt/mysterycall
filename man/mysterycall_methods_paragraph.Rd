@@ -51,11 +51,10 @@ mysterycall_methods_paragraph(
 \code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}} for the demographics summary;
 \code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} for the results section.
 
-Other manuscript:
-\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
-\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
-\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
-\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}}
+Other manuscript: 
+\code{\link{mysterycall_format_results_table}()},
+\code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_save_plot}()},
+\code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}
-\keyword{internal}
