@@ -14,11 +14,12 @@ mysterycall_marginal_effects(
 }
 \arguments{
 \item{model}{A fitted \code{glm} (with \code{family = poisson}), a \code{glmerMod} object
-from lme4, or a \code{mysterycall_poisson_model} object. For
-\code{mysterycall_poisson_model}, the \verb{$model} component is extracted
-automatically. Note: \code{mysterycall_nb_model} objects (glmmTMB) are not
-supported here because glmmTMB uses a different predict interface; use
-the \strong{marginaleffects} package for NB models.}
+from lme4, a \code{mysterycall_poisson_model}, or a \code{mysterycall_nb_model}
+object. For wrapper objects the \verb{$model} component is extracted
+automatically. For \code{mysterycall_nb_model} (glmmTMB), average marginal
+effects are computed via \code{\link[marginaleffects:avg_slopes]{marginaleffects::avg_slopes()}} and the result is
+coerced into the standard \code{term} / \code{level} / \code{ame} / \code{variable_type}
+data frame returned by this function.}
 
 \item{term}{Character vector of predictor names for which to compute
 marginal effects. Pass the variable name (e.g. \code{"cyl"}), not the
@@ -99,7 +100,8 @@ mysterycall_marginal_effects(m, term = "wt")
 mysterycall_marginal_effects(m, term = "cyl")
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}}
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
+\code{\link[marginaleffects:avg_slopes]{marginaleffects::avg_slopes()}} for direct use with glmmTMB NB models.
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
@@ -111,10 +113,13 @@ Other outcomes:
 \code{\link{.wait_stats}()},
 \code{\link{.wilson_ci}()},
 \code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_auto_model}()},
 \code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_model_metrics}()},
 \code{\link{mysterycall_nb_model}()},
+\code{\link{mysterycall_nb_power}()},
 \code{\link{mysterycall_plot_distribution}()},
 \code{\link{mysterycall_plot_effect}()},
 \code{\link{mysterycall_plot_emmeans_full}()},
@@ -128,6 +133,7 @@ Other outcomes:
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{print.mysterycall_nb_model}()},
+\code{\link{print.mysterycall_nb_power}()},
 \code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

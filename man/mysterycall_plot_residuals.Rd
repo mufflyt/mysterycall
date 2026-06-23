@@ -4,35 +4,64 @@
 \alias{mysterycall_plot_residuals}
 \title{Residual diagnostic plots for a fitted model}
 \usage{
-mysterycall_plot_residuals(model)
+mysterycall_plot_residuals(
+  model,
+  use_dharma = TRUE,
+  n_sim = 250L,
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A \code{mysterycall_poisson_model} or \code{mysterycall_nb_model} result,
-or a \code{glm}, \code{glmerMod}, \code{glmmTMB}, or \code{lm} object.}
+or a bare \code{glm}, \code{glmerMod}, \code{glmmTMB}, or \code{lm} object.}
+
+\item{use_dharma}{Logical. When \code{TRUE} (default) and DHARMa is installed,
+uses \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} for residual diagnostics. Set to
+\code{FALSE} to force the Pearson residual ggplot2 panels.}
+
+\item{n_sim}{Integer. Number of simulations passed to
+\code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}. Higher values give smoother distributions
+at the cost of time. Default \code{250L}.}
+
+\item{plot}{Logical. When \code{TRUE} (default), draws the DHARMa diagnostic
+plot to the active graphics device. Ignored on the Pearson path (those
+plots are always returned, never auto-drawn).}
+
+\item{...}{Additional arguments forwarded to \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}
+(DHARMa path only).}
 }
 \value{
-A named list with three elements, each a \code{ggplot} object:
+\strong{DHARMa path} (\code{use_dharma = TRUE} and DHARMa installed):
+Returns the \code{DHARMaResiduals} simulation object invisibly. Pass it to
+\code{\link[DHARMa:testZeroInflation]{DHARMa::testZeroInflation()}}, \code{\link[DHARMa:testDispersion]{DHARMa::testDispersion()}}, or
+\code{\link[DHARMa:testTemporalAutocorrelation]{DHARMa::testTemporalAutocorrelation()}} for targeted diagnostics.
+
+\strong{Pearson path} (\code{use_dharma = FALSE} or DHARMa not installed):
+Returns a named list of three \code{ggplot} objects:
 \describe{
-\item{\code{residuals_vs_fitted}}{Pearson residuals vs. fitted values with a horizontal dashed reference at zero.}
+\item{\code{residuals_vs_fitted}}{Pearson residuals vs. fitted values.}
 \item{\code{qq}}{Normal Q-Q plot of Pearson residuals.}
-\item{\code{scale_location}}{Square-root of |Pearson residuals| vs. fitted values (spread-location plot).}
+\item{\code{scale_location}}{Scale-location (spread-location) plot.}
 }
 }
 \description{
-Returns a named list of three ggplot2 plots: residuals vs. fitted values,
-a normal Q-Q plot of Pearson residuals, and a scale-location plot. Works
-with \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} results, \code{glm}, \code{glmerMod}, or \code{lm}
-objects.
+When DHARMa is installed (recommended), uses randomized quantile residuals
+via \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} — the current gold standard for diagnosing
+GLMMs. Falls back to Pearson residual ggplot2 panels when DHARMa is
+unavailable or \code{use_dharma = FALSE}.
 }
 \examples{
+# Pearson path (no DHARMa needed)
 m <- glm(mpg ~ wt, data = mtcars, family = gaussian())
-plots <- mysterycall_plot_residuals(m)
+plots <- mysterycall_plot_residuals(m, use_dharma = FALSE)
 plots$qq
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} to fit the model passed here;
-\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}} for marginal-effect plots;
-\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write any element to disk.
+\code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} for the simulation engine;
+\code{\link[=mysterycall_check_zero_inflation]{mysterycall_check_zero_inflation()}} for a targeted zero-inflation test;
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} / \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} to fit the model;
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write Pearson-path plots to disk.
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
@@ -44,11 +73,14 @@ Other outcomes:
 \code{\link{.wait_stats}()},
 \code{\link{.wilson_ci}()},
 \code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_auto_model}()},
 \code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
 \code{\link{mysterycall_nb_model}()},
+\code{\link{mysterycall_nb_power}()},
 \code{\link{mysterycall_plot_distribution}()},
 \code{\link{mysterycall_plot_effect}()},
 \code{\link{mysterycall_plot_emmeans_full}()},
@@ -61,6 +93,7 @@ Other outcomes:
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{print.mysterycall_nb_model}()},
+\code{\link{print.mysterycall_nb_power}()},
 \code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

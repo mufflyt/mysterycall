@@ -21,11 +21,12 @@ NULL
 #' Use [mysterycall_bootstrap_ci()] for bootstrap-based confidence intervals.
 #'
 #' @param model A fitted `glm` (with `family = poisson`), a `glmerMod` object
-#'   from lme4, or a `mysterycall_poisson_model` object. For
-#'   `mysterycall_poisson_model`, the `$model` component is extracted
-#'   automatically. Note: `mysterycall_nb_model` objects (glmmTMB) are not
-#'   supported here because glmmTMB uses a different predict interface; use
-#'   the **marginaleffects** package for NB models.
+#'   from lme4, a `mysterycall_poisson_model`, or a `mysterycall_nb_model`
+#'   object. For wrapper objects the `$model` component is extracted
+#'   automatically. For `mysterycall_nb_model` (glmmTMB), average marginal
+#'   effects are computed via [marginaleffects::avg_slopes()] and the result is
+#'   coerced into the standard `term` / `level` / `ame` / `variable_type`
+#'   data frame returned by this function.
 #' @param term Character vector of predictor names for which to compute
 #'   marginal effects. Pass the variable name (e.g. `"cyl"`), not the
 #'   dummy-encoded column name (e.g. `"factor(cyl)6"`). If `NULL` (default),
@@ -73,7 +74,8 @@ NULL
 #'
 #' @importFrom stats model.frame model.matrix predict formula terms
 #' @family outcomes
-#' @seealso [mysterycall_poisson_model()], [mysterycall_model_metrics()]
+#' @seealso [mysterycall_poisson_model()], [mysterycall_model_metrics()],
+#'   [marginaleffects::avg_slopes()] for direct use with glmmTMB NB models.
 #' @keywords internal
 #'
 #' @examples
@@ -91,11 +93,41 @@ mysterycall_marginal_effects <- function(model,
 
   # -- Unwrap package model objects --------------------------------------------
   if (inherits(model, "mysterycall_nb_model")) {
-    stop(
-      "`mysterycall_nb_model` (glmmTMB) is not supported by this function. ",
-      "Use the marginaleffects package: marginaleffects::avg_slopes(model$model).",
-      call. = FALSE
+    if (!requireNamespace("marginaleffects", quietly = TRUE)) {
+      stop(
+        "Package 'marginaleffects' is required for NB models. ",
+        "Install with: install.packages('marginaleffects')",
+        call. = FALSE
+      )
+    }
+    fit <- model$model
+    me_args <- list(fit)
+    if (!is.null(term)) me_args$variables <- term
+    raw <- do.call(marginaleffects::avg_slopes, c(me_args, list(...)))
+    raw_df <- as.data.frame(raw)
+
+    # Detect variable type from the bare model frame
+    mf_nb <- tryCatch(fit$frame, error = function(e) NULL)
+    .vtype <- function(trm) {
+      if (!is.null(mf_nb) && trm %in% names(mf_nb)) {
+        cls <- class(mf_nb[[trm]])[1L]
+        if (cls %in% c("factor", "character", "ordered")) return("categorical")
+      }
+      "continuous"
+    }
+
+    out <- data.frame(
+      term          = if ("term" %in% names(raw_df)) raw_df$term else NA_character_,
+      level         = if ("contrast" %in% names(raw_df)) raw_df$contrast else NA_character_,
+      ame           = if ("estimate" %in% names(raw_df)) raw_df$estimate else NA_real_,
+      variable_type = vapply(
+        if ("term" %in% names(raw_df)) raw_df$term else character(nrow(raw_df)),
+        .vtype, character(1L)
+      ),
+      stringsAsFactors = FALSE
     )
+    rownames(out) <- NULL
+    return(out)
   }
   if (inherits(model, "mysterycall_poisson_model")) {
     model <- model$model

@@ -10,7 +10,8 @@ mysterycall_methods_paragraph(
   specialties,
   insurance_types = c("Medicaid", "commercial insurance"),
   outcome = "business days until a new-patient appointment",
-  software = "R (R Foundation for Statistical Computing)"
+  software = "R (R Foundation for Statistical Computing)",
+  model_family = c("poisson", "negative_binomial", "auto")
 )
 }
 \arguments{
@@ -28,6 +29,11 @@ Default \code{"business days until a new-patient appointment"}.}
 
 \item{software}{Character scalar naming the analysis software.
 Default \code{"R (R Foundation for Statistical Computing)"}.}
+
+\item{model_family}{One of \code{"poisson"} (default), \code{"negative_binomial"}, or
+\code{"auto"}. Controls the statistical-model sentence appended after the
+software statement. Alternatively, pass a fitted \code{mysterycall_poisson_model}
+or \code{mysterycall_nb_model} object and the family is detected automatically.}
 }
 \value{
 A single character string containing a ready-to-paste methods
@@ -44,6 +50,13 @@ mysterycall_methods_paragraph(
   n_cities      = 10,
   specialties   = c("otolaryngology", "neurotology"),
   insurance_types = c("Medicaid", "Blue Cross Blue Shield")
+)
+
+mysterycall_methods_paragraph(
+  n_physicians    = 216,
+  n_cities        = 12,
+  specialties     = "otolaryngology",
+  model_family    = "negative_binomial"
 )
 }
 \seealso{

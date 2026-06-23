@@ -114,6 +114,10 @@ mysterycall_summarize_demographics <- function(data,
 #'   Default `"business days until a new-patient appointment"`.
 #' @param software Character scalar naming the analysis software.
 #'   Default `"R (R Foundation for Statistical Computing)"`.
+#' @param model_family One of `"poisson"` (default), `"negative_binomial"`, or
+#'   `"auto"`. Controls the statistical-model sentence appended after the
+#'   software statement. Alternatively, pass a fitted `mysterycall_poisson_model`
+#'   or `mysterycall_nb_model` object and the family is detected automatically.
 #'
 #' @return A single character string containing a ready-to-paste methods
 #'   paragraph describing the mystery-caller study design.
@@ -131,18 +135,30 @@ mysterycall_summarize_demographics <- function(data,
 #'   specialties   = c("otolaryngology", "neurotology"),
 #'   insurance_types = c("Medicaid", "Blue Cross Blue Shield")
 #' )
+#'
+#' mysterycall_methods_paragraph(
+#'   n_physicians    = 216,
+#'   n_cities        = 12,
+#'   specialties     = "otolaryngology",
+#'   model_family    = "negative_binomial"
+#' )
 mysterycall_methods_paragraph <- function(n_physicians,
                                           n_cities,
                                           specialties,
                                           insurance_types = c("Medicaid", "commercial insurance"),
                                           outcome         = "business days until a new-patient appointment",
-                                          software        = "R (R Foundation for Statistical Computing)") {
+                                          software        = "R (R Foundation for Statistical Computing)",
+                                          model_family    = c("poisson", "negative_binomial", "auto")) {
   if (!is.numeric(n_physicians) || n_physicians < 1)
     stop("`n_physicians` must be a positive number.", call. = FALSE)
   if (!is.numeric(n_cities) || n_cities < 1)
     stop("`n_cities` must be a positive number.", call. = FALSE)
   if (!is.character(specialties) || length(specialties) == 0L)
     stop("`specialties` must be a non-empty character vector.", call. = FALSE)
+
+  if (inherits(model_family, "mysterycall_nb_model"))      model_family <- "negative_binomial"
+  if (inherits(model_family, "mysterycall_poisson_model")) model_family <- "poisson"
+  model_family <- match.arg(model_family)
 
   spec_str <- if (length(specialties) == 1L) {
     specialties
@@ -151,6 +167,24 @@ mysterycall_methods_paragraph <- function(n_physicians,
           "and", specialties[[length(specialties)]])
   }
   ins_str <- paste(insurance_types, collapse = " and ")
+
+  model_sentence <- switch(
+    model_family,
+    poisson = paste0(
+      "A multilevel Poisson regression model with physician random intercepts was fit ",
+      "using the lme4 package to estimate incidence rate ratios (IRR) for the primary outcomes."
+    ),
+    negative_binomial = paste0(
+      "A multilevel negative binomial regression model with physician random intercepts was fit ",
+      "using the glmmTMB package to account for overdispersion in appointment wait times ",
+      "and estimate incidence rate ratios (IRR)."
+    ),
+    auto = paste0(
+      "Multilevel Poisson regression was used as the primary model; ",
+      "if overdispersion was detected (Pearson phi > 2), a negative binomial model was ",
+      "substituted and reported instead."
+    )
+  )
 
   sprintf(
     paste0(
@@ -161,14 +195,16 @@ mysterycall_methods_paragraph <- function(n_physicians,
       "office to request the earliest available new-patient appointment. ",
       "Calls were standardized and completed within one week of each other. ",
       "The primary outcome was %s. ",
-      "All analyses were performed using %s."
+      "All analyses were performed using %s. ",
+      "%s"
     ),
     format(as.integer(n_physicians), big.mark = ","),
     spec_str,
     format(as.integer(n_cities), big.mark = ","),
     ins_str,
     outcome,
-    software
+    software,
+    model_sentence
   )
 }
 
