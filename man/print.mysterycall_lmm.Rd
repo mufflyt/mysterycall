@@ -60,6 +60,7 @@ Other outcomes:
 \code{\link{mysterycall_sensitivity}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{plot.mysterycall_lmm}()},
+\code{\link{print.mysterycall_auto_model}()},
 \code{\link{print.mysterycall_icc}()},
 \code{\link{print.mysterycall_missing_data}()},
 \code{\link{print.mysterycall_nb_model}()},

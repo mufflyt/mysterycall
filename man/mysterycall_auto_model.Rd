@@ -2,7 +2,7 @@
 % Please edit documentation in R/auto_model.R
 \name{mysterycall_auto_model}
 \alias{mysterycall_auto_model}
-\title{Automatically select Poisson or negative binomial model based on overdispersion}
+\title{Automatically select and compare wait-time models}
 \usage{
 mysterycall_auto_model(
   data,
@@ -11,46 +11,82 @@ mysterycall_auto_model(
   random_intercept,
   phi_threshold = 2,
   conf_level = 0.95,
+  include_lmm = TRUE,
+  lmm_normality_threshold = 0.05,
   ...
 )
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{outcome}{Character scalar naming the count outcome column.}
-
-\item{predictors}{Character vector of fixed-effect predictor column names.}
-
-\item{random_intercept}{Character scalar naming the random-intercept grouping
+\item{outcome}{Character scalar. Name of the count (wait-day) outcome
 column.}
 
-\item{phi_threshold}{Numeric. Pearson phi above which the NB model is
-substituted. Default \code{2.0} (the conventional threshold).}
+\item{predictors}{Character vector of fixed-effect column names.}
+
+\item{random_intercept}{Character scalar. Grouping column for the
+physician random intercept.}
+
+\item{phi_threshold}{Numeric. Pearson phi above which the NB model
+replaces Poisson. Default \code{2.0}.}
 
 \item{conf_level}{Numeric. Confidence level for Wald CIs. Default \code{0.95}.}
 
-\item{...}{Additional arguments forwarded to both model-fitting functions.}
+\item{include_lmm}{Logical. Fit an LMM and evaluate its suitability?
+Default \code{TRUE}. The LMM is \emph{never} the primary model; it is always
+a secondary communication/sensitivity check.}
+
+\item{lmm_normality_threshold}{Numeric. Shapiro-Wilk p-value threshold
+above which LMM residuals are considered approximately normal.
+Default \code{0.05}.}
+
+\item{...}{Additional arguments forwarded to all model-fitting functions.}
 }
 \value{
-Either a \code{mysterycall_poisson_model} or \code{mysterycall_nb_model} object,
-depending on the overdispersion check. The returned object has an extra
-element \verb{$selection} — a list with:
+The selected count model — either a \code{mysterycall_poisson_model}
+or \code{mysterycall_nb_model} — with an extra element \verb{$selection}:
 \describe{
-\item{\code{poisson_phi}}{Numeric. Overdispersion from the initial Poisson fit.}
+\item{\code{poisson_phi}}{Numeric. Overdispersion from the initial Poisson
+fit.}
 \item{\code{model_chosen}}{Character. \code{"poisson"} or \code{"negative_binomial"}.}
-\item{\code{reason}}{Character. One-sentence explanation of the choice.}
+\item{\code{reason}}{Character. Explanation of count-model selection.}
+\item{\code{lmm}}{A \code{mysterycall_lmm} object, or \code{NULL} when
+\code{include_lmm = FALSE} or fitting failed.}
+\item{\code{lmm_shapiro_p}}{Numeric. Shapiro-Wilk p-value on LMM residuals,
+or \code{NA}.}
+\item{\code{lmm_defensible}}{Logical. \code{TRUE} when LMM residuals pass
+normality \strong{and} outcome range exceeds 30 days.}
+\item{\code{lmm_recommendation}}{Character. Plain-language guidance on
+whether and how to use the LMM.}
+\item{\code{recommendation}}{Character. Overall one-paragraph guidance
+covering both the primary model and the LMM.}
 }
 }
 \description{
-Fits a \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} first. If the Pearson overdispersion ratio
-(phi = Pearson chi-square / residual df) exceeds \code{phi_threshold}, re-fits the
-same specification as a \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} and returns that instead.
-Either way, a message explains the decision.
+Fits a Poisson GLMM first, checks overdispersion, and upgrades to a
+negative binomial GLMM when warranted. Optionally fits a Linear Mixed
+Model (LMM) in parallel and evaluates whether it is defensible as a
+communication/sensitivity tool. Returns the statistically preferred
+count model with a structured recommendation attached.
 }
 \details{
-This is a convenience wrapper for the two-step workflow recommended in
-\code{vignette("adding-covariates")}. It does not change any modelling decisions
-that require domain knowledge (covariate selection, random effects structure).
+\strong{Decision tree}
+\enumerate{
+\item Fit Poisson GLMM and compute Pearson overdispersion (phi).
+\item If phi <= \code{phi_threshold}: primary model = Poisson.
+Otherwise: re-fit as negative binomial (NB) GLMM.
+\item If \code{include_lmm = TRUE}: fit LMM and run a Shapiro-Wilk normality
+test on the residuals. If residuals are approximately normal
+(p >= \code{lmm_normality_threshold}) \strong{and} the outcome range exceeds
+30 days, the LMM is flagged as defensible for reporting
+day-scale coefficients alongside the primary count model.
+Otherwise the LMM is flagged as not recommended.
+}
+
+The \strong{primary return value} is the selected count model (Poisson or NB)
+— the same class as \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} /
+\code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}, so all downstream functions work unchanged.
+The LMM and routing metadata live in \code{result$selection}.
 }
 \examples{
 \dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
@@ -67,7 +103,7 @@ print(result)
 }
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}},
-\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}}
+\code{\link[=mysterycall_lmm]{mysterycall_lmm()}}, \code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}}
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
@@ -106,6 +142,7 @@ Other outcomes:
 \code{\link{mysterycall_sensitivity}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{plot.mysterycall_lmm}()},
+\code{\link{print.mysterycall_auto_model}()},
 \code{\link{print.mysterycall_icc}()},
 \code{\link{print.mysterycall_lmm}()},
 \code{\link{print.mysterycall_missing_data}()},
