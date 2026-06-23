@@ -61,5 +61,9 @@ mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance"
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces the \code{model_result}
 input; \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}} for tabular summaries of the
 same outcome data.
+
+Other reporting: 
+\code{\link{mysterycall_irr_to_days}()},
+\code{\link{print.mysterycall_irr_days}()}
 }
 \concept{reporting}
