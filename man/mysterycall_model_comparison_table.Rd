@@ -53,6 +53,7 @@ comparison; \code{\link[=mysterycall_auto_model]{mysterycall_auto_model()}} for 
 Other manuscript: 
 \code{\link{mysterycall_combined_results_table}()},
 \code{\link{mysterycall_export_results_docx}()},
+\code{\link{mysterycall_flow_diagram}()},
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
 \code{\link{mysterycall_results_report}()},

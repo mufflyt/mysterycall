@@ -118,6 +118,7 @@ print(report)
 Other manuscript: 
 \code{\link{mysterycall_combined_results_table}()},
 \code{\link{mysterycall_export_results_docx}()},
+\code{\link{mysterycall_flow_diagram}()},
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
 \code{\link{mysterycall_model_comparison_table}()},

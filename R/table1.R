@@ -407,3 +407,25 @@ print.mysterycall_table1 <- function(x, ...) {
   print(x$table, n = Inf, ...)
   invisible(x)
 }
+
+#' Convert a mysterycall_table1 to a flextable for Word export
+#'
+#' Converts a [mysterycall_table1()] object to a `flextable` suitable for
+#' inclusion in a Word document via [mysterycall_export_results_docx()].
+#'
+#' @param x A `mysterycall_table1` object.
+#' @param ... Passed to [flextable::flextable()].
+#' @return A `flextable` object.
+#' @family table
+#' @seealso [mysterycall_export_results_docx()], [mysterycall_table1()]
+#' @export
+as_flex_table.mysterycall_table1 <- function(x, ...) {
+  if (!requireNamespace("flextable", quietly = TRUE))
+    stop("Install 'flextable' for Word export: install.packages('flextable')",
+         call. = FALSE)
+  tbl_df <- as.data.frame(x$table)
+  ft <- flextable::flextable(tbl_df, ...)
+  ft <- flextable::autofit(ft)
+  ft <- flextable::theme_booktabs(ft)
+  ft
+}

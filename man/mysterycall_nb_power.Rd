@@ -96,6 +96,8 @@ Other outcomes:
 \code{\link{mysterycall_auto_model}()},
 \code{\link{mysterycall_bootstrap_ci}()},
 \code{\link{mysterycall_check_zero_inflation}()},
+\code{\link{mysterycall_icc}()},
+\code{\link{mysterycall_icc_sentence}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -109,13 +111,18 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
+\code{\link{mysterycall_power_curve}()},
+\code{\link{mysterycall_predicted_means}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_sensitivity}()},
 \code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_icc}()},
 \code{\link{print.mysterycall_nb_model}()},
 \code{\link{print.mysterycall_nb_power}()},
 \code{\link{print.mysterycall_poisson_model}()},
+\code{\link{print.mysterycall_power_curve}()},
+\code{\link{print.mysterycall_predicted_means}()},
 \code{\link{print.mysterycall_sensitivity}()}
 }
 \concept{outcomes}
