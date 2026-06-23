@@ -28,7 +28,6 @@ Other table:
 \code{\link{.t1_fmt_pval}()},
 \code{\link{.t1_rows_categorical}()},
 \code{\link{.t1_rows_continuous}()},
-\code{\link{as_flex_table.mysterycall_table1}()},
 \code{\link{mysterycall_table1}()},
 \code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
