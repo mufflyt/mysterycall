@@ -48,6 +48,9 @@ NULL
 #'   \item{`n`}{`integer`. Complete-case rows used.}
 #'   \item{`n_dropped`}{`integer`. Rows excluded for missing values.}
 #'   \item{`n_clusters`}{`integer`. Unique values of `random_intercept`.}
+#'   \item{`overdispersion`}{`numeric`. Pearson chi-square / residual df after
+#'     NB fit. Values near 1 indicate adequate fit. Values > 2 suggest the NB
+#'     model still underfits; consider zero-inflated NB.}
 #'   \item{`convergence`}{`list`. `converged` (logical), `messages` (character
 #'     vector).}
 #'   \item{`aic`}{`numeric`. AIC.}
@@ -149,6 +152,29 @@ mysterycall_nb_model <- function(data,
     stop("No complete cases remain after removing rows with missing values.", call. = FALSE)
   }
 
+  # -- Degrees-of-freedom check ------------------------------------------------
+  est_df <- 1L  # intercept
+  for (.pred in predictors) {
+    .x <- data_cc[[.pred]]
+    if (is.factor(.x) || is.character(.x)) {
+      est_df <- est_df + length(unique(.x[!is.na(.x)])) - 1L
+    } else {
+      est_df <- est_df + 1L
+    }
+  }
+  epv <- nrow(data_cc) / est_df
+  if (epv < 5) {
+    warning(sprintf(
+      "Very low events-per-variable ratio: %d observations / %d model parameters = %.1f obs/param. Model estimates will be unreliable. Remove predictors or collect more data.",
+      nrow(data_cc), est_df, epv
+    ), call. = FALSE)
+  } else if (epv < 10) {
+    warning(sprintf(
+      "Low events-per-variable ratio: %d observations / %d model parameters = %.1f obs/param. Convention recommends >=10 per parameter. Consider removing low-priority predictors.",
+      nrow(data_cc), est_df, epv
+    ), call. = FALSE)
+  }
+
   factor_refs <- Filter(Negate(is.null), lapply(
     setNames(predictors, predictors),
     function(pred) {
@@ -228,6 +254,30 @@ mysterycall_nb_model <- function(data,
 
   theta <- tryCatch(sigma(model), error = function(e) NA_real_)
 
+  # -- Overdispersion check for NB ---------------------------------------------
+  y_obs       <- data_cc[[outcome]]
+  y_hat       <- tryCatch(fitted(model), error = function(e) rep(NA_real_, length(y_obs)))
+  df_resid_nb <- max(nrow(data_cc) - nrow(irr_table), 1L)
+  pearson_nb  <- (y_obs - y_hat) / sqrt(y_hat + y_hat^2 / max(theta, 0.001))
+  overdispersion <- sum(pearson_nb^2, na.rm = TRUE) / df_resid_nb
+
+  if (!is.na(theta) && theta < 1) {
+    warning(sprintf(
+      "Extreme overdispersion: theta = %.2f (< 1). NB may still underfit. Consider a zero-inflated negative binomial model.",
+      theta
+    ), call. = FALSE)
+  } else if (overdispersion > 2) {
+    warning(sprintf(
+      "Residual overdispersion phi = %.2f after NB fit. The negative binomial may not fully account for the excess variance. Check for zero-inflation or outliers.",
+      overdispersion
+    ), call. = FALSE)
+  } else if (!is.na(theta) && theta > 100) {
+    message(sprintf(
+      "theta = %.1f suggests minimal overdispersion; a Poisson model may be adequate (compare AIC).",
+      theta
+    ))
+  }
+
   re_df <- tryCatch(
     as.data.frame(lme4::VarCorr(model)),
     error = function(e) data.frame()
@@ -248,6 +298,7 @@ mysterycall_nb_model <- function(data,
       model          = model,
       irr_table      = irr_table,
       theta          = theta,
+      overdispersion = overdispersion,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
@@ -288,14 +339,22 @@ print.mysterycall_nb_model <- function(x, digits = 3, ...) {
     x$n, x$n_clusters, x$aic, x$bic
   ))
   cat(sprintf("  Dispersion (theta) = %.3f  [higher = less overdispersion]\n", x$theta))
+  if (!is.null(x$overdispersion) && x$overdispersion > 2) {
+    cat(sprintf("  Residual overdispersion phi = %.2f (NB may underfit)\n", x$overdispersion))
+  }
 
   if (x$n_dropped > 0L) {
     cat(sprintf("  (%d row(s) excluded for missing values)\n", x$n_dropped))
   }
 
+  flags <- character(0L)
+  if (!x$convergence$converged) flags <- c(flags, "convergence issues")
+  if (!is.null(x$overdispersion) && x$overdispersion > 2) flags <- c(flags, sprintf("residual phi=%.2f", x$overdispersion))
+  if (length(flags)) cat(sprintf("  Warning: %s\n", paste(flags, collapse = "; ")))
+
   if (!x$convergence$converged) {
     msgs <- x$convergence$messages
-    cat(sprintf("  Warning: convergence issues — %s\n",
+    cat(sprintf("  Convergence detail — %s\n",
                 paste(msgs[nzchar(msgs)], collapse = "; ")))
   }
 

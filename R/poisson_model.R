@@ -178,6 +178,29 @@ mysterycall_poisson_model <- function(data,
     ))
   }
 
+  # -- Degrees-of-freedom check ------------------------------------------------
+  est_df <- 1L  # intercept
+  for (.pred in predictors) {
+    .x <- data_cc[[.pred]]
+    if (is.factor(.x) || is.character(.x)) {
+      est_df <- est_df + length(unique(.x[!is.na(.x)])) - 1L
+    } else {
+      est_df <- est_df + 1L
+    }
+  }
+  epv <- nrow(data_cc) / est_df
+  if (epv < 5) {
+    warning(sprintf(
+      "Very low events-per-variable ratio: %d observations / %d model parameters = %.1f obs/param. Model estimates will be unreliable. Remove predictors or collect more data.",
+      nrow(data_cc), est_df, epv
+    ), call. = FALSE)
+  } else if (epv < 10) {
+    warning(sprintf(
+      "Low events-per-variable ratio: %d observations / %d model parameters = %.1f obs/param. Convention recommends >=10 per parameter. Consider removing low-priority predictors.",
+      nrow(data_cc), est_df, epv
+    ), call. = FALSE)
+  }
+
   # -- Reference levels for factor/character predictors -------------------------
   factor_refs <- Filter(Negate(is.null), lapply(
     setNames(predictors, predictors),

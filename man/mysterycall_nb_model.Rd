@@ -54,6 +54,9 @@ predictors.}
 \item{\code{n}}{\code{integer}. Complete-case rows used.}
 \item{\code{n_dropped}}{\code{integer}. Rows excluded for missing values.}
 \item{\code{n_clusters}}{\code{integer}. Unique values of \code{random_intercept}.}
+\item{\code{overdispersion}}{\code{numeric}. Pearson chi-square / residual df after
+NB fit. Values near 1 indicate adequate fit. Values > 2 suggest the NB
+model still underfits; consider zero-inflated NB.}
 \item{\code{convergence}}{\code{list}. \code{converged} (logical), \code{messages} (character
 vector).}
 \item{\code{aic}}{\code{numeric}. AIC.}
