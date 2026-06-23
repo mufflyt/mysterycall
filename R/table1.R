@@ -250,6 +250,10 @@ NULL
 #' @param variable_labels Optional named character vector mapping column names
 #'   to display labels, e.g. `c(wait_days = "Wait time (days)")`. Unlabelled
 #'   columns use their column name.
+#' @param output_path Character scalar or `NULL`. When a path ending in
+#'   `.docx` is supplied (e.g. `"table1.docx"`), the table is exported to a
+#'   Word document via the `flextable` and `officer` packages and the path is
+#'   stored in `$docx_path`. Requires both packages to be installed.
 #'
 #' @return A list of class `mysterycall_table1` with:
 #' \describe{
@@ -260,6 +264,8 @@ NULL
 #'   \item{`column_ns`}{Named integer vector of sample sizes per column.}
 #'   \item{`stratify_by`}{The name of the stratifying column, or `NULL`.}
 #'   \item{`n`}{Total rows in `data`.}
+#'   \item{`docx_path`}{Character path to the written `.docx` file, or `NULL`
+#'     when `output_path` is not supplied.}
 #' }
 #'
 #' @importFrom stats wilcox.test kruskal.test chisq.test fisher.test sd median quantile
@@ -291,7 +297,8 @@ mysterycall_table1 <- function(data,
                                 digits          = 1L,
                                 p_value         = TRUE,
                                 min_cell        = 5L,
-                                variable_labels = NULL) {
+                                variable_labels = NULL,
+                                output_path     = NULL) {
 
   # -- Validate ---------------------------------------------------------------
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
@@ -369,8 +376,33 @@ mysterycall_table1 <- function(data,
     if (!is.null(stratify_by)) setNames(group_ns, groups) else integer(0L)
   )
 
+  docx_path <- NULL
+  if (!is.null(output_path)) {
+    if (!requireNamespace("flextable", quietly = TRUE) ||
+        !requireNamespace("officer",   quietly = TRUE)) {
+      warning(
+        "Packages 'flextable' and 'officer' are required for Word export. ",
+        "Install with: install.packages(c('flextable','officer'))",
+        call. = FALSE
+      )
+    } else {
+      ft  <- flextable::flextable(as.data.frame(tbl))
+      ft  <- flextable::autofit(ft)
+      ft  <- flextable::theme_booktabs(ft)
+      doc <- officer::read_docx()
+      doc <- flextable::body_add_flextable(doc, ft)
+      print(doc, target = output_path)
+      message("Table 1 written to: ", output_path)
+      docx_path <- output_path
+    }
+  }
+
   structure(
-    list(table = tbl, column_ns = col_ns, stratify_by = stratify_by, n = n_overall),
+    list(table       = tbl,
+         column_ns   = col_ns,
+         stratify_by = stratify_by,
+         n           = n_overall,
+         docx_path   = docx_path),
     class = "mysterycall_table1"
   )
 }
@@ -408,17 +440,12 @@ print.mysterycall_table1 <- function(x, ...) {
   invisible(x)
 }
 
-#' Convert a mysterycall_table1 to a flextable for Word export
-#'
-#' Converts a [mysterycall_table1()] object to a `flextable` suitable for
-#' inclusion in a Word document via [mysterycall_export_results_docx()].
+#' Convert a mysterycall_table1 to a flextable (internal)
 #'
 #' @param x A `mysterycall_table1` object.
 #' @param ... Passed to [flextable::flextable()].
 #' @return A `flextable` object.
-#' @family table
-#' @seealso [mysterycall_export_results_docx()], [mysterycall_table1()]
-#' @export
+#' @keywords internal
 as_flex_table.mysterycall_table1 <- function(x, ...) {
   if (!requireNamespace("flextable", quietly = TRUE))
     stop("Install 'flextable' for Word export: install.packages('flextable')",

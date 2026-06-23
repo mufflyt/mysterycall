@@ -2,7 +2,7 @@
 % Please edit documentation in R/table1.R
 \name{as_flex_table.mysterycall_table1}
 \alias{as_flex_table.mysterycall_table1}
-\title{Convert a mysterycall_table1 to a flextable for Word export}
+\title{Convert a mysterycall_table1 to a flextable (internal)}
 \usage{
 as_flex_table.mysterycall_table1(x, ...)
 }
@@ -15,26 +15,6 @@ as_flex_table.mysterycall_table1(x, ...)
 A \code{flextable} object.
 }
 \description{
-Converts a \code{\link[=mysterycall_table1]{mysterycall_table1()}} object to a \code{flextable} suitable for
-inclusion in a Word document via \code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}}.
+Convert a mysterycall_table1 to a flextable (internal)
 }
-\seealso{
-\code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}}, \code{\link[=mysterycall_table1]{mysterycall_table1()}}
-
-Other table: 
-\code{\link{.t1_cat_pvalue}()},
-\code{\link{.t1_cont_pvalue}()},
-\code{\link{.t1_fmt_mean_sd}()},
-\code{\link{.t1_fmt_median_iqr}()},
-\code{\link{.t1_fmt_pct}()},
-\code{\link{.t1_fmt_pval}()},
-\code{\link{.t1_rows_categorical}()},
-\code{\link{.t1_rows_continuous}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_table1}()}
-}
-\concept{table}
+\keyword{internal}

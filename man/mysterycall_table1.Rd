@@ -13,7 +13,8 @@ mysterycall_table1(
   digits = 1L,
   p_value = TRUE,
   min_cell = 5L,
-  variable_labels = NULL
+  variable_labels = NULL,
+  output_path = NULL
 )
 }
 \arguments{
@@ -47,6 +48,11 @@ test is used instead of chi-square (2-group categorical only). Default \code{5}.
 \item{variable_labels}{Optional named character vector mapping column names
 to display labels, e.g. \code{c(wait_days = "Wait time (days)")}. Unlabelled
 columns use their column name.}
+
+\item{output_path}{Character scalar or \code{NULL}. When a path ending in
+\code{.docx} is supplied (e.g. \code{"table1.docx"}), the table is exported to a
+Word document via the \code{flextable} and \code{officer} packages and the path is
+stored in \verb{$docx_path}. Requires both packages to be installed.}
 }
 \value{
 A list of class \code{mysterycall_table1} with:
@@ -58,6 +64,8 @@ category level.}
 \item{\code{column_ns}}{Named integer vector of sample sizes per column.}
 \item{\code{stratify_by}}{The name of the stratifying column, or \code{NULL}.}
 \item{\code{n}}{Total rows in \code{data}.}
+\item{\code{docx_path}}{Character path to the written \code{.docx} file, or \code{NULL}
+when \code{output_path} is not supplied.}
 }
 }
 \description{
@@ -96,7 +104,6 @@ Other table:
 \code{\link{.t1_fmt_pval}()},
 \code{\link{.t1_rows_categorical}()},
 \code{\link{.t1_rows_continuous}()},
-\code{\link{as_flex_table.mysterycall_table1}()},
 \code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_write_arsenal_table}()},
