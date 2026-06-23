@@ -85,8 +85,12 @@ mysterycall_model_comparison_table <- function(models,
       else BIC(m$model)
     }, error = function(e) NA_real_)
 
-    phi_val   <- tryCatch(as.numeric(m$overdispersion), error = function(e) NA_real_)
-    theta_val <- tryCatch(as.numeric(m$theta),          error = function(e) NA_real_)
+    phi_val   <- tryCatch({
+      v <- m$overdispersion; if (is.null(v)) NA_real_ else as.numeric(v)[[1L]]
+    }, error = function(e) NA_real_)
+    theta_val <- tryCatch({
+      v <- m$theta; if (is.null(v)) NA_real_ else as.numeric(v)[[1L]]
+    }, error = function(e) NA_real_)
 
     data.frame(
       Model       = nm,
