@@ -38,9 +38,19 @@ produce the model input; \code{\link[=mysterycall_write_results_paragraph]{myste
 generate a prose summary.
 
 Other manuscript: 
+\code{\link{mysterycall_combined_results_table}()},
+\code{\link{mysterycall_export_results_docx}()},
 \code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_model_comparison_table}()},
+\code{\link{mysterycall_results_report}()},
 \code{\link{mysterycall_sample_size_text}()},
 \code{\link{mysterycall_save_plot}()},
-\code{\link{mysterycall_summarize_demographics}()}
+\code{\link{mysterycall_strobe_checklist}()},
+\code{\link{mysterycall_summarize_demographics}()},
+\code{\link{mysterycall_table2}()},
+\code{\link{print.mysterycall_model_comparison_table}()},
+\code{\link{print.mysterycall_results_report}()},
+\code{\link{print.mysterycall_strobe_checklist}()},
+\code{\link{print.mysterycall_table2}()}
 }
 \concept{manuscript}

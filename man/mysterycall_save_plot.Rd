@@ -54,9 +54,19 @@ mysterycall_save_plot(p, "figures/mpg_vs_weight.png")
 \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for functions that produce plots to pass here.
 
 Other manuscript: 
+\code{\link{mysterycall_combined_results_table}()},
+\code{\link{mysterycall_export_results_docx}()},
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_model_comparison_table}()},
+\code{\link{mysterycall_results_report}()},
 \code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_summarize_demographics}()}
+\code{\link{mysterycall_strobe_checklist}()},
+\code{\link{mysterycall_summarize_demographics}()},
+\code{\link{mysterycall_table2}()},
+\code{\link{print.mysterycall_model_comparison_table}()},
+\code{\link{print.mysterycall_results_report}()},
+\code{\link{print.mysterycall_strobe_checklist}()},
+\code{\link{print.mysterycall_table2}()}
 }
 \concept{manuscript}

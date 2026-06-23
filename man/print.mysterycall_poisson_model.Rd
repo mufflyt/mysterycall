@@ -64,8 +64,10 @@ Other outcomes:
 \code{\link{mysterycall_poisson_model}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
+\code{\link{mysterycall_sensitivity}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{print.mysterycall_nb_model}()},
-\code{\link{print.mysterycall_nb_power}()}
+\code{\link{print.mysterycall_nb_power}()},
+\code{\link{print.mysterycall_sensitivity}()}
 }
 \concept{outcomes}

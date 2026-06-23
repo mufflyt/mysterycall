@@ -67,6 +67,8 @@ Suggests:
     lwgeom,
     memoise,
     mockery,
+    flextable,
+    officer,
     openxlsx,
     patchwork,
     progress,
