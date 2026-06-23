@@ -1,10 +1,19 @@
 Package: mysterycall
 Title: Mystery Caller Study Tools for Healthcare Access Research
-Version: 1.4.0
+Version: 1.5.0
+Date: 2026-06-23
 Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2044-1693"))
-Description: Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.
+Description: Tools for design, analysis, and reporting of mystery-caller (secret-shopper)
+    studies that measure healthcare access disparities. Provides generalized linear mixed
+    models (Poisson and negative-binomial GLMMs) for wait-time outcomes, incidence rate
+    ratios with confidence intervals, IRR-to-absolute-days conversion, model selection
+    and overdispersion diagnostics, intraclass correlation coefficients, Monte Carlo power
+    curves, CONSORT/STROBE flow diagrams, inter-caller reliability, missing-data MAR/MNAR
+    tests, and one-call manuscript generators for results, materials-and-methods, and
+    STROBE-checklist sections. Also includes utilities for National Provider Identifier
+    (NPI) record lookup, provider demographics, and publication-ready table and map output.
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
