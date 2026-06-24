@@ -15,13 +15,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = eval_vignettes)
 library(mysterycall)
 ```
 
-```{r load-package, eval=FALSE}
+```{r load-package, eval=FALSE, purl=FALSE}
 library(mysterycall)
 ```
 
@@ -135,7 +135,7 @@ The checks fall into five categories:
 The following synthetic data frame deliberately contains four problems that the
 preflight check will detect:
 
-```{r preflight-example, eval=FALSE}
+```{r preflight-example, eval=FALSE, purl=FALSE}
 # Build a small data frame with intentional problems
 bad_data <- data.frame(
   npi              = c("1234567890", "1234567890",   # duplicate NPI × insurance
@@ -187,7 +187,7 @@ print(report)
 
 ### Fixing the Problems
 
-```{r preflight-fix, eval=FALSE}
+```{r preflight-fix, eval=FALSE, purl=FALSE}
 # Step 1: Remove the duplicate NPI x insurance row
 clean_data <- bad_data[!duplicated(bad_data[, c("npi", "insurance")]), ]
 
@@ -264,7 +264,7 @@ which have a natural clinical interpretation: an IRR of 1.40 for Medicaid vs.
 Private insurance means that Medicaid patients waited 40 % longer than privately
 insured patients, on average, after adjusting for all other covariates in the model.
 
-```{r wait-time-dist, echo=TRUE, eval=TRUE, fig.width=6.5, fig.height=3.2, fig.cap="Right-skewed wait-time distribution for Medicaid callers (simulated). `mysterycall_plot_distribution()` returns raw and sqrt-scaled panels — the sqrt panel makes the long upper tail visible without distorting the modal value."}
+```{r wait-time-dist, echo=TRUE, eval=TRUE, fig.width=6.5, fig.height=3.2, fig.cap="Right-skewed wait-time distribution for Medicaid callers (simulated). `mysterycall_plot_distribution()` returns raw and sqrt-scaled panels — the sqrt panel makes the long upper tail visible without distorting the modal value.", purl=FALSE}
 set.seed(42)
 medicaid_waits <- rpois(200L, lambda = 18)
 
@@ -308,7 +308,7 @@ interest in an audit study.
 
 ## 3.3 Basic Model Fit
 
-```{r poisson-basic, eval=FALSE}
+```{r poisson-basic, eval=FALSE, purl=FALSE}
 # Fit the Poisson GLMM
 # data:       your cleaned mystery-caller data frame
 # outcome:    name of the count column (wait_days)
@@ -334,7 +334,7 @@ class(poisson_fit)
 The most important element of the fitted object is `irr_table`, a data frame
 containing the fixed-effect estimates on the incidence-rate-ratio scale:
 
-```{r irr-table, eval=FALSE}
+```{r irr-table, eval=FALSE, purl=FALSE}
 # Print the IRR table
 poisson_fit$irr_table
 #>   insurance       IRR  CI_lower  CI_upper  p_value
@@ -365,7 +365,7 @@ In the example above:
 
 ## 3.5 The `print()` Method
 
-```{r poisson-print, eval=FALSE}
+```{r poisson-print, eval=FALSE, purl=FALSE}
 print(poisson_fit)
 #> == mysterycall: Poisson GLMM Results ==============================
 #>
@@ -409,7 +409,7 @@ $\pi^2/3 \approx 3.29$ (the variance of a logistic distribution), giving:
 
 $$\text{ICC} \approx \frac{\sigma^2_{\text{physician}}}{\sigma^2_{\text{physician}} + \pi^2/3}$$
 
-```{r irr-forest, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.0, fig.cap="Forest plot of incidence rate ratios (IRR) from the Poisson GLMM produced by `mysterycall_irr_plot()`. Red points are statistically significant (p < 0.05); navy are not. Dashed line at IRR = 1 marks no effect."}
+```{r irr-forest, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.0, fig.cap="Forest plot of incidence rate ratios (IRR) from the Poisson GLMM produced by `mysterycall_irr_plot()`. Red points are statistically significant (p < 0.05); navy are not. Dashed line at IRR = 1 marks no effect.", purl=FALSE}
 # mysterycall_irr_plot() accepts a data frame with term/irr/ci_lower/ci_upper/p_value
 irr_df <- data.frame(
   term     = c("Medicaid", "Medicare", "Uninsured"),
@@ -441,7 +441,7 @@ Poisson model, this ratio should be approximately 1.0:
 | 1.5–3.0 | Mild overdispersion | Consider quasi-Poisson or negative binomial |
 | > 3.0 | Severe overdispersion | Negative binomial model; investigate outliers |
 
-```{r overdispersion, eval=FALSE}
+```{r overdispersion, eval=FALSE, purl=FALSE}
 # The overdispersion statistic is stored in the fitted object
 poisson_fit$overdispersion
 #> $pearson_chisq
@@ -482,7 +482,7 @@ data. Common causes in mystery-caller studies:
 - Near-zero between-physician variance (all physicians truly behave
   identically—which would mean the random intercept is unnecessary).
 
-```{r convergence, eval=FALSE}
+```{r convergence, eval=FALSE, purl=FALSE}
 # Check convergence diagnostics
 poisson_fit$convergence
 #> $converged
@@ -526,7 +526,7 @@ for panel size. The natural way to do this in a Poisson model is an **offset**
 term: log(panel_size) is added to the linear predictor with a fixed coefficient
 of 1, so the model effectively estimates wait days *per unit panel size*.
 
-```{r offset-example, eval=FALSE}
+```{r offset-example, eval=FALSE, purl=FALSE}
 # Assume mc_data has a column 'panel_size' (e.g., number of active patients)
 mc_data$log_panel <- log(mc_data$panel_size)
 
@@ -563,7 +563,7 @@ wait times by insurance group. This serves two purposes:
    IRR for Medicaid should be consistent with the ratio of median wait times
    in the summary table).
 
-```{r wait-summary, eval=FALSE}
+```{r wait-summary, eval=FALSE, purl=FALSE}
 # Summarize wait times by insurance type
 wait_summary <- mysterycall_wait_time_summary(
   data          = mc_data,
@@ -609,7 +609,7 @@ table shows the *marginal median*—these are different statistics.
 
 ## Combining the Summary Table With IRR Results
 
-```{r combine-tables, eval=FALSE}
+```{r combine-tables, eval=FALSE, purl=FALSE}
 # Summarize at the insurance-type level (no subspecialty stratification)
 wait_summ_top <- mysterycall_wait_time_summary(
   data         = mc_data,
@@ -683,7 +683,7 @@ $$\tilde{p} \pm \frac{z_{\alpha/2}}{1 + z_{\alpha/2}^2/n}
   per group *and* the proportion is between 0.15 and 0.85. Included for
   compatibility with older literature but rarely recommended.
 
-```{r acceptance-dot, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.2, fig.cap="Appointment-offered rates by insurance type with 95 % Wilson score confidence intervals. Private insurance is the reference group (dashed line). Medicaid and Uninsured callers face the largest absolute deficits."}
+```{r acceptance-dot, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.2, fig.cap="Appointment-offered rates by insurance type with 95 % Wilson score confidence intervals. Private insurance is the reference group (dashed line). Medicaid and Uninsured callers face the largest absolute deficits.", purl=FALSE}
 # Build a representative disparities table from synthetic data
 set.seed(99)
 n_per   <- 200L
@@ -701,19 +701,19 @@ mysterycall_plot_disparities(disp_tbl, metric = "rate")
 
 `mysterycall_plot_disparities()` supports three metrics — switch with `metric`:
 
-```{r disp-abs-diff, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Absolute difference in acceptance rate (percentage points) versus Private insurance. Negative values indicate lower appointment-offered rates."}
+```{r disp-abs-diff, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Absolute difference in acceptance rate (percentage points) versus Private insurance. Negative values indicate lower appointment-offered rates.", purl=FALSE}
 mysterycall_plot_disparities(disp_tbl, metric = "abs_diff",
                               title = "Absolute disparity (pp vs. Private)")
 ```
 
-```{r disp-rr, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Relative risk of being offered an appointment versus Private insurance. Values below 1 indicate lower rates for that group."}
+```{r disp-rr, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Relative risk of being offered an appointment versus Private insurance. Values below 1 indicate lower rates for that group.", purl=FALSE}
 mysterycall_plot_disparities(disp_tbl, metric = "rel_risk",
                               title = "Relative risk vs. Private")
 ```
 
 ## 5.3 Basic Disparity Analysis
 
-```{r disparities-basic, eval=FALSE}
+```{r disparities-basic, eval=FALSE, purl=FALSE}
 # Compute disparity metrics for appointment_offered across insurance types
 disparities <- mysterycall_disparities_table(
   data       = mc_data,
@@ -755,7 +755,7 @@ print(disparities)
 
 ## 5.4 Setting a Custom Reference Group
 
-```{r disparities-ref, eval=FALSE}
+```{r disparities-ref, eval=FALSE, purl=FALSE}
 # Use Medicaid as the reference group to compare others against it
 disparities_med_ref <- mysterycall_disparities_table(
   data      = mc_data,
@@ -782,7 +782,7 @@ Private-reference table would not emphasize.
 A frequent data-entry error is coding the outcome as 1/2 (e.g., 1 = "yes," 2 = "no")
 instead of 0/1. The function will catch this and return an informative error:
 
-```{r disparities-error, eval=FALSE}
+```{r disparities-error, eval=FALSE, purl=FALSE}
 # Wrong: appointment_offered coded as 1 or 2
 bad_mc <- mc_data
 bad_mc$appointment_offered <- bad_mc$appointment_offered + 1  # now 1 or 2
@@ -848,7 +848,7 @@ Holm-Bonferroni is uniformly more powerful than Bonferroni while still
 controlling the family-wise error rate. **Prefer Holm-Bonferroni in almost all
 situations.**
 
-```{r multiple-comparison, eval=FALSE}
+```{r multiple-comparison, eval=FALSE, purl=FALSE}
 # Extract the raw p-values from the disparities table
 raw_p <- disparities$p_value
 names(raw_p) <- disparities$insurance[disparities$insurance != "Private"]
@@ -888,7 +888,7 @@ ignores the ordering of evidence across tests.
 
 ## 6.3 Passing the Full Disparities Table Directly
 
-```{r multiple-comparison-full, eval=FALSE}
+```{r multiple-comparison-full, eval=FALSE, purl=FALSE}
 # Convenience wrapper: pass the entire disparities table
 adj_full <- mysterycall_multiple_comparison_adjust(
   disparities_table = disparities,  # output of mysterycall_disparities_table()
@@ -952,7 +952,7 @@ and $\alpha_2 = \Phi\!\left(\hat{z}_0 + \dfrac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \
 with $\hat{z}_0$ the bias-correction constant and $\hat{a}$ the acceleration
 constant estimated from jackknife leave-one-out statistics.
 
-```{r bootstrap-dist, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.5, fig.cap="Simulated bootstrap distribution of the Medicaid minus Private appointment-rate difference (B = 2 000 replicates, physician-level resampling). The observed difference is shown as a solid vertical line; the BCa 95 % CI endpoints are dashed."}
+```{r bootstrap-dist, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.5, fig.cap="Simulated bootstrap distribution of the Medicaid minus Private appointment-rate difference (B = 2 000 replicates, physician-level resampling). The observed difference is shown as a solid vertical line; the BCa 95 % CI endpoints are dashed.", purl=FALSE}
 set.seed(20240101)
 n_phys  <- 50L
 boot_b  <- 2000L
@@ -987,7 +987,7 @@ ggplot2::ggplot(boot_plot_df, ggplot2::aes(x = diff)) +
 
 ## 7.3 Bootstrapping the Difference in Appointment Rates
 
-```{r bootstrap-ci, eval=FALSE}
+```{r bootstrap-ci, eval=FALSE, purl=FALSE}
 # Set seed for reproducibility — always report this in your methods section
 set.seed(20240101)
 
@@ -1030,7 +1030,7 @@ anti-conservative (too narrow).
 
 ## 7.4 Bootstrapping a Custom Statistic
 
-```{r bootstrap-custom, eval=FALSE}
+```{r bootstrap-custom, eval=FALSE, purl=FALSE}
 # Example: bootstrap the ratio of median wait times (Medicaid / Private)
 # This has no closed-form CI, making bootstrap ideal.
 
@@ -1075,7 +1075,7 @@ returns a formatted results paragraph following APA 7th edition style convention
 and the reporting guidelines of JAMA and NEJM for observational health disparities
 research.
 
-```{r write-results, eval=FALSE}
+```{r write-results, eval=FALSE, purl=FALSE}
 results_text <- mysterycall_write_results_paragraph(
   poisson_model      = poisson_fit,
   disparities_table  = adj_full,           # version with adjusted p-values
@@ -1131,7 +1131,7 @@ can run it interactively by copying the chunks.
 
 ## 9.1 Build the Synthetic Dataset
 
-```{r build-data, eval=FALSE}
+```{r build-data, eval=FALSE, purl=FALSE}
 set.seed(42)
 
 # Study design parameters
@@ -1240,7 +1240,7 @@ head(mc_data)
 
 ## 9.2 Run the Preflight Check
 
-```{r full-preflight, eval=FALSE}
+```{r full-preflight, eval=FALSE, purl=FALSE}
 preflight <- mysterycall_preflight_check(mc_data)
 print(preflight)
 #> -- mysterycall preflight check ------------------------------------
@@ -1261,7 +1261,7 @@ print(preflight)
 
 ## 9.3 Disparity Analysis for Appointment-Offered Rate
 
-```{r full-disparities, eval=FALSE}
+```{r full-disparities, eval=FALSE, purl=FALSE}
 # --- Step 1: Compute raw disparity metrics ---
 disparities_raw <- mysterycall_disparities_table(
   data      = mc_data,
@@ -1294,7 +1294,7 @@ print(disparities_adj)
 
 ## 9.4 Poisson GLMM for Wait-Time Disparities
 
-```{r full-poisson, eval=FALSE}
+```{r full-poisson, eval=FALSE, purl=FALSE}
 # Fit the Poisson GLMM (wait times among callers offered appointments)
 poisson_fit <- mysterycall_poisson_model(
   data         = mc_data,
@@ -1334,7 +1334,7 @@ print(poisson_fit)
 
 ## 9.5 Wait-Time Summary Table
 
-```{r full-wait-summary, eval=FALSE}
+```{r full-wait-summary, eval=FALSE, purl=FALSE}
 wait_summ <- mysterycall_wait_time_summary(
   data     = mc_data,
   wait_col = "wait_days",
@@ -1353,7 +1353,7 @@ print(wait_summ)
 
 ## 9.6 Bootstrap CI for the Medicaid–Private Appointment Gap
 
-```{r full-bootstrap, eval=FALSE}
+```{r full-bootstrap, eval=FALSE, purl=FALSE}
 set.seed(20240101)
 
 boot_medicaid <- mysterycall_bootstrap_ci(
@@ -1384,7 +1384,7 @@ print(boot_medicaid)
 The following code assembles all the results into the structure of a
 "Table 2" suitable for direct inclusion in a manuscript.
 
-```{r pub-table, eval=FALSE}
+```{r pub-table, eval=FALSE, purl=FALSE}
 # Merge disparity metrics and Poisson IRRs into a single wide table
 pub_table <- merge(
   disparities_adj[, c("insurance", "n", "rate", "CI_lower", "CI_upper",
@@ -1443,7 +1443,7 @@ knitr::kable(
 
 ## 9.8 Write the Results Paragraph
 
-```{r full-write-results, eval=FALSE}
+```{r full-write-results, eval=FALSE, purl=FALSE}
 results_para <- mysterycall_write_results_paragraph(
   poisson_model     = poisson_fit,
   disparities_table = disparities_adj,
@@ -1499,7 +1499,7 @@ $$n_0 = \frac{z^2_{\alpha/2}\,p(1-p)}{e^2}, \qquad
 where $N$ is the finite population size, $p = 0.5$ (maximum variance, conservative),
 and $e$ is the desired margin of error.
 
-```{r cochran-n, echo=TRUE, eval=TRUE}
+```{r cochran-n, echo=TRUE, eval=TRUE, purl=FALSE}
 # How many providers needed from a state with N = 800 OB-GYNs,
 # margin of error ±5 %?
 result_cochran <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
@@ -1524,7 +1524,7 @@ type I error, and whether each provider is called once (unpaired) or twice
 
 $$n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}$$
 
-```{r poisson-power, echo=TRUE, eval=TRUE}
+```{r poisson-power, echo=TRUE, eval=TRUE, purl=FALSE}
 # Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days
 pw_40 <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                     power = 0.80, both_arms = TRUE)
@@ -1550,7 +1550,7 @@ knitr::kable(
 
 ## 10.3 Power Curve Across a Range of IRRs
 
-```{r power-curve, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.5, fig.cap="Required providers per arm (paired design, 80 % power) as a function of the minimum detectable IRR. Detecting small effects (IRR close to 1) requires substantially more providers."}
+```{r power-curve, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.5, fig.cap="Required providers per arm (paired design, 80 % power) as a function of the minimum detectable IRR. Detecting small effects (IRR close to 1) requires substantially more providers.", purl=FALSE}
 irr_seq  <- seq(1.10, 2.00, by = 0.05)
 n_seq    <- vapply(irr_seq, function(irr) {
   tryCatch(
@@ -1583,7 +1583,7 @@ ggplot2::ggplot(curve_df, ggplot2::aes(x = irr, y = n_per_arm)) +
 
 # Session Information
 
-```{r session-info, eval=FALSE}
+```{r session-info, eval=FALSE, purl=FALSE}
 sessionInfo()
 #> R version 4.4.1 (2024-06-14)
 #> Platform: aarch64-apple-darwin20 (64-bit)

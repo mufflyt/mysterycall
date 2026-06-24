@@ -300,8 +300,8 @@ test_that("delta AIC is 0 for winner and positive for loser", {
          Worse  = .fake_nb(aic = 115, bic = 120)),
     criterion = "aic"
   )
-  winner_delta <- as.numeric(tbl[["ΔAIC"]][tbl$Model == "Best"])
-  loser_delta  <- as.numeric(tbl[["ΔAIC"]][tbl$Model == "Worse"])
+  winner_delta <- as.numeric(tbl[["DeltaAIC"]][tbl$Model == "Best"])
+  loser_delta  <- as.numeric(tbl[["DeltaAIC"]][tbl$Model == "Worse"])
   expect_equal(winner_delta, 0, tolerance = 1e-6)
   expect_true(loser_delta > 0)
 })
@@ -311,7 +311,7 @@ test_that("output has all required columns", {
     list(A = .fake_poi(), B = .fake_nb())
   )
   expected_cols <- c("Model", "Family", "N", "Params",
-                     "AIC", "BIC", "ΔAIC", "ΔBIC",
+                     "AIC", "BIC", "DeltaAIC", "DeltaBIC",
                      "Phi (Pearson)", "Theta", "Winner")
   expect_true(all(expected_cols %in% names(tbl)))
 })

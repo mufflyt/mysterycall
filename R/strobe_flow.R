@@ -11,7 +11,7 @@ NULL
 #' wait-time model), with a right-side exclusion branch that lists each
 #' exclusion-code category and its count.
 #'
-#' **Three input modes — use whichever is most convenient:**
+#' **Three input modes - use whichever is most convenient:**
 #' \enumerate{
 #'   \item **Raw data frame or CSV path** (`data`): all counts and exclusion
 #'     details are computed automatically by calling [mysterycall_prepare_calls()]
@@ -19,22 +19,22 @@ NULL
 #'   \item **`mysterycall_prepared` object** (`prepared`): pass the object
 #'     returned by [mysterycall_prepare_calls()] directly.  Useful when you
 #'     have already run the preparation step.
-#'   \item **Explicit counts** (`n_total`, `n_calldate`, …): supply every N
+#'   \item **Explicit counts** (`n_total`, `n_calldate`, ...): supply every N
 #'     value by hand.  Useful for manual overrides or non-REDCap data.
 #' }
 #'
 #' **REDCap exclusion-code labels:**
 #' \itemize{
-#'   \item Code 1 — Closed medical system (Kaiser / military)
-#'   \item Code 2 — On hold > 5 minutes
-#'   \item Code 3 — Wrong number or wrong specialty
-#'   \item Code 5 — Phone not answered / busy signal
-#'   \item Code 6 — Physician's personal phone
-#'   \item Code 7 — Referral required before scheduling
-#'   \item Code 8 — Voicemail
-#'   \item Code 9 — Not accepting new patients
-#'   \item Code 10 — Must see midlevel provider first
-#'   \item Code NA — Exclusion code pending review
+#'   \item Code 1 - Closed medical system (Kaiser / military)
+#'   \item Code 2 - On hold > 5 minutes
+#'   \item Code 3 - Wrong number or wrong specialty
+#'   \item Code 5 - Phone not answered / busy signal
+#'   \item Code 6 - Physician's personal phone
+#'   \item Code 7 - Referral required before scheduling
+#'   \item Code 8 - Voicemail
+#'   \item Code 9 - Not accepting new patients
+#'   \item Code 10 - Must see midlevel provider first
+#'   \item Code NA - Exclusion code pending review
 #' }
 #'
 #' @param data A data frame (raw REDCap export) **or** a character string
@@ -63,7 +63,7 @@ NULL
 #' @param excl_no_calldate Integer. Records dropped for missing call date.
 #'   Default: `n_total - n_calldate`.
 #' @param excl_detail Named integer vector of per-code exclusion counts.
-#'   Names are REDCap codes as characters (`"1"`, `"2"`, …, `"NA"`).
+#'   Names are REDCap codes as characters (`"1"`, `"2"`, ..., `"NA"`).
 #'   Derived automatically when `data` or `prepared` is supplied.
 #' @param label_total Character. Box label for the initial count.
 #' @param label_calldate Character. Box label for the call-date step.
@@ -91,7 +91,7 @@ NULL
 #' raw <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
 #'                 stringsAsFactors = FALSE)
 #' mysterycall_strobe_flow(data = raw,
-#'                         title = "STROBE Flow — ICVs vs POP vs SUI Study")
+#'                         title = "STROBE Flow - ICVs vs POP vs SUI Study")
 #' }
 #'
 #' # Mode 2: from a mysterycall_prepared object
@@ -125,7 +125,7 @@ mysterycall_strobe_flow <- function(
     label_included   = "Scheduling discussion possible\n(exclusion code = 0)",
     label_logistic   = "Logistic analysis\nOutcome: appointment offered (yes/no)",
     label_waittime   = "Wait-time analysis\nOutcome: days to appointment",
-    title            = "STROBE Flow Diagram — Mystery-Caller Study",
+    title            = "STROBE Flow Diagram - Mystery-Caller Study",
     output_path      = NULL,
     width            = 9,
     height           = 11,
@@ -222,7 +222,7 @@ mysterycall_strobe_flow <- function(
       n <- excl_detail[[code]]
       if (!is.null(n) && !is.na(n) && n > 0)
         detail_lines <- c(detail_lines,
-                          sprintf("  • %s: %d", code_labels[[code]], as.integer(n)))
+                          sprintf("  - %s: %d", code_labels[[code]], as.integer(n)))
     }
     excl_screen_lbl <- paste0(
       "Excluded (n = ", .fmt_n(excl_total_screen), ")\n",
@@ -238,22 +238,22 @@ mysterycall_strobe_flow <- function(
                             .fmt_n(excl_waittime))
 
   # ---- Layout -----------------------------------------------------------------
-  # Layout — all coordinates in [0,1] (y=1 top, y=0 bottom).
+  # Layout - all coordinates in [0,1] (y=1 top, y=0 bottom).
   cx    <- 0.30   # main column centre x
   ex    <- 0.80   # exclusion column centre x
-  bw    <- 0.26   # main box half-width   → right edge at 0.56
-  ebw   <- 0.18   # excl box half-width   → left edge at 0.62 (gap = 0.06)
+  bw    <- 0.26   # main box half-width   -> right edge at 0.56
+  ebw   <- 0.18   # excl box half-width   -> left edge at 0.62 (gap = 0.06)
   bh    <- 0.046  # main box half-height
-  ebh_s <- 0.030  # small exclusion box half-height (2–3 lines)
+  ebh_s <- 0.030  # small exclusion box half-height (2-3 lines)
   arr   <- ggplot2::arrow(length = ggplot2::unit(0.18, "cm"), type = "closed")
 
   y1 <- 0.920   # total
   y2 <- 0.770   # calldate
-  y3 <- 0.480   # included  ← pushed down to give the excl box more room
+  y3 <- 0.480   # included  <- pushed down to give the excl box more room
   y4 <- 0.235   # logistic
   y5 <- 0.060   # waittime
 
-  # tap points — midpoints on the main vertical line between consecutive boxes
+  # tap points - midpoints on the main vertical line between consecutive boxes
   tap_ncd  <- (y1 + y2) / 2   # ~0.845
   tap_excl <- (y2 + y3) / 2   # ~0.625
   tap_wt   <- (y4 + y5) / 2   # ~0.148
@@ -309,7 +309,7 @@ mysterycall_strobe_flow <- function(
       plot.margin = ggplot2::margin(14, 8, 8, 8)
     )
 
-  # Box 1 — total
+  # Box 1 - total
   p <- .mbox(p, cx, y1, bw, bh,
              paste0(label_total, "\n(N = ", .fmt_n(n_total), ")"), bold = TRUE)
   p <- .vseg(p, y1 - bh, tap_ncd)
@@ -317,7 +317,7 @@ mysterycall_strobe_flow <- function(
   p <- .mbox(p, ex, tap_ncd, ebw, ebh_s, excl_ncd_lbl, size = 2.7)
   p <- .varrow(p, tap_ncd, y2 + bh)
 
-  # Box 2 — calldate
+  # Box 2 - calldate
   p <- .mbox(p, cx, y2, bw, bh,
              paste0(label_calldate, "\n(n = ", .fmt_n(n_calldate), ")"))
   p <- .vseg(p, y2 - bh, tap_excl)
@@ -326,12 +326,12 @@ mysterycall_strobe_flow <- function(
              size = if (n_det_lines > 6) 2.3 else 2.6)
   p <- .varrow(p, tap_excl, y3 + bh)
 
-  # Box 3 — included
+  # Box 3 - included
   p <- .mbox(p, cx, y3, bw, bh,
              paste0(label_included, "\n(n = ", .fmt_n(n_included), ")"))
   p <- .varrow(p, y3 - bh, y4 + bh)
 
-  # Box 4 — logistic
+  # Box 4 - logistic
   p <- .mbox(p, cx, y4, bw, bh,
              paste0(label_logistic, "\n(n = ", .fmt_n(n_logistic), ")"), bold = TRUE)
   p <- .vseg(p, y4 - bh, tap_wt)
@@ -339,7 +339,7 @@ mysterycall_strobe_flow <- function(
   p <- .mbox(p, ex, tap_wt, ebw, ebh_s + 0.010, excl_wt_lbl, size = 2.7)
   p <- .varrow(p, tap_wt, y5 + bh)
 
-  # Box 5 — waittime
+  # Box 5 - waittime
   p <- .mbox(p, cx, y5, bw, bh,
              paste0(label_waittime, "\n(n = ", .fmt_n(n_waittime), ")"), bold = TRUE)
 

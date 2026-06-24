@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 knitr::opts_chunk$set(
   collapse  = TRUE,
   comment   = "#>",
@@ -49,7 +49,7 @@ Below EPV = 10, parameter estimates become unstable and confidence intervals wid
 
 `mysterycall_poisson_model()` and `mysterycall_nb_model()` both check the EPV ratio **before fitting** and emit actionable warnings:
 
-```{r epv-demo, eval=FALSE}
+```{r epv-demo, eval=FALSE, purl=FALSE}
 # 40 observations, 5 predictors with many levels → low EPV
 small_df <- data.frame(
   wait_days = rpois(40, 18),
@@ -97,7 +97,7 @@ The overdispersion ratio $\phi$ is computed as Pearson $\chi^2$ / residual df. A
 
 `mysterycall_poisson_model()` computes and stores `$overdispersion` and emits a warning when $\phi > 2$:
 
-```{r od-demo, eval=FALSE}
+```{r od-demo, eval=FALSE, purl=FALSE}
 result <- mysterycall_poisson_model(
   mc_data,
   outcome          = "wait_days",
@@ -132,7 +132,7 @@ The `mysterycall` package provides functions to derive physician-level covariate
 
 ### Practice setting (academic vs. private)
 
-```{r setting, eval=FALSE}
+```{r setting, eval=FALSE, purl=FALSE}
 # After pulling clinician data with mysterycall_get_clinician_data()
 mc_data$practice_setting <- mysterycall_classify_practice_setting(
   facility_name = mc_data$facility_name
@@ -145,7 +145,7 @@ Academic institutions have structured scheduling offices and residents; they oft
 
 ### Physician gender (from first name)
 
-```{r gender, eval=FALSE}
+```{r gender, eval=FALSE, purl=FALSE}
 # Requires genderize.io API key stored in GENDERIZE_API_KEY env var
 mc_data <- mysterycall_genderize(
   data        = mc_data,
@@ -159,7 +159,7 @@ Gender may be associated with scheduling patterns (some studies show female phys
 
 ### Physician age
 
-```{r age, eval=FALSE}
+```{r age, eval=FALSE, purl=FALSE}
 # If graduation year is available (from NPI record)
 mc_data$physician_age <- as.integer(format(Sys.Date(), "%Y")) -
   mc_data$graduation_year
@@ -177,7 +177,7 @@ Older physicians may have established patient panels that limit new-patient avai
 
 ### Geographic location
 
-```{r geography, eval=FALSE}
+```{r geography, eval=FALSE, purl=FALSE}
 # Urban / Suburban / Rural from RUCA codes
 mc_data$urbanicity <- mysterycall_classify_ruca(mc_data$ruca_code)
 
@@ -194,7 +194,7 @@ Geographic factors drive systematic differences in physician density, payer mix,
 
 The fastest path is to use `mysterycall_get_clinician_data()` to retrieve all available registry fields for your physician list:
 
-```{r npi-pull, eval=FALSE}
+```{r npi-pull, eval=FALSE, purl=FALSE}
 # mc_npis: character vector of NPI numbers
 clinician_info <- mysterycall_get_clinician_data(npi_list = mc_npis)
 
@@ -245,7 +245,7 @@ This is safe for $n \geq 180$ observations (EPV = 10).
 
 ### In R
 
-```{r full-model, eval=FALSE}
+```{r full-model, eval=FALSE, purl=FALSE}
 nb_full <- mysterycall_nb_model(
   data             = mc_data,
   outcome          = "wait_days",
@@ -264,7 +264,7 @@ mysterycall_format_results_table(nb_full)
 
 Use `mysterycall_select_best_model()` to compare the base and full specifications:
 
-```{r aic-compare, eval=FALSE}
+```{r aic-compare, eval=FALSE, purl=FALSE}
 nb_base <- mysterycall_nb_model(
   mc_data, "wait_days",
   predictors       = c("insurance", "scenario"),
@@ -289,7 +289,7 @@ $$n \approx \frac{2\sigma^2 (z_{\alpha/2} + z_\beta)^2}{(\log \delta)^2}$$
 
 If a covariate reduces $\sigma$ by 15%, the required $n$ falls by $\approx 28\%$ ($1 - 0.85^2$).
 
-```{r power-table, echo=FALSE, eval=TRUE}
+```{r power-table, echo=FALSE, eval=TRUE, purl=FALSE}
 tbl <- data.frame(
   Covariates = c(
     "None (insurance + scenario only)",
@@ -333,7 +333,7 @@ knitr::kable(
 
 ## Complete workflow
 
-```{r workflow, eval=FALSE}
+```{r workflow, eval=FALSE, purl=FALSE}
 library(mysterycall)
 
 # 1. Pull NPI registry data

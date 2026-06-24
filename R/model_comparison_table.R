@@ -19,7 +19,7 @@ NULL
 #'   Default `1L`.
 #'
 #' @return A data frame with columns `Model`, `Family`, `N`, `Params`,
-#'   `AIC`, `BIC`, `ΔAIC`, `ΔBIC`, `Phi (Pearson)`, `Theta`, `Winner`.
+#'   `AIC`, `BIC`, `DeltaAIC`, `DeltaBIC`, `Phi (Pearson)`, `Theta`, `Winner`.
 #'   `Winner` is `"*"` for the best model under `criterion[1]` and `""`
 #'   otherwise. The data frame carries an attribute `"winner"` with the
 #'   winning model name.
@@ -108,8 +108,8 @@ mysterycall_model_comparison_table <- function(models,
   tbl <- do.call(rbind, rows)
   rownames(tbl) <- NULL
 
-  tbl[["ΔAIC"]] <- tbl$AIC - min(tbl$AIC, na.rm = TRUE)
-  tbl[["ΔBIC"]] <- tbl$BIC - min(tbl$BIC, na.rm = TRUE)
+  tbl[["DeltaAIC"]] <- tbl$AIC - min(tbl$AIC, na.rm = TRUE)
+  tbl[["DeltaBIC"]] <- tbl$BIC - min(tbl$BIC, na.rm = TRUE)
 
   score_col <- if (criterion == "bic") "BIC" else "AIC"
   best_idx  <- which.min(tbl[[score_col]])
@@ -119,8 +119,8 @@ mysterycall_model_comparison_table <- function(models,
   fmt <- paste0("%.", digits, "f")
   tbl$AIC         <- sprintf(fmt, tbl$AIC)
   tbl$BIC         <- sprintf(fmt, tbl$BIC)
-  tbl[["ΔAIC"]]   <- sprintf(fmt, tbl[["ΔAIC"]])
-  tbl[["ΔBIC"]]   <- sprintf(fmt, tbl[["ΔBIC"]])
+  tbl[["DeltaAIC"]]   <- sprintf(fmt, tbl[["DeltaAIC"]])
+  tbl[["DeltaBIC"]]   <- sprintf(fmt, tbl[["DeltaBIC"]])
   tbl$Phi_Pearson <- ifelse(is.na(tbl$Phi_Pearson), NA_character_, sprintf(fmt, tbl$Phi_Pearson))
   tbl$Theta       <- ifelse(is.na(tbl$Theta),       NA_character_, sprintf(fmt, tbl$Theta))
 

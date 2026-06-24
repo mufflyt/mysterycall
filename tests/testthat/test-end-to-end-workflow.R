@@ -179,6 +179,7 @@ test_that("End-to-end: NPI search and provider enrichment workflow", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       # Stage 1: Search by taxonomy
       obgyn_providers <- mysterycall_search_taxonomy(

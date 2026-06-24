@@ -78,6 +78,7 @@ test_that("Integration: NPI search and data cleaning pipeline", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       # Test the full pipeline
       result <- mysterycall_search_taxonomy(

@@ -110,7 +110,7 @@ mysterycall_materials_methods <- function(
     sampling_method           = "random",
     irb_institution           = "Colorado Multiple Institutional Review Board (COMIRB)",
     irb_number                = "[COMIRB NUMBER REQUIRED]",
-    call_hours                = "Monday through Friday, 9:00 am – 4:00 pm local time",
+    call_hours                = "Monday through Friday, 9:00 am - 4:00 pm local time",
     min_interval_hours        = 24L,
     caller_assignment         = "rotated systematically across physicians and conditions",
     appointment_definition    = "first available appointment offered",
@@ -231,7 +231,7 @@ mysterycall_materials_methods <- function(
   if (!is.null(reliability)) {
     stat_val  <- reliability$statistic
     type_str  <- switch(reliability$type,
-      kappa             = "Cohen’s κ",
+      kappa             = "Cohen's kappa",
       icc               = "an intraclass correlation coefficient (ICC)",
       percent_agreement = "percent agreement",
       reliability$type
@@ -249,13 +249,13 @@ mysterycall_materials_methods <- function(
       ""
     }
     reliability_sentence <- sprintf(
-      "Inter-caller reliability was assessed using %s across %d matched call pairs (%s = %s, 95%% CI %s–%s%s).",
+      "Inter-caller reliability was assessed using %s across %d matched call pairs (%s = %s, 95%% CI %s-%s%s).",
       type_str, reliability$n_pairs,
-      if (reliability$type == "kappa") "κ" else if (reliability$type == "icc") "ICC" else "%",
+      if (reliability$type == "kappa") "kappa" else if (reliability$type == "icc") "ICC" else "%",
       stat_str, lo_str, hi_str, interp_str
     )
   } else {
-    reliability_sentence <- "[Inter-caller reliability results pending — run mysterycall_caller_reliability()]"
+    reliability_sentence <- "[Inter-caller reliability results pending - run mysterycall_caller_reliability()]"
   }
 
   section1 <- sprintf(
@@ -276,7 +276,7 @@ mysterycall_materials_methods <- function(
     paste(
       "To minimize scheduler recognition across repeated calls to the same practice,",
       "a minimum interval of %d hours elapsed between any two calls to the same",
-      "physician’s office. Caller assignment was %s to prevent",
+      "physician's office. Caller assignment was %s to prevent",
       "caller-by-condition confounding."
     ),
     as.integer(min_interval_hours), caller_assignment
@@ -299,7 +299,7 @@ mysterycall_materials_methods <- function(
   n_phys_str <- if (!is.na(n_physicians)) {
     sprintf("A total of %d physicians were included", n_physicians)
   } else {
-    "[N physicians — confirm from data]"
+    "[N physicians - confirm from data]"
   }
 
   section4 <- sprintf(

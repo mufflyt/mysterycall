@@ -5,7 +5,11 @@
 \title{Draw a STROBE-compliant flow diagram for mystery-caller (secret-shopper) studies}
 \usage{
 mysterycall_strobe_flow(
+  data = NULL,
   prepared = NULL,
+  col_calldate = "calldate1",
+  col_exclusions = "exclusions",
+  col_appdate = "appdate",
   n_total = NULL,
   n_calldate = NULL,
   n_included = NULL,
@@ -18,7 +22,7 @@ mysterycall_strobe_flow(
   label_included = "Scheduling discussion possible\\n(exclusion code = 0)",
   label_logistic = "Logistic analysis\\nOutcome: appointment offered (yes/no)",
   label_waittime = "Wait-time analysis\\nOutcome: days to appointment",
-  title = "STROBE Flow Diagram — Mystery-Caller Study",
+  title = "STROBE Flow Diagram - Mystery-Caller Study",
   output_path = NULL,
   width = 9,
   height = 11,
@@ -26,62 +30,70 @@ mysterycall_strobe_flow(
 )
 }
 \arguments{
+\item{data}{A data frame (raw REDCap export) \strong{or} a character string
+giving the path to a CSV file.  When supplied, \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}
+is called internally using \code{col_calldate}, \code{col_exclusions}, and
+\code{col_appdate} to derive all N counts automatically.  All \verb{n_*} arguments
+and \code{excl_detail} are ignored when \code{data} is provided.}
+
 \item{prepared}{A \code{mysterycall_prepared} object returned by
-\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}. When supplied, all \verb{n_*} arguments are
-derived automatically. If \code{NULL}, all required \verb{n_*} arguments must be
-provided.}
+\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}. Counts are extracted automatically.
+Ignored when \code{data} is supplied.}
 
-\item{n_total}{Integer. Total call records in the raw export.}
+\item{col_calldate}{Character. Name of the call-date column in \code{data}.
+Default \code{"calldate1"}.}
 
-\item{n_calldate}{Integer. Records with a call date present (call placed).}
+\item{col_exclusions}{Character. Name of the exclusion-code column in \code{data}.
+Default \code{"exclusions"}.}
+
+\item{col_appdate}{Character. Name of the appointment-date column in \code{data}.
+Default \code{"appdate"}.}
+
+\item{n_total}{Integer. Total call records.  Required when neither \code{data}
+nor \code{prepared} is supplied.}
+
+\item{n_calldate}{Integer. Records with a call date present.}
 
 \item{n_included}{Integer. Records with exclusion code 0 (scheduling
 discussion took place).}
 
-\item{n_logistic}{Integer. Records entering the logistic (appointment-offered)
-model. Defaults to \code{n_included}.}
+\item{n_logistic}{Integer. Records entering the logistic model.
+Defaults to \code{n_included}.}
 
-\item{n_waittime}{Integer. Records entering the wait-time (days to
-appointment) model (subset of \code{n_logistic} with an appointment date).}
+\item{n_waittime}{Integer. Records entering the wait-time model
+(appointment date present).}
 
-\item{excl_no_calldate}{Integer. Dropped for missing call date.
+\item{excl_no_calldate}{Integer. Records dropped for missing call date.
 Default: \code{n_total - n_calldate}.}
 
-\item{excl_detail}{Named integer vector of per-code exclusion counts. Names
-should match REDCap exclusion codes as characters (\code{"1"}, \code{"2"}, ...,
-\code{"NA"}). When \code{prepared} is supplied, this is extracted from
-\code{prepared$exclusion_summary}. Override by passing your own vector.}
+\item{excl_detail}{Named integer vector of per-code exclusion counts.
+Names are REDCap codes as characters (\code{"1"}, \code{"2"}, ..., \code{"NA"}).
+Derived automatically when \code{data} or \code{prepared} is supplied.}
 
-\item{label_total}{Character. Box label for the initial count.
-Default \code{"Call attempts logged"}.}
+\item{label_total}{Character. Box label for the initial count.}
 
-\item{label_calldate}{Character. Box label for the call-date step.
-Default \code{"Call date recorded\\\\n(call was placed)"}.}
+\item{label_calldate}{Character. Box label for the call-date step.}
 
-\item{label_included}{Character. Box label for the included set.
-Default \code{"Scheduling discussion possible\\\\n(exclusion code = 0)"}.}
+\item{label_included}{Character. Box label for the included set.}
 
-\item{label_logistic}{Character. Box label for the logistic analysis.
-Default \code{"Logistic analysis\\\\nOutcome: appointment offered (yes/no)"}.}
+\item{label_logistic}{Character. Box label for the logistic analysis.}
 
-\item{label_waittime}{Character. Box label for the wait-time analysis.
-Default \code{"Wait-time analysis\\\\nOutcome: days to appointment"}.}
+\item{label_waittime}{Character. Box label for the wait-time analysis.}
 
-\item{title}{Character. Plot title.
-Default \code{"STROBE Flow Diagram — Mystery-Caller Study"}.}
+\item{title}{Character. Plot title.}
 
-\item{output_path}{Character or \code{NULL}. File path to save (\code{.png}, \code{.tiff},
-\code{.pdf}, \code{.svg}). When \code{NULL} (default), no file is written.}
+\item{output_path}{Character or \code{NULL}. File path to save the diagram
+(\code{.png}, \code{.tiff}, \code{.pdf}, \code{.svg}).  When \code{NULL} (default), no file is
+written.  Raster formats also save a paired copy in the other format.}
 
-\item{width}{Numeric. Width in inches for saved file. Default \code{9}.}
+\item{width}{Numeric. Width in inches. Default \code{9}.}
 
-\item{height}{Numeric. Height in inches for saved file. Default \code{11}.}
+\item{height}{Numeric. Height in inches. Default \code{11}.}
 
 \item{dpi}{Integer. Resolution for raster formats. Default \code{300}.}
 }
 \value{
-A \code{ggplot2} object (invisibly). The diagram is also printed
-when called interactively.
+A \code{ggplot2} object (invisibly).
 }
 \description{
 Produces a publication-quality STROBE/CONSORT-style participant flow diagram
@@ -91,38 +103,53 @@ wait-time model), with a right-side exclusion branch that lists each
 exclusion-code category and its count.
 }
 \details{
-The function can be driven in two ways:
+\strong{Three input modes - use whichever is most convenient:}
 \enumerate{
-\item \strong{From a \code{mysterycall_prepared} object} (see
-\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}): all N values are read automatically.
-\item \strong{From explicit counts} (all \verb{n_*} arguments): useful when you
-already know the numbers or are not working with REDCap data.
+\item \strong{Raw data frame or CSV path} (\code{data}): all counts and exclusion
+details are computed automatically by calling \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}
+internally.  This is the recommended path for most users.
+\item \strong{\code{mysterycall_prepared} object} (\code{prepared}): pass the object
+returned by \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}} directly.  Useful when you
+have already run the preparation step.
+\item \strong{Explicit counts} (\code{n_total}, \code{n_calldate}, ...): supply every N
+value by hand.  Useful for manual overrides or non-REDCap data.
 }
 
-\strong{Exclusion-code labels used in the diagram (REDCap mystery-caller convention):}
+\strong{REDCap exclusion-code labels:}
 \itemize{
-\item Code 1 — Closed medical system (Kaiser / military)
-\item Code 2 — On hold > 5 minutes
-\item Code 3 — Wrong number or wrong specialty
-\item Code 5 — Phone not answered / busy signal
-\item Code 6 — Physician's personal phone
-\item Code 7 — Referral required before scheduling
-\item Code 8 — Voicemail
-\item Code 9 — Not accepting new patients
-\item Code 10 — Must see midlevel provider first
-\item Code NA — Exclusion code pending review
+\item Code 1 - Closed medical system (Kaiser / military)
+\item Code 2 - On hold > 5 minutes
+\item Code 3 - Wrong number or wrong specialty
+\item Code 5 - Phone not answered / busy signal
+\item Code 6 - Physician's personal phone
+\item Code 7 - Referral required before scheduling
+\item Code 8 - Voicemail
+\item Code 9 - Not accepting new patients
+\item Code 10 - Must see midlevel provider first
+\item Code NA - Exclusion code pending review
 }
 }
 \examples{
-# From explicit counts
+# Mode 1: from a data frame (simplest)
+\dontrun{
+raw <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
+                stringsAsFactors = FALSE)
+mysterycall_strobe_flow(data = raw,
+                        title = "STROBE Flow - ICVs vs POP vs SUI Study")
+}
+
+# Mode 2: from a mysterycall_prepared object
+\dontrun{
+prepped <- mysterycall_prepare_calls(raw)
+mysterycall_strobe_flow(prepared = prepped)
+}
+
+# Mode 3: explicit counts (for non-REDCap data or manual overrides)
 mysterycall_strobe_flow(
   n_total    = 743,
   n_calldate = 737,
   n_included = 141,
-  n_logistic = 141,
-  n_waittime = 100,
-  excl_detail = c("1"=53, "2"=43, "3"=69, "5"=61, "6"=20,
-                  "7"=92, "8"=70, "9"=41, "10"=11, "NA"=136)
+  n_waittime = 100
 )
 }
 \seealso{

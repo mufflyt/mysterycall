@@ -26,7 +26,7 @@ Default \code{2L} (one Medicaid, one reference insurance).}
 the intervention group). Must be positive.}
 
 \item{theta}{Numeric. Negative binomial dispersion parameter. Higher values
-mean less overdispersion (Poisson is the limit as theta → ∞). Use the
+mean less overdispersion (Poisson is the limit as theta -> Inf). Use the
 \verb{$theta} from a pilot \code{mysterycall_nb_model()} fit, or a literature-based
 estimate. Default \code{2.0} (moderate overdispersion typical of wait-time data).}
 
@@ -66,7 +66,7 @@ closed-form power formulas for NB GLMMs require unrealistic approximations.
 
 If you have pilot data, fit \code{mysterycall_nb_model()} and use \code{result$theta}.
 Without pilot data, use \code{theta = 1} (high overdispersion, conservative) to
-\code{theta = 5} (mild overdispersion). Smaller theta → lower power → larger required N.
+\code{theta = 5} (mild overdispersion). Smaller theta -> lower power -> larger required N.
 }
 
 \examples{

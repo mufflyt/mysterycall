@@ -15,7 +15,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -50,7 +50,7 @@ silently match the wrong physician in every subsequent lookup.
 2. Require exactly 10 digits.
 3. Validate the Luhn checksum (the algorithm the NPI standard mandates).
 
-```{r npi-validation}
+```{r npi-validation, purl=FALSE}
 raw <- data.frame(
   npi           = c("1234567893", "0000000000", "123456789X", NA, "1234567893 "),
   physician_name = c("Smith, Alice", "Jones, Bob", "Park, Carol",
@@ -74,7 +74,7 @@ can use them for scheduling or re-call logic, validate each number against
 North American Numbering Plan (NANP) rules and optionally cross-check the
 area code against the physician's reported state.
 
-```{r phone-validation}
+```{r phone-validation, purl=FALSE}
 phones <- c(
   "(303) 555-1212",   # valid CO number
   "800-555-0199",     # toll-free — valid syntax, no state match
@@ -116,35 +116,35 @@ Apply the functions in this order:
 
 ### 3a. ASCII normalization
 
-```{r addr-ascii}
+```{r addr-ascii, purl=FALSE}
 raw_addr <- "123 Café Boulevard, Suite 4A"
 mysterycall_ascii_norm(raw_addr)
 ```
 
 ### 3b. Directional normalization (North → N, Northeast → NE)
 
-```{r addr-directionals}
+```{r addr-directionals, purl=FALSE}
 mysterycall_normalize_directionals("1400 North Main Street")
 mysterycall_normalize_directionals("201 Southeast Oak Avenue")
 ```
 
 ### 3c. Street suffix normalization (Street → ST, Boulevard → BLVD)
 
-```{r addr-suffix}
+```{r addr-suffix, purl=FALSE}
 mysterycall_normalize_suffix("100 MAIN STREET")
 mysterycall_normalize_suffix("500 OAK BOULEVARD SUITE 3")
 ```
 
 ### 3d. Unit designator normalization (Suite → STE, Apartment → APT)
 
-```{r addr-units}
+```{r addr-units, purl=FALSE}
 mysterycall_normalize_units("100 Main St Suite 4", addr2 = NA)
 mysterycall_normalize_units("200 Elm Ave", addr2 = "Apartment 7B")
 ```
 
 ### 3e. State abbreviation normalization
 
-```{r addr-state}
+```{r addr-state, purl=FALSE}
 mysterycall_normalize_state("California")
 mysterycall_normalize_state("new york")
 mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
@@ -152,7 +152,7 @@ mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
 
 ### 3f. ZIP code normalization (zero-pad to 5 digits)
 
-```{r addr-zip}
+```{r addr-zip, purl=FALSE}
 mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 ```
 
@@ -160,7 +160,7 @@ mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 
 Flag addresses that cannot be visited in person:
 
-```{r addr-po-box}
+```{r addr-po-box, purl=FALSE}
 mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 ```
 
@@ -168,7 +168,7 @@ mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 
 Pipe all steps together for a data frame:
 
-```{r addr-pipeline}
+```{r addr-pipeline, purl=FALSE}
 df_addr <- data.frame(
   addr1 = c("1234 north main street", "500 Oak Blvd Suite 3A",
              "P.O. Box 77", "789 Southeast Elm Avenue"),
@@ -206,7 +206,7 @@ insurance type called. `mysterycall_clean_phase1()` performs:
 - Academic/private practice classification
 - Audit trail generation (JSON) for data provenance
 
-```{r clean-phase1}
+```{r clean-phase1, purl=FALSE}
 phase1_raw <- data.frame(
   Names         = c("Smith, Alice MD", "Jones, Bob DO", "Park, Carol MD"),
   practice_name = c("Denver University Medical", "Downtown Family Clinic",
@@ -237,7 +237,7 @@ The function invisibly returns the cleaned data frame and writes two files to
 
 ### Accessing the audit trail
 
-```{r phase1-audit}
+```{r phase1-audit, purl=FALSE}
 trail <- attr(result_phase1, "audit_trail")
 cat(sprintf(
   "Rows: %d → %d  |  Duration: %.2fs  |  NPI completeness: %.0f%%\n",
@@ -255,7 +255,7 @@ cat(sprintf(
 Physicians called more than the protocol allows inflate your sample and bias
 results. Flag repeat calls before analysis:
 
-```{r duplicates}
+```{r duplicates, purl=FALSE}
 calls <- data.frame(
   npi         = c("1234567893", "1234567893", "1234567893",
                   "9876543210", "9876543210"),
@@ -280,7 +280,7 @@ removed (or justified) before the primary analysis.
 Raw exports from REDCap or spreadsheets often have verbose or inconsistent
 column names. Use `mysterycall_rename_columns()` to rename by substring match:
 
-```{r rename}
+```{r rename, purl=FALSE}
 messy <- data.frame(
   physician_full_name_as_entered = "Smith, Alice",
   office_telephone_number        = "303-555-1212",
@@ -308,7 +308,7 @@ address, credential) via the `provider` package. This step requires the
 remotes::install_github("andrewallenbruce/provider")
 ```
 
-```{r clinician-data}
+```{r clinician-data, purl=FALSE}
 npi_df <- data.frame(
   npi = c("1234567893", "1578798779"),
   stringsAsFactors = FALSE
@@ -334,7 +334,7 @@ and practice address fields.
 
 A complete cleaning pipeline for a new mystery caller dataset:
 
-```{r full-pipeline, eval = FALSE}
+```{r full-pipeline, eval = FALSE, purl=FALSE}
 library(mysterycall)
 
 # 1. Validate NPIs

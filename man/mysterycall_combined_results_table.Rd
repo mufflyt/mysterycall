@@ -38,7 +38,7 @@ A data frame with columns (in order):
 \describe{
 \item{\code{Term}}{Model term name.}
 \item{\code{IRR}}{Formatted IRR string.}
-\item{\verb{IRR 95\% CI}}{en-dash separated CI string, e.g. \code{"1.05–1.56"}.}
+\item{\verb{IRR 95\% CI}}{en-dash separated CI string, e.g. \code{"1.05-1.56"}.}
 \item{\code{p-value}}{Formatted p-value string.}
 \item{\verb{Days Diff}}{Signed absolute day difference (\code{"+4.3"}), or \code{NA}
 when \code{baseline_mean} is \code{NULL}.}

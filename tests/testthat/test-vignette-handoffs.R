@@ -400,6 +400,7 @@ test_that("Vignette handoff: Error scenarios in examples", {
   with_mocked_bindings(
     npi_search = mock_empty_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       # Should handle empty results gracefully
       result <- mysterycall_search_taxonomy("Nonexistent Specialty",

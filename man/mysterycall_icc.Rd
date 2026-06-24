@@ -14,7 +14,7 @@ object returned by \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_m
 Used only when \code{n_boot > 0}.}
 
 \item{n_boot}{Integer. Number of bootstrap replicates for confidence interval.
-Default \code{0L} (no bootstrap; CI is \code{c(NA, NA)}). Values of 500–2000 are
+Default \code{0L} (no bootstrap; CI is \code{c(NA, NA)}). Values of 500-2000 are
 recommended for publication.}
 
 \item{seed}{Integer or \code{NULL}. Random seed for bootstrap reproducibility.
@@ -68,7 +68,7 @@ print(icc)
 }
 \references{
 Nakagawa S, Schielzeth H (2010). A general and simple method for obtaining
-R² from generalized linear mixed-effects models. \emph{Methods in Ecology and
+R^2 from generalized linear mixed-effects models. \emph{Methods in Ecology and
 Evolution} 4(2):133-142. \doi{10.1111/j.2041-210x.2012.00261.x}
 }
 \seealso{

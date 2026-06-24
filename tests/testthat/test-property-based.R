@@ -264,6 +264,7 @@ test_that("Property: Search operations return consistent data types", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       for (taxonomy in taxonomies) {
         result <- mysterycall_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)

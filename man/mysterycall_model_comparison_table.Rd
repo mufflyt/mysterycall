@@ -22,7 +22,7 @@ Default \code{1L}.}
 }
 \value{
 A data frame with columns \code{Model}, \code{Family}, \code{N}, \code{Params},
-\code{AIC}, \code{BIC}, \code{ΔAIC}, \code{ΔBIC}, \code{Phi (Pearson)}, \code{Theta}, \code{Winner}.
+\code{AIC}, \code{BIC}, \code{DeltaAIC}, \code{DeltaBIC}, \code{Phi (Pearson)}, \code{Theta}, \code{Winner}.
 \code{Winner} is \code{"*"} for the best model under \code{criterion[1]} and \code{""}
 otherwise. The data frame carries an attribute \code{"winner"} with the
 winning model name.

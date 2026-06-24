@@ -15,7 +15,7 @@ df <- data.frame(
 test_that("table1: returns mysterycall_table1 list with expected names", {
   res <- mysterycall_table1(df, covariates = c("gender", "wait_days"))
   expect_s3_class(res, "mysterycall_table1")
-  expect_named(res, c("table", "column_ns", "stratify_by", "n"))
+  expect_named(res, c("table", "column_ns", "stratify_by", "n", "docx_path"))
   expect_s3_class(res$table, "tbl_df")
   expect_null(res$stratify_by)
   expect_equal(res$n, nrow(df))

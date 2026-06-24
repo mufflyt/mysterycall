@@ -18,7 +18,7 @@
 }
 \description{
 Displays a formatted console summary: sample size, physician count,
-AIC/BIC, residual SD, normality test, R², reference levels, and the
+AIC/BIC, residual SD, normality test, R^2, reference levels, and the
 fixed-effects table with coefficients in \strong{days}.
 }
 \seealso{

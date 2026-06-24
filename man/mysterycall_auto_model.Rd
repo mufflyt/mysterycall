@@ -43,8 +43,8 @@ Default \code{0.05}.}
 \item{...}{Additional arguments forwarded to all model-fitting functions.}
 }
 \value{
-The selected count model — either a \code{mysterycall_poisson_model}
-or \code{mysterycall_nb_model} — with an extra element \verb{$selection}:
+The selected count model - either a \code{mysterycall_poisson_model}
+or \code{mysterycall_nb_model} - with an extra element \verb{$selection}:
 \describe{
 \item{\code{poisson_phi}}{Numeric. Overdispersion from the initial Poisson
 fit.}
@@ -84,9 +84,11 @@ Otherwise the LMM is flagged as not recommended.
 }
 
 The \strong{primary return value} is the selected count model (Poisson or NB)
-— the same class as \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} /
+\itemize{
+\item the same class as \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} /
 \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}, so all downstream functions work unchanged.
 The LMM and routing metadata live in \code{result$selection}.
+}
 }
 \examples{
 \dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}

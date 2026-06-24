@@ -67,4 +67,3 @@ Other utilities:
 \code{\link{mysterycall_write_table}()}
 }
 \concept{utilities}
-\keyword{internal}

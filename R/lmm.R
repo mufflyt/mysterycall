@@ -73,14 +73,14 @@ NULL
 #' is on the same (days) scale.
 #'
 #' @section R-squared:
-#' Marginal R² reflects variance explained by fixed effects alone;
-#' conditional R² includes the physician random intercept. Both are computed
+#' Marginal R^2 reflects variance explained by fixed effects alone;
+#' conditional R^2 includes the physician random intercept. Both are computed
 #' from the variance-component decomposition (Nakagawa & Schielzeth 2013) and
 #' do not require any additional packages.
 #'
 #' @references
 #' Nakagawa S, Schielzeth H (2013). A general and simple method for obtaining
-#' R² from generalized linear mixed-effects models. *Methods in Ecology and
+#' R^2 from generalized linear mixed-effects models. *Methods in Ecology and
 #' Evolution* 4(2):133-142. \doi{10.1111/j.2041-210x.2012.00261.x}
 #'
 #' @importFrom stats complete.cases qnorm as.formula shapiro.test AIC BIC sigma
@@ -377,7 +377,7 @@ mysterycall_lmm <- function(data,
 #' Print method for mysterycall_lmm objects
 #'
 #' Displays a formatted console summary: sample size, physician count,
-#' AIC/BIC, residual SD, normality test, R², reference levels, and the
+#' AIC/BIC, residual SD, normality test, R^2, reference levels, and the
 #' fixed-effects table with coefficients in **days**.
 #'
 #' @param x A `mysterycall_lmm` object.
@@ -396,7 +396,7 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
               x$aic, x$bic, x$sigma))
 
   if (!is.na(x$r_squared$marginal)) {
-    cat(sprintf("  R² marginal = %.3f   conditional = %.3f\n",
+    cat(sprintf("  R^2 marginal = %.3f   conditional = %.3f\n",
                 x$r_squared$marginal, x$r_squared$conditional))
   }
 
@@ -447,7 +447,7 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
 #'
 #' Produces two side-by-side diagnostic panels: a Normal Q-Q plot of the
 #' model residuals and a residuals-vs-fitted plot. Use these **before** relying
-#' on the LMM — if the Q-Q plot shows a systematic S-shape or heavy tails,
+#' on the LMM - if the Q-Q plot shows a systematic S-shape or heavy tails,
 #' switch to a Poisson or negative-binomial GLMM.
 #'
 #' @param x A `mysterycall_lmm` object returned by [mysterycall_lmm()].

@@ -23,7 +23,7 @@ mysterycall_materials_methods(
   sampling_method = "random",
   irb_institution = "Colorado Multiple Institutional Review Board (COMIRB)",
   irb_number = "[COMIRB NUMBER REQUIRED]",
-  call_hours = "Monday through Friday, 9:00 am – 4:00 pm local time",
+  call_hours = "Monday through Friday, 9:00 am - 4:00 pm local time",
   min_interval_hours = 24L,
   caller_assignment = "rotated systematically across physicians and conditions",
   appointment_definition = "first available appointment offered",

@@ -72,6 +72,8 @@ NULL
 #' underlying variable name (`"cyl"`) to `term`, not the transformed name.
 #' The function resolves the original column automatically.
 #'
+#' @param ... Additional arguments forwarded to [marginaleffects::avg_slopes()]
+#'   for negative-binomial model wrappers.
 #' @importFrom stats model.frame model.matrix predict formula terms
 #' @family outcomes
 #' @seealso [mysterycall_poisson_model()], [mysterycall_model_metrics()],
@@ -87,7 +89,8 @@ mysterycall_marginal_effects <- function(model,
                                          term  = NULL,
                                          data  = NULL,
                                          type  = c("response", "link"),
-                                         eps   = 1e-7) {
+                                         eps   = 1e-7,
+                                         ...) {
 
   type <- match.arg(type)
 

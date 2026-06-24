@@ -190,7 +190,7 @@ print.mysterycall_predicted_means <- function(x, digits = 1, ...) {
     lo_r <- x[ord[1L], ]
     hi_r <- x[ord[nrow(x)], ]
     cat(sprintf(
-      "\nPredicted wait times ranged from %.1f days (%s) to %.1f days (%s, 95%% CI %.1f–%.1f).\n",
+      "\nPredicted wait times ranged from %.1f days (%s) to %.1f days (%s, 95%% CI %.1f-%.1f).\n",
       lo_r$predicted_mean, lo_r$group,
       hi_r$predicted_mean, hi_r$group,
       hi_r$ci_lower, hi_r$ci_upper

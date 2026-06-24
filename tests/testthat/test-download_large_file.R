@@ -16,7 +16,10 @@ test_that("mysterycall_download_file detects in-progress lock", {
   file.create(lock_path)
 
   mockery::stub(mysterycall_download_file, "get_content_length", function(...) NA_real_)
-  expect_equal(mysterycall_download_file("https://example.com/data", dest, overwrite = FALSE), dest)
+  expect_error(
+    mysterycall_download_file("https://example.com/data", dest, overwrite = FALSE),
+    "appears to be in progress"
+  )
   unlink(lock_path)
 })
 

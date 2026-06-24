@@ -11,7 +11,7 @@
 #' @param irr Numeric. The IRR to detect (e.g. `0.75` means 25% fewer days for
 #'   the intervention group). Must be positive.
 #' @param theta Numeric. Negative binomial dispersion parameter. Higher values
-#'   mean less overdispersion (Poisson is the limit as theta → ∞). Use the
+#'   mean less overdispersion (Poisson is the limit as theta -> Inf). Use the
 #'   `$theta` from a pilot `mysterycall_nb_model()` fit, or a literature-based
 #'   estimate. Default `2.0` (moderate overdispersion typical of wait-time data).
 #' @param baseline_mean Numeric. Expected mean wait days in the reference group.
@@ -38,7 +38,7 @@
 #' @section Choosing theta:
 #' If you have pilot data, fit `mysterycall_nb_model()` and use `result$theta`.
 #' Without pilot data, use `theta = 1` (high overdispersion, conservative) to
-#' `theta = 5` (mild overdispersion). Smaller theta → lower power → larger required N.
+#' `theta = 5` (mild overdispersion). Smaller theta -> lower power -> larger required N.
 #'
 #' @family outcomes
 #' @seealso [mysterycall_nb_model()] for fitting the NB model;
@@ -167,7 +167,7 @@ print.mysterycall_nb_power <- function(x, ...) {
     x$n_physicians, x$total_n, x$irr, x$theta
   ))
   cat(sprintf(
-    "  Estimated power: %.1f%%  (95%% CI: %.1f%%–%.1f%%)  [%d simulations, alpha=%.3f]\n",
+    "  Estimated power: %.1f%%  (95%% CI: %.1f%%-%.1f%%)  [%d simulations, alpha=%.3f]\n",
     x$power * 100, x$ci[1] * 100, x$ci[2] * 100, x$n_sim, x$alpha
   ))
   invisible(x)

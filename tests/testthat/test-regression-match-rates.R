@@ -96,6 +96,7 @@ test_that("Regression: mysterycall_search_taxonomy match rates", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       results <- list()
       errors <- 0

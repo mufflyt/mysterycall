@@ -84,4 +84,3 @@ generalist coverage before assigning scenarios;
 \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for specialty harmonization.
 }
 \concept{study design}
-\keyword{internal}

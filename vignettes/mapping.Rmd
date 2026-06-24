@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -34,7 +34,7 @@ widget in the top-right corner. A scale bar is added at the bottom-left. An
 optional `title` argument accepts an HTML string that is placed in a control
 panel at the top-left of the map.
 
-```{r base-map, eval=FALSE}
+```{r base-map, eval=FALSE, purl=FALSE}
 library(mysterycall)
 library(leaflet)
 
@@ -66,7 +66,7 @@ the packaged `acog_districts` lookup table to Natural Earth state geometries and
 returns a dissolved `sf` polygon object — one row per district — that is ready
 for mapping or spatial joins.
 
-```{r acog-districts, eval=FALSE}
+```{r acog-districts, eval=FALSE, purl=FALSE}
 library(mysterycall)
 
 # Build the sf object (requires rnaturalearth)
@@ -86,7 +86,7 @@ print(districts_sf[, c("ACOG_District", "States")], n = 5)
 The bundled `acog_districts` data frame contains the underlying state-to-district
 mapping and can be inspected without building the sf object:
 
-```{r acog-data, eval=TRUE}
+```{r acog-data, eval=TRUE, purl=FALSE}
 library(mysterycall)
 
 data(acog_districts)
@@ -95,7 +95,7 @@ head(acog_districts)
 
 The table below summarizes how many states each district covers:
 
-```{r acog-summary-table, eval=TRUE}
+```{r acog-summary-table, eval=TRUE, purl=FALSE}
 data(acog_districts)
 dist_summary <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_summary)[2] <- "n_states"
@@ -108,7 +108,7 @@ knitr::kable(
 )
 ```
 
-```{r acog-district-bar, eval=TRUE, fig.width=6, fig.height=3.8, fig.cap="State count per ACOG district. Districts vary from 2 (District XI — Puerto Rico / US territories) to 8 states."}
+```{r acog-district-bar, eval=TRUE, fig.width=6, fig.height=3.8, fig.cap="State count per ACOG district. Districts vary from 2 (District XI — Puerto Rico / US territories) to 8 states.", purl=FALSE}
 data(acog_districts)
 dist_counts <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_counts)[2] <- "n_states"
@@ -137,7 +137,7 @@ their district using the viridis `"magma"` palette (configurable via
 `color_palette`), adds a small random jitter to overlapping points, and saves
 the result as a self-contained HTML file plus a PNG screenshot to `output_dir`.
 
-```{r physician-dot, eval=FALSE}
+```{r physician-dot, eval=FALSE, purl=FALSE}
 library(mysterycall)
 
 # Synthetic provider data — replace with your own data frame
@@ -177,7 +177,7 @@ Dartmouth Atlas on first use, caches it in the user's R cache directory, and
 returns an `sf` object in CRS 4326. By default Hawaii and Alaska are excluded;
 set `remove_HI_AK = FALSE` to retain all regions.
 
-```{r hrr-sf, eval=FALSE}
+```{r hrr-sf, eval=FALSE, purl=FALSE}
 library(mysterycall)
 library(ggplot2)
 
@@ -190,7 +190,7 @@ glimpse(hrr_sf)
 The returned sf object can be passed directly to `ggplot2::geom_sf()` for
 static publication-ready maps:
 
-```{r hrr-map, eval=FALSE}
+```{r hrr-map, eval=FALSE, purl=FALSE}
 ggplot(hrr_sf) +
   geom_sf(fill = "#f0f0f0", color = "#999999", linewidth = 0.15) +
   theme_void() +
@@ -202,7 +202,7 @@ hexagonal grid, producing a count-per-cell choropleth with Alaska, Hawaii, and
 Puerto Rico insets. The result is saved as both TIFF and PNG at journal-ready
 resolution (600 dpi by default).
 
-```{r hrr-hex, eval=FALSE}
+```{r hrr-hex, eval=FALSE, purl=FALSE}
 # physician_sf must be an sf object with point geometries
 hrr_generate_maps(
   physician_sf = physician_sf,
@@ -227,7 +227,7 @@ shades block groups by their overlap proportion and draws each isochrone
 (30 / 60 / 120 / 180 minutes) in a distinct color. The map is exported as an
 HTML file and a PNG screenshot to `output_dir`.
 
-```{r block-group-overlap, eval=FALSE}
+```{r block-group-overlap, eval=FALSE, purl=FALSE}
 library(mysterycall)
 
 # bg_data and isochrones_data are sf objects produced by the isochrone workflow

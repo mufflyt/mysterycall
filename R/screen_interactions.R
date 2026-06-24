@@ -18,6 +18,9 @@ NULL
 #' @param random_intercept Optional character scalar. When supplied, a
 #'   `(1 | random_intercept)` term is added and `lme4::glmer()` is used;
 #'   otherwise `stats::glm()` is used.
+#' @param family Character scalar. Count-model family to use: `"poisson"`
+#'   (default) or `"negative_binomial"`. Negative-binomial screening requires
+#'   the `glmmTMB` package.
 #'
 #' @return A data frame with one row per candidate and columns:
 #'   `candidate`, `n_terms` (number of interaction coefficients),
@@ -42,11 +45,16 @@ mysterycall_screen_interactions <- function(data,
                                              outcome,
                                              exposure,
                                              candidates,
-                                             random_intercept = NULL) {
+                                             random_intercept = NULL,
+                                             family = c("poisson", "negative_binomial")) {
+  family <- match.arg(family)
   if (!is.data.frame(data)) stop("`data` must be a data frame.", call. = FALSE)
   missing_cols <- setdiff(c(outcome, exposure, candidates), names(data))
   if (length(missing_cols) > 0L) {
     stop("Columns not found in data: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+  }
+  if (identical(family, "negative_binomial") && !requireNamespace("glmmTMB", quietly = TRUE)) {
+    stop("glmmTMB is required when `family = \"negative_binomial\"`", call. = FALSE)
   }
   if (!is.null(random_intercept)) {
     if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -60,7 +68,17 @@ mysterycall_screen_interactions <- function(data,
 
   results <- lapply(candidates, function(cand) {
     tryCatch({
-      if (!is.null(random_intercept)) {
+      if (identical(family, "negative_binomial")) {
+        if (!is.null(random_intercept)) {
+          fml <- stats::as.formula(
+            sprintf("%s ~ %s * %s + (1|%s)", outcome, exposure, cand, random_intercept)
+          )
+        } else {
+          fml <- stats::as.formula(sprintf("%s ~ %s * %s", outcome, exposure, cand))
+        }
+        fit <- glmmTMB::glmmTMB(fml, data = data, family = glmmTMB::nbinom2(link = "log"))
+        coef_mat <- as.data.frame(summary(fit)$coefficients$cond)
+      } else if (!is.null(random_intercept)) {
         fml <- stats::as.formula(
           sprintf("%s ~ %s * %s + (1|%s)", outcome, exposure, cand, random_intercept)
         )

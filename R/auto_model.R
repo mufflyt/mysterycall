@@ -20,7 +20,7 @@
 #' }
 #'
 #' The **primary return value** is the selected count model (Poisson or NB)
-#' — the same class as [mysterycall_poisson_model()] /
+#' - the same class as [mysterycall_poisson_model()] /
 #' [mysterycall_nb_model()], so all downstream functions work unchanged.
 #' The LMM and routing metadata live in `result$selection`.
 #'
@@ -41,8 +41,8 @@
 #'   Default `0.05`.
 #' @param ... Additional arguments forwarded to all model-fitting functions.
 #'
-#' @return The selected count model — either a `mysterycall_poisson_model`
-#'   or `mysterycall_nb_model` — with an extra element `$selection`:
+#' @return The selected count model - either a `mysterycall_poisson_model`
+#'   or `mysterycall_nb_model` - with an extra element `$selection`:
 #' \describe{
 #'   \item{`poisson_phi`}{Numeric. Overdispersion from the initial Poisson
 #'     fit.}

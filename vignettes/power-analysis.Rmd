@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 knitr::opts_chunk$set(
   collapse  = TRUE,
   comment   = "#>",
@@ -39,7 +39,7 @@ The functions shown here are in the `power analysis` family:
 | `mysterycall_poisson_power()` | Sample size for Poisson count outcomes (wait days) |
 | `mysterycall_equation_figure()` | Power curve plot across a range of IRR values |
 
-```{r load}
+```{r load, purl=FALSE}
 library(mysterycall)
 ```
 
@@ -85,7 +85,7 @@ directory.
 
 ### Using `mysterycall_cochran_n()`
 
-```{r cochran-basic, echo=TRUE, eval=TRUE}
+```{r cochran-basic, echo=TRUE, eval=TRUE, purl=FALSE}
 # 800 OB-GYNs in target region — need acceptance rate within ±5 percentage points
 res_800 <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
 cat(sprintf(
@@ -95,7 +95,7 @@ cat(sprintf(
 ))
 ```
 
-```{r cochran-grid, echo=TRUE, eval=TRUE}
+```{r cochran-grid, echo=TRUE, eval=TRUE, purl=FALSE}
 # Show how n changes across directory sizes and margin-of-error targets
 grid <- expand.grid(
   N  = c(100, 200, 400, 800, 1600),
@@ -153,7 +153,7 @@ Suppose prior published work suggests physicians give Medicaid callers a wait
 of about 1.40 times the BCBS wait. The BCBS mean is 14 business days.
 How many providers are needed for 80 % power?
 
-```{r poisson-basic, echo=TRUE, eval=TRUE}
+```{r poisson-basic, echo=TRUE, eval=TRUE, purl=FALSE}
 pw <- mysterycall_poisson_power(
   irr       = 1.40,   # Medicaid wait is 40% longer
   lambda_ref = 14,    # BCBS mean = 14 business days
@@ -174,7 +174,7 @@ cat(sprintf(
 
 ### Comparing power and effect sizes
 
-```{r poisson-table, echo=TRUE, eval=TRUE}
+```{r poisson-table, echo=TRUE, eval=TRUE, purl=FALSE}
 scenarios <- list(
   list(irr = 1.20, power = 0.80, label = "Small effect (IRR 1.20), 80% power"),
   list(irr = 1.40, power = 0.80, label = "Moderate effect (IRR 1.40), 80% power"),
@@ -235,7 +235,7 @@ $$
 where $m$ is the average calls per cluster (office) and $\rho$ is the
 intra-class correlation (ICC).
 
-```{r icc, echo=TRUE, eval=TRUE}
+```{r icc, echo=TRUE, eval=TRUE, purl=FALSE}
 # No clustering vs. ICC = 0.10 (moderate) with 3 calls per office on average
 pw_no_icc  <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14)
 pw_icc_010 <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
@@ -279,7 +279,7 @@ A power curve shows how the required sample size per arm changes as a function
 of the minimum detectable effect (IRR). Plotting the curve helps justify the
 study's sample size to reviewers and IRBs.
 
-```{r power-curve, echo=TRUE, eval=TRUE, fig.cap="Required providers per arm (paired design, 80% power, lambda_ref = 14 d) as a function of the minimum detectable IRR."}
+```{r power-curve, echo=TRUE, eval=TRUE, fig.cap="Required providers per arm (paired design, 80% power, lambda_ref = 14 d) as a function of the minimum detectable IRR.", purl=FALSE}
 mysterycall_equation_figure(
   lambda0   = 14,
   irr_seq   = seq(1.10, 2.0, by = 0.05),
@@ -289,7 +289,7 @@ mysterycall_equation_figure(
 )
 ```
 
-```{r power-curve-90, echo=TRUE, eval=TRUE, fig.cap="Power curves comparing 80% and 90% power targets."}
+```{r power-curve-90, echo=TRUE, eval=TRUE, fig.cap="Power curves comparing 80% and 90% power targets.", purl=FALSE}
 library(ggplot2)
 
 irr_seq <- seq(1.10, 2.0, by = 0.05)
@@ -331,7 +331,7 @@ The expected wait time for the reference arm (`lambda_ref`) also affects
 required sample size. Studies in different specialties or regions should adapt
 this parameter.
 
-```{r lambda-sensitivity, echo=TRUE, eval=TRUE, fig.cap="Required sample size per arm for IRR = 1.40 across different reference wait-time assumptions."}
+```{r lambda-sensitivity, echo=TRUE, eval=TRUE, fig.cap="Required sample size per arm for IRR = 1.40 across different reference wait-time assumptions.", purl=FALSE}
 lambda_vals <- c(5, 7, 10, 14, 21, 30)
 
 n_by_lambda <- vapply(lambda_vals, function(lam)
@@ -369,7 +369,7 @@ A well-designed mystery caller study may need to satisfy *both* constraints:
 
 Take the **larger** of the two as the study's minimum sample size:
 
-```{r combined, echo=TRUE, eval=TRUE}
+```{r combined, echo=TRUE, eval=TRUE, purl=FALSE}
 n_cochran <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)$n
 n_poisson <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                         power = 0.80, both_arms = TRUE)$n_total
@@ -386,7 +386,7 @@ cat(sprintf("Required study size:           n = %d\n", max(n_cochran, n_poisson)
 When writing the Methods section of a manuscript, the relevant numbers can be
 generated programmatically:
 
-```{r reporting, echo=TRUE, eval=TRUE}
+```{r reporting, echo=TRUE, eval=TRUE, purl=FALSE}
 cochran_res <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
 poisson_res <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                           power = 0.80, both_arms = TRUE)

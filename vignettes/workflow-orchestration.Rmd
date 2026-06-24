@@ -16,13 +16,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = eval_vignettes)
 library(mysterycall)
 ```
 
-```{r load-pkg, eval=FALSE}
+```{r load-pkg, eval=FALSE, purl=FALSE}
 library(mysterycall)
 ```
 
@@ -123,7 +123,7 @@ code) so that the merged file is analysis-ready.
 
 **Option A — One-call orchestration (recommended for routine studies):**
 
-```{r one-call, eval=FALSE}
+```{r one-call, eval=FALSE, purl=FALSE}
 result <- mysterycall_run_workflow(
   taxonomy_terms      = c("207V00000X", "207VB0002X"),
   name_data           = provider_names_df,
@@ -171,7 +171,7 @@ Additional columns (specialty, address, etc.) are passed through untouched.
 
 ## 2.2 Key parameters
 
-```{r phase1-params, eval=FALSE}
+```{r phase1-params, eval=FALSE, purl=FALSE}
 result <- mysterycall_clean_phase1(
   phase1_data      = raw_roster,        # required: raw data frame or file path
   output_directory = "/study/output",   # required: directory for CSV + audit JSON
@@ -215,7 +215,7 @@ retained in the output. The flags exist so that downstream analysts can
 filter, weight, or report on data-quality issues without re-running the
 cleaning step.
 
-```{r phase1-flag-example, eval=FALSE}
+```{r phase1-flag-example, eval=FALSE, purl=FALSE}
 # How many rows were assigned a generated ID?
 sum(result$processing_flag_generated_id, na.rm = TRUE)
 
@@ -271,7 +271,7 @@ Key fields:
 The returned data frame carries two attributes that link it to the audit
 trail:
 
-```{r phase1-attrs, eval=FALSE}
+```{r phase1-attrs, eval=FALSE, purl=FALSE}
 # The cohort hash uniquely identifies this batch
 cohort_id <- attr(result, "cohort_hash")
 cat("Cohort hash:", cohort_id, "\n")
@@ -295,7 +295,7 @@ Phase 2 files, model results) back to this exact version of the cleaned roster.
 If `phase1_data` does not contain an `npi` column, `mysterycall_clean_phase1()`
 throws an informative error immediately:
 
-```{r phase1-error, eval=FALSE}
+```{r phase1-error, eval=FALSE, purl=FALSE}
 # This will fail with a clear error message
 bad_data <- data.frame(
   provider_first_name = "Jane",
@@ -335,7 +335,7 @@ problems entirely.
 
 ## 3.2 Using the function
 
-```{r npi-validate, eval=FALSE}
+```{r npi-validate, eval=FALSE, purl=FALSE}
 validated <- mysterycall_validate_npi(
   data       = phase1_result,
   npi_column = "npi"    # default; change if your column has a different name
@@ -370,7 +370,7 @@ apparent sample size and, if both entries are assigned to different callers,
 result in the same provider being called twice — a protocol violation in most
 IRB applications.
 
-```{r npi-dups, eval=FALSE}
+```{r npi-dups, eval=FALSE, purl=FALSE}
 dup_report <- mysterycall_check_duplicates(
   data       = validated,
   id_column  = "npi",
@@ -403,7 +403,7 @@ solves all three problems.
 
 ## 4.2 Key parameters
 
-```{r split-params, eval=FALSE}
+```{r split-params, eval=FALSE, purl=FALSE}
 workbooks <- mysterycall_split_and_save(
   data                = clean_roster,
   lab_assistant_names = c("Alice", "Bob", "Carol", "Dana", "Eve"),
@@ -447,7 +447,7 @@ This means workloads are balanced within ±1 provider across all callers for
 any roster size. The assignment is deterministic given the seed, the order of
 rows in `data`, and the order of names in `lab_assistant_names`.
 
-```{r workload-bar, echo=TRUE, eval=TRUE, fig.width=5, fig.height=2.8, fig.cap="Example round-robin workload distribution across five callers for a 198-provider roster. Differences of at most 1 provider guarantee balanced calling burden."}
+```{r workload-bar, echo=TRUE, eval=TRUE, fig.width=5, fig.height=2.8, fig.cap="Example round-robin workload distribution across five callers for a 198-provider roster. Differences of at most 1 provider guarantee balanced calling burden.", purl=FALSE}
 callers   <- c("Alice", "Bob", "Carol", "Dana", "Eve")
 n_total   <- 198L
 base_load <- n_total %/% length(callers)
@@ -476,7 +476,7 @@ ggplot2::ggplot(wb_df, ggplot2::aes(x = caller, y = n, fill = caller)) +
 Before sending workbooks to callers, verify that every provider appears in
 exactly one workbook:
 
-```{r split-verify, eval=FALSE}
+```{r split-verify, eval=FALSE, purl=FALSE}
 # Read all workbooks back and combine
 all_workbooks <- lapply(workbooks$file_paths, readxl::read_excel)
 combined      <- dplyr::bind_rows(all_workbooks)
@@ -522,7 +522,7 @@ names to replace them with.
 
 ## 5.2 `mysterycall_rename_columns()`: fuzzy column name matching
 
-```{r rename-cols, eval=FALSE}
+```{r rename-cols, eval=FALSE, purl=FALSE}
 # Standardize column names across all returned workbooks
 renamed <- mysterycall_rename_columns(
   data           = raw_returned_workbook,
@@ -545,7 +545,7 @@ emits a **warning** rather than an error. This is intentional: some callers
 may legitimately omit optional columns, and a warning lets you decide whether
 the missing column is a problem without crashing the pipeline.
 
-```{r rename-warning, eval=FALSE}
+```{r rename-warning, eval=FALSE, purl=FALSE}
 # If no column contains "wait", you get:
 #> Warning in mysterycall_rename_columns():
 #>   Target substring 'wait' did not match any column name.
@@ -555,7 +555,7 @@ the missing column is a problem without crashing the pipeline.
 
 ## 5.3 `mysterycall_clean_phase2()`: the full Phase 2 cleaning step
 
-```{r phase2-clean, eval=FALSE}
+```{r phase2-clean, eval=FALSE, purl=FALSE}
 phase2_result <- mysterycall_clean_phase2(
   data             = "/study/returned_workbooks",  # directory of Excel files
   output_directory = "/study/phase2_output",
@@ -578,7 +578,7 @@ process a single file.
 
 A complete example showing messy column normalization:
 
-```{r phase2-full, eval=FALSE}
+```{r phase2-full, eval=FALSE, purl=FALSE}
 # Simulate two messy returned workbooks
 alice_wb <- data.frame(
   NPI          = c("1234567893", "9876543210"),
@@ -610,7 +610,7 @@ check table provides this.
 
 ## 6.1 What the table contains
 
-```{r quality-params, eval=FALSE}
+```{r quality-params, eval=FALSE, purl=FALSE}
 mysterycall_save_quality_table(
   data        = phase2_result,
   output_path = "/study/qa/quality_table.csv",
@@ -636,7 +636,7 @@ insurance stratum) containing:
 The standard threshold in most mystery-caller protocols is 80% completion.
 Read the table back and flag callers below that threshold:
 
-```{r quality-flag, eval=FALSE}
+```{r quality-flag, eval=FALSE, purl=FALSE}
 qa <- read.csv("/study/qa/quality_table.csv")
 
 # Flag callers below 80% completion
@@ -662,7 +662,7 @@ identifies states with zero completed calls.
 
 ## 7.1 The `all_states` parameter
 
-```{r coverage-params, eval=FALSE}
+```{r coverage-params, eval=FALSE, purl=FALSE}
 not_contacted <- mysterycall_not_contacted_states(
   data       = phase2_result,
   all_states = state.abb           # all 50 states, or a custom list
@@ -676,7 +676,7 @@ and the states present in `data` where `call_outcome` is non-missing.
 
 ## 7.2 Visualizing contacted vs not-contacted states
 
-```{r coverage-table, eval=FALSE}
+```{r coverage-table, eval=FALSE, purl=FALSE}
 # Quick cross-tabulation of states by contact status
 contacted_states <- unique(phase2_result$state[
   !is.na(phase2_result$call_outcome)
@@ -695,7 +695,7 @@ print(table(status_vec))
 
 ## 7.3 Filtering for follow-up prioritization
 
-```{r coverage-filter, eval=FALSE}
+```{r coverage-filter, eval=FALSE, purl=FALSE}
 # Which specific states need follow-up?
 cat("States with zero completed calls:\n")
 cat(paste(not_contacted$state, collapse = ", "), "\n")
@@ -739,7 +739,7 @@ returns a named list of all intermediate and final artifacts.
 
 ## 8.2 The returned list structure
 
-```{r workflow-list, eval=FALSE}
+```{r workflow-list, eval=FALSE, purl=FALSE}
 names(result)
 #>  [1] "phase1_result"           "validated_npi"
 #>  [3] "workbook_paths"          "phase2_result"
@@ -754,7 +754,7 @@ you would if you had called `mysterycall_clean_phase1()` directly.
 
 ## 8.3 A complete realistic call
 
-```{r workflow-full, eval=FALSE}
+```{r workflow-full, eval=FALSE, purl=FALSE}
 result <- mysterycall_run_workflow(
   taxonomy_terms      = c(
     "207V00000X",   # Obstetrics & Gynecology
@@ -781,7 +781,7 @@ be present at the console, use `mysterycall_run_workflow_logged()`. It is
 **functionally identical** to `mysterycall_run_workflow()` but wraps every
 pipeline stage in structured JSON logging:
 
-```{r workflow-logged, eval=FALSE}
+```{r workflow-logged, eval=FALSE, purl=FALSE}
 result <- mysterycall_run_workflow_logged(
   # ... same parameters as mysterycall_run_workflow() ...
   log_file = "/network/obgyn_study/logs/workflow_run.jsonl"
@@ -809,7 +809,7 @@ After `mysterycall_run_workflow()` returns, the first thing to inspect is
 `result$workflow_summary`. This is a data frame with one row per pipeline
 stage:
 
-```{r workflow-summary, eval=FALSE}
+```{r workflow-summary, eval=FALSE, purl=FALSE}
 knitr::kable(
   result$workflow_summary,
   caption = "Row counts through the pipeline"
@@ -839,7 +839,7 @@ retired. Document these exclusions in your CONSORT flowchart.
 4. The `cohort_hash` in `result$cohort_hash` matches the hash stored in
    your lab notebook entry for this wave of data collection.
 
-```{r workflow-check, eval=FALSE}
+```{r workflow-check, eval=FALSE, purl=FALSE}
 # Programmatic pre-analysis checks
 stopifnot(
   result$workflow_summary$rows_retained[1] == 100,
@@ -856,7 +856,7 @@ stopifnot(
 
 Before passing any data to the workflow, run:
 
-```{r preflight, eval=FALSE}
+```{r preflight, eval=FALSE, purl=FALSE}
 mysterycall_preflight_check(phase1_data = raw_roster)
 ```
 
@@ -909,7 +909,7 @@ The logged variant also produces timing information for each stage. In large
 studies, Phase 1 with `duplicate_rows = TRUE` and `output_format = "parquet"`
 is typically the fastest combination (5–10× faster than CSV for > 5,000 rows).
 
-```{r large-study, eval=FALSE}
+```{r large-study, eval=FALSE, purl=FALSE}
 # Recommended settings for large studies
 result <- mysterycall_run_workflow_logged(
   phase1_data      = large_roster,
@@ -929,7 +929,7 @@ federal holidays are excluded. `mysterycall_count_business_days()` counts
 business days between two dates; `mysterycall_business_days()` applies the
 calculation to every row of a data frame.
 
-```{r business-days-scalar, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE)}
+```{r business-days-scalar, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE), purl=FALSE}
 # How many business days between a call on a Monday and an appointment on
 # Friday of the following week?  (Calendar days = 11; business days = 10)
 bd <- mysterycall_count_business_days(
@@ -939,7 +939,7 @@ bd <- mysterycall_count_business_days(
 cat("Business days:", bd, "\n")
 ```
 
-```{r business-days-df, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE)}
+```{r business-days-df, echo=TRUE, eval=requireNamespace("bizdays", quietly = TRUE), purl=FALSE}
 # Apply to a data frame of completed calls
 calls_df <- data.frame(
   npi       = paste0("NPI-", 1:6),
@@ -978,7 +978,7 @@ proceeding to analysis.
 outcomes) or the intraclass correlation coefficient (for numeric outcomes) on
 records audited by two callers.
 
-```{r caller-reliability, echo=TRUE, eval=TRUE}
+```{r caller-reliability, echo=TRUE, eval=TRUE, purl=FALSE}
 set.seed(7)
 # Long-format audit sample: each record appears twice — once per caller
 n_records <- 30L
@@ -1006,7 +1006,7 @@ print(rel)
 `mysterycall_call_productivity()` tallies completed, pending, and failed calls
 by caller and returns a summary data frame for QC review.
 
-```{r call-productivity, echo=TRUE, eval=TRUE}
+```{r call-productivity, echo=TRUE, eval=TRUE, purl=FALSE}
 set.seed(8)
 n_rows <- 80L
 prod_df <- data.frame(

@@ -87,7 +87,7 @@ and creates ready-to-model outcome columns for both the logistic model
 \details{
 \strong{Two inclusion sets are created (see Value):}
 \describe{
-\item{\verb{$logistic_data}}{All calls where the office was \emph{reached} —
+\item{\verb{$logistic_data}}{All calls where the office was \emph{reached} -
 whether or not an appointment was offered. Use with
 \code{\link[=mysterycall_logistic_model]{mysterycall_logistic_model()}}. Exclusion codes 7, 9, and 10 are
 included as "appointment not offered" (outcome = 0).}
@@ -98,13 +98,13 @@ date was recorded. Use with \code{\link[=mysterycall_poisson_model]{mysterycall_
 
 \strong{Standard REDCap column names assumed} (override via \verb{col_*} arguments):
 \itemize{
-\item \code{calldate1} — date of first call attempt
-\item \code{contacted1} — 1 = office reached, 0 = not reached (first call)
-\item \code{contacted2} — 1 = reached on second attempt, 0 = not, 99 = N/A
-\item \code{appdate} — date of appointment offered
-\item \code{exclusions} — integer exclusion code (0 = included)
-\item \code{initials} — caller identity (standardized to title case)
-\item \code{medicaid_status} — 1=accepts, 2=refuses, 3=BCBS call, 4=unknown
+\item \code{calldate1} - date of first call attempt
+\item \code{contacted1} - 1 = office reached, 0 = not reached (first call)
+\item \code{contacted2} - 1 = reached on second attempt, 0 = not, 99 = N/A
+\item \code{appdate} - date of appointment offered
+\item \code{exclusions} - integer exclusion code (0 = included)
+\item \code{initials} - caller identity (standardized to title case)
+\item \code{medicaid_status} - 1=accepts, 2=refuses, 3=BCBS call, 4=unknown
 }
 }
 \examples{

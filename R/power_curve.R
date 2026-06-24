@@ -120,15 +120,15 @@ mysterycall_power_curve <- function(n_range             = seq(20, 100, by = 10),
   p <- ggplot2::ggplot(
     dat,
     ggplot2::aes(
-      x      = n_physicians,
-      y      = power,
-      colour = irr_label,
-      fill   = irr_label,
-      group  = irr_label
+      x      = .data$n_physicians,
+      y      = .data$power,
+      colour = .data$irr_label,
+      fill   = .data$irr_label,
+      group  = .data$irr_label
     )
   ) +
     ggplot2::geom_ribbon(
-      ggplot2::aes(ymin = ci_lower, ymax = ci_upper),
+      ggplot2::aes(ymin = .data$ci_lower, ymax = .data$ci_upper),
       alpha  = 0.15,
       colour = NA
     ) +
@@ -156,7 +156,7 @@ mysterycall_power_curve <- function(n_range             = seq(20, 100, by = 10),
     ggplot2::labs(
       title   = "Power Curve: Negative Binomial GLMM",
       x       = "Physicians per group (N)",
-      y       = "Power (1 − β)",
+      y       = "Power (1 - beta)",
       colour  = NULL,
       fill    = NULL,
       caption = sprintf(
@@ -202,7 +202,7 @@ mysterycall_power_curve <- function(n_range             = seq(20, 100, by = 10),
 #' @family outcomes
 #' @export
 print.mysterycall_power_curve <- function(x, ...) {
-  cat("Power Curve — Minimum N to reach target power\n")
+  cat("Power Curve - Minimum N to reach target power\n")
   cat(sprintf("Target power: %.0f%%\n\n", x$params$target_power * 100))
   mn <- x$min_n
   for (nm in names(mn)) {

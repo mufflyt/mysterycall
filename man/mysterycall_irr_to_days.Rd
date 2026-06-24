@@ -40,7 +40,7 @@ A list of class \code{mysterycall_irr_days} with elements:
 \describe{
 \item{\code{table}}{Data frame with columns: \code{term}, \code{level} (group label
 stripped of the exposure prefix), \code{irr}, \code{days_mean} (reference-group
-mean × IRR), \code{days_diff} (days_mean − baseline_mean), \code{days_ci_lower},
+mean x IRR), \code{days_diff} (days_mean - baseline_mean), \code{days_ci_lower},
 \code{days_ci_upper}, \code{direction} (\code{"more"} or \code{"fewer"}), \code{p_value_fmt}.}
 \item{\code{sentences}}{Character vector. One manuscript-ready sentence per row.}
 \item{\code{paragraph}}{Character scalar. All sentences joined into a paragraph.}

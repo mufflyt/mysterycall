@@ -6,8 +6,8 @@ NULL
 #' Publication-ready forest plot of IRRs or odds ratios
 #'
 #' Produces a B&W forest plot styled for journal submission, following the
-#' design used in Acosta & Mufflyt (2025–2026): alternating row shading,
-#' right-side annotation text (`"1.28 (1.05–1.56); P = .014"`), AMA-style
+#' design used in Acosta & Mufflyt (2025-2026): alternating row shading,
+#' right-side annotation text (`"1.28 (1.05-1.56); P = .014"`), AMA-style
 #' p-values, and significance encoded via point shape and CI linetype rather
 #' than colour. Accepts model objects, plain data frames, or named lists of
 #' models.
@@ -113,13 +113,13 @@ mysterycall_forest_plot <- function(x,
   # ---- Significance & annotations --------------------------------------------
   if (!"p_value" %in% names(tbl)) tbl$p_value <- NA_real_
   tbl$sig       <- as.character(!is.na(tbl$p_value) & tbl$p_value < sig_threshold)
-  tbl$irr_label <- sprintf("%.2f (%.2f–%.2f)", tbl$irr, tbl$ci_lower, tbl$ci_upper)
+  tbl$irr_label <- sprintf("%.2f (%.2f-%.2f)", tbl$irr, tbl$ci_lower, tbl$ci_upper)
   tbl$p_str     <- .fmt_ama_pvalue(tbl$p_value)
   tbl$annotation <- ifelse(nzchar(tbl$p_str),
                             paste0(tbl$irr_label, "; ", tbl$p_str),
                             tbl$irr_label)
 
-  # ---- Factor ordering (first row of tbl → top of plot) ----------------------
+  # ---- Factor ordering (first row of tbl -> top of plot) ----------------------
   tbl$term <- factor(tbl$term, levels = rev(as.character(tbl$term)))
 
   # ---- Auto x-limits ---------------------------------------------------------
@@ -231,7 +231,7 @@ mysterycall_forest_plot <- function(x,
 
 .fp_extract <- function(x, x_label_default) {
 
-  # Named list of models → bind rows with a "model" prefix on term
+  # Named list of models -> bind rows with a "model" prefix on term
   if (is.list(x) && !is.data.frame(x) &&
       !inherits(x, c("mysterycall_poisson_model", "mysterycall_nb_model",
                      "mysterycall_auto_model", "mysterycall_logistic_model"))) {
@@ -247,7 +247,7 @@ mysterycall_forest_plot <- function(x,
     return(out)
   }
 
-  # Logistic model → use or_table, override label
+  # Logistic model -> use or_table, override label
   if (inherits(x, "mysterycall_logistic_model")) {
     tbl <- as.data.frame(x$or_table)
     names(tbl)[names(tbl) == "or"] <- "irr"
@@ -255,7 +255,7 @@ mysterycall_forest_plot <- function(x,
     return(tbl)
   }
 
-  # Poisson / NB / auto_model → use irr_table
+  # Poisson / NB / auto_model -> use irr_table
   if (inherits(x, c("mysterycall_poisson_model", "mysterycall_nb_model",
                      "mysterycall_auto_model"))) {
     tbl <- as.data.frame(x$irr_table)

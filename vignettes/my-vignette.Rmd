@@ -18,7 +18,7 @@ editor_options:
 ---
 
 
-```{r, include = FALSE}
+```{r, include = FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 library(magrittr)
 knitr::opts_chunk$set(
@@ -35,7 +35,7 @@ The `mysterycall::taxonomy` data and `mysterycall_search_taxonomy` function in t
 
 Before you can harness the power of the `mysterycall_search_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 if (eval_vignettes) {
   library(mysterycall)
 }
@@ -49,7 +49,7 @@ In particular, the `mysterycall::taxonomy` data frame contains NUCC taxonomy cod
 
 Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the `mysterycall_search_taxonomy` function.
 
-```{r, include = FALSE}
+```{r, include = FALSE, purl=FALSE}
 # Load required packages when evaluating examples
 if (eval_vignettes) {
   library(mysterycall)
@@ -61,7 +61,7 @@ if (eval_vignettes) {
 }
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, purl=FALSE}
 obgyn_taxonomy <- mysterycall::taxonomy %>%
   dplyr::filter(stringr::str_detect(`Classification`, stringr::fixed("GYN", ignore_case = TRUE))) %>%
   dplyr::select(Code, Specialization)
@@ -102,7 +102,7 @@ joinable to CMS Care Compare data and other federal datasets.
 
 Search for providers in one or more taxonomy descriptions:
 
-```{r, include=TRUE, message=TRUE, warning=TRUE, echo=TRUE, eval=FALSE}
+```{r, include=TRUE, message=TRUE, warning=TRUE, echo=TRUE, eval=FALSE, purl=FALSE}
 taxonomy_descriptions <- c(
   "Hospice and Palliative Medicine",
   "Gynecologic Oncology"
@@ -113,7 +113,7 @@ data <- mysterycall_search_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 
 Inspect the distribution of results:
 
-```{r, include=TRUE, message=FALSE, warning=FALSE, eval=FALSE}
+```{r, include=TRUE, message=FALSE, warning=FALSE, eval=FALSE, purl=FALSE}
 # Providers by gender and state
 dplyr::count(data, basic_gender, addresses_state, sort = TRUE)
 
@@ -131,7 +131,7 @@ The raw output from `mysterycall_search_taxonomy()` uses NPPES column names
 match the names expected by `mysterycall_get_clinician_data()` and other
 downstream functions, then derives a short subspecialty code.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 # OBGYN subspecialty taxonomy descriptions and their short codes
 obgyn_subspecialties <- c(
   "Obstetrics & Gynecology, Female Pelvic Medicine and Reconstructive Surgery" = "FPM",
@@ -192,7 +192,7 @@ roster_clean <- data |>
 Once the roster is clean, validate the phone numbers against the provider's
 reported state using the NANP helper:
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 phone_checks <- do.call(rbind, Map(
   mysterycall_validate_phone,
   phone_str      = roster_clean$phone,

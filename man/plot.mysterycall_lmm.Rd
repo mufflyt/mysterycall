@@ -18,7 +18,7 @@ active graphics device.
 \description{
 Produces two side-by-side diagnostic panels: a Normal Q-Q plot of the
 model residuals and a residuals-vs-fitted plot. Use these \strong{before} relying
-on the LMM — if the Q-Q plot shows a systematic S-shape or heavy tails,
+on the LMM - if the Q-Q plot shows a systematic S-shape or heavy tails,
 switch to a Poisson or negative-binomial GLMM.
 }
 \examples{

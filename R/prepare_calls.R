@@ -13,7 +13,7 @@ NULL
 #'
 #' **Two inclusion sets are created (see Value):**
 #' \describe{
-#'   \item{`$logistic_data`}{All calls where the office was *reached* —
+#'   \item{`$logistic_data`}{All calls where the office was *reached* -
 #'     whether or not an appointment was offered. Use with
 #'     [mysterycall_logistic_model()]. Exclusion codes 7, 9, and 10 are
 #'     included as "appointment not offered" (outcome = 0).}
@@ -24,13 +24,13 @@ NULL
 #'
 #' **Standard REDCap column names assumed** (override via `col_*` arguments):
 #' \itemize{
-#'   \item `calldate1` — date of first call attempt
-#'   \item `contacted1` — 1 = office reached, 0 = not reached (first call)
-#'   \item `contacted2` — 1 = reached on second attempt, 0 = not, 99 = N/A
-#'   \item `appdate` — date of appointment offered
-#'   \item `exclusions` — integer exclusion code (0 = included)
-#'   \item `initials` — caller identity (standardized to title case)
-#'   \item `medicaid_status` — 1=accepts, 2=refuses, 3=BCBS call, 4=unknown
+#'   \item `calldate1` - date of first call attempt
+#'   \item `contacted1` - 1 = office reached, 0 = not reached (first call)
+#'   \item `contacted2` - 1 = reached on second attempt, 0 = not, 99 = N/A
+#'   \item `appdate` - date of appointment offered
+#'   \item `exclusions` - integer exclusion code (0 = included)
+#'   \item `initials` - caller identity (standardized to title case)
+#'   \item `medicaid_status` - 1=accepts, 2=refuses, 3=BCBS call, 4=unknown
 #' }
 #'
 #' @param data A data frame. The raw REDCap export.
@@ -313,14 +313,14 @@ print.mysterycall_prepared <- function(x, ...) {
   ))
   if ("calendar_days" %in% names(x$waittime_data)) {
     cd <- x$waittime_data$calendar_days
-    cat(sprintf("  Calendar days: median=%.0f  mean=%.1f  range=%d–%d\n",
+    cat(sprintf("  Calendar days: median=%.0f  mean=%.1f  range=%d-%d\n",
                 stats::median(cd, na.rm = TRUE), mean(cd, na.rm = TRUE),
                 min(cd, na.rm = TRUE), max(cd, na.rm = TRUE)))
   }
 
   if (!is.null(x$na_exclusion_records)) {
     cat(sprintf(
-      "\n  WARNING: %d records have NA exclusion codes — review `$na_exclusion_records`\n",
+      "\n  WARNING: %d records have NA exclusion codes - review `$na_exclusion_records`\n",
       nrow(x$na_exclusion_records)
     ))
   }

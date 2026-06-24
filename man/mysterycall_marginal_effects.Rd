@@ -9,7 +9,8 @@ mysterycall_marginal_effects(
   term = NULL,
   data = NULL,
   type = c("response", "link"),
-  eps = 1e-07
+  eps = 1e-07,
+  ...
 )
 }
 \arguments{
@@ -17,7 +18,7 @@ mysterycall_marginal_effects(
 from lme4, a \code{mysterycall_poisson_model}, or a \code{mysterycall_nb_model}
 object. For wrapper objects the \verb{$model} component is extracted
 automatically. For \code{mysterycall_nb_model} (glmmTMB), average marginal
-effects are computed via \code{\link[marginaleffects:avg_slopes]{marginaleffects::avg_slopes()}} and the result is
+effects are computed via \code{\link[marginaleffects:slopes]{marginaleffects::avg_slopes()}} and the result is
 coerced into the standard \code{term} / \code{level} / \code{ame} / \code{variable_type}
 data frame returned by this function.}
 
@@ -36,6 +37,9 @@ predictions (\code{re.form = NA}) are always used.}
 
 \item{eps}{Positive numeric scalar. Step size for numerical differentiation
 of continuous predictors. Default \code{1e-7}.}
+
+\item{...}{Additional arguments forwarded to \code{\link[marginaleffects:slopes]{marginaleffects::avg_slopes()}}
+for negative-binomial model wrappers.}
 }
 \value{
 A \code{data.frame} with one row per term-level combination and columns:
@@ -101,7 +105,7 @@ mysterycall_marginal_effects(m, term = "cyl")
 }
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}, \code{\link[=mysterycall_model_metrics]{mysterycall_model_metrics()}},
-\code{\link[marginaleffects:avg_slopes]{marginaleffects::avg_slopes()}} for direct use with glmmTMB NB models.
+\code{\link[marginaleffects:slopes]{marginaleffects::avg_slopes()}} for direct use with glmmTMB NB models.
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},

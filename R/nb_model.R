@@ -66,7 +66,7 @@ NULL
 #'
 #' @section Interpreting theta:
 #' `theta` (the shape parameter) controls how quickly variance grows with
-#' the mean. As theta → ∞, the NB distribution approaches Poisson. Values
+#' the mean. As theta -> Inf, the NB distribution approaches Poisson. Values
 #' of theta < 5 indicate substantial overdispersion.
 #'
 #' @importFrom stats as.formula complete.cases qnorm AIC BIC
@@ -354,7 +354,7 @@ print.mysterycall_nb_model <- function(x, digits = 3, ...) {
 
   if (!x$convergence$converged) {
     msgs <- x$convergence$messages
-    cat(sprintf("  Convergence detail — %s\n",
+    cat(sprintf("  Convergence detail - %s\n",
                 paste(msgs[nzchar(msgs)], collapse = "; ")))
   }
 

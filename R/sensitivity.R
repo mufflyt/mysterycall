@@ -5,7 +5,7 @@ NULL
 
 #' Run sensitivity analyses by re-fitting a model across data subsets
 #'
-#' Re-runs the same model specification across subsets of the data — e.g.
+#' Re-runs the same model specification across subsets of the data - e.g.
 #' stratified by practice setting or geographic region, or excluding
 #' zero-wait observations. Returns a combined table comparing IRRs across
 #' subsets so the stability of the primary result can be assessed.

@@ -59,7 +59,13 @@ mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE
 
   if (file.exists(lock_path) && !overwrite) {
     if (lock_age_ok(lock_path)) {
-      return(dest)
+      if (is_download_complete(dest, expected_size)) {
+        return(dest)
+      }
+      stop(sprintf(
+        "Download for '%s' appears to be in progress and destination is not complete.",
+        dest
+      ), call. = FALSE)
     }
     unlink(lock_path)
   }

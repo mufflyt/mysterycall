@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include = FALSE, purl=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 The `mysterycall` package provides a comprehensive, end-to-end toolkit for conducting mystery caller studies in healthcare research. This vignette walks you through a simplified, reproducible example of the entire workflow: from generating a provider roster, to preparing the data for callers, to analyzing the results.
 
-```{r setup}
+```{r setup, purl=FALSE}
 library(mysterycall)
 library(dplyr)
 ```
@@ -27,7 +27,7 @@ library(dplyr)
 
 In a real study, you would likely use `mysterycall_search_taxonomy()` or `mysterycall_search_and_process_npi()` to query the NPPES registry. For this example, we will use a small subset of the bundled `physicians` dataset.
 
-```{r roster}
+```{r roster, purl=FALSE}
 # Load bundled physician data
 data(physicians)
 
@@ -49,7 +49,7 @@ head(roster)
 
 Before handing off the data, we need to ensure it is clean and properly formatted. We can use the package's normalization utilities.
 
-```{r prepare}
+```{r prepare, purl=FALSE}
 # Normalize names and practice locations
 clean_roster <- roster %>%
   mutate(
@@ -67,7 +67,7 @@ head(clean_roster)
 
 You can use `mysterycall_split_and_save()` to divide the roster among your research assistants.
 
-```{r split, eval=FALSE}
+```{r split, eval=FALSE, purl=FALSE}
 # Example of splitting the roster (not evaluated here to prevent file creation)
 # mysterycall_split_and_save(
 #   clean_roster, 
@@ -82,7 +82,7 @@ After your callers return the completed spreadsheets, you would clean them using
 
 Let's simulate the results of the calls:
 
-```{r simulate}
+```{r simulate, purl=FALSE}
 # Simulate caller responses
 results <- clean_roster %>%
   mutate(
@@ -104,7 +104,7 @@ results <- clean_roster %>%
 
 Generate a quick Table 1 of your provider sample.
 
-```{r table1}
+```{r table1, purl=FALSE}
 # Prepare variables for Table 1
 t1_data <- mysterycall_prepare_table1_vars(results)
 
@@ -123,7 +123,7 @@ print(t1)
 
 Finally, run a Poisson regression with robust standard errors to analyze the primary outcome (appointment acceptance rate).
 
-```{r model, eval = requireNamespace("lme4", quietly = TRUE)}
+```{r model, eval = requireNamespace("lme4", quietly = TRUE), purl=FALSE}
 # Fit a Poisson mixed model: subspecialty as random intercept allows
 # the demo model to converge with this small simulated sample.
 model <- mysterycall_poisson_model(

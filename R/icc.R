@@ -25,7 +25,7 @@ NULL
 #' @param conf_level Numeric. Confidence level for bootstrap CI. Default `0.95`.
 #'   Used only when `n_boot > 0`.
 #' @param n_boot Integer. Number of bootstrap replicates for confidence interval.
-#'   Default `0L` (no bootstrap; CI is `c(NA, NA)`). Values of 500–2000 are
+#'   Default `0L` (no bootstrap; CI is `c(NA, NA)`). Values of 500-2000 are
 #'   recommended for publication.
 #' @param seed Integer or `NULL`. Random seed for bootstrap reproducibility.
 #'   Default `NULL`.
@@ -46,7 +46,7 @@ NULL
 #'
 #' @references
 #' Nakagawa S, Schielzeth H (2010). A general and simple method for obtaining
-#' R² from generalized linear mixed-effects models. *Methods in Ecology and
+#' R^2 from generalized linear mixed-effects models. *Methods in Ecology and
 #' Evolution* 4(2):133-142. \doi{10.1111/j.2041-210x.2012.00261.x}
 #'
 #' @family outcomes
@@ -162,7 +162,7 @@ mysterycall_icc <- function(model_result,
   for (i in seq_len(n_boot)) {
     tryCatch({
       if (is_nb) {
-        sim <- glmmTMB::simulate(model_result$model, nsim = 1L)[[1L]]
+        sim <- stats::simulate(model_result$model, nsim = 1L)[[1L]]
         tmp_data <- model_result$model$frame
         tmp_data[[as.character(stats::formula(model_result$model)[[2L]])]] <- sim
         refit <- suppressWarnings(suppressMessages(
@@ -176,7 +176,7 @@ mysterycall_icc <- function(model_result,
         theta_b <- glmmTMB::sigma(refit)
         boot_iccs[i] <- .compute_icc(s2u, TRUE, theta_b)
       } else {
-        sim <- lme4::simulate(model_result$model, nsim = 1L)[[1L]]
+        sim <- stats::simulate(model_result$model, nsim = 1L)[[1L]]
         refit <- suppressWarnings(suppressMessages(
           lme4::refit(model_result$model, sim)
         ))
@@ -246,7 +246,7 @@ mysterycall_icc_sentence <- function(icc_result) {
   }
   pct <- round(icc_result$icc * 100, 1)
   ci_clause <- if (!is.na(icc_result$ci[1])) {
-    sprintf(" (95%% bootstrap CI %.3f–%.3f)",
+    sprintf(" (95%% bootstrap CI %.3f-%.3f)",
             icc_result$ci[1], icc_result$ci[2])
   } else {
     ""

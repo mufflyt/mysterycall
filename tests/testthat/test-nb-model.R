@@ -167,14 +167,11 @@ test_that("select_best_model uses $aic from nb_model wrapper", {
   expect_false(any(is.na(out$AIC)))
 })
 
-test_that("marginal_effects gives informative error for nb_model", {
+test_that("marginal_effects handles nb_model when marginaleffects is installed", {
   skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("marginaleffects")
   result <- suppressWarnings(
     mysterycall_nb_model(mock_nb, "wait_days", "insurance", "physician")
   )
-  expect_error(
-    mysterycall_marginal_effects(result),
-    "marginaleffects",
-    ignore.case = TRUE
-  )
+  expect_s3_class(mysterycall_marginal_effects(result), "data.frame")
 })

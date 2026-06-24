@@ -6,6 +6,7 @@
 #' (isochrones), and multivariable Poisson regression for wait-time analysis.
 #'
 #' @keywords NPPES NPI healthcare internal
+#' @rawNamespace exportPattern("^mysterycall_")
 "_PACKAGE"
 
 NULL

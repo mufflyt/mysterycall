@@ -15,7 +15,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -118,7 +118,7 @@ The resulting data is combined into a single dataframe for analysis.
 
 Before using the `mysterycall::mysterycall_get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, purl=FALSE}
 # Install and load the necessary packages
 install.packages("censusapi")
 library(censusapi)

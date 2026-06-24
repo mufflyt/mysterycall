@@ -7,11 +7,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment  = "#>",
-  eval     = FALSE   # set to TRUE when lme4 is on CRAN check machine
+  eval     = FALSE,  # set to TRUE when using a local REDCap export
+  purl     = FALSE
 )
 library(mysterycall)
 ```
@@ -41,7 +42,7 @@ Export your REDCap project as a CSV. The columns expected by default are:
 | `initials` | character | Caller identity (standardized internally) |
 | `medicaid_status` | 1–4 | Insurance type for this call |
 
-```{r load}
+```{r load, purl=FALSE}
 raw <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
                 stringsAsFactors = FALSE)
 dim(raw)  # e.g. 743 rows, 17 columns
@@ -54,7 +55,7 @@ dim(raw)  # e.g. 743 rows, 17 columns
 `mysterycall_prepare_calls()` encodes the standard mystery-caller filtering
 pipeline in a single call:
 
-```{r prepare}
+```{r prepare, purl=FALSE}
 prepped <- mysterycall_prepare_calls(raw)
 print(prepped)
 ```
@@ -89,7 +90,7 @@ where the office's actual access posture is unknown, so they are dropped.
 `$logistic_data` — all records where the office was **reached** and the outcome
 (appointment offered: yes/no) can be determined:
 
-```{r logistic-data}
+```{r logistic-data, purl=FALSE}
 nrow(prepped$logistic_data)  # office reached, appt_offered column ready
 table(prepped$logistic_data$appt_offered)
 ```
@@ -97,7 +98,7 @@ table(prepped$logistic_data$appt_offered)
 `$waittime_data` — subset where an appointment date was recorded (use with
 `mysterycall_auto_model()`):
 
-```{r waittime-data}
+```{r waittime-data, purl=FALSE}
 nrow(prepped$waittime_data)
 summary(prepped$waittime_data$calendar_days)
 ```
@@ -107,7 +108,7 @@ summary(prepped$waittime_data$calendar_days)
 If data entry is still in progress, some records will have `NA` exclusion codes.
 The default `na_exclusions = "warn"` keeps them but flags them:
 
-```{r na-review}
+```{r na-review, purl=FALSE}
 # Inspect before analysis
 prepped$na_exclusion_records[, c("record_id", "calldate1", "initials")]
 ```
@@ -123,7 +124,7 @@ them in REDCap and re-export.
 
 `medicaid_status` uses REDCap codes 1–4. Create a clean factor for modeling:
 
-```{r recode-ins}
+```{r recode-ins, purl=FALSE}
 d <- prepped$logistic_data
 d$insurance <- factor(
   d$medicaid_status,
@@ -145,7 +146,7 @@ d_model$insurance <- droplevels(d_model$insurance)
 Caller names are standardized to title case by `mysterycall_prepare_calls()`.
 Verify the `caller` column before modeling:
 
-```{r check-callers}
+```{r check-callers, purl=FALSE}
 table(d_model$caller)
 # Should show 3–5 named callers, not dozens of duplicates with case typos
 ```
@@ -154,7 +155,7 @@ table(d_model$caller)
 
 ## Step 4 — Fit the logistic GLMM
 
-```{r fit-logistic}
+```{r fit-logistic, purl=FALSE}
 fit_log <- mysterycall_logistic_model(
   data             = d_model,
   outcome          = "appt_offered",
@@ -167,7 +168,7 @@ print(fit_log)
 The model uses `lme4::glmer(..., family = binomial(link = "logit"))`. The
 `$or_table` contains odds ratios (OR) with 95% Wald confidence intervals:
 
-```{r or-table}
+```{r or-table, purl=FALSE}
 fit_log$or_table
 ```
 
@@ -180,7 +181,7 @@ fit_log$or_table
 
 ## Step 5 — Forest plot
 
-```{r forest-plot}
+```{r forest-plot, purl=FALSE}
 mysterycall_forest_plot(
   fit_log,
   x_label = "Odds Ratio (95% CI)",
@@ -201,7 +202,7 @@ The physician-level ICC from the logistic model tells you how much of the
 variation in scheduling is explained by the physician (vs. insurance type or
 other patient/call factors):
 
-```{r icc}
+```{r icc, purl=FALSE}
 fit_log$random_effects
 # $var_physician  — variance of physician random intercept on logit scale
 # Latent ICC = var_physician / (var_physician + pi^2/3)
@@ -214,7 +215,7 @@ insurance type — a meaningful finding for access research.
 
 ## Full pipeline in < 20 lines
 
-```{r full-pipeline}
+```{r full-pipeline, purl=FALSE}
 library(mysterycall)
 
 raw     <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
@@ -245,7 +246,7 @@ mysterycall_forest_plot(fit, x_label = "Odds Ratio (95% CI)")
 If you also want to model **how long** patients waited (among those who got
 appointments), use `$waittime_data` directly:
 
-```{r waittime}
+```{r waittime, purl=FALSE}
 wt <- prepped$waittime_data
 
 fit_wt <- mysterycall_auto_model(

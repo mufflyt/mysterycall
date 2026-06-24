@@ -16,7 +16,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -49,7 +49,7 @@ Use `npi` as the primary key whenever it is available. Names and addresses can
 change; NPI is usually the most stable identifier across roster creation,
 enrichment, and call outcome files.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 roster <- mysterycall_search_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
@@ -67,7 +67,7 @@ rather than a bare `dplyr::left_join()` — it verifies that the enrichment tabl
 is unique on `npi` and that at least 90 % of roster rows find a match, so
 silent data-loss from mis-typed join keys surfaces immediately.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 clinician_data <- mysterycall_get_clinician_data(roster)
 
 # Assert the enrichment table is unique before joining
@@ -91,7 +91,7 @@ Geocoding and isochrone generation happen at the practice-site level, not
 strictly at the person level. If multiple clinicians share one address, it is
 more efficient to geocode the unique site once and join the coordinates back.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 site_table <- analysis_base |>
   dplyr::distinct(npi, address, .keep_all = TRUE)
 ```
@@ -101,7 +101,7 @@ join warns if site addresses don't round-trip cleanly — a common problem when
 the geocoder normalizes whitespace or abbreviations differently from the original
 roster.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 analysis_with_geo <- mysterycall_safe_left_join(
   left         = analysis_base,
   right        = site_geography,
@@ -119,7 +119,7 @@ scenarios. It is usually easier to clean those files first and join them late
 in the pipeline. Set `expect_unique_right = FALSE` when the Phase 2 file has
 one row per call attempt rather than one row per provider.
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 phase2_clean <- clean_phase_2_data("phase2_results.xlsx")
 
 analysis_ready <- mysterycall_safe_left_join(
@@ -140,21 +140,21 @@ layers.
 
 ### Count providers by subspecialty
 
-```{r}
+```{r, purl=FALSE}
 mysterycall::physicians |>
   dplyr::count(subspecialty, sort = TRUE)
 ```
 
 ### Summarize access outcomes
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 analysis_ready |>
   dplyr::count(subspecialty, medicaid_accepted)
 ```
 
 ### Build publication tables
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 table_generate_overall(
   analysis_ready,
   vars = c("subspecialty", "medicaid_accepted", "appointment_offered")

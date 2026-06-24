@@ -38,6 +38,7 @@ test_that("mysterycall_search_taxonomy: Basic functionality", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       result <- mysterycall_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
@@ -75,6 +76,7 @@ test_that("mysterycall_search_taxonomy: Data quality validation", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       result <- mysterycall_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
@@ -102,6 +104,7 @@ test_that("mysterycall_search_taxonomy: Error handling", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       expect_s3_class(
         mysterycall_search_taxonomy("Invalid Taxonomy", write_snapshot = FALSE, notify = FALSE),
@@ -117,6 +120,7 @@ test_that("mysterycall_search_taxonomy: Multiple taxonomies", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       result <- mysterycall_search_taxonomy(
         c("Gynecologic Oncology", "Maternal & Fetal Medicine"),
@@ -134,6 +138,7 @@ test_that("mysterycall_search_taxonomy: Performance test", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       start_time <- Sys.time()
       result <- mysterycall_search_taxonomy("Gynecologic Oncology",
@@ -152,6 +157,7 @@ test_that("mysterycall_search_taxonomy: Snapshot functionality", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       result <- mysterycall_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = TRUE,
@@ -188,6 +194,7 @@ test_that("mysterycall_search_taxonomy: Property-based testing", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       test_inputs <- c(
         "Valid Taxonomy",
@@ -215,6 +222,7 @@ test_that("mysterycall_search_taxonomy: Regression tests for known issues", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       expect_no_error(
         mysterycall_search_taxonomy(special_chars, write_snapshot = FALSE, notify = FALSE)
@@ -230,6 +238,7 @@ test_that("mysterycall_search_taxonomy: Data validation and cleaning", {
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
+    .package = "npi",
     {
       result <- mysterycall_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,

@@ -57,7 +57,7 @@ mysterycall_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases
 #' @family utilities
-#' @keywords internal
+#' @export
 #' @examples
 #' df <- tibble::tibble(id = 1:3, value = c(1, NA, 3))
 #' mysterycall_check_data_completeness(df, required = c("id", "value"))
@@ -97,4 +97,3 @@ mysterycall_check_data_completeness <- function(data, required = NULL, id_cols =
 
   list(summary = summary, quality = quality, score = overall_score)
 }
-

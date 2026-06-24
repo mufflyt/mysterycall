@@ -15,7 +15,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -51,7 +51,7 @@ You will need:
 1. **A HERE API key** — register at <https://www.here.com/developer> (free tier
    allows ~250,000 isochrone requests/month). Store the key before running:
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 Sys.setenv(HERE_API_KEY = "your-here-key")
 ```
 
@@ -85,7 +85,7 @@ back to the originating provider.
 
 The typical four-step pattern:
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 library(mysterycall)
 
 # 1. Geocode practice addresses → lat/long
@@ -143,7 +143,7 @@ one isochrone polygon. Key added columns:
 | `column_label` | Human-readable label, e.g. `"30 min"` |
 | all input columns | All non-geometry columns from the source row are retained |
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 # Inspect the result
 names(isochrones_sf)
 
@@ -173,7 +173,7 @@ two checkpoint files to `output_dir` after every `save_interval` rows:
 If a run is interrupted (network error, cluster timeout), load the most recent
 checkpoint and pass the completed `point_index` values so they are skipped:
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 # Load the most recent checkpoint
 checkpoints <- list.files("data/isochrone_checkpoints", pattern = "\\.rds$",
                            full.names = TRUE)
@@ -220,7 +220,7 @@ isochrones_sf <- dplyr::bind_rows(partial, isochrones_sf)
 After generating isochrones, overlay them on Census block group geometries to
 calculate the reachable female population within each travel-time band:
 
-```{r eval=FALSE}
+```{r eval=FALSE, purl=FALSE}
 # Load the enriched block group layer (built in the Census vignette)
 bg_sf <- readr::read_rds("data/block_groups_with_demographics.rds")
 

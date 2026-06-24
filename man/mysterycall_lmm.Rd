@@ -95,8 +95,8 @@ is on the same (days) scale.
 
 \section{R-squared}{
 
-Marginal R² reflects variance explained by fixed effects alone;
-conditional R² includes the physician random intercept. Both are computed
+Marginal R^2 reflects variance explained by fixed effects alone;
+conditional R^2 includes the physician random intercept. Both are computed
 from the variance-component decomposition (Nakagawa & Schielzeth 2013) and
 do not require any additional packages.
 }
@@ -116,7 +116,7 @@ print(fit)
 }
 \references{
 Nakagawa S, Schielzeth H (2013). A general and simple method for obtaining
-R² from generalized linear mixed-effects models. \emph{Methods in Ecology and
+R^2 from generalized linear mixed-effects models. \emph{Methods in Ecology and
 Evolution} 4(2):133-142. \doi{10.1111/j.2041-210x.2012.00261.x}
 }
 \seealso{

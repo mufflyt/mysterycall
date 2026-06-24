@@ -6,7 +6,7 @@ NULL
 #' Residual diagnostic plots for a fitted count model
 #'
 #' When DHARMa is installed (recommended), uses randomized quantile residuals
-#' via [DHARMa::simulateResiduals()] — the current gold standard for diagnosing
+#' via [DHARMa::simulateResiduals()] - the current gold standard for diagnosing
 #' GLMMs. Falls back to Pearson residual ggplot2 panels when DHARMa is
 #' unavailable or `use_dharma = FALSE`.
 #'
@@ -42,6 +42,7 @@ NULL
 #'   [mysterycall_poisson_model()] / [mysterycall_nb_model()] to fit the model;
 #'   [mysterycall_save_plot()] to write Pearson-path plots to disk.
 #' @family outcomes
+#' @importFrom graphics plot
 #' @export
 #'
 #' @examples
@@ -80,7 +81,7 @@ mysterycall_plot_residuals <- function(model,
   if (use_dharma_actual) {
     sim <- DHARMa::simulateResiduals(fittedModel = fit, n = as.integer(n_sim), ...)
     if (isTRUE(plot)) {
-      DHARMa::plot(sim)
+      graphics::plot(sim)
     }
     return(invisible(sim))
   }

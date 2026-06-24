@@ -35,7 +35,7 @@ NULL
 #' \describe{
 #'   \item{`table`}{Data frame with columns: `term`, `level` (group label
 #'     stripped of the exposure prefix), `irr`, `days_mean` (reference-group
-#'     mean × IRR), `days_diff` (days_mean − baseline_mean), `days_ci_lower`,
+#'     mean x IRR), `days_diff` (days_mean - baseline_mean), `days_ci_lower`,
 #'     `days_ci_upper`, `direction` (`"more"` or `"fewer"`), `p_value_fmt`.}
 #'   \item{`sentences`}{Character vector. One manuscript-ready sentence per row.}
 #'   \item{`paragraph`}{Character scalar. All sentences joined into a paragraph.}

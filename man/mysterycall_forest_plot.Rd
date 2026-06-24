@@ -77,8 +77,8 @@ the active graphics device.
 }
 \description{
 Produces a B&W forest plot styled for journal submission, following the
-design used in Acosta & Mufflyt (2025–2026): alternating row shading,
-right-side annotation text (\code{"1.28 (1.05–1.56); P = .014"}), AMA-style
+design used in Acosta & Mufflyt (2025-2026): alternating row shading,
+right-side annotation text (\code{"1.28 (1.05-1.56); P = .014"}), AMA-style
 p-values, and significance encoded via point shape and CI linetype rather
 than colour. Accepts model objects, plain data frames, or named lists of
 models.

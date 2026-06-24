@@ -47,7 +47,7 @@ Returns a named list of three \code{ggplot} objects:
 }
 \description{
 When DHARMa is installed (recommended), uses randomized quantile residuals
-via \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} — the current gold standard for diagnosing
+via \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} - the current gold standard for diagnosing
 GLMMs. Falls back to Pearson residual ggplot2 panels when DHARMa is
 unavailable or \code{use_dharma = FALSE}.
 }

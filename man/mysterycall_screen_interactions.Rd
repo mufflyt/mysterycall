@@ -9,7 +9,8 @@ mysterycall_screen_interactions(
   outcome,
   exposure,
   candidates,
-  random_intercept = NULL
+  random_intercept = NULL,
+  family = c("poisson", "negative_binomial")
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ columns to screen.}
 \item{random_intercept}{Optional character scalar. When supplied, a
 \code{(1 | random_intercept)} term is added and \code{lme4::glmer()} is used;
 otherwise \code{stats::glm()} is used.}
+
+\item{family}{Character scalar. Count-model family to use: \code{"poisson"}
+(default) or \code{"negative_binomial"}. Negative-binomial screening requires
+the \code{glmmTMB} package.}
 }
 \value{
 A data frame with one row per candidate and columns:

@@ -19,7 +19,7 @@ The `geocode` function is designed to help you geocode datasets containing addre
 ### Installation
 Before you can harness the power of the `mysterycall_search_taxonomy` function, it is essential to ensure that you have the `mysterycall` package installed. You can effortlessly install it using the following command:
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -33,7 +33,7 @@ if (eval_vignettes) {
 }
 ```
 
-```{r}
+```{r, purl=FALSE}
 library(mysterycall)
 ```
 

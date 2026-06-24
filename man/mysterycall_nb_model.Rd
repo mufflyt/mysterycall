@@ -88,7 +88,7 @@ small p-values.
 \section{Interpreting theta}{
 
 \code{theta} (the shape parameter) controls how quickly variance grows with
-the mean. As theta → ∞, the NB distribution approaches Poisson. Values
+the mean. As theta -> Inf, the NB distribution approaches Poisson. Values
 of theta < 5 indicate substantial overdispersion.
 }
 
