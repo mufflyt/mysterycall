@@ -57,6 +57,7 @@ Other manuscript:
 \code{\link{mysterycall_sample_size_text}()},
 \code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_strobe_checklist}()},
+\code{\link{mysterycall_strobe_flow}()},
 \code{\link{mysterycall_table2}()},
 \code{\link{print.mysterycall_materials_methods}()},
 \code{\link{print.mysterycall_model_comparison_table}()},

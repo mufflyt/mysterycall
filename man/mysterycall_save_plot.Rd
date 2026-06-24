@@ -64,6 +64,7 @@ Other manuscript:
 \code{\link{mysterycall_results_report}()},
 \code{\link{mysterycall_sample_size_text}()},
 \code{\link{mysterycall_strobe_checklist}()},
+\code{\link{mysterycall_strobe_flow}()},
 \code{\link{mysterycall_summarize_demographics}()},
 \code{\link{mysterycall_table2}()},
 \code{\link{print.mysterycall_materials_methods}()},
