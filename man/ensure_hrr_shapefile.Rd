@@ -19,7 +19,8 @@ not already present in the user's cache directory. The archive is expanded
 in-place and the path to the \code{.shp} file is returned.
 }
 \examples{
-\donttest{
+# Requires internet access to download an ~8 MB shapefile on first call.
+\dontrun{
 mysterycall:::ensure_hrr_shapefile()
 }
 }

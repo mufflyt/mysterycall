@@ -50,7 +50,8 @@ mysterycall_cache_dir <- function(...) {
 #'
 #' @return The absolute path to the HRR boundary shapefile.
 #' @examples
-#' \donttest{
+#' # Requires internet access to download an ~8 MB shapefile on first call.
+#' \dontrun{
 #' mysterycall:::ensure_hrr_shapefile()
 #' }
 ensure_hrr_shapefile <- function(quiet = TRUE) {
