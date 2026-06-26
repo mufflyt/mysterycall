@@ -86,6 +86,8 @@ Suggests:
     openxlsx,
     patchwork,
     progress,
+    provider,
+    purrr,
     readxl,
     rmarkdown,
     rnaturalearth,

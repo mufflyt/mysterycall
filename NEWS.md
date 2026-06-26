@@ -1,3 +1,103 @@
+# mysterycall 1.6.0
+
+Released 2026-06-25.
+
+## ✨ New functions
+
+* **`mysterycall_enrich_npi()`** — end-to-end NPI enrichment pipeline: validates
+  NPIs, looks up clinician data, genderizes first names, classifies practice
+  setting, and assigns ACOG/census regions. Returns a deduplicated data frame.
+
+* **`mysterycall_parse_redcap_labels()`** — parses REDCap data-dictionary
+  choice labels into tidy `data.frame`s matching scenario × insurance × NPI
+  patterns used in mystery-caller study designs.
+
+* **`mysterycall_calendar_sensitivity()`** — side-by-side comparison of
+  wait-time LMMs fit on calendar days vs. business days, reporting
+  coefficient deltas and flagging results that differ meaningfully between
+  the two timescales.
+
+* **`medicaid_expansion`** data object — 51-row KFF-sourced dataset recording
+  each state's Medicaid expansion status (adopted / not adopted) for use in
+  stratified analyses.
+
+## ✨ Improvements
+
+* **broom-compatible `tidy()` methods** added for `mysterycall_lmm`,
+  `mysterycall_logistic_model`, and `mysterycall_poisson_model` result objects
+  via the `generics` package (now in `Imports`).
+
+* **`mysterycall_lmm()`** — auto log-transform now reports geometric-mean
+  ratios (GMR) with confidence intervals alongside the standard coefficient
+  table.
+
+* **`assign_region()`** — factor inputs are now silently coerced to character
+  rather than erroring; non-character, non-factor input gives a clear error.
+
+* **`mysterycall_get_clinician_data()`** — duplicate columns are dropped before
+  column-binding to prevent `cbind` errors when API responses overlap with
+  base data frame columns.
+
+* **`caller_reliability()`** — emits a `warning()` (not an error) when fewer
+  than 30 complete pairs are found, noting that ICC and kappa estimates are
+  unreliable at small *n*.
+
+* **`mysterycall_table1()`** — gains an `as.data.frame()` S3 method so results
+  can be piped directly into `flextable` or `knitr::kable()`.
+
+* **`bizdays` fallback** — `mysterycall_business_days()` now falls back to
+  calendar days with a `message()` instead of `stop()`-ing when the `bizdays`
+  package is not installed.
+
+## 🐛 Bug fixes
+
+* Fixed a namespace-locking bug in the test suite: 37 test files were calling
+  `library(mysterycall)` inside `devtools::test()`, which locked the package
+  namespace and silently broke all subsequent `with_mocked_bindings()` calls.
+  All such calls have been removed.
+
+* Fixed 11-digit NPI generation in regression-match-rate mocks when *n* > 10
+  (changed from `paste0("123456789", 0:(n-1))` to `sprintf("1%09d", seq_len(n))`).
+
+* Corrected ACOG district for Texas: District XI (not VII).
+
+---
+
+# mysterycall 1.5.0
+
+Released 2026-06-15.
+
+## ✨ New functions
+
+* **`mysterycall_prepare_calls()`** — merges phase-1 provider list with REDCap
+  wave schedule, assigns callers, and exports call sheets ready for upload.
+
+* **`mysterycall_strobe_flow()`** — generates a STROBE-compliant participant
+  flow diagram (DiagrammeR / Graphviz) from a named list of screening counts.
+
+* **`mysterycall_logistic_model()`** — fits a mixed-effects logistic regression
+  for binary outcomes (e.g., appointment offered yes/no), returns odds ratios,
+  CIs, and a publication-ready OR table.
+
+* **`mysterycall_forest_plot()`** — renders a forest plot from any `tidy()`-
+  compatible model object, with optional reference-line and faceting by
+  outcome variable.
+
+* **`mysterycall_auto_model()`** — selects the best GLMM family (Poisson,
+  negative-binomial, zero-inflated) by AIC/BIC and overdispersion diagnostics,
+  with an optional linear mixed-model evaluation step.
+
+## ✨ Improvements
+
+* `mysterycall_auto_model()` gained an LMM evaluation step that fits a
+  log-transformed LMM as an additional candidate and includes it in the AIC
+  comparison table.
+
+* Comprehensive adversarial + semantic test suite for `mysterycall_auto_model`
+  (52 passing tests, 1 skip).
+
+---
+
 # mysterycall 1.4.0
 
 Released 2026-06-02.
