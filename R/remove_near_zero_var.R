@@ -20,7 +20,7 @@
 #' @importFrom dplyr select
 #'
 #' @family data quality
-#' @keywords internal
+#' @export
 mysterycall_remove_near_zero <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   if (!requireNamespace("caret", quietly = TRUE)) {
     stop("Package 'caret' is required for mysterycall_remove_near_zero()", call. = FALSE)

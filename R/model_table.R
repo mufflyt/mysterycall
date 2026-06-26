@@ -28,7 +28,7 @@ NULL
 #'
 #' @family table helpers
 #' @seealso [mysterycall_poisson_model()], [mysterycall_irr_plot()]
-#' @keywords internal
+#' @export
 #'
 #' @examples
 #' if (requireNamespace("lme4", quietly = TRUE)) {

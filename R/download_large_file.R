@@ -48,6 +48,7 @@ mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE
   dest_tmp <- paste0(dest, ".download")
   lock_path <- paste0(dest, ".lock")
   download_success <- FALSE
+  lock_owned <- FALSE
 
   lock_age_ok <- function(path) {
     info <- file.info(path)
@@ -57,9 +58,19 @@ mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE
     difftime(Sys.time(), info$mtime, units = "hours") < 6
   }
 
-  if (file.exists(lock_path) && !overwrite) {
+  create_lock <- function(path) {
+    tryCatch({
+      con <- file(path, open = "wx")
+      close(con)
+      TRUE
+    }, error = function(e) {
+      FALSE
+    })
+  }
+
+  if (file.exists(lock_path)) {
     if (lock_age_ok(lock_path)) {
-      if (is_download_complete(dest, expected_size)) {
+      if (!isTRUE(overwrite) && is_download_complete(dest, expected_size)) {
         return(dest)
       }
       stop(sprintf(
@@ -69,6 +80,21 @@ mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE
     }
     unlink(lock_path)
   }
+
+  lock_owned <- create_lock(lock_path)
+  if (!lock_owned) {
+    if (file.exists(lock_path) && lock_age_ok(lock_path)) {
+      if (!isTRUE(overwrite) && is_download_complete(dest, expected_size)) {
+        return(dest)
+      }
+      stop(sprintf(
+        "Download for '%s' appears to be in progress and destination is not complete.",
+        dest
+      ), call. = FALSE)
+    }
+    stop(sprintf("Unable to create lock file '%s'.", lock_path), call. = FALSE)
+  }
+  on.exit(if (lock_owned && file.exists(lock_path)) unlink(lock_path), add = TRUE)
 
   if (file.exists(dest)) {
     if (isTRUE(overwrite)) {
@@ -95,12 +121,6 @@ mysterycall_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE
     }
     on.exit(if (file.exists(dest_tmp) && !download_success) unlink(dest_tmp), add = TRUE)
   }
-
-  lock_created <- file.create(lock_path)
-  if (!lock_created && !file.exists(lock_path)) {
-    stop(sprintf("Unable to create lock file '%s'.", lock_path), call. = FALSE)
-  }
-  on.exit(if (file.exists(lock_path)) unlink(lock_path), add = TRUE)
 
   attempts <- list(download_with_wget, download_with_curl, download_with_download_file)
 

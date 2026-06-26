@@ -78,7 +78,7 @@ NULL
 #' @family outcomes
 #' @seealso [mysterycall_poisson_model()], [mysterycall_model_metrics()],
 #'   [marginaleffects::avg_slopes()] for direct use with glmmTMB NB models.
-#' @keywords internal
+#' @export
 #'
 #' @examples
 #' m <- glm(vs ~ wt + factor(cyl), data = mtcars, family = poisson())

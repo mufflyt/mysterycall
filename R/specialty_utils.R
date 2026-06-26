@@ -95,8 +95,8 @@ mysterycall_parse_certification_subspecialty <- function(cert_type,
 #' @examples
 #' nms <- c("John Smith MD", "Dr. Jane Doe, PhD", "JONES, Robert",
 #'          "Mary Williams, MD, FACS", NA)
-#' mysterycall_extract_physician_name(nms)
-#' mysterycall_extract_physician_name(nms, format = "last")
+#' mysterycall:::mysterycall_extract_physician_name(nms)
+#' mysterycall:::mysterycall_extract_physician_name(nms, format = "last")
 mysterycall_extract_physician_name <- function(x,
                                                 format = c("dr_last", "last", "full_clean")) {
   format <- match.arg(format)

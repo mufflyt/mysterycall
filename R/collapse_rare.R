@@ -23,11 +23,11 @@ NULL
 #' @seealso [mysterycall_reorder_by_freq()] to reorder factor levels by
 #'   frequency; [mysterycall_recode_credentials()] for credential grouping.
 #' @family provider characteristics
-#' @keywords internal
 #'
 #' @examples
 #' x <- c(rep("Otolaryngology", 80), rep("Urology", 30), rep("Dermatology", 5))
 #' mysterycall_collapse_rare(x, threshold = 10)
+#' @export
 mysterycall_collapse_rare <- function(x, threshold = 50L, other_label = "Other") {
   if (!is.character(x) && !is.factor(x)) {
     stop("`x` must be a character or factor vector.", call. = FALSE)

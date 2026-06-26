@@ -17,10 +17,10 @@
 #'
 #' @examplesIf interactive()
 #' data <- read_csv("providers.csv")
-#' mysterycall_check_no_limits(data, "provider input")
+#' mysterycall:::mysterycall_check_no_limits(data, "provider input")
 #'
 #' npi_results <- mysterycall_search_and_process_npi(data)
-#' mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
+#' mysterycall:::mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 #'
 #' @seealso [mysterycall_check_no_data_loss()], [mysterycall_check_api_response()],
 #'   [mysterycall_scan_for_limits()] for related sanity-check utilities.
@@ -284,11 +284,11 @@ mysterycall_scan_for_limits <- function(path = "R",
 #' @examplesIf interactive()
 #' # Expect exactly 100 geocoding results
 #' coords <- geocode(addresses)
-#' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
+#' mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
 #'
 #' # Allow up to 5% missing
 #' coords <- geocode(addresses)
-#' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
+#' mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
 #'                         tolerance = 5)
 #'
 #' @seealso [mysterycall_check_no_limits()], [mysterycall_check_no_data_loss()],
@@ -345,12 +345,12 @@ mysterycall_check_api_response <- function(result,
 #' # Expect no data loss in cleaning
 #' before <- nrow(raw_data)
 #' clean_data <- mysterycall_clean_phase1(raw_data)
-#' mysterycall_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
+#' mysterycall:::mysterycall_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 #'
 #' # Expect deduplication to remove ~10 rows, allow +/-5
 #' before <- nrow(data)
 #' dedup_data <- deduplicate(data)
-#' mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
+#' mysterycall:::mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
 #'                         expected_change = -10, tolerance = 5)
 #'
 #' @seealso [mysterycall_check_no_limits()], [mysterycall_check_api_response()],

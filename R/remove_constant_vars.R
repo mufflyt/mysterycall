@@ -18,7 +18,7 @@
 #' mysterycall_remove_constants(df)
 #'
 #' @family data quality
-#' @keywords internal
+#' @export
 mysterycall_remove_constants <- function(data_frame) {
 
   # Log: Starting the function

@@ -29,7 +29,7 @@ NULL
 #' @examplesIf interactive()
 #' pb_id <- mysterycall_progress_bar("Processing", total = 10)
 #' for (i in 1:10) mysterycall_progress_update(pb_id)
-#' mysterycall_progress_done(pb_id)
+#' mysterycall:::mysterycall_progress_done(pb_id)
 #' @keywords internal
 mysterycall_progress_bar <- function(name,
                                 total,
@@ -233,10 +233,10 @@ mysterycall_progress_fail <- function(pb, msg = NULL) {
 #'
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
-#' mysterycall_multi_step(tracker, 1, total = 5)
+#' mysterycall:::mysterycall_multi_step(tracker, 1, total = 5)
 #' for (i in 1:5) mysterycall_multi_update(tracker)
-#' mysterycall_multi_complete(tracker)
-#' mysterycall_multi_done(tracker)
+#' mysterycall:::mysterycall_multi_complete(tracker)
+#' mysterycall:::mysterycall_multi_done(tracker)
 #' @keywords internal
 mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
   env <- new.env(parent = emptyenv())
@@ -342,8 +342,8 @@ mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
 #' @return `invisible(NULL)`.
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
-#' mysterycall_multi_step(tracker, 1, total = 5)
-#' mysterycall_multi_complete(tracker, result = "ok")
+#' mysterycall:::mysterycall_multi_step(tracker, 1, total = 5)
+#' mysterycall:::mysterycall_multi_complete(tracker, result = "ok")
 #' @family progress
 #' @keywords internal
 mysterycall_multi_complete <- function(tracker, result = NULL) {
@@ -367,7 +367,7 @@ mysterycall_multi_complete <- function(tracker, result = NULL) {
 #' @return `invisible(NULL)`.
 #' @examplesIf interactive()
 #' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
-#' mysterycall_multi_done(tracker)
+#' mysterycall:::mysterycall_multi_done(tracker)
 #' @family progress
 #' @keywords internal
 mysterycall_multi_done <- function(tracker) {
@@ -451,7 +451,7 @@ mysterycall_progress_map <- function(items,
 #' @family progress
 #' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
-#' mysterycall_spinner_stop(id)
+#' mysterycall:::mysterycall_spinner_stop(id)
 #' @keywords internal
 mysterycall_spinner_start <- function(name, msg = NULL) {
   if (requireNamespace("cli", quietly = TRUE) && cli::is_ansi_tty()) {
@@ -480,7 +480,7 @@ mysterycall_spinner_start <- function(name, msg = NULL) {
 #' @family progress
 #' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
-#' mysterycall_spinner_stop(id, result = "done")
+#' mysterycall:::mysterycall_spinner_stop(id, result = "done")
 #' @keywords internal
 mysterycall_spinner_stop <- function(id, result = "done") {
   if (!is.null(id) && requireNamespace("cli", quietly = TRUE)) {

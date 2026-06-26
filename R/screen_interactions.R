@@ -31,7 +31,7 @@ NULL
 #'   [mysterycall_select_best_model()] to rank models by AIC/BIC/LRT;
 #'   [mysterycall_multiple_comparison_adjust()] for correcting resulting p-values.
 #' @family outcomes
-#' @keywords internal
+#' @export
 #'
 #' @examplesIf interactive()
 #' mysterycall_screen_interactions(
@@ -90,11 +90,8 @@ mysterycall_screen_interactions <- function(data,
         coef_mat <- as.data.frame(summary(fit)$coefficients)
       }
 
-      rnames      <- rownames(coef_mat)
-      p_col       <- ncol(coef_mat)
-      int_pattern <- paste0("(", exposure, ":", cand, "|", cand, ":", exposure, ")")
-      is_int      <- grepl(int_pattern, rnames, perl = TRUE)
-      int_rows    <- coef_mat[is_int, , drop = FALSE]
+      p_col <- ncol(coef_mat)
+      int_rows <- .mysterycall_interaction_coef_rows(fit, coef_mat, exposure, cand)
 
       if (nrow(int_rows) == 0L) {
         return(data.frame(
@@ -127,4 +124,38 @@ mysterycall_screen_interactions <- function(data,
 
   out <- do.call(rbind, results)
   out[order(out$min_p_value, na.last = TRUE), ]
+}
+
+.mysterycall_interaction_coef_rows <- function(fit, coef_mat, exposure, candidate) {
+  term_labels <- tryCatch(attr(stats::terms(fit), "term.labels"),
+                          error = function(e) character(0))
+  interaction_terms <- c(
+    paste(exposure, candidate, sep = ":"),
+    paste(candidate, exposure, sep = ":")
+  )
+  interaction_idx <- which(term_labels %in% interaction_terms)
+
+  if (length(interaction_idx) > 0L) {
+    mm <- tryCatch(
+      {
+        if (inherits(fit, "glmmTMB")) {
+          stats::model.matrix(fit, component = "cond")
+        } else {
+          stats::model.matrix(fit)
+        }
+      },
+      error = function(e) NULL
+    )
+    assign <- attr(mm, "assign")
+    if (!is.null(mm) && !is.null(assign)) {
+      coef_names <- colnames(mm)[assign %in% interaction_idx]
+      matched <- intersect(coef_names, rownames(coef_mat))
+      if (length(matched) > 0L) {
+        return(coef_mat[matched, , drop = FALSE])
+      }
+    }
+  }
+
+  coef_mat[grepl(":", rownames(coef_mat)) & grepl(exposure, rownames(coef_mat), fixed = TRUE) &
+             grepl(candidate, rownames(coef_mat), fixed = TRUE), , drop = FALSE]
 }

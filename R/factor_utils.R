@@ -36,7 +36,7 @@ NULL
 #'
 #' @examples
 #' creds <- c("M.D.", "DO", "MD/PhD", "D.O.", "PA-C", "MBBS", NA)
-#' mysterycall_recode_credentials(creds)
+#' mysterycall:::mysterycall_recode_credentials(creds)
 mysterycall_recode_credentials <- function(x, other_label = "Other") {
   if (!is.character(x)) x <- as.character(x)
   if (!is.character(other_label) || length(other_label) != 1L)
@@ -84,7 +84,6 @@ mysterycall_recode_credentials <- function(x, other_label = "Other") {
 #' @return A factor with levels sorted by frequency.
 #'
 #' @family provider characteristics
-#' @keywords internal
 #'
 #' @examples
 #' x <- c("B", "A", "A", "C", "B", "B", "C", NA)
@@ -93,6 +92,7 @@ mysterycall_recode_credentials <- function(x, other_label = "Other") {
 #'
 #' # Useful in ggplot2:
 #' # ggplot(df, aes(x = mysterycall_reorder_by_freq(specialty))) + geom_bar()
+#' @export
 mysterycall_reorder_by_freq <- function(x, decreasing = TRUE, na_level = NULL) {
   if (!is.character(x) && !is.factor(x))
     stop("`x` must be a character or factor vector.", call. = FALSE)

@@ -38,7 +38,7 @@ NULL
 #'                        specialty = c("ENT","ENT"), stringsAsFactors = FALSE)
 #' abohns    <- data.frame(npi = c("A","C"), cert = c("Neurotology",NA),
 #'                         stringsAsFactors = FALSE)
-#' mysterycall_merge_with_prefix(registry, abohns, by = "npi",
+#' mysterycall:::mysterycall_merge_with_prefix(registry, abohns, by = "npi",
 #'                                prefix_x = "npi_", prefix_y = "abohns_")
 mysterycall_merge_with_prefix <- function(x, y, by,
                                            prefix_x   = "x_",

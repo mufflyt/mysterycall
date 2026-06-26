@@ -120,7 +120,7 @@ mysterycall_run_workflow_logged <- function(
 #' @keywords internal
 #' @examplesIf interactive()
 #' results <- mysterycall_run_workflow_logged(phase1_data = my_data)
-#' mysterycall_print_dashboard(results)
+#' mysterycall:::mysterycall_print_dashboard(results)
 mysterycall_print_dashboard <- function(results) {
   message("")
   message("\u256d", strrep("\u2500", 58), "\u256e")

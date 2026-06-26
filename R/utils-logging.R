@@ -296,9 +296,9 @@ mysterycall_log_save <- function(path, n_rows = NULL) {
 #'   metrics for the current step.
 #' @family logging
 #' @examplesIf interactive()
-#' mysterycall_workflow_start("Demo", total_steps = 1)
-#' mysterycall_log_step("Step 1")
-#' mysterycall_log_step_complete(n_success = 90, n_total = 100)
+#' mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
+#' mysterycall:::mysterycall_log_step("Step 1")
+#' mysterycall:::mysterycall_log_step_complete(n_success = 90, n_total = 100)
 #' @keywords internal
 mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_total = NULL) {
   step_num <- .mysterycall_workflow$current_step
@@ -343,8 +343,8 @@ mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL,
 #' @return `invisible(NULL)`.
 #' @family logging
 #' @examplesIf interactive()
-#' mysterycall_workflow_start("Demo", total_steps = 1)
-#' mysterycall_workflow_end(final_n = 80, input_n = 100)
+#' mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
+#' mysterycall:::mysterycall_workflow_end(final_n = 80, input_n = 100)
 #' @keywords internal
 mysterycall_workflow_end <- function(final_n = NULL, input_n = NULL) {
   if (is.null(.mysterycall_workflow$start_time)) {

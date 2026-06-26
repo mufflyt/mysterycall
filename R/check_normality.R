@@ -16,7 +16,7 @@
 #' @seealso [mysterycall_prepare_table1_vars()] for downstream variable
 #'   standardization; [mysterycall_physician_age()] for age summary statistics.
 #' @family modeling helpers
-#' @keywords internal
+#' @export
 #' @importFrom rlang sym
 #' @importFrom stats shapiro.test IQR median
 #'
@@ -103,4 +103,3 @@ mysterycall_check_normality <- function(data, variable) {
 
   return(summary_stats)
 }
-

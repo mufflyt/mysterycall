@@ -25,7 +25,7 @@ NULL
 #' @keywords internal
 #'
 #' @examples
-#' mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
+#' mysterycall:::mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
 mysterycall_extract_zip5 <- function(x) {
   if (!is.character(x)) x <- as.character(x)
 

@@ -28,7 +28,7 @@ NULL
 #' @keywords internal
 #'
 #' @examples
-#' mysterycall_luhn_check(c("1234567893", "9999999999", NA))
+#' mysterycall:::mysterycall_luhn_check(c("1234567893", "9999999999", NA))
 #' # Filter a data frame to valid NPIs:
 #' # df[mysterycall_luhn_check(df$npi), ]
 mysterycall_luhn_check <- function(npi) {
