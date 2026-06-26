@@ -124,28 +124,28 @@ mysterycall:::mysterycall_ascii_norm(raw_addr)
 
 ### 3b. Directional normalization (North → N, Northeast → NE)
 
-```{r addr-directionals, purl=FALSE}
+```{r addr-directionals, eval=FALSE, purl=FALSE}
 mysterycall_normalize_directionals("1400 North Main Street")
 mysterycall_normalize_directionals("201 Southeast Oak Avenue")
 ```
 
 ### 3c. Street suffix normalization (Street → ST, Boulevard → BLVD)
 
-```{r addr-suffix, purl=FALSE}
+```{r addr-suffix, eval=FALSE, purl=FALSE}
 mysterycall_normalize_suffix("100 MAIN STREET")
 mysterycall_normalize_suffix("500 OAK BOULEVARD SUITE 3")
 ```
 
 ### 3d. Unit designator normalization (Suite → STE, Apartment → APT)
 
-```{r addr-units, purl=FALSE}
+```{r addr-units, eval=FALSE, purl=FALSE}
 mysterycall_normalize_units("100 Main St Suite 4", addr2 = NA)
 mysterycall_normalize_units("200 Elm Ave", addr2 = "Apartment 7B")
 ```
 
 ### 3e. State abbreviation normalization
 
-```{r addr-state, purl=FALSE}
+```{r addr-state, eval=FALSE, purl=FALSE}
 mysterycall_normalize_state("California")
 mysterycall_normalize_state("new york")
 mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
@@ -153,7 +153,7 @@ mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
 
 ### 3f. ZIP code normalization (zero-pad to 5 digits)
 
-```{r addr-zip, purl=FALSE}
+```{r addr-zip, eval=FALSE, purl=FALSE}
 mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 ```
 
@@ -161,7 +161,7 @@ mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 
 Flag addresses that cannot be visited in person:
 
-```{r addr-po-box, purl=FALSE}
+```{r addr-po-box, eval=FALSE, purl=FALSE}
 mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 ```
 
@@ -169,7 +169,7 @@ mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 
 Pipe all steps together for a data frame:
 
-```{r addr-pipeline, purl=FALSE}
+```{r addr-pipeline, eval=FALSE, purl=FALSE}
 df_addr <- data.frame(
   addr1 = c("1234 north main street", "500 Oak Blvd Suite 3A",
              "P.O. Box 77", "789 Southeast Elm Avenue"),
