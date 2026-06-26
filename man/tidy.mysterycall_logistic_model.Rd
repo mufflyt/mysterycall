@@ -30,9 +30,17 @@ Wald 95\% CIs and p-values. Column names follow broom conventions so the
 result integrates with tidy workflows and \code{broom::bind_rows()}.
 }
 \examples{
-\dontrun{
-fit <- mysterycall_logistic_model(df, "accepted", c("scenario"), "practice")
-tidy(fit)
+\donttest{
+fake_fit <- structure(
+  list(or_table = data.frame(
+    term = "scenarioB", or = 2.5, se = 0.3,
+    z_value = 3.1, p_value = 0.002,
+    ci_lower = 1.8, ci_upper = 3.5,
+    stringsAsFactors = FALSE
+  )),
+  class = "mysterycall_logistic_model"
+)
+tidy(fake_fit)
 }
 }
 \seealso{

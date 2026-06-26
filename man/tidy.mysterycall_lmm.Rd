@@ -31,9 +31,17 @@ log-transformed outcome, \code{estimate} is on the \strong{log} scale; use
 \verb{$gmr_table} for back-transformed geometric mean ratios.
 }
 \examples{
-\dontrun{
-fit <- mysterycall_lmm(df, "wait_days", c("scenario"), "practice")
-tidy(fit)
+\donttest{
+fake_fit <- structure(
+  list(coef_table = data.frame(
+    term = "scenarioB", estimate = 2.1, se = 0.5,
+    t_value = 4.2, df = 80, p_value = 0.001,
+    ci_lower = 1.1, ci_upper = 3.1,
+    stringsAsFactors = FALSE
+  )),
+  class = "mysterycall_lmm"
+)
+tidy(fake_fit)
 }
 }
 \seealso{

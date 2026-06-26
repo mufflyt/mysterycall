@@ -39,15 +39,9 @@ to a temporary file then renamed to reduce the risk of file corruption
 during concurrent access.
 }
 \examples{
-\dontrun{
-# Write to CSV
-mysterycall_write_table(mtcars, "cars.csv")
-
-# Write to Parquet
-mysterycall_write_table(mtcars, "cars.parquet")
-
-# Append to an existing CSV
-mysterycall_write_table(new_data, "combined.csv", append = TRUE)
+\donttest{
+tmp <- tempfile(fileext = ".csv")
+mysterycall_write_table(mtcars, tmp)
 }
 }
 \seealso{

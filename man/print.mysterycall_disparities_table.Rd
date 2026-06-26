@@ -22,7 +22,7 @@ and p-values versus the reference group.  Column headers are labelled using
 the \code{ci_method} and \code{alpha} attributes stored on the object.
 }
 \examples{
-\dontrun{
+\donttest{
 df <- data.frame(
   group   = c("Medicaid", "Private", "Uninsured"),
   success = c(40L, 80L, 30L),

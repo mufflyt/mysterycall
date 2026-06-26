@@ -30,9 +30,17 @@ Returns a broom-compatible tibble of fixed-effect incidence rate ratios
 conventions so the result integrates with tidy workflows.
 }
 \examples{
-\dontrun{
-fit <- mysterycall_poisson_model(df, "n_calls", c("scenario"), "practice")
-tidy(fit)
+\donttest{
+fake_fit <- structure(
+  list(irr_table = data.frame(
+    term = "scenarioB", irr = 1.5, se = 0.15,
+    z_value = 2.6, p_value = 0.009,
+    ci_lower = 1.1, ci_upper = 2.0,
+    stringsAsFactors = FALSE
+  )),
+  class = "mysterycall_poisson_model"
+)
+tidy(fake_fit)
 }
 }
 \seealso{

@@ -19,7 +19,7 @@ Prints a formatted Table 1 with column sample sizes in the header and the
 underlying tibble displayed via \code{\link[tibble:formatting]{tibble::print.tbl_df()}}.
 }
 \examples{
-\dontrun{
+\donttest{
 df <- data.frame(
   age = c(25, 30, 35, 40),
   sex = c("M", "F", "F", "M")

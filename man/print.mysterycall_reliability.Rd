@@ -18,7 +18,7 @@
 Print method for mysterycall_reliability objects
 }
 \examples{
-\dontrun{
+\donttest{
 df <- data.frame(
   caller  = c("A", "A", "B", "B"),
   outcome = c(1L, 0L, 1L, 1L)

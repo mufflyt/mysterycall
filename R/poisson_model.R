@@ -345,11 +345,24 @@ mysterycall_poisson_model <- function(data,
 #' @family outcomes
 #' @export
 #' @examples
-#' \dontrun{
-#' model <- mysterycall_poisson_model(data, outcome_col = "wait_days",
-#'                                     predictor_col = "insurance",
-#'                                     random_intercept = "physician_id")
-#' print(model)
+#' \donttest{
+#' fake <- structure(list(
+#'   n = 120L, n_clusters = 40L, aic = 234.5, bic = 245.1,
+#'   n_dropped = 0L,
+#'   convergence = list(converged = TRUE, singular = FALSE),
+#'   overdispersion = 1.1,
+#'   factor_refs = list(),
+#'   irr_table = data.frame(
+#'     term = "scenarioB", irr = 1.5, ci_lower = 1.1, ci_upper = 2.0,
+#'     p_value_fmt = "0.009", se = 0.15, z_value = 2.6, p_value = 0.009,
+#'     stringsAsFactors = FALSE
+#'   ),
+#'   random_effects = data.frame(
+#'     grp = "practice", vcov = 0.05, sdcor = 0.22,
+#'     stringsAsFactors = FALSE
+#'   )
+#' ), class = "mysterycall_poisson_model")
+#' print(fake)
 #' }
 print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
   cat(sprintf(
@@ -414,9 +427,17 @@ print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
 #' @method tidy mysterycall_poisson_model
 #' @export
 #' @examples
-#' \dontrun{
-#' fit <- mysterycall_poisson_model(df, "n_calls", c("scenario"), "practice")
-#' tidy(fit)
+#' \donttest{
+#' fake_fit <- structure(
+#'   list(irr_table = data.frame(
+#'     term = "scenarioB", irr = 1.5, se = 0.15,
+#'     z_value = 2.6, p_value = 0.009,
+#'     ci_lower = 1.1, ci_upper = 2.0,
+#'     stringsAsFactors = FALSE
+#'   )),
+#'   class = "mysterycall_poisson_model"
+#' )
+#' tidy(fake_fit)
 #' }
 tidy.mysterycall_poisson_model <- function(x, ...) {
   tbl <- x$irr_table

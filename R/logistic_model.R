@@ -354,9 +354,17 @@ print.mysterycall_logistic_model <- function(x, digits = 3, ...) {
 #' @method tidy mysterycall_logistic_model
 #' @export
 #' @examples
-#' \dontrun{
-#' fit <- mysterycall_logistic_model(df, "accepted", c("scenario"), "practice")
-#' tidy(fit)
+#' \donttest{
+#' fake_fit <- structure(
+#'   list(or_table = data.frame(
+#'     term = "scenarioB", or = 2.5, se = 0.3,
+#'     z_value = 3.1, p_value = 0.002,
+#'     ci_lower = 1.8, ci_upper = 3.5,
+#'     stringsAsFactors = FALSE
+#'   )),
+#'   class = "mysterycall_logistic_model"
+#' )
+#' tidy(fake_fit)
 #' }
 tidy.mysterycall_logistic_model <- function(x, ...) {
   tbl <- x$or_table

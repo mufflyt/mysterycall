@@ -246,7 +246,7 @@ mysterycall_caller_reliability <- function(
 #' @param ... Ignored.
 #' @return `invisible(x)`.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' df <- data.frame(
 #'   caller  = c("A", "A", "B", "B"),
 #'   outcome = c(1L, 0L, 1L, 1L)

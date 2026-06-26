@@ -24,12 +24,10 @@ If an \code{npi} column is present and numeric, it is automatically coerced to
 character to prevent loss of leading zeros or precision.
 }
 \examples{
-\dontrun{
-# Read a CSV file
-df <- mysterycall_read_table("providers.csv")
-
-# Read a Parquet file
-df <- mysterycall_read_table("data.parquet")
+\donttest{
+tmp <- tempfile(fileext = ".csv")
+write.csv(mtcars, tmp, row.names = FALSE)
+df <- mysterycall_read_table(tmp)
 }
 }
 \seealso{
