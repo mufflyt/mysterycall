@@ -116,9 +116,10 @@ Apply the functions in this order:
 
 ### 3a. ASCII normalization
 
-```{r addr-ascii, purl=FALSE}
-raw_addr <- "123 Café Boulevard, Suite 4A"
-mysterycall_ascii_norm(raw_addr)
+```{r addr-ascii, eval=FALSE, purl=FALSE}
+# mysterycall_ascii_norm() is an internal helper; shown here for illustration.
+raw_addr <- "123 Cafe Boulevard, Suite 4A"
+mysterycall:::mysterycall_ascii_norm(raw_addr)
 ```
 
 ### 3b. Directional normalization (North → N, Northeast → NE)

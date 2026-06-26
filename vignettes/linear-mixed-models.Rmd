@@ -20,6 +20,7 @@ eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") &&
   requireNamespace("lme4", quietly = TRUE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = eval_vignettes)
 library(mysterycall)
+if (requireNamespace("generics", quietly = TRUE)) library(generics)
 ```
 
 ```{r load-packages, eval=FALSE}
@@ -138,7 +139,7 @@ If `auto_log` did trigger, interpret results from `$gmr_table` rather than
 `$coef_table`:
 
 ```{r gmr-table}
-if (fit$log_transformed) {
+if (isTRUE(fit$log_transformed)) {
   fit$gmr_table
 } else {
   message("auto_log did not trigger; use $coef_table directly.")
