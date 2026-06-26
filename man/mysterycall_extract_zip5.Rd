@@ -21,7 +21,7 @@ Returns \code{NA_character_} for inputs that cannot be parsed into a plausible
 ZIP code.
 }
 \examples{
-mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
+mysterycall:::mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
 }
 \seealso{
 Other data management: 

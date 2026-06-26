@@ -31,8 +31,8 @@ formats.
 \examples{
 nms <- c("John Smith MD", "Dr. Jane Doe, PhD", "JONES, Robert",
          "Mary Williams, MD, FACS", NA)
-mysterycall_extract_physician_name(nms)
-mysterycall_extract_physician_name(nms, format = "last")
+mysterycall:::mysterycall_extract_physician_name(nms)
+mysterycall:::mysterycall_extract_physician_name(nms, format = "last")
 }
 \seealso{
 Other provider characteristics: 

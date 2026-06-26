@@ -45,6 +45,7 @@ clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach clinician data to a roster.
 
 Other npi: 
+\code{\link{mysterycall_enrich_npi}()},
 \code{\link{mysterycall_search_and_process_npi}()},
 \code{\link{mysterycall_search_taxonomy}()}
 }

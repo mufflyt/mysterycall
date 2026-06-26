@@ -116,6 +116,8 @@ mysterycall_get_clinician_data <- function(input_data) {
     clinician_rows <- as.data.frame(clinician_rows, stringsAsFactors = FALSE)
 
     base_expanded <- base_row[rep(1, nrow(clinician_rows)), , drop = FALSE]
+    overlap <- intersect(names(base_expanded), names(clinician_rows))
+    if (length(overlap)) clinician_rows <- clinician_rows[, setdiff(names(clinician_rows), overlap), drop = FALSE]
     combined <- cbind(base_expanded, clinician_rows)
     as.data.frame(combined, stringsAsFactors = FALSE)
   })

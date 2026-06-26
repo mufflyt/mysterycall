@@ -20,7 +20,7 @@ Stop a spinner
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
-mysterycall_spinner_stop(id, result = "done")
+mysterycall:::mysterycall_spinner_stop(id, result = "done")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

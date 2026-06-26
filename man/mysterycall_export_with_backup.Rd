@@ -31,7 +31,7 @@ Write tabular or graphical outputs with timestamped backups
 }
 \examples{
 tmp <- tempfile(fileext = ".csv")
-mysterycall_export_with_backup(mtcars, tmp)
+mysterycall:::mysterycall_export_with_backup(mtcars, tmp)
 }
 \seealso{
 Other utilities: 
@@ -47,6 +47,7 @@ Other utilities:
 \code{\link{mysterycall_download_file}()},
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_read_table}()},

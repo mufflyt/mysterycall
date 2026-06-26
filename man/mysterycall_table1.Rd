@@ -14,7 +14,8 @@ mysterycall_table1(
   p_value = TRUE,
   min_cell = 5L,
   variable_labels = NULL,
-  output_path = NULL
+  output_path = NULL,
+  acog_district_col = NULL
 )
 }
 \arguments{
@@ -53,6 +54,15 @@ columns use their column name.}
 \code{.docx} is supplied (e.g. \code{"table1.docx"}), the table is exported to a
 Word document via the \code{flextable} and \code{officer} packages and the path is
 stored in \verb{$docx_path}. Requires both packages to be installed.}
+
+\item{acog_district_col}{Character scalar or \code{NULL}. Name of the column
+containing ACOG district assignments (e.g. \code{"acog_district"}). When set,
+two things happen automatically: (1) the variable label is expanded to
+"American College of Obstetricians and Gynecologists (ACOG) District", and
+(2) each district level is annotated with its two-letter state
+abbreviations, e.g. "District I (CT, ME, MA, NH, RI, VT)". A
+\code{variable_labels} entry for the same column takes precedence over the
+auto-generated label.}
 }
 \value{
 A list of class \code{mysterycall_table1} with:

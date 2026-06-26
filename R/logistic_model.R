@@ -327,3 +327,46 @@ print.mysterycall_logistic_model <- function(x, digits = 3, ...) {
 
   invisible(x)
 }
+
+
+#' Tidy method for mysterycall_logistic_model objects
+#'
+#' Returns a broom-compatible tibble of fixed-effect odds ratios (OR) with
+#' Wald 95% CIs and p-values. Column names follow broom conventions so the
+#' result integrates with tidy workflows and `broom::bind_rows()`.
+#'
+#' @param x A `mysterycall_logistic_model` object returned by
+#'   [mysterycall_logistic_model()].
+#' @param ... Ignored; present for S3 consistency.
+#'
+#' @return A [tibble::tibble()] with one row per fixed-effect term and columns:
+#' \describe{
+#'   \item{`term`}{Coefficient name.}
+#'   \item{`estimate`}{OR (odds ratio) on the exponentiated scale.}
+#'   \item{`std.error`}{Standard error of the *log*-OR.}
+#'   \item{`statistic`}{z-statistic.}
+#'   \item{`p.value`}{Two-tailed Wald p-value.}
+#'   \item{`conf.low`}{Lower bound of 95% Wald CI for OR.}
+#'   \item{`conf.high`}{Upper bound of 95% Wald CI for OR.}
+#' }
+#'
+#' @family outcomes
+#' @method tidy mysterycall_logistic_model
+#' @export
+#' @examples
+#' \dontrun{
+#' fit <- mysterycall_logistic_model(df, "accepted", c("scenario"), "practice")
+#' tidy(fit)
+#' }
+tidy.mysterycall_logistic_model <- function(x, ...) {
+  tbl <- x$or_table
+  tibble::tibble(
+    term      = tbl$term,
+    estimate  = tbl$or,
+    std.error = tbl$se,
+    statistic = tbl$z_value,
+    p.value   = tbl$p_value,
+    conf.low  = tbl$ci_lower,
+    conf.high = tbl$ci_upper
+  )
+}

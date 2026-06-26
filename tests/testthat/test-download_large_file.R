@@ -23,6 +23,28 @@ test_that("mysterycall_download_file detects in-progress lock", {
   unlink(lock_path)
 })
 
+test_that("mysterycall_download_file overwrite does not bypass in-progress lock", {
+  tmp_dir <- tempdir()
+  dest <- normalizePath(file.path(tmp_dir, "locked-overwrite.dat"), mustWork = FALSE)
+  lock_path <- paste0(dest, ".lock")
+  dir.create(dirname(lock_path), recursive = TRUE, showWarnings = FALSE)
+  file.create(lock_path)
+  writeBin(as.raw(rep(1, 2)), dest)
+
+  mockery::stub(mysterycall_download_file, "get_content_length", function(...) 4)
+  mockery::stub(mysterycall_download_file, "download_with_wget", function(...) {
+    stop("download should not start while lock is active")
+  })
+
+  expect_error(
+    mysterycall_download_file("https://example.com/data", dest, overwrite = TRUE),
+    "appears to be in progress"
+  )
+  expect_true(file.exists(lock_path))
+  expect_equal(file.info(dest)$size, 2)
+  unlink(c(dest, lock_path))
+})
+
 test_that("mysterycall_download_file falls back through download methods", {
   tmp_dir <- tempdir()
   dest <- normalizePath(file.path(tmp_dir, "fallback.dat"), mustWork = FALSE)

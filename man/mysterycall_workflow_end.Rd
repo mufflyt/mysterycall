@@ -19,8 +19,8 @@ End workflow and print summary
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-mysterycall_workflow_start("Demo", total_steps = 1)
-mysterycall_workflow_end(final_n = 80, input_n = 100)
+mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
+mysterycall:::mysterycall_workflow_end(final_n = 80, input_n = 100)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

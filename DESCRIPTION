@@ -1,7 +1,7 @@
 Package: mysterycall
 Title: Mystery Caller Study Tools for Healthcare Access Research
-Version: 1.5.0
-Date: 2026-06-23
+Version: 1.6.0
+Date: 2026-06-25
 Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2044-1693"))
@@ -13,7 +13,9 @@ Description: Tools for design, analysis, and reporting of mystery-caller (secret
     curves, CONSORT/STROBE flow diagrams, inter-caller reliability, missing-data MAR/MNAR
     tests, and one-call manuscript generators for results, materials-and-methods, and
     STROBE-checklist sections. Also includes utilities for National Provider Identifier
-    (NPI) record lookup, provider demographics, and publication-ready table and map output.
+    (NPI) record lookup and enrichment pipeline, provider demographics, Medicaid expansion
+    status dataset, calendar-vs-business-day sensitivity analysis, broom-compatible tidy()
+    methods, REDCap data dictionary parser, and publication-ready table and map output.
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
@@ -23,6 +25,7 @@ BugReports: https://github.com/mufflyt/mysterycall/issues
 Depends:
     R (>= 4.1.0)
 Imports:
+    generics,
     httr,
     janitor,
     readr,

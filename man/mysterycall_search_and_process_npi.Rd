@@ -114,6 +114,7 @@ results <- mysterycall_search_and_process_npi(df)
 \code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}} for taxonomy-based registry searches.
 
 Other npi: 
+\code{\link{mysterycall_enrich_npi}()},
 \code{\link{mysterycall_get_clinician_data}()},
 \code{\link{mysterycall_search_taxonomy}()}
 }

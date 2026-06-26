@@ -32,11 +32,11 @@ Use after any API call where you expect a specific number of results.
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Expect exactly 100 geocoding results
 coords <- geocode(addresses)
-mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
+mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
 
 # Allow up to 5\% missing
 coords <- geocode(addresses)
-mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
+mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
                         tolerance = 5)
 \dontshow{\}) # examplesIf}
 }
@@ -57,6 +57,7 @@ Other utilities:
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_read_table}()},

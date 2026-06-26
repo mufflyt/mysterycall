@@ -70,6 +70,7 @@ Other outcomes:
 \code{\link{mysterycall_acceptance_rate}()},
 \code{\link{mysterycall_auto_model}()},
 \code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_calendar_sensitivity}()},
 \code{\link{mysterycall_forest_plot}()},
 \code{\link{mysterycall_icc}()},
 \code{\link{mysterycall_icc_sentence}()},
@@ -98,6 +99,7 @@ Other outcomes:
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{plot.mysterycall_lmm}()},
 \code{\link{print.mysterycall_auto_model}()},
+\code{\link{print.mysterycall_calendar_sensitivity}()},
 \code{\link{print.mysterycall_icc}()},
 \code{\link{print.mysterycall_lmm}()},
 \code{\link{print.mysterycall_logistic_model}()},
@@ -107,6 +109,9 @@ Other outcomes:
 \code{\link{print.mysterycall_poisson_model}()},
 \code{\link{print.mysterycall_power_curve}()},
 \code{\link{print.mysterycall_predicted_means}()},
-\code{\link{print.mysterycall_sensitivity}()}
+\code{\link{print.mysterycall_sensitivity}()},
+\code{\link{tidy.mysterycall_lmm}()},
+\code{\link{tidy.mysterycall_logistic_model}()},
+\code{\link{tidy.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

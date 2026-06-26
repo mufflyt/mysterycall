@@ -37,14 +37,43 @@ NULL
 #' @param REML Logical. Use Restricted Maximum Likelihood? Default `TRUE`
 #'   (recommended for variance estimation). Set `FALSE` for AIC-based model
 #'   comparison.
+#' @param auto_log Logical. When `TRUE` (default), the function checks whether
+#'   the outcome is right-skewed (sample skewness > 1 on non-negative values)
+#'   and automatically applies a `log1p()` transform before fitting. Coefficients
+#'   are returned on both the log scale (`coef_table`) and back-transformed as
+#'   geometric mean ratios (`gmr_table`). Set to `FALSE` to suppress this
+#'   behaviour and model the raw outcome.
+#' @param sensitivity_poisson One of `"auto"` (default), `TRUE`, or `FALSE`.
+#'   Controls whether a Poisson GLMM sensitivity analysis is run on the
+#'   **original untransformed** outcome alongside the LMM:
+#'   \describe{
+#'     \item{`"auto"`}{Runs the Poisson model only when the Shapiro-Wilk test
+#'       on LMM residuals returns p < 0.05, indicating non-normal residuals.}
+#'     \item{`TRUE`}{Always runs the Poisson sensitivity model.}
+#'     \item{`FALSE`}{Never runs it.}
+#'   }
+#'   Results are stored in `$sensitivity` (a `mysterycall_poisson_model`
+#'   object) and printed as a compact IRR table. Requires `lme4`.
 #' @param ... Additional arguments forwarded to [lme4::lmer()].
 #'
 #' @return A list of class `mysterycall_lmm` with elements:
 #' \describe{
 #'   \item{`model`}{`lmerMod` (or `lmerModLmerTest`). The fitted model.}
 #'   \item{`coef_table`}{`tibble`. One row per fixed-effect term: `term`,
-#'     `estimate` (days), `se`, `t_value`, `df` (Satterthwaite or residual),
-#'     `p_value`, `p_value_fmt`, `ci_lower` (days), `ci_upper` (days).}
+#'     `estimate`, `se`, `t_value`, `df`, `p_value`, `p_value_fmt`,
+#'     `ci_lower`, `ci_upper`. Units are days (raw outcome) or log1p(days)
+#'     when `log_transformed` is `TRUE`.}
+#'   \item{`gmr_table`}{`tibble` or `NULL`. Present only when
+#'     `log_transformed = TRUE`. Columns: `term`, `GMR` (geometric mean ratio
+#'     of (days + 1) vs. reference level), `GMR_lo`, `GMR_hi`, `p_value_fmt`.
+#'     A GMR < 1 means shorter wait relative to the reference.}
+#'   \item{`log_transformed`}{`logical`. `TRUE` when `auto_log` triggered a
+#'     `log1p()` transform.}
+#'   \item{`outcome_original`}{`character`. The column name as supplied by
+#'     the caller.}
+#'   \item{`outcome_used`}{`character`. The column actually modelled
+#'     (`log1p_<outcome>` when transformed, same as `outcome_original`
+#'     otherwise).}
 #'   \item{`random_effects`}{`data.frame` from [lme4::VarCorr()].}
 #'   \item{`factor_refs`}{`list`. Reference levels for character/factor
 #'     predictors.}
@@ -52,11 +81,9 @@ NULL
 #'   \item{`n`}{`integer`. Complete-case rows used.}
 #'   \item{`n_dropped`}{`integer`. Rows excluded for missing values.}
 #'   \item{`n_clusters`}{`integer`. Unique values of `random_intercept`.}
-#'   \item{`sigma`}{`numeric`. Residual standard deviation (within-physician
-#'     SD of wait days around the fixed-effect prediction).}
-#'   \item{`r_squared`}{`list`. `marginal` (variance explained by fixed
-#'     effects) and `conditional` (fixed + random effects), computed via the
-#'     Nakagawa & Schielzeth (2013) method.}
+#'   \item{`sigma`}{`numeric`. Residual standard deviation.}
+#'   \item{`r_squared`}{`list`. `marginal` and `conditional` R^2 (Nakagawa
+#'     & Schielzeth 2013).}
 #'   \item{`normality`}{`list`. Shapiro-Wilk test on model residuals:
 #'     `statistic`, `p_value`, `interpretation`, `method`. Skipped when
 #'     n > 5000.}
@@ -64,13 +91,24 @@ NULL
 #'     `messages` (character vector).}
 #'   \item{`aic`}{`numeric`. AIC (valid only when `REML = FALSE`).}
 #'   \item{`bic`}{`numeric`. BIC (valid only when `REML = FALSE`).}
+#'   \item{`sensitivity`}{`mysterycall_poisson_model` or `NULL`. A Poisson
+#'     GLMM fit on the original (untransformed) outcome using the same
+#'     predictors and random intercept. Present when `sensitivity_poisson`
+#'     triggers; `NULL` otherwise. Use `$sensitivity$irr_table` for IRR
+#'     estimates. IRR < 1 = shorter wait than reference.}
+#'   \item{`sensitivity_note`}{`character` or `NULL`. One-sentence explanation
+#'     of why the sensitivity analysis was (or was not) run.}
 #' }
 #'
 #' @section Interpreting coefficients:
-#' An estimate of `+5.2` for `insuranceMedicaid` means physicians called with
-#' Medicaid insurance had, on average, **5.2 more wait days** than the reference
-#' insurance group, after accounting for physician-level clustering. The 95% CI
-#' is on the same (days) scale.
+#' **Raw scale (`auto_log = FALSE` or skewness <= 1):** An estimate of `+5.2`
+#' for `insuranceMedicaid` means physicians called with Medicaid had, on
+#' average, **5.2 more wait days** than the reference group.
+#'
+#' **Log scale (`auto_log = TRUE`, skewness > 1):** Coefficients are on the
+#' `log1p(days)` scale. Use `gmr_table` for interpretation: a GMR of `0.87`
+#' means the group waits ~13% fewer days (× (days + 1)) than the reference.
+#' Report as: "GMR = 0.87 (95% CI 0.49–1.54), p = 0.631."
 #'
 #' @section R-squared:
 #' Marginal R^2 reflects variance explained by fixed effects alone;
@@ -106,8 +144,10 @@ mysterycall_lmm <- function(data,
                              outcome,
                              predictors,
                              random_intercept,
-                             conf_level = 0.95,
-                             REML       = TRUE,
+                             conf_level           = 0.95,
+                             REML                 = TRUE,
+                             auto_log             = TRUE,
+                             sensitivity_poisson  = "auto",
                              ...) {
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -145,8 +185,38 @@ mysterycall_lmm <- function(data,
   if (!nrow(data_cc))
     stop("No complete cases remain after removing rows with missing values.", call. = FALSE)
 
+  # -- Auto log1p transform for right-skewed non-negative outcomes ---------------
+  log_transformed  <- FALSE
+  outcome_original <- outcome
+
+  if (isTRUE(auto_log)) {
+    y_raw <- data_cc[[outcome]]
+    if (min(y_raw, na.rm = TRUE) >= 0) {
+      y_mean <- mean(y_raw, na.rm = TRUE)
+      y_sd   <- stats::sd(y_raw, na.rm = TRUE)
+      skew   <- if (y_sd > 0) {
+        mean(((y_raw - y_mean) / y_sd)^3, na.rm = TRUE)
+      } else 0
+      if (skew > 1) {
+        log_col <- paste0("log1p_", outcome)
+        data_cc[[log_col]] <- log1p(y_raw)
+        message(sprintf(
+          paste0(
+            "auto_log: right-skewed outcome detected (skewness = %.2f > 1). ",
+            "Applying log1p(%s) -> '%s'. ",
+            "Coefficients are on the log scale; GMR back-transforms are in $gmr_table. ",
+            "To model the raw outcome, set auto_log = FALSE."
+          ),
+          skew, outcome, log_col
+        ))
+        outcome         <- log_col
+        log_transformed <- TRUE
+      }
+    }
+  }
+
   # -- Normality pre-check on raw outcome ----------------------------------------
-  y_range <- diff(range(data_cc[[outcome]], na.rm = TRUE))
+  y_range <- diff(range(data_cc[[outcome_original]], na.rm = TRUE))
   if (y_range < 30) {
     warning(sprintf(
       paste0("Outcome range is only %.0f days (< 30). LMM assumes approximate normality; ",
@@ -271,6 +341,19 @@ mysterycall_lmm <- function(data,
     ci_upper    = fe[[est_col]] + z_crit * fe[[se_col]]
   )
 
+  # -- Back-transform to geometric mean ratios when log-transformed -------------
+  gmr_table <- if (log_transformed) {
+    tibble::tibble(
+      term        = coef_table$term,
+      GMR         = exp(coef_table$estimate),
+      GMR_lo      = exp(coef_table$ci_lower),
+      GMR_hi      = exp(coef_table$ci_upper),
+      p_value_fmt = coef_table$p_value_fmt
+    )
+  } else {
+    NULL
+  }
+
   # -- Random effects ------------------------------------------------------------
   re_df      <- as.data.frame(lme4::VarCorr(model))
   n_clusters <- lme4::ngrps(model)[[random_intercept]]
@@ -289,6 +372,46 @@ mysterycall_lmm <- function(data,
     ), call. = FALSE)
   }
 
+  # -- Poisson sensitivity analysis ---------------------------------------------
+  run_sensitivity <- isTRUE(sensitivity_poisson) ||
+    (identical(sensitivity_poisson, "auto") &&
+       !is.na(normality$p_value) && normality$p_value < 0.05)
+
+  sensitivity      <- NULL
+  sensitivity_note <- NULL
+
+  if (run_sensitivity) {
+    sensitivity_note <- sprintf(
+      paste0("Poisson GLMM sensitivity analysis on %s ",
+             "(original scale, log link). ",
+             "IRR < 1 = shorter wait than reference. ",
+             "Triggered by: %s"),
+      outcome_original,
+      if (identical(sensitivity_poisson, TRUE)) {
+        "sensitivity_poisson = TRUE"
+      } else {
+        sprintf("Shapiro-Wilk p = %.4f < 0.05 on LMM residuals", normality$p_value)
+      }
+    )
+    sensitivity <- tryCatch(
+      suppressMessages(
+        mysterycall_poisson_model(
+          data             = data_cc,
+          outcome          = outcome_original,
+          predictors       = predictors,
+          random_intercept = random_intercept,
+          conf_level       = conf_level
+        )
+      ),
+      error = function(e) {
+        sensitivity_note <<- sprintf(
+          "Poisson sensitivity failed: %s", e$message
+        )
+        NULL
+      }
+    )
+  }
+
   # -- R-squared (Nakagawa & Schielzeth 2013) ------------------------------------
   r2 <- .lmm_r_squared(model, re_df, res_sigma)
 
@@ -299,25 +422,31 @@ mysterycall_lmm <- function(data,
 
   structure(
     list(
-      model          = model,
-      coef_table     = coef_table,
-      random_effects = re_df,
-      factor_refs    = factor_refs,
-      formula        = model_formula,
-      n              = nrow(data_cc),
-      n_dropped      = n_dropped,
-      n_clusters     = n_clusters,
-      sigma          = res_sigma,
-      r_squared      = r2,
-      normality      = normality,
-      convergence    = list(
+      model            = model,
+      coef_table       = coef_table,
+      gmr_table        = gmr_table,
+      log_transformed  = log_transformed,
+      outcome_original = outcome_original,
+      outcome_used     = outcome,
+      random_effects   = re_df,
+      factor_refs      = factor_refs,
+      formula          = model_formula,
+      n                = nrow(data_cc),
+      n_dropped        = n_dropped,
+      n_clusters       = n_clusters,
+      sigma            = res_sigma,
+      r_squared        = r2,
+      normality        = normality,
+      convergence      = list(
         converged = converged,
         singular  = is_singular,
         messages  = c(conv_msgs, warnings_captured)
       ),
-      aic  = AIC(model),
-      bic  = BIC(model),
-      REML = REML
+      aic              = AIC(model),
+      bic              = BIC(model),
+      REML             = REML,
+      sensitivity      = sensitivity,
+      sensitivity_note = sensitivity_note
     ),
     class = "mysterycall_lmm"
   )
@@ -421,7 +550,15 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
     cat(sprintf("  Reference levels: %s\n", refs))
   }
 
-  cat("\nFixed effects (days):\n")
+  if (isTRUE(x$log_transformed)) {
+    cat(sprintf(
+      "  Outcome: log1p(%s) [auto_log]. Coefs are on log scale; see GMR table below.\n",
+      x$outcome_original
+    ))
+  }
+
+  log_label <- if (isTRUE(x$log_transformed)) "log1p(days)" else "days"
+  cat(sprintf("\nFixed effects (%s):\n", log_label))
   tbl <- as.data.frame(x$coef_table[, c("term", "estimate", "se", "ci_lower", "ci_upper", "p_value_fmt")])
   tbl$estimate <- round(tbl$estimate, digits)
   tbl$se       <- round(tbl$se,       digits)
@@ -430,6 +567,16 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
   names(tbl)[names(tbl) == "p_value_fmt"] <- "p-value"
   print(tbl, row.names = FALSE)
 
+  if (!is.null(x$gmr_table)) {
+    cat("\nGeometric mean ratios [exp(estimate)] — GMR < 1 = shorter wait:\n")
+    gmr <- as.data.frame(x$gmr_table)
+    gmr$GMR    <- round(gmr$GMR,    3)
+    gmr$GMR_lo <- round(gmr$GMR_lo, 3)
+    gmr$GMR_hi <- round(gmr$GMR_hi, 3)
+    names(gmr)[names(gmr) == "p_value_fmt"] <- "p-value"
+    print(gmr, row.names = FALSE)
+  }
+
   re <- x$random_effects[
     !is.na(x$random_effects$grp) & x$random_effects$grp != "Residual", ,
     drop = FALSE
@@ -437,6 +584,24 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
   if (nrow(re)) {
     cat(sprintf("\nRandom intercept (%s):  variance = %.4f  SD = %.4f days\n",
                 re$grp[[1L]], re$vcov[[1L]], re$sdcor[[1L]]))
+  }
+
+  if (!is.null(x$sensitivity)) {
+    cat("\n-- Sensitivity Analysis: Poisson GLMM (same outcome, log link) --\n")
+    if (!is.null(x$sensitivity_note)) cat(strwrap(x$sensitivity_note, width = 72,
+                                                    prefix = "  "), sep = "\n")
+    cat("\n")
+    irr <- as.data.frame(
+      x$sensitivity$irr_table[, c("term", "irr", "ci_lower", "ci_upper", "p_value_fmt")]
+    )
+    irr$irr      <- round(irr$irr,      digits)
+    irr$ci_lower <- round(irr$ci_lower, digits)
+    irr$ci_upper <- round(irr$ci_upper, digits)
+    names(irr)[names(irr) == "p_value_fmt"] <- "p-value"
+    print(irr, row.names = FALSE)
+    cat("  IRR < 1 = shorter wait than reference. Check $sensitivity for full output.\n")
+  } else if (!is.null(x$sensitivity_note)) {
+    cat(sprintf("\nSensitivity: %s\n", x$sensitivity_note))
   }
 
   invisible(x)
@@ -524,3 +689,50 @@ plot.mysterycall_lmm <- function(x, ...) {
   print(p)
   invisible(p)
 }
+
+
+#' Tidy method for mysterycall_lmm objects
+#'
+#' Returns a broom-compatible tibble of fixed-effect coefficients with Wald
+#' 95% CIs and Satterthwaite p-values. When the model was fit on a
+#' log-transformed outcome, `estimate` is on the **log** scale; use
+#' `$gmr_table` for back-transformed geometric mean ratios.
+#'
+#' @param x A `mysterycall_lmm` object returned by [mysterycall_lmm()].
+#' @param ... Ignored; present for S3 consistency.
+#'
+#' @return A [tibble::tibble()] with one row per fixed-effect term and columns:
+#' \describe{
+#'   \item{`term`}{Coefficient name.}
+#'   \item{`estimate`}{Point estimate (days, or log-days if log-transformed).}
+#'   \item{`std.error`}{Standard error.}
+#'   \item{`statistic`}{t-statistic.}
+#'   \item{`df`}{Satterthwaite denominator degrees of freedom.}
+#'   \item{`p.value`}{Two-tailed Satterthwaite p-value.}
+#'   \item{`conf.low`}{Lower bound of Wald CI.}
+#'   \item{`conf.high`}{Upper bound of Wald CI.}
+#' }
+#'
+#' @family outcomes
+#' @importFrom generics tidy
+#' @method tidy mysterycall_lmm
+#' @export
+#' @examples
+#' \dontrun{
+#' fit <- mysterycall_lmm(df, "wait_days", c("scenario"), "practice")
+#' tidy(fit)
+#' }
+tidy.mysterycall_lmm <- function(x, ...) {
+  tbl <- x$coef_table
+  tibble::tibble(
+    term      = tbl$term,
+    estimate  = tbl$estimate,
+    std.error = tbl$se,
+    statistic = tbl$t_value,
+    df        = tbl$df,
+    p.value   = tbl$p_value,
+    conf.low  = tbl$ci_lower,
+    conf.high = tbl$ci_upper
+  )
+}
+

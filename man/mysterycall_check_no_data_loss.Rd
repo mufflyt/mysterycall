@@ -38,12 +38,12 @@ that lose data.
 # Expect no data loss in cleaning
 before <- nrow(raw_data)
 clean_data <- mysterycall_clean_phase1(raw_data)
-mysterycall_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
+mysterycall:::mysterycall_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 
 # Expect deduplication to remove ~10 rows, allow +/-5
 before <- nrow(data)
 dedup_data <- deduplicate(data)
-mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
+mysterycall:::mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
                         expected_change = -10, tolerance = 5)
 \dontshow{\}) # examplesIf}
 }
@@ -64,6 +64,7 @@ Other utilities:
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_read_table}()},

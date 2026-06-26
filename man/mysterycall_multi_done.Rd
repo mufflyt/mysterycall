@@ -18,7 +18,7 @@ Complete multi-step tracker
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
-mysterycall_multi_done(tracker)
+mysterycall:::mysterycall_multi_done(tracker)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

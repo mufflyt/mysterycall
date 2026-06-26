@@ -56,4 +56,3 @@ Other provider characteristics:
 \code{\link{mysterycall_reconcile_specialty}()}
 }
 \concept{provider characteristics}
-\keyword{internal}

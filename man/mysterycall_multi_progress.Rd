@@ -21,10 +21,10 @@ Shows overall progress plus current step progress.
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
-mysterycall_multi_step(tracker, 1, total = 5)
+mysterycall:::mysterycall_multi_step(tracker, 1, total = 5)
 for (i in 1:5) mysterycall_multi_update(tracker)
-mysterycall_multi_complete(tracker)
-mysterycall_multi_done(tracker)
+mysterycall:::mysterycall_multi_complete(tracker)
+mysterycall:::mysterycall_multi_done(tracker)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

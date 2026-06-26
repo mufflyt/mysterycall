@@ -10,6 +10,34 @@
 #' @name mysterycall_table1
 NULL
 
+# -- ACOG district label lookup -----------------------------------------------
+# Maps "District X" -> "District X (ST, ST, ...)" using two-letter abbreviations.
+# Derived from .mc_acog_map in assign_region.R; hardcoded to avoid a runtime
+# dependency on the acog_districts dataset being loaded.
+# Source of truth: acog_districts dataset (acog_districts.R).
+# District III = NJ, PA (DE is in IV); District XI = TX; no District X.
+# Source of truth: acog_districts dataset (acog_districts.R).
+# District III = NJ, PA (DE is in IV); District XI = TX; no District X.
+# Abbreviations are sorted alphabetically within each district to match the dataset.
+.ACOG_DISTRICT_ABBREVS <- c(
+  "District I"    = "CT, MA, ME, NH, RI, VT",
+  "District II"   = "NY",
+  "District III"  = "NJ, PA",
+  "District IV"   = "DC, DE, GA, MD, NC, PR, SC, VA, WV",
+  "District V"    = "IN, KY, MI, OH",
+  "District VI"   = "IA, IL, MN, ND, NE, SD, WI",
+  "District VII"  = "AL, AR, KS, LA, MO, MS, OK, TN",
+  "District VIII" = "AK, AZ, CO, HI, ID, MT, NM, NV, OR, UT, WA, WY",
+  "District IX"   = "CA",
+  "District XI"   = "TX",
+  "District XII"  = "FL"
+)
+
+.t1_expand_acog_level <- function(level) {
+  abbrevs <- .ACOG_DISTRICT_ABBREVS[level]
+  ifelse(is.na(abbrevs), level, sprintf("%s (%s)", level, abbrevs))
+}
+
 # -- Internal formatters -------------------------------------------------------
 
 #' Format n (%)
@@ -254,6 +282,14 @@ NULL
 #'   `.docx` is supplied (e.g. `"table1.docx"`), the table is exported to a
 #'   Word document via the `flextable` and `officer` packages and the path is
 #'   stored in `$docx_path`. Requires both packages to be installed.
+#' @param acog_district_col Character scalar or `NULL`. Name of the column
+#'   containing ACOG district assignments (e.g. `"acog_district"`). When set,
+#'   two things happen automatically: (1) the variable label is expanded to
+#'   "American College of Obstetricians and Gynecologists (ACOG) District", and
+#'   (2) each district level is annotated with its two-letter state
+#'   abbreviations, e.g. "District I (CT, ME, MA, NH, RI, VT)". A
+#'   `variable_labels` entry for the same column takes precedence over the
+#'   auto-generated label.
 #'
 #' @return A list of class `mysterycall_table1` with:
 #' \describe{
@@ -291,14 +327,15 @@ NULL
 #' result$table
 mysterycall_table1 <- function(data,
                                 covariates,
-                                stratify_by     = NULL,
+                                stratify_by      = NULL,
                                 include_overall  = TRUE,
-                                cont_stats      = c("median_iqr", "mean_sd"),
-                                digits          = 1L,
-                                p_value         = TRUE,
-                                min_cell        = 5L,
-                                variable_labels = NULL,
-                                output_path     = NULL) {
+                                cont_stats       = c("median_iqr", "mean_sd"),
+                                digits           = 1L,
+                                p_value          = TRUE,
+                                min_cell         = 5L,
+                                variable_labels  = NULL,
+                                output_path      = NULL,
+                                acog_district_col = NULL) {
 
   # -- Validate ---------------------------------------------------------------
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
@@ -343,11 +380,29 @@ mysterycall_table1 <- function(data,
 
   # -- Build one block of rows per covariate ---------------------------------
   blocks <- lapply(covariates, function(cv) {
-    x     <- data[[cv]]
+    x <- data[[cv]]
+
+    # Determine display label: explicit variable_labels > acog auto-label > column name
+    is_acog_col <- !is.null(acog_district_col) && identical(cv, acog_district_col)
     label <- if (!is.null(variable_labels) && cv %in% names(variable_labels)) {
       variable_labels[[cv]]
+    } else if (is_acog_col) {
+      "American College of Obstetricians and Gynecologists (ACOG) District"
     } else {
       cv
+    }
+
+    # Expand district level names to include state abbreviations
+    if (is_acog_col && (is.character(x) || is.factor(x))) {
+      was_factor <- is.factor(x)
+      x_chr      <- as.character(x)
+      expanded   <- .t1_expand_acog_level(x_chr)
+      x <- if (was_factor) {
+        orig_lvls <- levels(x)
+        factor(expanded, levels = .t1_expand_acog_level(orig_lvls))
+      } else {
+        expanded
+      }
     }
 
     if (is.numeric(x) && !is.logical(x)) {
@@ -438,6 +493,22 @@ print.mysterycall_table1 <- function(x, ...) {
   cat("\n")
   print(x$table, n = Inf, ...)
   invisible(x)
+}
+
+#' Convert a mysterycall_table1 to a flextable (internal)
+#'
+#' @param x A `mysterycall_table1` object.
+#' @param ... Passed to [flextable::flextable()].
+#' @return A `flextable` object.
+#' @keywords internal
+#' Coerce a mysterycall_table1 to a plain data frame
+#'
+#' @param x A `mysterycall_table1` object.
+#' @param ... Ignored.
+#' @return A data frame.
+#' @export
+as.data.frame.mysterycall_table1 <- function(x, ...) {
+  as.data.frame(x$table, stringsAsFactors = FALSE)
 }
 
 #' Convert a mysterycall_table1 to a flextable (internal)

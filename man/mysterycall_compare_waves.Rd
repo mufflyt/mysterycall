@@ -62,4 +62,3 @@ Other inference:
 \code{\link{mysterycall_multiple_comparison_adjust}()}
 }
 \concept{inference}
-\keyword{internal}

@@ -119,6 +119,7 @@ Other utilities:
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_read_table}()},
 \code{\link{mysterycall_require_arrow}()},

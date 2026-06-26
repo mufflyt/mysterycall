@@ -48,7 +48,7 @@ registry <- data.frame(npi = c("A","B"), state = c("CO","TX"),
                        specialty = c("ENT","ENT"), stringsAsFactors = FALSE)
 abohns    <- data.frame(npi = c("A","C"), cert = c("Neurotology",NA),
                         stringsAsFactors = FALSE)
-mysterycall_merge_with_prefix(registry, abohns, by = "npi",
+mysterycall:::mysterycall_merge_with_prefix(registry, abohns, by = "npi",
                                prefix_x = "npi_", prefix_y = "abohns_")
 }
 \seealso{

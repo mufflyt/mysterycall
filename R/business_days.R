@@ -189,8 +189,8 @@ mysterycall_count_business_days <- function(start_date,
                                             end_date,
                                             calendar = NULL) {
   if (!requireNamespace("bizdays", quietly = TRUE)) {
-    stop("Package 'bizdays' is required",
-         call. = FALSE)
+    message("Package 'bizdays' is not installed; falling back to calendar days. Install with: install.packages('bizdays')")
+    return(as.integer(as.Date(end_date) - as.Date(start_date)))
   }
   if (is.null(calendar)) calendar <- mysterycall_us_federal_calendar()
 
@@ -270,8 +270,11 @@ mysterycall_business_days <- function(data,
                                       result_col = "business_days_until_appointment",
                                       calendar   = NULL) {
   if (!requireNamespace("bizdays", quietly = TRUE)) {
-    stop("Package 'bizdays' is required",
-         call. = FALSE)
+    message("Package 'bizdays' is not installed; falling back to calendar days. Install with: install.packages('bizdays')")
+    validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
+    validate_required_columns(data, c(call_col, appt_col), name = "data")
+    data[[result_col]] <- as.integer(as.Date(data[[appt_col]]) - as.Date(data[[call_col]]))
+    return(data)
   }
 
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)

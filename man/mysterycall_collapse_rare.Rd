@@ -53,4 +53,3 @@ Other provider characteristics:
 \code{\link{mysterycall_reorder_by_freq}()}
 }
 \concept{provider characteristics}
-\keyword{internal}

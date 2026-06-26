@@ -20,7 +20,7 @@ Shows an animated spinner for operations where total is unknown.
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
-mysterycall_spinner_stop(id)
+mysterycall:::mysterycall_spinner_stop(id)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

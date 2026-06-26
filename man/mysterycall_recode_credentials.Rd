@@ -34,7 +34,7 @@ Recognised patterns:
 }
 \examples{
 creds <- c("M.D.", "DO", "MD/PhD", "D.O.", "PA-C", "MBBS", NA)
-mysterycall_recode_credentials(creds)
+mysterycall:::mysterycall_recode_credentials(creds)
 }
 \seealso{
 Other provider characteristics: 

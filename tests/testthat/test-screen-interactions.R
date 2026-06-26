@@ -31,6 +31,18 @@ test_that("screen_interactions: expected column names", {
   expect_true(all(c("candidate","n_terms","min_p_value","significant") %in% names(res)))
 })
 
+test_that("screen_interactions: detects factor-expanded interaction coefficients", {
+  df <- data.frame(
+    wait = rpois(40, 12),
+    ins = factor(rep(c("BCBS", "Medicaid"), 20)),
+    gender = factor(rep(c("Female", "Male"), each = 20)),
+    stringsAsFactors = FALSE
+  )
+  res <- mysterycall_screen_interactions(df, "wait", "ins", "gender")
+  expect_equal(res$n_terms, 1L)
+  expect_false(is.na(res$min_p_value))
+})
+
 test_that("screen_interactions: sorted by min_p_value ascending", {
   df  <- make_df()
   res <- mysterycall:::mysterycall_screen_interactions(df, "wait", "ins", c("gender","setting"))
@@ -106,6 +118,22 @@ test_that("screen_interactions NB: expected column names", {
                                     family = "negative_binomial")
   )
   expect_true(all(c("candidate", "n_terms", "min_p_value", "significant") %in% names(res)))
+})
+
+test_that("screen_interactions NB: detects factor-expanded interaction coefficients", {
+  skip_if_not_installed("glmmTMB")
+  df <- data.frame(
+    wait = rnbinom(60, mu = 12, size = 1.5),
+    ins = factor(rep(c("BCBS", "Medicaid"), 30)),
+    gender = factor(rep(c("Female", "Male"), each = 30)),
+    stringsAsFactors = FALSE
+  )
+  res <- suppressWarnings(
+    mysterycall_screen_interactions(df, "wait", "ins", "gender",
+                                    family = "negative_binomial")
+  )
+  expect_equal(res$n_terms, 1L)
+  expect_false(is.na(res$min_p_value))
 })
 
 test_that("screen_interactions NB: sorted by min_p_value ascending", {

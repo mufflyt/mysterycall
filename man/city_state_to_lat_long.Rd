@@ -35,6 +35,7 @@ Other datasets:
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},
 \code{\link{fips}},
+\code{\link{medicaid_expansion}},
 \code{\link{physicians}},
 \code{\link{taxonomy}}
 }

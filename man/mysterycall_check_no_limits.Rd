@@ -35,10 +35,10 @@ artificial limits.
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 data <- read_csv("providers.csv")
-mysterycall_check_no_limits(data, "provider input")
+mysterycall:::mysterycall_check_no_limits(data, "provider input")
 
 npi_results <- mysterycall_search_and_process_npi(data)
-mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
+mysterycall:::mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
@@ -58,6 +58,7 @@ Other utilities:
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_normalize_file_format}()},
+\code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_read_table}()},

@@ -11,6 +11,8 @@ mysterycall_lmm(
   random_intercept,
   conf_level = 0.95,
   REML = TRUE,
+  auto_log = TRUE,
+  sensitivity_poisson = "auto",
   ...
 )
 }
@@ -35,6 +37,25 @@ automatically.}
 (recommended for variance estimation). Set \code{FALSE} for AIC-based model
 comparison.}
 
+\item{auto_log}{Logical. When \code{TRUE} (default), the function checks whether
+the outcome is right-skewed (sample skewness > 1 on non-negative values)
+and automatically applies a \code{log1p()} transform before fitting. Coefficients
+are returned on both the log scale (\code{coef_table}) and back-transformed as
+geometric mean ratios (\code{gmr_table}). Set to \code{FALSE} to suppress this
+behaviour and model the raw outcome.}
+
+\item{sensitivity_poisson}{One of \code{"auto"} (default), \code{TRUE}, or \code{FALSE}.
+Controls whether a Poisson GLMM sensitivity analysis is run on the
+\strong{original untransformed} outcome alongside the LMM:
+\describe{
+\item{\code{"auto"}}{Runs the Poisson model only when the Shapiro-Wilk test
+on LMM residuals returns p < 0.05, indicating non-normal residuals.}
+\item{\code{TRUE}}{Always runs the Poisson sensitivity model.}
+\item{\code{FALSE}}{Never runs it.}
+}
+Results are stored in \verb{$sensitivity} (a \code{mysterycall_poisson_model}
+object) and printed as a compact IRR table. Requires \code{lme4}.}
+
 \item{...}{Additional arguments forwarded to \code{\link[lme4:lmer]{lme4::lmer()}}.}
 }
 \value{
@@ -42,8 +63,20 @@ A list of class \code{mysterycall_lmm} with elements:
 \describe{
 \item{\code{model}}{\code{lmerMod} (or \code{lmerModLmerTest}). The fitted model.}
 \item{\code{coef_table}}{\code{tibble}. One row per fixed-effect term: \code{term},
-\code{estimate} (days), \code{se}, \code{t_value}, \code{df} (Satterthwaite or residual),
-\code{p_value}, \code{p_value_fmt}, \code{ci_lower} (days), \code{ci_upper} (days).}
+\code{estimate}, \code{se}, \code{t_value}, \code{df}, \code{p_value}, \code{p_value_fmt},
+\code{ci_lower}, \code{ci_upper}. Units are days (raw outcome) or log1p(days)
+when \code{log_transformed} is \code{TRUE}.}
+\item{\code{gmr_table}}{\code{tibble} or \code{NULL}. Present only when
+\code{log_transformed = TRUE}. Columns: \code{term}, \code{GMR} (geometric mean ratio
+of (days + 1) vs. reference level), \code{GMR_lo}, \code{GMR_hi}, \code{p_value_fmt}.
+A GMR < 1 means shorter wait relative to the reference.}
+\item{\code{log_transformed}}{\code{logical}. \code{TRUE} when \code{auto_log} triggered a
+\code{log1p()} transform.}
+\item{\code{outcome_original}}{\code{character}. The column name as supplied by
+the caller.}
+\item{\code{outcome_used}}{\code{character}. The column actually modelled
+(\verb{log1p_<outcome>} when transformed, same as \code{outcome_original}
+otherwise).}
 \item{\code{random_effects}}{\code{data.frame} from \code{\link[lme4:VarCorr]{lme4::VarCorr()}}.}
 \item{\code{factor_refs}}{\code{list}. Reference levels for character/factor
 predictors.}
@@ -51,11 +84,9 @@ predictors.}
 \item{\code{n}}{\code{integer}. Complete-case rows used.}
 \item{\code{n_dropped}}{\code{integer}. Rows excluded for missing values.}
 \item{\code{n_clusters}}{\code{integer}. Unique values of \code{random_intercept}.}
-\item{\code{sigma}}{\code{numeric}. Residual standard deviation (within-physician
-SD of wait days around the fixed-effect prediction).}
-\item{\code{r_squared}}{\code{list}. \code{marginal} (variance explained by fixed
-effects) and \code{conditional} (fixed + random effects), computed via the
-Nakagawa & Schielzeth (2013) method.}
+\item{\code{sigma}}{\code{numeric}. Residual standard deviation.}
+\item{\code{r_squared}}{\code{list}. \code{marginal} and \code{conditional} R^2 (Nakagawa
+& Schielzeth 2013).}
 \item{\code{normality}}{\code{list}. Shapiro-Wilk test on model residuals:
 \code{statistic}, \code{p_value}, \code{interpretation}, \code{method}. Skipped when
 n > 5000.}
@@ -63,6 +94,13 @@ n > 5000.}
 \code{messages} (character vector).}
 \item{\code{aic}}{\code{numeric}. AIC (valid only when \code{REML = FALSE}).}
 \item{\code{bic}}{\code{numeric}. BIC (valid only when \code{REML = FALSE}).}
+\item{\code{sensitivity}}{\code{mysterycall_poisson_model} or \code{NULL}. A Poisson
+GLMM fit on the original (untransformed) outcome using the same
+predictors and random intercept. Present when \code{sensitivity_poisson}
+triggers; \code{NULL} otherwise. Use \verb{$sensitivity$irr_table} for IRR
+estimates. IRR < 1 = shorter wait than reference.}
+\item{\code{sensitivity_note}}{\code{character} or \code{NULL}. One-sentence explanation
+of why the sensitivity analysis was (or was not) run.}
 }
 }
 \description{
@@ -87,10 +125,14 @@ conservative t-approximation with residual df otherwise.
 }
 \section{Interpreting coefficients}{
 
-An estimate of \code{+5.2} for \code{insuranceMedicaid} means physicians called with
-Medicaid insurance had, on average, \strong{5.2 more wait days} than the reference
-insurance group, after accounting for physician-level clustering. The 95\% CI
-is on the same (days) scale.
+\strong{Raw scale (\code{auto_log = FALSE} or skewness <= 1):} An estimate of \code{+5.2}
+for \code{insuranceMedicaid} means physicians called with Medicaid had, on
+average, \strong{5.2 more wait days} than the reference group.
+
+\strong{Log scale (\code{auto_log = TRUE}, skewness > 1):} Coefficients are on the
+\code{log1p(days)} scale. Use \code{gmr_table} for interpretation: a GMR of \code{0.87}
+means the group waits ~13\% fewer days (× (days + 1)) than the reference.
+Report as: "GMR = 0.87 (95\% CI 0.49–1.54), p = 0.631."
 }
 
 \section{R-squared}{
@@ -137,6 +179,7 @@ Other outcomes:
 \code{\link{mysterycall_acceptance_rate}()},
 \code{\link{mysterycall_auto_model}()},
 \code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_calendar_sensitivity}()},
 \code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_forest_plot}()},
 \code{\link{mysterycall_icc}()},
@@ -165,6 +208,7 @@ Other outcomes:
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{plot.mysterycall_lmm}()},
 \code{\link{print.mysterycall_auto_model}()},
+\code{\link{print.mysterycall_calendar_sensitivity}()},
 \code{\link{print.mysterycall_icc}()},
 \code{\link{print.mysterycall_lmm}()},
 \code{\link{print.mysterycall_logistic_model}()},
@@ -174,6 +218,9 @@ Other outcomes:
 \code{\link{print.mysterycall_poisson_model}()},
 \code{\link{print.mysterycall_power_curve}()},
 \code{\link{print.mysterycall_predicted_means}()},
-\code{\link{print.mysterycall_sensitivity}()}
+\code{\link{print.mysterycall_sensitivity}()},
+\code{\link{tidy.mysterycall_lmm}()},
+\code{\link{tidy.mysterycall_logistic_model}()},
+\code{\link{tidy.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

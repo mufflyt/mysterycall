@@ -5,28 +5,31 @@ NULL
 
 # -- Internal lookup tables (built from regions.R and add_ent_demographics.R) --
 
+# Source of truth: acog_districts dataset.
+# Key corrections from prior version:
+#   Delaware moved III -> IV; Wisconsin moved V -> VI;
+#   Missouri moved VI -> VII; Texas moved VII -> XI (its own district).
 .mc_acog_map <- c(
   "Connecticut" = "District I",   "Maine" = "District I",
   "Massachusetts" = "District I", "New Hampshire" = "District I",
   "Rhode Island" = "District I",  "Vermont" = "District I",
   "New York" = "District II",
-  "Delaware" = "District III",    "New Jersey" = "District III",
-  "Pennsylvania" = "District III",
-  "District of Columbia" = "District IV", "Georgia" = "District IV",
-  "Maryland" = "District IV",     "North Carolina" = "District IV",
+  "New Jersey" = "District III",  "Pennsylvania" = "District III",
+  "Delaware" = "District IV",     "District of Columbia" = "District IV",
+  "Georgia" = "District IV",      "Maryland" = "District IV",
+  "North Carolina" = "District IV","Puerto Rico" = "District IV",
   "South Carolina" = "District IV","Virginia" = "District IV",
-  "West Virginia" = "District IV", "Puerto Rico" = "District IV",
+  "West Virginia" = "District IV",
   "Indiana" = "District V",       "Kentucky" = "District V",
   "Michigan" = "District V",      "Ohio" = "District V",
-  "Wisconsin" = "District V",
   "Illinois" = "District VI",     "Iowa" = "District VI",
-  "Minnesota" = "District VI",    "Missouri" = "District VI",
-  "Nebraska" = "District VI",     "North Dakota" = "District VI",
-  "South Dakota" = "District VI",
-  "Arkansas" = "District VII",    "Kansas" = "District VII",
-  "Louisiana" = "District VII",   "Mississippi" = "District VII",
+  "Minnesota" = "District VI",    "Nebraska" = "District VI",
+  "North Dakota" = "District VI", "South Dakota" = "District VI",
+  "Wisconsin" = "District VI",
+  "Alabama" = "District VII",     "Arkansas" = "District VII",
+  "Kansas" = "District VII",      "Louisiana" = "District VII",
+  "Mississippi" = "District VII", "Missouri" = "District VII",
   "Oklahoma" = "District VII",    "Tennessee" = "District VII",
-  "Texas" = "District VII",
   "Alaska" = "District VIII",     "Arizona" = "District VIII",
   "Colorado" = "District VIII",   "Hawaii" = "District VIII",
   "Idaho" = "District VIII",      "Montana" = "District VIII",
@@ -34,7 +37,8 @@ NULL
   "Oregon" = "District VIII",     "Utah" = "District VIII",
   "Washington" = "District VIII", "Wyoming" = "District VIII",
   "California" = "District IX",
-  "Alabama" = "District VII",     "Florida" = "District XII"
+  "Texas" = "District XI",
+  "Florida" = "District XII"
 )
 
 .mc_aao_hns_map <- c(
@@ -174,8 +178,10 @@ mysterycall_assign_region <- function(state,
                                        na_label = "Unknown") {
 
   system <- match.arg(system)
-  if (!is.character(state)) {
-    stop("`state` must be a character vector.", call. = FALSE)
+  if (is.factor(state)) {
+    state <- as.character(state)
+  } else if (!is.character(state)) {
+    stop("`state` must be a character vector or factor.", call. = FALSE)
   }
   if (!is.character(na_label) || length(na_label) != 1L) {
     stop("`na_label` must be a single character string.", call. = FALSE)

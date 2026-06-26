@@ -37,7 +37,7 @@ Uses the cli package for cross-platform compatibility and beautiful output.
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 pb_id <- mysterycall_progress_bar("Processing", total = 10)
 for (i in 1:10) mysterycall_progress_update(pb_id)
-mysterycall_progress_done(pb_id)
+mysterycall:::mysterycall_progress_done(pb_id)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
