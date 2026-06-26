@@ -22,16 +22,14 @@ and p-values versus the reference group.  Column headers are labelled using
 the \code{ci_method} and \code{alpha} attributes stored on the object.
 }
 \examples{
-\donttest{
+set.seed(1)
 df <- data.frame(
-  group   = c("Medicaid", "Private", "Uninsured"),
-  success = c(40L, 80L, 30L),
-  total   = c(100L, 100L, 100L)
+  insurance = sample(c("Medicaid", "Private", "Medicare"), 120, replace = TRUE),
+  accepted  = rbinom(120, 1, 0.5)
 )
-disp_table <- mysterycall_disparities_table(df, "group", "success", "total",
-                                             ref_group = "Private")
+disp_table <- mysterycall_disparities_table(df, "accepted", "insurance",
+                                            ref_group = "Private")
 print(disp_table)
-}
 }
 \seealso{
 \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}

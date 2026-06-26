@@ -287,16 +287,14 @@ mysterycall_disparities_table <- function(
 #' @family table helpers
 #' @export
 #' @examples
-#' \donttest{
+#' set.seed(1)
 #' df <- data.frame(
-#'   group   = c("Medicaid", "Private", "Uninsured"),
-#'   success = c(40L, 80L, 30L),
-#'   total   = c(100L, 100L, 100L)
+#'   insurance = sample(c("Medicaid", "Private", "Medicare"), 120, replace = TRUE),
+#'   accepted  = rbinom(120, 1, 0.5)
 #' )
-#' disp_table <- mysterycall_disparities_table(df, "group", "success", "total",
-#'                                              ref_group = "Private")
+#' disp_table <- mysterycall_disparities_table(df, "accepted", "insurance",
+#'                                             ref_group = "Private")
 #' print(disp_table)
-#' }
 print.mysterycall_disparities_table <- function(x, ...) {
   ref    <- attr(x, "ref_group") %||% x$group[[1L]]
   method <- attr(x, "ci_method") %||% "wilson"
