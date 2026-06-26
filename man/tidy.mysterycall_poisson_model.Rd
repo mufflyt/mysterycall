@@ -40,7 +40,7 @@ fake_fit <- structure(
   )),
   class = "mysterycall_poisson_model"
 )
-tidy(fake_fit)
+generics::tidy(fake_fit)
 }
 }
 \seealso{

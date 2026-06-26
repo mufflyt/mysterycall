@@ -364,7 +364,7 @@ print.mysterycall_logistic_model <- function(x, digits = 3, ...) {
 #'   )),
 #'   class = "mysterycall_logistic_model"
 #' )
-#' tidy(fake_fit)
+#' generics::tidy(fake_fit)
 #' }
 tidy.mysterycall_logistic_model <- function(x, ...) {
   tbl <- x$or_table

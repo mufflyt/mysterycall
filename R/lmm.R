@@ -728,7 +728,7 @@ plot.mysterycall_lmm <- function(x, ...) {
 #'   )),
 #'   class = "mysterycall_lmm"
 #' )
-#' tidy(fake_fit)
+#' generics::tidy(fake_fit)
 #' }
 tidy.mysterycall_lmm <- function(x, ...) {
   tbl <- x$coef_table

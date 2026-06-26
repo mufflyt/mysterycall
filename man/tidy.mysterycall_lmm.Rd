@@ -41,7 +41,7 @@ fake_fit <- structure(
   )),
   class = "mysterycall_lmm"
 )
-tidy(fake_fit)
+generics::tidy(fake_fit)
 }
 }
 \seealso{

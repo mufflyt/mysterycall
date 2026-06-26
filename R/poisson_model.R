@@ -437,7 +437,7 @@ print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
 #'   )),
 #'   class = "mysterycall_poisson_model"
 #' )
-#' tidy(fake_fit)
+#' generics::tidy(fake_fit)
 #' }
 tidy.mysterycall_poisson_model <- function(x, ...) {
   tbl <- x$irr_table
