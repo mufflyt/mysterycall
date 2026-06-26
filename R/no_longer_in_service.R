@@ -32,6 +32,7 @@
 #' @export
 #'
 #' @examples
+#' # Requires active Twilio credentials in environment variables.
 #' \dontrun{
 #' checked <- mysterycall_no_longer_in_service(
 #'   csv_path = "providers.csv",

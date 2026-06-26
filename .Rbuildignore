@@ -32,8 +32,9 @@
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$
 
-# Check artifacts
+# Check artifacts and build bundles
 ^.*\.Rcheck$
+^.*\.tar\.gz$
 ^CITATION\.cff$
 
 # Non-standard top-level files

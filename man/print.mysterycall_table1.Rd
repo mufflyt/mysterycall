@@ -24,7 +24,7 @@ df <- data.frame(
   age = c(25, 30, 35, 40),
   sex = c("M", "F", "F", "M")
 )
-t1 <- mysterycall_table1(df, vars = c("age", "sex"))
+t1 <- mysterycall_table1(df, covariates = c("age", "sex"))
 print(t1)
 }
 }

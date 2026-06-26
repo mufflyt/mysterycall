@@ -39,6 +39,7 @@ NULL
 #' @export
 #'
 #' @examples
+#' # Requires live NPPES API access and (optionally) a Genderize.io API key.
 #' \dontrun{
 #' roster <- data.frame(
 #'   npi        = c("1234567893", "9876543210"),
