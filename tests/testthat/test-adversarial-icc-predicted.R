@@ -1,6 +1,6 @@
-suppressPackageStartupMessages(
-  pkgload::load_all("/Users/tylermuffly/mysterycall", quiet = TRUE)
-)
+# pkgload::load_all() was removed — it replaced the namespace object and broke
+# with_mocked_bindings() in subsequent test files. devtools::test() already
+# calls load_all() before running tests.
 
 # ---------------------------------------------------------------------------
 # Helpers

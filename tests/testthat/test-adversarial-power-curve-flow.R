@@ -1,6 +1,7 @@
-suppressPackageStartupMessages(
-  pkgload::load_all("/Users/tylermuffly/mysterycall", quiet = TRUE)
-)
+# devtools::test() already calls load_all() before tests — removed pkgload::load_all() call
+#(
+#  pkgload::load_all()
+#)
 
 # ---------------------------------------------------------------------------
 # Block 1: mysterycall_power_curve() — adversarial

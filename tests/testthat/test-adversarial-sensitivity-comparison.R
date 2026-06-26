@@ -1,6 +1,4 @@
-suppressPackageStartupMessages({
-  pkgload::load_all("/Users/tylermuffly/mysterycall", quiet = TRUE)
-})
+# devtools::test() already calls load_all() before tests — removed pkgload::load_all() call
 
 # ── shared fake model helpers ────────────────────────────────────────────────
 
