@@ -64,12 +64,10 @@ mysterycall_require_arrow <- function() {
 #' @family utilities
 #' @export
 #' @examples
-#' \dontrun{
-#' # Read a CSV file
-#' df <- mysterycall_read_table("providers.csv")
-#'
-#' # Read a Parquet file
-#' df <- mysterycall_read_table("data.parquet")
+#' \donttest{
+#' tmp <- tempfile(fileext = ".csv")
+#' write.csv(mtcars, tmp, row.names = FALSE)
+#' df <- mysterycall_read_table(tmp)
 #' }
 mysterycall_read_table <- function(path, format = NULL, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)
@@ -121,15 +119,9 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
 #' @family utilities
 #' @export
 #' @examples
-#' \dontrun{
-#' # Write to CSV
-#' mysterycall_write_table(mtcars, "cars.csv")
-#'
-#' # Write to Parquet
-#' mysterycall_write_table(mtcars, "cars.parquet")
-#'
-#' # Append to an existing CSV
-#' mysterycall_write_table(new_data, "combined.csv", append = TRUE)
+#' \donttest{
+#' tmp <- tempfile(fileext = ".csv")
+#' mysterycall_write_table(mtcars, tmp)
 #' }
 mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
   fmt <- mysterycall_normalize_file_format(format, path = path)

@@ -287,7 +287,7 @@ mysterycall_disparities_table <- function(
 #' @family table helpers
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' df <- data.frame(
 #'   group   = c("Medicaid", "Private", "Uninsured"),
 #'   success = c(40L, 80L, 30L),
