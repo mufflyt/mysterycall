@@ -390,7 +390,7 @@ print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
   tbl$irr      <- round(tbl$irr,      digits)
   tbl$ci_lower <- round(tbl$ci_lower, digits)
   tbl$ci_upper <- round(tbl$ci_upper, digits)
-  print(tbl, n = Inf)
+  print(as.data.frame(tbl))
 
   re <- x$random_effects[x$random_effects$grp != "Residual", , drop = FALSE]
   if (nrow(re)) {
