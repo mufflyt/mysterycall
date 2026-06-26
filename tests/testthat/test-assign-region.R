@@ -18,8 +18,8 @@ test_that("assign_region ACOG: New York → District II", {
   expect_equal(mysterycall_assign_region("NY", "acog"), "District II")
 })
 
-test_that("assign_region ACOG: Texas → District VII", {
-  expect_equal(mysterycall_assign_region("TX", "acog"), "District VII")
+test_that("assign_region ACOG: Texas → District XI", {
+  expect_equal(mysterycall_assign_region("TX", "acog"), "District XI")
 })
 
 test_that("assign_region ACOG: California → District IX", {
