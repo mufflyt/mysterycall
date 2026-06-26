@@ -1,6 +1,5 @@
 # Integration tests with test databases
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Helper function to create a mock census database

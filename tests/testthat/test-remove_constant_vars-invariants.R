@@ -13,7 +13,6 @@
 #   - Property-based: 50 random data frames, invariant never broken
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # Helper: suppress the messages from mysterycall:::mysterycall_remove_constants

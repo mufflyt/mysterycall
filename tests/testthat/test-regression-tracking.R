@@ -7,7 +7,6 @@
 # - ❌ Analysis-breaking NA rates
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Load baseline metrics

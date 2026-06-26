@@ -1,6 +1,5 @@
 # Comprehensive tests for mysterycall_clean_phase1 function
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Helper function to create test data

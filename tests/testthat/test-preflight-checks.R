@@ -2,7 +2,6 @@
 # Comprehensive tests for workflow validation and resource estimation
 
 library(testthat)
-library(mysterycall)
 
 # ==============================================================================
 # mysterycall_assess_data_quality()

@@ -8,7 +8,6 @@
 # - ❌ Inefficient algorithms that don't scale
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # ==============================================================================

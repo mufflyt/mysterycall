@@ -2,7 +2,6 @@
 # Testing all bug fixes implemented in this session
 
 library(testthat)
-library(mysterycall)
 
 # ==============================================================================
 # Bug #5: Phone Number Validation

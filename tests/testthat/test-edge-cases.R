@@ -8,7 +8,6 @@
 # - ❌ Incorrect handling of special characters
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # ==============================================================================

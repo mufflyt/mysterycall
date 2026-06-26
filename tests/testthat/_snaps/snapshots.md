@@ -76,3 +76,21 @@
     Output
       [1] "low"
 
+# mysterycall:::mysterycall_check_data_completeness() summary structure is stable
+
+    Code
+      result$summary
+    Output
+      # A tibble: 2 x 3
+        column completeness missing
+        <chr>         <dbl>   <dbl>
+      1 id              1       0  
+      2 value           0.6     0.4
+
+---
+
+    Code
+      result$quality
+    Output
+      [1] "medium"
+

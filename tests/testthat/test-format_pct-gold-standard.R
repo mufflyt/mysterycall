@@ -11,7 +11,6 @@
 #   - Boundary conditions (0, 1, 0.001, rounding at 0.9999)
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # 1-4. Core gold-standard values (manually verified)

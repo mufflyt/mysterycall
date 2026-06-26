@@ -8,7 +8,6 @@
 # - ❌ Silent data corruption during handoffs
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # ==============================================================================

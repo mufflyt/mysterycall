@@ -12,7 +12,6 @@
 #   - Schema contracts (processing_flag_* cols are logical, id col always present)
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("dplyr")
 skip_if_not_installed("janitor")

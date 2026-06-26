@@ -1,6 +1,5 @@
 # Handoff tests for all vignettes - ensuring examples work correctly
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Test data generators for vignette examples

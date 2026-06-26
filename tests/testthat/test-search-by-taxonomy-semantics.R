@@ -11,7 +11,6 @@
 #   - Idempotency-adjacent (write_snapshot=FALSE doesn't pollute filesystem)
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("tibble")
 skip_if_not_installed("dplyr")

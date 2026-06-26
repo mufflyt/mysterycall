@@ -8,7 +8,6 @@
 # - ❌ Data corruption from parallel processing
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # ==============================================================================

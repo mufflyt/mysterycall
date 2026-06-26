@@ -15,7 +15,6 @@
 #   - Schema contracts (always length-1 character string)
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("beepr")
 skip_if_not_installed("dplyr")

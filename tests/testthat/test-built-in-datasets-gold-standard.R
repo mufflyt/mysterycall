@@ -11,7 +11,6 @@
 #   - Cross-file referential integrity (physicians subspecialties vs taxonomy)
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -2,7 +2,6 @@
 # Comprehensive tests for data validation and limit detection
 
 library(testthat)
-library(mysterycall)
 
 # ==============================================================================
 # mysterycall:::mysterycall_check_no_limits()

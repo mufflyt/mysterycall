@@ -2,7 +2,6 @@
 # Testing progress bars, multi-step trackers, and spinners
 
 library(testthat)
-library(mysterycall)
 
 # ==============================================================================
 # mysterycall:::mysterycall_progress_bar() - Creation

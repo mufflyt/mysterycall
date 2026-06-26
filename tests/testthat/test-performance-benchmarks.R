@@ -1,6 +1,5 @@
 # Performance benchmark tests
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Performance benchmarks - these represent acceptable performance thresholds

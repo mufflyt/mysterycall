@@ -1,6 +1,5 @@
 # Comprehensive data validation tests
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Data validation rules and constraints

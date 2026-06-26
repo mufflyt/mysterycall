@@ -6,7 +6,6 @@
 # the documented contract has been broken.
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # mysterycall_validate_npi() contracts

@@ -8,7 +8,6 @@
 # - ❌ Data quality insufficient for research conclusions
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Load baseline metrics

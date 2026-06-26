@@ -19,7 +19,6 @@
 #   - Cardinality (no silent row duplication)
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("npi")
 

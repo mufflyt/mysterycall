@@ -1,6 +1,5 @@
 # End-to-end workflow tests with real data samples
 library(testthat)
-library(mysterycall)
 library(dplyr)
 library(readr)
 

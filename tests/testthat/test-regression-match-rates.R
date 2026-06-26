@@ -1,6 +1,5 @@
 # Regression tests for match rates and data quality
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Store baseline match rates and quality metrics
@@ -72,7 +71,7 @@ test_that("Regression: mysterycall_search_taxonomy match rates", {
       )
 
       list(
-        npi = paste0("123456789", 0:(n_results-1)),
+        npi = sprintf("1%09d", seq_len(n_results)),
         basic_first_name = paste("Provider", 1:n_results),
         basic_last_name = paste("Last", 1:n_results),
         basic_credential = rep("MD", n_results),

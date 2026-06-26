@@ -10,7 +10,6 @@
 #   - Boundary conditions (call with empty cache, call with populated cache)
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("memoise")
 

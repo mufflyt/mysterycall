@@ -1,6 +1,5 @@
 # Property-based tests for mysterycall package
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Property-based test generators

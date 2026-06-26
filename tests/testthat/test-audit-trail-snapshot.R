@@ -12,7 +12,6 @@
 # with testthat::snapshot_accept() if the change is deliberate.
 
 library(testthat)
-library(mysterycall)
 
 skip_if_not_installed("jsonlite")
 

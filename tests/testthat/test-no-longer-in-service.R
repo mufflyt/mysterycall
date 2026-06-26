@@ -1,5 +1,4 @@
 library(testthat)
-library(mysterycall)
 
 make_twilio_response <- function(payload, status = 200L) {
   body <- jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null")

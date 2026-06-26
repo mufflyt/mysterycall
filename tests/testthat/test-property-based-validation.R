@@ -7,7 +7,6 @@
 # - ❌ Cross-column inconsistencies
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # Load baseline for valid domains

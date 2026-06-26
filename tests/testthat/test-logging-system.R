@@ -2,7 +2,6 @@
 # Testing workflow tracking, logging functions, and output formatting
 
 library(testthat)
-library(mysterycall)
 
 # ==============================================================================
 # mysterycall:::mysterycall_format_duration()

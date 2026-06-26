@@ -1,6 +1,5 @@
 # Comprehensive tests for mysterycall_search_taxonomy function
 library(testthat)
-library(mysterycall)
 library(tibble)
 library(dplyr)
 

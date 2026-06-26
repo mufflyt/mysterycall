@@ -12,7 +12,6 @@
 #   - Schema contracts (output is always length-1 character)
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # Gold-standard helper data

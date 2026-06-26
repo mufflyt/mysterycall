@@ -12,7 +12,6 @@
 #   - Property-based testing (all non-response cols appear on RHS)
 
 library(testthat)
-library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # Helper: suppress messages from mysterycall:::mysterycall_create_formula

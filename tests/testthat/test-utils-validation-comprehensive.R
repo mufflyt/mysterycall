@@ -1,6 +1,5 @@
 # Comprehensive tests for validation utilities
 library(testthat)
-library(mysterycall)
 
 test_that("validate_dataframe: Basic functionality", {
   # Valid data frame

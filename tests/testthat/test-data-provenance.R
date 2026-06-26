@@ -8,7 +8,6 @@
 # - ❌ ID columns not preserved across stages
 
 library(testthat)
-library(mysterycall)
 library(dplyr)
 
 # ==============================================================================
