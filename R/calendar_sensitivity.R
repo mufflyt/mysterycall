@@ -6,8 +6,8 @@ NULL
 #' Compare calendar-day and business-day wait-time models side by side
 #'
 #' Fits the same linear mixed model ([mysterycall_lmm()]) on two wait-time
-#' columns — one in calendar days, one in business days (Mon–Fri, US federal
-#' holidays excluded) — and returns a side-by-side comparison table with a
+#' columns -- one in calendar days, one in business days (Mon-Fri, US federal
+#' holidays excluded) -- and returns a side-by-side comparison table with a
 #' ready-to-paste supplemental paragraph.
 #'
 #' This function fulfils the M&M promise of a supplemental table comparing
@@ -147,7 +147,7 @@ mysterycall_calendar_sensitivity <- function(
   cal_ct <- .strip(as.data.frame(cal_fit$coef_table))
   biz_ct <- .strip(as.data.frame(biz_fit$coef_table))
 
-  # Align on term names (inner join — only terms present in both)
+  # Align on term names (inner join -- only terms present in both)
   common_terms <- intersect(cal_ct$term, biz_ct$term)
   if (!length(common_terms))
     stop("No common non-intercept terms found between the two models.", call. = FALSE)
@@ -232,7 +232,7 @@ mysterycall_calendar_sensitivity <- function(
   # Summarise magnitudes: business days are typically ~5/7 of calendar days
   med_ratio <- stats::median(magnitude_ratio, na.rm = TRUE)
   # Only report the ratio when it's physically meaningful: business-day estimates
-  # should be 0–1.5× calendar-day estimates (the 5/7 weekday fraction ≈ 0.71).
+  # should be 0-1.5x calendar-day estimates (the 5/7 weekday fraction ~= 0.71).
   # Negative or very large ratios signal that the two columns are inconsistent
   # (e.g., from independent random data in tests) and the note would be misleading.
   ratio_note <- if (!is.na(med_ratio) && med_ratio > 0 && med_ratio < 1.5) {
@@ -356,7 +356,7 @@ print.mysterycall_calendar_sensitivity <- function(x, ...) {
     x$n_calendar, x$n_business
   ))
   cat(sprintf("  Direction consistent across all terms: %s\n\n",
-              if (x$all_consistent) "YES" else "NO — see Consistent column"))
+              if (x$all_consistent) "YES" else "NO -- see Consistent column"))
 
   print(x$summary_table, row.names = FALSE)
 

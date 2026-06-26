@@ -107,8 +107,8 @@ NULL
 #'
 #' **Log scale (`auto_log = TRUE`, skewness > 1):** Coefficients are on the
 #' `log1p(days)` scale. Use `gmr_table` for interpretation: a GMR of `0.87`
-#' means the group waits ~13% fewer days (× (days + 1)) than the reference.
-#' Report as: "GMR = 0.87 (95% CI 0.49–1.54), p = 0.631."
+#' means the group waits ~13% fewer days (* (days + 1)) than the reference.
+#' Report as: "GMR = 0.87 (95% CI 0.49-1.54), p = 0.631."
 #'
 #' @section R-squared:
 #' Marginal R^2 reflects variance explained by fixed effects alone;
@@ -568,7 +568,7 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
   print(tbl, row.names = FALSE)
 
   if (!is.null(x$gmr_table)) {
-    cat("\nGeometric mean ratios [exp(estimate)] — GMR < 1 = shorter wait:\n")
+    cat("\nGeometric mean ratios [exp(estimate)] -- GMR < 1 = shorter wait:\n")
     gmr <- as.data.frame(x$gmr_table)
     gmr$GMR    <- round(gmr$GMR,    3)
     gmr$GMR_lo <- round(gmr$GMR_lo, 3)
