@@ -71,8 +71,8 @@ paste into the manuscript.}
 }
 \description{
 Fits the same linear mixed model (\code{\link[=mysterycall_lmm]{mysterycall_lmm()}}) on two wait-time
-columns — one in calendar days, one in business days (Mon–Fri, US federal
-holidays excluded) — and returns a side-by-side comparison table with a
+columns -- one in calendar days, one in business days (Mon-Fri, US federal
+holidays excluded) -- and returns a side-by-side comparison table with a
 ready-to-paste supplemental paragraph.
 }
 \details{
