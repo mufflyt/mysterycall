@@ -112,16 +112,15 @@ test_that("genderize_fetch batches requests to improve performance", {
   )
 })
 
-# Helper: run mysterycall_genderize with genderize_fetch and beepr::beep mocked
+# Helper: run mysterycall_genderize with genderize_fetch mocked.
+# beepr::beep is only called when interactive() is TRUE (never in tests), so
+# no beepr mock is needed; nesting two with_mocked_bindings caused the outer
+# mock's on.exit cleanup frame to conflict in the full 153-file test suite.
 with_genderize_mocks <- function(fake_genderize, expr) {
   with_mocked_bindings(
     genderize_fetch = fake_genderize,
     .package = "mysterycall",
-    code = with_mocked_bindings(
-      beep = function(...) NULL,
-      .package = "beepr",
-      code = expr
-    )
+    code = expr
   )
 }
 
