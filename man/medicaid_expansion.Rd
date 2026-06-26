@@ -10,12 +10,12 @@ A data frame with 51 rows (50 states + DC) and 6 columns:
 \item{state}{Full state name (character).}
 \item{state_abb}{Two-letter USPS abbreviation (character).}
 \item{expanded}{Logical. \code{TRUE} if the state adopted full ACA
-Medicaid expansion to 138\\% FPL.}
+Medicaid expansion to 138 percent FPL.}
 \item{expansion_date}{Date the expansion took effect, or \code{NA} for
 non-expansion states.}
 \item{status}{Character. \code{"Expanded"} or \code{"Not Expanded"}.}
 \item{notes}{Character. Edge-case clarifications for Wisconsin (BadgerCare
-waiver, 100\\% FPL) and Georgia (Pathways partial expansion). \code{NA}
+waiver, 100 percent FPL) and Georgia (Pathways partial expansion). \code{NA}
 for all other states.}
 }
 }
@@ -36,8 +36,8 @@ voluntary; as of June 2025, 40 states plus DC have adopted full expansion.
 Ten states have not: Alabama, Florida, Georgia, Kansas, Mississippi, South
 Carolina, Tennessee, Texas, Wisconsin, and Wyoming.
 
-\strong{Wisconsin} covers adults to 100\\% FPL through the BadgerCare waiver
-programme but did not adopt the ACA Medicaid expansion to 138\\% FPL;
+\strong{Wisconsin} covers adults to 100 percent FPL through the BadgerCare waiver
+programme but did not adopt the ACA Medicaid expansion to 138 percent FPL;
 \code{expanded} is \code{FALSE}.
 
 \strong{Georgia} launched "Georgia Pathways" in July 2023, a partial

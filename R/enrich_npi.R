@@ -76,11 +76,18 @@ mysterycall_enrich_npi <- function(
     }
   )
 
-  # Step 2: genderize
+  # Step 2: genderize — mysterycall_genderize() always looks for a "first_name"
+  # column; temporarily rename if needed, then restore the original name.
   if (!is.null(first_name_col) && first_name_col %in% names(data)) {
     .msg("Step 2/4: inferring gender from first name...")
     data <- tryCatch(
-      mysterycall_genderize(data, name_col = first_name_col),
+      {
+        renamed <- first_name_col != "first_name"
+        if (renamed) names(data)[names(data) == first_name_col] <- "first_name"
+        out <- mysterycall_genderize(data)
+        if (renamed) names(out)[names(out) == "first_name"] <- first_name_col
+        out
+      },
       error = function(e) {
         warning("mysterycall_genderize() failed: ", conditionMessage(e),
                 "\nSkipping step 2.", call. = FALSE)
@@ -91,11 +98,17 @@ mysterycall_enrich_npi <- function(
     .msg("Step 2/4: skipping gender inference (first_name_col not found or NULL).")
   }
 
-  # Step 3: classify practice setting
+  # Step 3: classify practice setting — takes a character vector, returns a
+  # vector of labels; add result as new column "practice_setting".
   if (!is.null(address_col) && address_col %in% names(data)) {
     .msg("Step 3/4: classifying practice setting...")
     data <- tryCatch(
-      mysterycall_classify_practice_setting(data, address_col = address_col),
+      {
+        data$practice_setting <- mysterycall_classify_practice_setting(
+          data[[address_col]]
+        )
+        data
+      },
       error = function(e) {
         warning("mysterycall_classify_practice_setting() failed: ", conditionMessage(e),
                 "\nSkipping step 3.", call. = FALSE)

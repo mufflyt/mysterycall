@@ -15,18 +15,18 @@
 #'   \item{state}{Full state name (character).}
 #'   \item{state_abb}{Two-letter USPS abbreviation (character).}
 #'   \item{expanded}{Logical. \code{TRUE} if the state adopted full ACA
-#'     Medicaid expansion to 138\% FPL.}
+#'     Medicaid expansion to 138 percent FPL.}
 #'   \item{expansion_date}{Date the expansion took effect, or \code{NA} for
 #'     non-expansion states.}
 #'   \item{status}{Character. \code{"Expanded"} or \code{"Not Expanded"}.}
 #'   \item{notes}{Character. Edge-case clarifications for Wisconsin (BadgerCare
-#'     waiver, 100\% FPL) and Georgia (Pathways partial expansion). \code{NA}
+#'     waiver, 100 percent FPL) and Georgia (Pathways partial expansion). \code{NA}
 #'     for all other states.}
 #' }
 #'
 #' @details
-#' **Wisconsin** covers adults to 100\% FPL through the BadgerCare waiver
-#' programme but did not adopt the ACA Medicaid expansion to 138\% FPL;
+#' **Wisconsin** covers adults to 100 percent FPL through the BadgerCare waiver
+#' programme but did not adopt the ACA Medicaid expansion to 138 percent FPL;
 #' \code{expanded} is \code{FALSE}.
 #'
 #' **Georgia** launched "Georgia Pathways" in July 2023, a partial
