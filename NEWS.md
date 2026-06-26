@@ -4,6 +4,12 @@ Released 2026-06-25.
 
 ## ✨ New functions
 
+* **`mysterycall_predict_appointment()`** — generates predicted appointment-
+  acceptance probabilities (plus optional delta-method 95% CIs) for new patient
+  or practice profiles from a fitted `mysterycall_logistic_model` object.
+  Population-level predictions (`re.form = NA`) are the default, appropriate
+  for new practices unseen during model training.
+
 * **`mysterycall_enrich_npi()`** — end-to-end NPI enrichment pipeline: validates
   NPIs, looks up clinician data, genderizes first names, classifies practice
   setting, and assigns ACOG/census regions. Returns a deduplicated data frame.
