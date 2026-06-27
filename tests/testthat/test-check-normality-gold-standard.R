@@ -129,5 +129,9 @@ test_that("mysterycall:::mysterycall_check_normality - large-n normal data (n=50
   result <- suppressMessages(mysterycall:::mysterycall_check_normality(df, "val"))
   # With 5000 obs Shapiro-Wilk may detect tiny departures; test structural invariant
   expect_true(is.list(result))
-  expect_true(length(result) == 2)
+  # Return list now includes is_normal, p_value, w_statistic, is_count, interpretation
+  # plus either mean+sd (normal) or median+iqr (non-normal)
+  expect_true(length(result) >= 2)
+  expect_true("interpretation" %in% names(result))
+  expect_true("is_normal" %in% names(result))
 })
