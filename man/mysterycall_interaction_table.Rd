@@ -149,6 +149,7 @@ Other outcomes:
 \code{\link{mysterycall_screen_predictors}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_sensitivity}()},
+\code{\link{mysterycall_simple_poisson}()},
 \code{\link{mysterycall_wait_time_crossover}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{plot.mysterycall_lmm}()},

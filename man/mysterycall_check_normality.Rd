@@ -4,34 +4,76 @@
 \alias{mysterycall_check_normality}
 \title{Check Normality and Summarize Data}
 \usage{
-mysterycall_check_normality(data, variable)
+mysterycall_check_normality(
+  data,
+  variable,
+  outcome_label = NULL,
+  group_label = NULL
+)
 }
 \arguments{
 \item{data}{A dataframe containing the data.}
 
-\item{variable}{A string specifying the column name of the variable to be checked and summarized.}
+\item{variable}{A string specifying the column name of the variable to be
+checked and summarized.}
+
+\item{outcome_label}{Optional character scalar. Human-readable label for the
+outcome used in the interpretation sentence (e.g.,
+\code{"days until appointment"}). Defaults to \code{variable}.}
+
+\item{group_label}{Optional character scalar. Human-readable label for the
+grouping variable used in the interpretation sentence (e.g.,
+\code{"insurance type"}). Defaults to \code{"the grouping variable"}.}
 }
 \value{
-A named list with either:
+A named list containing:
 \describe{
-\item{mean, sd}{Numeric scalars (if Shapiro-Wilk p > 0.05, data approximately normal).}
-\item{median, iqr}{Numeric scalars (if Shapiro-Wilk p <= 0.05, data non-normal).}
+\item{\code{is_normal}}{Logical. \code{TRUE} if Shapiro-Wilk p > 0.05.}
+\item{\code{p_value}}{Numeric. Shapiro-Wilk p-value.}
+\item{\code{w_statistic}}{Numeric. Shapiro-Wilk W statistic.}
+\item{\code{is_count}}{Logical. \code{TRUE} if all non-missing values are
+non-negative integers — heuristic for count outcomes.}
+\item{\code{mean}, \code{sd}}{Numeric scalars (present when \code{is_normal = TRUE}).}
+\item{\code{median}, \code{iqr}}{Numeric scalars (present when \code{is_normal = FALSE}).}
+\item{\code{interpretation}}{Character scalar. A single manuscript-ready
+paragraph describing the distribution and, for non-normal count data,
+recommending Poisson regression over t-test or Kruskal-Wallis.}
 }
-Also emits a histogram + density plot and a Q-Q plot via side effects.
+Side effects: emits a histogram + density plot and a Q-Q plot.
 }
 \description{
-This function checks the normality of a specified variable in a dataframe using the Shapiro-Wilk test
-and provides summary statistics (mean and standard deviation if normal, median and IQR if not normal).
+Checks the normality of a variable using the Shapiro-Wilk test, returns
+summary statistics, and—crucially—generates a manuscript-ready
+\verb{$interpretation} sentence that identifies count data and recommends
+Poisson regression when appropriate.
 }
+\section{Interpretation sentence}{
+
+When the data are \strong{not normally distributed} and \strong{consist of counts}
+(non-negative integers), the returned sentence reads:
+
+\emph{"The data is not normally distributed (Shapiro-Wilk W = X, p = Y). Plus it
+is count data. t-test assumes that data is normally distributed, and
+comparing the means of count data is also not appropriate. We can check the
+incidence rate ratio (IRR) for comparison of \link{outcome} among the categories
+of \link{group}. Better to use Poisson regression."}
+}
+
 \examples{
 sample_data <- data.frame(
-  business_days_until_appointment = c(1.5, 2.0, 1.8, 2.2, 1.9, 2.1, 2.3)
+  business_days_until_appointment = c(1L, 3L, 2L, 5L, 0L, 4L, 7L, 2L, 1L, 14L)
 )
-mysterycall_check_normality(sample_data, "business_days_until_appointment")
+result <- mysterycall_check_normality(
+  sample_data, "business_days_until_appointment",
+  outcome_label = "days until appointment",
+  group_label   = "insurance type"
+)
+cat(result$interpretation)
 }
 \seealso{
-\code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream variable
-standardization; \code{\link[=mysterycall_physician_age]{mysterycall_physician_age()}} for age summary statistics.
+\code{\link[=mysterycall_simple_poisson]{mysterycall_simple_poisson()}} for the Poisson model this function
+recommends; \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream variable
+standardization.
 
 Other modeling helpers: 
 \code{\link{mysterycall_create_formula}()},
