@@ -118,6 +118,7 @@ choropleth; \code{\link[=mysterycall_forest_plot]{mysterycall_forest_plot()}} fo
 
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
+\code{\link{mysterycall_exclusion_summary}()},
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_session_snapshot}()},

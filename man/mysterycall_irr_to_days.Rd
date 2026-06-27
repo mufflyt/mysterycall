@@ -90,6 +90,7 @@ cat(result$paragraph)
 
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
+\code{\link{mysterycall_exclusion_summary}()},
 \code{\link{mysterycall_geographic_map}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_session_snapshot}()},

@@ -22,6 +22,7 @@ Print method for mysterycall_irr_days
 \seealso{
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
+\code{\link{mysterycall_exclusion_summary}()},
 \code{\link{mysterycall_geographic_map}()},
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
