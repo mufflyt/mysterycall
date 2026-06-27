@@ -47,6 +47,7 @@ Cochran, W. G. (1977). \emph{Sampling Techniques} (3rd ed.). Wiley.
 
 Other power analysis: 
 \code{\link{mysterycall_equation_figure}()},
-\code{\link{mysterycall_poisson_power}()}
+\code{\link{mysterycall_poisson_power}()},
+\code{\link{mysterycall_power_calc}()}
 }
 \concept{power analysis}

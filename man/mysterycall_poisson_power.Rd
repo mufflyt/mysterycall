@@ -82,6 +82,7 @@ mysterycall_poisson_power(irr = 1.20, lambda_ref = 14)
 
 Other power analysis: 
 \code{\link{mysterycall_cochran_n}()},
-\code{\link{mysterycall_equation_figure}()}
+\code{\link{mysterycall_equation_figure}()},
+\code{\link{mysterycall_power_calc}()}
 }
 \concept{power analysis}

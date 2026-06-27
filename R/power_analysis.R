@@ -256,3 +256,197 @@ mysterycall_equation_figure <- function(lambda0   = 14,
     ggplot2::theme_minimal() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 11))
 }
+
+
+#' Clustered binary power and sample-size calculator (GLMM / VIF approach)
+#'
+#' Computes the required sample size or achieved power for a two-group binary
+#' outcome in a clustered mystery-caller study using the variance inflation
+#' factor (VIF) approach for clustered binary data (Donner & Klar 2000). This
+#' is the appropriate correction when multiple calls are placed to the same
+#' physician (cluster), inducing within-cluster correlation that inflates
+#' effective sample-size requirements relative to an independence assumption.
+#'
+#' The unadjusted sample size per group (\eqn{n_{\text{simple}}}) comes from
+#' the standard unpooled two-proportion \eqn{z}-test:
+#'
+#' \deqn{n_{\text{simple}} = \frac{(z_{\alpha/2} + z_{\beta})^2
+#'   [p_1(1-p_1) + p_2(1-p_2)]}{(p_1 - p_2)^2}}
+#'
+#' The clustering adjustment uses the variance inflation factor:
+#'
+#' \deqn{\text{VIF} = 1 + (m - 1)\,\rho}
+#'
+#' where \eqn{m} is the average cluster size (calls per physician) and
+#' \eqn{\rho} is the intraclass correlation (ICC). The adjusted sample size is:
+#'
+#' \deqn{n_{\text{adjusted}} = \lceil n_{\text{simple}} \times \text{VIF} \rceil}
+#'
+#' When \code{n} is supplied instead of leaving it \code{NULL}, the function
+#' back-calculates the achieved power at that \code{n} (treated as
+#' \eqn{n_{\text{simple}}, before clustering).
+#'
+#' @param p1 Numeric. Baseline acceptance probability for the reference group
+#'   (e.g. commercial insurance). Must be in (0, 1). Default \code{0.70}.
+#' @param p2 Numeric or \code{NULL}. Expected acceptance probability for the
+#'   comparison group (e.g. Medicaid). Must be in (0, 1) and differ from
+#'   \code{p1}. If \code{NULL}, power is back-calculated from \code{n};
+#'   \code{n} must then be provided. Either \code{p2} or \code{n} must be
+#'   non-\code{NULL}.
+#' @param n Integer or \code{NULL}. Known simple (unclustered) sample size per
+#'   group. If \code{NULL}, \eqn{n} is solved from \code{p1}, \code{p2},
+#'   \code{alpha}, and \code{power}. Either \code{p2} or \code{n} must be
+#'   non-\code{NULL}.
+#' @param icc Numeric. Intraclass correlation coefficient capturing
+#'   within-physician clustering. Must be in \eqn{[0, 1)}. Default \code{0.05}.
+#' @param m Numeric. Average number of mystery calls placed per physician
+#'   (cluster size). Must be \eqn{\geq 1}. Default \code{4}.
+#' @param alpha Numeric. Two-sided significance level. Must be in (0, 1).
+#'   Default \code{0.05}.
+#' @param power Numeric. Desired statistical power (1 - beta) when solving for
+#'   \code{n}. Must be in (0, 1). Default \code{0.80}. Ignored when \code{n}
+#'   is supplied; achieved power is returned in that case.
+#'
+#' @return A named list with elements:
+#' \describe{
+#'   \item{\code{n_simple}}{Unadjusted sample size per group from the
+#'     two-proportion \eqn{z}-test (integer).}
+#'   \item{\code{n_adjusted}}{Clustering-adjusted sample size per group,
+#'     \eqn{\lceil n_{\text{simple}} \times \text{VIF} \rceil} (integer).}
+#'   \item{\code{vif}}{Variance inflation factor \eqn{1 + (m - 1)\,\rho}.}
+#'   \item{\code{p1}}{Input baseline acceptance probability.}
+#'   \item{\code{p2}}{Input comparison acceptance probability (or \code{NULL}).}
+#'   \item{\code{alpha}}{Input significance level.}
+#'   \item{\code{power}}{Achieved power at the returned \code{n_simple}. When
+#'     solving for \code{n}, this reflects the power at the ceiling-rounded
+#'     \code{n_simple} and will be \eqn{\geq} the requested power. When
+#'     \code{n} is supplied directly, this is the back-calculated power.}
+#'   \item{\code{icc}}{Input intraclass correlation.}
+#'   \item{\code{m}}{Input average cluster size.}
+#'   \item{\code{message}}{A character string suitable for a manuscript methods
+#'     section summarising the key design parameters and result.}
+#' }
+#'
+#' @references Donner A, Klar N (2000). \emph{Design and Analysis of Cluster
+#'   Randomization Trials in Health Research}. Arnold: London.
+#'
+#' @family power analysis
+#' @seealso [mysterycall_cochran_n()], [mysterycall_poisson_power()]
+#' @export
+#'
+#' @examples
+#' # Solve for n: Medicaid acceptance (p2 = 0.50) vs commercial (p1 = 0.70)
+#' mysterycall_power_calc(p1 = 0.70, p2 = 0.50)
+#'
+#' # Larger ICC and more calls per physician inflate the adjusted n
+#' mysterycall_power_calc(p1 = 0.70, p2 = 0.50, icc = 0.15, m = 6)
+#'
+#' # 90% power and a smaller effect require a larger sample
+#' mysterycall_power_calc(p1 = 0.70, p2 = 0.55, power = 0.90)
+#'
+#' # Back-calculate power for a fixed simple n of 100 per group
+#' mysterycall_power_calc(p1 = 0.70, p2 = 0.50, n = 100)
+mysterycall_power_calc <- function(p1    = 0.70,
+                                   p2    = NULL,
+                                   n     = NULL,
+                                   icc   = 0.05,
+                                   m     = 4,
+                                   alpha = 0.05,
+                                   power = 0.80) {
+
+  # ---- input validation -------------------------------------------------------
+  if (!is.numeric(p1) || length(p1) != 1L || p1 <= 0 || p1 >= 1) {
+    stop("`p1` must be a single number in (0, 1).", call. = FALSE)
+  }
+  if (!is.null(p2)) {
+    if (!is.numeric(p2) || length(p2) != 1L || p2 <= 0 || p2 >= 1) {
+      stop("`p2` must be a single number in (0, 1) or NULL.", call. = FALSE)
+    }
+    if (isTRUE(all.equal(p1, p2))) {
+      stop("`p1` and `p2` must differ.", call. = FALSE)
+    }
+  }
+  if (!is.null(n)) {
+    if (!is.numeric(n) || length(n) != 1L || n < 1) {
+      stop("`n` must be a single positive number or NULL.", call. = FALSE)
+    }
+  }
+  if (is.null(p2) && is.null(n)) {
+    stop("Either `p2` or `n` must be non-NULL.", call. = FALSE)
+  }
+  if (is.null(p2) && !is.null(n)) {
+    stop(
+      "`p2` must be provided to compute power; only `n` was supplied.",
+      call. = FALSE
+    )
+  }
+  if (!is.numeric(icc) || length(icc) != 1L || icc < 0 || icc >= 1) {
+    stop("`icc` must be a single number in [0, 1).", call. = FALSE)
+  }
+  if (!is.numeric(m) || length(m) != 1L || m < 1) {
+    stop("`m` must be a single number >= 1.", call. = FALSE)
+  }
+  if (!is.numeric(alpha) || length(alpha) != 1L || alpha <= 0 || alpha >= 1) {
+    stop("`alpha` must be a single number in (0, 1).", call. = FALSE)
+  }
+  if (!is.numeric(power) || length(power) != 1L || power <= 0 || power >= 1) {
+    stop("`power` must be a single number in (0, 1).", call. = FALSE)
+  }
+
+  # ---- core computation -------------------------------------------------------
+  vif        <- 1 + (m - 1) * icc
+  z_a2       <- stats::qnorm(1 - alpha / 2)
+  pooled_var <- p1 * (1 - p1) + p2 * (1 - p2)
+  delta_sq   <- (p1 - p2)^2
+
+  if (is.null(n)) {
+    # Mode 1: solve for n given p1, p2, alpha, power -------------------------
+    z_b      <- stats::qnorm(power)
+    n_simple <- ceiling((z_a2 + z_b)^2 * pooled_var / delta_sq)
+    n_adj    <- ceiling(n_simple * vif)
+    # Back-calculate achieved power at the ceiling-rounded n_simple
+    achieved_power <- stats::pnorm(
+      sqrt(n_simple * delta_sq / pooled_var) - z_a2
+    )
+  } else {
+    # Mode 2: back-calculate power for the provided n (treated as n_simple) --
+    n_simple <- as.integer(ceiling(n))
+    n_adj    <- ceiling(n_simple * vif)
+    achieved_power <- stats::pnorm(
+      sqrt(n_simple * delta_sq / pooled_var) - z_a2
+    )
+  }
+
+  # ---- methods-section sentence -----------------------------------------------
+  msg <- sprintf(
+    paste0(
+      "Assuming an acceptance probability of %.0f%% in the reference group and ",
+      "%.0f%% in the comparison group, with an intraclass correlation of %.3f ",
+      "and an average of %.1f calls per physician (VIF = %.3f), ",
+      "%d participants per group are required before clustering adjustment and ",
+      "%d per group after adjustment, yielding %.1f%% power at a ",
+      "two-sided alpha of %.3f (Donner & Klar 2000)."
+    ),
+    p1 * 100, p2 * 100, icc, m, vif,
+    as.integer(n_simple), as.integer(n_adj),
+    achieved_power * 100, alpha
+  )
+
+  message(sprintf(
+    "mysterycall_power_calc: n_simple=%d, n_adjusted=%d, VIF=%.3f, power=%.1f%%",
+    as.integer(n_simple), as.integer(n_adj), vif, achieved_power * 100
+  ))
+
+  list(
+    n_simple   = as.integer(n_simple),
+    n_adjusted = as.integer(n_adj),
+    vif        = vif,
+    p1         = p1,
+    p2         = p2,
+    alpha      = alpha,
+    power      = achieved_power,
+    icc        = icc,
+    m          = m,
+    message    = msg
+  )
+}

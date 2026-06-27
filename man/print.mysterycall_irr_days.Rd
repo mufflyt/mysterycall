@@ -21,7 +21,14 @@ Print method for mysterycall_irr_days
 }
 \seealso{
 Other reporting: 
+\code{\link{mysterycall_abstract_numbers}()},
+\code{\link{mysterycall_geographic_map}()},
 \code{\link{mysterycall_irr_to_days}()},
-\code{\link{mysterycall_write_results_paragraph}()}
+\code{\link{mysterycall_results_paragraph}()},
+\code{\link{mysterycall_session_snapshot}()},
+\code{\link{mysterycall_supplemental_tables}()},
+\code{\link{mysterycall_write_results_paragraph}()},
+\code{\link{print.mysterycall_abstract_numbers}()},
+\code{\link{print.mysterycall_snapshot}()}
 }
 \concept{reporting}
