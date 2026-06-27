@@ -95,6 +95,13 @@ mysterycall_facet_histogram <- function(
     " (N = ", format(total_n, big.mark = ","), ")"
   )
 
+  # Drop NA rows from x_col so ggplot2 never sees them and never warns
+  n_na_x <- sum(is.na(data[[x_col]]))
+  if (n_na_x > 0L) {
+    message(sprintf("Removing %d NA row(s) from '%s' before plotting.", n_na_x, x_col))
+    data <- data[!is.na(data[[x_col]]), , drop = FALSE]
+  }
+
   # Base plot
   p <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[x_col]])) +
     ggplot2::geom_histogram(

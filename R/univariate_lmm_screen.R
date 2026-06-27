@@ -25,6 +25,11 @@ NULL
 #'   identifier / free-text columns.
 #' @param alpha Numeric. Significance threshold for the `$significant` table.
 #'   Default `0.2`.
+#' @param p_adjust_method Character scalar passed to [stats::p.adjust()] after
+#'   all raw p-values are collected. `"none"` (default) skips adjustment and
+#'   preserves existing behaviour. Common choices: `"BH"`, `"bonferroni"`,
+#'   `"holm"`. When not `"none"`, a `P_Value_Adjusted` column is added to
+#'   `$results` and significance is evaluated against the adjusted values.
 #' @param output_dir Character scalar or `NULL`. Directory for CSV output.
 #'   `NULL` uses [mysterycall_tempdir()]. Pass `NA` to skip writing.
 #' @param filename Character scalar. CSV file name.
@@ -44,7 +49,7 @@ NULL
 #' @family modeling helpers
 #' @seealso [mysterycall_univariate_poisson_screen()],
 #'   [mysterycall_interaction_screen()]
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula p.adjust
 #' @importFrom utils write.csv
 #' @export
 #'
@@ -60,14 +65,15 @@ NULL
 #' res <- mysterycall_univariate_lmm_screen(df, output_dir = NA)
 mysterycall_univariate_lmm_screen <- function(
     data,
-    outcome_col    = "business_days_until_appointment",
-    random_effect  = "last",
-    exclude_cols   = c(outcome_col, random_effect,
-                       "record_id", "middle", "first",
-                       "phone", "zip", "notes", "address"),
-    alpha          = 0.2,
-    output_dir     = NULL,
-    filename       = "univariate_lmm_screen.csv") {
+    outcome_col      = "business_days_until_appointment",
+    random_effect    = "last",
+    exclude_cols     = c(outcome_col, random_effect,
+                         "record_id", "middle", "first",
+                         "phone", "zip", "notes", "address"),
+    alpha            = 0.2,
+    p_adjust_method  = "none",
+    output_dir       = NULL,
+    filename         = "univariate_lmm_screen.csv") {
 
   if (!is.data.frame(data))
     stop("`data` must be a data frame.", call. = FALSE)
@@ -104,7 +110,13 @@ mysterycall_univariate_lmm_screen <- function(
       fml <- stats::as.formula(
         sprintf("%s ~ %s + %s", outcome_col, predictor, random_term)
       )
-      model <- lmerTest::lmer(fml, data = df_filtered, REML = FALSE)
+      withCallingHandlers(
+        { model <- lmerTest::lmer(fml, data = df_filtered, REML = FALSE) },
+        warning = function(w) {
+          if (grepl("singular", conditionMessage(w), ignore.case = TRUE))
+            invokeRestart("muffleWarning")
+        }
+      )
       coef_tbl <- summary(model)$coefficients
 
       if (nrow(coef_tbl) < 2L) return(NULL)
@@ -149,23 +161,34 @@ mysterycall_univariate_lmm_screen <- function(
     results <- tibble::as_tibble(do.call(rbind, rows))
   }
 
-  significant <- results[results$P_Value < alpha, , drop = FALSE]
-  significant <- significant[order(significant$P_Value), , drop = FALSE]
+  if (!identical(p_adjust_method, "none")) {
+    results$P_Value_Adjusted <- stats::p.adjust(results$P_Value,
+                                                 method = p_adjust_method)
+    results$P_Adjusted_Formatted <- ifelse(results$P_Value_Adjusted < 0.01,
+      "<0.01", as.character(round(results$P_Value_Adjusted, 3)))
+    sig_col <- "P_Value_Adjusted"
+  } else {
+    sig_col <- "P_Value"
+  }
+  significant <- results[results[[sig_col]] < alpha, , drop = FALSE]
+  significant <- significant[order(significant[[sig_col]]), , drop = FALSE]
 
   if (nrow(significant) == 0L) {
     sentence <- sprintf("No significant predictors found (p < %.2f).", alpha)
   } else {
+    correction_note <- if (!identical(p_adjust_method, "none"))
+      sprintf(", %s-adjusted", p_adjust_method) else ""
     parts <- mapply(
       function(pred, pval) {
         sprintf("%s (p=%s)", pred,
                 ifelse(pval < 0.01, "<0.01", as.character(round(pval, 2))))
       },
-      significant$Predictor, significant$P_Value,
+      significant$Predictor, significant[[sig_col]],
       SIMPLIFY = TRUE
     )
     sentence <- sprintf(
-      "The following predictors were significant (p < %.2f): %s.",
-      alpha, paste(parts, collapse = ", ")
+      "The following predictors were significant (p < %.2f%s): %s.",
+      alpha, correction_note, paste(parts, collapse = ", ")
     )
   }
 

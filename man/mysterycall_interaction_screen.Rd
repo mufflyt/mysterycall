@@ -9,6 +9,7 @@ mysterycall_interaction_screen(
   outcome_col = "business_days_until_appointment",
   random_effect = "last",
   alpha = 0.05,
+  p_adjust_method = "none",
   max_pairs = 50L,
   output_dir = NULL,
   filename = "interaction_screen.csv"
@@ -25,6 +26,13 @@ Default \code{"last"}.}
 
 \item{alpha}{Numeric. P-value threshold for a pair to be considered
 significant. Default \code{0.05}.}
+
+\item{p_adjust_method}{Character scalar passed to \code{\link[stats:p.adjust]{stats::p.adjust()}} after
+all raw per-pair p-values are collected. \code{"none"} (default) skips
+adjustment and preserves existing behaviour. Common choices: \code{"BH"},
+\code{"bonferroni"}, \code{"holm"}. When not \code{"none"}, a \code{P_Value_Adjusted} column
+is added to \verb{$interaction_results} and significance is evaluated against
+the adjusted values.}
 
 \item{max_pairs}{Integer. Maximum pairs to test. When the pool exceeds this,
 \code{max_pairs} pairs are sampled randomly with \code{set.seed(42)}.

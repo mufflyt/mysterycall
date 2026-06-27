@@ -1,0 +1,269 @@
+---
+title: "Mystery Caller Workflow: From Raw Data to Manuscript"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mystery Caller Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+## Overview
+
+Mystery-caller (secret-shopper) studies measure disparities in healthcare access by
+having trained callers pose as patients requesting appointments under different insurance
+types. Each physician in the sampling frame is called once per insurance type; the
+caller records whether an appointment was offered and, if so, how many business days
+until the earliest available slot. The `mysterycall` package provides a structured
+pipeline from raw call logs to manuscript-ready statistics, covering quality control,
+deduplication, descriptive summaries, regression modeling, and sensitivity analyses.
+
+## Simulated Data
+
+We construct a 200-row data frame representing 100 physician offices, each called
+twice — once under Medicaid and once under Blue Cross/Blue Shield.
+
+```{r simulate, eval=TRUE}
+suppressMessages({
+  library(mysterycall)
+
+  set.seed(42)
+  n_phy  <- 100L
+  ids    <- sprintf("%03d", seq_len(n_phy))
+  phones <- paste0("555-", sprintf("%04d", seq_len(n_phy)))
+
+  raw_df <- data.frame(
+    id_number             = rep(ids, each = 2L),
+    phone                 = rep(phones, each = 2L),
+    physician_information = paste0("Dr. Physician ", rep(ids, each = 2L)),
+    insurance             = rep(c("Medicaid", "Blue Cross/Blue Shield"), n_phy),
+    stringsAsFactors      = FALSE
+  )
+
+  raw_df$reason_for_exclusions <- sample(
+    c("Able to contact", "Physician not available", "Number disconnected"),
+    200L, replace = TRUE, prob = c(0.70, 0.20, 0.10)
+  )
+
+  # Appointment wait times only for successfully-contacted rows
+  raw_df$business_days_until_appointment <- ifelse(
+    raw_df$reason_for_exclusions == "Able to contact",
+    rpois(200L, lambda = 14L) + 1L,
+    NA_integer_
+  )
+
+  # Medicaid acceptance column: realistic for Medicaid rows, boilerplate for BCBS
+  medicaid_vals <- sample(
+    c(
+      "Yes they accept Medicaid",
+      "No",
+      "No answer, unable to determine if they accept Medicaid."
+    ),
+    200L, replace = TRUE, prob = c(0.55, 0.30, 0.15)
+  )
+  raw_df$does_the_physician_accept_medicaid <- ifelse(
+    raw_df$insurance == "Medicaid",
+    medicaid_vals,
+    "NA as this was a Blue Cross/Blue Shield call."
+  )
+
+  raw_df$scenario <- sample(
+    c("HIP scenario", "SHOULDER scenario", "KNEE scenario"),
+    200L, replace = TRUE
+  )
+  raw_df$gender <- sample(c("Male", "Female"), 200L, replace = TRUE)
+  raw_df$state  <- sample(
+    c(
+      "Colorado", "Texas", "California", "New York", "Florida",
+      "Illinois", "Pennsylvania", "Ohio", "Georgia", "Michigan"
+    ),
+    200L, replace = TRUE
+  )
+  raw_df$notes <- NA_character_
+})
+
+dim(raw_df)
+head(raw_df[, c("id_number", "phone", "insurance",
+                "reason_for_exclusions", "business_days_until_appointment")])
+```
+
+## Quality Control
+
+Two QC checks are run on the raw data.  `mysterycall_flag_repeat_physicians()`
+identifies physician records appearing more than the expected number of times.
+`mysterycall_flag_exclusion_discrepancy()` flags rows that are marked as excluded
+but nonetheless carry a non-negative appointment wait time — a logical contradiction
+indicating a data-entry error.
+
+```{r qc, eval=TRUE}
+suppressMessages({
+  repeat_flag <- mysterycall_flag_repeat_physicians(
+    raw_df,
+    output_dir = NA
+  )
+
+  disc_flag <- mysterycall_flag_exclusion_discrepancy(
+    raw_df,
+    output_dir = NA
+  )
+})
+
+repeat_flag
+disc_flag
+```
+
+Both checks pass: no physician exceeds the call-count threshold and no excluded row
+carries a valid wait time.
+
+## Deduplication
+
+`mysterycall_dedup_by_insurance()` removes duplicate rows so each
+phone x insurance x physician combination appears exactly once.
+
+```{r dedup, eval=TRUE}
+df <- suppressMessages(
+  mysterycall_dedup_by_insurance(raw_df, output_dir = NA)
+)
+nrow(df)
+```
+
+## Clean Medicaid Column
+
+`mysterycall_clean_medicaid_col()` recodes ambiguous or non-informative responses
+to `NA` and appends a binary 0/1 numeric indicator.
+
+```{r clean-medicaid, eval=TRUE}
+df <- suppressMessages(
+  mysterycall_clean_medicaid_col(df)
+)
+table(df$cleaned_does_the_physician_accept_medicaid, useNA = "ifany")
+```
+
+## Sample Demographics
+
+`mysterycall_sample_demographics()` computes total call counts, insurance-group
+physician counts, and geographic coverage, then returns a manuscript-ready sentence.
+
+```{r demographics, eval=TRUE}
+demo <- suppressMessages(
+  mysterycall_sample_demographics(df, output_dir = NA)
+)
+cat(demo$summary_sentence, "\n")
+```
+
+## Scenario Counts
+
+`mysterycall_scenario_summary()` tabulates calls by scenario and produces a
+descriptive sentence ready for insertion into the Participants section.
+
+```{r scenario, eval=TRUE}
+scen <- suppressMessages(
+  mysterycall_scenario_summary(
+    df,
+    scenario_levels = c(
+      hip      = "HIP scenario",
+      shoulder = "SHOULDER scenario",
+      knee     = "KNEE scenario"
+    ),
+    contact_col = "reason_for_exclusions",
+    output_dir  = NA
+  )
+)
+print(scen$counts)
+cat(scen$sentence, "\n")
+```
+
+## Acceptance Rates
+
+`mysterycall_insurance_acceptance_rates()` computes Medicaid and Blue Cross/Blue Shield
+acceptance rates using distinct-physician numerators and denominators that exclude
+unreachable physician offices.
+
+```{r acceptance, eval=TRUE}
+rates <- suppressMessages(
+  mysterycall_insurance_acceptance_rates(df, output_dir = NA)
+)
+cat(rates$paragraph, "\n")
+```
+
+## Wait Times
+
+`mysterycall_wait_time_by_group()` provides median (IQR) wait times per group.
+`mysterycall_wait_time_sentence()` additionally fits a Poisson GLM to obtain
+p-values for each group versus the reference and assembles a full paragraph.
+
+```{r wait-times, eval=TRUE}
+wt_grp <- suppressMessages(
+  mysterycall_wait_time_by_group(
+    df,
+    group_col  = "insurance",
+    output_dir = NA
+  )
+)
+print(wt_grp)
+
+wt_sent <- suppressMessages(
+  mysterycall_wait_time_sentence(df, group_col = "insurance")
+)
+cat(wt_sent$sentence, "\n")
+```
+
+## Poisson Model
+
+`mysterycall_simple_poisson()` fits a Poisson GLM and returns an incidence rate ratio
+(IRR) table with confidence intervals and a manuscript-ready summary statement.
+Poisson regression is preferred over rank tests because the outcome (days until
+appointment) is a count variable.
+
+```{r poisson, eval=TRUE}
+poisson_res <- suppressMessages(
+  mysterycall_simple_poisson(
+    df,
+    outcome        = "business_days_until_appointment",
+    group          = "insurance",
+    reference      = "Blue Cross/Blue Shield",
+    outcome_label  = "business days until appointment",
+    use_profile_ci = FALSE
+  )
+)
+
+knitr::kable(
+  poisson_res$irr_table[, c("level", "irr", "ci_lower", "ci_upper", "p_value_fmt")],
+  digits    = 3,
+  caption   = "Poisson regression incidence rate ratios (reference: Blue Cross/Blue Shield)",
+  col.names = c("Group", "IRR", "95% CI Lower", "95% CI Upper", "P-value")
+)
+```
+
+## Sensitivity Analysis
+
+`mysterycall_sensitivity_both_insurance()` identifies physicians called under both
+Medicaid and Blue Cross/Blue Shield and compares their wait times, providing a
+paired check of whether the observed acceptance-rate difference holds within physicians.
+
+```{r sensitivity, eval=TRUE}
+sens <- suppressMessages(
+  mysterycall_sensitivity_both_insurance(df, output_dir = NA)
+)
+cat(sens$sentence, "\n")
+```
+
+## Mapping to Manuscript Sections
+
+The functions used in this vignette map directly to standard manuscript sections.
+`mysterycall_sample_demographics()` and `mysterycall_scenario_summary()` supply the
+**Participants** paragraph of the Methods section. `mysterycall_insurance_acceptance_rates()`
+drives the primary **Results** sentence reporting acceptance rates by insurance type.
+`mysterycall_wait_time_sentence()` and `mysterycall_simple_poisson()` together produce
+the **Statistical Analysis** paragraph and the IRR table reported in the Results.
+Finally, `mysterycall_sensitivity_both_insurance()` supplies the **Sensitivity Analysis**
+subsection, which compares paired physician records across insurance types to assess
+whether the acceptance-rate gap reflects within-physician differences in scheduling
+behavior.

@@ -71,8 +71,16 @@ mysterycall_random_effect_variance <- function(model,
          call. = FALSE)
   }
 
-  vc      <- lme4::VarCorr(model)
-  vc_df   <- as.data.frame(vc)
+  withCallingHandlers(
+    {
+      vc    <- lme4::VarCorr(model)
+      vc_df <- as.data.frame(vc)
+    },
+    warning = function(w) {
+      if (grepl("singular", conditionMessage(w), ignore.case = TRUE))
+        invokeRestart("muffleWarning")
+    }
+  )
 
   random_variance      <- vc_df$vcov[1L]
   random_effect_group  <- as.character(vc_df$grp[1L])

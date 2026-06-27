@@ -184,3 +184,57 @@ test_that("interaction_screen: sentence mentions AIC when interactions found", {
     succeed()
   }
 })
+
+# ── p_adjust_method tests ─────────────────────────────────────────────────────
+
+test_that("interaction_screen: p_adjust_method='BH' adds P_Value_Adjusted column", {
+  skip_if_not_installed("lmerTest")
+  df  <- make_factor_df()
+  res <- suppressMessages(
+    mysterycall_interaction_screen(df, alpha = 1, p_adjust_method = "BH",
+                                   output_dir = NA)
+  )
+  # alpha=1 ensures all pairs appear in interaction_results
+  expect_true("P_Value_Adjusted" %in% names(res$interaction_results))
+})
+
+test_that("interaction_screen: p_adjust_method='bonferroni' gives adjusted >= raw p", {
+  skip_if_not_installed("lmerTest")
+  df  <- make_factor_df()
+  res <- suppressMessages(
+    mysterycall_interaction_screen(df, alpha = 1,
+                                   p_adjust_method = "bonferroni",
+                                   output_dir = NA)
+  )
+  expect_true("P_Value_Adjusted" %in% names(res$interaction_results))
+  if (nrow(res$interaction_results) > 0L) {
+    # Bonferroni always inflates (adjusted >= raw)
+    expect_true(all(
+      res$interaction_results$P_Value_Adjusted >=
+        res$interaction_results$P_Value
+    ))
+  } else {
+    succeed()
+  }
+})
+
+test_that("interaction_screen: p_adjust_method='none' produces no P_Value_Adjusted column", {
+  skip_if_not_installed("lmerTest")
+  df  <- make_factor_df()
+  res <- suppressMessages(
+    mysterycall_interaction_screen(df, p_adjust_method = "none",
+                                   output_dir = NA)
+  )
+  expect_false("P_Value_Adjusted" %in% names(res$interaction_results))
+})
+
+test_that("interaction_screen: p_adjust_method='invalid_xyz' errors", {
+  skip_if_not_installed("lmerTest")
+  df  <- make_factor_df()
+  expect_error(
+    suppressMessages(
+      mysterycall_interaction_screen(df, p_adjust_method = "invalid_xyz",
+                                     output_dir = NA)
+    )
+  )
+})

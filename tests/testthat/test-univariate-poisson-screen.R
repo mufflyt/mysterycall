@@ -224,3 +224,50 @@ test_that("poisson_screen: Formatted_P_Value is '<0.01' for very small p", {
     succeed()
   }
 })
+
+# ── p_adjust_method tests ─────────────────────────────────────────────────────
+
+test_that("poisson_screen: p_adjust_method='BH' adds P_Value_Adjusted column", {
+  df  <- make_poisson_df()
+  res <- suppressMessages(
+    mysterycall_univariate_poisson_screen(
+      df, outcome_col = "wait_days", p_adjust_method = "BH", output_dir = NA
+    )
+  )
+  expect_true("P_Value_Adjusted" %in% names(res$results))
+})
+
+test_that("poisson_screen: p_adjust_method='bonferroni' gives adjusted >= raw p", {
+  df  <- make_poisson_df()
+  res <- suppressMessages(
+    mysterycall_univariate_poisson_screen(
+      df, outcome_col = "wait_days", p_adjust_method = "bonferroni",
+      output_dir = NA
+    )
+  )
+  expect_true("P_Value_Adjusted" %in% names(res$results))
+  # Bonferroni always inflates (adjusted >= raw)
+  expect_true(all(res$results$P_Value_Adjusted >= res$results$P_Value))
+})
+
+test_that("poisson_screen: p_adjust_method='none' produces no P_Value_Adjusted column", {
+  df  <- make_poisson_df()
+  res <- suppressMessages(
+    mysterycall_univariate_poisson_screen(
+      df, outcome_col = "wait_days", p_adjust_method = "none", output_dir = NA
+    )
+  )
+  expect_false("P_Value_Adjusted" %in% names(res$results))
+})
+
+test_that("poisson_screen: p_adjust_method='invalid_xyz' errors", {
+  df  <- make_poisson_df()
+  expect_error(
+    suppressMessages(
+      mysterycall_univariate_poisson_screen(
+        df, outcome_col = "wait_days", p_adjust_method = "invalid_xyz",
+        output_dir = NA
+      )
+    )
+  )
+})

@@ -21,6 +21,12 @@ NULL
 #'   Default `"last"`.
 #' @param alpha Numeric. P-value threshold for a pair to be considered
 #'   significant. Default `0.05`.
+#' @param p_adjust_method Character scalar passed to [stats::p.adjust()] after
+#'   all raw per-pair p-values are collected. `"none"` (default) skips
+#'   adjustment and preserves existing behaviour. Common choices: `"BH"`,
+#'   `"bonferroni"`, `"holm"`. When not `"none"`, a `P_Value_Adjusted` column
+#'   is added to `$interaction_results` and significance is evaluated against
+#'   the adjusted values.
 #' @param max_pairs Integer. Maximum pairs to test. When the pool exceeds this,
 #'   `max_pairs` pairs are sampled randomly with `set.seed(42)`.
 #'   Default `50L`.
@@ -44,7 +50,7 @@ NULL
 #' @family modeling helpers
 #' @seealso [mysterycall_univariate_lmm_screen()],
 #'   [mysterycall_univariate_poisson_screen()]
-#' @importFrom stats as.formula AIC
+#' @importFrom stats as.formula AIC p.adjust
 #' @importFrom utils write.csv
 #' @export
 #'
@@ -60,12 +66,13 @@ NULL
 #' res <- mysterycall_interaction_screen(df, output_dir = NA)
 mysterycall_interaction_screen <- function(
     data,
-    outcome_col   = "business_days_until_appointment",
-    random_effect = "last",
-    alpha         = 0.05,
-    max_pairs     = 50L,
-    output_dir    = NULL,
-    filename      = "interaction_screen.csv") {
+    outcome_col     = "business_days_until_appointment",
+    random_effect   = "last",
+    alpha           = 0.05,
+    p_adjust_method = "none",
+    max_pairs       = 50L,
+    output_dir      = NULL,
+    filename        = "interaction_screen.csv") {
 
   if (!is.data.frame(data))
     stop("`data` must be a data frame.", call. = FALSE)
@@ -124,7 +131,13 @@ mysterycall_interaction_screen <- function(
       fml <- stats::as.formula(sprintf(
         "%s ~ %s * %s + %s", outcome_col, var1, var2, random_term
       ))
-      model <- lmerTest::lmer(fml, data = df_filtered, REML = FALSE)
+      withCallingHandlers(
+        { model <- lmerTest::lmer(fml, data = df_filtered, REML = FALSE) },
+        warning = function(w) {
+          if (grepl("singular", conditionMessage(w), ignore.case = TRUE))
+            invokeRestart("muffleWarning")
+        }
+      )
       coef_tbl <- summary(model)$coefficients
 
       # Exclude intercept; look at all other rows
@@ -134,16 +147,12 @@ mysterycall_interaction_screen <- function(
         p_col_name <- "Pr(>|t|)"
         if (p_col_name %in% colnames(non_intercept)) {
           p_vals <- non_intercept[, p_col_name]
-          sig_rows <- non_intercept[!is.na(p_vals) & p_vals <= alpha, ,
-                                    drop = FALSE]
-          if (nrow(sig_rows) > 0L) {
-            # Record minimum p per pair
-            interaction_rows[[length(interaction_rows) + 1L]] <- data.frame(
-              Interaction = interaction_label,
-              P_Value     = min(p_vals, na.rm = TRUE),
-              stringsAsFactors = FALSE
-            )
-          }
+          # Collect all pairs; filtering against alpha is done after p.adjust
+          interaction_rows[[length(interaction_rows) + 1L]] <- data.frame(
+            Interaction = interaction_label,
+            P_Value     = min(p_vals, na.rm = TRUE),
+            stringsAsFactors = FALSE
+          )
         }
       }
 
@@ -162,15 +171,28 @@ mysterycall_interaction_screen <- function(
 
   # Assemble output tables
   if (length(interaction_rows) > 0L) {
-    interaction_results <- tibble::as_tibble(
-      do.call(rbind, interaction_rows)
-    )
+    all_interactions <- tibble::as_tibble(do.call(rbind, interaction_rows))
   } else {
-    interaction_results <- tibble::tibble(
+    all_interactions <- tibble::tibble(
       Interaction = character(),
       P_Value     = numeric()
     )
   }
+
+  if (!identical(p_adjust_method, "none")) {
+    all_interactions$P_Value_Adjusted <- stats::p.adjust(
+      all_interactions$P_Value, method = p_adjust_method)
+    all_interactions$P_Adjusted_Formatted <- ifelse(
+      all_interactions$P_Value_Adjusted < 0.01, "<0.01",
+      as.character(round(all_interactions$P_Value_Adjusted, 3)))
+    sig_col <- "P_Value_Adjusted"
+  } else {
+    sig_col <- "P_Value"
+  }
+
+  interaction_results <- all_interactions[
+    !is.na(all_interactions[[sig_col]]) &
+      all_interactions[[sig_col]] < alpha, , drop = FALSE]
 
   if (length(aic_rows) > 0L) {
     aic_results <- tibble::as_tibble(do.call(rbind, aic_rows))
@@ -185,10 +207,13 @@ mysterycall_interaction_screen <- function(
 
   if (nrow(aic_results) > 0L && !all(is.na(aic_results$AIC))) {
     best_interaction <- aic_results[which.min(aic_results$AIC), , drop = FALSE]
+    correction_note <- if (!identical(p_adjust_method, "none"))
+      sprintf(" P-values are %s-adjusted.", p_adjust_method) else ""
     sentence <- sprintf(
-      "The interaction with the lowest AIC was %s (AIC=%.2f).",
+      "The interaction with the lowest AIC was %s (AIC=%.2f).%s",
       best_interaction$Interaction[1L],
-      best_interaction$AIC[1L]
+      best_interaction$AIC[1L],
+      correction_note
     )
   } else {
     best_interaction <- NULL

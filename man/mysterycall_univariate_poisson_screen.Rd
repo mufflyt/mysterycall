@@ -9,6 +9,7 @@ mysterycall_univariate_poisson_screen(
   outcome_col = "business_days_until_appointment",
   exclude_cols = outcome_col,
   alpha = 0.2,
+  p_adjust_method = "none",
   output_dir = NULL,
   filename = "univariate_poisson_screen.csv"
 )
@@ -23,6 +24,12 @@ loop. Default is \code{outcome_col} alone; supply additional columns as needed.}
 
 \item{alpha}{Numeric. Significance threshold for the \verb{$significant} table.
 Default \code{0.2}.}
+
+\item{p_adjust_method}{Character scalar passed to \code{\link[stats:p.adjust]{stats::p.adjust()}} after
+all raw p-values are collected. \code{"none"} (default) skips adjustment and
+preserves existing behaviour. Common choices: \code{"BH"}, \code{"bonferroni"},
+\code{"holm"}. When not \code{"none"}, a \code{P_Value_Adjusted} column is added to
+\verb{$results} and significance is evaluated against the adjusted values.}
 
 \item{output_dir}{Character scalar or \code{NULL}. Directory for CSV output.
 \code{NULL} uses \code{\link[=mysterycall_tempdir]{mysterycall_tempdir()}}. Pass \code{NA} to skip writing.}

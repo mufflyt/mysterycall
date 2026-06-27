@@ -11,6 +11,7 @@ mysterycall_univariate_lmm_screen(
   exclude_cols = c(outcome_col, random_effect, "record_id", "middle", "first", "phone",
     "zip", "notes", "address"),
   alpha = 0.2,
+  p_adjust_method = "none",
   output_dir = NULL,
   filename = "univariate_lmm_screen.csv"
 )
@@ -30,6 +31,12 @@ identifier / free-text columns.}
 
 \item{alpha}{Numeric. Significance threshold for the \verb{$significant} table.
 Default \code{0.2}.}
+
+\item{p_adjust_method}{Character scalar passed to \code{\link[stats:p.adjust]{stats::p.adjust()}} after
+all raw p-values are collected. \code{"none"} (default) skips adjustment and
+preserves existing behaviour. Common choices: \code{"BH"}, \code{"bonferroni"},
+\code{"holm"}. When not \code{"none"}, a \code{P_Value_Adjusted} column is added to
+\verb{$results} and significance is evaluated against the adjusted values.}
 
 \item{output_dir}{Character scalar or \code{NULL}. Directory for CSV output.
 \code{NULL} uses \code{\link[=mysterycall_tempdir]{mysterycall_tempdir()}}. Pass \code{NA} to skip writing.}

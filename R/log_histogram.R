@@ -118,6 +118,13 @@ mysterycall_log_histogram <- function(
     "Distribution of log(", x_col, ") by ", facet_col
   )
 
+  # Drop NA rows from x_col so ggplot2 never sees them and never warns
+  n_na_x <- sum(is.na(data[[x_col]]))
+  if (n_na_x > 0L) {
+    message(sprintf("Removing %d NA row(s) from '%s' before plotting.", n_na_x, x_col))
+    data <- data[!is.na(data[[x_col]]), , drop = FALSE]
+  }
+
   # Build histogram (with or without fixed binwidth)
   hist_args <- list(
     fill  = fill,

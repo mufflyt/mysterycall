@@ -60,7 +60,13 @@ mysterycall_r2_sentence <- function(model, digits = 3, digits_pct = 1) {
   }
 
   r2_values <- tryCatch(
-    performance::r2(model),
+    withCallingHandlers(
+      performance::r2(model),
+      warning = function(w) {
+        if (grepl("singular", conditionMessage(w), ignore.case = TRUE))
+          invokeRestart("muffleWarning")
+      }
+    ),
     error = function(e) {
       stop(
         paste0("Could not compute R² for this model: ", conditionMessage(e)),

@@ -20,6 +20,11 @@ NULL
 #'   loop. Default is `outcome_col` alone; supply additional columns as needed.
 #' @param alpha Numeric. Significance threshold for the `$significant` table.
 #'   Default `0.2`.
+#' @param p_adjust_method Character scalar passed to [stats::p.adjust()] after
+#'   all raw p-values are collected. `"none"` (default) skips adjustment and
+#'   preserves existing behaviour. Common choices: `"BH"`, `"bonferroni"`,
+#'   `"holm"`. When not `"none"`, a `P_Value_Adjusted` column is added to
+#'   `$results` and significance is evaluated against the adjusted values.
 #' @param output_dir Character scalar or `NULL`. Directory for CSV output.
 #'   `NULL` uses [mysterycall_tempdir()]. Pass `NA` to skip writing.
 #' @param filename Character scalar. CSV file name.
@@ -38,7 +43,7 @@ NULL
 #' @family modeling helpers
 #' @seealso [mysterycall_univariate_lmm_screen()],
 #'   [mysterycall_interaction_screen()]
-#' @importFrom stats glm poisson coef as.formula na.omit
+#' @importFrom stats glm poisson coef as.formula na.omit p.adjust
 #' @importFrom utils write.csv
 #' @export
 #'
@@ -55,11 +60,12 @@ NULL
 #' )
 mysterycall_univariate_poisson_screen <- function(
     data,
-    outcome_col  = "business_days_until_appointment",
-    exclude_cols = outcome_col,
-    alpha        = 0.2,
-    output_dir   = NULL,
-    filename     = "univariate_poisson_screen.csv") {
+    outcome_col     = "business_days_until_appointment",
+    exclude_cols    = outcome_col,
+    alpha           = 0.2,
+    p_adjust_method = "none",
+    output_dir      = NULL,
+    filename        = "univariate_poisson_screen.csv") {
 
   if (!is.data.frame(data))
     stop("`data` must be a data frame.", call. = FALSE)
@@ -123,23 +129,34 @@ mysterycall_univariate_poisson_screen <- function(
     results <- tibble::as_tibble(do.call(rbind, rows))
   }
 
-  significant <- results[results$P_Value < alpha, , drop = FALSE]
-  significant <- significant[order(significant$P_Value), , drop = FALSE]
+  if (!identical(p_adjust_method, "none")) {
+    results$P_Value_Adjusted <- stats::p.adjust(results$P_Value,
+                                                 method = p_adjust_method)
+    results$P_Adjusted_Formatted <- ifelse(results$P_Value_Adjusted < 0.01,
+      "<0.01", as.character(round(results$P_Value_Adjusted, 3)))
+    sig_col <- "P_Value_Adjusted"
+  } else {
+    sig_col <- "P_Value"
+  }
+  significant <- results[results[[sig_col]] < alpha, , drop = FALSE]
+  significant <- significant[order(significant[[sig_col]]), , drop = FALSE]
 
   if (nrow(significant) == 0L) {
     sentence <- sprintf("No significant predictors found (p < %.2f).", alpha)
   } else {
+    correction_note <- if (!identical(p_adjust_method, "none"))
+      sprintf(", %s-adjusted", p_adjust_method) else ""
     parts <- mapply(
       function(var, dir, pval) {
         sprintf("%s (%s, p=%s)", var, dir,
                 ifelse(pval < 0.01, "<0.01", as.character(round(pval, 2))))
       },
-      significant$Variable, significant$Direction, significant$P_Value,
+      significant$Variable, significant$Direction, significant[[sig_col]],
       SIMPLIFY = TRUE
     )
     sentence <- sprintf(
-      "Significant predictors (p < %.2f): %s.",
-      alpha, paste(parts, collapse = ", ")
+      "Significant predictors (p < %.2f%s): %s.",
+      alpha, correction_note, paste(parts, collapse = ", ")
     )
   }
 
