@@ -77,6 +77,8 @@ result
 \code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}} for broader pre-analysis validation.
 
 Other quality control: 
+\code{\link{mysterycall_clean_medicaid_col}()},
+\code{\link{mysterycall_dedup_by_insurance}()},
 \code{\link{mysterycall_flag_excluded_with_appointments}()},
 \code{\link{mysterycall_flag_included_na_appointments}()},
 \code{\link{mysterycall_flag_repeat_physicians}()}

@@ -1,0 +1,189 @@
+#' Screen predictors one-at-a-time using a linear mixed model
+#'
+#' @name mysterycall_univariate_lmm_screen
+NULL
+
+#' Screen predictors with univariate linear mixed models
+#'
+#' For each predictor (excluding `outcome_col`, `random_effect`, and any
+#' `exclude_cols`), fits a linear mixed model using [lmerTest::lmer()] with
+#' `REML = FALSE`, then extracts the fixed-effect estimate, standard error, and
+#' p-value from the second row of the coefficient table (the predictor row).
+#' Predictors with only one unique non-NA value are skipped with a message.
+#'
+#' Incidence rate ratios (IRR) and 95 % Wald confidence intervals on the
+#' exponential scale are returned for convenient forest-plot input, even though
+#' the underlying model is linear (not Poisson).
+#'
+#' @param data A data frame. Rows where `outcome_col` is `NA` are dropped.
+#' @param outcome_col Character scalar. The numeric outcome column.
+#'   Default `"business_days_until_appointment"`.
+#' @param random_effect Character scalar. Column used as the random intercept
+#'   `(1 | random_effect)`. Default `"last"`.
+#' @param exclude_cols Character vector. Columns to exclude from the predictor
+#'   loop. Default includes `outcome_col`, `random_effect`, and common
+#'   identifier / free-text columns.
+#' @param alpha Numeric. Significance threshold for the `$significant` table.
+#'   Default `0.2`.
+#' @param output_dir Character scalar or `NULL`. Directory for CSV output.
+#'   `NULL` uses [mysterycall_tempdir()]. Pass `NA` to skip writing.
+#' @param filename Character scalar. CSV file name.
+#'   Default `"univariate_lmm_screen.csv"`.
+#'
+#' @return A named list with four elements:
+#' \describe{
+#'   \item{`results`}{[tibble::tibble()] with columns `Predictor`, `P_Value`,
+#'     `P_Formatted`, `IRR`, `CI_Lower`, `CI_Upper` for every predictor
+#'     attempted.}
+#'   \item{`significant`}{Subset of `results` where `P_Value < alpha`, sorted
+#'     ascending by `P_Value`.}
+#'   \item{`sentence`}{Character scalar summarising significant predictors.}
+#'   \item{`alpha`}{The threshold used.}
+#' }
+#'
+#' @family modeling helpers
+#' @seealso [mysterycall_univariate_poisson_screen()],
+#'   [mysterycall_interaction_screen()]
+#' @importFrom stats as.formula
+#' @importFrom utils write.csv
+#' @export
+#'
+#' @examplesIf requireNamespace("lmerTest", quietly = TRUE)
+#' set.seed(1)
+#' df <- data.frame(
+#'   business_days_until_appointment = rpois(60, 10),
+#'   insurance = rep(c("BCBS", "Medicaid"), 30),
+#'   gender    = rep(c("M", "F"), 30),
+#'   last      = rep(paste0("Dr", 1:10), each = 6),
+#'   stringsAsFactors = FALSE
+#' )
+#' res <- mysterycall_univariate_lmm_screen(df, output_dir = NA)
+mysterycall_univariate_lmm_screen <- function(
+    data,
+    outcome_col    = "business_days_until_appointment",
+    random_effect  = "last",
+    exclude_cols   = c(outcome_col, random_effect,
+                       "record_id", "middle", "first",
+                       "phone", "zip", "notes", "address"),
+    alpha          = 0.2,
+    output_dir     = NULL,
+    filename       = "univariate_lmm_screen.csv") {
+
+  if (!is.data.frame(data))
+    stop("`data` must be a data frame.", call. = FALSE)
+  if (!outcome_col %in% names(data))
+    stop(sprintf("Outcome column '%s' not found in data.", outcome_col),
+         call. = FALSE)
+  if (!random_effect %in% names(data))
+    stop(sprintf("Random effect column '%s' not found in data.", random_effect),
+         call. = FALSE)
+  if (!requireNamespace("lmerTest", quietly = TRUE))
+    stop("Package 'lmerTest' is required. Install with: install.packages('lmerTest')",
+         call. = FALSE)
+
+  # Drop NAs in outcome
+  df_filtered <- data[!is.na(data[[outcome_col]]), , drop = FALSE]
+
+  # Build predictor list
+  predictors <- setdiff(names(df_filtered), unique(exclude_cols))
+  predictors <- predictors[nzchar(predictors)]
+
+  random_term <- sprintf("(1 | %s)", random_effect)
+
+  rows <- lapply(predictors, function(predictor) {
+    col_vals <- df_filtered[[predictor]]
+    n_unique <- length(unique(stats::na.omit(col_vals)))
+    if (n_unique < 2L) {
+      message(sprintf(
+        "Skipping '%s': only %d unique value(s).", predictor, n_unique
+      ))
+      return(NULL)
+    }
+
+    tryCatch({
+      fml <- stats::as.formula(
+        sprintf("%s ~ %s + %s", outcome_col, predictor, random_term)
+      )
+      model <- lmerTest::lmer(fml, data = df_filtered, REML = FALSE)
+      coef_tbl <- summary(model)$coefficients
+
+      if (nrow(coef_tbl) < 2L) return(NULL)
+
+      coef_value <- coef_tbl[2L, "Estimate"]
+      std_error  <- coef_tbl[2L, "Std. Error"]
+      p_value    <- coef_tbl[2L, "Pr(>|t|)"]
+
+      irr      <- exp(coef_value)
+      ci_lower <- exp(coef_value - 1.96 * std_error)
+      ci_upper <- exp(coef_value + 1.96 * std_error)
+
+      data.frame(
+        Predictor   = predictor,
+        P_Value     = p_value,
+        P_Formatted = ifelse(p_value < 0.01, "<0.01",
+                             as.character(round(p_value, 2))),
+        IRR         = irr,
+        CI_Lower    = ci_lower,
+        CI_Upper    = ci_upper,
+        stringsAsFactors = FALSE
+      )
+    }, error = function(e) {
+      message(sprintf("Skipping '%s': model failed (%s).", predictor,
+                      conditionMessage(e)))
+      NULL
+    })
+  })
+
+  rows <- rows[!vapply(rows, is.null, logical(1L))]
+
+  if (length(rows) == 0L) {
+    results <- tibble::tibble(
+      Predictor   = character(),
+      P_Value     = numeric(),
+      P_Formatted = character(),
+      IRR         = numeric(),
+      CI_Lower    = numeric(),
+      CI_Upper    = numeric()
+    )
+  } else {
+    results <- tibble::as_tibble(do.call(rbind, rows))
+  }
+
+  significant <- results[results$P_Value < alpha, , drop = FALSE]
+  significant <- significant[order(significant$P_Value), , drop = FALSE]
+
+  if (nrow(significant) == 0L) {
+    sentence <- sprintf("No significant predictors found (p < %.2f).", alpha)
+  } else {
+    parts <- mapply(
+      function(pred, pval) {
+        sprintf("%s (p=%s)", pred,
+                ifelse(pval < 0.01, "<0.01", as.character(round(pval, 2))))
+      },
+      significant$Predictor, significant$P_Value,
+      SIMPLIFY = TRUE
+    )
+    sentence <- sprintf(
+      "The following predictors were significant (p < %.2f): %s.",
+      alpha, paste(parts, collapse = ", ")
+    )
+  }
+
+  # Output
+  if (!identical(output_dir, NA) && !identical(output_dir, NA_character_)) {
+    if (is.null(output_dir)) {
+      output_dir <- mysterycall_tempdir("univariate_lmm_screen", create = TRUE)
+    }
+    out_path <- file.path(output_dir, filename)
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    utils::write.csv(results, out_path, row.names = FALSE)
+    message(sprintf("Results written to %s", out_path))
+  }
+
+  list(
+    results     = results,
+    significant = tibble::as_tibble(significant),
+    sentence    = sentence,
+    alpha       = alpha
+  )
+}

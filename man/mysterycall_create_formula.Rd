@@ -39,6 +39,12 @@ internally.
 
 Other modeling helpers: 
 \code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_plot_interaction}()}
+\code{\link{mysterycall_interaction_screen}()},
+\code{\link{mysterycall_overdispersion_sentence}()},
+\code{\link{mysterycall_plot_interaction}()},
+\code{\link{mysterycall_r2_sentence}()},
+\code{\link{mysterycall_random_effect_variance}()},
+\code{\link{mysterycall_univariate_lmm_screen}()},
+\code{\link{mysterycall_univariate_poisson_screen}()}
 }
 \concept{modeling helpers}
