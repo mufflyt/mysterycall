@@ -54,19 +54,19 @@ mysterycall_calculate_overlap <- function(block_groups,
 
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
-    stop("Error: 'block_groups' must be an sf object.", call. = FALSE)
+    stop("'block_groups' must be an sf object.", call. = FALSE)
   }
   if (!inherits(isochrones_joined, "sf")) {
-    stop("Error: 'isochrones_joined' must be an sf object.", call. = FALSE)
+    stop("'isochrones_joined' must be an sf object.", call. = FALSE)
   }
   if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
-    stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.", call. = FALSE)
+    stop("'drive_time_minutes' must be a single non-negative numeric value.", call. = FALSE)
   }
   if (!is.character(output_dir) || !nzchar(output_dir)) {
-    stop("Error: 'output_dir' must be a non-empty character string.", call. = FALSE)
+    stop("'output_dir' must be a non-empty character string.", call. = FALSE)
   }
   if (!is.null(crosswalk) && !is.function(crosswalk)) {
-    stop("Error: 'crosswalk' must be a function or NULL.", call. = FALSE)
+    stop("'crosswalk' must be a function or NULL.", call. = FALSE)
   }
   checkmate::assert_flag(notify, .var.name = "notify")
 

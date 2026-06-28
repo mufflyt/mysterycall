@@ -57,15 +57,27 @@ mysterycall_caller_reliability <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.character(caller_col),  length(caller_col)  == 1)
   stopifnot(is.character(outcome_col), length(outcome_col) == 1)
-  if (!caller_col  %in% names(data)) stop("caller_col '",  caller_col,  "' not found in data.", call. = FALSE)
-  if (!outcome_col %in% names(data)) stop("outcome_col '", outcome_col, "' not found in data.", call. = FALSE)
+  if (!caller_col  %in% names(data)) stop(sprintf(
+    "caller_col '%s' not found in `data`.\nAvailable columns: %s",
+    caller_col, paste(names(data), collapse = ", ")
+  ), call. = FALSE)
+  if (!outcome_col %in% names(data)) stop(sprintf(
+    "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
+    outcome_col, paste(names(data), collapse = ", ")
+  ), call. = FALSE)
   if (!is.null(gold_col)) {
     stopifnot(is.character(gold_col), length(gold_col) == 1)
-    if (!gold_col %in% names(data)) stop("gold_col '", gold_col, "' not found in data.", call. = FALSE)
+    if (!gold_col %in% names(data)) stop(sprintf(
+      "gold_col '%s' not found in `data`.\nAvailable columns: %s",
+      gold_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   if (!is.null(pair_col)) {
     stopifnot(is.character(pair_col), length(pair_col) == 1)
-    if (!pair_col %in% names(data)) stop("pair_col '", pair_col, "' not found in data.", call. = FALSE)
+    if (!pair_col %in% names(data)) stop(sprintf(
+      "pair_col '%s' not found in `data`.\nAvailable columns: %s",
+      pair_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   stopifnot(is.numeric(alpha), alpha > 0, alpha < 1)
 
@@ -95,7 +107,10 @@ mysterycall_caller_reliability <- function(
   } else if (!is.null(pair_col)) {
     # Reshape to wide; use first two callers if >2 for kappa / ICC pair logic
     callers <- unique(data[[caller_col]])
-    if (length(callers) < 2) stop("Need at least 2 callers for reliability.", call. = FALSE)
+    if (length(callers) < 2) stop(sprintf(
+      "At least 2 unique callers are required; found %d.",
+      length(unique(data[[caller_col]]))
+    ), call. = FALSE)
 
     # Build wide matrix: rows = pairs, cols = callers
     wide <- lapply(callers, function(cl) {
@@ -118,7 +133,10 @@ mysterycall_caller_reliability <- function(
     # Pair consecutive rows within each caller -- not valid for >1 caller
     # fallback: split by caller and compare first two callers
     callers <- unique(data[[caller_col]])
-    if (length(callers) < 2) stop("Need at least 2 callers or supply gold_col/pair_col.", call. = FALSE)
+    if (length(callers) < 2) stop(sprintf(
+      "At least 2 unique callers are required; found %d. Supply gold_col or pair_col for single-caller data.",
+      length(unique(data[[caller_col]]))
+    ), call. = FALSE)
     d1 <- data[data[[caller_col]] == callers[1], ]
     d2 <- data[data[[caller_col]] == callers[2], ]
     n  <- min(nrow(d1), nrow(d2))

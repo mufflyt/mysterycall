@@ -140,13 +140,19 @@ mysterycall_acceptance_rate_calc <- function(
     stop("`insurance_col` must be a single character string.", call. = FALSE)
   }
   if (!insurance_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", insurance_col), call. = FALSE)
+    stop(sprintf(
+      "insurance_col '%s' not found in `data`.\nAvailable columns: %s",
+      insurance_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   if (!is.character(inclusion_col) || length(inclusion_col) != 1L) {
     stop("`inclusion_col` must be a single character string.", call. = FALSE)
   }
   if (!inclusion_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", inclusion_col), call. = FALSE)
+    stop(sprintf(
+      "inclusion_col '%s' not found in `data`.\nAvailable columns: %s",
+      inclusion_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   if (!is.character(inclusion_value) || length(inclusion_value) != 1L ||
       !nzchar(inclusion_value)) {
@@ -157,7 +163,10 @@ mysterycall_acceptance_rate_calc <- function(
       stop("`wait_col` must be a single character string or NULL.", call. = FALSE)
     }
     if (!wait_col %in% names(data)) {
-      stop(sprintf("Column '%s' not found in `data`.", wait_col), call. = FALSE)
+      stop(sprintf(
+        "wait_col '%s' not found in `data`.\nAvailable columns: %s",
+        wait_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
     if (!is.numeric(data[[wait_col]])) {
       stop(
@@ -173,17 +182,20 @@ mysterycall_acceptance_rate_calc <- function(
     stop("`id_col` must be a single character string.", call. = FALSE)
   }
   if (!id_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", id_col), call. = FALSE)
+    stop(sprintf(
+      "id_col '%s' not found in `data`.\nAvailable columns: %s",
+      id_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   if (!is.null(medicaid_accept_col)) {
     if (!is.character(medicaid_accept_col) || length(medicaid_accept_col) != 1L) {
       stop("`medicaid_accept_col` must be a single character string or NULL.", call. = FALSE)
     }
     if (!medicaid_accept_col %in% names(data)) {
-      stop(
-        sprintf("Column '%s' not found in `data`.", medicaid_accept_col),
-        call. = FALSE
-      )
+      stop(sprintf(
+        "medicaid_accept_col '%s' not found in `data`.\nAvailable columns: %s",
+        medicaid_accept_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
   if (!is.numeric(conf_level) || length(conf_level) != 1L ||

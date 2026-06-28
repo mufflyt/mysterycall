@@ -145,12 +145,18 @@ mysterycall_wait_time_crossover <- function(
 
   for (col in c(time_col, group_col, id_col)) {
     if (!col %in% names(data)) {
-      stop("Column '", col, "' not found in data.", call. = FALSE)
+      stop(sprintf(
+        "Column '%s' not found in `data`.\nAvailable columns: %s",
+        col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
 
   if (!is.numeric(data[[time_col]])) {
-    stop("Column '", time_col, "' must be numeric.", call. = FALSE)
+    stop(sprintf(
+      "Column '%s' must be numeric; received %s.",
+      time_col, class(data[[time_col]])[1L]
+    ), call. = FALSE)
   }
 
   # ---- resolve group labels ---------------------------------------------------
@@ -169,12 +175,16 @@ mysterycall_wait_time_crossover <- function(
   if (is.null(group2)) group2 <- all_groups[2L]
 
   if (!group1 %in% all_groups) {
-    stop("group1 '", group1, "' not found in column '", group_col, "'.",
-         call. = FALSE)
+    stop(sprintf(
+      "group1 '%s' not found in column '%s'.\nAvailable values: %s",
+      group1, group_col, paste(all_groups, collapse = ", ")
+    ), call. = FALSE)
   }
   if (!group2 %in% all_groups) {
-    stop("group2 '", group2, "' not found in column '", group_col, "'.",
-         call. = FALSE)
+    stop(sprintf(
+      "group2 '%s' not found in column '%s'.\nAvailable values: %s",
+      group2, group_col, paste(all_groups, collapse = ", ")
+    ), call. = FALSE)
   }
   if (identical(group1, group2)) {
     stop("group1 and group2 must be different values.", call. = FALSE)

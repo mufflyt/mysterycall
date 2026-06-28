@@ -65,14 +65,20 @@ mysterycall_bootstrap_ci <- function(
     stop("`outcome_col` must be a single character string.", call. = FALSE)
   }
   if (!outcome_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", outcome_col), call. = FALSE)
+    stop(sprintf(
+      "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
+      outcome_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   if (!is.null(group_col)) {
     if (!is.character(group_col) || length(group_col) != 1L) {
       stop("`group_col` must be a single character string or NULL.", call. = FALSE)
     }
     if (!group_col %in% names(data)) {
-      stop(sprintf("Column '%s' not found in `data`.", group_col), call. = FALSE)
+      stop(sprintf(
+        "group_col '%s' not found in `data`.\nAvailable columns: %s",
+        group_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
   if (is.null(n_boot)) {

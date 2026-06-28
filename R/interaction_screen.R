@@ -77,14 +77,21 @@ mysterycall_interaction_screen <- function(
   if (!is.data.frame(data))
     stop("`data` must be a data frame.", call. = FALSE)
   if (!outcome_col %in% names(data))
-    stop(sprintf("Outcome column '%s' not found in data.", outcome_col),
-         call. = FALSE)
+    stop(sprintf(
+      "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
+      outcome_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!random_effect %in% names(data))
-    stop(sprintf("Random effect column '%s' not found in data.", random_effect),
-         call. = FALSE)
+    stop(sprintf(
+      "random_effect '%s' not found in `data`.\nAvailable columns: %s",
+      random_effect, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!requireNamespace("lmerTest", quietly = TRUE))
-    stop("Package 'lmerTest' is required. Install with: install.packages('lmerTest')",
-         call. = FALSE)
+    stop(
+      "This function requires the lmerTest package.\n",
+      "Install it with: install.packages(\"lmerTest\")",
+      call. = FALSE
+    )
 
   df_filtered <- data[!is.na(data[[outcome_col]]), , drop = FALSE]
 

@@ -57,7 +57,11 @@ mysterycall_table1_gtsummary <- function(data,
                                           overall_last = FALSE,
                                           ...) {
   if (!requireNamespace("gtsummary", quietly = TRUE)) {
-    stop("Package 'gtsummary' is required", call. = FALSE)
+    stop(
+      "This function requires the gtsummary package.\n",
+      "Install it with: install.packages(\"gtsummary\")",
+      call. = FALSE
+    )
   }
   # ---- validation ----------------------------------------------------------
   if (!is.data.frame(data)) {

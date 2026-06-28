@@ -59,7 +59,10 @@ mysterycall_call_productivity <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.character(caller_col), length(caller_col) == 1)
   if (!caller_col %in% names(data)) {
-    stop("caller_col '", caller_col, "' not found in data.")
+    stop(sprintf(
+      "caller_col '%s' not found in `data`.\nAvailable columns: %s",
+      caller_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
   n_unique_callers <- length(unique(data[[caller_col]]))
   if (n_unique_callers < 2) {
@@ -68,7 +71,10 @@ mysterycall_call_productivity <- function(
   .check_col <- function(col, label) {
     if (!is.null(col)) {
       stopifnot(is.character(col), length(col) == 1)
-      if (!col %in% names(data)) stop(label, " '", col, "' not found in data.")
+      if (!col %in% names(data)) stop(sprintf(
+        "%s '%s' not found in `data`.\nAvailable columns: %s",
+        label, col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
   .check_col(date_col,      "date_col")

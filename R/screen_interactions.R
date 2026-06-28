@@ -51,18 +51,39 @@ mysterycall_screen_interactions <- function(data,
   if (!is.data.frame(data)) stop("`data` must be a data frame.", call. = FALSE)
   missing_cols <- setdiff(c(outcome, exposure, candidates), names(data))
   if (length(missing_cols) > 0L) {
-    stop("Columns not found in data: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+    stop(
+      sprintf(
+        "Columns not found in `data`: %s\nAvailable columns: %s",
+        paste(missing_cols, collapse = ", "),
+        paste(names(data), collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
   if (identical(family, "negative_binomial") && !requireNamespace("glmmTMB", quietly = TRUE)) {
-    stop("glmmTMB is required when `family = \"negative_binomial\"`", call. = FALSE)
+    stop(
+      "This function requires the glmmTMB package.\n",
+      "Install it with: install.packages(\"glmmTMB\")",
+      call. = FALSE
+    )
   }
   if (!is.null(random_intercept)) {
     if (!requireNamespace("lme4", quietly = TRUE)) {
-      stop("lme4 is required when `random_intercept` is supplied",
-           call. = FALSE)
+      stop(
+        "This function requires the lme4 package.\n",
+        "Install it with: install.packages(\"lme4\")",
+        call. = FALSE
+      )
     }
     if (!random_intercept %in% names(data)) {
-      stop("`random_intercept` column not found in data.", call. = FALSE)
+      stop(
+        sprintf(
+          "`random_intercept` column '%s' not found in `data`.\nAvailable columns: %s",
+          random_intercept,
+          paste(names(data), collapse = ", ")
+        ),
+        call. = FALSE
+      )
     }
   }
 

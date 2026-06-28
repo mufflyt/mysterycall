@@ -125,15 +125,21 @@ mysterycall_icc <- function(model_result,
   tryCatch({
     if (is_nb) {
       if (!requireNamespace("glmmTMB", quietly = TRUE)) {
-        stop("Package 'glmmTMB' is required to extract variance from NB models.",
-             call. = FALSE)
+        stop(
+          "This function requires the glmmTMB package.\n",
+          "Install it with: install.packages(\"glmmTMB\")",
+          call. = FALSE
+        )
       }
       vc <- glmmTMB::VarCorr(model_result$model)
       as.numeric(vc$cond[[1L]])
     } else {
       if (!requireNamespace("lme4", quietly = TRUE)) {
-        stop("Package 'lme4' is required to extract variance from Poisson models.",
-             call. = FALSE)
+        stop(
+          "This function requires the lme4 package.\n",
+          "Install it with: install.packages(\"lme4\")",
+          call. = FALSE
+        )
       }
       vc <- lme4::VarCorr(model_result$model)
       as.numeric(vc[[1L]])
@@ -375,16 +381,24 @@ mysterycall_icc_report <- function(data,
   if (!is.character(outcome_col) || length(outcome_col) != 1L)
     stop("`outcome_col` must be a single character string.", call. = FALSE)
   if (!caller_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", caller_col), call. = FALSE)
+    stop(sprintf(
+      "caller_col '%s' not found in `data`.\nAvailable columns: %s",
+      caller_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!outcome_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", outcome_col), call. = FALSE)
+    stop(sprintf(
+      "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
+      outcome_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!is.null(group_col)) {
     if (!is.character(group_col) || length(group_col) != 1L)
       stop("`group_col` must be a single character string or NULL.",
            call. = FALSE)
     if (!group_col %in% names(data))
-      stop(sprintf("Column '%s' not found in `data`.", group_col),
-           call. = FALSE)
+      stop(sprintf(
+        "group_col '%s' not found in `data`.\nAvailable columns: %s",
+        group_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
   }
   if (!is.numeric(conf_level) || length(conf_level) != 1L ||
       conf_level <= 0 || conf_level >= 1)
@@ -410,10 +424,10 @@ mysterycall_icc_report <- function(data,
   N      <- nrow(df)
 
   if (k < 2L)
-    stop(
-      "At least 2 distinct callers are required for inter-caller reliability.",
-      call. = FALSE
-    )
+    stop(sprintf(
+      "At least 2 distinct callers are required for inter-caller reliability; found %d.",
+      k
+    ), call. = FALSE)
   if (N <= k)
     stop(
       "`n_calls` must exceed `n_callers` (too few observations).",
