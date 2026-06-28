@@ -24,7 +24,7 @@
 #'   [mysterycall_save_green_journal_figure()] to export at journal resolution.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom rlang sym .data
-#' @family mapping
+#' @family visualization
 #' @export
 #' @examplesIf interactive()
 #' example_data <- data.frame(

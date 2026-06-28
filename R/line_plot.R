@@ -26,7 +26,7 @@
 #'   [mysterycall_plot_density()] for density distribution plots.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom rlang sym .data
-#' @family mapping
+#' @family visualization
 #' @export
 #' @examplesIf interactive()
 #' example_data <- data.frame(

@@ -28,7 +28,7 @@
 #'   [mysterycall_plot_line()] for median-trend line plots.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom rlang sym .data
-#' @family mapping
+#' @family visualization
 #' @export
 #' @examplesIf interactive()
 #' example_data <- data.frame(
