@@ -40,7 +40,8 @@ Imports:
     stringr,
     tibble,
     tools,
-    utils
+    utils,
+    xml2
 LazyData: true
 Suggests:
     magrittr,
@@ -98,7 +99,6 @@ Suggests:
     tidycensus,
     tidyr,
     covr,
-    xml2,
     sf,
     viridis,
     ggpattern,
