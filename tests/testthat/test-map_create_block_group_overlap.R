@@ -1,4 +1,4 @@
-library(sf)
+skip_if_not_installed("sf")
 
 test_that("mysterycall_map_block_group requires drive_time column", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))

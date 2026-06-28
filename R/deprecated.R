@@ -17,9 +17,8 @@ arsenal_tables_write2word <- function(...) {
 
 #' @rdname mysterycall-deprecated
 calculate_intersection_overlap_and_save <- function(...) {
-  .Deprecated("mysterycall_calculate_overlap", package = "mysterycall",
-              msg = paste0("calculate_intersection_overlap_and_save() is deprecated. Use mysterycall_calculate_overlap() instead."))
-  mysterycall_calculate_overlap(...)
+  stop("calculate_intersection_overlap_and_save() has moved to the mysterymaps package.
+Use: mysterymaps::mysterymaps_calculate_overlap(...)", call. = FALSE)
 }
 
 #' @rdname mysterycall-deprecated
@@ -66,9 +65,8 @@ create_formula <- function(...) {
 
 #' @rdname mysterycall-deprecated
 create_individual_isochrone_plots <- function(...) {
-  .Deprecated("mysterycall_plot_isochrones", package = "mysterycall",
-              msg = paste0("create_individual_isochrone_plots() is deprecated. Use mysterycall_plot_isochrones() instead."))
-  mysterycall_plot_isochrones(...)
+  stop("create_individual_isochrone_plots() has moved to the mysterymaps package.
+Use: mysterymaps::mysterymaps_plot_isochrones(...)", call. = FALSE)
 }
 
 #' @rdname mysterycall-deprecated
@@ -443,9 +441,8 @@ tyler_assess_data_quality <- function(...) {
 
 #' @rdname tyler-deprecated
 tyler_calculate_overlap <- function(...) {
-  .Deprecated("mysterycall_calculate_overlap", package = "mysterycall",
-              msg = paste0("tyler_calculate_overlap() is deprecated. Use mysterycall_calculate_overlap() instead."))
-  mysterycall_calculate_overlap(...)
+  stop("tyler_calculate_overlap() has moved to the mysterymaps package.
+Use: mysterymaps::mysterymaps_calculate_overlap(...)", call. = FALSE)
 }
 
 #' @rdname tyler-deprecated
@@ -807,9 +804,8 @@ tyler_plot_interaction <- function(...) {
 
 #' @rdname tyler-deprecated
 tyler_plot_isochrones <- function(...) {
-  .Deprecated("mysterycall_plot_isochrones", package = "mysterycall",
-              msg = paste0("tyler_plot_isochrones() is deprecated. Use mysterycall_plot_isochrones() instead."))
-  mysterycall_plot_isochrones(...)
+  stop("tyler_plot_isochrones() has moved to the mysterymaps package.
+Use: mysterymaps::mysterymaps_plot_isochrones(...)", call. = FALSE)
 }
 
 #' @rdname tyler-deprecated

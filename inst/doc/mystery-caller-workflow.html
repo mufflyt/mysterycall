@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Mystery Caller Workflow: From Raw Data to Manuscript</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Mystery Caller Workflow: From Raw Data to
+Manuscript</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Mystery-caller (secret-shopper) studies measure disparities in
+healthcare access by having trained callers pose as patients requesting
+appointments under different insurance types. Each physician in the
+sampling frame is called once per insurance type; the caller records
+whether an appointment was offered and, if so, how many business days
+until the earliest available slot. The <code>mysterycall</code> package
+provides a structured pipeline from raw call logs to manuscript-ready
+statistics, covering quality control, deduplication, descriptive
+summaries, regression modeling, and sensitivity analyses.</p>
+</div>
+<div id="simulated-data" class="section level2">
+<h2>Simulated Data</h2>
+<p>We construct a 200-row data frame representing 100 physician offices,
+each called twice — once under Medicaid and once under Blue Cross/Blue
+Shield.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">suppressMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="fu">library</span>(mysterycall)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  n_phy  <span class="ot">&lt;-</span> <span class="dv">100</span><span class="dt">L</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  ids    <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%03d&quot;</span>, <span class="fu">seq_len</span>(n_phy))</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  phones <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;555-&quot;</span>, <span class="fu">sprintf</span>(<span class="st">&quot;%04d&quot;</span>, <span class="fu">seq_len</span>(n_phy)))</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  raw_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    <span class="at">id_number             =</span> <span class="fu">rep</span>(ids, <span class="at">each =</span> <span class="dv">2</span><span class="dt">L</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    <span class="at">phone                 =</span> <span class="fu">rep</span>(phones, <span class="at">each =</span> <span class="dv">2</span><span class="dt">L</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    <span class="at">physician_information =</span> <span class="fu">paste0</span>(<span class="st">&quot;Dr. Physician &quot;</span>, <span class="fu">rep</span>(ids, <span class="at">each =</span> <span class="dv">2</span><span class="dt">L</span>)),</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    <span class="at">insurance             =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Medicaid&quot;</span>, <span class="st">&quot;Blue Cross/Blue Shield&quot;</span>), n_phy),</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    <span class="at">stringsAsFactors      =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  )</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  raw_df<span class="sc">$</span>reason_for_exclusions <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Able to contact&quot;</span>, <span class="st">&quot;Physician not available&quot;</span>, <span class="st">&quot;Number disconnected&quot;</span>),</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    <span class="dv">200</span><span class="dt">L</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.70</span>, <span class="fl">0.20</span>, <span class="fl">0.10</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  )</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>  <span class="co"># Appointment wait times only for successfully-contacted rows</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>  raw_df<span class="sc">$</span>business_days_until_appointment <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>    raw_df<span class="sc">$</span>reason_for_exclusions <span class="sc">==</span> <span class="st">&quot;Able to contact&quot;</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>    <span class="fu">rpois</span>(<span class="dv">200</span><span class="dt">L</span>, <span class="at">lambda =</span> <span class="dv">14</span><span class="dt">L</span>) <span class="sc">+</span> <span class="dv">1</span><span class="dt">L</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>    <span class="cn">NA_integer_</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>  )</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>  <span class="co"># Medicaid acceptance column: realistic for Medicaid rows, boilerplate for BCBS</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>  medicaid_vals <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>    <span class="fu">c</span>(</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>      <span class="st">&quot;Yes they accept Medicaid&quot;</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>      <span class="st">&quot;No&quot;</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>      <span class="st">&quot;No answer, unable to determine if they accept Medicaid.&quot;</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>    ),</span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>    <span class="dv">200</span><span class="dt">L</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.55</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>  )</span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a>  raw_df<span class="sc">$</span>does_the_physician_accept_medicaid <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>    raw_df<span class="sc">$</span>insurance <span class="sc">==</span> <span class="st">&quot;Medicaid&quot;</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a>    medicaid_vals,</span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a>    <span class="st">&quot;NA as this was a Blue Cross/Blue Shield call.&quot;</span></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a>  )</span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a>  raw_df<span class="sc">$</span>scenario <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;HIP scenario&quot;</span>, <span class="st">&quot;SHOULDER scenario&quot;</span>, <span class="st">&quot;KNEE scenario&quot;</span>),</span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a>    <span class="dv">200</span><span class="dt">L</span>, <span class="at">replace =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a>  )</span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a>  raw_df<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>), <span class="dv">200</span><span class="dt">L</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a>  raw_df<span class="sc">$</span>state  <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a>    <span class="fu">c</span>(</span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a>      <span class="st">&quot;Colorado&quot;</span>, <span class="st">&quot;Texas&quot;</span>, <span class="st">&quot;California&quot;</span>, <span class="st">&quot;New York&quot;</span>, <span class="st">&quot;Florida&quot;</span>,</span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a>      <span class="st">&quot;Illinois&quot;</span>, <span class="st">&quot;Pennsylvania&quot;</span>, <span class="st">&quot;Ohio&quot;</span>, <span class="st">&quot;Georgia&quot;</span>, <span class="st">&quot;Michigan&quot;</span></span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a>    ),</span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a>    <span class="dv">200</span><span class="dt">L</span>, <span class="at">replace =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a>  )</span>
+<span id="cb1-56"><a href="#cb1-56" tabindex="-1"></a>  raw_df<span class="sc">$</span>notes <span class="ot">&lt;-</span> <span class="cn">NA_character_</span></span>
+<span id="cb1-57"><a href="#cb1-57" tabindex="-1"></a>})</span>
+<span id="cb1-58"><a href="#cb1-58" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" tabindex="-1"></a><span class="fu">dim</span>(raw_df)</span>
+<span id="cb1-60"><a href="#cb1-60" tabindex="-1"></a><span class="co">#&gt; [1] 200  11</span></span>
+<span id="cb1-61"><a href="#cb1-61" tabindex="-1"></a><span class="fu">head</span>(raw_df[, <span class="fu">c</span>(<span class="st">&quot;id_number&quot;</span>, <span class="st">&quot;phone&quot;</span>, <span class="st">&quot;insurance&quot;</span>,</span>
+<span id="cb1-62"><a href="#cb1-62" tabindex="-1"></a>                <span class="st">&quot;reason_for_exclusions&quot;</span>, <span class="st">&quot;business_days_until_appointment&quot;</span>)])</span>
+<span id="cb1-63"><a href="#cb1-63" tabindex="-1"></a><span class="co">#&gt;   id_number    phone              insurance   reason_for_exclusions</span></span>
+<span id="cb1-64"><a href="#cb1-64" tabindex="-1"></a><span class="co">#&gt; 1       001 555-0001               Medicaid     Number disconnected</span></span>
+<span id="cb1-65"><a href="#cb1-65" tabindex="-1"></a><span class="co">#&gt; 2       001 555-0001 Blue Cross/Blue Shield     Number disconnected</span></span>
+<span id="cb1-66"><a href="#cb1-66" tabindex="-1"></a><span class="co">#&gt; 3       002 555-0002               Medicaid         Able to contact</span></span>
+<span id="cb1-67"><a href="#cb1-67" tabindex="-1"></a><span class="co">#&gt; 4       002 555-0002 Blue Cross/Blue Shield Physician not available</span></span>
+<span id="cb1-68"><a href="#cb1-68" tabindex="-1"></a><span class="co">#&gt; 5       003 555-0003               Medicaid         Able to contact</span></span>
+<span id="cb1-69"><a href="#cb1-69" tabindex="-1"></a><span class="co">#&gt; 6       003 555-0003 Blue Cross/Blue Shield         Able to contact</span></span>
+<span id="cb1-70"><a href="#cb1-70" tabindex="-1"></a><span class="co">#&gt;   business_days_until_appointment</span></span>
+<span id="cb1-71"><a href="#cb1-71" tabindex="-1"></a><span class="co">#&gt; 1                              NA</span></span>
+<span id="cb1-72"><a href="#cb1-72" tabindex="-1"></a><span class="co">#&gt; 2                              NA</span></span>
+<span id="cb1-73"><a href="#cb1-73" tabindex="-1"></a><span class="co">#&gt; 3                              11</span></span>
+<span id="cb1-74"><a href="#cb1-74" tabindex="-1"></a><span class="co">#&gt; 4                              NA</span></span>
+<span id="cb1-75"><a href="#cb1-75" tabindex="-1"></a><span class="co">#&gt; 5                              12</span></span>
+<span id="cb1-76"><a href="#cb1-76" tabindex="-1"></a><span class="co">#&gt; 6                              13</span></span></code></pre></div>
+</div>
+<div id="quality-control" class="section level2">
+<h2>Quality Control</h2>
+<p>Two QC checks are run on the raw data.
+<code>mysterycall_flag_repeat_physicians()</code> identifies physician
+records appearing more than the expected number of times.
+<code>mysterycall_flag_exclusion_discrepancy()</code> flags rows that
+are marked as excluded but nonetheless carry a non-negative appointment
+wait time — a logical contradiction indicating a data-entry error.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">suppressMessages</span>({</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  repeat_flag <span class="ot">&lt;-</span> <span class="fu">mysterycall_flag_repeat_physicians</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    raw_df,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="cn">NA</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  )</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  disc_flag <span class="ot">&lt;-</span> <span class="fu">mysterycall_flag_exclusion_discrepancy</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    raw_df,</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="cn">NA</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  )</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>})</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>repeat_flag</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; # A tibble: 0 × 3</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; # ℹ 3 variables: id_number &lt;chr&gt;, physician_information &lt;chr&gt;, n_calls &lt;int&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>disc_flag</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; [1] physician_information           id_number                      </span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; [3] notes                           reason_for_exclusions          </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; [5] business_days_until_appointment</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span></code></pre></div>
+<p>Both checks pass: no physician exceeds the call-count threshold and
+no excluded row carries a valid wait time.</p>
+</div>
+<div id="deduplication" class="section level2">
+<h2>Deduplication</h2>
+<p><code>mysterycall_dedup_by_insurance()</code> removes duplicate rows
+so each phone x insurance x physician combination appears exactly
+once.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">mysterycall_dedup_by_insurance</span>(raw_df, <span class="at">output_dir =</span> <span class="cn">NA</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">nrow</span>(df)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [1] 200</span></span></code></pre></div>
+</div>
+<div id="clean-medicaid-column" class="section level2">
+<h2>Clean Medicaid Column</h2>
+<p><code>mysterycall_clean_medicaid_col()</code> recodes ambiguous or
+non-informative responses to <code>NA</code> and appends a binary 0/1
+numeric indicator.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">mysterycall_clean_medicaid_col</span>(df)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>cleaned_does_the_physician_accept_medicaid, <span class="at">useNA =</span> <span class="st">&quot;ifany&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;                       No Yes they accept Medicaid                     &lt;NA&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;                       29                       55                      116</span></span></code></pre></div>
+</div>
+<div id="sample-demographics" class="section level2">
+<h2>Sample Demographics</h2>
+<p><code>mysterycall_sample_demographics()</code> computes total call
+counts, insurance-group physician counts, and geographic coverage, then
+returns a manuscript-ready sentence.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>demo <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">mysterycall_sample_demographics</span>(df, <span class="at">output_dir =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">cat</span>(demo<span class="sc">$</span>summary_sentence, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Our sample included 200 calls to physician offices from 10 states, including the District of Columbia, excluding Alabama, Alaska, Arizona, Arkansas, Connecticut, Delaware, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Oklahoma, Oregon, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia.</span></span></code></pre></div>
+</div>
+<div id="scenario-counts" class="section level2">
+<h2>Scenario Counts</h2>
+<p><code>mysterycall_scenario_summary()</code> tabulates calls by
+scenario and produces a descriptive sentence ready for insertion into
+the Participants section.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>scen <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">mysterycall_scenario_summary</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    df,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="at">scenario_levels =</span> <span class="fu">c</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>      <span class="at">hip      =</span> <span class="st">&quot;HIP scenario&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>      <span class="at">shoulder =</span> <span class="st">&quot;SHOULDER scenario&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      <span class="at">knee     =</span> <span class="st">&quot;KNEE scenario&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    ),</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    <span class="at">contact_col =</span> <span class="st">&quot;reason_for_exclusions&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    <span class="at">output_dir  =</span> <span class="cn">NA</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  )</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="fu">print</span>(scen<span class="sc">$</span>counts)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;   scenario          count percent</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;int&gt;   &lt;dbl&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 1 KNEE scenario        69    34.5</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 2 SHOULDER scenario    67    33.5</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 3 HIP scenario         64    32</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="fu">cat</span>(scen<span class="sc">$</span>sentence, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; There were 200 calls, with sports medicine orthopedists specializing in 64 hip, 67 shoulder, and 69 knee.</span></span></code></pre></div>
+</div>
+<div id="acceptance-rates" class="section level2">
+<h2>Acceptance Rates</h2>
+<p><code>mysterycall_insurance_acceptance_rates()</code> computes
+Medicaid and Blue Cross/Blue Shield acceptance rates using
+distinct-physician numerators and denominators that exclude unreachable
+physician offices.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>rates <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">mysterycall_insurance_acceptance_rates</span>(df, <span class="at">output_dir =</span> <span class="cn">NA</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">cat</span>(rates<span class="sc">$</span>paragraph, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (100), 65 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 100.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (100), 64 accepted this insurance and provided an appointment, yielding an acceptance rate of 100.0%.</span></span></code></pre></div>
+</div>
+<div id="wait-times" class="section level2">
+<h2>Wait Times</h2>
+<p><code>mysterycall_wait_time_by_group()</code> provides median (IQR)
+wait times per group. <code>mysterycall_wait_time_sentence()</code>
+additionally fits a Poisson GLM to obtain p-values for each group versus
+the reference and assembles a full paragraph.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>wt_grp <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">mysterycall_wait_time_by_group</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    df,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="at">group_col  =</span> <span class="st">&quot;insurance&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="cn">NA</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">print</span>(wt_grp)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;   insurance              median_days    q1    q3     n</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 1 Blue Cross/Blue Shield        14.5    12    17    64</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; 2 Medicaid                      14      11    17    65</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>wt_sent <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="fu">mysterycall_wait_time_sentence</span>(df, <span class="at">group_col =</span> <span class="st">&quot;insurance&quot;</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>)</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="fu">cat</span>(wt_sent<span class="sc">$</span>sentence, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; The median wait time across all insurance was 14 business days (IQR: 11–17). Specifically, the median wait time was 14 days (IQR: 12–17) for Blue Cross/Blue Shield, 14 days (IQR: 11–17) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.9.</span></span></code></pre></div>
+</div>
+<div id="poisson-model" class="section level2">
+<h2>Poisson Model</h2>
+<p><code>mysterycall_simple_poisson()</code> fits a Poisson GLM and
+returns an incidence rate ratio (IRR) table with confidence intervals
+and a manuscript-ready summary statement. Poisson regression is
+preferred over rank tests because the outcome (days until appointment)
+is a count variable.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>poisson_res <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">mysterycall_simple_poisson</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    df,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="at">outcome        =</span> <span class="st">&quot;business_days_until_appointment&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="at">group          =</span> <span class="st">&quot;insurance&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="at">reference      =</span> <span class="st">&quot;Blue Cross/Blue Shield&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="at">outcome_label  =</span> <span class="st">&quot;business days until appointment&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="at">use_profile_ci =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  )</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>)</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  poisson_res<span class="sc">$</span>irr_table[, <span class="fu">c</span>(<span class="st">&quot;level&quot;</span>, <span class="st">&quot;irr&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, <span class="st">&quot;ci_upper&quot;</span>, <span class="st">&quot;p_value_fmt&quot;</span>)],</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="at">digits    =</span> <span class="dv">3</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="at">caption   =</span> <span class="st">&quot;Poisson regression incidence rate ratios (reference: Blue Cross/Blue Shield)&quot;</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>, <span class="st">&quot;IRR&quot;</span>, <span class="st">&quot;95% CI Lower&quot;</span>, <span class="st">&quot;95% CI Upper&quot;</span>, <span class="st">&quot;P-value&quot;</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<caption>Poisson regression incidence rate ratios (reference: Blue
+Cross/Blue Shield)</caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">IRR</th>
+<th align="right">95% CI Lower</th>
+<th align="right">95% CI Upper</th>
+<th align="left">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Medicaid</td>
+<td align="right">1.006</td>
+<td align="right">0.919</td>
+<td align="right">1.101</td>
+<td align="left">0.900</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sensitivity-analysis" class="section level2">
+<h2>Sensitivity Analysis</h2>
+<p><code>mysterycall_sensitivity_both_insurance()</code> identifies
+physicians called under both Medicaid and Blue Cross/Blue Shield and
+compares their wait times, providing a paired check of whether the
+observed acceptance-rate difference holds within physicians.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>sens <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">mysterycall_sensitivity_both_insurance</span>(df, <span class="at">output_dir =</span> <span class="cn">NA</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">cat</span>(sens<span class="sc">$</span>sentence, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; Of 100 physicians called, 100 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 14.6 days (SD 3.8) for Medicaid vs 14.5 days (SD 3.5) for BCBS (t-test p = 0.895).</span></span></code></pre></div>
+</div>
+<div id="mapping-to-manuscript-sections" class="section level2">
+<h2>Mapping to Manuscript Sections</h2>
+<p>The functions used in this vignette map directly to standard
+manuscript sections. <code>mysterycall_sample_demographics()</code> and
+<code>mysterycall_scenario_summary()</code> supply the
+<strong>Participants</strong> paragraph of the Methods section.
+<code>mysterycall_insurance_acceptance_rates()</code> drives the primary
+<strong>Results</strong> sentence reporting acceptance rates by
+insurance type. <code>mysterycall_wait_time_sentence()</code> and
+<code>mysterycall_simple_poisson()</code> together produce the
+<strong>Statistical Analysis</strong> paragraph and the IRR table
+reported in the Results. Finally,
+<code>mysterycall_sensitivity_both_insurance()</code> supplies the
+<strong>Sensitivity Analysis</strong> subsection, which compares paired
+physician records across insurance types to assess whether the
+acceptance-rate gap reflects within-physician differences in scheduling
+behavior.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

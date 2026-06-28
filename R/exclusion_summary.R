@@ -121,7 +121,7 @@ NULL
 #' df3$npi <- c(
 #'   seq_len(120L),                  # included (unique)
 #'   rep(121L, 40L),                 # one provider, 40 no-answer attempts
-#'   122L + seq_len(sum(n_each[-c(1L, 2L)]) - 1L)  # remaining
+#'   seq_len(sum(n_each[-c(1L, 2L)])) + 121L  # remaining unique providers
 #' )
 #' # id_col collapses repeated dials to the same NPI
 #' result3 <- mysterycall_exclusion_summary(df3, id_col = "npi")

@@ -1,4 +1,4 @@
-library(sf)
+skip_if_not_installed("sf")
 
 make_square_sf <- function(...) {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))

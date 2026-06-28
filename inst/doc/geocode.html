@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tyler Muffly, MD" />
+
+
+<title>Geocoding</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Geocoding</h1>
+<h4 class="author">Tyler Muffly, MD</h4>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>The <code>geocode</code> function is designed to help you geocode
+datasets containing addresses and change them to latitude and
+longitude.</p>
+<div id="step-1" class="section level2">
+<h2>Step 1</h2>
+<div id="installation" class="section level3">
+<h3>Installation</h3>
+<p>Before you can harness the power of the
+<code>mysterycall_search_taxonomy</code> function, it is essential to
+ensure that you have the <code>mysterycall</code> package installed. You
+can effortlessly install it using the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(mysterycall)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="example-usage" class="section level1">
+<h1>Example Usage</h1>
+<div id="understanding-geocoding" class="section level2">
+<h2>Understanding Geocoding</h2>
+<p>Certainly! Geocoding, the process of converting addresses or place
+names into geographic coordinates (latitude and longitude), has its
+advantages and disadvantages. Here’s an overview of the pluses and
+minuses of geocoding:</p>
+<p><strong>Pluses of Geocoding:</strong></p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><strong>Location Accuracy:</strong> Geocoding provides precise
+location information, allowing you to pinpoint addresses or places on a
+map with high accuracy. This is crucial for various applications such as
+mapping, navigation, and location-based services.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><strong>Spatial Analysis:</strong> Geocoded data enables spatial
+analysis, allowing you to perform tasks like proximity analysis, spatial
+clustering, and spatial interpolation. It’s invaluable for geographic
+information systems (GIS) and geographic research.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><strong>Geographic Visualization:</strong> Geocoded data can be
+visualized on maps, making it easier to understand and communicate
+spatial patterns and trends. This is particularly useful for data
+presentation and decision-making.</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li><strong>Routing and Navigation:</strong> Geocoding is essential for
+navigation systems, delivery route optimization, and location-based apps
+that provide directions and estimated travel times.</li>
+</ol></li>
+</ul>
+<p><strong>Minuses of Geocoding:</strong></p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><strong>Data Quality Issues:</strong> Geocoding accuracy heavily
+relies on the quality of the underlying address data. Inaccurate or
+outdated address information can lead to geocoding errors.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><strong>Costs:</strong> Geocoding services or software often come
+with associated costs, particularly for large-scale geocoding
+operations. These costs can include data licensing fees and usage
+charges.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><strong>Complexity:</strong> Advanced geocoding tasks, such as
+reverse geocoding (converting coordinates to addresses) and batch
+geocoding, can be technically complex and may require expertise or
+specialized tools.</li>
+</ol></li>
+</ul>
+<p>In summary, geocoding offers numerous benefits in terms of location
+accuracy, spatial analysis, visualization, and navigation. However, it
+also comes with challenges related to data quality, costs, and
+complexity. Careful consideration of these factors is essential when
+using geocoding in various applications.</p>
+<p><strong>Do not geocode from Zip codes</strong> There are several
+issues and limitations associated with geocoding solely based on zip
+codes:</p>
+<ul>
+<li><p>Lack of Precision: Zip codes are designed to cover a group of
+addresses or an area, not specific points. Therefore, geocoding based
+solely on a zip code provides only an approximation of the location,
+often at the center or centroid of the zip code area. This lack of
+precision can be problematic for applications that require accurate
+coordinates.</p></li>
+<li><p>Zip Code Boundaries: Zip code boundaries can be irregular and may
+not align with natural or administrative boundaries. This means that
+geocoding based on zip codes can result in coordinates that do not
+reflect the actual geography of the area, leading to
+inaccuracies.</p></li>
+<li><p>Zip Code Changes: Zip code boundaries and assignments can change
+over time due to population growth, urban development, or administrative
+reasons. Geocoding based on outdated zip code data can lead to incorrect
+locations.</p></li>
+<li><p>Large Zip Codes: Some zip codes cover vast geographic areas,
+especially in rural regions. Geocoding to the center of such large zip
+code areas can be highly inaccurate for specific locations within that
+area.</p></li>
+<li><p>Overlapping Zip Codes: In some cases, zip codes may overlap with
+one another. Geocoding based solely on a zip code may not distinguish
+between the overlapping areas, leading to ambiguity.</p></li>
+<li><p>Urban Density: In densely populated urban areas, zip codes can be
+small and densely packed with addresses. Geocoding solely by zip code
+may still result in a lack of precision when trying to identify a
+particular location within a zip code.</p></li>
+</ul>
+</div>
+<div id="step-2-prepare-your-data" class="section level2">
+<h2>Step 2: Prepare Your Data</h2>
+<p><code>mysterycall_geocode()</code> accepts a CSV file path. Under the
+hood it calls the Google Maps Geocoding API via
+<code>ggmap::geocode()</code> — the same service AHRQ uses for
+practice-location geocoding. You will need a Google Maps API key with
+the Geocoding API enabled; set it in your <code>.Renviron</code>
+file:</p>
+<pre><code>GOOGLE_MAPS_API_KEY=AIza...</code></pre>
+<p><strong>Deduplicate addresses before geocoding.</strong> If 300
+providers share 150 unique practice addresses, geocode the 150 unique
+addresses and join back — this halves your API usage and cost.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>roster <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;providers.csv&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Deduplicate: geocode each unique address once</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>unique_addresses <span class="ot">&lt;-</span> roster <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(address, <span class="at">.keep_all =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(unique_addresses, <span class="st">&quot;data/unique_addresses.csv&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>geocoded <span class="ot">&lt;-</span> <span class="fu">mysterycall_geocode</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="at">file_path           =</span> <span class="st">&quot;data/unique_addresses.csv&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="at">google_maps_api_key =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;GOOGLE_MAPS_API_KEY&quot;</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="at">output_file_path    =</span> <span class="st">&quot;data/geocoded_unique_addresses.csv&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>)</span></code></pre></div>
+<p>The output CSV adds <code>lon</code> and <code>lat</code> columns
+(decimal degrees, WGS84) plus a <code>geocode_status</code> column
+(<code>&quot;OK&quot;</code>, <code>&quot;ZERO_RESULTS&quot;</code>, or
+<code>&quot;REQUEST_DENIED&quot;</code>). Always inspect the status column before
+proceeding:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">table</span>(geocoded<span class="sc">$</span>geocode_status)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; OK            ZERO_RESULTS</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 147           3</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co"># Rows with ZERO_RESULTS need manual address correction</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>failed <span class="ot">&lt;-</span> geocoded[geocoded<span class="sc">$</span>geocode_status <span class="sc">!=</span> <span class="st">&quot;OK&quot;</span>, ]</span></code></pre></div>
+</div>
+<div id="step-3-extract-lat-long-and-rejoin-to-the-full-roster" class="section level2">
+<h2>Step 3: Extract lat / long and rejoin to the full roster</h2>
+<p>The geocoded result has one row per unique address. Rejoin to the
+full provider roster with <code>mysterycall_safe_left_join()</code> so
+every provider row gets coordinates, and so any address-matching
+failures are visible rather than silent.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Rename output columns to match the isochrone workflow expectation</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>geocoded_clean <span class="ot">&lt;-</span> geocoded <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(geocode_status <span class="sc">==</span> <span class="st">&quot;OK&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">lat =</span> lat, <span class="at">long =</span> lon) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(address, lat, long)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>roster_geocoded <span class="ot">&lt;-</span> <span class="fu">mysterycall_safe_left_join</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="at">left         =</span> roster,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">right        =</span> geocoded_clean,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">by           =</span> <span class="st">&quot;address&quot;</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="at">label_left   =</span> <span class="st">&quot;provider_roster&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="at">label_right  =</span> <span class="st">&quot;geocoded_addresses&quot;</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="at">min_coverage =</span> <span class="fl">0.97</span>   <span class="co"># flag if &gt; 3 % of providers have no coordinates</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-4-extract-coordinate-columns-when-needed" class="section level2">
+<h2>Step 4: Extract coordinate columns when needed</h2>
+<p>Some downstream functions
+(e.g. <code>create_isochrones_for_dataframe()</code>) expect separate
+numeric <code>lat</code> and <code>long</code> columns rather than an
+<code>sf</code> geometry column. If you are working with an
+<code>sf</code> object, extract coordinates with:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>roster_geocoded <span class="ot">&lt;-</span> roster_geocoded <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="at">lat  =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[, <span class="st">&quot;Y&quot;</span>],</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="at">long =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[, <span class="st">&quot;X&quot;</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="common-address-formatting-issues" class="section level2">
+<h2>Common address formatting issues</h2>
+<p>Google’s geocoder is tolerant but some patterns fail
+consistently:</p>
+<table>
+<colgroup>
+<col width="39%" />
+<col width="39%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problem</th>
+<th>Example</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Suite/unit in wrong position</td>
+<td><code>&quot;Suite 200, 123 Main St&quot;</code></td>
+<td>Move to end: <code>&quot;123 Main St Suite 200&quot;</code></td>
+</tr>
+<tr class="even">
+<td>Missing state</td>
+<td><code>&quot;123 Main St, Denver&quot;</code></td>
+<td>Append state: <code>&quot;123 Main St, Denver, CO&quot;</code></td>
+</tr>
+<tr class="odd">
+<td>PO Box</td>
+<td><code>&quot;PO Box 1234, Denver CO&quot;</code></td>
+<td>Use physical address instead</td>
+</tr>
+<tr class="even">
+<td>Abbreviation mismatch</td>
+<td><code>&quot;St.&quot; vs &quot;Street&quot;</code></td>
+<td>Standardize before geocoding</td>
+</tr>
+<tr class="odd">
+<td>ZIP+4 format</td>
+<td><code>&quot;80202-1234&quot;</code></td>
+<td>Truncate to 5-digit ZIP</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Do not geocode from ZIP codes alone.</strong> ZIP-code
+centroids place practices at the post-office, not the clinic — a
+meaningful spatial error that compounds in the isochrone step.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p><code>mysterycall_geocode()</code> converts raw practice addresses
+into latitude/longitude coordinates suitable for mapping, drive-time
+modeling, and spatial joins. Combine it with
+<code>mysterycall_search_taxonomy()</code> to build a fully enriched
+provider roster — from NPI retrieval through geocoded locations — in a
+single reproducible pipeline. Next, pass the geocoded file into
+<code>create_isochrones_for_dataframe()</code> to build drive-time
+polygons (see
+<code>vignette(&quot;create_isochrones&quot;, package = &quot;mysterycall&quot;)</code>).</p>
+</div>
+<div id="features-and-bugs" class="section level1">
+<h1>Features and bugs</h1>
+<p>If you have ideas for other features that would make geocoding
+easier, or find a bug, the best approach is to report it at the package
+issue tracker.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

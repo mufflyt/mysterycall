@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Adding Physician Covariates to the Wait-Time Model</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Adding Physician Covariates to the
+Wait-Time Model</h1>
+
+
+
+<div id="why-add-physician-covariates" class="section level2">
+<h2>Why add physician covariates?</h2>
+<p>The core exposure in a mystery-caller study is the <strong>insurance
+type</strong> presented by the simulated patient. But physicians are not
+identical: an academic-center otolaryngologist, a rural solo
+practitioner, and an urban multispecialty group physician may have
+systematically different scheduling patterns regardless of insurance. If
+those differences are large and unaccounted for, they become
+<em>residual variance</em> — noise that makes it harder to detect the
+insurance effect you care about.</p>
+<p>Adding physician-level covariates does two things simultaneously:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Controls for confounding.</strong> Estimates of the
+insurance IRR become more precise because the model accounts for reasons
+why wait times differ across physicians that have nothing to do with
+insurance.</li>
+<li><strong>Reduces residual variance.</strong> When a covariate
+explains variance in the outcome, the unexplained (residual) variance
+shrinks. Smaller residual variance means narrower confidence intervals
+and greater statistical power — you may need fewer physicians in a
+follow-up study.</li>
+</ol>
+<p>The trade-off is <strong>degrees of freedom</strong>: every covariate
+you add costs parameters, and parameters need data to estimate
+reliably.</p>
+<hr />
+</div>
+<div id="degrees-of-freedom-and-the-events-per-variable-rule" class="section level2">
+<h2>Degrees of freedom and the events-per-variable rule</h2>
+<div id="what-is-a-degree-of-freedom" class="section level3">
+<h3>What is a degree of freedom?</h3>
+<p>Each fixed-effect term in a regression model uses one degree of
+freedom. A continuous predictor (age, years in practice) uses 1. A
+categorical predictor with <span class="math inline">\(k\)</span> levels
+uses <span class="math inline">\(k - 1\)</span> (one level is absorbed
+as the reference category).</p>
+<p>For a model with <span class="math inline">\(p\)</span> total
+parameters, you have <span class="math inline">\(n - p\)</span>
+<strong>residual</strong> degrees of freedom — the information left over
+to estimate error after all parameters are fitted. Residual df must be
+positive; the model becomes singular if it equals zero.</p>
+</div>
+<div id="the-events-per-variable-epv-rule" class="section level3">
+<h3>The events-per-variable (EPV) rule</h3>
+<p>For count-outcome (Poisson / negative binomial) models, the commonly
+used rule of thumb is:</p>
+<p><span class="math display">\[\text{EPV} = \frac{n_{\text{obs}}}{p}
+\geq 10\]</span></p>
+<p>Below EPV = 10, parameter estimates become unstable and confidence
+intervals widen unpredictably. Below EPV = 5, the model is unreliable
+and results should not be reported.</p>
+</div>
+<div id="how-mysterycall-warns-you" class="section level3">
+<h3>How mysterycall warns you</h3>
+<p><code>mysterycall_poisson_model()</code> and
+<code>mysterycall_nb_model()</code> both check the EPV ratio
+<strong>before fitting</strong> and emit actionable warnings:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># 40 observations, 5 predictors with many levels → low EPV</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>small_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">wait_days =</span> <span class="fu">rpois</span>(<span class="dv">40</span>, <span class="dv">18</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">insurance =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Medicaid&quot;</span>,<span class="st">&quot;BCBS&quot;</span>), <span class="dv">20</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">state     =</span> <span class="fu">sample</span>(state.name[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>], <span class="dv">40</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),  <span class="co"># 20 levels = 19 df</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">physician =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">&quot;Dr_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>), <span class="dv">5</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">mysterycall_poisson_model</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  small_df,</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="at">outcome          =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;state&quot;</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;physician&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; Warning: Low events-per-variable ratio: 40 observations / 20 model parameters</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt;   = 2.0 obs/param. Model estimates will be unreliable. Remove predictors</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt;   or collect more data.</span></span></code></pre></div>
+<p>The safest path when EPV &lt; 10 is to <strong>aggregate</strong>
+categorical predictors (e.g., use ACOG district instead of individual
+states, or <code>&quot;Academic&quot;</code> vs. <code>&quot;Private&quot;</code> instead of
+hospital name) rather than simply dropping the information.</p>
+</div>
+<div id="how-many-parameters-does-your-study-support" class="section level3">
+<h3>How many parameters does your study support?</h3>
+<p>A practical rule for planning:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Physicians enrolled</th>
+<th>Max safe parameters</th>
+<th>Example model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>36</td>
+<td>3</td>
+<td>insurance + scenario</td>
+</tr>
+<tr class="even">
+<td>60</td>
+<td>6</td>
+<td>insurance + scenario + gender + setting</td>
+</tr>
+<tr class="odd">
+<td>120</td>
+<td>12</td>
+<td>insurance + scenario + gender + setting + ACOG district (11 df)</td>
+</tr>
+<tr class="even">
+<td>200</td>
+<td>20</td>
+<td>insurance + scenario + gender + setting + age category (3 df) + ACOG
+district (11 df)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="overdispersion" class="section level2">
+<h2>Overdispersion</h2>
+<div id="what-it-means" class="section level3">
+<h3>What it means</h3>
+<p>Poisson regression assumes <strong>mean = variance</strong>. Real
+wait-time data routinely violates this: a physician who is very busy
+some weeks and slow others will show variance far exceeding the mean (a
+physician effect that the random intercept alone doesn’t absorb). This
+is <strong>overdispersion</strong>.</p>
+<p>The overdispersion ratio <span class="math inline">\(\phi\)</span> is
+computed as Pearson <span class="math inline">\(\chi^2\)</span> /
+residual df. A value near 1 means the Poisson variance assumption holds.
+Values &gt; 2 indicate problematic overdispersion.</p>
+</div>
+<div id="how-mysterycall-warns-you-1" class="section level3">
+<h3>How mysterycall warns you</h3>
+<p><code>mysterycall_poisson_model()</code> computes and stores
+<code>$overdispersion</code> and emits a warning when <span class="math inline">\(\phi &gt; 2\)</span>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">mysterycall_poisson_model</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  mc_data,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">outcome          =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;npi&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>result<span class="sc">$</span>overdispersion</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; [1] 3.47</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Warning: Overdispersion detected (phi = 3.47). Standard errors may be</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;   underestimated. Consider a negative binomial model.</span></span></code></pre></div>
+</div>
+<div id="what-to-do-about-it" class="section level3">
+<h3>What to do about it</h3>
+<p>Switch to <code>mysterycall_nb_model()</code>. The negative binomial
+distribution adds a <strong>dispersion parameter</strong> <span class="math inline">\(\theta\)</span> (theta) such that:</p>
+<p><span class="math display">\[\text{Var}(Y) = \mu +
+\frac{\mu^2}{\theta}\]</span></p>
+<p>As <span class="math inline">\(\theta \to \infty\)</span>, the
+variance equals the mean (Poisson). As <span class="math inline">\(\theta \to 0\)</span>, the distribution becomes
+more overdispersed. The NB model estimates <span class="math inline">\(\theta\)</span> from the data and absorbs excess
+variance into it rather than into the fixed-effect standard errors.</p>
+<p><code>mysterycall_nb_model()</code> warns you when:</p>
+<ul>
+<li><strong><span class="math inline">\(\theta &lt; 1\)</span></strong>:
+extreme overdispersion even for NB — consider a zero-inflated
+model.</li>
+<li><strong>Residual <span class="math inline">\(\phi &gt; 2\)</span>
+after NB fit</strong>: the NB model still underfits — investigate
+zero-inflation or outlying observations.</li>
+<li><strong><span class="math inline">\(\theta &gt;
+100\)</span></strong>: minimal overdispersion — a Poisson model is
+probably adequate; compare AIC.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="available-physician-covariates" class="section level2">
+<h2>Available physician covariates</h2>
+<p>The <code>mysterycall</code> package provides functions to derive
+physician-level covariates from the NPI registry, which contains
+information on all licensed US clinicians.</p>
+<div id="practice-setting-academic-vs.-private" class="section level3">
+<h3>Practice setting (academic vs. private)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># After pulling clinician data with mysterycall_get_clinician_data()</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>mc_data<span class="sc">$</span>practice_setting <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_practice_setting</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">facility_name =</span> mc_data<span class="sc">$</span>facility_name</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># Returns &quot;Academic&quot;, &quot;Government&quot;, or &quot;Private Practice&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">table</span>(mc_data<span class="sc">$</span>practice_setting)</span></code></pre></div>
+<p>Academic institutions have structured scheduling offices and
+residents; they often have longer wait times for new-patient
+appointments than private practices. Including this variable typically
+explains 10–20% of residual variance in wait-time studies.</p>
+</div>
+<div id="physician-gender-from-first-name" class="section level3">
+<h3>Physician gender (from first name)</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Requires genderize.io API key stored in GENDERIZE_API_KEY env var</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mc_data <span class="ot">&lt;-</span> <span class="fu">mysterycall_genderize</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">data        =</span> mc_data,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">first_name  =</span> <span class="st">&quot;physician_first_name&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">last_name   =</span> <span class="st">&quot;physician_last_name&quot;</span>  <span class="co"># optional, improves accuracy</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># Adds columns: gender, gender_probability</span></span></code></pre></div>
+<p>Gender may be associated with scheduling patterns (some studies show
+female physicians see more patients per day). It is not a primary
+hypothesis variable — include it as a <em>confounder control</em>.</p>
+</div>
+<div id="physician-age" class="section level3">
+<h3>Physician age</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># If graduation year is available (from NPI record)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mc_data<span class="sc">$</span>physician_age <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">format</span>(<span class="fu">Sys.Date</span>(), <span class="st">&quot;%Y&quot;</span>)) <span class="sc">-</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  mc_data<span class="sc">$</span>graduation_year</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co"># Binned for reporting and to reduce degrees of freedom</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>mc_data<span class="sc">$</span>age_category <span class="ot">&lt;-</span> <span class="fu">mysterycall_age_category</span>(mc_data<span class="sc">$</span>physician_age)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># Returns &quot;&lt; 40&quot;, &quot;40-54&quot;, &quot;55-64&quot;, &quot;65+&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># Summary sentence for manuscript methods:</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">mysterycall_physician_age</span>(mc_data, <span class="st">&quot;physician_age&quot;</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; &quot;The median age was 52.00 years (IQR: 43.0–61.0 years).&quot;</span></span></code></pre></div>
+<p>Older physicians may have established patient panels that limit
+new-patient availability.</p>
+</div>
+<div id="geographic-location" class="section level3">
+<h3>Geographic location</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Urban / Suburban / Rural from RUCA codes</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mc_data<span class="sc">$</span>urbanicity <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_ruca</span>(mc_data<span class="sc">$</span>ruca_code)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># ACOG district (12 levels → 11 df) or Census region (4 levels → 3 df)</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>mc_data<span class="sc">$</span>acog_district  <span class="ot">&lt;-</span> <span class="fu">mysterycall_assign_region</span>(mc_data<span class="sc">$</span>state, <span class="at">type =</span> <span class="st">&quot;acog&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>mc_data<span class="sc">$</span>census_region  <span class="ot">&lt;-</span> <span class="fu">mysterycall_assign_region</span>(mc_data<span class="sc">$</span>state, <span class="at">type =</span> <span class="st">&quot;census&quot;</span>)</span></code></pre></div>
+<p>Geographic factors drive systematic differences in physician density,
+payer mix, and scheduling norms. ACOG districts (12 levels, 11 df) are
+the right granularity for specialty studies — they are clinically
+meaningful and consume far fewer degrees of freedom than individual
+states (50 levels, 49 df).</p>
+<hr />
+</div>
+</div>
+<div id="pulling-covariates-from-the-npi-registry" class="section level2">
+<h2>Pulling covariates from the NPI registry</h2>
+<p>The fastest path is to use
+<code>mysterycall_get_clinician_data()</code> to retrieve all available
+registry fields for your physician list:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># mc_npis: character vector of NPI numbers</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>clinician_info <span class="ot">&lt;-</span> <span class="fu">mysterycall_get_clinician_data</span>(<span class="at">npi_list =</span> mc_npis)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>mc_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">left_join</span>(mc_data, clinician_info, <span class="at">by =</span> <span class="st">&quot;npi&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># Derive covariates from registry fields</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>mc_data<span class="sc">$</span>practice_setting <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_practice_setting</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  mc_data<span class="sc">$</span>organization_name</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>mc_data<span class="sc">$</span>urbanicity <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_ruca</span>(mc_data<span class="sc">$</span>ruca_code)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>mc_data<span class="sc">$</span>acog_district <span class="ot">&lt;-</span> <span class="fu">mysterycall_assign_region</span>(mc_data<span class="sc">$</span>state, <span class="at">type =</span> <span class="st">&quot;acog&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="fitting-the-recommended-full-model" class="section level2">
+<h2>Fitting the recommended full model</h2>
+<div id="the-model-equation" class="section level3">
+<h3>The model equation</h3>
+<p>The recommended multilevel negative binomial model with physician
+covariates is:</p>
+<p><span class="math display">\[\log(\mu_{ij}) = \beta_0
+  + \beta_1 \text{Medicaid}_{ij}
+  + \beta_2 \text{Incontinence}_{ij}
+  + \beta_3 \text{Prolapse}_{ij}
+  + \beta_4 \text{Male}_{ij}
+  + \beta_5 \text{Academic}_{ij}
+  + \beta_6 \text{Rural}_{ij}
+  + \sum_{k=2}^{12} \gamma_k \text{ACOGDistrict}_{kij}
+  + u_j\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(Y_{ij} \sim \text{NegBin}(\mu_{ij},
+\theta)\)</span></li>
+<li><span class="math inline">\(i\)</span> = individual mystery call,
+<span class="math inline">\(j\)</span> = physician NPI</li>
+<li><span class="math inline">\(\beta_0\)</span> = intercept (log
+expected wait for reference group: BCBS + Bladder pain, female, private,
+urban, District I)</li>
+<li><span class="math inline">\(\beta_1\)</span> = log IRR for Medicaid
+vs BCBS</li>
+<li><span class="math inline">\(\beta_2, \beta_3\)</span> = log IRR for
+scenario vs. Bladder Pain</li>
+<li><span class="math inline">\(\beta_4\)</span> = log IRR for male
+vs. female physician</li>
+<li><span class="math inline">\(\beta_5\)</span> = log IRR for Academic
+vs. Private Practice</li>
+<li><span class="math inline">\(\beta_6\)</span> = log IRR for Rural
+vs. Urban</li>
+<li><span class="math inline">\(\gamma_k\)</span> = fixed effect for
+ACOG District <span class="math inline">\(k\)</span> (District I is
+reference)</li>
+<li><span class="math inline">\(u_j \sim \mathcal{N}(0,
+\sigma_u^2)\)</span> = physician-level random intercept</li>
+</ul>
+<p>Total fixed-effect parameters: 1 + 1 + 2 + 1 + 1 + 1 + 11 =
+<strong>18 parameters</strong></p>
+<p>This is safe for <span class="math inline">\(n \geq 180\)</span>
+observations (EPV = 10).</p>
+</div>
+<div id="in-r" class="section level3">
+<h3>In R</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>nb_full <span class="ot">&lt;-</span> <span class="fu">mysterycall_nb_model</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">data             =</span> mc_data,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">outcome          =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;scenario&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                        <span class="st">&quot;physician_gender&quot;</span>, <span class="st">&quot;practice_setting&quot;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                        <span class="st">&quot;urbanicity&quot;</span>, <span class="st">&quot;acog_district&quot;</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;npi&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">print</span>(nb_full)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="fu">mysterycall_irr_plot</span>(nb_full)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">mysterycall_format_results_table</span>(nb_full)</span></code></pre></div>
+</div>
+<div id="comparing-models-with-aic" class="section level3">
+<h3>Comparing models with AIC</h3>
+<p>Use <code>mysterycall_select_best_model()</code> to compare the base
+and full specifications:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>nb_base <span class="ot">&lt;-</span> <span class="fu">mysterycall_nb_model</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  mc_data, <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;scenario&quot;</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;npi&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">mysterycall_select_best_model</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">base =</span> nb_base, <span class="at">full =</span> nb_full),</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;AIC&quot;</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>)</span></code></pre></div>
+<p>Choose the model with the lowest AIC. If the full model AIC is more
+than 2–4 units lower, the covariates improve fit enough to retain. If
+the AIC is higher (over-fitting), drop the least-theoretically-motivated
+variable first.</p>
+<hr />
+</div>
+</div>
+<div id="effect-on-power-how-covariates-reduce-required-sample-size" class="section level2">
+<h2>Effect on power: how covariates reduce required sample size</h2>
+<p>Adding covariates that genuinely explain variance in the outcome
+reduces the <strong>residual standard deviation</strong> <span class="math inline">\(\sigma\)</span>. The power formula for detecting
+an IRR of <span class="math inline">\(\delta\)</span> is
+approximately:</p>
+<p><span class="math display">\[n \approx \frac{2\sigma^2 (z_{\alpha/2}
++ z_\beta)^2}{(\log \delta)^2}\]</span></p>
+<p>If a covariate reduces <span class="math inline">\(\sigma\)</span> by
+15%, the required <span class="math inline">\(n\)</span> falls by <span class="math inline">\(\approx 28\%\)</span> (<span class="math inline">\(1 - 0.85^2\)</span>).</p>
+<table>
+<caption>Approximate power analysis: detecting a 25% IRR difference (80%
+power, α = 0.05), assuming baseline SD ≈ 30 days.</caption>
+<colgroup>
+<col width="29%" />
+<col width="21%" />
+<col width="22%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Covariates added</th>
+<th align="left">Variance explained (R²)</th>
+<th align="left">Residual SD vs. baseline</th>
+<th align="right">Physicians needed (per group)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">None (insurance + scenario only)</td>
+<td align="left">0%</td>
+<td align="left">baseline</td>
+<td align="right">48</td>
+</tr>
+<tr class="even">
+<td align="left">Add gender + setting</td>
+<td align="left">10%</td>
+<td align="left">-5%</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="left">Add urbanicity</td>
+<td align="left">13%</td>
+<td align="left">-7%</td>
+<td align="right">42</td>
+</tr>
+<tr class="even">
+<td align="left">Add setting + ACOG district</td>
+<td align="left">20%</td>
+<td align="left">-11%</td>
+<td align="right">38</td>
+</tr>
+<tr class="odd">
+<td align="left">Full model (all above)</td>
+<td align="left">30%</td>
+<td align="left">-16%</td>
+<td align="right">34</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important caveats:</strong></p>
+<ol style="list-style-type: decimal">
+<li>The R² figures are estimates. Whether a given covariate
+<em>actually</em> explains 10% or 2% of variance depends on your data.
+Check
+<code>1 - (residual variance with covariate) / (residual variance without)</code>
+after fitting both models.</li>
+<li>Adding a covariate that explains little variance increases
+parameters without reducing noise — effectively <em>hurting</em>
+power.</li>
+<li>The EPV constraint is binding: if adding a covariate drops EPV below
+10, you need more physicians before you can include it.</li>
+</ol>
+<hr />
+</div>
+<div id="decision-checklist-before-adding-a-covariate" class="section level2">
+<h2>Decision checklist before adding a covariate</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>If yes →</th>
+<th>If no →</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Is it available for all (or nearly all) physicians?</td>
+<td>Include it</td>
+<td>Impute or exclude</td>
+</tr>
+<tr class="even">
+<td>Does it explain ≥ 5% of residual variance (from literature or pilot
+data)?</td>
+<td>Include it</td>
+<td>Drop it</td>
+</tr>
+<tr class="odd">
+<td>Does EPV remain ≥ 10 after adding it?</td>
+<td>Safe to include</td>
+<td>Aggregate or exclude</td>
+</tr>
+<tr class="even">
+<td>Is it a primary hypothesis variable?</td>
+<td>Include regardless</td>
+<td>Depends on variance explained</td>
+</tr>
+<tr class="odd">
+<td>Does AIC improve by ≥ 2 after adding it?</td>
+<td>Keep it</td>
+<td>Consider dropping</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="complete-workflow" class="section level2">
+<h2>Complete workflow</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(mysterycall)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># 1. Pull NPI registry data</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>clin <span class="ot">&lt;-</span> <span class="fu">mysterycall_get_clinician_data</span>(<span class="at">npi_list =</span> mc_data<span class="sc">$</span>npi)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>mc_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">left_join</span>(mc_data, clin, <span class="at">by =</span> <span class="st">&quot;npi&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co"># 2. Derive physician covariates</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>mc_data<span class="sc">$</span>practice_setting <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_practice_setting</span>(mc_data<span class="sc">$</span>org_name)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>mc_data<span class="sc">$</span>urbanicity       <span class="ot">&lt;-</span> <span class="fu">mysterycall_classify_ruca</span>(mc_data<span class="sc">$</span>ruca_code)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>mc_data<span class="sc">$</span>acog_district    <span class="ot">&lt;-</span> <span class="fu">mysterycall_assign_region</span>(mc_data<span class="sc">$</span>state, <span class="at">type =</span> <span class="st">&quot;acog&quot;</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co"># 3. Fit base Poisson to check overdispersion</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>base_poi <span class="ot">&lt;-</span> <span class="fu">mysterycall_poisson_model</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  mc_data, <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;scenario&quot;</span>),</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;npi&quot;</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>)</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>base_poi<span class="sc">$</span>overdispersion  <span class="co"># if &gt; 2, switch to NB</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co"># 4. Fit NB with covariates</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>nb_full <span class="ot">&lt;-</span> <span class="fu">mysterycall_nb_model</span>(</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>  mc_data, <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;scenario&quot;</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>                        <span class="st">&quot;practice_setting&quot;</span>, <span class="st">&quot;urbanicity&quot;</span>, <span class="st">&quot;acog_district&quot;</span>),</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;npi&quot;</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>)</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co"># EPV and overdispersion warnings fire automatically if thresholds are crossed</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co"># 5. Compare models</span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="fu">mysterycall_select_best_model</span>(</span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">poisson_base =</span> base_poi, <span class="at">nb_full =</span> nb_full),</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;AIC&quot;</span></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a>)</span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co"># 6. Report results</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="fu">print</span>(nb_full)</span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="fu">mysterycall_irr_plot</span>(nb_full)</span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="fu">mysterycall_write_results_paragraph</span>(nb_full, <span class="at">ref_group =</span> <span class="st">&quot;BCBS&quot;</span>, <span class="at">exposure_col =</span> <span class="st">&quot;insurance&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="see-also" class="section level2">
+<h2>See also</h2>
+<ul>
+<li><code>vignette(&quot;statistical-analysis&quot;)</code> — base Poisson and NB
+model workflow</li>
+<li><code>vignette(&quot;power-analysis&quot;)</code> — full power calculation and
+sample-size planning</li>
+<li><code>vignette(&quot;provider-classification&quot;)</code> — detail on
+<code>mysterycall_classify_practice_setting()</code> and related
+helpers</li>
+<li>[mysterycall_poisson_model()], [mysterycall_nb_model()] — model
+fitting functions</li>
+<li>[mysterycall_select_best_model()] — AIC / BIC / LRT model
+comparison</li>
+<li>[mysterycall_classify_practice_setting()],
+[mysterycall_classify_ruca()], [mysterycall_assign_region()] — covariate
+derivation</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

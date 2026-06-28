@@ -14,6 +14,11 @@ mysterycall_literature_table(
 )
 }
 \arguments{
+\item{prior_studies}{Data frame of published mystery-caller study results.
+Required columns: \code{author}, \code{year}, \code{specialty}, \code{insurance_comparison},
+\code{or}, \code{ci_lower}, \code{ci_upper}, \code{n}.  Optional columns: \code{setting},
+\code{outcome_label}, \code{notes}.}
+
 \item{current_study}{A named list (or \code{NULL}).  When non-\code{NULL}, a row
 labelled \code{"[Current study]"} is appended \strong{after} the prior studies but
 \strong{before} sorting.  Required list elements mirror the required columns of

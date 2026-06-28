@@ -96,7 +96,10 @@ Suggests:
     reformulas,
     sf,
     viridis,
-    zoo
+    zoo,
+    MASS,
+    broom,
+    withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0

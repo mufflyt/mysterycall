@@ -102,7 +102,7 @@ mysterycall_interaction_screen <- function(
                                        is.factor, logical(1L))]
 
   if (length(factor_cols) < 2L) {
-    message("fewer than 2 factor columns found — no pairs to test.")
+    message("fewer than 2 factor columns found \u2014 no pairs to test.")
     return(list(
       interaction_results = tibble::tibble(Interaction = character(),
                                            P_Value     = numeric()),

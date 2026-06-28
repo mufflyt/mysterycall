@@ -22,7 +22,7 @@
 #'
 #' @return A named list:
 #' \describe{
-#'   \item{`sentence`}{Character scalar — the manuscript paragraph.}
+#'   \item{`sentence`}{Character scalar \u2014 the manuscript paragraph.}
 #'   \item{`irr`}{Numeric IRR for Medicaid vs. BCBS.}
 #'   \item{`ci_lower`}{Numeric lower 95% CI bound.}
 #'   \item{`ci_upper`}{Numeric upper 95% CI bound.}
@@ -156,9 +156,9 @@ mysterycall_insurance_wait_sentence <- function(
   sentence <- sprintf(
     paste0(
       "%s patients experienced a %s%% %s wait compared to patients with %s ",
-      "(Incidence Rate Ratio: %.*f; 95%% CI: %.*f–%.*f; p %s) ",
-      "with median wait times of %g business days (IQR: %g–%g) ",
-      "and %g business days (IQR: %g–%g) respectively."
+      "(Incidence Rate Ratio: %.*f; 95%% CI: %.*f\u2013%.*f; p %s) ",
+      "with median wait times of %g business days (IQR: %g\u2013%g) ",
+      "and %g business days (IQR: %g\u2013%g) respectively."
     ),
     medicaid_label,
     abs(pct_diff),

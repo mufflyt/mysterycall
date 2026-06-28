@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Linear Mixed Models for Wait-Time Analysis</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Linear Mixed Models for Wait-Time
+Analysis</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#when-to-use-lmm-vs.-poissonnb-glmm" id="toc-when-to-use-lmm-vs.-poissonnb-glmm">1. When to use LMM
+vs. Poisson/NB GLMM</a></li>
+<li><a href="#simulated-data" id="toc-simulated-data">2. Simulated
+data</a></li>
+<li><a href="#fitting-a-basic-lmm" id="toc-fitting-a-basic-lmm">3.
+Fitting a basic LMM</a></li>
+<li><a href="#auto-log-transform-and-geometric-mean-ratios" id="toc-auto-log-transform-and-geometric-mean-ratios">4. Auto-log
+transform and geometric mean ratios</a></li>
+<li><a href="#poisson-sensitivity-analysis" id="toc-poisson-sensitivity-analysis">5. Poisson sensitivity
+analysis</a></li>
+<li><a href="#broom-compatible-tidy-method" id="toc-broom-compatible-tidy-method">6. Broom-compatible
+<code>tidy()</code> method</a></li>
+<li><a href="#calendar-vs.-business-day-sensitivity" id="toc-calendar-vs.-business-day-sensitivity">7. Calendar
+vs. business-day sensitivity</a></li>
+<li><a href="#diagnostic-plots" id="toc-diagnostic-plots">8. Diagnostic
+plots</a></li>
+<li><a href="#model-comparison" id="toc-model-comparison">9. Model
+comparison</a></li>
+<li><a href="#reporting-checklist" id="toc-reporting-checklist">10.
+Reporting checklist</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(mysterycall)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(lme4)        <span class="co"># required for model fitting</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(lmerTest)    <span class="co"># recommended — Satterthwaite p-values</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(generics)    <span class="co"># for tidy()</span></span></code></pre></div>
+<hr />
+<div id="when-to-use-lmm-vs.-poissonnb-glmm" class="section level1">
+<h1>1. When to use LMM vs. Poisson/NB GLMM</h1>
+<p>Mystery-caller studies collect wait times as counts of days from the
+call date to the offered appointment date. Two model families cover most
+scenarios:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Recommended model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wait days roughly symmetric, no strong floor at 0</td>
+<td><code>mysterycall_lmm()</code></td>
+</tr>
+<tr class="even">
+<td>Outcome right-skewed (many short waits, long tail)</td>
+<td><code>mysterycall_lmm()</code> with <code>auto_log = TRUE</code>
+(default)</td>
+</tr>
+<tr class="odd">
+<td>Many zeroes or extreme right-skew</td>
+<td><code>mysterycall_poisson_model()</code> or
+<code>mysterycall_nb_model()</code></td>
+</tr>
+<tr class="even">
+<td>Binary outcome (accepted/not accepted)</td>
+<td><code>mysterycall_logistic_model()</code></td>
+</tr>
+</tbody>
+</table>
+<p>The function itself diagnoses the distribution automatically:</p>
+<ul>
+<li><strong>Skewness &gt; 1 and outcome ≥ 0</strong>:
+<code>auto_log = TRUE</code> (default) applies
+<code>log1p(wait_days)</code> before fitting, and back-transforms
+results to <em>geometric mean ratios</em> (GMRs) for reporting.</li>
+<li><strong>Shapiro-Wilk p &lt; 0.05 on residuals</strong>: a warning is
+issued and, when <code>sensitivity_poisson = &quot;auto&quot;</code> (default), a
+Poisson GLMM is run alongside the LMM as a robustness check.</li>
+</ul>
+<hr />
+</div>
+<div id="simulated-data" class="section level1">
+<h1>2. Simulated data</h1>
+<p>The examples below use a synthetic dataset resembling a two-wave
+mystery-caller study comparing Medicaid and commercial insurance
+patients across 20 physician practices.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>n_physicians <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>n_calls      <span class="ot">&lt;-</span> <span class="dv">4</span>     <span class="co"># calls per physician (2 insurance types × 2 call dates)</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>sim_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">physician  =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">&quot;Dr&quot;</span>, <span class="fu">sprintf</span>(<span class="st">&quot;%02d&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n_physicians)), <span class="at">each =</span> n_calls),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">insurance  =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Medicaid&quot;</span>, <span class="st">&quot;Medicaid&quot;</span>, <span class="st">&quot;BCBS&quot;</span>, <span class="st">&quot;BCBS&quot;</span>), n_physicians),</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">wave       =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Wave1&quot;</span>, <span class="st">&quot;Wave2&quot;</span>, <span class="st">&quot;Wave1&quot;</span>, <span class="st">&quot;Wave2&quot;</span>), n_physicians),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="co"># Medicaid callers wait ~8 days longer on average</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">wait_days  =</span> <span class="fu">round</span>(<span class="fu">pmax</span>(<span class="dv">0</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="fu">rnorm</span>(n_physicians <span class="sc">*</span> n_calls,</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>          <span class="at">mean =</span> <span class="fu">ifelse</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>), n_physicians), <span class="dv">29</span>, <span class="dv">21</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>          <span class="at">sd   =</span> <span class="dv">10</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  )),</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co"># Add a business-days column (≈ 5/7 of calendar days)</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>sim_data<span class="sc">$</span>business_days <span class="ot">&lt;-</span> <span class="fu">round</span>(sim_data<span class="sc">$</span>wait_days <span class="sc">*</span> <span class="fl">0.71</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="fu">head</span>(sim_data)</span></code></pre></div>
+<hr />
+</div>
+<div id="fitting-a-basic-lmm" class="section level1">
+<h1>3. Fitting a basic LMM</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">mysterycall_lmm</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">data              =</span> sim_data,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">outcome           =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">predictors        =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;wave&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">random_intercept  =</span> <span class="st">&quot;physician&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)</span></code></pre></div>
+<p><code>print()</code> produces a structured report:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">print</span>(fit)</span></code></pre></div>
+<p>Key elements of the returned object:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Fixed-effect table in days (or log-scale if auto_log triggered)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>fit<span class="sc">$</span>coef_table</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># Model fit: R-squared, ICC, sigma</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">marginal_R2   =</span> fit<span class="sc">$</span>r_squared<span class="sc">$</span>marginal,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">conditional_R2 =</span> fit<span class="sc">$</span>r_squared<span class="sc">$</span>conditional,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="at">sigma          =</span> fit<span class="sc">$</span>sigma,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">n_obs          =</span> fit<span class="sc">$</span>n,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">n_physicians   =</span> fit<span class="sc">$</span>n_clusters</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co"># Normality of residuals</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>fit<span class="sc">$</span>normality</span></code></pre></div>
+<hr />
+</div>
+<div id="auto-log-transform-and-geometric-mean-ratios" class="section level1">
+<h1>4. Auto-log transform and geometric mean ratios</h1>
+<p>When wait times are right-skewed, <code>auto_log = TRUE</code> (the
+default) applies <code>log1p(wait_days)</code> before fitting. A message
+indicates whether the transform was triggered. When it is, coefficients
+are on the log scale and <code>fit$log_transformed</code> is
+<code>TRUE</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit<span class="sc">$</span>log_transformed</span></code></pre></div>
+<p>If <code>auto_log</code> did trigger, interpret results from
+<code>$gmr_table</code> rather than <code>$coef_table</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">isTRUE</span>(fit<span class="sc">$</span>log_transformed)) {</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  fit<span class="sc">$</span>gmr_table</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">&quot;auto_log did not trigger; use $coef_table directly.&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>How to report GMRs:</strong> A GMR of 0.87 for
+<code>insuranceMedicaid</code> means Medicaid callers wait, on average,
+13% fewer days (× (days + 1)) than the BCBS reference group (GMR = 0.87,
+95% CI 0.75–1.01, p = 0.07).</p>
+<p>When <code>auto_log</code> did <em>not</em> trigger, interpret
+<code>coef_table</code> directly in days: “Medicaid callers waited 8.2
+days longer than BCBS callers (β = 8.2, 95% CI 3.1–13.3, p =
+0.002).”</p>
+<hr />
+</div>
+<div id="poisson-sensitivity-analysis" class="section level1">
+<h1>5. Poisson sensitivity analysis</h1>
+<p>By default (<code>sensitivity_poisson = &quot;auto&quot;</code>), a Poisson
+GLMM is run on the <strong>original untransformed</strong> outcome
+whenever the Shapiro-Wilk test on LMM residuals returns p &lt; 0.05.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Force a sensitivity run regardless of normality</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>fit_sens <span class="ot">&lt;-</span> <span class="fu">mysterycall_lmm</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">data              =</span> sim_data,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">outcome           =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">predictors        =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;wave&quot;</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">random_intercept  =</span> <span class="st">&quot;physician&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">sensitivity_poisson =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># Inspect the Poisson IRR table</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(fit_sens<span class="sc">$</span>sensitivity)) {</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  fit_sens<span class="sc">$</span>sensitivity<span class="sc">$</span>irr_table</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>}</span></code></pre></div>
+<p>Report the sensitivity Poisson model in a supplemental table
+alongside the primary LMM. Consistent direction of effects (same sign
+across both models) supports robustness of the conclusion.</p>
+<hr />
+</div>
+<div id="broom-compatible-tidy-method" class="section level1">
+<h1>6. Broom-compatible <code>tidy()</code> method</h1>
+<p>The <code>tidy()</code> generic (from the <code>generics</code>
+package) returns a tidy tibble of fixed-effect estimates, making it easy
+to pipe into <code>ggplot2</code> or <code>gt</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>tidy_result <span class="ot">&lt;-</span> <span class="fu">tidy</span>(fit)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>tidy_result</span></code></pre></div>
+<hr />
+</div>
+<div id="calendar-vs.-business-day-sensitivity" class="section level1">
+<h1>7. Calendar vs. business-day sensitivity</h1>
+<p>To satisfy the M&amp;M promise of a supplemental table comparing
+calendar-day and business-day wait times, use
+<code>mysterycall_calendar_sensitivity()</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>sens <span class="ot">&lt;-</span> <span class="fu">mysterycall_calendar_sensitivity</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data             =</span> sim_data,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">calendar_col     =</span> <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">business_col     =</span> <span class="st">&quot;business_days&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">predictors       =</span> <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;wave&quot;</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">random_intercept =</span> <span class="st">&quot;physician&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">ref_label        =</span> <span class="st">&quot;BCBS (commercial)&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">supp_table_num   =</span> <span class="st">&quot;S2&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>The comparison table:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>sens<span class="sc">$</span>summary_table</span></code></pre></div>
+<p>Whether all term directions are consistent across both measurement
+approaches:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>sens<span class="sc">$</span>all_consistent</span></code></pre></div>
+<p>The ready-to-paste supplemental paragraph:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">cat</span>(sens<span class="sc">$</span>paragraph)</span></code></pre></div>
+<hr />
+</div>
+<div id="diagnostic-plots" class="section level1">
+<h1>8. Diagnostic plots</h1>
+<p><code>plot()</code> dispatches on the <code>mysterycall_lmm</code>
+class to produce Q-Q and residual-vs-fitted plots:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code></pre></div>
+<p>A well-specified LMM shows:</p>
+<ul>
+<li><strong>Q-Q plot</strong>: points close to the diagonal reference
+line.</li>
+<li><strong>Residuals vs. fitted</strong>: no strong pattern; spread
+roughly constant.</li>
+</ul>
+<p>If the Q-Q plot shows a pronounced right tail, the
+<code>auto_log</code> transform or a Poisson/NB GLMM is warranted.</p>
+<hr />
+</div>
+<div id="model-comparison" class="section level1">
+<h1>9. Model comparison</h1>
+<p>Fit two models with <code>REML = FALSE</code> for valid AIC-based
+comparison:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>fit_full    <span class="ot">&lt;-</span> <span class="fu">mysterycall_lmm</span>(sim_data, <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                                <span class="fu">c</span>(<span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="st">&quot;physician&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>                                <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>fit_reduced <span class="ot">&lt;-</span> <span class="fu">mysterycall_lmm</span>(sim_data, <span class="st">&quot;wait_days&quot;</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>                                <span class="st">&quot;insurance&quot;</span>, <span class="st">&quot;physician&quot;</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>                                <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="at">model =</span> <span class="fu">c</span>(<span class="st">&quot;Full (insurance + wave)&quot;</span>, <span class="st">&quot;Reduced (insurance only)&quot;</span>),</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>  <span class="at">AIC   =</span> <span class="fu">c</span>(fit_full<span class="sc">$</span>aic,    fit_reduced<span class="sc">$</span>aic),</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>  <span class="at">BIC   =</span> <span class="fu">c</span>(fit_full<span class="sc">$</span>bic,    fit_reduced<span class="sc">$</span>bic)</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>)</span></code></pre></div>
+<p>Lower AIC/BIC favours the more parsimonious model. Use
+<code>mysterycall_model_comparison_table()</code> for a print-ready
+table.</p>
+<hr />
+</div>
+<div id="reporting-checklist" class="section level1">
+<h1>10. Reporting checklist</h1>
+<p>When writing up an LMM analysis from a mystery-caller study:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Sample</strong>: report <code>fit$n</code> complete cases
+and <code>fit$n_clusters</code> physicians.</li>
+<li><strong>Model form</strong>: “We fitted a linear mixed model with a
+random intercept for physician practice (<code>lme4::lmer</code>).”</li>
+<li><strong>P-values</strong>: “Denominator degrees of freedom were
+estimated using the Satterthwaite approximation
+(<code>lmerTest</code>).”</li>
+<li><strong>Transform</strong>: if <code>fit$log_transformed</code>,
+report GMRs with 95% CI from <code>$gmr_table</code>. If not, report β
+(days) from <code>$coef_table</code>.</li>
+<li><strong>Normality</strong>: report Shapiro-Wilk W and p from
+<code>fit$normality</code>.</li>
+<li><strong>R²</strong>: report marginal and conditional R² (Nakagawa
+&amp; Schielzeth 2013).</li>
+<li><strong>Sensitivity</strong>: if <code>sensitivity_poisson</code>
+ran, cite the Poisson IRR table in a supplemental section (use
+<code>mysterycall_calendar_sensitivity()</code> to generate the
+paragraph automatically).</li>
+</ol>
+<hr />
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Nakagawa S, Schielzeth H (2013). A general and simple method for
+obtaining R² from generalized linear mixed-effects models. <em>Methods
+in Ecology and Evolution</em> 4(2):133–142. <a href="doi:10.1111/j.2041-210x.2012.00261.x" class="uri">doi:10.1111/j.2041-210x.2012.00261.x</a></p>
+<p>Asplin BR, Rhodes KV, Levy H, et al. (2005). Insurance status and
+access to urgent ambulatory care follow-up appointments. <em>JAMA</em>
+294(10):1248–1254. <a href="doi:10.1001/jama.294.10.1248" class="uri">doi:10.1001/jama.294.10.1248</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

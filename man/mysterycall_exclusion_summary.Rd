@@ -137,7 +137,7 @@ df3 <- df
 df3$npi <- c(
   seq_len(120L),                  # included (unique)
   rep(121L, 40L),                 # one provider, 40 no-answer attempts
-  122L + seq_len(sum(n_each[-c(1L, 2L)]) - 1L)  # remaining
+  seq_len(sum(n_each[-c(1L, 2L)])) + 121L  # remaining unique providers
 )
 # id_col collapses repeated dials to the same NPI
 result3 <- mysterycall_exclusion_summary(df3, id_col = "npi")
@@ -148,7 +148,7 @@ result3$total   # unique providers, not raw call rows
 
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
-\code{\link{mysterycall_geographic_map}()},
+\code{mysterycall_geographic_map()} (in the mysterymaps package),
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_session_snapshot}()},

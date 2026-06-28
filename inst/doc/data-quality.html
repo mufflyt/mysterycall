@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Data Quality: Phone Validation, Name Parsing, and Safe Joins</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Data Quality: Phone Validation, Name
+Parsing, and Safe Joins</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#phone-validation-mysterycall_validate_phone" id="toc-phone-validation-mysterycall_validate_phone">1. Phone validation
+(<code>mysterycall_validate_phone</code>)</a></li>
+<li><a href="#name-parsing-mysterycall_parse_physician_name" id="toc-name-parsing-mysterycall_parse_physician_name">2. Name parsing
+(<code>mysterycall_parse_physician_name</code>)</a></li>
+<li><a href="#safe-joins-mysterycall_safe_left_join-and-friends" id="toc-safe-joins-mysterycall_safe_left_join-and-friends">3. Safe joins
+(<code>mysterycall_safe_left_join</code> and friends)</a></li>
+<li><a href="#putting-it-together-a-complete-roster-qa-pipeline" id="toc-putting-it-together-a-complete-roster-qa-pipeline">4. Putting it
+together: a complete roster QA pipeline</a></li>
+</ul>
+</div>
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Mystery-caller studies assemble provider rosters from several
+upstream sources (NPPES, CMS Care Compare, internal call logs) that each
+carry their own formatting quirks. Three categories of data-quality
+problems arise repeatedly:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Phone numbers</strong> — formatting noise
+(<code>(303) 555-1234</code>, <code>303.555.1234</code>,
+<code>+13035551234</code>) and area codes that don’t match the
+provider’s reported state.</li>
+<li><strong>Physician names</strong> — a single free-text name field
+that must be split into first / middle / last / suffix components before
+being used in call scripts or de-duplication logic.</li>
+<li><strong>Table joins</strong> — silent row multiplication when the
+right-hand table is not unique on the join key, or silent data loss when
+a large fraction of left-hand rows find no match on the right.</li>
+</ol>
+<p>This vignette walks through the <code>mysterycall</code> helpers that
+address each problem. All code runs without any API keys using only
+built-in package data.</p>
+<hr />
+</div>
+<div id="phone-validation-mysterycall_validate_phone" class="section level2">
+<h2>1. Phone validation (<code>mysterycall_validate_phone</code>)</h2>
+<div id="background" class="section level3">
+<h3>Background</h3>
+<p>The North American Numbering Plan (NANP) defines the structure of US
+phone numbers:</p>
+<pre><code>NPA-NXX-XXXX</code></pre>
+<p>where <strong>NPA</strong> (Numbering Plan Area, the “area code”)
+must have a first digit of 2–9, and <strong>NXX</strong> (the
+central-office code) must also have a first digit of 2–9 and must not be
+an N11 service code (211, 311, …, 911).</p>
+<p><code>mysterycall_validate_phone()</code> strips formatting, enforces
+those structural rules, and — optionally — checks that the area code
+belongs to the provider’s reported practice state using the bundled
+<code>inst/extdata/nanp_area_codes_us.csv</code> lookup table.</p>
+</div>
+<div id="basic-usage" class="section level3">
+<h3>Basic usage</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># A well-formed Colorado number</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">mysterycall_validate_phone</span>(<span class="st">&quot;(303) 555-1234&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># Missing number</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">mysterycall_validate_phone</span>(<span class="cn">NA_character_</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># Non-NANP format (too few digits)</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">mysterycall_validate_phone</span>(<span class="st">&quot;555-1234&quot;</span>)</span></code></pre></div>
+<p>The function always returns a data frame with five columns:</p>
+<table>
+<colgroup>
+<col width="34%" />
+<col width="26%" />
+<col width="39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>phone_e164_valid</code></td>
+<td>logical</td>
+<td><code>TRUE</code> if the number passes all NANP rules</td>
+</tr>
+<tr class="even">
+<td><code>phone_npa</code></td>
+<td>character</td>
+<td>The three-digit area code, or <code>NA</code></td>
+</tr>
+<tr class="odd">
+<td><code>phone_state_from_npa</code></td>
+<td>character</td>
+<td>State associated with the NPA in the lookup table</td>
+</tr>
+<tr class="even">
+<td><code>phone_area_code_matches_state</code></td>
+<td>logical</td>
+<td><code>TRUE</code> if NPA ↔︎ <code>practice_state</code> agree;
+<code>NA</code> if no state was supplied</td>
+</tr>
+<tr class="odd">
+<td><code>phone_validity_flag</code></td>
+<td>character</td>
+<td>One of the five validity codes below</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>valid</code></td>
+<td>Passes all NANP rules; area code matches practice state (if
+supplied)</td>
+</tr>
+<tr class="even">
+<td><code>missing</code></td>
+<td>Input is <code>NA</code> or empty</td>
+</tr>
+<tr class="odd">
+<td><code>invalid_format</code></td>
+<td>Cannot be reduced to a 10-digit NANP number</td>
+</tr>
+<tr class="even">
+<td><code>unknown_area_code</code></td>
+<td>Digits are structurally valid but NPA is not in the lookup
+table</td>
+</tr>
+<tr class="odd">
+<td><code>area_code_state_mismatch</code></td>
+<td>NPA is valid but registered to a different state</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="state-mismatch-detection" class="section level3">
+<h3>State-mismatch detection</h3>
+<p>Pass the provider’s two-letter state abbreviation to catch numbers
+whose area code is registered to a different state:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Colorado provider with a New York area code</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">mysterycall_validate_phone</span>(<span class="st">&quot;(212) 555-0199&quot;</span>, <span class="at">practice_state =</span> <span class="st">&quot;CO&quot;</span>)</span></code></pre></div>
+</div>
+<div id="validating-a-full-roster-column" class="section level3">
+<h3>Validating a full roster column</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>roster <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">npi            =</span> <span class="fu">c</span>(<span class="st">&quot;1234567890&quot;</span>, <span class="st">&quot;0987654321&quot;</span>, <span class="st">&quot;1111111111&quot;</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">phone          =</span> <span class="fu">c</span>(<span class="st">&quot;(720) 555-0101&quot;</span>, <span class="st">&quot;999-0000&quot;</span>, <span class="st">&quot;(303) 867-5309&quot;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">practice_state =</span> <span class="fu">c</span>(<span class="st">&quot;CO&quot;</span>,            <span class="st">&quot;CO&quot;</span>,        <span class="st">&quot;CO&quot;</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># vectorised: one call per row, returns a data frame</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>phone_results <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">Map</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  mysterycall_validate_phone,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">phone_str      =</span> roster<span class="sc">$</span>phone,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="at">practice_state =</span> roster<span class="sc">$</span>practice_state</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>))</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="fu">cbind</span>(roster[<span class="st">&quot;npi&quot;</span>], phone_results[, <span class="fu">c</span>(<span class="st">&quot;phone_e164_valid&quot;</span>, <span class="st">&quot;phone_validity_flag&quot;</span>)])</span></code></pre></div>
+<p>The NANP lookup table is lazy-loaded once per session and cached
+internally, so repeated calls in a loop incur no extra I/O.</p>
+<hr />
+</div>
+</div>
+<div id="name-parsing-mysterycall_parse_physician_name" class="section level2">
+<h2>2. Name parsing (<code>mysterycall_parse_physician_name</code>)</h2>
+<div id="background-1" class="section level3">
+<h3>Background</h3>
+<p>Provider names arrive from NPPES and call logs in several
+formats:</p>
+<ul>
+<li><code>&quot;Jane A. Smith, MD&quot;</code> — credential after name</li>
+<li><code>&quot;Smith, Jane A.&quot;</code> — last-first comma format
+(two-part)</li>
+<li><code>&quot;Smith, Jane, Jr.&quot;</code> — last-first-suffix three-part comma
+format</li>
+<li><code>&quot;María de la Cruz&quot;</code> — name particle in the last
+name</li>
+<li><code>&quot;Robert Smith DO&quot;</code> — <code>DO</code> credential that
+must not become <code>last_name</code></li>
+<li><code>&quot;Linda Do&quot;</code> — Vietnamese surname <code>Do</code> that
+must <strong>not</strong> be treated as a credential</li>
+</ul>
+<p><code>mysterycall_parse_physician_name()</code> wraps
+<code>humaniformat::parse_names()</code> and applies deterministic
+post-processing rules for these edge cases, then assigns a confidence
+level (<code>high</code> / <code>medium</code> / <code>low</code>) so
+downstream consumers can flag low-confidence parses for manual
+review.</p>
+</div>
+<div id="single-name" class="section level3">
+<h3>Single name</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">mysterycall_parse_physician_name</span>(<span class="st">&quot;Smith, Jane, Jr.&quot;</span>)</span></code></pre></div>
+</div>
+<div id="vectorised-over-a-column" class="section level3">
+<h3>Vectorised over a column</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>raw_names <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="st">&quot;Maria de la Cruz&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="st">&quot;Smith, John, Jr.&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="st">&quot;Robert Smith DO&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="st">&quot;Linda Do&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="cn">NA_character_</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> <span class="fu">mysterycall_parse_physician_name</span>(raw_names)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>parsed[, <span class="fu">c</span>(<span class="st">&quot;first_name&quot;</span>, <span class="st">&quot;last_name&quot;</span>, <span class="st">&quot;suffix&quot;</span>, <span class="st">&quot;parse_confidence&quot;</span>, <span class="st">&quot;parse_warnings&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="using-the-built-in-physicians-dataset" class="section level3">
+<h3>Using the built-in <code>physicians</code> dataset</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Parse the 4,659 physician names from the bundled roster</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>parsed_physicians <span class="ot">&lt;-</span> <span class="fu">mysterycall_parse_physician_name</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  mysterycall<span class="sc">::</span>physicians<span class="sc">$</span>name</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># Confidence breakdown</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">table</span>(parsed_physicians<span class="sc">$</span>parse_confidence)</span></code></pre></div>
+</div>
+<div id="validating-parsed-output" class="section level3">
+<h3>Validating parsed output</h3>
+<p>After parsing a full roster, call
+<code>mysterycall_validate_parsed_names()</code> to flag structural
+quality problems in each row:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>validated <span class="ot">&lt;-</span> <span class="fu">mysterycall_validate_parsed_names</span>(parsed)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># Overview of quality issues</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">table</span>(validated<span class="sc">$</span>quality_issue, <span class="at">useNA =</span> <span class="st">&quot;ifany&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co"># Rows that are not valid (missing first or last name)</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>validated[<span class="sc">!</span>validated<span class="sc">$</span>is_valid, <span class="fu">c</span>(<span class="st">&quot;first_name&quot;</span>, <span class="st">&quot;last_name&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>                                  <span class="st">&quot;parse_confidence&quot;</span>, <span class="st">&quot;quality_issue&quot;</span>)]</span></code></pre></div>
+<p>Rows with <code>parse_confidence == &quot;low&quot;</code> or a
+non-<code>NA</code> <code>quality_issue</code> should be reviewed
+manually before use in call scripts.</p>
+</div>
+<div id="formatting-names-for-output" class="section level3">
+<h3>Formatting names for output</h3>
+<p>Once parsed, use <code>mysterycall_format_physician_name()</code> to
+render names in a consistent house style:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">mysterycall_format_physician_name</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">first_name     =</span> <span class="st">&quot;Jane&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">last_name      =</span> <span class="st">&quot;Smith&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">middle_name    =</span> <span class="st">&quot;A.&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">suffix         =</span> <span class="st">&quot;MD&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">format         =</span> <span class="st">&quot;last_first&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">include_suffix =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co"># Vectorised</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">mysterycall_format_physician_name</span>(</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  <span class="at">first_name  =</span> <span class="fu">c</span>(<span class="st">&quot;John&quot;</span>,  <span class="st">&quot;Maria&quot;</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  <span class="at">last_name   =</span> <span class="fu">c</span>(<span class="st">&quot;Smith&quot;</span>, <span class="st">&quot;Cruz&quot;</span>),</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="at">suffix      =</span> <span class="fu">c</span>(<span class="st">&quot;MD&quot;</span>,    <span class="cn">NA</span>),</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="at">format      =</span> <span class="st">&quot;first_last&quot;</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="built-in-edge-case-test-suite" class="section level3">
+<h3>Built-in edge-case test suite</h3>
+<p>The function ships with 13 known-difficult cases (DO credential,
+Vietnamese surnames, three-part comma, hyphenated names) that you can
+run at any time to verify parser behavior after an upgrade:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">mysterycall_test_name_parser</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%d / %d high-confidence valid parses</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>            <span class="fu">sum</span>(tbl<span class="sc">$</span>is_valid <span class="sc">&amp;</span> tbl<span class="sc">$</span>parse_confidence <span class="sc">==</span> <span class="st">&quot;high&quot;</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>            <span class="fu">nrow</span>(tbl)))</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="safe-joins-mysterycall_safe_left_join-and-friends" class="section level2">
+<h2>3. Safe joins (<code>mysterycall_safe_left_join</code> and
+friends)</h2>
+<div id="the-problem-with-silent-join-failures" class="section level3">
+<h3>The problem with silent join failures</h3>
+<p>A plain <code>dplyr::left_join()</code> will silently:</p>
+<ul>
+<li><strong>Multiply rows</strong> if the right-hand key is not unique
+(a many-to-one match becomes many-to-many).</li>
+<li><strong>Drop rows</strong> if the join key types don’t match (e.g.,
+integer vs. character NPI), causing every row to land in the unmatched
+group.</li>
+<li><strong>Return no warning</strong> when 40 % of left-hand NPIs have
+no match on the right.</li>
+</ul>
+<p>The <code>mysterycall_safe_*_join()</code> family wraps
+<code>dplyr</code> joins with pre- and post-join assertions that make
+these failures loud.</p>
+</div>
+<div id="mysterycall_safe_left_join" class="section level3">
+<h3><code>mysterycall_safe_left_join</code></h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>calls <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">npi  =</span> <span class="fu">c</span>(<span class="st">&quot;1111111111&quot;</span>, <span class="st">&quot;2222222222&quot;</span>, <span class="st">&quot;3333333333&quot;</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">&quot;2025-01-10&quot;</span>, <span class="st">&quot;2025-01-11&quot;</span>, <span class="st">&quot;2025-01-12&quot;</span>)),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>demographics <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="at">npi    =</span> <span class="fu">c</span>(<span class="st">&quot;1111111111&quot;</span>, <span class="st">&quot;2222222222&quot;</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co"># 2 of 3 left rows match → coverage = 66.7 % &lt; 95 % threshold → error</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="fu">tryCatch</span>(</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  <span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_left_join</span>(</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>    <span class="at">left         =</span> calls,</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="at">right        =</span> demographics,</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>    <span class="at">by           =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>    <span class="at">label_left   =</span> <span class="st">&quot;call_log&quot;</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>    <span class="at">label_right  =</span> <span class="st">&quot;demographics&quot;</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>    <span class="at">min_coverage =</span> <span class="fl">0.95</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>  )),</span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a>  <span class="at">error =</span> <span class="cf">function</span>(e) <span class="fu">message</span>(<span class="st">&quot;Caught: &quot;</span>, <span class="fu">conditionMessage</span>(e))</span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a>)</span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co"># Lower threshold to match the actual coverage</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_left_join</span>(</span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>  <span class="at">left         =</span> calls,</span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>  <span class="at">right        =</span> demographics,</span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>  <span class="at">by           =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>  <span class="at">label_left   =</span> <span class="st">&quot;call_log&quot;</span>,</span>
+<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a>  <span class="at">label_right  =</span> <span class="st">&quot;demographics&quot;</span>,</span>
+<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a>  <span class="at">min_coverage =</span> <span class="fl">0.60</span></span>
+<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a>))</span>
+<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a>result</span></code></pre></div>
+</div>
+<div id="key-type-harmonization" class="section level3">
+<h3>Key-type harmonization</h3>
+<p>If one table stores NPI as integer and the other as character, a
+plain join silently returns zero matches. The safe join coerces both
+sides to character:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>left2  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">npi =</span> <span class="dv">1111111111</span><span class="dt">L</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>right2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">npi =</span> <span class="st">&quot;1111111111&quot;</span>, <span class="at">x =</span> <span class="dv">42</span><span class="dt">L</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_left_join</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  left2, right2, <span class="at">by =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="at">label_left  =</span> <span class="st">&quot;left&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">label_right =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="at">min_coverage =</span> <span class="dv">0</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+<div id="asserting-uniqueness-before-a-join" class="section level3">
+<h3>Asserting uniqueness before a join</h3>
+<p><code>mysterycall_assert_unique_keys()</code> lets you verify that a
+table is unique on one or more columns before passing it to any
+join:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>dupes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="at">npi    =</span> <span class="fu">c</span>(<span class="st">&quot;1111111111&quot;</span>, <span class="st">&quot;1111111111&quot;</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">source =</span> <span class="fu">c</span>(<span class="st">&quot;NPPES&quot;</span>, <span class="st">&quot;CMS&quot;</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># Error: found 1 duplicate group</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="fu">tryCatch</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="fu">mysterycall_assert_unique_keys</span>(dupes, <span class="at">key_cols =</span> <span class="st">&quot;npi&quot;</span>, <span class="at">label =</span> <span class="st">&quot;demographics&quot;</span>),</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  <span class="at">error =</span> <span class="cf">function</span>(e) <span class="fu">message</span>(<span class="st">&quot;Caught: &quot;</span>, <span class="fu">conditionMessage</span>(e))</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co"># Pass dedupe = TRUE to drop duplicates instead:</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>  <span class="fu">mysterycall_assert_unique_keys</span>(dupes, <span class="at">key_cols =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>                                  <span class="at">label =</span> <span class="st">&quot;demographics&quot;</span>, <span class="at">dedupe =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>)</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="fu">nrow</span>(clean)</span></code></pre></div>
+</div>
+<div id="inner-semi-and-anti-joins" class="section level3">
+<h3>Inner, semi, and anti joins</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Inner join — only matched rows; defaults to min_coverage = 0.90</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>result_inner <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_inner_join</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">left        =</span> calls,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">right       =</span> demographics,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">label_left  =</span> <span class="st">&quot;call_log&quot;</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">label_right =</span> <span class="st">&quot;demographics&quot;</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">min_coverage =</span> <span class="fl">0.60</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>))</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu">nrow</span>(result_inner)   <span class="co"># 2 rows: only matched NPIs</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co"># Semi join — keep left rows that match; no right columns added</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>matched_calls <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_semi_join</span>(</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  <span class="at">left        =</span> calls,</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  <span class="at">right       =</span> demographics,</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>  <span class="at">label_left  =</span> <span class="st">&quot;call_log&quot;</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>  <span class="at">label_right =</span> <span class="st">&quot;demographics&quot;</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>  <span class="at">min_coverage =</span> <span class="fl">0.60</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>))</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>matched_calls   <span class="co"># 2 rows, same columns as calls</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co"># Anti join — keep left rows with NO match</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a>unmatched_calls <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">mysterycall_safe_anti_join</span>(</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a>  <span class="at">left        =</span> calls,</span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a>  <span class="at">right       =</span> demographics,</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">&quot;npi&quot;</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a>  <span class="at">label_left  =</span> <span class="st">&quot;call_log&quot;</span>,</span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>  <span class="at">label_right =</span> <span class="st">&quot;demographics&quot;</span></span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a>))</span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a>unmatched_calls   <span class="co"># 1 row: NPI 3333333333</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="putting-it-together-a-complete-roster-qa-pipeline" class="section level2">
+<h2>4. Putting it together: a complete roster QA pipeline</h2>
+<p>The built-in <code>physicians</code> dataset contains 4,659 OBGYN
+subspecialists with NPI and name. The block below demonstrates the full
+data-quality pipeline without any API calls.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># ── 1. Parse physician names ──────────────────────────────────────────────────</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>roster <span class="ot">&lt;-</span> mysterycall<span class="sc">::</span>physicians <span class="sc">|&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="fu">select</span>(NPI, name, subspecialty)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>parsed_names <span class="ot">&lt;-</span> <span class="fu">mysterycall_parse_physician_name</span>(roster<span class="sc">$</span>name)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>roster <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(roster, parsed_names)</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>low_conf <span class="ot">&lt;-</span> <span class="fu">filter</span>(roster, parse_confidence <span class="sc">==</span> <span class="st">&quot;low&quot;</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%d name(s) flagged as low-confidence (%.1f%%)&quot;</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>                <span class="fu">nrow</span>(low_conf), <span class="dv">100</span> <span class="sc">*</span> <span class="fu">nrow</span>(low_conf) <span class="sc">/</span> <span class="fu">nrow</span>(roster)))</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co"># ── 2. Validate parsed names ──────────────────────────────────────────────────</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>validated_names <span class="ot">&lt;-</span> <span class="fu">mysterycall_validate_parsed_names</span>(parsed_names)</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>issues <span class="ot">&lt;-</span> <span class="fu">filter</span>(validated_names, <span class="sc">!</span><span class="fu">is.na</span>(quality_issue))</span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%d name quality issue(s) detected:&quot;</span>, <span class="fu">nrow</span>(issues)))</span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">table</span>(issues<span class="sc">$</span>quality_issue))</span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co"># ── 3. Illustrate a safe join with a synthetic demographics sidecar ───────────</span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co"># In a real study this would be CMS Care Compare or similar</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>demographics_sidecar <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>  <span class="at">NPI    =</span> roster<span class="sc">$</span>NPI[<span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>],       <span class="co"># 4,000 of 4,659 have demographics</span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Unknown&quot;</span>),</span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>                  <span class="dv">4000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(.<span class="dv">7</span>, .<span class="dv">28</span>, .<span class="dv">02</span>)),</span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a>)</span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a>roster_enriched <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(</span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a>  <span class="fu">mysterycall_safe_left_join</span>(</span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a>    <span class="at">left         =</span> roster,</span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a>    <span class="at">right        =</span> demographics_sidecar,</span>
+<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a>    <span class="at">by           =</span> <span class="st">&quot;NPI&quot;</span>,</span>
+<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a>    <span class="at">label_left   =</span> <span class="st">&quot;physicians&quot;</span>,</span>
+<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a>    <span class="at">label_right  =</span> <span class="st">&quot;demographics_sidecar&quot;</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a>    <span class="at">min_coverage =</span> <span class="fl">0.85</span>   <span class="co"># expect ≥ 85 % match rate</span></span>
+<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a>  )</span>
+<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a>)</span>
+<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a></span>
+<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a><span class="co"># Coverage summary</span></span>
+<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(</span>
+<span id="cb15-42"><a href="#cb15-42" tabindex="-1"></a>  <span class="st">&quot;Roster rows: %d  |  Enriched rows: %d  |  Coverage: %.1f%%</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb15-43"><a href="#cb15-43" tabindex="-1"></a>  <span class="fu">nrow</span>(roster), <span class="fu">nrow</span>(roster_enriched),</span>
+<span id="cb15-44"><a href="#cb15-44" tabindex="-1"></a>  <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(<span class="sc">!</span><span class="fu">is.na</span>(roster_enriched<span class="sc">$</span>gender))</span>
+<span id="cb15-45"><a href="#cb15-45" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

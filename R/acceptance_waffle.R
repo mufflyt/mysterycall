@@ -5,7 +5,7 @@
 #' Each square represents one call; shading encodes Accepted vs. Declined.
 #'
 #' Inspired by Nicola Rennie (2024), "Five Charts You Can Make with the
-#' `waffle` Package", \url{https://nrennie.rbind.io/}.
+#' waffle Package", \url{https://nrennie.rbind.io/}.
 #'
 #' @param acceptance_result A data frame with at least columns
 #'   `insurance_type`, `outcome` (values `"Accepted"` / `"Declined"`), and
@@ -32,15 +32,17 @@
 #'
 #' @return A `patchwork` / `ggplot` object, returned invisibly.
 #'
-#' @note Requires the \pkg{waffle} and \pkg{patchwork} packages (listed in
-#'   `Suggests`).  Install with:
-#'   `install.packages(c("waffle", "patchwork"))`.
+#' @note Requires the \pkg{waffle} package (GitHub-only -- not on CRAN) and
+#'   \pkg{patchwork}.  Install with:
+#'   `remotes::install_github("hrbrmstr/waffle")` and
+#'   `install.packages("patchwork")`.
 #'
-#' @importFrom ggplot2 ggsave labs theme element_text
+#' @importFrom ggplot2 ggsave
 #' @family visualization
 #' @export
 #'
-#' @examplesIf requireNamespace("waffle", quietly = TRUE) && requireNamespace("patchwork", quietly = TRUE)
+#' @examples
+#' \dontrun{
 #' acc <- data.frame(
 #'   insurance_type = c("Medicaid", "Medicaid", "BCBS", "BCBS"),
 #'   outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
@@ -48,6 +50,7 @@
 #'   stringsAsFactors = FALSE
 #' )
 #' mysterycall_acceptance_waffle(acc, output_dir = NA)
+#' }
 mysterycall_acceptance_waffle <- function(
     acceptance_result,
     medicaid_label = "Medicaid",
@@ -61,10 +64,16 @@ mysterycall_acceptance_waffle <- function(
     output_dir     = NULL,
     filename       = "acceptance_waffle.png"
 ) {
-
-  if (!requireNamespace("waffle",    quietly = TRUE)) {
-    stop("Package 'waffle' is required. Install with: install.packages('waffle')",
-         call. = FALSE)
+  waffle_ns <- tryCatch(
+    loadNamespace("waffle"),
+    error = function(e) NULL
+  )
+  if (is.null(waffle_ns)) {
+    stop(
+      "Package 'waffle' is required but not installed.\n",
+      "Install with: remotes::install_github(\"hrbrmstr/waffle\")",
+      call. = FALSE
+    )
   }
   if (!requireNamespace("patchwork", quietly = TRUE)) {
     stop("Package 'patchwork' is required. Install with: install.packages('patchwork')",
@@ -80,6 +89,8 @@ mysterycall_acceptance_waffle <- function(
   checkmate::assert_flag(flip)
   checkmate::assert_flag(monochrome)
 
+  waffle_fn <- get("waffle", envir = waffle_ns)
+
   .make_panel <- function(ins_label, display_label) {
     sub <- acceptance_result[acceptance_result$insurance_type == ins_label, , drop = FALSE]
     if (nrow(sub) == 0L) {
@@ -87,7 +98,7 @@ mysterycall_acceptance_waffle <- function(
     }
     vals <- stats::setNames(as.integer(sub$n), sub$outcome)
 
-    p <- waffle::waffle(
+    p <- waffle_fn(
       parts = vals,
       rows  = rows,
       flip  = flip,
@@ -105,14 +116,14 @@ mysterycall_acceptance_waffle <- function(
   p_medicaid <- .make_panel(medicaid_label, medicaid_label)
   p_bcbs     <- .make_panel(bcbs_label,     bcbs_label)
 
-  combined <- patchwork::wrap_plots(p_medicaid, p_bcbs, ncol = 2L)
+  wrap_plots_fn <- get("wrap_plots", envir = loadNamespace("patchwork"))
+  combined <- wrap_plots_fn(p_medicaid, p_bcbs, ncol = 2L)
 
   if (!is.null(title)) {
-    combined <- combined +
-      patchwork::plot_annotation(title = title)
+    plot_annotation_fn <- get("plot_annotation", envir = loadNamespace("patchwork"))
+    combined <- combined + plot_annotation_fn(title = title)
   }
 
-  # Save
   if (is.null(output_dir)) {
     output_dir <- mysterycall_tempdir("acceptance_waffle", create = TRUE)
   }

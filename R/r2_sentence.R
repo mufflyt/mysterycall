@@ -3,25 +3,25 @@
 #' @name mysterycall_r2_sentence
 NULL
 
-#' Compute marginal and conditional R² and generate an interpretive sentence
+#' Compute marginal and conditional R\u00b2 and generate an interpretive sentence
 #'
 #' Extracts marginal (fixed-effects only) and conditional (fixed + random
-#' effects) R² values from a fitted mixed model using
+#' effects) R\u00b2 values from a fitted mixed model using
 #' [performance::r2()], then formats them into a manuscript-ready
 #' interpretive paragraph.
 #'
 #' @param model A fitted mixed model (\code{glmerMod}, \code{lmerMod}, etc.)
 #'   compatible with [performance::r2()]. Pure fixed-effects models (e.g.,
 #'   \code{lm}, \code{glm}) are not supported and will trigger an error.
-#' @param digits Integer scalar. Number of decimal places for R² values in
+#' @param digits Integer scalar. Number of decimal places for R\u00b2 values in
 #'   the sentence. Default \code{3}.
 #' @param digits_pct Integer scalar. Number of decimal places for percentage
 #'   values in the sentence. Default \code{1}.
 #'
 #' @return A named list with:
 #'   \describe{
-#'     \item{\code{marginal_r2}}{Numeric. Marginal R² (fixed effects only).}
-#'     \item{\code{conditional_r2}}{Numeric. Conditional R² (fixed + random effects).}
+#'     \item{\code{marginal_r2}}{Numeric. Marginal R\u00b2 (fixed effects only).}
+#'     \item{\code{conditional_r2}}{Numeric. Conditional R\u00b2 (fixed + random effects).}
 #'     \item{\code{fixed_effects}}{Character vector of fixed-effect term names.}
 #'     \item{\code{random_effects}}{Character vector of random-effect group names.}
 #'     \item{\code{sentence}}{Character scalar. Full interpretive paragraph.}
@@ -69,7 +69,7 @@ mysterycall_r2_sentence <- function(model, digits = 3, digits_pct = 1) {
     ),
     error = function(e) {
       stop(
-        paste0("Could not compute R² for this model: ", conditionMessage(e)),
+        paste0("Could not compute R\u00b2 for this model: ", conditionMessage(e)),
         call. = FALSE
       )
     }
@@ -85,12 +85,12 @@ mysterycall_r2_sentence <- function(model, digits = 3, digits_pct = 1) {
   re_str <- paste(random_effects, collapse = ", ")
 
   sentence <- paste0(
-    "The marginal R² value of the model is ", round(marginal_r2, digits),
-    " and the conditional R² value is ", round(conditional_r2, digits), ". ",
-    "The marginal R² represents the proportion of variance explained by the ",
+    "The marginal R\u00b2 value of the model is ", round(marginal_r2, digits),
+    " and the conditional R\u00b2 value is ", round(conditional_r2, digits), ". ",
+    "The marginal R\u00b2 represents the proportion of variance explained by the ",
     "fixed effects (", fe_str, ") alone (",
     round(marginal_r2 * 100, digits_pct), "%). ",
-    "The conditional R² represents the proportion of variance explained by both ",
+    "The conditional R\u00b2 represents the proportion of variance explained by both ",
     "the fixed effects and the random effects (", re_str, ") combined (",
     round(conditional_r2 * 100, digits_pct), "%)."
   )

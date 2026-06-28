@@ -396,7 +396,7 @@ mysterycall_model_mae_rmse <- function(fit,
       ann_x   <- x_rng[[1L]] + 0.03 * diff(x_rng)
       ann_y   <- y_rng[[2L]] - 0.03 * diff(y_rng)
       ann_lab <- sprintf(
-        "MAE  = %.2f\nRMSE = %.2f\nR²   = %.3f",
+        "MAE  = %.2f\nRMSE = %.2f\nR\u00b2   = %.3f",
         mae, rmse, r2_pearson
       )
 

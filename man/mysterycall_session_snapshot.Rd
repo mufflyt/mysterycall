@@ -86,7 +86,7 @@ print(out)
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
 \code{\link{mysterycall_exclusion_summary}()},
-\code{\link{mysterycall_geographic_map}()},
+\code{mysterycall_geographic_map()} (in the mysterymaps package),
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_supplemental_tables}()},

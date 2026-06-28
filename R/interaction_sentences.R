@@ -266,7 +266,7 @@ mysterycall_interaction_sentences <- function(model,
       lcl <- r[[lcl_col]]
       ucl <- r[[ucl_col]]
       sprintf(
-        "%s patients: mean %s %s (95%% CI %s–%s)",
+        "%s patients: mean %s %s (95%% CI %s\u2013%s)",
         v2_ordered[i],
         .fmt(est),
         outcome_label,
@@ -333,7 +333,7 @@ mysterycall_interaction_sentences <- function(model,
           sig_word <- if (p_min < 0.05) "statistically significant" else
             "not statistically significant"
           sprintf(
-            "The %s × %s interaction was %s (p %s).",
+            "The %s \u00d7 %s interaction was %s (p %s).",
             var1, var2, sig_word, p_fmt
           )
         } else {

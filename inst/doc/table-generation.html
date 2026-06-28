@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Generating Publication Tables</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Generating Publication Tables</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#overview-tables-a-mystery-caller-manuscript-needs" id="toc-overview-tables-a-mystery-caller-manuscript-needs">1. Overview:
+Tables a Mystery-Caller Manuscript Needs</a></li>
+<li><a href="#table-1-with-base-r-mysterycall_table1" id="toc-table-1-with-base-r-mysterycall_table1">2. Table 1 with Base R:
+<code>mysterycall_table1()</code></a>
+<ul>
+<li><a href="#building-a-synthetic-provider-data-frame" id="toc-building-a-synthetic-provider-data-frame">2.1 Building a
+synthetic provider data frame</a></li>
+<li><a href="#full-parameter-documentation" id="toc-full-parameter-documentation">2.2 Full parameter
+documentation</a></li>
+<li><a href="#a-note-on-categorical-vs.-continuous-detection" id="toc-a-note-on-categorical-vs.-continuous-detection">2.3 A note on
+categorical vs. continuous detection</a></li>
+</ul></li>
+<li><a href="#table-1-with-gtsummary-mysterycall_table1_gtsummary" id="toc-table-1-with-gtsummary-mysterycall_table1_gtsummary">3. Table 1
+with gtsummary: <code>mysterycall_table1_gtsummary()</code></a>
+<ul>
+<li><a href="#parameters" id="toc-parameters">3.1 Parameters</a></li>
+<li><a href="#chaining-gtsummary-modifiers" id="toc-chaining-gtsummary-modifiers">3.2 Chaining gtsummary
+modifiers</a></li>
+<li><a href="#exporting-to-word" id="toc-exporting-to-word">3.3
+Exporting to Word</a></li>
+</ul></li>
+<li><a href="#overall-summary-table-to-pdf-mysterycall_table_overall" id="toc-overall-summary-table-to-pdf-mysterycall_table_overall">4.
+Overall Summary Table to PDF:
+<code>mysterycall_table_overall()</code></a>
+<ul>
+<li><a href="#when-to-use-table_overall-vs.-mysterycall_table1" id="toc-when-to-use-table_overall-vs.-mysterycall_table1">4.1 When to
+use <code>table_overall</code>
+vs. <code>mysterycall_table1()</code></a></li>
+<li><a href="#parameters-and-example" id="toc-parameters-and-example">4.2 Parameters and example</a></li>
+</ul></li>
+<li><a href="#percentage-tables-mysterycall_table_percentages" id="toc-percentage-tables-mysterycall_table_percentages">5. Percentage
+Tables: <code>mysterycall_table_percentages()</code></a>
+<ul>
+<li><a href="#row-vs.-column-percentages" id="toc-row-vs.-column-percentages">5.1 Row vs. column
+percentages</a></li>
+<li><a href="#example-appointment-offered-by-insurance-type" id="toc-example-appointment-offered-by-insurance-type">5.2 Example:
+appointment offered by insurance type</a></li>
+</ul></li>
+<li><a href="#proportion-tables-mysterycall_table_proportion" id="toc-proportion-tables-mysterycall_table_proportion">6. Proportion
+Tables: <code>mysterycall_table_proportion()</code></a>
+<ul>
+<li><a href="#difference-from-percentage-tables" id="toc-difference-from-percentage-tables">6.1 Difference from
+percentage tables</a></li>
+<li><a href="#example-wait-time-category-by-subspecialty" id="toc-example-wait-time-category-by-subspecialty">6.2 Example:
+wait-time category by subspecialty</a></li>
+</ul></li>
+<li><a href="#disparity-table-for-a-manuscript-mysterycall_disparities_table" id="toc-disparity-table-for-a-manuscript-mysterycall_disparities_table">7.
+Disparity Table for a Manuscript:
+<code>mysterycall_disparities_table()</code></a>
+<ul>
+<li><a href="#printing-with-a-bold-reference-row" id="toc-printing-with-a-bold-reference-row">7.1 Printing with a bold
+reference row</a></li>
+<li><a href="#adding-significance-stars" id="toc-adding-significance-stars">7.2 Adding significance
+stars</a></li>
+<li><a href="#exporting-to-csv-for-a-journal-supplement" id="toc-exporting-to-csv-for-a-journal-supplement">7.3 Exporting to CSV
+for a journal supplement</a></li>
+</ul></li>
+<li><a href="#exporting-tables-to-pdf-mysterycall_write_table_pdf" id="toc-exporting-tables-to-pdf-mysterycall_write_table_pdf">8.
+Exporting Tables to PDF: <code>mysterycall_write_table_pdf()</code></a>
+<ul>
+<li><a href="#basic-usage" id="toc-basic-usage">8.1 Basic usage</a></li>
+<li><a href="#common-issue-latex-not-installed" id="toc-common-issue-latex-not-installed">8.2 Common issue: LaTeX not
+installed</a></li>
+<li><a href="#alternative-export-to-html-with-knitrkable" id="toc-alternative-export-to-html-with-knitrkable">8.3 Alternative:
+export to HTML with <code>knitr::kable()</code></a></li>
+</ul></li>
+<li><a href="#writing-the-methods-and-results-paragraph-mysterycall_write_results_paragraph" id="toc-writing-the-methods-and-results-paragraph-mysterycall_write_results_paragraph">9.
+Writing the Methods and Results Paragraph:
+<code>mysterycall_write_results_paragraph()</code></a>
+<ul>
+<li><a href="#generating-the-paragraph" id="toc-generating-the-paragraph">9.1 Generating the paragraph</a></li>
+<li><a href="#apa-style-number-formatting" id="toc-apa-style-number-formatting">9.2 APA-style number
+formatting</a></li>
+</ul></li>
+<li><a href="#complete-end-to-end-table-generation-example" id="toc-complete-end-to-end-table-generation-example">10. Complete
+End-to-End Table Generation Example</a>
+<ul>
+<li><a href="#step-0-prepare-variables" id="toc-step-0-prepare-variables">10.1 Step 0 — Prepare
+variables</a></li>
+<li><a href="#step-1-table-1-baseline-characteristics-stratified-by-subspecialty" id="toc-step-1-table-1-baseline-characteristics-stratified-by-subspecialty">10.2
+Step 1 — Table 1: Baseline characteristics stratified by
+subspecialty</a></li>
+<li><a href="#step-2-table-2-appointment-acceptance-rates-by-insurance-type" id="toc-step-2-table-2-appointment-acceptance-rates-by-insurance-type">10.3
+Step 2 — Table 2: Appointment acceptance rates by insurance
+type</a></li>
+<li><a href="#step-3-table-3-median-wait-days-by-insurance-type" id="toc-step-3-table-3-median-wait-days-by-insurance-type">10.4 Step 3 —
+Table 3: Median wait days by insurance type</a></li>
+<li><a href="#step-4-export-all-three-tables-to-pdf" id="toc-step-4-export-all-three-tables-to-pdf">10.5 Step 4 — Export all
+three tables to PDF</a></li>
+</ul></li>
+<li><a href="#frequency-helpers-mysterycall_max_table-and-mysterycall_min_table" id="toc-frequency-helpers-mysterycall_max_table-and-mysterycall_min_table">11.
+Frequency Helpers: <code>mysterycall_max_table()</code> and
+<code>mysterycall_min_table()</code></a></li>
+<li><a href="#formatting-percentages-mysterycall_format_pct" id="toc-formatting-percentages-mysterycall_format_pct">12. Formatting
+Percentages: <code>mysterycall_format_pct()</code></a>
+<ul>
+<li><a href="#a-note-on-journal-specific-requirements" id="toc-a-note-on-journal-specific-requirements">A note on
+journal-specific requirements</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(mysterycall)</span></code></pre></div>
+<hr />
+<div id="overview-tables-a-mystery-caller-manuscript-needs" class="section level1">
+<h1>1. Overview: Tables a Mystery-Caller Manuscript Needs</h1>
+<p>A completed mystery-caller study typically requires four tables for
+publication. Understanding what each table communicates — and to whom —
+is the first step in building it correctly.</p>
+<p><strong>Table 1 — Baseline characteristics of the provider
+sample</strong> This is the standard descriptive table found in every
+observational study. It describes the providers who were
+<em>sampled</em>, not the outcomes of the calls. Rows are provider
+characteristics (specialty, gender, practice setting, urban vs. rural
+classification). Columns are the study strata (usually insurance type:
+Medicaid vs. private insurance, or some broader grouping). Journals such
+as NEJM and JAMA expect Table 1 to appear before the results section and
+to demonstrate that the sampling was balanced or to quantify imbalances
+that readers should bear in mind.</p>
+<p><strong>Table 2 — Appointment acceptance rates by insurance
+type</strong> This is the disparity table. Its primary purpose is to
+show whether providers were significantly more or less likely to offer
+an appointment to a Medicaid caller than to a private-insurance caller.
+Each row is typically a provider subgroup (subspecialty, region,
+practice type). Cells contain appointment acceptance rates with 95%
+confidence intervals. An adjusted odds ratio or risk ratio from a
+logistic or Poisson regression model appears alongside.</p>
+<p><strong>Table 3 — Wait times by subspecialty (or insurance
+type)</strong> For studies that record how many days until the next
+available appointment, Table 3 summarizes the wait-time distribution.
+Because wait times are right-skewed and often overdispersed, medians and
+interquartile ranges are more appropriate than means and standard
+deviations, and Poisson or negative binomial model summaries are often
+reported alongside.</p>
+<p><strong>Disparity supplement table</strong> Many journals request a
+supplementary table reporting fully adjusted model estimates for every
+covariate, not just the primary insurance-type comparison. This table is
+typically formatted as a forest-plot data source and exported to CSV for
+the journal’s online supplement.</p>
+<p><strong>Prerequisite:</strong>
+<code>mysterycall_prepare_table1_vars()</code> (documented in the
+provider-classification vignette) must be run before calling any of the
+table functions in this vignette. That function creates the standardized
+columns (<code>age_category</code>, <code>gender_std</code>,
+<code>ruca_category</code>, <code>region_std</code>) that the table
+functions expect.</p>
+<hr />
+</div>
+<div id="table-1-with-base-r-mysterycall_table1" class="section level1">
+<h1>2. Table 1 with Base R: <code>mysterycall_table1()</code></h1>
+<p><code>mysterycall_table1()</code> produces a publication-ready Table
+1 using only base R and the <code>arsenal</code> package. It is the
+recommended function when you want precise control over every cell and
+need output that can be exported to any format (HTML, PDF, Word, plain
+text).</p>
+<div id="building-a-synthetic-provider-data-frame" class="section level2">
+<h2>2.1 Building a synthetic provider data frame</h2>
+<p>Throughout this vignette we use a 200-row synthetic data frame that
+mirrors the structure of a real mystery-caller study analysis file.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>analysis_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="co"># Provider characteristics</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">age_category      =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;&lt; 40&quot;</span>, <span class="st">&quot;40-49&quot;</span>, <span class="st">&quot;50-59&quot;</span>, <span class="st">&quot;60+&quot;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                             <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.20</span>, <span class="fl">0.35</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>)),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">gender_std        =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.55</span>, <span class="fl">0.45</span>)),</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="at">subspecialty      =</span> <span class="fu">sample</span>(</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;General OB/GYN&quot;</span>, <span class="st">&quot;Urogynecology&quot;</span>, <span class="st">&quot;Gynecologic Oncology&quot;</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>      <span class="st">&quot;Maternal-Fetal Medicine&quot;</span>, <span class="st">&quot;Reproductive Endocrinology&quot;</span>),</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>, <span class="fl">0.10</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  ),</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="at">practice_setting  =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Academic&quot;</span>, <span class="st">&quot;Private&quot;</span>, <span class="st">&quot;Community Health Center&quot;</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>                               <span class="st">&quot;Hospital-Based&quot;</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>                             <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.30</span>, <span class="fl">0.40</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>)),</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  <span class="at">region_std        =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Northeast&quot;</span>, <span class="st">&quot;Midwest&quot;</span>, <span class="st">&quot;South&quot;</span>, <span class="st">&quot;West&quot;</span>),</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>                             <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.22</span>, <span class="fl">0.26</span>, <span class="fl">0.36</span>, <span class="fl">0.16</span>)),</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  <span class="at">ruca_category     =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Urban&quot;</span>, <span class="st">&quot;Large Rural&quot;</span>, <span class="st">&quot;Small Rural&quot;</span>, <span class="st">&quot;Isolated&quot;</span>),</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>                             <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.75</span>, <span class="fl">0.12</span>, <span class="fl">0.08</span>, <span class="fl">0.05</span>)),</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>  <span class="co"># Call outcome variables</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>  <span class="at">insurance_type    =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Medicaid&quot;</span>, <span class="st">&quot;Private&quot;</span>),</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>  <span class="at">appt_offered      =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>, <span class="cn">NA_character_</span>),</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>                             n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.60</span>, <span class="fl">0.35</span>, <span class="fl">0.05</span>)),</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>  <span class="at">wait_days         =</span> <span class="fu">pmax</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="fu">as.integer</span>(</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">runif</span>(n) <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="cn">NA_integer_</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>           <span class="fu">round</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">18</span>, <span class="at">sd =</span> <span class="dv">12</span>)))</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  ))</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="full-parameter-documentation" class="section level2">
+<h2>2.2 Full parameter documentation</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>tbl1 <span class="ot">&lt;-</span> <span class="fu">mysterycall_table1</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">data             =</span> analysis_data,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">covariates       =</span> <span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;gender_std&quot;</span>, <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                       <span class="st">&quot;practice_setting&quot;</span>, <span class="st">&quot;region_std&quot;</span>, <span class="st">&quot;ruca_category&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">stratify_by      =</span> <span class="st">&quot;insurance_type&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">include_overall  =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">cont_stats       =</span> <span class="st">&quot;median_iqr&quot;</span>,    <span class="co"># &quot;mean_sd&quot;, &quot;median_iqr&quot;, or c(&quot;mean_sd&quot;,&quot;median_iqr&quot;)</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">digits           =</span> <span class="dv">1</span>,               <span class="co"># decimal places for percentages</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="at">p_value          =</span> <span class="cn">TRUE</span>,            <span class="co"># adds chi-sq / Kruskal-Wallis p-value column</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="at">min_cell         =</span> <span class="dv">5</span>,               <span class="co"># use Fisher&#39;s exact test when expected cell &lt; 5</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="at">variable_labels  =</span> <span class="fu">c</span>(</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="at">age_category     =</span> <span class="st">&quot;Provider age, years&quot;</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="at">gender_std       =</span> <span class="st">&quot;Physician sex&quot;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="at">subspecialty     =</span> <span class="st">&quot;Subspecialty&quot;</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="at">practice_setting =</span> <span class="st">&quot;Practice setting&quot;</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="at">region_std       =</span> <span class="st">&quot;US Census region&quot;</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="at">ruca_category    =</span> <span class="st">&quot;Rurality (RUCA category)&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  )</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="fu">print</span>(tbl1)</span></code></pre></div>
+<p><strong>Parameter details:</strong></p>
+<p><strong><code>covariates</code></strong> — a character vector of
+column names that will appear as row groups in the table. The function
+detects whether each variable is continuous (numeric or integer with
+&gt; 5 unique values) or categorical (factor or character, or numeric
+with ≤ 5 unique values) and formats accordingly.</p>
+<p><strong><code>stratify_by</code></strong> — the column whose unique
+values become the stratification columns. Pass <code>NULL</code> to
+generate an unstratified table with a single “Overall” column.</p>
+<p><strong><code>include_overall</code></strong> — when
+<code>TRUE</code>, a column labelled “Overall” is prepended to the
+stratification columns, showing counts and percentages across the full
+sample regardless of stratum.</p>
+<p><strong><code>cont_stats</code></strong> — controls how continuous
+variables (e.g., <code>wait_days</code>) are summarized: *
+<code>&quot;mean_sd&quot;</code>: Mean ± SD, appropriate when the distribution is
+approximately normal. * <code>&quot;median_iqr&quot;</code>: Median [IQR],
+appropriate for right-skewed variables like wait times. *
+<code>c(&quot;mean_sd&quot;, &quot;median_iqr&quot;)</code>: Both rows are printed. Useful
+in supplements or data-quality tables but rarely appropriate for a
+primary manuscript table.</p>
+<p><strong><code>p_value</code></strong> — when <code>TRUE</code>, a
+column of p-values is appended. For categorical variables, the function
+runs a Pearson chi-squared test; if any expected cell count is below
+<code>min_cell</code>, it switches to Fisher’s exact test. For
+continuous variables, it runs a Kruskal-Wallis test (regardless of
+whether <code>cont_stats</code> is <code>&quot;mean_sd&quot;</code> or
+<code>&quot;median_iqr&quot;</code>) because mystery-caller data rarely satisfy
+the normality assumptions required for a standard t-test or ANOVA.</p>
+<p><strong>Interpreting p-values in this context:</strong> In a
+mystery-caller study, the p-values in Table 1 test whether the
+<em>sampling</em> was balanced by insurance type. They do not test the
+primary hypothesis (appointment disparity). A significant p-value in
+Table 1 means that providers assigned to the Medicaid and
+private-insurance call scenarios differ on that characteristic, which is
+relevant if the split was done by something other than
+<code>mysterycall_split_and_save()</code>. If the split was random (as
+it should be), all Table 1 p-values should be non-significant.</p>
+<p><strong><code>variable_labels</code></strong> — a named character
+vector where names are column names in <code>data</code> and values are
+the display labels that appear in the table. This is where you translate
+snake_case column names to the mixed-case, abbreviation-spelled-out
+labels that journals require.</p>
+<p><strong><code>min_cell</code></strong> — default 5, following the
+standard Fisher’s exact test threshold used in most biostatistics
+textbooks. For subspecialty comparisons with rare specialties (e.g.,
+Reproductive Endocrinology appears in &lt; 5% of rows), this threshold
+will trigger Fisher’s exact test automatically. Note that the function
+prints a message when it switches tests:</p>
+<pre><code># Note: Using Fisher&#39;s exact test for &#39;subspecialty&#39; (minimum expected
+# cell count = 2.3, below threshold of 5).</code></pre>
+</div>
+<div id="a-note-on-categorical-vs.-continuous-detection" class="section level2">
+<h2>2.3 A note on categorical vs. continuous detection</h2>
+<p><code>mysterycall_table1()</code> classifies variables automatically,
+but you can override this by converting columns to the appropriate type
+before calling the function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Force wait_days to be treated as continuous (it has many unique values</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># but is stored as integer, so auto-detection is correct here)</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># Force age_category to be treated as categorical even though it looks ordinal</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>analysis_data<span class="sc">$</span>age_category <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  analysis_data<span class="sc">$</span>age_category,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&lt; 40&quot;</span>, <span class="st">&quot;40-49&quot;</span>, <span class="st">&quot;50-59&quot;</span>, <span class="st">&quot;60+&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="table-1-with-gtsummary-mysterycall_table1_gtsummary" class="section level1">
+<h1>3. Table 1 with gtsummary:
+<code>mysterycall_table1_gtsummary()</code></h1>
+<p><code>gtsummary</code> produces richer formatted output than the
+base-R approach and integrates directly with Word, HTML, and PDF export
+pipelines. Use it when:</p>
+<ul>
+<li>You need publication-quality HTML output for a journal submission
+system that accepts HTML tables.</li>
+<li>You are preparing a Word document for collaborators who will
+copy-paste the table into a manuscript template.</li>
+<li>You want <code>bold_labels()</code>, <code>add_n()</code>,
+<code>add_overall()</code>, or other gtsummary modifiers without writing
+custom formatting code.</li>
+</ul>
+<p>Use <code>mysterycall_table1()</code> (Section 2) when you need a
+plain-text or PDF output with <code>arsenal</code>-style formatting, or
+when you need a p-value column that falls back to Fisher’s exact test
+automatically.</p>
+<div id="parameters" class="section level2">
+<h2>3.1 Parameters</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>tbl1_gt <span class="ot">&lt;-</span> <span class="fu">mysterycall_table1_gtsummary</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">data         =</span> analysis_data,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">vars         =</span> <span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;gender_std&quot;</span>, <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                   <span class="st">&quot;practice_setting&quot;</span>, <span class="st">&quot;region_std&quot;</span>, <span class="st">&quot;ruca_category&quot;</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">strata_col   =</span> <span class="st">&quot;insurance_type&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">label_list   =</span> <span class="fu">list</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    age_category     <span class="sc">~</span> <span class="st">&quot;Provider age, years&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    gender_std       <span class="sc">~</span> <span class="st">&quot;Physician sex&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    subspecialty     <span class="sc">~</span> <span class="st">&quot;Subspecialty&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    practice_setting <span class="sc">~</span> <span class="st">&quot;Practice setting&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    region_std       <span class="sc">~</span> <span class="st">&quot;US Census region&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    ruca_category    <span class="sc">~</span> <span class="st">&quot;Rurality (RUCA category)&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  ),</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="at">missing      =</span> <span class="st">&quot;no&quot;</span>,     <span class="co"># &quot;no&quot; = omit missing row; &quot;ifany&quot; = show if any missing</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="at">percent      =</span> <span class="st">&quot;column&quot;</span>, <span class="co"># &quot;column&quot; (default), &quot;row&quot;, or &quot;cell&quot;</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="at">overall_last =</span> <span class="cn">TRUE</span>      <span class="co"># place Overall column after strata, not before</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>)</span></code></pre></div>
+<p><strong><code>label_list</code></strong> uses a formula syntax
+(<code>variable ~ &quot;Label&quot;</code>) rather than a named vector. This is
+the gtsummary convention and supports more complex label specifications
+(e.g., multi-line labels).</p>
+<p><strong><code>missing</code></strong> — <code>&quot;no&quot;</code> omits the
+“Unknown” row from the table, which is appropriate when your protocol
+treats missing data as MCAR and you have imputed or excluded missing
+rows before building the table. Use <code>&quot;ifany&quot;</code> when you want
+readers to see the extent of missing data, which is appropriate for a
+supplement table but unusual in a primary manuscript table.</p>
+<p><strong><code>percent</code></strong> — <code>&quot;column&quot;</code> is
+almost always correct for Table 1. Column percentages show what fraction
+of Medicaid-assigned providers fall into each category, which is what
+readers need to assess balance. Row percentages would show what fraction
+of female physicians were assigned to Medicaid vs. private insurance,
+which is usually not the estimand of interest in Table 1.</p>
+</div>
+<div id="chaining-gtsummary-modifiers" class="section level2">
+<h2>3.2 Chaining gtsummary modifiers</h2>
+<p>The returned object is a standard <code>gtsummary::tbl_summary</code>
+object and accepts all gtsummary modifiers:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>tbl1_gt <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">bold_labels</span>() <span class="sc">|&gt;</span>           <span class="co"># bold the variable name rows</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">add_n</span>() <span class="sc">|&gt;</span>                 <span class="co"># add total N per stratum</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">add_p</span>() <span class="sc">|&gt;</span>                 <span class="co"># add chi-sq / Kruskal-Wallis p-values</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">modify_caption</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="st">&quot;**Table 1.** Baseline Characteristics of Sampled Providers by Insurance Type&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="exporting-to-word" class="section level2">
+<h2>3.3 Exporting to Word</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>tbl1_gt <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">bold_labels</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">add_n</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  gtsummary<span class="sc">::</span><span class="fu">as_flex_table</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">save_as_docx</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;/study/tables/table1_baseline.docx&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  )</span></code></pre></div>
+<p>The resulting <code>.docx</code> file contains a formatted table that
+uses the Normal style in Word, making it straightforward to copy into a
+journal manuscript template. All cell borders, bold labels, and
+footnotes are preserved.</p>
+<hr />
+</div>
+</div>
+<div id="overall-summary-table-to-pdf-mysterycall_table_overall" class="section level1">
+<h1>4. Overall Summary Table to PDF:
+<code>mysterycall_table_overall()</code></h1>
+<p><code>mysterycall_table_overall()</code> is designed for
+<strong>quick quality-assurance snapshots during data
+collection</strong>, not for publication. It reads an RDS file (or a
+data frame), generates an <code>arsenal::tableby()</code> summary, and
+writes a PDF to disk in a single call. It is the fastest way to answer
+the question “What does our dataset look like right now?” at the weekly
+coordinator check-in meeting.</p>
+<div id="when-to-use-table_overall-vs.-mysterycall_table1" class="section level2">
+<h2>4.1 When to use <code>table_overall</code>
+vs. <code>mysterycall_table1()</code></h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Recommended function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Weekly QA check-in during data collection</td>
+<td><code>mysterycall_table_overall()</code></td>
+</tr>
+<tr class="even">
+<td>Final manuscript Table 1</td>
+<td><code>mysterycall_table1()</code> or
+<code>mysterycall_table1_gtsummary()</code></td>
+</tr>
+<tr class="odd">
+<td>Need Fisher’s exact test fallback</td>
+<td><code>mysterycall_table1()</code></td>
+</tr>
+<tr class="even">
+<td>Need Word / HTML output</td>
+<td><code>mysterycall_table1_gtsummary()</code></td>
+</tr>
+<tr class="odd">
+<td>Need to share PDF with non-R users quickly</td>
+<td><code>mysterycall_table_overall()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="parameters-and-example" class="section level2">
+<h2>4.2 Parameters and example</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">mysterycall_table_overall</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">input_file_path   =</span> <span class="st">&quot;/study/phase2_output/analysis_ready.rds&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">output_directory  =</span> <span class="st">&quot;/study/tables/qa&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">title             =</span> <span class="st">&quot;Mystery Caller Study — QA Snapshot 2024-03-15&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">selected_columns  =</span> <span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;gender_std&quot;</span>, <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                        <span class="st">&quot;practice_setting&quot;</span>, <span class="st">&quot;region_std&quot;</span>, <span class="st">&quot;ruca_category&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                        <span class="st">&quot;appt_offered&quot;</span>, <span class="st">&quot;wait_days&quot;</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="at">label_translations =</span> <span class="fu">c</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="at">age_category     =</span> <span class="st">&quot;Provider age&quot;</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="at">gender_std       =</span> <span class="st">&quot;Physician sex&quot;</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    <span class="at">appt_offered     =</span> <span class="st">&quot;Appointment offered&quot;</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="at">wait_days        =</span> <span class="st">&quot;Days until next appointment&quot;</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  )</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>)</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; Writing QA table to /study/tables/qa/qa_snapshot_20240315.pdf</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; Done. Table has 8 variables and 1688 observations.</span></span></code></pre></div>
+<p><code>label_translations</code> is a named character vector that maps
+column names to display labels. Unlike
+<code>mysterycall_table1()</code>, this function does not accept a
+formula interface — use the named-vector syntax.</p>
+<hr />
+</div>
+</div>
+<div id="percentage-tables-mysterycall_table_percentages" class="section level1">
+<h1>5. Percentage Tables:
+<code>mysterycall_table_percentages()</code></h1>
+<p><code>mysterycall_table_percentages()</code> produces
+cross-tabulation tables with row-wise or column-wise percentages and
+optional 95% confidence intervals. It is most often used to build Table
+2 — appointment acceptance rates broken down by insurance type and
+provider subgroup.</p>
+<div id="row-vs.-column-percentages" class="section level2">
+<h2>5.1 Row vs. column percentages</h2>
+<p>In a mystery-caller disparity study:</p>
+<ul>
+<li><strong>Row percentages</strong> — “Of the Medicaid calls to Female
+physicians, what percent were offered an appointment?” This is the most
+intuitive framing for Table 2 and is the default
+(<code>direction = &quot;row&quot;</code>).</li>
+<li><strong>Column percentages</strong> — “Of all the calls that
+resulted in an appointment offer, what percent were Medicaid calls?”
+This is useful for understanding the composition of the contacted sample
+but is rarely the primary estimand.</li>
+</ul>
+</div>
+<div id="example-appointment-offered-by-insurance-type" class="section level2">
+<h2>5.2 Example: appointment offered by insurance type</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>pct_tbl <span class="ot">&lt;-</span> <span class="fu">mysterycall_table_percentages</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data        =</span> analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(analysis_data<span class="sc">$</span>appt_offered), ],</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">row_var     =</span> <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">col_var     =</span> <span class="st">&quot;insurance_type&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">outcome_var =</span> <span class="st">&quot;appt_offered&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">outcome_val =</span> <span class="st">&quot;Yes&quot;</span>,      <span class="co"># the value that counts as &quot;success&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">direction   =</span> <span class="st">&quot;row&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">conf_level  =</span> <span class="fl">0.95</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="at">digits      =</span> <span class="dv">1</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  pct_tbl,</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Table 2. Appointment Acceptance Rate (%) by Subspecialty and Insurance Type&quot;</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>)</span></code></pre></div>
+<p>The output data frame contains one row per subspecialty with
+columns:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>subspecialty</code></td>
+<td>Row label</td>
+</tr>
+<tr class="even">
+<td><code>Medicaid_n</code></td>
+<td>Number of Medicaid calls completed</td>
+</tr>
+<tr class="odd">
+<td><code>Medicaid_pct</code></td>
+<td>% offered appointment (Medicaid callers)</td>
+</tr>
+<tr class="even">
+<td><code>Medicaid_CI</code></td>
+<td>95% CI for Medicaid percentage</td>
+</tr>
+<tr class="odd">
+<td><code>Private_n</code></td>
+<td>Number of Private calls completed</td>
+</tr>
+<tr class="even">
+<td><code>Private_pct</code></td>
+<td>% offered appointment (Private callers)</td>
+</tr>
+<tr class="odd">
+<td><code>Private_CI</code></td>
+<td>95% CI for Private percentage</td>
+</tr>
+</tbody>
+</table>
+<p>The 95% CIs use the Wilson score interval by default, which is
+recommended for proportions near 0 or 1 and for small cell sizes — both
+of which are common in subspecialty subgroups of mystery-caller
+studies.</p>
+<hr />
+</div>
+</div>
+<div id="proportion-tables-mysterycall_table_proportion" class="section level1">
+<h1>6. Proportion Tables:
+<code>mysterycall_table_proportion()</code></h1>
+<p><code>mysterycall_table_proportion()</code> is closely related to
+<code>mysterycall_table_percentages()</code> but reports the numerator
+<em>N</em> and the proportion as a fraction side-by-side, rather than
+combining them into a formatted “60.2% (95% CI: 52.1-67.9%)” string.
+This format is required by some journals (particularly JAMA-network
+journals) that prefer separate columns for N and proportion.</p>
+<div id="difference-from-percentage-tables" class="section level2">
+<h2>6.1 Difference from percentage tables</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Output cell format</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mysterycall_table_percentages()</code></td>
+<td><code>&quot;60.2% (95% CI: 52.1–67.9%)&quot;</code></td>
+</tr>
+<tr class="even">
+<td><code>mysterycall_table_proportion()</code></td>
+<td><code>n = 89</code>, <code>proportion = 0.602</code></td>
+</tr>
+</tbody>
+</table>
+<p>The proportion format also facilitates downstream statistical
+programming: you can feed <code>n</code> and <code>proportion</code>
+directly into <code>prop.test()</code> or a meta-analysis function
+without parsing formatted strings.</p>
+</div>
+<div id="example-wait-time-category-by-subspecialty" class="section level2">
+<h2>6.2 Example: wait-time category by subspecialty</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Create a wait-time category</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>analysis_data<span class="sc">$</span>wait_category <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  analysis_data<span class="sc">$</span>wait_days,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">breaks  =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">28</span>, <span class="cn">Inf</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">labels  =</span> <span class="fu">c</span>(<span class="st">&quot;&lt; 1 week&quot;</span>, <span class="st">&quot;1-2 weeks&quot;</span>, <span class="st">&quot;2-4 weeks&quot;</span>, <span class="st">&quot;&gt; 4 weeks&quot;</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">right   =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>prop_tbl <span class="ot">&lt;-</span> <span class="fu">mysterycall_table_proportion</span>(</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="at">data        =</span> analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(analysis_data<span class="sc">$</span>wait_days), ],</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  <span class="at">row_var     =</span> <span class="st">&quot;wait_category&quot;</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>  <span class="at">col_var     =</span> <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>  <span class="at">conf_level  =</span> <span class="fl">0.95</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>)</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>  prop_tbl,</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Table 3. Wait-Time Category by Subspecialty (N and proportion)&quot;</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="disparity-table-for-a-manuscript-mysterycall_disparities_table" class="section level1">
+<h1>7. Disparity Table for a Manuscript:
+<code>mysterycall_disparities_table()</code></h1>
+<p>The disparity table is the centerpiece of a mystery-caller
+manuscript. It reports the primary statistical comparison — whether
+Medicaid callers were significantly less likely to be offered an
+appointment than private-insurance callers — with full model-based
+adjustment for provider characteristics.</p>
+<p>The statistical modelling that produces the estimates underlying this
+table is documented in the statistics vignette. This section focuses
+exclusively on <strong>formatting</strong> the disparity table for
+publication.</p>
+<div id="printing-with-a-bold-reference-row" class="section level2">
+<h2>7.1 Printing with a bold reference row</h2>
+<p>Many journals require that the reference category within each
+categorical variable be labelled clearly (e.g., “Ref.” in the OR column
+and bold text in the variable label). <code>knitr::kable()</code> does
+not support conditional bold formatting natively, but the
+<code>kableExtra</code> package does:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># Assume &#39;disparity_result&#39; is the output of mysterycall_disparities_table()</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>disp_tbl <span class="ot">&lt;-</span> disparity_result<span class="sc">$</span>formatted_table</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># Identify the reference rows (OR == &quot;Ref.&quot; or 1.00 with no CI)</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>ref_rows <span class="ot">&lt;-</span> <span class="fu">which</span>(disp_tbl<span class="sc">$</span>adjusted_or <span class="sc">==</span> <span class="st">&quot;Ref.&quot;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  disp_tbl,</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Category&quot;</span>, <span class="st">&quot;Medicaid %&quot;</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>                <span class="st">&quot;Private %&quot;</span>, <span class="st">&quot;Adjusted OR&quot;</span>, <span class="st">&quot;95% CI&quot;</span>, <span class="st">&quot;p-value&quot;</span>),</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="at">caption   =</span> <span class="st">&quot;Table 2. Adjusted Odds Ratios for Appointment Acceptance by Insurance Type&quot;</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">row_spec</span>(ref_rows, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">italic =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">footnote</span>(</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>    <span class="at">general =</span> <span class="st">&quot;OR = odds ratio; CI = confidence interval. Reference categories</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="st">    shown in bold italics. Models adjusted for physician sex, subspecialty,</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="st">    practice setting, US Census region, and rurality (RUCA category).&quot;</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>    <span class="at">threeparttable =</span> <span class="cn">TRUE</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="adding-significance-stars" class="section level2">
+<h2>7.2 Adding significance stars</h2>
+<p>Some journals — and all conference poster sessions — expect
+significance stars (* p &lt; 0.05; ** p &lt; 0.01; *** p &lt; 0.001)
+alongside adjusted p-values. Add them as a separate column after
+extracting numeric p-values:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Extract numeric p-values (assumes a &#39;p_numeric&#39; column in the result)</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>disp_tbl<span class="sc">$</span>stars <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  disp_tbl<span class="sc">$</span>p_numeric <span class="sc">&lt;</span> <span class="fl">0.001</span> <span class="sc">~</span> <span class="st">&quot;***&quot;</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  disp_tbl<span class="sc">$</span>p_numeric <span class="sc">&lt;</span> <span class="fl">0.01</span>  <span class="sc">~</span> <span class="st">&quot;**&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  disp_tbl<span class="sc">$</span>p_numeric <span class="sc">&lt;</span> <span class="fl">0.05</span>  <span class="sc">~</span> <span class="st">&quot;*&quot;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="cn">TRUE</span>                        <span class="sc">~</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># Combine with formatted p-value for display</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>disp_tbl<span class="sc">$</span>p_display <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>  <span class="fu">formatC</span>(disp_tbl<span class="sc">$</span>p_numeric, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> <span class="dv">3</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>  disp_tbl<span class="sc">$</span>stars</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>)</span></code></pre></div>
+<p>Note: Some journals (including NEJM and JAMA) explicitly prohibit
+significance stars in favour of exact p-values. Check the target
+journal’s instructions for authors before adding stars.</p>
+</div>
+<div id="exporting-to-csv-for-a-journal-supplement" class="section level2">
+<h2>7.3 Exporting to CSV for a journal supplement</h2>
+<p>The online supplement of a disparity manuscript typically requires a
+machine-readable version of the full adjusted model results:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Export the full disparity table to CSV for the supplement</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">write.csv</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  disp_tbl,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">file      =</span> <span class="st">&quot;/study/tables/supplement_table_S1_disparity.csv&quot;</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">na        =</span> <span class="st">&quot;&quot;</span>    <span class="co"># journals prefer empty strings to &quot;NA&quot; in CSV supplements</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># Optionally, also write an Excel version for non-R collaborators</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>openxlsx<span class="sc">::</span><span class="fu">write.xlsx</span>(</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>  disp_tbl,</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  <span class="at">file       =</span> <span class="st">&quot;/study/tables/supplement_table_S1_disparity.xlsx&quot;</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  <span class="at">sheetName  =</span> <span class="st">&quot;Disparity Table&quot;</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  <span class="at">colNames   =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  <span class="at">rowNames   =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="exporting-tables-to-pdf-mysterycall_write_table_pdf" class="section level1">
+<h1>8. Exporting Tables to PDF:
+<code>mysterycall_write_table_pdf()</code></h1>
+<p><code>mysterycall_write_table_pdf()</code> takes an
+<code>arsenal::tableby</code> object (the internal representation
+produced by <code>mysterycall_table1()</code> and
+<code>mysterycall_table_overall()</code>) and writes a formatted PDF via
+R Markdown and a LaTeX engine.</p>
+<div id="basic-usage" class="section level2">
+<h2>8.1 Basic usage</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">mysterycall_write_table_pdf</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">object   =</span> tbl1,        <span class="co"># arsenal tableby object from mysterycall_table1()</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;/study/tables/table1_baseline.pdf&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="common-issue-latex-not-installed" class="section level2">
+<h2>8.2 Common issue: LaTeX not installed</h2>
+<p>The most frequent error when using this function is:</p>
+<pre><code>Error in mysterycall_write_table_pdf():
+  pandoc-citeproc: could not find a LaTeX installation.
+  Please install a LaTeX distribution or run tinytex::install_tinytex().</code></pre>
+<p>The solution is to install TinyTeX, a minimal LaTeX distribution that
+is sufficient for the PDF tables produced by this function:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Install TinyTeX (one-time setup, ~200 MB download)</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tinytex&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co"># Then re-run the table export</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">mysterycall_write_table_pdf</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">object   =</span> tbl1,</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;/study/tables/table1_baseline.pdf&quot;</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>If you are working in a restricted computing environment where LaTeX
+cannot be installed (e.g., a hospital IT-managed machine), use the HTML
+alternative.</p>
+</div>
+<div id="alternative-export-to-html-with-knitrkable" class="section level2">
+<h2>8.3 Alternative: export to HTML with
+<code>knitr::kable()</code></h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># knitr::kable() does not require LaTeX</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>html_table <span class="ot">&lt;-</span> knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(tbl1, <span class="at">text =</span> <span class="st">&quot;html&quot;</span>)),</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">format  =</span> <span class="st">&quot;html&quot;</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Table 1. Baseline Characteristics&quot;</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co"># Save to standalone HTML file</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="fu">writeLines</span>(</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>    <span class="st">&quot;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;body&gt;&quot;</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>    <span class="fu">as.character</span>(html_table),</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>    <span class="st">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>  ),</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>  <span class="at">con =</span> <span class="st">&quot;/study/tables/table1_baseline.html&quot;</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>)</span></code></pre></div>
+<p>The resulting HTML file can be opened in any browser and printed to
+PDF using the browser’s built-in print function (File → Print → Save as
+PDF on macOS and Windows), without requiring any LaTeX installation.</p>
+<hr />
+</div>
+</div>
+<div id="writing-the-methods-and-results-paragraph-mysterycall_write_results_paragraph" class="section level1">
+<h1>9. Writing the Methods and Results Paragraph:
+<code>mysterycall_write_results_paragraph()</code></h1>
+<p><code>mysterycall_write_results_paragraph()</code> generates a
+structured prose paragraph suitable for the Methods and Results sections
+of a manuscript. It extracts key statistics from the model result and
+the disparity table and formats them according to APA 7th edition
+number-formatting conventions (two decimal places for statistics, three
+for p-values, confidence intervals in brackets).</p>
+<div id="generating-the-paragraph" class="section level2">
+<h2>9.1 Generating the paragraph</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>paragraph <span class="ot">&lt;-</span> <span class="fu">mysterycall_write_results_paragraph</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="at">model_result    =</span> poisson_model_result,   <span class="co"># output of mysterycall_poisson_model()</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="at">disparity_table =</span> disp_tbl,              <span class="co"># output of mysterycall_disparities_table()</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="at">outcome_label   =</span> <span class="st">&quot;appointment acceptance&quot;</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="at">insurance_var   =</span> <span class="st">&quot;insurance_type&quot;</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="at">ref_level       =</span> <span class="st">&quot;Private&quot;</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="at">alt_level       =</span> <span class="st">&quot;Medicaid&quot;</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>)</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="fu">cat</span>(paragraph)</span></code></pre></div>
+<p>A typical output looks like:</p>
+<pre><code>Among 1,688 completed calls to 844 unique providers, Medicaid callers were
+significantly less likely to be offered an appointment than private-insurance
+callers (59.2% vs. 72.4%; adjusted odds ratio [aOR] 0.61, 95% CI [0.51,
+0.73]; p &lt; 0.001). This disparity persisted after adjustment for physician
+sex, subspecialty, practice setting, US Census region, and rurality
+(aOR 0.63, 95% CI [0.53, 0.75]; p &lt; 0.001). Among subspecialties,
+the largest disparity was observed in Urogynecology (aOR 0.44, 95% CI
+[0.28, 0.70]; p &lt; 0.001) and the smallest in Gynecologic Oncology
+(aOR 0.81, 95% CI [0.58, 1.13]; p = 0.21).</code></pre>
+</div>
+<div id="apa-style-number-formatting" class="section level2">
+<h2>9.2 APA-style number formatting</h2>
+<p>The function applies the following formatting rules
+automatically:</p>
+<ul>
+<li><strong>Odds ratios and risk ratios</strong> — two decimal places
+(e.g., <code>0.61</code>, not <code>0.6</code> or
+<code>0.613</code>).</li>
+<li><strong>Percentages</strong> — one decimal place (e.g.,
+<code>59.2%</code>).</li>
+<li><strong>p-values</strong> — three decimal places with
+<code>&lt; 0.001</code> substituted for any value below 0.001 (e.g.,
+<code>p = 0.031</code>, <code>p &lt; 0.001</code>).</li>
+<li><strong>Confidence intervals</strong> — in square brackets with two
+decimal places (e.g., <code>[0.51, 0.73]</code>), following APA 7th
+edition Table 7.21.</li>
+<li><strong>Large counts</strong> — comma-formatted (e.g.,
+<code>1,688</code>, not <code>1688</code>).</li>
+</ul>
+<p>Copy the paragraph output directly into your manuscript draft. Most
+medical journal style guides are compatible with APA number formatting
+for statistics; check the target journal’s instructions for authors if
+you are unsure.</p>
+<hr />
+</div>
+</div>
+<div id="complete-end-to-end-table-generation-example" class="section level1">
+<h1>10. Complete End-to-End Table Generation Example</h1>
+<p>This section demonstrates building all three primary manuscript
+tables and exporting them, using the 200-provider synthetic data frame
+defined in Section 2.1.</p>
+<div id="step-0-prepare-variables" class="section level2">
+<h2>10.1 Step 0 — Prepare variables</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># These preparations mirror what mysterycall_prepare_table1_vars() does</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co"># (run that function on your real data instead)</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>analysis_data<span class="sc">$</span>age_category <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  analysis_data<span class="sc">$</span>age_category,</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&lt; 40&quot;</span>, <span class="st">&quot;40-49&quot;</span>, <span class="st">&quot;50-59&quot;</span>, <span class="st">&quot;60+&quot;</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>analysis_data<span class="sc">$</span>appt_offered_binary <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  analysis_data<span class="sc">$</span>appt_offered <span class="sc">==</span> <span class="st">&quot;Yes&quot;</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-1-table-1-baseline-characteristics-stratified-by-subspecialty" class="section level2">
+<h2>10.2 Step 1 — Table 1: Baseline characteristics stratified by
+subspecialty</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>table1_final <span class="ot">&lt;-</span> <span class="fu">mysterycall_table1</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="at">data            =</span> analysis_data,</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="at">covariates      =</span> <span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;gender_std&quot;</span>, <span class="st">&quot;practice_setting&quot;</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>                      <span class="st">&quot;region_std&quot;</span>, <span class="st">&quot;ruca_category&quot;</span>, <span class="st">&quot;insurance_type&quot;</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>  <span class="at">stratify_by     =</span> <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>  <span class="at">include_overall =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  <span class="at">cont_stats      =</span> <span class="st">&quot;median_iqr&quot;</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>  <span class="at">digits          =</span> <span class="dv">1</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="at">p_value         =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>  <span class="at">min_cell        =</span> <span class="dv">5</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>  <span class="at">variable_labels =</span> <span class="fu">c</span>(</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>    <span class="at">age_category     =</span> <span class="st">&quot;Provider age, years&quot;</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>    <span class="at">gender_std       =</span> <span class="st">&quot;Physician sex&quot;</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>    <span class="at">practice_setting =</span> <span class="st">&quot;Practice setting&quot;</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>    <span class="at">region_std       =</span> <span class="st">&quot;US Census region&quot;</span>,</span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>    <span class="at">ruca_category    =</span> <span class="st">&quot;Rurality (RUCA category)&quot;</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a>    <span class="at">insurance_type   =</span> <span class="st">&quot;Insurance type assigned&quot;</span></span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>  )</span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>)</span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a><span class="co"># Export to PDF</span></span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a><span class="fu">mysterycall_write_table_pdf</span>(</span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>  <span class="at">object   =</span> table1_final,</span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;/study/tables/table1_by_subspecialty.pdf&quot;</span></span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a>)</span></code></pre></div>
+<p>Because we stratify by subspecialty (5 columns) with an Overall
+column, the resulting table is wide. Consider using landscape
+orientation if your journal allows it;
+<code>mysterycall_write_table_pdf()</code> detects wide tables
+automatically and applies landscape orientation when the number of
+columns exceeds 6.</p>
+</div>
+<div id="step-2-table-2-appointment-acceptance-rates-by-insurance-type" class="section level2">
+<h2>10.3 Step 2 — Table 2: Appointment acceptance rates by insurance
+type</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># First compute the disparity estimates</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># (assumes mysterycall_poisson_model() has already been run — see stats vignette)</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>disparity_result <span class="ot">&lt;-</span> <span class="fu">mysterycall_disparities_table</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="at">data          =</span> analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(analysis_data<span class="sc">$</span>appt_offered), ],</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>  <span class="at">outcome_var   =</span> <span class="st">&quot;appt_offered_binary&quot;</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>  <span class="at">insurance_var =</span> <span class="st">&quot;insurance_type&quot;</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>  <span class="at">ref_level     =</span> <span class="st">&quot;Private&quot;</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>  <span class="at">covariates    =</span> <span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;gender_std&quot;</span>, <span class="st">&quot;subspecialty&quot;</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>                    <span class="st">&quot;practice_setting&quot;</span>, <span class="st">&quot;region_std&quot;</span>, <span class="st">&quot;ruca_category&quot;</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>)</span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="co"># Format and print</span></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>  disparity_result<span class="sc">$</span>formatted_table,</span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Category&quot;</span>, <span class="st">&quot;Medicaid % (n)&quot;</span>,</span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a>                <span class="st">&quot;Private % (n)&quot;</span>, <span class="st">&quot;Unadjusted OR&quot;</span>,</span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a>                <span class="st">&quot;Adjusted OR&quot;</span>, <span class="st">&quot;95% CI&quot;</span>, <span class="st">&quot;p-value&quot;</span>),</span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a>  <span class="at">caption   =</span> <span class="fu">paste</span>(</span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a>    <span class="st">&quot;Table 2. Appointment Acceptance Rates and Adjusted Odds Ratios&quot;</span>,</span>
+<span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a>    <span class="st">&quot;by Insurance Type Among Obstetrics &amp; Gynecology Providers&quot;</span></span>
+<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a>  )</span>
+<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">footnote</span>(</span>
+<span id="cb23-25"><a href="#cb23-25" tabindex="-1"></a>    <span class="at">general =</span> <span class="fu">paste</span>(</span>
+<span id="cb23-26"><a href="#cb23-26" tabindex="-1"></a>      <span class="st">&quot;OR = odds ratio; CI = confidence interval.&quot;</span>,</span>
+<span id="cb23-27"><a href="#cb23-27" tabindex="-1"></a>      <span class="st">&quot;Adjusted models include physician sex, subspecialty, practice setting,&quot;</span>,</span>
+<span id="cb23-28"><a href="#cb23-28" tabindex="-1"></a>      <span class="st">&quot;US Census region, and RUCA rurality category as covariates.&quot;</span></span>
+<span id="cb23-29"><a href="#cb23-29" tabindex="-1"></a>    ),</span>
+<span id="cb23-30"><a href="#cb23-30" tabindex="-1"></a>    <span class="at">threeparttable =</span> <span class="cn">TRUE</span></span>
+<span id="cb23-31"><a href="#cb23-31" tabindex="-1"></a>  )</span>
+<span id="cb23-32"><a href="#cb23-32" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" tabindex="-1"></a><span class="co"># Export to CSV for journal supplement</span></span>
+<span id="cb23-34"><a href="#cb23-34" tabindex="-1"></a><span class="fu">write.csv</span>(</span>
+<span id="cb23-35"><a href="#cb23-35" tabindex="-1"></a>  disparity_result<span class="sc">$</span>formatted_table,</span>
+<span id="cb23-36"><a href="#cb23-36" tabindex="-1"></a>  <span class="at">file      =</span> <span class="st">&quot;/study/tables/table2_disparity.csv&quot;</span>,</span>
+<span id="cb23-37"><a href="#cb23-37" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb23-38"><a href="#cb23-38" tabindex="-1"></a>  <span class="at">na        =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb23-39"><a href="#cb23-39" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-3-table-3-median-wait-days-by-insurance-type" class="section level2">
+<h2>10.4 Step 3 — Table 3: Median wait days by insurance type</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Summarize wait times by insurance type using the Poisson model summary</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co"># (assumes mysterycall_poisson_model() has been run — see stats vignette)</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>wait_summary <span class="ot">&lt;-</span> analysis_data <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wait_days)) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(insurance_type) <span class="sc">|&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>    <span class="at">n            =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>    <span class="at">median_days  =</span> <span class="fu">median</span>(wait_days),</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    <span class="at">q1           =</span> <span class="fu">quantile</span>(wait_days, <span class="fl">0.25</span>),</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>    <span class="at">q3           =</span> <span class="fu">quantile</span>(wait_days, <span class="fl">0.75</span>),</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>    <span class="at">pct_gt28days =</span> <span class="fu">round</span>(<span class="fu">mean</span>(wait_days <span class="sc">&gt;</span> <span class="dv">28</span>) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>    <span class="at">.groups      =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>    <span class="at">median_iqr =</span> <span class="fu">paste0</span>(median_days, <span class="st">&quot; [&quot;</span>, q1, <span class="st">&quot;–&quot;</span>, q3, <span class="st">&quot;]&quot;</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>  )</span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>  wait_summary[, <span class="fu">c</span>(<span class="st">&quot;insurance_type&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;median_iqr&quot;</span>, <span class="st">&quot;pct_gt28days&quot;</span>)],</span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Insurance Type&quot;</span>, <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Median days [IQR]&quot;</span>, <span class="st">&quot;% &gt; 28 days&quot;</span>),</span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a>  <span class="at">caption   =</span> <span class="fu">paste</span>(</span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a>    <span class="st">&quot;Table 3. Days to Next Available Appointment by Insurance Type&quot;</span>,</span>
+<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a>    <span class="st">&quot;(Completed Calls with Appointment Offered)&quot;</span></span>
+<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a>  )</span>
+<span id="cb24-25"><a href="#cb24-25" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-4-export-all-three-tables-to-pdf" class="section level2">
+<h2>10.5 Step 4 — Export all three tables to PDF</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># Table 1 was already exported in Step 1.</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co"># Export Table 2 (disparity) to PDF:</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">mysterycall_write_table_pdf</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="at">object   =</span> disparity_result<span class="sc">$</span>arsenal_object,</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;/study/tables/table2_disparity.pdf&quot;</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co"># Table 3 (wait times) is a simple data frame, not an arsenal object;</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a><span class="co"># use knitr → rmarkdown → PDF for it:</span></span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">render</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>  <span class="at">input       =</span> <span class="st">&quot;/study/scripts/table3_waittimes.Rmd&quot;</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;/study/tables/table3_waittimes.pdf&quot;</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>  <span class="at">params      =</span> <span class="fu">list</span>(<span class="at">data_path =</span> <span class="st">&quot;/study/phase2_output/analysis_ready.rds&quot;</span>)</span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>)</span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a><span class="fu">message</span>(</span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>  <span class="st">&quot;All three tables exported.</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>  <span class="st">&quot;  Table 1: /study/tables/table1_by_subspecialty.pdf</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a>  <span class="st">&quot;  Table 2: /study/tables/table2_disparity.pdf</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a>  <span class="st">&quot;  Table 3: /study/tables/table3_waittimes.pdf</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a>  <span class="st">&quot;  Table 2 CSV supplement: /study/tables/table2_disparity.csv&quot;</span></span>
+<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="frequency-helpers-mysterycall_max_table-and-mysterycall_min_table" class="section level1">
+<h1>11. Frequency Helpers: <code>mysterycall_max_table()</code> and
+<code>mysterycall_min_table()</code></h1>
+<p>These helpers quickly identify the most- and least-common values in
+any vector — useful for sanity-checking free-text columns or building
+footnotes.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>subspecialties <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;General OB/GYN&quot;</span>, <span class="st">&quot;MFM&quot;</span>, <span class="st">&quot;GYN Oncology&quot;</span>, <span class="st">&quot;REI&quot;</span>, <span class="st">&quot;FPMRS&quot;</span>, <span class="st">&quot;General OB/GYN&quot;</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>    <span class="st">&quot;General OB/GYN&quot;</span>, <span class="st">&quot;MFM&quot;</span>, <span class="st">&quot;General OB/GYN&quot;</span>, <span class="st">&quot;REI&quot;</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">120</span>, <span class="at">replace =</span> <span class="cn">TRUE</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>)</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co"># Most common subspecialty</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Most common:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt; Most common:</span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">mysterycall_max_table</span>(subspecialties))</span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;General OB/GYN&quot;</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co"># Least common subspecialty</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Least common:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="co">#&gt; Least common:</span></span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">mysterycall_min_table</span>(subspecialties))</span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a><span class="co">#&gt; [1] &quot;GYN Oncology&quot;</span></span></code></pre></div>
+</div>
+<div id="formatting-percentages-mysterycall_format_pct" class="section level1">
+<h1>12. Formatting Percentages:
+<code>mysterycall_format_pct()</code></h1>
+<p><code>mysterycall_format_pct()</code> converts a numeric proportion
+to a character string with a configurable number of decimal places —
+useful for inline reporting and table cells.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>rates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.91</span>, <span class="fl">0.638</span>, <span class="fl">0.54</span>, <span class="fl">0.00</span>, <span class="fl">1.00</span>, <span class="fl">0.085</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>    <span class="at">raw_rate     =</span> rates,</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>    <span class="at">formatted_1d =</span> <span class="fu">mysterycall_format_pct</span>(rates, <span class="at">digits =</span> <span class="dv">1</span>),</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>    <span class="at">formatted_0d =</span> <span class="fu">mysterycall_format_pct</span>(rates, <span class="at">digits =</span> <span class="dv">0</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>  ),</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Raw proportion&quot;</span>, <span class="st">&quot;1 decimal place&quot;</span>, <span class="st">&quot;0 decimal places&quot;</span>),</span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>  <span class="at">caption   =</span> <span class="st">&quot;`mysterycall_format_pct()` output for typical acceptance rates.&quot;</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<caption><code>mysterycall_format_pct()</code> output for typical
+acceptance rates.</caption>
+<thead>
+<tr class="header">
+<th align="right">Raw proportion</th>
+<th align="left">1 decimal place</th>
+<th align="left">0 decimal places</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.910</td>
+<td align="left">91.0%</td>
+<td align="left">91%</td>
+</tr>
+<tr class="even">
+<td align="right">0.638</td>
+<td align="left">63.8%</td>
+<td align="left">64%</td>
+</tr>
+<tr class="odd">
+<td align="right">0.540</td>
+<td align="left">54.0%</td>
+<td align="left">54%</td>
+</tr>
+<tr class="even">
+<td align="right">0.000</td>
+<td align="left">0.0%</td>
+<td align="left">0%</td>
+</tr>
+<tr class="odd">
+<td align="right">1.000</td>
+<td align="left">100.0%</td>
+<td align="left">100%</td>
+</tr>
+<tr class="even">
+<td align="right">0.085</td>
+<td align="left">8.5%</td>
+<td align="left">8%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div id="a-note-on-journal-specific-requirements" class="section level2">
+<h2>A note on journal-specific requirements</h2>
+<p><strong>NEJM</strong> — Tables must be submitted as separate files.
+Use <code>mysterycall_write_table_pdf()</code> for each table
+individually, then convert to EPS or TIFF at 600 DPI using the journal’s
+figure preparation guidelines (NEJM treats tables as figures in its
+online submission system). Do not embed significance stars; report exact
+p-values. Confidence intervals in parentheses, not brackets.</p>
+<p><strong>JAMA and JAMA Network journals</strong> — Accept Word or PDF.
+The <code>mysterycall_table1_gtsummary()</code> →
+<code>gtsummary::as_flex_table()</code> →
+<code>flextable::save_as_docx()</code> pipeline (Section 3.3) produces
+JAMA-compliant Word output. JAMA requires that Table 1 report “No.” (not
+“N” or “n”) as the column header for counts.</p>
+<p><strong>Obstetrics &amp; Gynecology (Green Journal)</strong> —
+Accepts Word. Prefers that percentages be reported as whole numbers for
+proportions &gt; 10% and one decimal place for proportions &lt; 10%. Set
+<code>digits = 0</code> in <code>mysterycall_table1()</code> and apply a
+custom formatting function for small proportions. The Green Journal does
+not require p-values in Table 1 for randomised or balanced designs.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

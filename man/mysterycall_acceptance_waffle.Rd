@@ -65,12 +65,13 @@ Inspired by Nicola Rennie (2024), "Five Charts You Can Make with the
 \code{waffle} Package", \url{https://nrennie.rbind.io/}.
 }
 \note{
-Requires the \pkg{waffle} and \pkg{patchwork} packages (listed in
-\code{Suggests}).  Install with:
-\code{install.packages(c("waffle", "patchwork"))}.
+Requires the \pkg{waffle} package (GitHub-only -- not on CRAN) and
+\pkg{patchwork}.  Install with:
+\code{remotes::install_github("hrbrmstr/waffle")} and
+\code{install.packages("patchwork")}.
 }
 \examples{
-\dontshow{if (requireNamespace("waffle", quietly = TRUE) && requireNamespace("patchwork", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontrun{
 acc <- data.frame(
   insurance_type = c("Medicaid", "Medicaid", "BCBS", "BCBS"),
   outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
@@ -78,7 +79,7 @@ acc <- data.frame(
   stringsAsFactors = FALSE
 )
 mysterycall_acceptance_waffle(acc, output_dir = NA)
-\dontshow{\}) # examplesIf}
+}
 }
 \seealso{
 Other visualization: 

@@ -17,7 +17,7 @@
 #'
 #' @return A named list:
 #' \describe{
-#'   \item{`sentence`}{Character scalar — the full manuscript paragraph.}
+#'   \item{`sentence`}{Character scalar \u2014 the full manuscript paragraph.}
 #'   \item{`overall_stats`}{Named list: `median`, `q1`, `q3` (across all rows).}
 #'   \item{`group_stats`}{Tibble from [mysterycall_wait_time_by_group()].}
 #'   \item{`p_values`}{Named numeric vector of formatted p-values (one per
@@ -116,7 +116,7 @@ mysterycall_wait_time_sentence <- function(
 
   # 5. Build sentence
   overall_clause <- sprintf(
-    "The median wait time across all %s was %g business days (IQR: %g–%g).",
+    "The median wait time across all %s was %g business days (IQR: %g\u2013%g).",
     group_col,
     ov_median, ov_q1, ov_q3
   )
@@ -128,7 +128,7 @@ mysterycall_wait_time_sentence <- function(
     q1_i  <- group_stats$q1[i]
     q3_i  <- group_stats$q3[i]
     per_group_parts[i] <- sprintf(
-      "%g days (IQR: %g–%g) for %s",
+      "%g days (IQR: %g\u2013%g) for %s",
       med_i, q1_i, q3_i, lvl
     )
   }
