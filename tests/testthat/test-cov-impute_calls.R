@@ -103,7 +103,7 @@ test_that("mysterycall_impute_calls: rejects missing required argument", {
     stringsAsFactors = FALSE
   )
 
-  # Missing outcome_col argument
+  # Missing outcome_col argument - expect any error (missing required argument)
   expect_error(
     mysterycall_impute_calls(
       data             = df,
@@ -111,8 +111,7 @@ test_that("mysterycall_impute_calls: rejects missing required argument", {
       random_intercept = "physician",
       m                = 3L,
       seed             = 42L
-    ),
-    NA
+    )
   )
 })
 

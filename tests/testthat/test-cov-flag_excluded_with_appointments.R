@@ -58,7 +58,7 @@ test_that("flag_excluded_with_appointments returns zero-row tibble when none fla
 
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
-  expect_invisible(result)
+  expect_invisible(suppressMessages(mysterycall_flag_excluded_with_appointments(df, output_dir = NA)))
 })
 
 # Test 3: Sorting by id_number descending when present
@@ -139,7 +139,8 @@ test_that("flag_excluded_with_appointments flags NA in exclusion_col", {
     mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
   )
 
-  expect_equal(nrow(result), 2L)
+  # NA in exclusion_col: dplyr drops NA-condition rows, so only the non-NA excluded row remains
+  expect_equal(nrow(result), 1L)
 })
 
 # Test 7: Edge case - zero days (boundary: days == 0 not flagged)

@@ -36,7 +36,8 @@ test_that("mysterycall_insurance_wait_sentence returns expected structure", {
   expect_type(res, "list")
   expect_named(res, c("sentence", "irr", "ci_lower", "ci_upper", "p_value",
                       "pct_diff", "medicaid_stats", "bcbs_stats"))
-  expect_character(res$sentence, len = 1)
+  expect_type(res$sentence, "character")
+  expect_length(res$sentence, 1L)
   expect_type(res$irr, "double")
   expect_type(res$ci_lower, "double")
   expect_type(res$ci_upper, "double")
@@ -60,7 +61,7 @@ test_that("mysterycall_insurance_wait_sentence works with custom column names", 
     insurance_col = "ins_type"
   ))
 
-  expect_character(res$sentence)
+  expect_type(res$sentence, "character")
   expect_true(nchar(res$sentence) > 0)
   expect_true(grepl("Medicaid", res$sentence))
   expect_true(grepl("Blue Cross/Blue Shield", res$sentence))
@@ -80,7 +81,7 @@ test_that("mysterycall_insurance_wait_sentence works with custom labels", {
     bcbs_label = "PPO"
   ))
 
-  expect_character(res$sentence)
+  expect_type(res$sentence, "character")
   expect_true(grepl("MA", res$sentence))
   expect_true(grepl("PPO", res$sentence))
 })

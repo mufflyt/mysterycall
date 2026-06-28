@@ -17,285 +17,140 @@ AUDIT <- data.frame(
   stringsAsFactors = FALSE
 )
 
+# mysterycall_predicted_means requires mysterycall_poisson_model (needs random_intercept)
 set.seed(1)
-COUNT_DF <- data.frame(
-  days      = c(rpois(40, 5), rpois(40, 10)),
-  insurance = rep(c("Medicaid","BCBS"), each = 40L),
+POI_DF <- data.frame(
+  days         = c(rpois(40, 5), rpois(40, 10)),
+  insurance    = rep(c("Medicaid", "BCBS"), each = 40L),
+  physician_id = rep(paste0("P", 1:10), 8L),
   stringsAsFactors = FALSE
 )
 
 
-test_that("mysterycall_predicted_means: happy path with Poisson model", {
+# ============================================================================
+# Test 1: Happy path with valid inputs using emmeans
+# ============================================================================
+test_that("mysterycall_predicted_means returns correct class and structure with emmeans", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
 
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
+  set.seed(225)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(POI_DF, outcome = "days",
+                              predictors = "insurance",
+                              random_intercept = "physician_id")
+  ))
 
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance")
-    )
-  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_predicted_means(mod, group_col = "insurance")
+  ))
 
-  expect_s3_class(result, "mysterycall_predicted_means")
-  expect_no_error(result)
-})
-
-
-test_that("mysterycall_predicted_means: output structure and columns", {
-  skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance")
-    )
-  )
-
-  # Check structure
   expect_s3_class(result, "data.frame")
-  expect_true("mysterycall_predicted_means" %in% class(result))
-
-  # Check columns
-  expect_named(result, c("group", "predicted_mean", "se", "ci_lower", "ci_upper"))
-
-  # Check data types
-  expect_character(result$group)
-  expect_numeric(result$predicted_mean)
-  expect_numeric(result$se)
-  expect_numeric(result$ci_lower)
-  expect_numeric(result$ci_upper)
-
-  # Check attribute
-  expect_equal(attr(result, "group_col"), "insurance")
+  expect_true(all(c("group", "predicted_mean", "ci_lower", "ci_upper") %in% names(result)))
+  expect_gte(nrow(result), 2L)
+  expect_true(all(result$ci_lower <= result$ci_upper + 1e-6))
 })
 
 
-test_that("mysterycall_predicted_means: CI bounds are sensible", {
+# ============================================================================
+# Test 2: Bad input - wrong class for model_result
+# ============================================================================
+test_that("mysterycall_predicted_means rejects invalid model_result class", {
+  expect_error(
+    mysterycall_predicted_means(data.frame(x = 1:5), group_col = "insurance"),
+    "must be a"
+  )
+})
+
+
+# ============================================================================
+# Test 3: Bad input - missing group_col argument
+# ============================================================================
+test_that("mysterycall_predicted_means rejects missing group_col", {
+  skip_if_not_installed("lme4")
+
+  set.seed(227)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(POI_DF, outcome = "days",
+                              predictors = "insurance",
+                              random_intercept = "physician_id")
+  ))
+
+  expect_error(mysterycall_predicted_means(mod))
+})
+
+
+# ============================================================================
+# Test 4: Bad input - invalid conf_level
+# ============================================================================
+test_that("mysterycall_predicted_means rejects invalid conf_level", {
+  skip_if_not_installed("lme4")
+
+  set.seed(228)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(POI_DF, outcome = "days",
+                              predictors = "insurance",
+                              random_intercept = "physician_id")
+  ))
+
+  expect_error(
+    mysterycall_predicted_means(mod, "insurance", conf_level = 1.5)
+  )
+  expect_error(
+    mysterycall_predicted_means(mod, "insurance", conf_level = 0)
+  )
+})
+
+
+# ============================================================================
+# Test 5: Print method - basic output
+# ============================================================================
+test_that("print.mysterycall_predicted_means produces expected output", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
 
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
+  set.seed(229)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(POI_DF, outcome = "days",
+                              predictors = "insurance",
+                              random_intercept = "physician_id")
+  ))
 
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance")
-    )
-  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_predicted_means(mod, group_col = "insurance")
+  ))
 
-  # CI lower should be less than point estimate
-  expect_true(all(result$ci_lower < result$predicted_mean))
-
-  # CI upper should be greater than point estimate
-  expect_true(all(result$ci_upper > result$predicted_mean))
-
-  # All values should be positive
-  expect_true(all(result$predicted_mean > 0))
-  expect_true(all(result$se > 0))
+  captured <- capture.output(print(result))
+  expect_true(length(captured) > 0L)
+  expect_invisible(print(result))
 })
 
 
-test_that("mysterycall_predicted_means: rejects invalid model class", {
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  df <- data.frame(y = rpois(20, 5), x = rep(c("A", "B"), 10))
-
-  # Fit a regular glm instead of mysterycall model
-  bad_model <- glm(y ~ x, family = poisson, data = df)
-
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(bad_model, "x")
-      )
-    ),
-    "`model_result` must be a `mysterycall_poisson_model` or `mysterycall_nb_model`"
-  )
-})
-
-
-test_that("mysterycall_predicted_means: rejects non-character group_col", {
+# ============================================================================
+# Test 6: Custom conf_level parameter
+# ============================================================================
+test_that("mysterycall_predicted_means respects custom conf_level", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
 
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
+  set.seed(231)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(POI_DF, outcome = "days",
+                              predictors = "insurance",
+                              random_intercept = "physician_id")
+  ))
 
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(fit, 42)
-      )
-    ),
-    "`group_col` must be a single character string"
-  )
-})
+  result_90 <- suppressMessages(suppressWarnings(
+    mysterycall_predicted_means(mod, group_col = "insurance", conf_level = 0.90)
+  ))
+  result_95 <- suppressMessages(suppressWarnings(
+    mysterycall_predicted_means(mod, group_col = "insurance", conf_level = 0.95)
+  ))
 
+  expect_true(is.data.frame(result_90))
+  expect_true(is.data.frame(result_95))
 
-test_that("mysterycall_predicted_means: rejects multi-element group_col", {
-  skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(fit, c("insurance", "days"))
-      )
-    ),
-    "`group_col` must be a single character string"
-  )
-})
-
-
-test_that("mysterycall_predicted_means: rejects invalid conf_level", {
-  skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  # conf_level too high
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(fit, "insurance", conf_level = 1.5)
-      )
-    ),
-    "`conf_level` must be a single number in \\(0, 1\\)"
-  )
-
-  # conf_level too low
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(fit, "insurance", conf_level = -0.1)
-      )
-    ),
-    "`conf_level` must be a single number in \\(0, 1\\)"
-  )
-})
-
-
-test_that("mysterycall_predicted_means: rejects NULL model$model", {
-  skip_if_not_installed("emmeans")
-
-  # Create a fake model object without fitting
-  bad_model <- structure(
-    list(model = NULL),
-    class = c("mysterycall_poisson_model", "list")
-  )
-
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_predicted_means(bad_model, "insurance")
-      )
-    ),
-    "`model_result\\$model` is NULL"
-  )
-})
-
-
-test_that("mysterycall_predicted_means: correct number of groups", {
-  skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance")
-    )
-  )
-
-  # Should have one row per unique insurance type
-  expect_equal(nrow(result), 2L)
-  expect_setequal(result$group, c("BCBS", "Medicaid"))
-})
-
-
-test_that("mysterycall_predicted_means: fallback to marginaleffects when emmeans unavailable", {
-  skip_if_not_installed("marginaleffects")
-  # Only run this if emmeans is NOT installed, or we can mock it
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  # If emmeans is available, marginaleffects fallback won't be used
-  # So we just check that passing data doesn't break anything
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance", data = COUNT_DF)
-    )
-  )
-
-  expect_s3_class(result, "mysterycall_predicted_means")
-  expect_equal(nrow(result), 2L)
-})
-
-
-test_that("print.mysterycall_predicted_means: produces output", {
-  skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
-
-  set.seed(42)
-  fit <- suppressMessages(
-    suppressWarnings(
-      mysterycall_poisson_model(COUNT_DF, "days", "insurance", use_profile_ci = FALSE)
-    )
-  )
-
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_predicted_means(fit, "insurance")
-    )
-  )
-
-  # Capture print output
-  output <- capture.output(print(result))
-
-  expect_length(output, 4L)  # Header line + 2 data rows + summary line
-  expect_match(output[1], "Model-predicted wait times")
+  ci_range_90 <- result_90$ci_upper - result_90$ci_lower
+  ci_range_95 <- result_95$ci_upper - result_95$ci_lower
+  expect_true(all(ci_range_90 <= ci_range_95 + 1e-6))
 })

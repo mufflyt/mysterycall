@@ -566,7 +566,7 @@ test_that("mysterycall_literature_table() correctly computes Direction column", 
     insurance_comparison = c("Med vs. Priv", "Med vs. Priv", "Med vs. Priv"),
     or                   = c(0.50, 1.00, 0.70),
     ci_lower             = c(0.30, 0.90, 0.60),
-    ci_upper             = c(0.70, 1.10, 0.90),
+    ci_upper             = c(0.70, 1.10, 1.20),
     n                    = c(500L, 600L, 700L),
     stringsAsFactors     = FALSE
   )

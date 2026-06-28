@@ -162,12 +162,13 @@ test_that("export_results_docx warns for non-.docx extension", {
   simple_table <- data.frame(x = 1:2, stringsAsFactors = FALSE)
   output_file <- tempfile(fileext = ".txt")
 
+  # officer errors when saving to non-.docx; wrap inner call so we can check the warning
   expect_warning(
-    suppressMessages(
-      mysterycall_export_results_docx(
-        simple_table,
-        output_path = output_file
-      )
+    tryCatch(
+      suppressMessages(
+        mysterycall_export_results_docx(simple_table, output_path = output_file)
+      ),
+      error = function(e) invisible(NULL)
     ),
     "does not end in '.docx'"
   )
@@ -177,7 +178,7 @@ test_that("export_results_docx warns for non-.docx extension", {
 
 
 test_that("export_results_docx skips when officer not installed", {
-  skip_if_installed("officer")
+  skip_if(requireNamespace("officer", quietly = TRUE), "officer is installed; cannot test missing-package error")
 
   simple_table <- data.frame(x = 1:2, stringsAsFactors = FALSE)
   output_file <- tempfile(fileext = ".docx")
@@ -197,7 +198,7 @@ test_that("export_results_docx skips when officer not installed", {
 
 
 test_that("export_results_docx skips when flextable not installed", {
-  skip_if_installed("flextable")
+  skip_if(requireNamespace("flextable", quietly = TRUE), "flextable is installed; cannot test missing-package error")
 
   simple_table <- data.frame(x = 1:2, stringsAsFactors = FALSE)
   output_file <- tempfile(fileext = ".docx")

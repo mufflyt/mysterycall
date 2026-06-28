@@ -58,7 +58,7 @@ test_that("mysterycall_verify_artifact() succeeds with valid audit JSON", {
   # Should pass verification
   result <- suppressMessages(mysterycall_verify_artifact(tmp_file))
   expect_identical(result, TRUE)
-  expect_invisible(result)
+  expect_invisible(suppressMessages(mysterycall_verify_artifact(tmp_file)))
 
   # Cleanup
   unlink(tmp_file)

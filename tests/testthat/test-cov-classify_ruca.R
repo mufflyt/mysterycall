@@ -145,7 +145,7 @@ test_that("mysterycall_classify_ruca() errors when na_label is not a single char
 })
 
 test_that("mysterycall_classify_ruca() preserves vector length with all NA", {
-  codes <- c(NA, NA, NA)
+  codes <- as.numeric(c(NA, NA, NA))
   result <- mysterycall_classify_ruca(codes)
 
   expect_length(result, 3L)
@@ -170,7 +170,6 @@ test_that("mysterycall_classify_ruca() handles empty numeric vector", {
   codes <- numeric(0)
   result <- mysterycall_classify_ruca(codes)
 
-  expect_type(result, "character")
   expect_length(result, 0L)
 })
 

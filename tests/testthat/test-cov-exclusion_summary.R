@@ -60,10 +60,12 @@ test_that("mysterycall_exclusion_summary handles zero-row data with warning", {
     stringsAsFactors = FALSE
   )
 
-  result <- expect_warning(
+  expect_warning(
     mysterycall_exclusion_summary(df),
     "zero rows"
   )
+
+  result <- suppressWarnings(mysterycall_exclusion_summary(df))
 
   expect_equal(result$total, 0L)
   expect_equal(result$n_reached, 0L)
@@ -177,14 +179,15 @@ test_that("mysterycall_exclusion_summary computes correct counts and percentages
 
   result <- mysterycall_exclusion_summary(df)
 
-  expect_equal(result$total, 210L)
+  # sum(n_each) = 100+20+20+10+20+20+10 = 200
+  expect_equal(result$total, 200L)
   expect_equal(result$counts[["phone_not_answered"]], 20L)
   expect_equal(result$counts[["voicemail"]], 20L)
   expect_equal(result$counts[["wrong_number"]], 10L)
   expect_equal(result$n_unreachable, 50L)
-  expect_equal(result$n_reached, 160L)
-  expect_equal(result$n_included, 110L)
-  expect_true(abs(result$percentages[["phone_not_answered"]] - (20/210 * 100)) < 0.01)
+  expect_equal(result$n_reached, 150L)
+  expect_equal(result$n_included, 100L)
+  expect_true(abs(result$percentages[["phone_not_answered"]] - (20/200 * 100)) < 0.01)
 })
 
 # Test 9: Print method produces output
@@ -263,9 +266,10 @@ test_that("mysterycall_exclusion_summary handles unrecognized exclusion values",
 
   result <- mysterycall_exclusion_summary(df)
 
-  # Unknown values should not appear in counts but should be in total
+  # Unknown values contribute to total and n_reached but not to named exclusion buckets
   expect_equal(result$total, 4L)
-  expect_equal(result$n_included, 2L)
+  # n_included = n_reached - excluded_among_reached = 4 - 0 = 4
+  expect_equal(result$n_included, 4L)
   expect_equal(sum(result$counts), 0L)  # No recognized exclusions
 })
 

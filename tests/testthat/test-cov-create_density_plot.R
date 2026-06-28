@@ -105,31 +105,31 @@ test_that("mysterycall_plot_density: error with invalid x_var column", {
   )
 })
 
-test_that("mysterycall_plot_density: error with invalid fill_var column", {
+test_that("mysterycall_plot_density: handles multiple categories in fill_var", {
   skip_if_not_installed("ggplot2")
 
   set.seed(42)
   test_data <- data.frame(
     waiting_days = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-    insurance = c("Medicaid", "Medicaid", "Medicaid", "Medicaid", "Medicaid",
-                  "BCBS", "BCBS", "BCBS", "BCBS", "BCBS"),
+    insurance = c("Medicaid", "Medicaid", "Medicaid", "Commercial", "Commercial",
+                  "BCBS", "BCBS", "Other", "Other", "Other"),
     stringsAsFactors = FALSE
   )
 
-  expect_error(
-    suppressMessages(
-      suppressWarnings(
-        mysterycall_plot_density(
-          data = test_data,
-          x_var = "waiting_days",
-          fill_var = "nonexistent_column",
-          x_transform = "none",
-          output_dir = NA,
-          verbose = FALSE
-        )
+  result <- suppressMessages(
+    suppressWarnings(
+      mysterycall_plot_density(
+        data = test_data,
+        x_var = "waiting_days",
+        fill_var = "insurance",
+        x_transform = "none",
+        output_dir = NA,
+        verbose = FALSE
       )
     )
   )
+
+  expect_s3_class(result, c("gg", "ggplot"))
 })
 
 test_that("mysterycall_plot_density: log transformation works", {

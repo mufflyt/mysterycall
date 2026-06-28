@@ -95,23 +95,27 @@ mysterycall_plot_density <- function(data,
   # Display the plot
   invisible(density_plot)
 
-  if (is.null(output_dir)) {
-    output_dir <- mysterycall_tempdir("density_plots", create = TRUE)
-  } else if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
-  }
+  if (isTRUE(is.na(output_dir))) {
+    # Skip file writing when output_dir = NA
+  } else {
+    if (is.null(output_dir)) {
+      output_dir <- mysterycall_tempdir("density_plots", create = TRUE)
+    } else if (!dir.exists(output_dir)) {
+      dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    }
 
-  # Automatic Filename Generation
-  timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
-  tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
-  png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
+    timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+    tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
+    png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
 
-  ggplot2::ggsave(filename = tiff_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in", compression = "lzw")
-  ggplot2::ggsave(filename = png_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in")
+    ggplot2::ggsave(filename = tiff_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in", compression = "lzw")
+    ggplot2::ggsave(filename = png_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in")
 
-  if (verbose) {
-    message("Plots saved to: ", tiff_filename, " and ", png_filename)
+    if (verbose) {
+      message("Plots saved to: ", tiff_filename, " and ", png_filename)
+    }
   }
 
   invisible(density_plot)
 }
+

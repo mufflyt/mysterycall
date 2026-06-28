@@ -13,7 +13,6 @@ AUDIT <- data.frame(
   specialty                        = c("OB/GYN","OB/GYN","OB/GYN","OB/GYN"),
   phone                            = c("3035550100","3035550100","7205550200","7205550200"),
   physician_information            = c("Smith, John","Smith, John","Doe, Jane","Doe, Jane"),
-  physician                        = c("Dr_1", "Dr_1", "Dr_2", "Dr_2"),
   reason_for_exclusions            = rep("Able to contact", 4L),
   stringsAsFactors = FALSE
 )
@@ -26,199 +25,432 @@ COUNT_DF <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
-test_that("mysterycall_table2 returns valid object with minimal inputs", {
+test_that("mysterycall_table2: happy path with baseline_mean", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(2)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
+  set.seed(3)
   result <- suppressMessages(suppressWarnings(
     mysterycall_table2(
-      data      = AUDIT,
-      model_result = model,
-      group_col = "insurance"
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      accepted_col = "contact_office",
+      baseline_mean = 10,
+      exposure_col = "insurance",
+      ref_group = "BCBS",
+      digits = 2L,
+      include_intercept = FALSE
     )
   ))
 
   expect_s3_class(result, "mysterycall_table2")
+  expect_true(is.list(result))
   expect_named(result, c("acceptance", "estimates", "notes"))
-  expect_s3_class(result$acceptance, "data.frame")
-  expect_s3_class(result$estimates, "data.frame")
-  expect_type(result$notes, "character")
-})
-
-
-test_that("mysterycall_table2 output has correct structure", {
-  skip_if_not_installed("lme4")
-
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
-  ))
-
-  result <- suppressMessages(suppressWarnings(
-    mysterycall_table2(
-      data      = AUDIT,
-      model_result = model,
-      group_col = "insurance"
-    )
-  ))
-
-  # Panel A: acceptance
-  expect_true(nrow(result$acceptance) > 0L)
-  expect_true(all(c("Group", "N", "Accepted, n (%)", "95% CI") %in% names(result$acceptance)))
-
-  # Panel B: estimates
-  expect_true(nrow(result$estimates) > 0L)
-  expect_true(all(c("Term", "IRR", "IRR 95% CI", "p-value") %in% names(result$estimates)))
-
-  # Notes
+  expect_true(is.data.frame(result$acceptance))
+  expect_named(
+    result$acceptance,
+    c("Group", "N", "Accepted, n (%)", "95% CI")
+  )
+  expect_true(nrow(result$acceptance) >= 1L)
+  expect_true(is.data.frame(result$estimates))
+  expect_true("Days Diff" %in% names(result$estimates))
+  expect_true("Days 95% CI" %in% names(result$estimates))
+  expect_true(is.character(result$notes))
   expect_true(length(result$notes) >= 2L)
 })
 
-
-test_that("mysterycall_table2 adds Days columns when baseline_mean provided", {
+test_that("mysterycall_table2: edge case without baseline_mean", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
-  ))
-
-  result <- suppressMessages(suppressWarnings(
-    mysterycall_table2(
-      data         = AUDIT,
-      model_result = model,
-      group_col    = "insurance",
-      baseline_mean = 7.5,
-      exposure_col = "insurance"
+  set.seed(4)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
     )
   ))
 
-  expect_true(all(c("Days Diff", "Days 95% CI") %in% names(result$estimates)))
-  expect_equal(length(result$notes), 3L)
+  set.seed(5)
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      accepted_col = "contact_office",
+      baseline_mean = NULL,
+      digits = 2L,
+      include_intercept = FALSE
+    )
+  ))
+
+  expect_s3_class(result, "mysterycall_table2")
+  expect_false("Days Diff" %in% names(result$estimates))
+  expect_false("Days 95% CI" %in% names(result$estimates))
+  expect_named(
+    result$estimates,
+    c("Term", "IRR", "IRR 95% CI", "p-value")
+  )
+  expect_true(length(result$notes) >= 2L)
 })
 
-
-test_that("mysterycall_table2 errors on invalid data argument", {
+test_that("mysterycall_table2: bad input - data is not a data frame", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(6)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
   expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_table2(
-        data         = as.list(AUDIT),
-        model_result = model,
-        group_col    = "insurance"
-      )
-    )),
+    mysterycall_table2(
+      data = list(foo = 1),
+      model_result = mod,
+      group_col = "insurance"
+    ),
     "`data` must be a data frame"
   )
 })
 
-
-test_that("mysterycall_table2 errors on invalid group_col argument", {
+test_that("mysterycall_table2: bad input - group_col not in data", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(7)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
   expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_table2(
-        data         = AUDIT,
-        model_result = model,
-        group_col    = c("insurance", "wave")
-      )
-    )),
-    "`group_col` must be a single character string"
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "nonexistent_column"
+    ),
+    "not found in `data`"
   )
 })
 
-
-test_that("mysterycall_table2 errors on missing group_col in data", {
+test_that("mysterycall_table2: bad input - accepted_col not in data", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(8)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
   expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_table2(
-        data         = AUDIT,
-        model_result = model,
-        group_col    = "nonexistent_column"
-      )
-    )),
-    "Column 'nonexistent_column' not found"
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      accepted_col = "nonexistent_col"
+    ),
+    "not found in `data`"
   )
 })
 
-
-test_that("mysterycall_table2 errors on invalid model_result", {
+test_that("mysterycall_table2: bad input - wrong model_result class", {
+  set.seed(9)
   expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_table2(
-        data         = AUDIT,
-        model_result = list(some = "object"),
-        group_col    = "insurance"
-      )
-    )),
-    "`model_result` must be a `mysterycall_poisson_model` or `mysterycall_nb_model`"
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = list(irr_table = data.frame()),
+      group_col = "insurance"
+    ),
+    "`model_result` must be a"
   )
 })
 
-
-test_that("mysterycall_table2 errors on invalid baseline_mean", {
+test_that("mysterycall_table2: bad input - negative baseline_mean", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(10)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
   expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_table2(
-        data         = AUDIT,
-        model_result = model,
-        group_col    = "insurance",
-        baseline_mean = -5
-      )
-    )),
-    "`baseline_mean` must be a single positive number"
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = -5
+    ),
+    "must be a single positive number"
   )
 })
 
-
-test_that("print.mysterycall_table2 produces output without error", {
+test_that("mysterycall_table2: bad input - group_col is not a character", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
-  model <- suppressMessages(suppressWarnings(
-    mysterycall_poisson_model(COUNT_DF, "days", "insurance", "physician")
+  set.seed(11)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
   ))
 
+  expect_error(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = 1
+    ),
+    "must be a single character string"
+  )
+})
+
+test_that("mysterycall_table2: parameter include_intercept = TRUE", {
+  skip_if_not_installed("lme4")
+
+  set.seed(12)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(13)
+  result_with_intercept <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      include_intercept = TRUE
+    )
+  ))
+
+  expect_s3_class(result_with_intercept, "mysterycall_table2")
+  expect_true(nrow(result_with_intercept$estimates) >= 1L)
+})
+
+test_that("mysterycall_table2: digits parameter affects formatting", {
+  skip_if_not_installed("lme4")
+
+  set.seed(14)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(15)
+  result_digits_0 <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = 10,
+      digits = 0L
+    )
+  ))
+
+  set.seed(16)
+  result_digits_3 <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = 10,
+      digits = 3L
+    )
+  ))
+
+  expect_s3_class(result_digits_0, "mysterycall_table2")
+  expect_s3_class(result_digits_3, "mysterycall_table2")
+  expect_true("IRR" %in% names(result_digits_0$estimates))
+  expect_true("IRR" %in% names(result_digits_3$estimates))
+})
+
+test_that("print.mysterycall_table2: returns invisible and prints output", {
+  skip_if_not_installed("lme4")
+
+  set.seed(17)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(18)
+  tbl2 <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = 10
+    )
+  ))
+
+  output <- capture.output(result_inv <- print(tbl2))
+  expect_identical(result_inv, tbl2)
+  expect_true(any(grepl("Panel A", output)))
+  expect_true(any(grepl("Panel B", output)))
+  expect_true(any(grepl("Notes", output)))
+})
+
+test_that("print.mysterycall_table2: happy path without baseline_mean", {
+  skip_if_not_installed("lme4")
+
+  set.seed(19)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(20)
+  tbl2_no_baseline <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = NULL
+    )
+  ))
+
+  output <- capture.output(print(tbl2_no_baseline))
+  expect_true(any(grepl("Panel A", output)))
+  expect_true(any(grepl("Panel B", output)))
+})
+
+test_that("mysterycall_table2: acceptance panel has correct structure", {
+  skip_if_not_installed("lme4")
+
+  set.seed(21)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(22)
   result <- suppressMessages(suppressWarnings(
     mysterycall_table2(
-      data      = AUDIT,
-      model_result = model,
+      data = AUDIT,
+      model_result = mod,
       group_col = "insurance"
     )
   ))
 
-  expect_output(print(result), "Panel A")
-  expect_output(print(result), "Panel B")
-  expect_output(print(result), "Notes")
+  acc <- result$acceptance
+  expect_true(all(sapply(acc, function(x) is.character(x) || is.numeric(x))))
+  expect_true(all(grepl("%", acc[["Accepted, n (%)"]], fixed = TRUE)))
+  expect_true(all(grepl("%", acc[["95% CI"]], fixed = TRUE)))
+})
+
+test_that("mysterycall_table2: estimates panel has correct attributes", {
+  skip_if_not_installed("lme4")
+
+  set.seed(23)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(24)
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance"
+    )
+  ))
+
+  est <- result$estimates
+  expect_true(!is.null(attr(est, "significant_rows")))
+  expect_true(all(sapply(est, function(x) is.character(x) || is.numeric(x))))
+})
+
+test_that("mysterycall_table2: notes vector structure", {
+  skip_if_not_installed("lme4")
+
+  set.seed(25)
+  mod <- suppressMessages(suppressWarnings(
+    mysterycall_poisson_model(
+      COUNT_DF,
+      outcome = "days",
+      predictors = "insurance",
+      random_intercept = "physician"
+    )
+  ))
+
+  set.seed(26)
+  result_with_baseline <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = 15
+    )
+  ))
+
+  set.seed(27)
+  result_no_baseline <- suppressMessages(suppressWarnings(
+    mysterycall_table2(
+      data = AUDIT,
+      model_result = mod,
+      group_col = "insurance",
+      baseline_mean = NULL
+    )
+  ))
+
+  expect_true(length(result_with_baseline$notes) > length(result_no_baseline$notes))
+  expect_true(all(is.character(result_with_baseline$notes)))
+  expect_true(all(is.character(result_no_baseline$notes)))
+  expect_true(any(grepl("IRR", result_with_baseline$notes)))
+  expect_true(any(grepl("confidence interval", result_with_baseline$notes, ignore.case = TRUE)))
 })

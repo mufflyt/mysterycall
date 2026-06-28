@@ -1,5 +1,4 @@
 library(testthat)
-library(mysterycall)
 
 AUDIT <- data.frame(
   npi                              = c("1234567893","1234567893","9876543210","9876543210"),
@@ -159,5 +158,7 @@ test_that("invisibly returns filtered data frame", {
   # Result should have the filtered data
   expect_equal(nrow(result), 1L)
   expect_equal(result$count[1], 4L)
-  expect_names(names(result), must.include = c("npi", "name", "count"))
+  expect_true("npi" %in% names(result))
+  expect_true("name" %in% names(result))
+  expect_true("count" %in% names(result))
 })

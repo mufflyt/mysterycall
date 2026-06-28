@@ -58,26 +58,24 @@ test_that("mysterycall_impute_age handles NA values correctly", {
 })
 
 test_that("mysterycall_impute_age warns when ages fall outside min_age/max_age bounds", {
-  # Age too low: 1995 with high ref_year -> age > 90
+  # Age too high: 1920 with ref_year=2026 -> age 133 (offset 27 default) > max_age=90 -> warning
   expect_warning(
     mysterycall_impute_age(1920, ref_year = 2026L, max_age = 90),
     "imputed age.*outside"
   )
 
-  # Age too low: 2020 with small offset -> age < 25
+  # Age too low: grad_year=2010, age=43, min_age=44 -> 43 < 44 -> warning
   expect_warning(
-    mysterycall_impute_age(2020, ref_year = 2026L, min_age = 25),
+    mysterycall_impute_age(2010, ref_year = 2026L, min_age = 44),
     "imputed age.*outside"
   )
 })
 
 test_that("mysterycall_impute_age sets implausible ages to NA", {
+  # ages: 1920->133 (>90 NA), 1995->58 (OK), 2010->43 (<44 NA); all with offset=27
   result <- suppressWarnings(
-    mysterycall_impute_age(c(1920, 1995, 2020), ref_year = 2026L, min_age = 25, max_age = 90)
+    mysterycall_impute_age(c(1920, 1995, 2010), ref_year = 2026L, min_age = 44, max_age = 90)
   )
-  # 1920 -> age 133, too high -> NA
-  # 1995 -> age 58, OK
-  # 2020 -> age 13, too low -> NA
   expect_true(is.na(result[1L]))
   expect_false(is.na(result[2L]))
   expect_true(is.na(result[3L]))
@@ -90,15 +88,13 @@ test_that("mysterycall_impute_age respects custom age_offset", {
 })
 
 test_that("mysterycall_impute_age respects custom min_age and max_age", {
+  # ages (offset=27): 1970->83 (>70 NA), 1995->58 (OK), 2015->38 (OK)
   result <- suppressWarnings(
     mysterycall_impute_age(c(1970, 1995, 2015), ref_year = 2026L, min_age = 20, max_age = 70)
   )
-  # 1970 -> age 83, exceeds max_age=70 -> NA
-  # 1995 -> age 58, OK
-  # 2015 -> age 28, OK
   expect_true(is.na(result[1L]))
   expect_equal(result[2L], 58L)
-  expect_equal(result[3L], 28L)
+  expect_equal(result[3L], 38L)
 })
 
 test_that("mysterycall_impute_age messages when graduation year exceeds ref_year", {
@@ -195,10 +191,11 @@ test_that("mysterycall_age_category respects custom breaks", {
 })
 
 test_that("mysterycall_age_category respects custom labels", {
+  # breaks=c(35,50) creates 3 bins: <35, 35-49, 50+ -> 3 labels required
   ages <- c(28, 35, 47, 55)
-  custom_labels <- c("Young", "Mid-Early", "Mid-Late", "Senior")
+  custom_labels <- c("Young", "Middle", "Senior")
   result <- mysterycall_age_category(ages, breaks = c(35, 50), labels = custom_labels)
-  expected <- c("Young", "Mid-Early", "Mid-Late", "Senior")
+  expected <- c("Young", "Middle", "Middle", "Senior")
   expect_equal(result, expected)
 })
 

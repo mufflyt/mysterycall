@@ -1,5 +1,4 @@
 library(testthat)
-library(mysterycall)
 
 AUDIT <- data.frame(
   npi                              = c("1234567893","1234567893","9876543210","9876543210"),
@@ -24,72 +23,74 @@ COUNT_DF <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
-test_that("strobe_flow works with explicit counts (Mode 3 - happy path)", {
-  skip_if_not_installed("ggplot2")
-
-  expect_no_error(suppressMessages(suppressWarnings(
-    mysterycall_strobe_flow(
-      n_total    = 743,
-      n_calldate = 737,
-      n_included = 141,
-      n_waittime = 100,
-      output_path = NULL
-    )
-  )))
-})
-
-
-test_that("strobe_flow returns a ggplot object", {
-  skip_if_not_installed("ggplot2")
-
-  result <- suppressMessages(suppressWarnings(
-    mysterycall_strobe_flow(
-      n_total    = 743,
-      n_calldate = 737,
-      n_included = 141,
-      n_waittime = 100,
-      output_path = NULL
-    )
-  ))
-
-  expect_s3_class(result, "ggplot")
-})
-
-
-test_that("strobe_flow errors when required counts are missing", {
-  skip_if_not_installed("ggplot2")
-
-  # Missing n_waittime should error
-  expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_strobe_flow(
-        n_total    = 743,
-        n_calldate = 737,
-        n_included = 141,
-        output_path = NULL
-      )
-    )),
-    "Could not determine.*n_waittime"
-  )
-})
-
-
-test_that("strobe_flow works with custom labels and title", {
-  skip_if_not_installed("ggplot2")
-
+test_that("mysterycall_strobe_flow returns ggplot with minimal explicit counts", {
   result <- suppressMessages(suppressWarnings(
     mysterycall_strobe_flow(
       n_total    = 100,
       n_calldate = 95,
-      n_included = 80,
-      n_waittime = 75,
-      title      = "Custom STROBE Title",
-      label_total = "Custom Total",
-      output_path = NULL
+      n_included = 50,
+      n_waittime = 40
     )
   ))
-
   expect_s3_class(result, "ggplot")
-  expect_equal(result$labels$title, "Custom STROBE Title")
+  expect_equal(result$labels$title, "STROBE Flow Diagram - Mystery-Caller Study")
+})
+
+test_that("mysterycall_strobe_flow respects custom labels and title", {
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_strobe_flow(
+      n_total    = 500,
+      n_calldate = 450,
+      n_included = 200,
+      n_waittime = 150,
+      label_total    = "Calls Logged",
+      label_included = "Included Records",
+      title          = "My STROBE Diagram"
+    )
+  ))
+  expect_s3_class(result, "ggplot")
+  expect_equal(result$labels$title, "My STROBE Diagram")
+})
+
+test_that("mysterycall_strobe_flow includes exclusion details when provided", {
+  # Must be a named list so missing code lookups return NULL rather than error
+  excl_codes <- list("1" = 5L, "2" = 3L, "3" = 0L, "5" = 0L,
+                     "6" = 0L, "7" = 0L, "8" = 10L, "9" = 0L, "10" = 0L, "NA" = 0L)
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_strobe_flow(
+      n_total          = 100,
+      n_calldate       = 82,
+      n_included       = 60,
+      n_waittime       = 45,
+      excl_detail      = excl_codes,
+      excl_no_calldate = 18
+    )
+  ))
+  expect_s3_class(result, "ggplot")
+})
+
+test_that("mysterycall_strobe_flow handles small sample sizes (edge case)", {
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_strobe_flow(
+      n_total    = 1,
+      n_calldate = 1,
+      n_included = 1,
+      n_waittime = 1
+    )
+  ))
+  expect_s3_class(result, "ggplot")
+})
+
+test_that("mysterycall_strobe_flow errors when required n_* arguments missing", {
+  expect_error(
+    mysterycall_strobe_flow(),
+    "Could not determine"
+  )
+})
+
+test_that("mysterycall_strobe_flow rejects invalid prepared object", {
+  expect_error(
+    mysterycall_strobe_flow(prepared = list(invalid = TRUE)),
+    "mysterycall_prepared"
+  )
 })

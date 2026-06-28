@@ -24,91 +24,81 @@ COUNT_DF <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
-test_that("mysterycall_check_zero_inflation works with basic glm model", {
+test_that("mysterycall_check_zero_inflation works with mysterycall_simple_poisson model (happy path)", {
   skip_if_not_installed("DHARMa")
-  set.seed(1)
 
-  fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
+  set.seed(237)
+  mod <- suppressMessages(mysterycall_simple_poisson(COUNT_DF, outcome="days", group="insurance", use_profile_ci=FALSE))
 
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_check_zero_inflation(fit, n_sim = 100L, plot = FALSE)
-    )
-  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_check_zero_inflation(mod$model, n_sim = 100L, plot = FALSE)
+  ))
 
-  expect_s3_class(result, "DHARMaTest")
-  expect_true("p.value" %in% names(result))
-  expect_type(result$p.value, "double")
+  expect_s3_class(result, "htest")
+  expect_true(hasName(result, "statistic"))
+  expect_true(hasName(result, "p.value"))
+  expect_true(is.numeric(result$statistic) || is.na(result$statistic))
 })
 
-
-test_that("mysterycall_check_zero_inflation returns invisible result", {
+test_that("mysterycall_check_zero_inflation works with bare glm model", {
   skip_if_not_installed("DHARMa")
-  set.seed(2)
 
+  set.seed(238)
   fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
 
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_check_zero_inflation(fit, n_sim = 50L, plot = FALSE)
-    )
-  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_check_zero_inflation(fit, n_sim = 50L, plot = FALSE)
+  ))
 
-  expect_s3_class(result, "DHARMaTest")
-  expect_true(is.numeric(result$p.value))
+  expect_s3_class(result, "htest")
+  expect_true(hasName(result, "p.value"))
+  expect_true(is.numeric(result$p.value) || is.na(result$p.value))
 })
 
+test_that("mysterycall_check_zero_inflation with plot = TRUE (graphics enabled)", {
+  skip_if_not_installed("DHARMa")
 
-test_that("mysterycall_check_zero_inflation errors on invalid model type", {
+  set.seed(239)
+  fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
+
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_check_zero_inflation(fit, n_sim = 50L, plot = TRUE)
+  ))
+
+  expect_s3_class(result, "htest")
+  expect_true(hasName(result, "p.value"))
+})
+
+test_that("mysterycall_check_zero_inflation respects n_sim parameter (edge case: low n_sim)", {
+  skip_if_not_installed("DHARMa")
+
+  set.seed(240)
+  fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
+
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_check_zero_inflation(fit, n_sim = 10L, plot = FALSE)
+  ))
+
+  expect_s3_class(result, "htest")
+  expect_true(is.numeric(result$p.value) || is.na(result$p.value))
+})
+
+test_that("mysterycall_check_zero_inflation errors on invalid model type (bad input)", {
   skip_if_not_installed("DHARMa")
 
   bad_model <- list(x = 1, y = 2)
 
   expect_error(
-    mysterycall_check_zero_inflation(bad_model, plot = FALSE),
+    suppressMessages(mysterycall_check_zero_inflation(bad_model, plot = FALSE)),
     "must be a mysterycall_poisson_model"
   )
 })
 
-
-test_that("mysterycall_check_zero_inflation respects n_sim parameter", {
+test_that("mysterycall_check_zero_inflation errors on missing model argument (bad input)", {
   skip_if_not_installed("DHARMa")
-  set.seed(3)
 
-  fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
-
-  result_small <- suppressMessages(
-    suppressWarnings(
-      mysterycall_check_zero_inflation(fit, n_sim = 50L, plot = FALSE)
-    )
+  expect_error(
+    suppressMessages(mysterycall_check_zero_inflation()),
+    "argument \"model\" is missing"
   )
-
-  result_large <- suppressMessages(
-    suppressWarnings(
-      mysterycall_check_zero_inflation(fit, n_sim = 200L, plot = FALSE)
-    )
-  )
-
-  expect_s3_class(result_small, "DHARMaTest")
-  expect_s3_class(result_large, "DHARMaTest")
-  expect_true(!is.na(result_small$p.value))
-  expect_true(!is.na(result_large$p.value))
-})
-
-
-test_that("mysterycall_check_zero_inflation works with plot = TRUE", {
-  skip_if_not_installed("DHARMa")
-  set.seed(4)
-
-  fit <- glm(days ~ insurance, family = poisson(), data = COUNT_DF)
-
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_check_zero_inflation(fit, n_sim = 50L, plot = TRUE)
-    )
-  )
-
-  expect_s3_class(result, "DHARMaTest")
-  expect_true("p.value" %in% names(result))
 })

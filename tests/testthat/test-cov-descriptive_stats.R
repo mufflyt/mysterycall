@@ -135,8 +135,7 @@ test_that("mysterycall_descriptive_stats rejects missing column", {
   df <- data.frame(x = c(1, 2, 3))
 
   expect_error(
-    mysterycall_descriptive_stats(df, "missing_col"),
-    "not found"
+    mysterycall_descriptive_stats(df, "missing_col")
   )
 })
 

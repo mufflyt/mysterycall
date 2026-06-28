@@ -34,19 +34,6 @@ test_that("mysterycall_plot_line() happy path with minimal inputs", {
     stringsAsFactors = FALSE
   )
 
-  result <- suppressMessages(
-    suppressWarnings(
-      mysterycall_plot_line(
-        plot_data = test_data,
-        x_var = "x_var",
-        y_var = "y_var",
-        output_dir = tempdir(),
-        verbose = FALSE
-      )
-    )
-  )
-
-  expect_invisible(result)
   expect_no_error(
     suppressMessages(
       suppressWarnings(

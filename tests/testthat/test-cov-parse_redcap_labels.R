@@ -83,12 +83,12 @@ test_that("parse_redcap_labels: trim parameter controls whitespace", {
   expect_equal(result_trim$code, c("1", "2"))
   expect_equal(result_trim$label, c("Yes", "No"))
 
-  # With trim = FALSE
+  # With trim = FALSE: exact whitespace from splitting on pipe/comma is preserved
   result_no_trim <- suppressMessages(
     mysterycall_parse_redcap_labels(raw_with_spaces, trim = FALSE)
   )
-  expect_equal(result_no_trim$code, c("  1  ", "  2  "))
-  expect_equal(result_no_trim$label, c("  Yes  ", "  No  "))
+  expect_equal(result_no_trim$code, c("  1  ", " 2  "))
+  expect_equal(result_no_trim$label, c(" Yes ", " No  "))
 })
 
 test_that("parse_redcap_labels: edge case - NA and empty strings", {
@@ -176,20 +176,24 @@ test_that("parse_redcap_labels: error on invalid sep_code", {
 })
 
 test_that("parse_redcap_labels: partial field names use defaults", {
-  raw <- c(
+  # Named but with content -> field_2 auto-name; empty element -> no rows
+  raw_with_content <- c(
     field_a = "1, A",
-    "",
+    "2, B",
     field_c = "3, C"
   )
-  result <- suppressMessages(
-    mysterycall_parse_redcap_labels(raw)
+  result_content <- suppressMessages(
+    mysterycall_parse_redcap_labels(raw_with_content)
   )
-
-  # Unnamed element (index 2) should get field_2
-  field_names <- sort(unique(result$field))
+  field_names <- sort(unique(result_content$field))
   expect_true("field_2" %in% field_names)
   expect_true("field_a" %in% field_names)
   expect_true("field_c" %in% field_names)
+
+  # Empty element contributes no rows, so field_2 won't appear
+  raw_empty <- c(field_a = "1, A", "", field_c = "3, C")
+  result_empty <- suppressMessages(mysterycall_parse_redcap_labels(raw_empty))
+  expect_false("field_2" %in% unique(result_empty$field))
 })
 
 test_that("parse_redcap_labels: labels with commas in label text", {

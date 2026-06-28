@@ -167,3 +167,100 @@ test_that("mysterycall_plot_source_venn: works with custom column names", {
 
   expect_s3_class(result, "ggplot")
 })
+
+
+test_that("mysterycall_plot_source_venn: error when border_colors not length 3", {
+  skip_if_not_installed("ggplot2")
+
+  d <- list(
+    npis  = c("A", "B", "C"),
+    nppes = c("A", "B"),
+    pc    = c("B", "C"),
+    dac   = c("C")
+  )
+
+  expect_error(
+    suppressMessages(suppressWarnings({
+      mysterycall_plot_source_venn(d, border_colors = c("black", "white"))
+    })),
+    "`border_colors` must be a character vector of length 3."
+  )
+})
+
+
+test_that("mysterycall_plot_source_venn: error when source_long not length 3", {
+  skip_if_not_installed("ggplot2")
+
+  d <- list(
+    npis  = c("A", "B", "C"),
+    nppes = c("A", "B"),
+    pc    = c("B", "C"),
+    dac   = c("C")
+  )
+
+  expect_error(
+    suppressMessages(suppressWarnings({
+      mysterycall_plot_source_venn(d, source_long = c("Long1", "Long2"))
+    })),
+    "`source_long` must be a character vector of length 3."
+  )
+})
+
+
+test_that("mysterycall_plot_source_venn: handles complete overlap of all sources", {
+  skip_if_not_installed("ggplot2")
+
+  d <- list(
+    npis  = c("A", "B", "C"),
+    nppes = c("A", "B", "C"),
+    pc    = c("A", "B", "C"),
+    dac   = c("A", "B", "C")
+  )
+
+  result <- suppressMessages(suppressWarnings({
+    mysterycall_plot_source_venn(d)
+  }))
+
+  expect_s3_class(result, "ggplot")
+})
+
+
+test_that("mysterycall_plot_source_venn: handles disjoint source sets", {
+  skip_if_not_installed("ggplot2")
+
+  d <- list(
+    npis  = c("A", "B", "C", "D", "E", "F"),
+    nppes = c("A", "B"),
+    pc    = c("C", "D"),
+    dac   = c("E", "F")
+  )
+
+  result <- suppressMessages(suppressWarnings({
+    mysterycall_plot_source_venn(d)
+  }))
+
+  expect_s3_class(result, "ggplot")
+})
+
+
+test_that("mysterycall_plot_source_venn: accepts custom subtitle and caption", {
+  skip_if_not_installed("ggplot2")
+
+  d <- list(
+    npis  = c("A", "B", "C"),
+    nppes = c("A", "B"),
+    pc    = c("B", "C"),
+    dac   = c("C")
+  )
+
+  result <- suppressMessages(suppressWarnings({
+    mysterycall_plot_source_venn(
+      d,
+      title = "Test Title",
+      subtitle = "Custom Subtitle",
+      caption = "Custom Caption"
+    )
+  }))
+
+  expect_s3_class(result, "ggplot")
+})

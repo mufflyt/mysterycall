@@ -1,5 +1,4 @@
 library(testthat)
-library(mysterycall)
 
 AUDIT <- data.frame(
   npi                              = c("1234567893","1234567893","9876543210","9876543210"),
@@ -25,11 +24,14 @@ COUNT_DF <- data.frame(
 )
 
 
-# -- Happy path: minimal valid inputs ------------------------------------------
-test_that("mysterycall_logistic_model fits a logistic GLMER with valid inputs", {
+# ============================================================================
+# mysterycall_logistic_model() - HAPPY PATH
+# ============================================================================
+
+test_that("mysterycall_logistic_model: happy path with valid binary outcome", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
+  set.seed(101)
   df <- data.frame(
     offered   = rbinom(80, 1L, 0.7),
     insurance = rep(c("Medicaid", "BCBS"), 40),
@@ -37,59 +39,114 @@ test_that("mysterycall_logistic_model fits a logistic GLMER with valid inputs", 
     stringsAsFactors = FALSE
   )
 
-  fit <- suppressMessages(suppressWarnings(
+  fit <- suppressMessages(
     mysterycall_logistic_model(df, "offered", "insurance", "physician")
-  ))
-
-  expect_no_error({
-    fit
-  })
-})
-
-
-# -- Output type check: verify return class and structure -----------------------
-test_that("mysterycall_logistic_model returns correct class and structure", {
-  skip_if_not_installed("lme4")
-
-  set.seed(42)
-  df <- data.frame(
-    offered   = rbinom(80, 1L, 0.7),
-    insurance = rep(c("Medicaid", "BCBS"), 40),
-    physician = rep(paste0("Dr", 1:20), each = 4L),
-    stringsAsFactors = FALSE
   )
 
-  fit <- suppressMessages(suppressWarnings(
-    mysterycall_logistic_model(df, "offered", "insurance", "physician")
-  ))
-
-  # Check class
   expect_s3_class(fit, "mysterycall_logistic_model")
-
-  # Check list structure
   expect_type(fit, "list")
-
-  # Check required elements
   expect_named(fit, c("model", "or_table", "random_effects", "factor_refs",
                       "formula", "n", "n_dropped", "n_clusters",
                       "convergence", "aic", "bic"))
-
-  # Check types of key elements
-  expect_s4_class(fit$model, "glmerMod")
-  expect_s3_class(fit$or_table, "tbl_df")
-  expect_type(fit$n, "integer")
-  expect_type(fit$aic, "double")
-  expect_type(fit$bic, "double")
-  expect_type(fit$convergence, "list")
+  expect_equal(fit$n, 80)
+  expect_equal(fit$n_dropped, 0)
+  expect_equal(fit$n_clusters, 20)
 })
 
+test_that("mysterycall_logistic_model: happy path with logical outcome (TRUE/FALSE)", {
+  skip_if_not_installed("lme4")
 
-# -- Error path: invalid outcome (not binary) ----------------------------------
-test_that("mysterycall_logistic_model errors on non-binary outcome", {
+  set.seed(102)
+  df <- data.frame(
+    offered   = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
+    insurance = rep(c("Medicaid", "BCBS"), 3),
+    physician = rep(c("A", "B"), each = 3),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(suppressWarnings(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  ))
+
+  expect_s3_class(fit, "mysterycall_logistic_model")
+  expect_equal(fit$n, 6)
+})
+
+test_that("mysterycall_logistic_model: happy path with multiple predictors", {
+  skip_if_not_installed("lme4")
+
+  set.seed(103)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.6),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    specialty = rep(c("OB/GYN", "Surgery"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(suppressWarnings(
+    mysterycall_logistic_model(df, "offered", c("insurance", "specialty"), "physician")
+  ))
+
+  expect_s3_class(fit, "mysterycall_logistic_model")
+  expect_true(nrow(fit$or_table) >= 2)
+  expect_setequal(names(fit$factor_refs), c("insurance", "specialty"))
+})
+
+# ============================================================================
+# mysterycall_logistic_model() - EDGE CASES
+# ============================================================================
+
+test_that("mysterycall_logistic_model: edge case with missing values", {
+  skip_if_not_installed("lme4")
+
+  set.seed(104)
+  df <- data.frame(
+    offered   = c(rbinom(50, 1, 0.65), rep(NA, 10)),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  expect_s3_class(fit, "mysterycall_logistic_model")
+  expect_equal(fit$n, 50)
+  expect_equal(fit$n_dropped, 10)
+})
+
+test_that("mysterycall_logistic_model: alternative conf_level (0.90)", {
+  skip_if_not_installed("lme4")
+
+  set.seed(105)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician", conf_level = 0.90)
+  )
+
+  expect_s3_class(fit, "mysterycall_logistic_model")
+  expect_equal(fit$n, 60)
+  expect_true(all(is.finite(fit$or_table$ci_lower)))
+  expect_true(all(is.finite(fit$or_table$ci_upper)))
+})
+
+# ============================================================================
+# mysterycall_logistic_model() - ERROR CASES
+# ============================================================================
+
+test_that("mysterycall_logistic_model: error on non-binary outcome", {
   skip_if_not_installed("lme4")
 
   df <- data.frame(
-    outcome   = c(1, 2, 3, 4),  # not binary
+    outcome   = c(0, 1, 2, 3),
     insurance = c("A", "B", "A", "B"),
     physician = c("Dr1", "Dr1", "Dr2", "Dr2"),
     stringsAsFactors = FALSE
@@ -101,9 +158,7 @@ test_that("mysterycall_logistic_model errors on non-binary outcome", {
   )
 })
 
-
-# -- Error path: missing required columns--------------------------------------
-test_that("mysterycall_logistic_model errors on missing columns", {
+test_that("mysterycall_logistic_model: error on missing columns", {
   skip_if_not_installed("lme4")
 
   df <- data.frame(
@@ -117,9 +172,7 @@ test_that("mysterycall_logistic_model errors on missing columns", {
   )
 })
 
-
-# -- Error path: invalid outcome argument type --------------------------------
-test_that("mysterycall_logistic_model errors when outcome is not a scalar", {
+test_that("mysterycall_logistic_model: error on outcome vector (not scalar)", {
   skip_if_not_installed("lme4")
 
   df <- data.frame(
@@ -132,16 +185,14 @@ test_that("mysterycall_logistic_model errors when outcome is not a scalar", {
 
   expect_error(
     mysterycall_logistic_model(df, c("out1", "out2"), "insurance", "physician"),
-    "must be a single column name"
+    "single column name"
   )
 })
 
-
-# -- Error path: invalid conf_level -------------------------------------------
-test_that("mysterycall_logistic_model errors on invalid conf_level", {
+test_that("mysterycall_logistic_model: error on invalid conf_level", {
   skip_if_not_installed("lme4")
 
-  set.seed(42)
+  set.seed(106)
   df <- data.frame(
     offered   = rbinom(20, 1L, 0.7),
     insurance = rep(c("Medicaid", "BCBS"), 10),
@@ -151,17 +202,14 @@ test_that("mysterycall_logistic_model errors on invalid conf_level", {
 
   expect_error(
     mysterycall_logistic_model(df, "offered", "insurance", "physician", conf_level = 1.5),
-    "conf_level.*between 0 and 1"
+    "between 0 and 1"
   )
 })
 
-
-# -- lme4 not installed check -------------------------------------------------
-test_that("mysterycall_logistic_model errors gracefully when lme4 unavailable", {
-  # This test is for documentation; can't actually uninstall lme4
-  # Just verify the error message handling in the source
+test_that("mysterycall_logistic_model: error on conf_level = 0", {
   skip_if_not_installed("lme4")
 
+  set.seed(107)
   df <- data.frame(
     offered   = rbinom(20, 1L, 0.7),
     insurance = rep(c("Medicaid", "BCBS"), 10),
@@ -169,6 +217,148 @@ test_that("mysterycall_logistic_model errors gracefully when lme4 unavailable", 
     stringsAsFactors = FALSE
   )
 
-  # Verify the function exists and is callable
-  expect_true(exists("mysterycall_logistic_model"))
+  expect_error(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician", conf_level = 0),
+    "between 0 and 1"
+  )
+})
+
+# ============================================================================
+# print.mysterycall_logistic_model() - HAPPY PATH
+# ============================================================================
+
+test_that("print.mysterycall_logistic_model: basic output structure", {
+  skip_if_not_installed("lme4")
+
+  set.seed(108)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  output <- capture.output(suppressMessages(print(fit)))
+  expect_true(length(output) > 0)
+  expect_true(any(grepl("Logistic GLMER", output)))
+  expect_true(any(grepl("physicians", output)))
+})
+
+test_that("print.mysterycall_logistic_model: custom digits parameter", {
+  skip_if_not_installed("lme4")
+
+  set.seed(109)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  output <- capture.output(suppressMessages(print(fit, digits = 2)))
+  expect_true(length(output) > 0)
+})
+
+test_that("print.mysterycall_logistic_model: returns invisible(x)", {
+  skip_if_not_installed("lme4")
+
+  set.seed(110)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  result <- suppressMessages(print(fit))
+  expect_identical(result, fit)
+})
+
+# ============================================================================
+# tidy.mysterycall_logistic_model() - HAPPY PATH
+# ============================================================================
+
+test_that("tidy.mysterycall_logistic_model: basic output structure", {
+  skip_if_not_installed("lme4")
+
+  set.seed(111)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  tidy_result <- tidy.mysterycall_logistic_model(fit)
+
+  expect_s3_class(tidy_result, "tbl_df")
+  expect_named(tidy_result, c("term", "estimate", "std.error", "statistic",
+                              "p.value", "conf.low", "conf.high"))
+})
+
+test_that("tidy.mysterycall_logistic_model: column types and content", {
+  skip_if_not_installed("lme4")
+
+  set.seed(112)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    specialty = rep(c("OB/GYN", "Surgery"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(suppressWarnings(
+    mysterycall_logistic_model(df, "offered", c("insurance", "specialty"), "physician")
+  ))
+
+  tidy_result <- tidy.mysterycall_logistic_model(fit)
+
+  expect_type(tidy_result$term, "character")
+  expect_type(tidy_result$estimate, "double")
+  expect_type(tidy_result$std.error, "double")
+  expect_type(tidy_result$statistic, "double")
+  expect_type(tidy_result$p.value, "double")
+  expect_type(tidy_result$conf.low, "double")
+  expect_type(tidy_result$conf.high, "double")
+  expect_true(all(is.finite(tidy_result$estimate)))
+  expect_true(all(is.finite(tidy_result$p.value)))
+})
+
+test_that("tidy.mysterycall_logistic_model: no NA in critical columns", {
+  skip_if_not_installed("lme4")
+
+  set.seed(113)
+  df <- data.frame(
+    offered   = rbinom(60, 1, 0.65),
+    insurance = rep(c("Medicaid", "BCBS"), 30),
+    physician = rep(paste0("Dr", 1:10), each = 6),
+    stringsAsFactors = FALSE
+  )
+
+  fit <- suppressMessages(
+    mysterycall_logistic_model(df, "offered", "insurance", "physician")
+  )
+
+  tidy_result <- tidy.mysterycall_logistic_model(fit)
+
+  expect_false(any(is.na(tidy_result$term)))
+  expect_false(any(is.na(tidy_result$estimate)))
+  expect_false(any(is.na(tidy_result$p.value)))
 })

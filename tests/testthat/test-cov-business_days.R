@@ -31,7 +31,7 @@ skip_if_not_installed("bizdays")
 
 test_that("mysterycall_us_federal_calendar returns a calendar object with correct class", {
   cal <- suppressMessages(mysterycall_us_federal_calendar(2026, 2026))
-  expect_s3_class(cal, "calendar")
+  expect_s3_class(cal, "Calendar")
 })
 
 test_that("mysterycall_us_federal_calendar includes all 11 federal holidays per year", {
@@ -216,7 +216,7 @@ test_that("mysterycall_business_days validates required columns", {
   )
   expect_error(
     suppressMessages(mysterycall_business_days(df)),
-    "call_date.*not found|required columns"
+    "missing"
   )
 })
 
