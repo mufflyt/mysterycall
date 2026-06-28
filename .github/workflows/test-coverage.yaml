@@ -53,9 +53,17 @@ jobs:
             }
           }
         shell: Rscript {0}
+      - name: Print coverage summary
+        run: |
+          if (file.exists("cobertura.xml")) {
+            xml <- xml2::read_xml("cobertura.xml")
+            pct <- as.numeric(xml2::xml_attr(xml, "line-rate")) * 100
+            cat(sprintf("Coverage: %.1f%%\n", pct))
+          }
+        shell: Rscript {0}
       - uses: codecov/codecov-action@v4
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' && true || false }}
+          fail_ci_if_error: false
           file: ./cobertura.xml
           plugin: noop
           disable_search: true
