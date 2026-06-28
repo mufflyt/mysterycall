@@ -208,7 +208,7 @@ test_that("check_generalist_presence orders results by generalist_needed descend
 test_that("check_generalist_presence handles single location column", {
   df <- data.frame(
     city      = c("Denver","Denver","Austin","Austin"),
-    specialty = c("General","Neurotology","Otology","Laryngology"),
+    specialty = c("Neurotology","Pediatric","Otology","Laryngology"),
     stringsAsFactors = FALSE
   )
 
