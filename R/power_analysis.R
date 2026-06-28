@@ -55,7 +55,7 @@ mysterycall_cochran_n <- function(N, margin_of_error = 0.05) {
   }
 
   n_raw <- N / (1 + N * margin_of_error^2)
-  n     <- ceiling(n_raw)
+  n     <- as.integer(ceiling(n_raw))
 
   list(
     n                = n,
@@ -180,9 +180,9 @@ mysterycall_poisson_power <- function(irr,
   ))
 
   list(
-    n_per_arm      = n_per_arm,
-    n_total        = n_total,
-    n_total_calls  = n_total_calls,
+    n_per_arm      = as.integer(n_per_arm),
+    n_total        = as.integer(n_total),
+    n_total_calls  = as.integer(n_total_calls),
     irr            = irr,
     lambda_ref     = lambda_ref,
     lambda_trt     = lambda_trt,
@@ -226,7 +226,7 @@ mysterycall_equation_figure <- function(lambda0   = 14,
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("ggplot2 is required.", call. = FALSE)
   }
-  if (!is.numeric(irr_seq) || length(irr_seq) < 1L) {
+  if (!is.numeric(irr_seq) || length(irr_seq) < 2L) {
     stop("`irr_seq` must be a numeric vector with at least 2 values.", call. = FALSE)
   }
   irr_seq <- irr_seq[irr_seq > 0 & irr_seq != 1]

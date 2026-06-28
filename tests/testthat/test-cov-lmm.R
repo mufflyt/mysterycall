@@ -557,7 +557,7 @@ test_that("tidy.mysterycall_lmm returns tibble with expected columns", {
     mysterycall_lmm(df, "y", "x", "id")
   ))
 
-  tidy_result <- tidy(fit)
+  skip_if_not_installed("broom"); tidy_result <- broom::tidy(fit)
 
   expect_s3_class(tidy_result, "tbl_df")
   expect_named(tidy_result, c("term", "estimate", "std.error", "statistic",
@@ -580,7 +580,7 @@ test_that("tidy.mysterycall_lmm has one row per fixed effect", {
     mysterycall_lmm(df, "y", c("pred1", "pred2"), "id")
   ))
 
-  tidy_result <- tidy(fit)
+  skip_if_not_installed("broom"); tidy_result <- broom::tidy(fit)
 
   expect_equal(nrow(tidy_result), nrow(fit$coef_table))
 })
@@ -600,7 +600,7 @@ test_that("tidy.mysterycall_lmm values match coef_table", {
     mysterycall_lmm(df, "y", "x", "id")
   ))
 
-  tidy_result <- tidy(fit)
+  skip_if_not_installed("broom"); tidy_result <- broom::tidy(fit)
   coef_tbl <- fit$coef_table
 
   expect_equal(tidy_result$term, coef_tbl$term)

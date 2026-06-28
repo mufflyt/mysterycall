@@ -26,19 +26,19 @@ COUNT_DF <- data.frame(
 skip_if_not_installed("caret")
 
 test_that("mysterycall_remove_near_zero removes near-zero variance columns", {
-  # Create a data frame with a near-zero variance column matching the documentation example
+  set.seed(42)
   df <- data.frame(
-    a = 1:20,
-    b = c(rep(1, 19), 2),  # Near-zero variance: 19:1 ratio
-    c = rnorm(20),
+    a = 1:100,
+    b = c(rep(1, 96), rep(2, 4)),  # ratio 24:1 > freqCut=19, uniqueCut 2% < 10%
+    c = rnorm(100),
     stringsAsFactors = FALSE
   )
 
   result <- suppressMessages(mysterycall_remove_near_zero(df))
 
   expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 20L)
-  expect_false("b" %in% colnames(result))  # Column b should be removed
+  expect_equal(nrow(result), 100L)
+  expect_false("b" %in% colnames(result))
   expect_true("a" %in% colnames(result))
   expect_true("c" %in% colnames(result))
 })

@@ -51,7 +51,7 @@ test_that("mysterycall_poisson_model fits basic model with valid inputs", {
     "formula", "n", "n_dropped", "n_clusters", "overdispersion",
     "convergence", "aic", "bic"
   ))
-  expect_s3_class(result$model, "glmerMod")
+  expect_s4_class(result$model, "glmerMod")
   expect_true(is.data.frame(result$irr_table))
   expect_equal(result$n, 60L)
   expect_equal(result$n_dropped, 0L)
@@ -328,9 +328,10 @@ test_that("print.mysterycall_poisson_model displays summary and returns invisibl
   ))
 
   # Capture printed output
-  output <- capture_output(result <- print(model))
+  output <- capture_output(print(model))
 
-  expect_invisible(result)
+  # Test invisibility directly on the call — variable lookups are always visible
+  expect_invisible(print(model))
   expect_true(nchar(output) > 0)
   expect_match(output, "Poisson GLMER")
   expect_match(output, "Fixed effects")

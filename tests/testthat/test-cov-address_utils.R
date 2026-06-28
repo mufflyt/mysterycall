@@ -25,7 +25,7 @@ COUNT_DF <- data.frame(
 
 # Test mysterycall_extract_zip5 - Happy path
 test_that("mysterycall_extract_zip5 extracts standard ZIP formats correctly", {
-  result <- suppressMessages(suppressWarnings(mysterycall_extract_zip5(c("80203", "80203-1234", " 80203 "))))
+  result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c("80203", "80203-1234", " 80203 "))))
 
   expect_type(result, "character")
   expect_length(result, 3L)
@@ -34,7 +34,7 @@ test_that("mysterycall_extract_zip5 extracts standard ZIP formats correctly", {
 
 # Test mysterycall_extract_zip5 - Left-padding
 test_that("mysterycall_extract_zip5 left-pads short ZIPs with zeros", {
-  result <- suppressMessages(suppressWarnings(mysterycall_extract_zip5(c("8020", "203", "70001"))))
+  result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c("8020", "203", "70001"))))
 
   expect_type(result, "character")
   expect_equal(result, c("08020", "00203", "70001"))
@@ -42,7 +42,7 @@ test_that("mysterycall_extract_zip5 left-pads short ZIPs with zeros", {
 
 # Test mysterycall_extract_zip5 - NA and edge cases
 test_that("mysterycall_extract_zip5 returns NA for unparseable inputs", {
-  result <- suppressMessages(suppressWarnings(mysterycall_extract_zip5(c("abc", "  ", "12", NA, ""))))
+  result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c("abc", "  ", "12", NA, ""))))
 
   expect_type(result, "character")
   expect_length(result, 5L)
@@ -55,7 +55,7 @@ test_that("mysterycall_extract_zip5 returns NA for unparseable inputs", {
 
 # Test mysterycall_extract_zip5 - Takes first 5 digits
 test_that("mysterycall_extract_zip5 takes only first 5 digits from longer strings", {
-  result <- suppressMessages(suppressWarnings(mysterycall_extract_zip5(c("802031234", "9999988888"))))
+  result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c("802031234", "9999988888"))))
 
   expect_type(result, "character")
   expect_equal(result[1], "80203")
@@ -64,7 +64,7 @@ test_that("mysterycall_extract_zip5 takes only first 5 digits from longer string
 
 # Test mysterycall_extract_zip5 - Type coercion
 test_that("mysterycall_extract_zip5 coerces numeric input to character", {
-  result <- suppressMessages(suppressWarnings(mysterycall_extract_zip5(c(80203, 80203))))
+  result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c(80203, 80203))))
 
   expect_type(result, "character")
   expect_equal(result, c("80203", "80203"))

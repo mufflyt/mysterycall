@@ -305,7 +305,7 @@ test_that("tidy.mysterycall_logistic_model: basic output structure", {
     mysterycall_logistic_model(df, "offered", "insurance", "physician")
   )
 
-  tidy_result <- tidy.mysterycall_logistic_model(fit)
+  tidy_result <- mysterycall:::tidy.mysterycall_logistic_model(fit)
 
   expect_s3_class(tidy_result, "tbl_df")
   expect_named(tidy_result, c("term", "estimate", "std.error", "statistic",
@@ -328,7 +328,7 @@ test_that("tidy.mysterycall_logistic_model: column types and content", {
     mysterycall_logistic_model(df, "offered", c("insurance", "specialty"), "physician")
   ))
 
-  tidy_result <- tidy.mysterycall_logistic_model(fit)
+  tidy_result <- mysterycall:::tidy.mysterycall_logistic_model(fit)
 
   expect_type(tidy_result$term, "character")
   expect_type(tidy_result$estimate, "double")
@@ -356,7 +356,7 @@ test_that("tidy.mysterycall_logistic_model: no NA in critical columns", {
     mysterycall_logistic_model(df, "offered", "insurance", "physician")
   )
 
-  tidy_result <- tidy.mysterycall_logistic_model(fit)
+  tidy_result <- mysterycall:::tidy.mysterycall_logistic_model(fit)
 
   expect_false(any(is.na(tidy_result$term)))
   expect_false(any(is.na(tidy_result$estimate)))

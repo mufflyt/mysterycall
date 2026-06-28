@@ -30,7 +30,7 @@ COUNT_DF <- data.frame(
 
 test_that("mysterycall_check_no_limits passes with normal data", {
   result <- suppressWarnings(
-    mysterycall_check_no_limits(AUDIT, context = "test_data")
+    mysterycall:::mysterycall_check_no_limits(AUDIT, context = "test_data")
   )
   expect_true(isTRUE(result))
 })
@@ -38,7 +38,7 @@ test_that("mysterycall_check_no_limits passes with normal data", {
 test_that("mysterycall_check_no_limits warns on suspicious counts (100)", {
   df_100 <- data.frame(x = 1:100)
   expect_warning(
-    mysterycall_check_no_limits(df_100, context = "test"),
+    mysterycall:::mysterycall_check_no_limits(df_100, context = "test"),
     "exactly 100 rows"
   )
 })
@@ -46,21 +46,21 @@ test_that("mysterycall_check_no_limits warns on suspicious counts (100)", {
 test_that("mysterycall_check_no_limits warns on 1200 (NPI API cap)", {
   df_1200 <- data.frame(x = 1:1200)
   expect_warning(
-    mysterycall_check_no_limits(df_1200, context = "npi_results"),
+    mysterycall:::mysterycall_check_no_limits(df_1200, context = "npi_results"),
     "NPI registry API hard cap"
   )
 })
 
 test_that("mysterycall_check_no_limits warns on min_expected violation", {
   expect_warning(
-    mysterycall_check_no_limits(AUDIT, context = "test", min_expected = 100),
+    mysterycall:::mysterycall_check_no_limits(AUDIT, context = "test", min_expected = 100),
     "only 4 rows but expected at least 100"
   )
 })
 
 test_that("mysterycall_check_no_limits warns on max_expected violation", {
   expect_warning(
-    mysterycall_check_no_limits(AUDIT, context = "test", max_expected = 2),
+    mysterycall:::mysterycall_check_no_limits(AUDIT, context = "test", max_expected = 2),
     "4 rows but expected at most 2"
   )
 })
@@ -68,7 +68,7 @@ test_that("mysterycall_check_no_limits warns on max_expected violation", {
 test_that("mysterycall_check_no_limits warns on zero rows", {
   df_empty <- AUDIT[0, ]
   expect_warning(
-    mysterycall_check_no_limits(df_empty, context = "empty"),
+    mysterycall:::mysterycall_check_no_limits(df_empty, context = "empty"),
     "ZERO rows"
   )
 })
@@ -76,28 +76,28 @@ test_that("mysterycall_check_no_limits warns on zero rows", {
 test_that("mysterycall_check_no_limits messages on 1000x multiple", {
   df_2000 <- data.frame(x = 1:2000)
   expect_message(
-    mysterycall_check_no_limits(df_2000, context = "test"),
+    mysterycall:::mysterycall_check_no_limits(df_2000, context = "test"),
     "exact multiple of 1000"
   )
 })
 
 test_that("mysterycall_check_no_limits errors on non-dataframe input", {
   expect_error(
-    mysterycall_check_no_limits(list(x = 1), context = "bad"),
+    mysterycall:::mysterycall_check_no_limits(list(x = 1), context = "bad"),
     "must be a data frame"
   )
 })
 
 test_that("mysterycall_check_no_limits errors on vector input", {
   expect_error(
-    mysterycall_check_no_limits(c(1, 2, 3)),
+    mysterycall:::mysterycall_check_no_limits(c(1, 2, 3)),
     "must be a data frame"
   )
 })
 
 test_that("mysterycall_check_no_limits errors on matrix input", {
   expect_error(
-    mysterycall_check_no_limits(matrix(1:4, nrow = 2)),
+    mysterycall:::mysterycall_check_no_limits(matrix(1:4, nrow = 2)),
     "must be a data frame"
   )
 })
@@ -109,21 +109,21 @@ test_that("mysterycall_check_no_limits errors on matrix input", {
 
 test_that("mysterycall_check_api_response passes with exact count match", {
   result <- suppressMessages(
-    mysterycall_check_api_response(AUDIT, expected = 4, api_name = "Test API")
+    mysterycall:::mysterycall_check_api_response(AUDIT, expected = 4, api_name = "Test API")
   )
   expect_true(isTRUE(result))
 })
 
 test_that("mysterycall_check_api_response messages on partial success within tolerance", {
   expect_message(
-    mysterycall_check_api_response(AUDIT, expected = 5, api_name = "Test API", tolerance = 1),
+    mysterycall:::mysterycall_check_api_response(AUDIT, expected = 5, api_name = "Test API", tolerance = 1),
     "4/5 rows returned"
   )
 })
 
 test_that("mysterycall_check_api_response errors on mismatch without tolerance", {
   expect_error(
-    mysterycall_check_api_response(AUDIT, expected = 10, api_name = "Test API"),
+    mysterycall:::mysterycall_check_api_response(AUDIT, expected = 10, api_name = "Test API"),
     "response count mismatch"
   )
 })
@@ -131,14 +131,14 @@ test_that("mysterycall_check_api_response errors on mismatch without tolerance",
 test_that("mysterycall_check_api_response errors on large difference even with tolerance", {
   df_small <- AUDIT[1:2, ]
   expect_error(
-    mysterycall_check_api_response(df_small, expected = 10, api_name = "Test API", tolerance = 1),
+    mysterycall:::mysterycall_check_api_response(df_small, expected = 10, api_name = "Test API", tolerance = 1),
     "response count mismatch"
   )
 })
 
 test_that("mysterycall_check_api_response errors on non-dataframe result", {
   expect_error(
-    mysterycall_check_api_response(list(x = 1), expected = 1, api_name = "Test API"),
+    mysterycall:::mysterycall_check_api_response(list(x = 1), expected = 1, api_name = "Test API"),
     "non-dataframe result"
   )
 })
@@ -146,7 +146,7 @@ test_that("mysterycall_check_api_response errors on non-dataframe result", {
 test_that("mysterycall_check_api_response errors on empty result when expecting data", {
   df_empty <- AUDIT[0, ]
   expect_error(
-    mysterycall_check_api_response(df_empty, expected = 4, api_name = "API"),
+    mysterycall:::mysterycall_check_api_response(df_empty, expected = 4, api_name = "API"),
     "response count mismatch"
   )
 })
@@ -154,7 +154,7 @@ test_that("mysterycall_check_api_response errors on empty result when expecting 
 test_that("mysterycall_check_api_response handles zero expected with tolerance", {
   df_empty <- AUDIT[0, ]
   result <- suppressMessages(
-    mysterycall_check_api_response(df_empty, expected = 0, api_name = "API", tolerance = 0)
+    mysterycall:::mysterycall_check_api_response(df_empty, expected = 0, api_name = "API", tolerance = 0)
   )
   expect_true(isTRUE(result))
 })
@@ -165,48 +165,48 @@ test_that("mysterycall_check_api_response handles zero expected with tolerance",
 # =============================================================================
 
 test_that("mysterycall_check_no_data_loss passes with no change (numeric)", {
-  result <- mysterycall_check_no_data_loss(4, 4, "test operation")
+  result <- mysterycall:::mysterycall_check_no_data_loss(4, 4, "test operation")
   expect_true(isTRUE(result))
 })
 
 test_that("mysterycall_check_no_data_loss accepts dataframes as input", {
-  result <- mysterycall_check_no_data_loss(AUDIT, AUDIT, "copy operation")
+  result <- mysterycall:::mysterycall_check_no_data_loss(AUDIT, AUDIT, "copy operation")
   expect_true(isTRUE(result))
 })
 
 test_that("mysterycall_check_no_data_loss errors on data loss", {
   expect_error(
-    mysterycall_check_no_data_loss(10, 5, "bad operation"),
+    mysterycall:::mysterycall_check_no_data_loss(10, 5, "bad operation"),
     "DATA LOSS detected"
   )
 })
 
 test_that("mysterycall_check_no_data_loss accepts expected_change parameter", {
-  result <- mysterycall_check_no_data_loss(4, 6, "join operation", expected_change = 2)
+  result <- mysterycall:::mysterycall_check_no_data_loss(4, 6, "join operation", expected_change = 2)
   expect_true(isTRUE(result))
 })
 
 test_that("mysterycall_check_no_data_loss warns on unexpected row increase", {
   expect_warning(
-    mysterycall_check_no_data_loss(4, 8, "bad join", expected_change = 0),
+    mysterycall:::mysterycall_check_no_data_loss(4, 8, "bad join", expected_change = 0),
     "UNEXPECTED ROW INCREASE"
   )
 })
 
 test_that("mysterycall_check_no_data_loss respects tolerance parameter", {
-  result <- mysterycall_check_no_data_loss(10, 9, "operation", expected_change = 0, tolerance = 1)
+  result <- mysterycall:::mysterycall_check_no_data_loss(10, 9, "operation", expected_change = 0, tolerance = 1)
   expect_true(isTRUE(result))
 })
 
 test_that("mysterycall_check_no_data_loss errors when loss exceeds tolerance", {
   expect_error(
-    mysterycall_check_no_data_loss(10, 5, "operation", expected_change = 0, tolerance = 3),
+    mysterycall:::mysterycall_check_no_data_loss(10, 5, "operation", expected_change = 0, tolerance = 3),
     "DATA LOSS detected"
   )
 })
 
 test_that("mysterycall_check_no_data_loss handles zero row cases", {
-  result <- mysterycall_check_no_data_loss(0, 0, "empty operation")
+  result <- mysterycall:::mysterycall_check_no_data_loss(0, 0, "empty operation")
   expect_true(isTRUE(result))
 })
 
@@ -217,7 +217,7 @@ test_that("mysterycall_check_no_data_loss handles zero row cases", {
 
 test_that("mysterycall_scan_for_limits errors on nonexistent directory", {
   expect_error(
-    mysterycall_scan_for_limits("/nonexistent/path/xyz123"),
+    mysterycall:::mysterycall_scan_for_limits("/nonexistent/path/xyz123"),
     "does not exist"
   )
 })
@@ -229,7 +229,7 @@ test_that("mysterycall_scan_for_limits returns dataframe with correct structure"
 
   result <- suppressMessages(
     suppressWarnings(
-      mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
+      mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
     )
   )
 
@@ -252,7 +252,7 @@ test_that("mysterycall_scan_for_limits detects head() anti-pattern", {
 
   result <- suppressWarnings(
     suppressMessages(
-      mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
+      mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
     )
   )
 
@@ -269,7 +269,7 @@ test_that("mysterycall_scan_for_limits detects slice_head() anti-pattern", {
 
   result <- suppressWarnings(
     suppressMessages(
-      mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
+      mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
     )
   )
 
@@ -285,7 +285,7 @@ test_that("mysterycall_scan_for_limits respects exclude_pattern", {
   writeLines("x <- head(data, 100)", test_file)
 
   result <- suppressMessages(
-    mysterycall_scan_for_limits(tmpdir, recursive = FALSE, exclude_pattern = "exclude")
+    mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE, exclude_pattern = "exclude")
   )
 
   expect_equal(nrow(result), 0)
@@ -300,7 +300,7 @@ test_that("mysterycall_scan_for_limits detects n_max anti-pattern", {
 
   result <- suppressWarnings(
     suppressMessages(
-      mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
+      mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
     )
   )
 
@@ -317,7 +317,7 @@ test_that("mysterycall_scan_for_limits assigns correct severity levels", {
 
   result <- suppressWarnings(
     suppressMessages(
-      mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
+      mysterycall:::mysterycall_scan_for_limits(tmpdir, recursive = FALSE)
     )
   )
 

@@ -106,13 +106,16 @@ test_that("mysterycall_table1_gtsummary warns when strata_col in vars", {
     stringsAsFactors = FALSE
   )
 
-  result <- suppressMessages(
+  result <- NULL
+  suppressMessages(
     expect_warning(
-      mysterycall_table1_gtsummary(
-        df,
-        vars       = c("gender", "insurance"),
-        strata_col = "insurance"
-      ),
+      {
+        result <- mysterycall_table1_gtsummary(
+          df,
+          vars       = c("gender", "insurance"),
+          strata_col = "insurance"
+        )
+      },
       "appears in `vars`"
     )
   )

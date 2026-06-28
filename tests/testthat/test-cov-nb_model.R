@@ -316,8 +316,8 @@ test_that("print.mysterycall_nb_model respects digits parameter", {
     random_intercept = "physician"
   ))
 
-  expect_silent(print(result, digits = 2))
-  expect_silent(print(result, digits = 4))
+  expect_output(print(result, digits = 2))
+  expect_output(print(result, digits = 4))
 })
 
 # Test 13: factor reference levels detected
