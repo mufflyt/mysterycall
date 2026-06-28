@@ -5,8 +5,8 @@ Extracts and formats the fixed-effects table from a
 names and values follow standard epidemiological reporting conventions
 (IRR with 95% CI in a single "IRR (95% CI)" column, formatted p-values).
 The returned data frame can be passed directly to
-`flextable::flextable()` or
-[`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html) for
+[`flextable::flextable()`](https://davidgohel.github.io/flextable/reference/flextable.html)
+or [`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html) for
 Word/HTML output.
 
 ## Usage
@@ -27,7 +27,9 @@ mysterycall_model_table(
 - x:
 
   A `mysterycall_poisson_model` object from
-  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md).
+  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
+  or a `mysterycall_nb_model` object from
+  [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md).
 
 - include_intercept:
 
@@ -87,6 +89,11 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 }
 #> Fitting Poisson GLMER: wait_days ~ insurance + (1 | physician)
 #> boundary (singular) fit: see help('isSingular')
+#> Convergence issues detected:
+#>   boundary (singular) fit: see help('isSingular')
+#> Consider simplifying predictors or using nAGQ = 1.
+#> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=40, physicians=8, AIC=229.1, overdispersion=0.89
-#> Error in mysterycall_model_table(result): could not find function "mysterycall_model_table"
+#>                Term     IRR (95% CI) p-value
+#> 1 insuranceMedicaid 1.01 (0.87-1.17)   0.883
 ```

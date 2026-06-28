@@ -44,14 +44,18 @@ Other table helpers:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+set.seed(1)
 df <- data.frame(
-  group   = c("Medicaid", "Private", "Uninsured"),
-  success = c(40L, 80L, 30L),
-  total   = c(100L, 100L, 100L)
+  insurance = sample(c("Medicaid", "Private", "Medicare"), 120, replace = TRUE),
+  accepted  = rbinom(120, 1, 0.5)
 )
-disp_table <- mysterycall_disparities_table(df, "group", "success", "total",
-                                             ref_group = "Private")
+disp_table <- mysterycall_disparities_table(df, "accepted", "insurance",
+                                            ref_group = "Private")
 print(disp_table)
-} # }
+#> Disparity table -- 3 groups | ref: 'Private' | wilson 95% CI
+#> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
+#> ---------------------------------------------------------------------------------------------------- 
+#> Private                    44     21    47.7%  33.8%-62.1%          (ref)  1.00 (ref)              (ref)
+#> Medicaid                   38     18    47.4%  32.5%-62.7%        -0.4 pp  0.99 (0.63-1.57)        p = 0.974
+#> Medicare                   38     18    47.4%  32.5%-62.7%        -0.4 pp  0.99 (0.63-1.57)        p = 0.974
 ```

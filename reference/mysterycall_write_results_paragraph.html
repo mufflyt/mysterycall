@@ -9,7 +9,7 @@ multivariable Poisson regression, formatted for clinical manuscripts."><meta pro
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@ multivariable Poisson regression, formatted for clinical manuscripts."><meta pro
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -34,6 +35,7 @@ multivariable Poisson regression, formatted for clinical manuscripts."><meta pro
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -46,6 +48,9 @@ multivariable Poisson regression, formatted for clinical manuscripts."><meta pro
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -91,8 +96,8 @@ multivariable Poisson regression, formatted for clinical manuscripts.</p>
 
 
 <dl><dt id="arg-model-result">model_result<a class="anchor" aria-label="anchor" href="#arg-model-result"></a></dt>
-<dd><p>Either a <code>mysterycall_poisson_model</code> object (with
-element <code>$irr_table</code>) or a data frame with columns <code>term</code>,
+<dd><p>A <code>mysterycall_poisson_model</code> or <code>mysterycall_nb_model</code>
+object (with element <code>$irr_table</code>), or a data frame with columns <code>term</code>,
 <code>irr</code>, <code>ci_lower</code>, <code>ci_upper</code>, and <code>p_value</code>.</p></dd>
 
 
@@ -136,7 +141,18 @@ for future use.)</p></dd>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> which produces the <code>model_result</code>
 input; <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code> for tabular summaries of the
-same outcome data.</p></div>
+same outcome data.</p>
+<p>Other reporting:
+<code><a href="mysterycall_abstract_numbers.html">mysterycall_abstract_numbers()</a></code>,
+<code><a href="mysterycall_exclusion_summary.html">mysterycall_exclusion_summary()</a></code>,
+<code><a href="mysterycall_geographic_map.html">mysterycall_geographic_map()</a></code>,
+<code><a href="mysterycall_irr_to_days.html">mysterycall_irr_to_days()</a></code>,
+<code><a href="mysterycall_results_paragraph.html">mysterycall_results_paragraph()</a></code>,
+<code><a href="mysterycall_session_snapshot.html">mysterycall_session_snapshot()</a></code>,
+<code><a href="mysterycall_supplemental_tables.html">mysterycall_supplemental_tables()</a></code>,
+<code><a href="print.mysterycall_abstract_numbers.html">print.mysterycall_abstract_numbers()</a></code>,
+<code><a href="print.mysterycall_irr_days.html">print.mysterycall_irr_days()</a></code>,
+<code><a href="print.mysterycall_snapshot.html">print.mysterycall_snapshot()</a></code></p></div>
     </div>
 
     <div class="section level2">

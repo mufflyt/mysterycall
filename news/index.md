@@ -1,5 +1,196 @@
 # Changelog
 
+## mysterycall (development version)
+
+### New functions
+
+- mysterycall_run_analysis(): full 9-step pipeline orchestrator
+- mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt
+  tables
+- mysterycall_dedup_by_insurance(): deduplicate by phone x insurance
+- mysterycall_physicians_with_detail(): fetch full rows for flagged IDs
+- mysterycall_descriptive_stats(): median / Q1 / Q3 with sentence
+- mysterycall_distribution_summary(): modal category with sentence
+- mysterycall_demographics_sentence(): prose from
+  gender/specialty/credential distributions
+- mysterycall_wait_time_by_group(): grouped median / IQR table
+- mysterycall_wait_time_sentence(): Poisson p-values woven into prose
+- mysterycall_insurance_wait_sentence(): Medicaid vs BCBS IRR paragraph
+- mysterycall_scenario_summary(): call counts by scenario with sentence
+- mysterycall_sensitivity_both_insurance(): paired-insurance sensitivity
+  analysis
+- mysterycall_univariate_lmm_screen(): LMM univariate predictor screen
+  with IRR
+- mysterycall_interaction_screen(): pairwise interaction LMM screen with
+  AIC
+- mysterycall_univariate_poisson_screen(): simple GLM Poisson predictor
+  screen
+- mysterycall_r2_sentence(): marginal / conditional R² prose
+- mysterycall_random_effect_variance(): ICC + VarCorr table with
+  interpretation
+- mysterycall_overdispersion_sentence(): Pearson phi dispersion test
+  with tiers
+- mysterycall_clean_medicaid_col(): recode Medicaid acceptance to 0/1
+- mysterycall_facet_histogram(): faceted histogram with stats annotation
+- mysterycall_log_histogram(): log-scale faceted histogram
+- mysterycall_simple_poisson(): simple Poisson GLM with IRR table and
+  manuscript sentence
+- mysterycall_flag_repeat_physicians(): QC flag for repeated physician
+  entries
+- mysterycall_flag_exclusion_discrepancy(): QC flag for excluded rows
+  with wait times
+- mysterycall_flag_excluded_with_appointments(): QC flag for excluded
+  rows with days \> 0
+- mysterycall_flag_included_na_appointments(): QC flag for included rows
+  with NA days
+- mysterycall_sample_demographics(): physician sample summary with
+  sentence
+- mysterycall_insurance_acceptance_rates(): Medicaid vs BCBS acceptance
+  rate computation
+
+### Improvements
+
+- Lme4 singular-fit warnings suppressed in lmm/interaction/r2/randeff
+  functions
+- NA rows pre-filtered in histogram functions before ggplot construction
+- p_adjust_method parameter added to univariate_lmm_screen,
+  univariate_poisson_screen, interaction_screen
+- Input validation standardised with checkmate across all new functions
+
+### Vignettes
+
+- “Mystery Caller Workflow” vignette added: end-to-end 12-section
+  walkthrough
+
+## mysterycall 1.6.0
+
+Released 2026-06-25.
+
+### ✨ New functions
+
+- **[`mysterycall_predict_appointment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_predict_appointment.md)**
+  — generates predicted appointment- acceptance probabilities (plus
+  optional delta-method 95% CIs) for new patient or practice profiles
+  from a fitted `mysterycall_logistic_model` object. Population-level
+  predictions (`re.form = NA`) are the default, appropriate for new
+  practices unseen during model training.
+
+- **[`mysterycall_enrich_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_enrich_npi.md)**
+  — end-to-end NPI enrichment pipeline: validates NPIs, looks up
+  clinician data, genderizes first names, classifies practice setting,
+  and assigns ACOG/census regions. Returns a deduplicated data frame.
+
+- **[`mysterycall_parse_redcap_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_redcap_labels.md)**
+  — parses REDCap data-dictionary choice labels into tidy `data.frame`s
+  matching scenario × insurance × NPI patterns used in mystery-caller
+  study designs.
+
+- **[`mysterycall_calendar_sensitivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calendar_sensitivity.md)**
+  — side-by-side comparison of wait-time LMMs fit on calendar days
+  vs. business days, reporting coefficient deltas and flagging results
+  that differ meaningfully between the two timescales.
+
+- **`medicaid_expansion`** data object — 51-row KFF-sourced dataset
+  recording each state’s Medicaid expansion status (adopted / not
+  adopted) for use in stratified analyses.
+
+### ✨ Improvements
+
+- **broom-compatible
+  [`tidy()`](https://generics.r-lib.org/reference/tidy.html) methods**
+  added for `mysterycall_lmm`, `mysterycall_logistic_model`, and
+  `mysterycall_poisson_model` result objects via the `generics` package
+  (now in `Imports`).
+
+- **[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)**
+  — auto log-transform now reports geometric-mean ratios (GMR) with
+  confidence intervals alongside the standard coefficient table.
+
+- **`assign_region()`** — factor inputs are now silently coerced to
+  character rather than erroring; non-character, non-factor input gives
+  a clear error.
+
+- **[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)**
+  — duplicate columns are dropped before column-binding to prevent
+  `cbind` errors when API responses overlap with base data frame
+  columns.
+
+- **`caller_reliability()`** — emits a
+  [`warning()`](https://rdrr.io/r/base/warning.html) (not an error) when
+  fewer than 30 complete pairs are found, noting that ICC and kappa
+  estimates are unreliable at small *n*.
+
+- **[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md)**
+  — gains an
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) S3
+  method so results can be piped directly into `flextable` or
+  [`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html).
+
+- **`bizdays` fallback** —
+  [`mysterycall_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_business_days.md)
+  now falls back to calendar days with a
+  [`message()`](https://rdrr.io/r/base/message.html) instead of
+  [`stop()`](https://rdrr.io/r/base/stop.html)-ing when the `bizdays`
+  package is not installed.
+
+### 🐛 Bug fixes
+
+- Fixed a namespace-locking bug in the test suite: 37 test files were
+  calling
+  [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/)
+  inside `devtools::test()`, which locked the package namespace and
+  silently broke all subsequent `with_mocked_bindings()` calls. All such
+  calls have been removed.
+
+- Fixed 11-digit NPI generation in regression-match-rate mocks when *n*
+  \> 10 (changed from `paste0("123456789", 0:(n-1))` to
+  `sprintf("1%09d", seq_len(n))`).
+
+- Corrected ACOG district for Texas: District XI (not VII).
+
+------------------------------------------------------------------------
+
+## mysterycall 1.5.0
+
+Released 2026-06-15.
+
+### ✨ New functions
+
+- **[`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md)**
+  — merges phase-1 provider list with REDCap wave schedule, assigns
+  callers, and exports call sheets ready for upload.
+
+- **[`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)**
+  — generates a STROBE-compliant participant flow diagram (DiagrammeR /
+  Graphviz) from a named list of screening counts.
+
+- **[`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)**
+  — fits a mixed-effects logistic regression for binary outcomes (e.g.,
+  appointment offered yes/no), returns odds ratios, CIs, and a
+  publication-ready OR table.
+
+- **[`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md)**
+  — renders a forest plot from any
+  [`tidy()`](https://generics.r-lib.org/reference/tidy.html)- compatible
+  model object, with optional reference-line and faceting by outcome
+  variable.
+
+- **[`mysterycall_auto_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.md)**
+  — selects the best GLMM family (Poisson, negative-binomial,
+  zero-inflated) by AIC/BIC and overdispersion diagnostics, with an
+  optional linear mixed-model evaluation step.
+
+### ✨ Improvements
+
+- [`mysterycall_auto_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.md)
+  gained an LMM evaluation step that fits a log-transformed LMM as an
+  additional candidate and includes it in the AIC comparison table.
+
+- Comprehensive adversarial + semantic test suite for
+  `mysterycall_auto_model` (52 passing tests, 1 skip).
+
+------------------------------------------------------------------------
+
 ## mysterycall 1.4.0
 
 Released 2026-06-02.
@@ -38,7 +229,9 @@ Released 2026-06-02.
 
   - Stripped `install.packages('X')` instructions from ~70 error
     messages.
-  - Replaced `ggforce::geom_circle` in
+  - Replaced
+    [`ggforce::geom_circle`](https://ggforce.data-imaginist.com/reference/geom_circle.html)
+    in
     [`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)
     with a base-ggplot2 `geom_polygon` implementation (no `ggforce`
     dep).

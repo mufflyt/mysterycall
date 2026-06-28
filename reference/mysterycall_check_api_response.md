@@ -47,7 +47,7 @@ to validate API keys before the workflow.
 
 Other utilities:
 [`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
-`%>%`,
+`%>%()`,
 [`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_data_completeness()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_data_completeness.md),
@@ -58,6 +58,7 @@ Other utilities:
 [`mysterycall_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_estimate_resources.md),
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_normalize_file_format()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_file_format.md),
+[`mysterycall_parse_redcap_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_redcap_labels.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
 [`mysterycall_read_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_read_table.md),
@@ -75,11 +76,11 @@ Other utilities:
 if (FALSE) { # interactive()
 # Expect exactly 100 geocoding results
 coords <- geocode(addresses)
-mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
+mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
 
 # Allow up to 5% missing
 coords <- geocode(addresses)
-mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
+mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
                         tolerance = 5)
 }
 ```

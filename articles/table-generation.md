@@ -948,9 +948,11 @@ brackets.
 [`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md)
 →
 [`gtsummary::as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html)
-→ `flextable::save_as_docx()` pipeline (Section 3.3) produces
-JAMA-compliant Word output. JAMA requires that Table 1 report “No.” (not
-“N” or “n”) as the column header for counts.
+→
+[`flextable::save_as_docx()`](https://davidgohel.github.io/flextable/reference/save_as_docx.html)
+pipeline (Section 3.3) produces JAMA-compliant Word output. JAMA
+requires that Table 1 report “No.” (not “N” or “n”) as the column header
+for counts.
 
 **Obstetrics & Gynecology (Green Journal)** — Accepts Word. Prefers that
 percentages be reported as whole numbers for proportions \> 10% and one

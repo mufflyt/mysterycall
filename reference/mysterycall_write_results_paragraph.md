@@ -22,9 +22,9 @@ mysterycall_write_results_paragraph(
 
 - model_result:
 
-  Either a `mysterycall_poisson_model` object (with element
-  `$irr_table`) or a data frame with columns `term`, `irr`, `ci_lower`,
-  `ci_upper`, and `p_value`.
+  A `mysterycall_poisson_model` or `mysterycall_nb_model` object (with
+  element `$irr_table`), or a data frame with columns `term`, `irr`,
+  `ci_lower`, `ci_upper`, and `p_value`.
 
 - ref_group:
 
@@ -68,6 +68,18 @@ A single character string containing all result sentences.
 which produces the `model_result` input;
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
 for tabular summaries of the same outcome data.
+
+Other reporting:
+[`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
+[`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md),
+[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
+[`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
+[`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
+[`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md),
+[`mysterycall_supplemental_tables()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_supplemental_tables.md),
+[`print.mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_abstract_numbers.md),
+[`print.mysterycall_irr_days()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_irr_days.md),
+[`print.mysterycall_snapshot()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_snapshot.md)
 
 ## Examples
 

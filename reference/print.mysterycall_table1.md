@@ -2,7 +2,7 @@
 
 Prints a formatted Table 1 with column sample sizes in the header and
 the underlying tibble displayed via
-[`print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
+[`tibble::print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
 
 ## Usage
 
@@ -21,7 +21,7 @@ print(x, ...)
 - ...:
 
   Additional arguments passed to
-  [`print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
+  [`tibble::print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
 
 ## Value
 
@@ -52,12 +52,21 @@ Other table:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 df <- data.frame(
   age = c(25, 30, 35, 40),
   sex = c("M", "F", "F", "M")
 )
-t1 <- mysterycall_table1(df, vars = c("age", "sex"))
+t1 <- mysterycall_table1(df, covariates = c("age", "sex"))
 print(t1)
-} # }
+#> Table 1 (Overall N=4)
+#> 
+#> # A tibble: 4 × 3
+#>   variable level        Overall         
+#>   <chr>    <chr>        <chr>           
+#> 1 age      Median [IQR] 32.5 [28.8-36.2]
+#> 2 age      Mean (SD)    32.5 (6.5)      
+#> 3 sex      F            2 (50.0%)       
+#> 4 sex      M            2 (50.0%)       
+# }
 ```

@@ -15,7 +15,7 @@ so that calls are balanced across scenarios."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,7 @@ so that calls are balanced across scenarios."><meta property="og:image" content=
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -40,6 +41,7 @@ so that calls are balanced across scenarios."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -52,6 +54,9 @@ so that calls are balanced across scenarios."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -177,7 +182,14 @@ generalist coverage before assigning scenarios;
 <span class="r-in"><span>                       <span class="st">"Pediatric Otolaryngology"</span>  <span class="op">=</span> <span class="st">"Pediatric Otolaryngology"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  id_col           <span class="op">=</span> <span class="st">"id"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mysterycall_assign_scenarios(df, generalist_level = "General Otolaryngology",     scenario_map = c(Neurotology = "Neurotology", `Pediatric Otolaryngology` = "Pediatric Otolaryngology"),     id_col = "id"):</span> could not find function "mysterycall_assign_scenarios"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scenarios assigned to 3/3 generalist rows; stored in column 'scenario'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      city state_code        specialty_primary id                 scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Denver         CO   General Otolaryngology  1              Neurotology</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Denver         CO   General Otolaryngology  2 Pediatric Otolaryngology</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Denver         CO              Neurotology  3              Neurotology</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Denver         CO Pediatric Otolaryngology  4 Pediatric Otolaryngology</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Boulder         CO   General Otolaryngology  5              Neurotology</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Boulder         CO              Neurotology  6              Neurotology</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

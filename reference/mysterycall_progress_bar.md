@@ -68,6 +68,6 @@ Other progress:
 if (FALSE) { # interactive()
 pb_id <- mysterycall_progress_bar("Processing", total = 10)
 for (i in 1:10) mysterycall_progress_update(pb_id)
-mysterycall_progress_done(pb_id)
+mysterycall:::mysterycall_progress_done(pb_id)
 }
 ```

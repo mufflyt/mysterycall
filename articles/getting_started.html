@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -53,6 +54,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -65,6 +67,9 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -261,11 +266,10 @@ analyze the primary outcome (appointment acceptance rate).</p>
 <span><span class="co">#&gt; 24 row(s) have accepted = 0 (same-day appointments). Poisson handles zeros; verify these are intentional.</span></span>
 <span><span class="co">#&gt; Fitting Poisson GLMER: accepted ~ insurance_scenario + (1 | subspecialty)</span></span>
 <span><span class="co">#&gt; boundary (singular) fit: see help('isSingular')</span></span>
-<span><span class="co">#&gt; Warning: Convergence issues detected:</span></span>
+<span><span class="co">#&gt; Convergence issues detected:</span></span>
 <span><span class="co">#&gt;   boundary (singular) fit: see help('isSingular')</span></span>
 <span><span class="co">#&gt; Consider simplifying predictors or using nAGQ = 1.</span></span>
-<span><span class="co">#&gt; Warning: Singular fit: random-intercept variance is ~0. The physician-level</span></span>
-<span><span class="co">#&gt; random effect explains little variation.</span></span>
+<span><span class="co">#&gt; Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.</span></span>
 <span><span class="co">#&gt; Model fitted: n=50, physicians=6, AIC=84.2, overdispersion=0.50</span></span>
 <span></span>
 <span><span class="co"># Print the incidence rate ratios (IRR)</span></span>
@@ -275,11 +279,9 @@ analyze the primary outcome (appointment acceptance rate).</p>
 <span><span class="co">#&gt;   Reference levels: insurance_scenario='Medicaid'</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Fixed effects (IRR with Wald CI):</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
-<span><span class="co">#&gt;   term                        irr ci_lower ci_upper p_value_fmt</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)               0.259    0.124    0.544 &lt;0.001     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> insurance_scenarioPrivate 3.19     1.34     7.58  0.009      </span></span>
+<span><span class="co">#&gt;                        term   irr ci_lower ci_upper p_value_fmt</span></span>
+<span><span class="co">#&gt; 1               (Intercept) 0.259    0.124    0.544      &lt;0.001</span></span>
+<span><span class="co">#&gt; 2 insurance_scenarioPrivate 3.186    1.340    7.579       0.009</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random intercept (subspecialty):  variance = 0.0000  SD = 0.0000</span></span>
 <span></span>

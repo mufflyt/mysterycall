@@ -51,7 +51,7 @@ for related sanity-check utilities.
 
 Other utilities:
 [`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
-`%>%`,
+`%>%()`,
 [`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
@@ -62,6 +62,7 @@ Other utilities:
 [`mysterycall_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_estimate_resources.md),
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_normalize_file_format()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_file_format.md),
+[`mysterycall_parse_redcap_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_redcap_labels.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
 [`mysterycall_read_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_read_table.md),
@@ -78,9 +79,9 @@ Other utilities:
 ``` r
 if (FALSE) { # interactive()
 data <- read_csv("providers.csv")
-mysterycall_check_no_limits(data, "provider input")
+mysterycall:::mysterycall_check_no_limits(data, "provider input")
 
 npi_results <- mysterycall_search_and_process_npi(data)
-mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
+mysterycall:::mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 }
 ```

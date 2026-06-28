@@ -104,6 +104,7 @@ df <- data.frame(
   gold    = c(1, 0, 1, 1)
 )
 mysterycall_caller_reliability(df, "caller", "outcome", gold_col = "gold")
+#> Only 4 complete pair(s) found. ICC and kappa are unreliable with fewer than 30 pairs; interpret results with caution.
 #> -- mysterycall_caller_reliability --
 #> Method       : kappa 
 #> Statistic    : 0.5 

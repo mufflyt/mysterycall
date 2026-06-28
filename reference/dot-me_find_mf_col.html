@@ -9,7 +9,7 @@ model frame (e.g., "cyl" -&amp;gt; "factor(cyl)").'><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@ model frame (e.g., "cyl" -&amp;gt; "factor(cyl)").'><meta property="og:image" co
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -34,6 +35,7 @@ model frame (e.g., "cyl" -&amp;gt; "factor(cyl)").'><meta property="og:image" co
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -46,6 +48,9 @@ model frame (e.g., "cyl" -&amp;gt; "factor(cyl)").'><meta property="og:image" co
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -104,10 +109,34 @@ model frame (e.g., <code>"cyl"</code> -&gt; <code>"factor(cyl)"</code>).</p>
 <code><a href="dot-wait_stats.html">.wait_stats()</a></code>,
 <code><a href="dot-wilson_ci.html">.wilson_ci()</a></code>,
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
+<code><a href="mysterycall_acceptance_rate_calc.html">mysterycall_acceptance_rate_calc()</a></code>,
+<code><a href="mysterycall_auto_model.html">mysterycall_auto_model()</a></code>,
 <code><a href="mysterycall_bootstrap_ci.html">mysterycall_bootstrap_ci()</a></code>,
+<code><a href="mysterycall_calendar_sensitivity.html">mysterycall_calendar_sensitivity()</a></code>,
+<code><a href="mysterycall_caller_drift.html">mysterycall_caller_drift()</a></code>,
+<code><a href="mysterycall_check_zero_inflation.html">mysterycall_check_zero_inflation()</a></code>,
+<code><a href="mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code>,
+<code><a href="mysterycall_icc.html">mysterycall_icc()</a></code>,
+<code><a href="mysterycall_icc_report.html">mysterycall_icc_report()</a></code>,
+<code><a href="mysterycall_icc_sentence.html">mysterycall_icc_sentence()</a></code>,
+<code><a href="mysterycall_impute_calls.html">mysterycall_impute_calls()</a></code>,
+<code><a href="mysterycall_insurance_acceptance_rates.html">mysterycall_insurance_acceptance_rates()</a></code>,
+<code><a href="mysterycall_insurance_wait_sentence.html">mysterycall_insurance_wait_sentence()</a></code>,
+<code><a href="mysterycall_interaction_sentences.html">mysterycall_interaction_sentences()</a></code>,
+<code><a href="mysterycall_interaction_table.html">mysterycall_interaction_table()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
+<code><a href="mysterycall_irr_table.html">mysterycall_irr_table()</a></code>,
+<code><a href="mysterycall_kaplan_meier.html">mysterycall_kaplan_meier()</a></code>,
+<code><a href="mysterycall_lmm.html">mysterycall_lmm()</a></code>,
+<code><a href="mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
+<code><a href="mysterycall_missing_data_analysis.html">mysterycall_missing_data_analysis()</a></code>,
+<code><a href="mysterycall_model_gt.html">mysterycall_model_gt()</a></code>,
+<code><a href="mysterycall_model_mae_rmse.html">mysterycall_model_mae_rmse()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
+<code><a href="mysterycall_nb_model.html">mysterycall_nb_model()</a></code>,
+<code><a href="mysterycall_nb_power.html">mysterycall_nb_power()</a></code>,
+<code><a href="mysterycall_overdispersion_test.html">mysterycall_overdispersion_test()</a></code>,
 <code><a href="mysterycall_plot_distribution.html">mysterycall_plot_distribution()</a></code>,
 <code><a href="mysterycall_plot_effect.html">mysterycall_plot_effect()</a></code>,
 <code><a href="mysterycall_plot_emmeans_full.html">mysterycall_plot_emmeans_full()</a></code>,
@@ -117,10 +146,41 @@ model frame (e.g., <code>"cyl"</code> -&gt; <code>"factor(cyl)"</code>).</p>
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
+<code><a href="mysterycall_power_curve.html">mysterycall_power_curve()</a></code>,
+<code><a href="mysterycall_predicted_means.html">mysterycall_predicted_means()</a></code>,
+<code><a href="mysterycall_sample_demographics.html">mysterycall_sample_demographics()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
+<code><a href="mysterycall_screen_predictors.html">mysterycall_screen_predictors()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
+<code><a href="mysterycall_sensitivity.html">mysterycall_sensitivity()</a></code>,
+<code><a href="mysterycall_simple_poisson.html">mysterycall_simple_poisson()</a></code>,
+<code><a href="mysterycall_wait_time_by_group.html">mysterycall_wait_time_by_group()</a></code>,
+<code><a href="mysterycall_wait_time_crossover.html">mysterycall_wait_time_crossover()</a></code>,
+<code><a href="mysterycall_wait_time_sentence.html">mysterycall_wait_time_sentence()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,
-<code><a href="print.mysterycall_poisson_model.html">print.mysterycall_poisson_model()</a></code></p></div>
+<code><a href="plot.mysterycall_lmm.html">plot.mysterycall_lmm()</a></code>,
+<code><a href="print.mysterycall_acceptance_rate_calc.html">print.mysterycall_acceptance_rate_calc()</a></code>,
+<code><a href="print.mysterycall_auto_model.html">print.mysterycall_auto_model()</a></code>,
+<code><a href="print.mysterycall_calendar_sensitivity.html">print.mysterycall_calendar_sensitivity()</a></code>,
+<code><a href="print.mysterycall_caller_drift.html">print.mysterycall_caller_drift()</a></code>,
+<code><a href="print.mysterycall_icc.html">print.mysterycall_icc()</a></code>,
+<code><a href="print.mysterycall_icc_report.html">print.mysterycall_icc_report()</a></code>,
+<code><a href="print.mysterycall_impute_calls.html">print.mysterycall_impute_calls()</a></code>,
+<code><a href="print.mysterycall_interaction_table.html">print.mysterycall_interaction_table()</a></code>,
+<code><a href="print.mysterycall_lmm.html">print.mysterycall_lmm()</a></code>,
+<code><a href="print.mysterycall_logistic_model.html">print.mysterycall_logistic_model()</a></code>,
+<code><a href="print.mysterycall_missing_data.html">print.mysterycall_missing_data()</a></code>,
+<code><a href="print.mysterycall_model_mae_rmse.html">print.mysterycall_model_mae_rmse()</a></code>,
+<code><a href="print.mysterycall_nb_model.html">print.mysterycall_nb_model()</a></code>,
+<code><a href="print.mysterycall_nb_power.html">print.mysterycall_nb_power()</a></code>,
+<code><a href="print.mysterycall_poisson_model.html">print.mysterycall_poisson_model()</a></code>,
+<code><a href="print.mysterycall_power_curve.html">print.mysterycall_power_curve()</a></code>,
+<code><a href="print.mysterycall_predicted_means.html">print.mysterycall_predicted_means()</a></code>,
+<code><a href="print.mysterycall_sensitivity.html">print.mysterycall_sensitivity()</a></code>,
+<code><a href="print.mysterycall_wait_time_crossover.html">print.mysterycall_wait_time_crossover()</a></code>,
+<code><a href="tidy.mysterycall_lmm.html">tidy.mysterycall_lmm()</a></code>,
+<code><a href="tidy.mysterycall_logistic_model.html">tidy.mysterycall_logistic_model()</a></code>,
+<code><a href="tidy.mysterycall_poisson_model.html">tidy.mysterycall_poisson_model()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -50,7 +50,7 @@ Other logging:
 
 ``` r
 if (FALSE) { # interactive()
-mysterycall_workflow_start("Demo", total_steps = 1)
-mysterycall_workflow_end(final_n = 80, input_n = 100)
+mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
+mysterycall:::mysterycall_workflow_end(final_n = 80, input_n = 100)
 }
 ```

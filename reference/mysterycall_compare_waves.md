@@ -74,5 +74,7 @@ df <- data.frame(
   outcome = c(1, 0, 1, 1)
 )
 mysterycall_compare_waves(df, "wave", "outcome")
-#> Error in mysterycall_compare_waves(df, "wave", "outcome"): could not find function "mysterycall_compare_waves"
+#>   wave n n_accepted rate   lower_ci  upper_ci  p_vs_ref
+#> 1 post 2          2  1.0 0.34238023 1.0000000        NA
+#> 2  pre 2          1  0.5 0.09453121 0.9054688 0.2482131
 ```

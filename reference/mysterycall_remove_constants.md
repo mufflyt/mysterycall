@@ -39,5 +39,13 @@ Other data quality:
 ``` r
 df <- data.frame(a = 1:3, b = c(5, 5, 5), c = c("x", "y", "z"))
 mysterycall_remove_constants(df)
-#> Error in mysterycall_remove_constants(df): could not find function "mysterycall_remove_constants"
+#> Starting the function to remove constant variables.
+#> Identifying constant variables...
+#> Found 1 constant variables.
+#> Removing constant variables...
+#> Function completed.
+#>   a c
+#> 1 1 x
+#> 2 2 y
+#> 3 3 z
 ```

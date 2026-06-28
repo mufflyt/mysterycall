@@ -17,7 +17,7 @@ variables, chi-square or Fisher's exact for categorical."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,7 @@ variables, chi-square or Fisher's exact for categorical."><meta property="og:ima
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -42,6 +43,7 @@ variables, chi-square or Fisher's exact for categorical."><meta property="og:ima
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -54,6 +56,9 @@ variables, chi-square or Fisher's exact for categorical."><meta property="og:ima
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -95,7 +100,9 @@ variables, chi-square or Fisher's exact for categorical.</p>
 <span>  digits <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  p_value <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  min_cell <span class="op">=</span> <span class="fl">5L</span>,</span>
-<span>  variable_labels <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  variable_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  acog_district_col <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -151,6 +158,24 @@ test is used instead of chi-square (2-group categorical only). Default <code>5</
 to display labels, e.g. <code>c(wait_days = "Wait time (days)")</code>. Unlabelled
 columns use their column name.</p></dd>
 
+
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
+<dd><p>Character scalar or <code>NULL</code>. When a path ending in
+<code>.docx</code> is supplied (e.g. <code>"table1.docx"</code>), the table is exported to a
+Word document via the <code>flextable</code> and <code>officer</code> packages and the path is
+stored in <code>$docx_path</code>. Requires both packages to be installed.</p></dd>
+
+
+<dt id="arg-acog-district-col">acog_district_col<a class="anchor" aria-label="anchor" href="#arg-acog-district-col"></a></dt>
+<dd><p>Character scalar or <code>NULL</code>. Name of the column
+containing ACOG district assignments (e.g. <code>"acog_district"</code>). When set,
+two things happen automatically: (1) the variable label is expanded to
+"American College of Obstetricians and Gynecologists (ACOG) District", and
+(2) each district level is annotated with its two-letter state
+abbreviations, e.g. "District I (CT, ME, MA, NH, RI, VT)". A
+<code>variable_labels</code> entry for the same column takes precedence over the
+auto-generated label.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -168,6 +193,10 @@ category level.</p></dd>
 
 <dt><code>n</code></dt>
 <dd><p>Total rows in <code>data</code>.</p></dd>
+
+<dt><code>docx_path</code></dt>
+<dd><p>Character path to the written <code>.docx</code> file, or <code>NULL</code>
+when <code>output_path</code> is not supplied.</p></dd>
 
 
 </dl></div>

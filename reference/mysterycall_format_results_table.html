@@ -11,7 +11,7 @@ Optionally excludes the intercept row.'><meta property="og:image" content="https
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@ Optionally excludes the intercept row.'><meta property="og:image" content="https
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -36,6 +37,7 @@ Optionally excludes the intercept row.'><meta property="og:image" content="https
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -48,6 +50,9 @@ Optionally excludes the intercept row.'><meta property="og:image" content="https
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -107,13 +112,32 @@ to apply bold styling.  Intercept row is excluded by default.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> which produces the model input;
-<code><a href="mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph()</a></code> to generate a prose summary.</p>
+    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> and <code><a href="mysterycall_nb_model.html">mysterycall_nb_model()</a></code> which
+produce the model input; <code><a href="mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph()</a></code> to
+generate a prose summary.</p>
 <p>Other manuscript:
+<code><a href="mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code>,
+<code><a href="mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>,
+<code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
+<code><a href="mysterycall_literature_table.html">mysterycall_literature_table()</a></code>,
+<code><a href="mysterycall_materials_methods.html">mysterycall_materials_methods()</a></code>,
 <code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>,
+<code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>,
+<code><a href="mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code>,
+<code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>,
 <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
 <code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
-<code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code></p></div>
+<code><a href="mysterycall_sensitivity_table.html">mysterycall_sensitivity_table()</a></code>,
+<code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code>,
+<code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>,
+<code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code>,
+<code><a href="mysterycall_table2.html">mysterycall_table2()</a></code>,
+<code><a href="print.mysterycall_materials_methods.html">print.mysterycall_materials_methods()</a></code>,
+<code><a href="print.mysterycall_model_comparison_table.html">print.mysterycall_model_comparison_table()</a></code>,
+<code><a href="print.mysterycall_multi_model_table.html">print.mysterycall_multi_model_table()</a></code>,
+<code><a href="print.mysterycall_results_report.html">print.mysterycall_results_report()</a></code>,
+<code><a href="print.mysterycall_strobe_checklist.html">print.mysterycall_strobe_checklist()</a></code>,
+<code><a href="print.mysterycall_table2.html">print.mysterycall_table2()</a></code></p></div>
     </div>
 
     <div class="section level2">

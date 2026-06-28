@@ -11,6 +11,9 @@
   A comprehensive guide with examples on searching the NPI Database
   using taxonomy codes.
 
+- [Mystery Caller Workflow: From Raw Data to
+  Manuscript](https://mufflyt.github.io/mysterycall/articles/mystery-caller-workflow.md):
+
 - [Aggregating Provider Data for
   Analysis](https://mufflyt.github.io/mysterycall/articles/aggregating_provider_data.md):
 
@@ -44,6 +47,13 @@
   How to validate NANP phone numbers, parse physician names into
   structured components, and perform audited joins that guard against
   row duplication and coverage loss.
+
+- [Data Cleaning: A Complete Workflow for Mystery Caller
+  Studies](https://mufflyt.github.io/mysterycall/articles/data-cleaning.md):
+
+  End-to-end data cleaning for mystery caller studies: NPI validation,
+  phone validation, address normalization, Phase 1 and Phase 2 log
+  cleaning, duplicate detection, and clinician data retrieval.
 
 ### Geospatial
 
@@ -83,6 +93,20 @@
   Poisson mixed-effects regression for wait-time analysis, disparity
   metrics across insurance types, bootstrap confidence intervals, and
   multiple- comparison adjustment for mystery-caller studies.
+
+- [Linear Mixed Models for Wait-Time
+  Analysis](https://mufflyt.github.io/mysterycall/articles/linear-mixed-models.md):
+
+  When and how to use mysterycall_lmm() for appointment wait-time
+  outcomes, including auto-log transforms, geometric mean ratios,
+  Poisson sensitivity analysis, and the calendar vs. business-day
+  comparison.
+
+- [Logistic Model: Appointment Offered
+  (Yes/No)](https://mufflyt.github.io/mysterycall/articles/logistic-model.md):
+
+- [Adding Physician Covariates to the Wait-Time
+  Model](https://mufflyt.github.io/mysterycall/articles/adding-covariates.md):
 
 - [Power Analysis and Sample Size for Mystery Caller
   Studies](https://mufflyt.github.io/mysterycall/articles/power-analysis.md):

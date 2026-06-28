@@ -17,7 +17,7 @@ or knitr::kable() for Word/HTML output.'><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,7 @@ or knitr::kable() for Word/HTML output.'><meta property="og:image" content="http
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -42,6 +43,7 @@ or knitr::kable() for Word/HTML output.'><meta property="og:image" content="http
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -54,6 +56,9 @@ or knitr::kable() for Word/HTML output.'><meta property="og:image" content="http
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -80,7 +85,7 @@ or knitr::kable() for Word/HTML output.'><meta property="og:image" content="http
 <code>mysterycall_poisson_model</code> result into a print-ready data frame. Column
 names and values follow standard epidemiological reporting conventions
 (IRR with 95% CI in a single "IRR (95% CI)" column, formatted p-values).
-The returned data frame can be passed directly to <code>flextable::flextable()</code>
+The returned data frame can be passed directly to <code><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable::flextable()</a></code>
 or <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code> for Word/HTML output.</p>
     </div>
 
@@ -101,8 +106,8 @@ or <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A <code>mysterycall_poisson_model</code> object from
-<code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>.</p></dd>
+<dd><p>A <code>mysterycall_poisson_model</code> object from <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>
+or a <code>mysterycall_nb_model</code> object from <code><a href="mysterycall_nb_model.html">mysterycall_nb_model()</a></code>.</p></dd>
 
 
 <dt id="arg-include-intercept">include_intercept<a class="anchor" aria-label="anchor" href="#arg-include-intercept"></a></dt>
@@ -162,8 +167,13 @@ Default <code>"IRR (95% CI)"</code>.</p></dd>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting Poisson GLMER: wait_days ~ insurance + (1 | physician)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Convergence issues detected:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   boundary (singular) fit: see help('isSingular')</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider simplifying predictors or using nAGQ = 1.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Model fitted: n=40, physicians=8, AIC=229.1, overdispersion=0.89</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mysterycall_model_table(result):</span> could not find function "mysterycall_model_table"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                Term     IRR (95% CI) p-value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 insuranceMedicaid 1.01 (0.87-1.17)   0.883</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

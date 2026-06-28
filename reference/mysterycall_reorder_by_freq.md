@@ -34,8 +34,9 @@ A factor with levels sorted by frequency.
 
 ## Details
 
-Equivalent to `forcats::fct_infreq()` but implemented in pure base R
-with no additional dependencies.
+Equivalent to
+[`forcats::fct_infreq()`](https://forcats.tidyverse.org/reference/fct_inorder.html)
+but implemented in pure base R with no additional dependencies.
 
 ## See also
 
@@ -62,7 +63,8 @@ Other provider characteristics:
 ``` r
 x <- c("B", "A", "A", "C", "B", "B", "C", NA)
 mysterycall_reorder_by_freq(x)
-#> Error in mysterycall_reorder_by_freq(x): could not find function "mysterycall_reorder_by_freq"
+#> [1] B    A    A    C    B    B    C    <NA>
+#> Levels: B A C
 # levels: B (3), A (2), C (2), then by appearance for ties
 
 # Useful in ggplot2:

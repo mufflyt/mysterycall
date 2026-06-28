@@ -75,7 +75,7 @@ Other provider characteristics:
 states <- c("CO", "Texas", "New York", "california", NA)
 
 mysterycall_assign_region(states, system = "acog")
-#> [1] "District VIII" "District VII"  "District II"   "District IX"  
+#> [1] "District VIII" "District XI"   "District II"   "District IX"  
 #> [5] "Unknown"      
 mysterycall_assign_region(states, system = "aao_hns")
 #> [1] "District 7" "District 6" "District 2" "District 8" "Unknown"   

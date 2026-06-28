@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -32,6 +33,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -44,6 +46,9 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -1979,6 +1984,1068 @@
         </dt>
         <dd>Internal helper for package-specific temporary directories</dd>
       </dl></div><div class="section level2">
+      <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
+
+      <div class="section-desc"><p>Built-in datasets included with the package.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="medicaid_expansion.html">medicaid_expansion</a></code>
+
+        </dt>
+        <dd>Medicaid Expansion Status by State</dd>
+      </dl></div><div class="section level2">
+      <h2 id="mixed-models-and-glmms">Mixed Models and GLMMs<a class="anchor" aria-label="anchor" href="#mixed-models-and-glmms"></a></h2>
+
+      <div class="section-desc"><p>Fit LMMs, Poisson GLMMs, negative-binomial GLMMs, and logistic models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_lmm.html">mysterycall_lmm()</a></code>
+
+        </dt>
+        <dd>Fit a Linear Mixed Model (LMM) for wait-time analysis</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_nb_model.html">mysterycall_nb_model()</a></code>
+
+        </dt>
+        <dd>Fit a Negative Binomial GLMM for overdispersed wait-time analysis</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code>
+
+        </dt>
+        <dd>Fit a Logistic GLMER for mystery caller appointment-offered outcome</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_auto_model.html">mysterycall_auto_model()</a></code>
+
+        </dt>
+        <dd>Automatically select and compare wait-time models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_simple_poisson.html">mysterycall_simple_poisson()</a></code>
+
+        </dt>
+        <dd>Simple Poisson Regression for Group Comparison of Count Outcomes</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_univariate_lmm_screen.html">mysterycall_univariate_lmm_screen()</a></code>
+
+        </dt>
+        <dd>Screen predictors one-at-a-time using a linear mixed model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_univariate_poisson_screen.html">mysterycall_univariate_poisson_screen()</a></code>
+
+        </dt>
+        <dd>Screen predictors one-at-a-time using univariate Poisson GLMs</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_interaction_screen.html">mysterycall_interaction_screen()</a></code>
+
+        </dt>
+        <dd>Screen all pairwise factor interactions using linear mixed models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_screen_predictors.html">mysterycall_screen_predictors()</a></code>
+
+        </dt>
+        <dd>Screen candidate predictors for a GLMM outcome</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-interpretation">Model Interpretation<a class="anchor" aria-label="anchor" href="#model-interpretation"></a></h2>
+
+      <div class="section-desc"><p>Interpret fitted models: ICC, overdispersion, IRR, power, and predictions.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_icc.html">mysterycall_icc()</a></code>
+
+        </dt>
+        <dd>Extract the intraclass correlation coefficient from a fitted model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_icc_report.html">mysterycall_icc_report()</a></code>
+
+        </dt>
+        <dd>Inter-caller reliability report for STROBE item 22</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_icc_sentence.html">mysterycall_icc_sentence()</a></code>
+
+        </dt>
+        <dd>Generate a manuscript sentence for the ICC</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_r2_sentence.html">mysterycall_r2_sentence()</a></code>
+
+        </dt>
+        <dd>Compute R-squared values and generate an interpretive sentence for mixed models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_random_effect_variance.html">mysterycall_random_effect_variance()</a></code>
+
+        </dt>
+        <dd>Compute random-effect variance components and ICC for mixed models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_overdispersion_sentence.html">mysterycall_overdispersion_sentence()</a></code>
+
+        </dt>
+        <dd>Test for overdispersion and generate an interpretive sentence</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_overdispersion_test.html">mysterycall_overdispersion_test()</a></code>
+
+        </dt>
+        <dd>Test overdispersion in a fitted count model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_irr_to_days.html">mysterycall_irr_to_days()</a></code>
+
+        </dt>
+        <dd>Convert IRRs to absolute wait-time differences in days</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_power_calc.html">mysterycall_power_calc()</a></code>
+
+        </dt>
+        <dd>Clustered binary power and sample-size calculator (GLMM / VIF approach)</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_power_curve.html">mysterycall_power_curve()</a></code>
+
+        </dt>
+        <dd>Plot power vs. physicians across IRR scenarios (NB GLMM)</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_nb_power.html">mysterycall_nb_power()</a></code>
+
+        </dt>
+        <dd>Simulate power for a negative binomial mixed model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_predict_appointment.html">mysterycall_predict_appointment()</a></code>
+
+        </dt>
+        <dd>Predict appointment probability for new patient profiles</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_predicted_means.html">mysterycall_predicted_means()</a></code>
+
+        </dt>
+        <dd>Extract predicted mean wait times from a fitted mystery-caller model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_model_mae_rmse.html">mysterycall_model_mae_rmse()</a></code>
+
+        </dt>
+        <dd>Compute MAE, RMSE, Pearson R<sup>2</sup>, and MAPE for a fitted model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>
+
+        </dt>
+        <dd>Publication-ready model comparison table</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code>
+
+        </dt>
+        <dd>Multi-model regression table for manuscript submission</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_acceptance_rate_calc.html">mysterycall_acceptance_rate_calc()</a></code>
+
+        </dt>
+        <dd>Rigorous Three-Part Acceptance Rate Calculator</dd>
+      </dl></div><div class="section level2">
+      <h2 id="acceptance-rates-and-wait-times">Acceptance Rates and Wait Times<a class="anchor" aria-label="anchor" href="#acceptance-rates-and-wait-times"></a></h2>
+
+      <div class="section-desc"><p>Calculate and narrate appointment acceptance rates and wait-time outcomes.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_insurance_acceptance_rates.html">mysterycall_insurance_acceptance_rates()</a></code>
+
+        </dt>
+        <dd>Calculate Medicaid and BCBS Acceptance Rates</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_insurance_wait_sentence.html">mysterycall_insurance_wait_sentence()</a></code>
+
+        </dt>
+        <dd>Build a Manuscript-Ready Insurance Wait-Time Sentence</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_sensitivity_both_insurance.html">mysterycall_sensitivity_both_insurance()</a></code>
+
+        </dt>
+        <dd>Sensitivity analysis: physicians called under both insurance types</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_sensitivity.html">mysterycall_sensitivity()</a></code>
+
+        </dt>
+        <dd>Sensitivity analysis across data subsets</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_sensitivity_table.html">mysterycall_sensitivity_table()</a></code>
+
+        </dt>
+        <dd>Side-by-side sensitivity table of exposure-term estimates across models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_calendar_sensitivity.html">mysterycall_calendar_sensitivity()</a></code>
+
+        </dt>
+        <dd>Calendar-days vs. business-days sensitivity analysis for wait-time models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_wait_time_by_group.html">mysterycall_wait_time_by_group()</a></code>
+
+        </dt>
+        <dd>Summarise Wait Times by Group</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_wait_time_sentence.html">mysterycall_wait_time_sentence()</a></code>
+
+        </dt>
+        <dd>Build a Manuscript-Ready Wait-Time Sentence</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_wait_time_crossover.html">mysterycall_wait_time_crossover()</a></code>
+
+        </dt>
+        <dd>Compute the wait-time equalization (crossover) point between two insurance groups</dd>
+      </dl></div><div class="section level2">
+      <h2 id="descriptive-statistics">Descriptive Statistics<a class="anchor" aria-label="anchor" href="#descriptive-statistics"></a></h2>
+
+      <div class="section-desc"><p>Summarize demographics, distributions, and scenarios in text and tables.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_abstract_numbers.html">mysterycall_abstract_numbers()</a></code>
+
+        </dt>
+        <dd>Distil key abstract numbers from fitted model objects</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_descriptive_stats.html">mysterycall_descriptive_stats()</a></code>
+
+        </dt>
+        <dd>Descriptive statistics for a numeric column</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_distribution_summary.html">mysterycall_distribution_summary()</a></code>
+
+        </dt>
+        <dd>Distribution summary for a categorical column</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_demographics_sentence.html">mysterycall_demographics_sentence()</a></code>
+
+        </dt>
+        <dd>Build a Manuscript-Ready Demographics Sentence</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_sample_demographics.html">mysterycall_sample_demographics()</a></code>
+
+        </dt>
+        <dd>Summarise Sample Demographics for a Mystery-Caller Study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_scenario_summary.html">mysterycall_scenario_summary()</a></code>
+
+        </dt>
+        <dd>Scenario call count summary and descriptive sentence</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-cleaning">Data Cleaning<a class="anchor" aria-label="anchor" href="#data-cleaning"></a></h2>
+
+      <div class="section-desc"><p>Clean raw call data, recode insurance columns, and deduplicate records.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_clean_data.html">mysterycall_clean_data()</a></code>
+
+        </dt>
+        <dd>Clean raw mystery-caller data for publication-ready analysis</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_clean_data_keep_identifiers.html">mysterycall_clean_data_keep_identifiers()</a></code>
+
+        </dt>
+        <dd>Clean mystery-caller data while retaining all identifier columns</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_clean_medicaid_col.html">mysterycall_clean_medicaid_col()</a></code>
+
+        </dt>
+        <dd>Clean and binarise a Medicaid acceptance column</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_dedup_by_insurance.html">mysterycall_dedup_by_insurance()</a></code>
+
+        </dt>
+        <dd>Deduplicate data by insurance and physician phone</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_physicians_with_detail.html">mysterycall_physicians_with_detail()</a></code>
+
+        </dt>
+        <dd>Retrieve detailed records for a set of flagged physician IDs</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_impute_calls.html">mysterycall_impute_calls()</a></code>
+
+        </dt>
+        <dd>Multiple imputation by chained equations for missing call outcomes</dd>
+      </dl></div><div class="section level2">
+      <h2 id="quality-control-and-flags">Quality Control and Flags<a class="anchor" aria-label="anchor" href="#quality-control-and-flags"></a></h2>
+
+      <div class="section-desc"><p>Flag outliers, exclusion discrepancies, and missing data patterns.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_flag_date_outliers.html">mysterycall_flag_date_outliers()</a></code>
+
+        </dt>
+        <dd>Flag call dates that look like fat-finger entry errors</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flag_excluded_with_appointments.html">mysterycall_flag_excluded_with_appointments()</a></code>
+
+        </dt>
+        <dd>Flag Excluded Records That Still Have a Positive Wait Time</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flag_exclusion_discrepancy.html">mysterycall_flag_exclusion_discrepancy()</a></code>
+
+        </dt>
+        <dd>Flag Records with Exclusions That Also Have a Wait Time</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flag_included_na_appointments.html">mysterycall_flag_included_na_appointments()</a></code>
+
+        </dt>
+        <dd>Flag "Included" Records with a Missing Wait Time</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flag_repeat_physicians.html">mysterycall_flag_repeat_physicians()</a></code>
+
+        </dt>
+        <dd>Flag Physicians Included More Than a Threshold Number of Times</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_check_zero_inflation.html">mysterycall_check_zero_inflation()</a></code>
+
+        </dt>
+        <dd>Test for zero-inflation in a fitted count model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_missing_data_analysis.html">mysterycall_missing_data_analysis()</a></code>
+
+        </dt>
+        <dd>Test whether missing appointment dates are MAR or MNAR</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_caller_drift.html">mysterycall_caller_drift()</a></code>
+
+        </dt>
+        <dd>Detect and visualise calendar and sequence drift in mystery-caller outcomes</dd>
+      </dl></div><div class="section level2">
+      <h2 id="visualization-1">Visualization<a class="anchor" aria-label="anchor" href="#visualization-1"></a></h2>
+
+      <div class="section-desc"><p>Publication-ready figures: forest plots, histograms, survival curves, flow diagrams.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code>
+
+        </dt>
+        <dd>Publication-ready forest plot of IRRs or odds ratios</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_log_histogram.html">mysterycall_log_histogram()</a></code>
+
+        </dt>
+        <dd>Log-scale faceted histogram of a numeric variable by group</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_facet_histogram.html">mysterycall_facet_histogram()</a></code>
+
+        </dt>
+        <dd>Faceted histogram of a numeric variable by group</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_kaplan_meier.html">mysterycall_kaplan_meier()</a></code>
+
+        </dt>
+        <dd>Kaplan-Meier time-to-appointment analysis by insurance group</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>
+
+        </dt>
+        <dd>Draw a participant flow diagram for a mystery-caller study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_geographic_map.html">mysterycall_geographic_map()</a></code>
+
+        </dt>
+        <dd>State-Level Choropleth Map of Acceptance Rates</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_acceptance_waffle.html">mysterycall_acceptance_waffle()</a></code>
+
+        </dt>
+        <dd>Waffle chart of insurance acceptance rates</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_bw_theme.html">mysterycall_bw_theme()</a></code>
+
+        </dt>
+        <dd>Greene-journal-ready monochrome ggplot2 theme</dd>
+      </dl></div><div class="section level2">
+      <h2 id="reporting-and-manuscript-tables">Reporting and Manuscript Tables<a class="anchor" aria-label="anchor" href="#reporting-and-manuscript-tables"></a></h2>
+
+      <div class="section-desc"><p>Generate methods paragraphs, results sentences, and supplemental tables.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_materials_methods.html">mysterycall_materials_methods()</a></code>
+
+        </dt>
+        <dd>Generate a complete Materials &amp; Methods section for a mystery-caller study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_results_paragraph.html">mysterycall_results_paragraph()</a></code>
+
+        </dt>
+        <dd>Generate a results paragraph for a logistic mystery caller model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>
+
+        </dt>
+        <dd>Generate a complete manuscript results report from a fitted model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_literature_table.html">mysterycall_literature_table()</a></code>
+
+        </dt>
+        <dd>Literature comparison table for mystery-caller study Discussion sections</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_interaction_sentences.html">mysterycall_interaction_sentences()</a></code> <code><a href="mysterycall_interaction_sentences.html">print(<i>&lt;mysterycall_interaction_sentences&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Auto-generate manuscript sentences for a two-way interaction</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_interaction_table.html">mysterycall_interaction_table()</a></code>
+
+        </dt>
+        <dd>Stratum-specific ORs and omnibus LRT for a fitted interaction term</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_supplemental_tables.html">mysterycall_supplemental_tables()</a></code>
+
+        </dt>
+        <dd>Export a publication-ready supplemental Excel workbook</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_exclusion_summary.html">mysterycall_exclusion_summary()</a></code>
+
+        </dt>
+        <dd>Summarise call-level exclusions into a manuscript-ready paragraph</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code>
+
+        </dt>
+        <dd>Merge IRR results and absolute day differences into one publication table</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>
+
+        </dt>
+        <dd>Write a styled manuscript results table to a .docx file</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_table2.html">mysterycall_table2()</a></code>
+
+        </dt>
+        <dd>Build a two-panel manuscript Table 2</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_irr_table.html">mysterycall_irr_table()</a></code>
+
+        </dt>
+        <dd>Publication-Ready gt Table of Incidence Rate Ratios</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_model_gt.html">mysterycall_model_gt()</a></code>
+
+        </dt>
+        <dd>Thin Wrapper: gt IRR Table from a Simple Poisson Result</dd>
+      </dl></div><div class="section level2">
+      <h2 id="npi-enrichment-and-redcap">NPI Enrichment and REDCap<a class="anchor" aria-label="anchor" href="#npi-enrichment-and-redcap"></a></h2>
+
+      <div class="section-desc"><p>Enrich NPI records and parse REDCap data dictionaries.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_enrich_npi.html">mysterycall_enrich_npi()</a></code>
+
+        </dt>
+        <dd>Integrated NPI enrichment pipeline</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_parse_redcap_labels.html">mysterycall_parse_redcap_labels()</a></code>
+
+        </dt>
+        <dd>Parse REDCap field labels into choice-code / label tables</dd>
+      </dl></div><div class="section level2">
+      <h2 id="study-flow-and-strobe">Study Flow and STROBE<a class="anchor" aria-label="anchor" href="#study-flow-and-strobe"></a></h2>
+
+      <div class="section-desc"><p>Prepare call lists, STROBE checklists, and session snapshots.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code>
+
+        </dt>
+        <dd>STROBE reporting checklist for mystery-caller studies</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>
+
+        </dt>
+        <dd>Draw a STROBE-compliant flow diagram for mystery-caller (secret-shopper) studies</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_prepare_calls.html">mysterycall_prepare_calls()</a></code>
+
+        </dt>
+        <dd>Prepare raw REDCap mystery-caller data for statistical analysis</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_session_snapshot.html">mysterycall_session_snapshot()</a></code>
+
+        </dt>
+        <dd>Write a reproducibility snapshot at analysis end</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_run_analysis.html">mysterycall_run_analysis()</a></code>
+
+        </dt>
+        <dd>Run the Full Mystery-Caller Analysis Pipeline</dd>
+      </dl></div><div class="section level2">
+      <h2 id="s-methods">S3 Methods<a class="anchor" aria-label="anchor" href="#s-methods"></a></h2>
+
+      <div class="section-desc"><p>print(), tidy(), plot(), and coercion methods for mysterycall objects.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="plot.mysterycall_lmm.html">plot(<i>&lt;mysterycall_lmm&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Q-Q and residual diagnostic plots for a fitted LMM</dd>
+
+        <dt>
+
+          <code><a href="tidy.mysterycall_lmm.html">tidy(<i>&lt;mysterycall_lmm&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Tidy method for mysterycall_lmm objects</dd>
+
+        <dt>
+
+          <code><a href="tidy.mysterycall_logistic_model.html">tidy(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Tidy method for mysterycall_logistic_model objects</dd>
+
+        <dt>
+
+          <code><a href="tidy.mysterycall_poisson_model.html">tidy(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Tidy method for mysterycall_poisson_model objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_abstract_numbers.html">print(<i>&lt;mysterycall_abstract_numbers&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_abstract_numbers objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_acceptance_rate_calc.html">print(<i>&lt;mysterycall_acceptance_rate_calc&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_acceptance_rate_calc Object</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_auto_model.html">print(<i>&lt;mysterycall_auto_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for auto-selected mystery-caller models</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_calendar_sensitivity.html">print(<i>&lt;mysterycall_calendar_sensitivity&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_calendar_sensitivity</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_caller_drift.html">print(<i>&lt;mysterycall_caller_drift&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_caller_drift objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_icc.html">print(<i>&lt;mysterycall_icc&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_icc</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_icc_report.html">print(<i>&lt;mysterycall_icc_report&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_icc_report</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_impute_calls.html">print(<i>&lt;mysterycall_impute_calls&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_impute_calls objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_interaction_table.html">print(<i>&lt;mysterycall_interaction_table&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_interaction_table objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_irr_days.html">print(<i>&lt;mysterycall_irr_days&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_irr_days</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_kaplan_meier.html">print(<i>&lt;mysterycall_kaplan_meier&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_kaplan_meier result</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_literature_table.html">print(<i>&lt;mysterycall_literature_table&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_literature_table object</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_lmm.html">print(<i>&lt;mysterycall_lmm&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_lmm objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_logistic_model.html">print(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_logistic_model objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_materials_methods.html">print(<i>&lt;mysterycall_materials_methods&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_materials_methods</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_missing_data.html">print(<i>&lt;mysterycall_missing_data&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_missing_data</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_model_comparison_table.html">print(<i>&lt;mysterycall_model_comparison_table&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for model comparison table</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_model_mae_rmse.html">print(<i>&lt;mysterycall_model_mae_rmse&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_model_mae_rmse objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_multi_model_table.html">print(<i>&lt;mysterycall_multi_model_table&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_multi_model_table</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_nb_model.html">print(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_nb_model objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_nb_power.html">print(<i>&lt;mysterycall_nb_power&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_nb_power</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_overdispersion_test.html">print(<i>&lt;mysterycall_overdispersion_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_overdispersion_test</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_power_curve.html">print(<i>&lt;mysterycall_power_curve&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_power_curve</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_predicted_means.html">print(<i>&lt;mysterycall_predicted_means&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_predicted_means</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_prepared.html">print(<i>&lt;mysterycall_prepared&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_prepared objects</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_results_report.html">print(<i>&lt;mysterycall_results_report&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_results_report</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_sensitivity.html">print(<i>&lt;mysterycall_sensitivity&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_sensitivity</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_snapshot.html">print(<i>&lt;mysterycall_snapshot&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_snapshot object</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_strobe_checklist.html">print(<i>&lt;mysterycall_strobe_checklist&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_strobe_checklist</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_table2.html">print(<i>&lt;mysterycall_table2&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_table2</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_wait_time_crossover.html">print(<i>&lt;mysterycall_wait_time_crossover&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_wait_time_crossover result</dd>
+      </dl></div><div class="section level2">
+      <h2 id="short-aliases">Short Aliases<a class="anchor" aria-label="anchor" href="#short-aliases"></a></h2>
+
+      <div class="section-desc"><p>Unqualified alias names for frequently used functions.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="clean_data.html">clean_data</a></code>
+
+        </dt>
+        <dd>Clean and standardize raw mystery-caller data for analysis</dd>
+
+        <dt>
+
+          <code><a href="combined_results_table.html">combined_results_table</a></code>
+
+        </dt>
+        <dd>Combined IRR and absolute-days publication table</dd>
+
+        <dt>
+
+          <code><a href="export_results_docx.html">export_results_docx</a></code>
+
+        </dt>
+        <dd>Export results table to a styled Word document</dd>
+
+        <dt>
+
+          <code><a href="flow_diagram.html">flow_diagram</a></code>
+
+        </dt>
+        <dd>CONSORT/STROBE flow diagram for mystery-caller studies</dd>
+
+        <dt>
+
+          <code><a href="forest_plot.html">forest_plot</a></code>
+
+        </dt>
+        <dd>Publication-ready forest plot for mystery-caller model results</dd>
+
+        <dt>
+
+          <code><a href="icc.html">icc</a></code>
+
+        </dt>
+        <dd>Intraclass correlation coefficient for mystery-caller models</dd>
+
+        <dt>
+
+          <code><a href="impute_calls.html">impute_calls</a></code>
+
+        </dt>
+        <dd>Multiple imputation for missing mystery-caller outcomes</dd>
+
+        <dt>
+
+          <code><a href="lmm.html">lmm</a></code>
+
+        </dt>
+        <dd>Fit a Linear Mixed Model for approximately normal wait-time outcomes</dd>
+
+        <dt>
+
+          <code><a href="materials_methods.html">materials_methods</a></code>
+
+        </dt>
+        <dd>Generate a programmatic Materials &amp; Methods section</dd>
+
+        <dt>
+
+          <code><a href="missing_data_analysis.html">missing_data_analysis</a></code>
+
+        </dt>
+        <dd>Missing data analysis for mystery-caller appointment outcomes</dd>
+
+        <dt>
+
+          <code><a href="model_mae_rmse.html">model_mae_rmse</a></code>
+
+        </dt>
+        <dd>Evaluate prediction accuracy for a fitted mysterycall model</dd>
+
+        <dt>
+
+          <code><a href="power_curve.html">power_curve</a></code>
+
+        </dt>
+        <dd>Power curve for negative binomial GLMM mystery-caller studies</dd>
+
+        <dt>
+
+          <code><a href="predicted_means.html">predicted_means</a></code>
+
+        </dt>
+        <dd>Model-based predicted mean wait times per group</dd>
+
+        <dt>
+
+          <code><a href="prepare_calls.html">prepare_calls</a></code>
+
+        </dt>
+        <dd>Prepare and filter raw REDCap mystery-caller data for analysis</dd>
+
+        <dt>
+
+          <code><a href="results_report.html">results_report</a></code>
+
+        </dt>
+        <dd>One-call manuscript results report</dd>
+
+        <dt>
+
+          <code><a href="strobe_flow.html">strobe_flow</a></code>
+
+        </dt>
+        <dd>STROBE flow diagram for mystery-caller studies</dd>
+      </dl></div><div class="section level2">
       <h2 id="deprecated">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated"></a></h2>
 
 
@@ -1994,6 +3061,13 @@
 
         </dt>
         <dd>Deprecated functions in mysterycall</dd>
+
+        <dt>
+
+          <code><a href="mystercall_no_longer_in_service.html">mystercall_no_longer_in_service()</a></code> <code><a href="mystercall_no_longer_in_service.html">mysterycall_no_longer_in_service()</a></code>
+
+        </dt>
+        <dd>Dial phone numbers and flag lines that appear no longer in service</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

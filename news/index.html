@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -32,6 +33,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -44,6 +46,9 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
@@ -65,6 +70,96 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="mysterycall-development-version">mysterycall (development version)<a class="anchor" aria-label="anchor" href="#mysterycall-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-functions-development-version">New functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h3>
+<ul><li>mysterycall_run_analysis(): full 9-step pipeline orchestrator</li>
+<li>mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt tables</li>
+<li>mysterycall_dedup_by_insurance(): deduplicate by phone x insurance</li>
+<li>mysterycall_physicians_with_detail(): fetch full rows for flagged IDs</li>
+<li>mysterycall_descriptive_stats(): median / Q1 / Q3 with sentence</li>
+<li>mysterycall_distribution_summary(): modal category with sentence</li>
+<li>mysterycall_demographics_sentence(): prose from gender/specialty/credential distributions</li>
+<li>mysterycall_wait_time_by_group(): grouped median / IQR table</li>
+<li>mysterycall_wait_time_sentence(): Poisson p-values woven into prose</li>
+<li>mysterycall_insurance_wait_sentence(): Medicaid vs BCBS IRR paragraph</li>
+<li>mysterycall_scenario_summary(): call counts by scenario with sentence</li>
+<li>mysterycall_sensitivity_both_insurance(): paired-insurance sensitivity analysis</li>
+<li>mysterycall_univariate_lmm_screen(): LMM univariate predictor screen with IRR</li>
+<li>mysterycall_interaction_screen(): pairwise interaction LMM screen with AIC</li>
+<li>mysterycall_univariate_poisson_screen(): simple GLM Poisson predictor screen</li>
+<li>mysterycall_r2_sentence(): marginal / conditional R² prose</li>
+<li>mysterycall_random_effect_variance(): ICC + VarCorr table with interpretation</li>
+<li>mysterycall_overdispersion_sentence(): Pearson phi dispersion test with tiers</li>
+<li>mysterycall_clean_medicaid_col(): recode Medicaid acceptance to 0/1</li>
+<li>mysterycall_facet_histogram(): faceted histogram with stats annotation</li>
+<li>mysterycall_log_histogram(): log-scale faceted histogram</li>
+<li>mysterycall_simple_poisson(): simple Poisson GLM with IRR table and manuscript sentence</li>
+<li>mysterycall_flag_repeat_physicians(): QC flag for repeated physician entries</li>
+<li>mysterycall_flag_exclusion_discrepancy(): QC flag for excluded rows with wait times</li>
+<li>mysterycall_flag_excluded_with_appointments(): QC flag for excluded rows with days &gt; 0</li>
+<li>mysterycall_flag_included_na_appointments(): QC flag for included rows with NA days</li>
+<li>mysterycall_sample_demographics(): physician sample summary with sentence</li>
+<li>mysterycall_insurance_acceptance_rates(): Medicaid vs BCBS acceptance rate computation</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Lme4 singular-fit warnings suppressed in lmm/interaction/r2/randeff functions</li>
+<li>NA rows pre-filtered in histogram functions before ggplot construction</li>
+<li>p_adjust_method parameter added to univariate_lmm_screen, univariate_poisson_screen, interaction_screen</li>
+<li>Input validation standardised with checkmate across all new functions</li>
+</ul></div>
+<div class="section level3">
+<h3 id="vignettes-development-version">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes-development-version"></a></h3>
+<ul><li>“Mystery Caller Workflow” vignette added: end-to-end 12-section walkthrough</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.6.0" id="mysterycall-160">mysterycall 1.6.0<a class="anchor" aria-label="anchor" href="#mysterycall-160"></a></h2>
+<p>Released 2026-06-25.</p>
+<div class="section level3">
+<h3 id="sparkles-new-functions-1-6-0">✨ New functions<a class="anchor" aria-label="anchor" href="#sparkles-new-functions-1-6-0"></a></h3>
+<ul><li><p><strong><code><a href="../reference/mysterycall_predict_appointment.html">mysterycall_predict_appointment()</a></code></strong> — generates predicted appointment- acceptance probabilities (plus optional delta-method 95% CIs) for new patient or practice profiles from a fitted <code>mysterycall_logistic_model</code> object. Population-level predictions (<code>re.form = NA</code>) are the default, appropriate for new practices unseen during model training.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_enrich_npi.html">mysterycall_enrich_npi()</a></code></strong> — end-to-end NPI enrichment pipeline: validates NPIs, looks up clinician data, genderizes first names, classifies practice setting, and assigns ACOG/census regions. Returns a deduplicated data frame.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_parse_redcap_labels.html">mysterycall_parse_redcap_labels()</a></code></strong> — parses REDCap data-dictionary choice labels into tidy <code>data.frame</code>s matching scenario × insurance × NPI patterns used in mystery-caller study designs.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_calendar_sensitivity.html">mysterycall_calendar_sensitivity()</a></code></strong> — side-by-side comparison of wait-time LMMs fit on calendar days vs. business days, reporting coefficient deltas and flagging results that differ meaningfully between the two timescales.</p></li>
+<li><p><strong><code>medicaid_expansion</code></strong> data object — 51-row KFF-sourced dataset recording each state’s Medicaid expansion status (adopted / not adopted) for use in stratified analyses.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="sparkles-improvements-1-6-0">✨ Improvements<a class="anchor" aria-label="anchor" href="#sparkles-improvements-1-6-0"></a></h3>
+<ul><li><p><strong>broom-compatible <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> methods</strong> added for <code>mysterycall_lmm</code>, <code>mysterycall_logistic_model</code>, and <code>mysterycall_poisson_model</code> result objects via the <code>generics</code> package (now in <code>Imports</code>).</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_lmm.html">mysterycall_lmm()</a></code></strong> — auto log-transform now reports geometric-mean ratios (GMR) with confidence intervals alongside the standard coefficient table.</p></li>
+<li><p><strong><code>assign_region()</code></strong> — factor inputs are now silently coerced to character rather than erroring; non-character, non-factor input gives a clear error.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code></strong> — duplicate columns are dropped before column-binding to prevent <code>cbind</code> errors when API responses overlap with base data frame columns.</p></li>
+<li><p><strong><code>caller_reliability()</code></strong> — emits a <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code> (not an error) when fewer than 30 complete pairs are found, noting that ICC and kappa estimates are unreliable at small <em>n</em>.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_table1.html">mysterycall_table1()</a></code></strong> — gains an <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> S3 method so results can be piped directly into <code>flextable</code> or <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>.</p></li>
+<li><p><strong><code>bizdays</code> fallback</strong> — <code><a href="../reference/mysterycall_business_days.html">mysterycall_business_days()</a></code> now falls back to calendar days with a <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> instead of <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>-ing when the <code>bizdays</code> package is not installed.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-bug-fixes-1-6-0">🐛 Bug fixes<a class="anchor" aria-label="anchor" href="#bug-bug-fixes-1-6-0"></a></h3>
+<ul><li><p>Fixed a namespace-locking bug in the test suite: 37 test files were calling <code><a href="https://mufflyt.github.io/mysterycall/">library(mysterycall)</a></code> inside <code>devtools::test()</code>, which locked the package namespace and silently broke all subsequent <code>with_mocked_bindings()</code> calls. All such calls have been removed.</p></li>
+<li><p>Fixed 11-digit NPI generation in regression-match-rate mocks when <em>n</em> &gt; 10 (changed from <code>paste0("123456789", 0:(n-1))</code> to <code>sprintf("1%09d", seq_len(n))</code>).</p></li>
+<li><p>Corrected ACOG district for Texas: District XI (not VII).</p></li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="mysterycall-150">mysterycall 1.5.0<a class="anchor" aria-label="anchor" href="#mysterycall-150"></a></h2>
+<p>Released 2026-06-15.</p>
+<div class="section level3">
+<h3 id="sparkles-new-functions-1-5-0">✨ New functions<a class="anchor" aria-label="anchor" href="#sparkles-new-functions-1-5-0"></a></h3>
+<ul><li><p><strong><code><a href="../reference/mysterycall_prepare_calls.html">mysterycall_prepare_calls()</a></code></strong> — merges phase-1 provider list with REDCap wave schedule, assigns callers, and exports call sheets ready for upload.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code></strong> — generates a STROBE-compliant participant flow diagram (DiagrammeR / Graphviz) from a named list of screening counts.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code></strong> — fits a mixed-effects logistic regression for binary outcomes (e.g., appointment offered yes/no), returns odds ratios, CIs, and a publication-ready OR table.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code></strong> — renders a forest plot from any <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>- compatible model object, with optional reference-line and faceting by outcome variable.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_auto_model.html">mysterycall_auto_model()</a></code></strong> — selects the best GLMM family (Poisson, negative-binomial, zero-inflated) by AIC/BIC and overdispersion diagnostics, with an optional linear mixed-model evaluation step.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="sparkles-improvements-1-5-0">✨ Improvements<a class="anchor" aria-label="anchor" href="#sparkles-improvements-1-5-0"></a></h3>
+<ul><li><p><code><a href="../reference/mysterycall_auto_model.html">mysterycall_auto_model()</a></code> gained an LMM evaluation step that fits a log-transformed LMM as an additional candidate and includes it in the AIC comparison table.</p></li>
+<li><p>Comprehensive adversarial + semantic test suite for <code>mysterycall_auto_model</code> (52 passing tests, 1 skip).</p></li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="mysterycall-140">mysterycall 1.4.0<a class="anchor" aria-label="anchor" href="#mysterycall-140"></a></h2>
 <p>Released 2026-06-02.</p>
 <div class="section level3">
@@ -85,7 +180,7 @@
 <ul><li>
 <p><strong>CRAN-readiness fixes.</strong> <code>R CMD check --as-cran</code> now passes with zero errors, zero warnings, and only the standard “New submission” NOTE. Highlights:</p>
 <ul><li>Stripped <code>install.packages('X')</code> instructions from ~70 error messages.</li>
-<li>Replaced <code>ggforce::geom_circle</code> in <code><a href="../reference/mysterycall_plot_source_venn.html">mysterycall_plot_source_venn()</a></code> with a base-ggplot2 <code>geom_polygon</code> implementation (no <code>ggforce</code> dep).</li>
+<li>Replaced <code><a href="https://ggforce.data-imaginist.com/reference/geom_circle.html" class="external-link">ggforce::geom_circle</a></code> in <code><a href="../reference/mysterycall_plot_source_venn.html">mysterycall_plot_source_venn()</a></code> with a base-ggplot2 <code>geom_polygon</code> implementation (no <code>ggforce</code> dep).</li>
 <li>Replaced <code><a href="https://rdrr.io/pkg/tigris/man/fips_codes.html" class="external-link">tigris::fips_codes</a></code> example with a hardcoded vector (no <code>tigris</code> dep).</li>
 <li>Fixed 301/404 URLs (HERE developer portal, ACGME, USDA ERS).</li>
 <li>Soft-fail in <code><a href="../reference/mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code> when optional Suggests are missing.</li>

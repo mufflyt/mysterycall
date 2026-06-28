@@ -36,6 +36,6 @@ Other workflow:
 ``` r
 if (FALSE) { # interactive()
 results <- mysterycall_run_workflow_logged(phase1_data = my_data)
-mysterycall_print_dashboard(results)
+mysterycall:::mysterycall_print_dashboard(results)
 }
 ```

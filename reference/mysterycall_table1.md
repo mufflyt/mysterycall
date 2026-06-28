@@ -20,7 +20,9 @@ mysterycall_table1(
   digits = 1L,
   p_value = TRUE,
   min_cell = 5L,
-  variable_labels = NULL
+  variable_labels = NULL,
+  output_path = NULL,
+  acog_district_col = NULL
 )
 ```
 
@@ -76,6 +78,24 @@ mysterycall_table1(
   labels, e.g. `c(wait_days = "Wait time (days)")`. Unlabelled columns
   use their column name.
 
+- output_path:
+
+  Character scalar or `NULL`. When a path ending in `.docx` is supplied
+  (e.g. `"table1.docx"`), the table is exported to a Word document via
+  the `flextable` and `officer` packages and the path is stored in
+  `$docx_path`. Requires both packages to be installed.
+
+- acog_district_col:
+
+  Character scalar or `NULL`. Name of the column containing ACOG
+  district assignments (e.g. `"acog_district"`). When set, two things
+  happen automatically: (1) the variable label is expanded to "American
+  College of Obstetricians and Gynecologists (ACOG) District", and (2)
+  each district level is annotated with its two-letter state
+  abbreviations, e.g. "District I (CT, ME, MA, NH, RI, VT)". A
+  `variable_labels` entry for the same column takes precedence over the
+  auto-generated label.
+
 ## Value
 
 A list of class `mysterycall_table1` with:
@@ -98,6 +118,11 @@ A list of class `mysterycall_table1` with:
 - `n`:
 
   Total rows in `data`.
+
+- `docx_path`:
+
+  Character path to the written `.docx` file, or `NULL` when
+  `output_path` is not supplied.
 
 ## See also
 

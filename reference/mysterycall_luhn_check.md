@@ -42,8 +42,8 @@ Other data management:
 ## Examples
 
 ``` r
-mysterycall_luhn_check(c("1234567893", "9999999999", NA))
-#> Error in mysterycall_luhn_check(c("1234567893", "9999999999", NA)): could not find function "mysterycall_luhn_check"
+mysterycall:::mysterycall_luhn_check(c("1234567893", "9999999999", NA))
+#> [1]  TRUE FALSE FALSE
 # Filter a data frame to valid NPIs:
 # df[mysterycall_luhn_check(df$npi), ]
 ```

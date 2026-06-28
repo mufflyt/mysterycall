@@ -486,15 +486,18 @@ poisson_fit$overdispersion
 #> $interpretation
 #> [1] "Adequate: ratio = 1.08 is below the 1.5 threshold. Poisson model is appropriate."
 
-# If overdispersion is detected, refit with negative binomial (via glmer.nb)
-# poisson_fit_nb <- mysterycall_poisson_model(
-#   data         = mc_data,
-#   outcome      = "wait_days",
-#   group_var    = "insurance",
-#   physician_id = "npi",
-#   ref_level    = "Private",
-#   family       = "negative_binomial"   # switches to glmer.nb internally
-# )
+# If overdispersion is detected (phi > 2), refit with the negative binomial model
+if (requireNamespace("glmmTMB", quietly = TRUE)) {
+  nb_fit <- mysterycall_nb_model(
+    data             = mc_data,
+    outcome          = "wait_days",
+    predictors       = "insurance",
+    random_intercept = "npi"
+  )
+  print(nb_fit)
+  # Use the same downstream helpers: irr_plot, model_table, write_results_paragraph
+  mysterycall_irr_plot(nb_fit)
+}
 ```
 
 ### 3.7 Convergence and Singular Fit

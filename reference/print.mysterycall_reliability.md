@@ -31,12 +31,18 @@ Other caller-management:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 df <- data.frame(
   caller  = c("A", "A", "B", "B"),
   outcome = c(1L, 0L, 1L, 1L)
 )
 res <- mysterycall_caller_reliability(df, "caller", "outcome")
+#> Only 2 complete pair(s) found. ICC and kappa are unreliable with fewer than 30 pairs; interpret results with caution.
 print(res)
-} # }
+#> -- mysterycall_caller_reliability --
+#> Method       : kappa 
+#> Statistic    : NA 
+#> 95% CI       : [ NA , NA ]
+#> N pairs      : 2 
+# }
 ```

@@ -25,9 +25,8 @@ The absolute path to the HRR boundary shapefile.
 ## Examples
 
 ``` r
-# \donttest{
+# Requires internet access to download an ~8 MB shapefile on first call.
+if (FALSE) { # \dontrun{
 mysterycall:::ensure_hrr_shapefile()
-#> Downloading HRR boundary shapefile (~8 MB). This is a one-time operation.
-#> Error: Failed to retrieve the HRR boundary shapefile. Please try again or download it manually from https://data.dartmouthatlas.org/supplemental/.
-# }
+} # }
 ```

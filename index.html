@@ -17,8 +17,8 @@
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Mystery Caller Study Tools for Healthcare Access Research">
-<meta name="description" content="Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.">
-<meta property="og:description" content="Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.">
+<meta name="description" content="Tools for design, analysis, and reporting of mystery-caller (secret-shopper) studies that measure healthcare access disparities. Provides generalized linear mixed models (Poisson and negative-binomial GLMMs) for wait-time outcomes, incidence rate ratios with confidence intervals, IRR-to-absolute-days conversion, model selection and overdispersion diagnostics, intraclass correlation coefficients, Monte Carlo power curves, CONSORT/STROBE flow diagrams, inter-caller reliability, missing-data MAR/MNAR tests, and one-call manuscript generators for results, materials-and-methods, and STROBE-checklist sections. Also includes utilities for National Provider Identifier (NPI) record lookup and enrichment pipeline, provider demographics, Medicaid expansion status dataset, calendar-vs-business-day sensitivity analysis, broom-compatible tidy() methods, REDCap data dictionary parser, and publication-ready table and map output.">
+<meta property="og:description" content="Tools for design, analysis, and reporting of mystery-caller (secret-shopper) studies that measure healthcare access disparities. Provides generalized linear mixed models (Poisson and negative-binomial GLMMs) for wait-time outcomes, incidence rate ratios with confidence intervals, IRR-to-absolute-days conversion, model selection and overdispersion diagnostics, intraclass correlation coefficients, Monte Carlo power curves, CONSORT/STROBE flow diagrams, inter-caller reliability, missing-data MAR/MNAR tests, and one-call manuscript generators for results, materials-and-methods, and STROBE-checklist sections. Also includes utilities for National Provider Identifier (NPI) record lookup and enrichment pipeline, provider demographics, Medicaid expansion status dataset, calendar-vs-business-day sensitivity analysis, broom-compatible tidy() methods, REDCap data dictionary parser, and publication-ready table and map output.">
 <meta property="og:image" content="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57">
 <meta property="og:image:alt" content="mysterycall hex logo">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -60,6 +61,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="articles/geocode.html">Geocoding</a></li>
@@ -72,6 +74,9 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="articles/imotive-news.html">Imotive News &amp; Changelog</a></li>

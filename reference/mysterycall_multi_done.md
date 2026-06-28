@@ -38,6 +38,6 @@ Other progress:
 ``` r
 if (FALSE) { # interactive()
 tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
-mysterycall_multi_done(tracker)
+mysterycall:::mysterycall_multi_done(tracker)
 }
 ```

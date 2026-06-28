@@ -59,8 +59,8 @@ Other logging:
 
 ``` r
 if (FALSE) { # interactive()
-mysterycall_workflow_start("Demo", total_steps = 1)
-mysterycall_log_step("Step 1")
-mysterycall_log_step_complete(n_success = 90, n_total = 100)
+mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
+mysterycall:::mysterycall_log_step("Step 1")
+mysterycall:::mysterycall_log_step_complete(n_success = 90, n_total = 100)
 }
 ```

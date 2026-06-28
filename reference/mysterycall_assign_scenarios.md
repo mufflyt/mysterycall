@@ -104,5 +104,12 @@ mysterycall_assign_scenarios(
                        "Pediatric Otolaryngology"  = "Pediatric Otolaryngology"),
   id_col           = "id"
 )
-#> Error in mysterycall_assign_scenarios(df, generalist_level = "General Otolaryngology",     scenario_map = c(Neurotology = "Neurotology", `Pediatric Otolaryngology` = "Pediatric Otolaryngology"),     id_col = "id"): could not find function "mysterycall_assign_scenarios"
+#> Scenarios assigned to 3/3 generalist rows; stored in column 'scenario'.
+#>      city state_code        specialty_primary id                 scenario
+#> 1  Denver         CO   General Otolaryngology  1              Neurotology
+#> 2  Denver         CO   General Otolaryngology  2 Pediatric Otolaryngology
+#> 3  Denver         CO              Neurotology  3              Neurotology
+#> 4  Denver         CO Pediatric Otolaryngology  4 Pediatric Otolaryngology
+#> 5 Boulder         CO   General Otolaryngology  5              Neurotology
+#> 6 Boulder         CO              Neurotology  6              Neurotology
 ```

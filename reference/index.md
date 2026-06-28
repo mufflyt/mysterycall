@@ -656,6 +656,373 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 - [`mysterycall_tempdir()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_tempdir.md)
   : Internal helper for package-specific temporary directories
 
+## Datasets
+
+Built-in datasets included with the package.
+
+- [`medicaid_expansion`](https://mufflyt.github.io/mysterycall/reference/medicaid_expansion.md)
+  : Medicaid Expansion Status by State
+
+## Mixed Models and GLMMs
+
+Fit LMMs, Poisson GLMMs, negative-binomial GLMMs, and logistic models.
+
+- [`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
+  : Fit a Linear Mixed Model (LMM) for wait-time analysis
+- [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md)
+  : Fit a Negative Binomial GLMM for overdispersed wait-time analysis
+- [`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+  : Fit a Logistic GLMER for mystery caller appointment-offered outcome
+- [`mysterycall_auto_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.md)
+  : Automatically select and compare wait-time models
+- [`mysterycall_simple_poisson()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_simple_poisson.md)
+  : Simple Poisson Regression for Group Comparison of Count Outcomes
+- [`mysterycall_univariate_lmm_screen()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_univariate_lmm_screen.md)
+  : Screen predictors one-at-a-time using a linear mixed model
+- [`mysterycall_univariate_poisson_screen()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_univariate_poisson_screen.md)
+  : Screen predictors one-at-a-time using univariate Poisson GLMs
+- [`mysterycall_interaction_screen()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_screen.md)
+  : Screen all pairwise factor interactions using linear mixed models
+- [`mysterycall_screen_predictors()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_predictors.md)
+  : Screen candidate predictors for a GLMM outcome
+
+## Model Interpretation
+
+Interpret fitted models: ICC, overdispersion, IRR, power, and
+predictions.
+
+- [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md)
+  : Extract the intraclass correlation coefficient from a fitted model
+
+- [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md)
+  : Inter-caller reliability report for STROBE item 22
+
+- [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md)
+  : Generate a manuscript sentence for the ICC
+
+- [`mysterycall_r2_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_r2_sentence.md)
+  : Compute R-squared values and generate an interpretive sentence for
+  mixed models
+
+- [`mysterycall_random_effect_variance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_random_effect_variance.md)
+  : Compute random-effect variance components and ICC for mixed models
+
+- [`mysterycall_overdispersion_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_sentence.md)
+  : Test for overdispersion and generate an interpretive sentence
+
+- [`mysterycall_overdispersion_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_test.md)
+  : Test overdispersion in a fitted count model
+
+- [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md)
+  : Convert IRRs to absolute wait-time differences in days
+
+- [`mysterycall_power_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_power_calc.md)
+  : Clustered binary power and sample-size calculator (GLMM / VIF
+  approach)
+
+- [`mysterycall_power_curve()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_power_curve.md)
+  : Plot power vs. physicians across IRR scenarios (NB GLMM)
+
+- [`mysterycall_nb_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_power.md)
+  : Simulate power for a negative binomial mixed model
+
+- [`mysterycall_predict_appointment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_predict_appointment.md)
+  : Predict appointment probability for new patient profiles
+
+- [`mysterycall_predicted_means()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_predicted_means.md)
+  : Extract predicted mean wait times from a fitted mystery-caller model
+
+- [`mysterycall_model_mae_rmse()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_mae_rmse.md)
+  :
+
+  Compute MAE, RMSE, Pearson R², and MAPE for a fitted model
+
+- [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md)
+  : Publication-ready model comparison table
+
+- [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md)
+  : Multi-model regression table for manuscript submission
+
+- [`mysterycall_acceptance_rate_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate_calc.md)
+  : Rigorous Three-Part Acceptance Rate Calculator
+
+## Acceptance Rates and Wait Times
+
+Calculate and narrate appointment acceptance rates and wait-time
+outcomes.
+
+- [`mysterycall_insurance_acceptance_rates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_acceptance_rates.md)
+  : Calculate Medicaid and BCBS Acceptance Rates
+- [`mysterycall_insurance_wait_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_wait_sentence.md)
+  : Build a Manuscript-Ready Insurance Wait-Time Sentence
+- [`mysterycall_sensitivity_both_insurance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_both_insurance.md)
+  : Sensitivity analysis: physicians called under both insurance types
+- [`mysterycall_sensitivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity.md)
+  : Sensitivity analysis across data subsets
+- [`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md)
+  : Side-by-side sensitivity table of exposure-term estimates across
+  models
+- [`mysterycall_calendar_sensitivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calendar_sensitivity.md)
+  : Calendar-days vs. business-days sensitivity analysis for wait-time
+  models
+- [`mysterycall_wait_time_by_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_by_group.md)
+  : Summarise Wait Times by Group
+- [`mysterycall_wait_time_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_sentence.md)
+  : Build a Manuscript-Ready Wait-Time Sentence
+- [`mysterycall_wait_time_crossover()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_crossover.md)
+  : Compute the wait-time equalization (crossover) point between two
+  insurance groups
+
+## Descriptive Statistics
+
+Summarize demographics, distributions, and scenarios in text and tables.
+
+- [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md)
+  : Distil key abstract numbers from fitted model objects
+- [`mysterycall_descriptive_stats()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_descriptive_stats.md)
+  : Descriptive statistics for a numeric column
+- [`mysterycall_distribution_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_distribution_summary.md)
+  : Distribution summary for a categorical column
+- [`mysterycall_demographics_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_demographics_sentence.md)
+  : Build a Manuscript-Ready Demographics Sentence
+- [`mysterycall_sample_demographics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_demographics.md)
+  : Summarise Sample Demographics for a Mystery-Caller Study
+- [`mysterycall_scenario_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_summary.md)
+  : Scenario call count summary and descriptive sentence
+
+## Data Cleaning
+
+Clean raw call data, recode insurance columns, and deduplicate records.
+
+- [`mysterycall_clean_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_data.md)
+  : Clean raw mystery-caller data for publication-ready analysis
+- [`mysterycall_clean_data_keep_identifiers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_data_keep_identifiers.md)
+  : Clean mystery-caller data while retaining all identifier columns
+- [`mysterycall_clean_medicaid_col()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_medicaid_col.md)
+  : Clean and binarise a Medicaid acceptance column
+- [`mysterycall_dedup_by_insurance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_dedup_by_insurance.md)
+  : Deduplicate data by insurance and physician phone
+- [`mysterycall_physicians_with_detail()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physicians_with_detail.md)
+  : Retrieve detailed records for a set of flagged physician IDs
+- [`mysterycall_impute_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_impute_calls.md)
+  : Multiple imputation by chained equations for missing call outcomes
+
+## Quality Control and Flags
+
+Flag outliers, exclusion discrepancies, and missing data patterns.
+
+- [`mysterycall_flag_date_outliers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_date_outliers.md)
+  : Flag call dates that look like fat-finger entry errors
+- [`mysterycall_flag_excluded_with_appointments()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_excluded_with_appointments.md)
+  : Flag Excluded Records That Still Have a Positive Wait Time
+- [`mysterycall_flag_exclusion_discrepancy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_exclusion_discrepancy.md)
+  : Flag Records with Exclusions That Also Have a Wait Time
+- [`mysterycall_flag_included_na_appointments()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_included_na_appointments.md)
+  : Flag "Included" Records with a Missing Wait Time
+- [`mysterycall_flag_repeat_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_repeat_physicians.md)
+  : Flag Physicians Included More Than a Threshold Number of Times
+- [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md)
+  : Test for zero-inflation in a fitted count model
+- [`mysterycall_missing_data_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_missing_data_analysis.md)
+  : Test whether missing appointment dates are MAR or MNAR
+- [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md)
+  : Detect and visualise calendar and sequence drift in mystery-caller
+  outcomes
+
+## Visualization
+
+Publication-ready figures: forest plots, histograms, survival curves,
+flow diagrams.
+
+- [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md)
+  : Publication-ready forest plot of IRRs or odds ratios
+- [`mysterycall_log_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_histogram.md)
+  : Log-scale faceted histogram of a numeric variable by group
+- [`mysterycall_facet_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_facet_histogram.md)
+  : Faceted histogram of a numeric variable by group
+- [`mysterycall_kaplan_meier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_kaplan_meier.md)
+  : Kaplan-Meier time-to-appointment analysis by insurance group
+- [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+  : Draw a participant flow diagram for a mystery-caller study
+- [`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md)
+  : State-Level Choropleth Map of Acceptance Rates
+- [`mysterycall_acceptance_waffle()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_waffle.md)
+  : Waffle chart of insurance acceptance rates
+- [`mysterycall_bw_theme()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.md)
+  : Greene-journal-ready monochrome ggplot2 theme
+
+## Reporting and Manuscript Tables
+
+Generate methods paragraphs, results sentences, and supplemental tables.
+
+- [`mysterycall_materials_methods()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_materials_methods.md)
+  : Generate a complete Materials & Methods section for a mystery-caller
+  study
+- [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md)
+  : Generate a results paragraph for a logistic mystery caller model
+- [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md)
+  : Generate a complete manuscript results report from a fitted model
+- [`mysterycall_literature_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_literature_table.md)
+  : Literature comparison table for mystery-caller study Discussion
+  sections
+- [`mysterycall_interaction_sentences()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_sentences.md)
+  [`print(`*`<mysterycall_interaction_sentences>`*`)`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_sentences.md)
+  : Auto-generate manuscript sentences for a two-way interaction
+- [`mysterycall_interaction_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_table.md)
+  : Stratum-specific ORs and omnibus LRT for a fitted interaction term
+- [`mysterycall_supplemental_tables()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_supplemental_tables.md)
+  : Export a publication-ready supplemental Excel workbook
+- [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md)
+  : Summarise call-level exclusions into a manuscript-ready paragraph
+- [`mysterycall_combined_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_combined_results_table.md)
+  : Merge IRR results and absolute day differences into one publication
+  table
+- [`mysterycall_export_results_docx()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_results_docx.md)
+  : Write a styled manuscript results table to a .docx file
+- [`mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table2.md)
+  : Build a two-panel manuscript Table 2
+- [`mysterycall_irr_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_table.md)
+  : Publication-Ready gt Table of Incidence Rate Ratios
+- [`mysterycall_model_gt()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_gt.md)
+  : Thin Wrapper: gt IRR Table from a Simple Poisson Result
+
+## NPI Enrichment and REDCap
+
+Enrich NPI records and parse REDCap data dictionaries.
+
+- [`mysterycall_enrich_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_enrich_npi.md)
+  : Integrated NPI enrichment pipeline
+- [`mysterycall_parse_redcap_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_redcap_labels.md)
+  : Parse REDCap field labels into choice-code / label tables
+
+## Study Flow and STROBE
+
+Prepare call lists, STROBE checklists, and session snapshots.
+
+- [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md)
+  : STROBE reporting checklist for mystery-caller studies
+- [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+  : Draw a STROBE-compliant flow diagram for mystery-caller
+  (secret-shopper) studies
+- [`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md)
+  : Prepare raw REDCap mystery-caller data for statistical analysis
+- [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md)
+  : Write a reproducibility snapshot at analysis end
+- [`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
+  : Run the Full Mystery-Caller Analysis Pipeline
+
+## S3 Methods
+
+print(), tidy(), plot(), and coercion methods for mysterycall objects.
+
+- [`plot(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/plot.mysterycall_lmm.md)
+  : Q-Q and residual diagnostic plots for a fitted LMM
+- [`tidy(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/tidy.mysterycall_lmm.md)
+  : Tidy method for mysterycall_lmm objects
+- [`tidy(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/tidy.mysterycall_logistic_model.md)
+  : Tidy method for mysterycall_logistic_model objects
+- [`tidy(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/tidy.mysterycall_poisson_model.md)
+  : Tidy method for mysterycall_poisson_model objects
+- [`print(`*`<mysterycall_abstract_numbers>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_abstract_numbers.md)
+  : Print method for mysterycall_abstract_numbers objects
+- [`print(`*`<mysterycall_acceptance_rate_calc>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_acceptance_rate_calc.md)
+  : Print a mysterycall_acceptance_rate_calc Object
+- [`print(`*`<mysterycall_auto_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_auto_model.md)
+  : Print method for auto-selected mystery-caller models
+- [`print(`*`<mysterycall_calendar_sensitivity>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_calendar_sensitivity.md)
+  : Print method for mysterycall_calendar_sensitivity
+- [`print(`*`<mysterycall_caller_drift>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_caller_drift.md)
+  : Print method for mysterycall_caller_drift objects
+- [`print(`*`<mysterycall_icc>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_icc.md)
+  : Print method for mysterycall_icc
+- [`print(`*`<mysterycall_icc_report>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_icc_report.md)
+  : Print method for mysterycall_icc_report
+- [`print(`*`<mysterycall_impute_calls>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_impute_calls.md)
+  : Print method for mysterycall_impute_calls objects
+- [`print(`*`<mysterycall_interaction_table>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_interaction_table.md)
+  : Print method for mysterycall_interaction_table objects
+- [`print(`*`<mysterycall_irr_days>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_irr_days.md)
+  : Print method for mysterycall_irr_days
+- [`print(`*`<mysterycall_kaplan_meier>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_kaplan_meier.md)
+  : Print a mysterycall_kaplan_meier result
+- [`print(`*`<mysterycall_literature_table>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_literature_table.md)
+  : Print a mysterycall_literature_table object
+- [`print(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_lmm.md)
+  : Print method for mysterycall_lmm objects
+- [`print(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_logistic_model.md)
+  : Print method for mysterycall_logistic_model objects
+- [`print(`*`<mysterycall_materials_methods>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_materials_methods.md)
+  : Print method for mysterycall_materials_methods
+- [`print(`*`<mysterycall_missing_data>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_missing_data.md)
+  : Print method for mysterycall_missing_data
+- [`print(`*`<mysterycall_model_comparison_table>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md)
+  : Print method for model comparison table
+- [`print(`*`<mysterycall_model_mae_rmse>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_mae_rmse.md)
+  : Print method for mysterycall_model_mae_rmse objects
+- [`print(`*`<mysterycall_multi_model_table>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md)
+  : Print a mysterycall_multi_model_table
+- [`print(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_nb_model.md)
+  : Print method for mysterycall_nb_model objects
+- [`print(`*`<mysterycall_nb_power>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_nb_power.md)
+  : Print method for mysterycall_nb_power
+- [`print(`*`<mysterycall_overdispersion_test>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_overdispersion_test.md)
+  : Print method for mysterycall_overdispersion_test
+- [`print(`*`<mysterycall_power_curve>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_power_curve.md)
+  : Print method for mysterycall_power_curve
+- [`print(`*`<mysterycall_predicted_means>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_predicted_means.md)
+  : Print method for mysterycall_predicted_means
+- [`print(`*`<mysterycall_prepared>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_prepared.md)
+  : Print method for mysterycall_prepared objects
+- [`print(`*`<mysterycall_results_report>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md)
+  : Print method for mysterycall_results_report
+- [`print(`*`<mysterycall_sensitivity>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sensitivity.md)
+  : Print method for mysterycall_sensitivity
+- [`print(`*`<mysterycall_snapshot>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_snapshot.md)
+  : Print a mysterycall_snapshot object
+- [`print(`*`<mysterycall_strobe_checklist>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md)
+  : Print method for mysterycall_strobe_checklist
+- [`print(`*`<mysterycall_table2>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
+  : Print method for mysterycall_table2
+- [`print(`*`<mysterycall_wait_time_crossover>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_wait_time_crossover.md)
+  : Print a mysterycall_wait_time_crossover result
+
+## Short Aliases
+
+Unqualified alias names for frequently used functions.
+
+- [`clean_data`](https://mufflyt.github.io/mysterycall/reference/clean_data.md)
+  : Clean and standardize raw mystery-caller data for analysis
+- [`combined_results_table`](https://mufflyt.github.io/mysterycall/reference/combined_results_table.md)
+  : Combined IRR and absolute-days publication table
+- [`export_results_docx`](https://mufflyt.github.io/mysterycall/reference/export_results_docx.md)
+  : Export results table to a styled Word document
+- [`flow_diagram`](https://mufflyt.github.io/mysterycall/reference/flow_diagram.md)
+  : CONSORT/STROBE flow diagram for mystery-caller studies
+- [`forest_plot`](https://mufflyt.github.io/mysterycall/reference/forest_plot.md)
+  : Publication-ready forest plot for mystery-caller model results
+- [`icc`](https://mufflyt.github.io/mysterycall/reference/icc.md) :
+  Intraclass correlation coefficient for mystery-caller models
+- [`impute_calls`](https://mufflyt.github.io/mysterycall/reference/impute_calls.md)
+  : Multiple imputation for missing mystery-caller outcomes
+- [`lmm`](https://mufflyt.github.io/mysterycall/reference/lmm.md) : Fit
+  a Linear Mixed Model for approximately normal wait-time outcomes
+- [`materials_methods`](https://mufflyt.github.io/mysterycall/reference/materials_methods.md)
+  : Generate a programmatic Materials & Methods section
+- [`missing_data_analysis`](https://mufflyt.github.io/mysterycall/reference/missing_data_analysis.md)
+  : Missing data analysis for mystery-caller appointment outcomes
+- [`model_mae_rmse`](https://mufflyt.github.io/mysterycall/reference/model_mae_rmse.md)
+  : Evaluate prediction accuracy for a fitted mysterycall model
+- [`power_curve`](https://mufflyt.github.io/mysterycall/reference/power_curve.md)
+  : Power curve for negative binomial GLMM mystery-caller studies
+- [`predicted_means`](https://mufflyt.github.io/mysterycall/reference/predicted_means.md)
+  : Model-based predicted mean wait times per group
+- [`prepare_calls`](https://mufflyt.github.io/mysterycall/reference/prepare_calls.md)
+  : Prepare and filter raw REDCap mystery-caller data for analysis
+- [`results_report`](https://mufflyt.github.io/mysterycall/reference/results_report.md)
+  : One-call manuscript results report
+- [`strobe_flow`](https://mufflyt.github.io/mysterycall/reference/strobe_flow.md)
+  : STROBE flow diagram for mystery-caller studies
+
 ## Deprecated
 
 - [`arsenal_tables_write2word()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
@@ -716,3 +1083,6 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
   [`progress_tracker_update()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   [`progress_tracker_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   : Deprecated functions in mysterycall
+- [`mystercall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)
+  [`mysterycall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)
+  : Dial phone numbers and flag lines that appear no longer in service

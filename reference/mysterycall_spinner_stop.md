@@ -42,6 +42,6 @@ Other progress:
 ``` r
 if (FALSE) { # interactive()
 id <- mysterycall_spinner_start("Loading data")
-mysterycall_spinner_stop(id, result = "done")
+mysterycall:::mysterycall_spinner_stop(id, result = "done")
 }
 ```

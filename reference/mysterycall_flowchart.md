@@ -63,6 +63,10 @@ Viewer or a browser; use `DiagrammeRsvg::export_svg()` +
 
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
 
+Other visualization:
+[`mysterycall_acceptance_waffle()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_waffle.md),
+[`mysterycall_bw_theme()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.md)
+
 ## Examples
 
 ``` r

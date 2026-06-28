@@ -66,6 +66,9 @@ to retrieve clinician details for validated NPIs;
 [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
 for upstream NPI discovery.
 
+Other data-quality:
+[`mysterycall_flag_date_outliers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_date_outliers.md)
+
 ## Examples
 
 ``` r
