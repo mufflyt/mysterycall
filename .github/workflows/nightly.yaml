@@ -1,0 +1,110 @@
+# Nightly regression test — runs the full test suite including slow/stress tests,
+# checks snapshot drift, and reports coverage drops.
+# Inspired by: https://github.com/r-lib/actions/tree/v2/examples
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 2am UTC every night
+  workflow_dispatch:       # allow manual trigger from Actions tab
+
+name: nightly
+
+permissions: read-all
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      # Unlock slow test gates
+      TEST_PERFORMANCE: 'true'
+      TEST_SCALABILITY: 'true'
+      TEST_STRESS: 'true'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libgit2-dev libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, any::covr, any::xml2, any::testthat
+          cache: true
+          needs: check
+
+      # ── 1. Full test suite (stricter than PR check) ────────────────────────
+      - name: Run full test suite
+        run: |
+          devtools::load_all()
+          results <- devtools::test(reporter = testthat::ProgressReporter$new())
+          df <- as.data.frame(results)
+          failures <- df[df$failed > 0 | df$error, ]
+          if (nrow(failures) > 0) {
+            message("FAILURES:\n", paste(failures$test, collapse = "\n"))
+            quit(status = 1)
+          }
+        shell: Rscript {0}
+
+      # ── 2. Snapshot drift detection ────────────────────────────────────────
+      - name: Check for snapshot drift
+        run: |
+          git diff --exit-code tests/testthat/_snaps/ || \
+            (echo "Snapshot drift detected — run devtools::test() locally and commit updated snapshots." && exit 1)
+
+      # ── 3. Coverage report (fail if < 60%) ────────────────────────────────
+      - name: Check test coverage
+        run: |
+          cov <- covr::package_coverage(quiet = FALSE)
+          pct <- covr::percent_coverage(cov)
+          message(sprintf("Coverage: %.1f%%", pct))
+          covr::to_cobertura(cov, filename = "cobertura.xml")
+          if (pct < 60) {
+            message(sprintf("Coverage %.1f%% is below 60%% threshold.", pct))
+            quit(status = 1)
+          }
+        shell: Rscript {0}
+
+      - uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          file: ./cobertura.xml
+          plugin: noop
+          disable_search: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+      # ── 4. Upload artifacts for inspection ────────────────────────────────
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: cobertura.xml
+          retention-days: 30
+
+      # ── 5. Open a GitHub issue on failure ─────────────────────────────────
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly CI failure — ${date}`,
+              body: `The nightly regression test failed.\n\n**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nCheck the logs for snapshot drift, test failures, or coverage drops.`,
+              labels: ['ci', 'bug']
+            });
