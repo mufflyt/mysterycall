@@ -64,8 +64,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: false
-          file: ./cobertura.xml
-          plugin: noop
+          files: ./cobertura.xml
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: mufflyt/mysterycall
