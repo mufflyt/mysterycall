@@ -22,8 +22,9 @@
 .*\.Rhistory$
 .*\.RData$
 
-# Ignore data files at the package root and in /data/ — but NOT inst/extdata/
-.*\.rds$
+# Ignore data files at the package root and in /data/ — but NOT inst/extdata/ or inst/doc/
+^[^/]*\.rds$
+^data/.*\.rds$
 ^[^/]*\.csv$
 ^data/.*\.csv$
 ^To_amany\.R$
@@ -37,7 +38,11 @@
 ^.*\.tar\.gz$
 ^CITATION\.cff$
 
+# Hidden directories that shouldn't be in the package
+^\.claude$
+
 # Non-standard top-level files
+^CHANGELOG\.md$
 ^ASSUMPTIONS_REQUIRING_REAL_DATA_TESTING\.md$
 ^COMPREHENSIVE_ANALYSIS_SUMMARY\.md$
 ^FINAL_SESSION_SUMMARY\.md$

@@ -76,19 +76,5 @@ mysterycall_plot_density(
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots;
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}} to export at journal resolution.
 
-Other mapping: 
-\code{\link{mysterycall_clear_isochrone_cache}()},
-\code{\link{mysterycall_create_isochrones}()},
-\code{\link{mysterycall_hrr_maps}()},
-\code{\link{mysterycall_isochrones_for_df}()},
-\code{\link{mysterycall_map_acceptance_rate}()},
-\code{\link{mysterycall_map_acog_districts}()},
-\code{\link{mysterycall_map_base}()},
-\code{\link{mysterycall_map_block_group}()},
-\code{\link{mysterycall_map_leaflet}()},
-\code{\link{mysterycall_map_physicians}()},
-\code{\link{mysterycall_plot_isochrones}()},
-\code{\link{mysterycall_plot_line}()},
-\code{\link{mysterycall_plot_scatter}()}
 }
-\concept{mapping}
+\concept{visualization}

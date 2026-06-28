@@ -64,8 +64,9 @@ mysterycall_acceptance_waffle <- function(
     output_dir     = NULL,
     filename       = "acceptance_waffle.png"
 ) {
+  waffle_pkg <- "waffle"
   waffle_ns <- tryCatch(
-    loadNamespace("waffle"),
+    loadNamespace(waffle_pkg),
     error = function(e) NULL
   )
   if (is.null(waffle_ns)) {
