@@ -96,7 +96,6 @@ Suggests:
     reformulas,
     sf,
     viridis,
-    waffle,
     zoo
 VignetteBuilder: knitr
 Config/testthat/edition: 3
