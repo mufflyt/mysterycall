@@ -8,7 +8,9 @@ on:
 
 name: nightly
 
-permissions: read-all
+permissions:
+  contents: read
+  issues: write
 
 jobs:
   nightly:
@@ -40,7 +42,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::covr, any::xml2, any::testthat
+          extra-packages: any::rcmdcheck, any::covr, any::xml2, any::testthat, any::devtools
           cache: true
           needs: check
 
