@@ -21,7 +21,7 @@ NULL
 #' likelihood-ratio test (LRT) by refitting the model without the interaction,
 #' and returns a tidy list suitable for manuscript reporting.
 #'
-#' The LRT refits the model with `lme4::update()` dropping only the
+#' The LRT refits the model with `update()` dropping only the
 #' `var1:var2` term, then calls [stats::anova()] on the two models.  If the
 #' refit fails for any reason (e.g. convergence, missing `lme4`, or a `NULL`
 #' `$model` in a fake object) the LRT p-value is set to `NA` with a warning
@@ -208,7 +208,7 @@ mysterycall_interaction_table <- function(fit,
         NA_real_
       } else {
         drop_str      <- paste0(". ~ . - ", var1, ":", var2)
-        model_reduced <- lme4::update(fit$model, stats::as.formula(drop_str))
+        model_reduced <- update(fit$model, stats::as.formula(drop_str))
         lrt_result    <- stats::anova(model_reduced, fit$model)
         lrt_result[["Pr(>Chisq)"]][[2L]]
       }

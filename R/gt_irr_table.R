@@ -6,11 +6,11 @@
 #'
 #' @param irr_data A data frame or tibble with at least the following columns
 #'   (exact names are detected flexibly):
-#'   * `term` **or** `level` — row label for each contrast.
-#'   * `irr` — point estimate (incidence rate ratio).
-#'   * `ci_lower` — lower bound of the confidence interval.
-#'   * `ci_upper` — upper bound of the confidence interval.
-#'   * `p_value` **or** `p_value_fmt` — numeric p-value **or** a
+#'   * `term` **or** `level` -- row label for each contrast.
+#'   * `irr` -- point estimate (incidence rate ratio).
+#'   * `ci_lower` -- lower bound of the confidence interval.
+#'   * `ci_upper` -- upper bound of the confidence interval.
+#'   * `p_value` **or** `p_value_fmt` -- numeric p-value **or** a
 #'     pre-formatted character string. When both are present `p_value` is used
 #'     for star assignment and `p_value_fmt` for display.
 #' @param title Character scalar. Table title passed to [gt::tab_header()].
@@ -29,14 +29,14 @@
 #' @return A `gt_tbl` object ready for rendering or export.
 #'
 #' @details
-#' **Column detection** — the function looks for these column names in order:
+#' **Column detection** -- the function looks for these column names in order:
 #' * Label: `"term"`, then `"level"`.
 #' * P-value (numeric, for stars): `"p_value"`, then attempts to parse
 #'   `"p_value_fmt"`.
 #' * P-value (display): `"p_value_fmt"` when present, otherwise the numeric
 #'   `p_value` rounded to three decimal places.
 #'
-#' **Significance stars** — assigned from the numeric p-value:
+#' **Significance stars** -- assigned from the numeric p-value:
 #' | p | Stars |
 #' |---|-------|
 #' | < 0.001 | `***` |
@@ -44,7 +44,7 @@
 #' | < 0.05  | `*`   |
 #' | >= 0.05 | `""`  |
 #'
-#' **Bold rows** — rows where `p_value < 0.05` are styled with bold text via
+#' **Bold rows** -- rows where `p_value < 0.05` are styled with bold text via
 #' [gt::tab_style()].
 #'
 #' @family outcomes
@@ -69,7 +69,7 @@
 mysterycall_irr_table <- function(irr_data,
                                    title                  = "Incidence Rate Ratios",
                                    subtitle               = NULL,
-                                   outcome_label          = "IRR (95 95% CI)",
+                                   outcome_label          = "IRR (95 95% CI)",
                                    digits                 = 2L,
                                    add_significance_stars = TRUE,
                                    footnote               = paste0(
@@ -145,7 +145,7 @@ mysterycall_irr_table <- function(irr_data,
   } else {
     irr_ci <- paste0(
       round(irr_data[["irr"]],      digits), " (",
-      round(irr_data[["ci_lower"]], digits), "–",
+      round(irr_data[["ci_lower"]], digits), "--",
       round(irr_data[["ci_upper"]], digits), ")"
     )
   }

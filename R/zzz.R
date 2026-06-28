@@ -111,7 +111,15 @@ utils::globalVariables(c(
   "valid_last",
   "x0",
   "y0",
-  "r"
+  "r",
+  "x",
+  "y",
+  "time",
+  "surv",
+  "strata",
+  "lower",
+  "upper",
+  "n_risk"
 ))
 
 .onAttach <- function(libname, pkgname) {

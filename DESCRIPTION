@@ -25,8 +25,12 @@ Depends:
     R (>= 4.1.0)
 Imports:
     generics,
+    ggplot2,
+    gt,
     httr,
     janitor,
+    lme4,
+    performance,
     readr,
     scales,
     checkmate,
@@ -41,7 +45,6 @@ Imports:
     tibble,
     tools,
     utils,
-    xml2
 LazyData: true
 Suggests:
     magrittr,
@@ -59,10 +62,8 @@ Suggests:
     easyr,
     effects,
     emmeans,
-    ggplot2,
     ggforce,
     glmmTMB,
-    gt,
     gtsummary,
     grid,
     gridExtra,
@@ -71,7 +72,6 @@ Suggests:
     jsonlite,
     knitr,
     lmerTest,
-    lme4,
     marginaleffects,
     memoise,
     mice,
@@ -91,8 +91,13 @@ Suggests:
     tidycensus,
     tidyr,
     covr,
+    forcats,
+    ggmap (>= 3.0.0),
+    reformulas,
+    sf,
     viridis,
-    ggpattern
+    waffle,
+    zoo
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0

@@ -96,14 +96,14 @@ mysterycall_auto_model <- function(data,
   if (any(y_check < 0, na.rm = TRUE)) {
     n_neg <- sum(y_check < 0, na.rm = TRUE)
     stop(sprintf(
-      "Outcome '%s' contains %d negative value%s (min = %g).\nNegative wait days are impossible — check for data entry errors or date calculation bugs.",
+      "Outcome '%s' contains %d negative value%s (min = %g).\nNegative wait days are impossible -- check for data entry errors or date calculation bugs.",
       outcome, n_neg, if (n_neg == 1L) "" else "s", min(y_check, na.rm = TRUE)
     ), call. = FALSE)
   }
   if (any(y_check > 365, na.rm = TRUE)) {
     n_long <- sum(y_check > 365, na.rm = TRUE)
     warning(sprintf(
-      "Outcome '%s' contains %d value%s exceeding 365 days (max = %g).\nWait times over one year are likely a year-typo error (e.g. 2027 instead of 2026) — verify appointment dates before modelling.",
+      "Outcome '%s' contains %d value%s exceeding 365 days (max = %g).\nWait times over one year are likely a year-typo error (e.g. 2027 instead of 2026) -- verify appointment dates before modelling.",
       outcome, n_long, if (n_long == 1L) "" else "s", max(y_check, na.rm = TRUE)
     ), call. = FALSE)
   }

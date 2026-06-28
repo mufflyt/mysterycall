@@ -55,7 +55,7 @@ When the data are \strong{not normally distributed} and \strong{consist of count
 \emph{"The data is not normally distributed (Shapiro-Wilk W = X, p = Y). Plus it
 is count data. t-test assumes that data is normally distributed, and
 comparing the means of count data is also not appropriate. We can check the
-incidence rate ratio (IRR) for comparison of \link{outcome} among the categories
+incidence rate ratio (IRR) for comparison of outcome among the categories
 of \link{group}. Better to use Poisson regression."}
 }
 

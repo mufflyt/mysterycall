@@ -1,7 +1,7 @@
 #' Check Normality and Summarize Data
 #'
 #' Checks the normality of a variable using the Shapiro-Wilk test, returns
-#' summary statistics, and—crucially—generates a manuscript-ready
+#' summary statistics, and--crucially--generates a manuscript-ready
 #' `$interpretation` sentence that identifies count data and recommends
 #' Poisson regression when appropriate.
 #'
@@ -21,7 +21,7 @@
 #'     \item{`p_value`}{Numeric. Shapiro-Wilk p-value.}
 #'     \item{`w_statistic`}{Numeric. Shapiro-Wilk W statistic.}
 #'     \item{`is_count`}{Logical. `TRUE` if all non-missing values are
-#'       non-negative integers — heuristic for count outcomes.}
+#'       non-negative integers -- heuristic for count outcomes.}
 #'     \item{`mean`, `sd`}{Numeric scalars (present when `is_normal = TRUE`).}
 #'     \item{`median`, `iqr`}{Numeric scalars (present when `is_normal = FALSE`).}
 #'     \item{`interpretation`}{Character scalar. A single manuscript-ready
@@ -81,13 +81,13 @@ mysterycall_check_normality <- function(data, variable,
   n_neg <- sum(data_var < 0)
   if (n_neg > 0L)
     warning(sprintf(
-      "%d negative value%s found in '%s' (min = %g). Negative wait days are impossible — check for date calculation errors before modelling.",
+      "%d negative value%s found in '%s' (min = %g). Negative wait days are impossible -- check for date calculation errors before modelling.",
       n_neg, if (n_neg == 1L) "" else "s", variable, min(data_var)
     ), call. = FALSE)
   n_long <- sum(data_var > 365)
   if (n_long > 0L)
     warning(sprintf(
-      "%d value%s in '%s' exceed 365 days (max = %g). Wait times over one year are likely a year-typo error (e.g. 2027 instead of 2026) — verify appointment dates.",
+      "%d value%s in '%s' exceed 365 days (max = %g). Wait times over one year are likely a year-typo error (e.g. 2027 instead of 2026) -- verify appointment dates.",
       n_long, if (n_long == 1L) "" else "s", variable, max(data_var)
     ), call. = FALSE)
   message("Normality check for '", variable, "': n = ", length(data_var))
@@ -105,7 +105,7 @@ mysterycall_check_normality <- function(data, variable,
   is_normal <- p_value > 0.05
 
   # -- Count-data heuristic -----------------------------------------------------
-  # All observed values are non-negative whole numbers → treat as count outcome
+  # All observed values are non-negative whole numbers -> treat as count outcome
   is_count <- all(data_var == floor(data_var)) && min(data_var, na.rm = TRUE) >= 0
 
   # -- Plots --------------------------------------------------------------------
@@ -193,7 +193,7 @@ mysterycall_check_normality <- function(data, variable,
     }
     message("Not normally distributed. Median = ", median_val,
             ", IQR = ", iqr_val,
-            if (is_count) " [count data — Poisson recommended]" else "")
+            if (is_count) " [count data -- Poisson recommended]" else "")
   }
 
   summary_stats$interpretation <- interpretation

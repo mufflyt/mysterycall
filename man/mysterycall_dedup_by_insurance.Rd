@@ -60,7 +60,7 @@ mysterycall_dedup_by_insurance(df, output_dir = NA)
 }
 \seealso{
 \code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}} for duplicate-call detection;
-\code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}} for broader pre-analysis validation.
+`mysterycall_sanity_checks()` for broader pre-analysis validation.
 
 Other quality control: 
 \code{\link{mysterycall_clean_medicaid_col}()},
