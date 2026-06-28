@@ -89,6 +89,13 @@ mysterycall_simple_poisson <- function(data,
   y <- data[[outcome]]
   if (!is.numeric(y))
     stop(sprintf("Outcome '%s' must be numeric.", outcome), call. = FALSE)
+  if (any(y < 0, na.rm = TRUE)) {
+    n_neg <- sum(y < 0, na.rm = TRUE)
+    stop(sprintf(
+      "Outcome '%s' contains %d negative value%s (min = %g).\nNegative wait days are impossible — check for data entry errors or date calculation bugs.",
+      outcome, n_neg, if (n_neg == 1L) "" else "s", min(y, na.rm = TRUE)
+    ), call. = FALSE)
+  }
 
   g <- data[[group]]
   if (!is.factor(g) && !is.character(g))

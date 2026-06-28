@@ -78,6 +78,12 @@ mysterycall_check_normality <- function(data, variable,
   group_label   <- group_label   %||% "the grouping variable"
 
   data_var <- stats::na.omit(data[[variable]])
+  n_neg <- sum(data_var < 0)
+  if (n_neg > 0L)
+    warning(sprintf(
+      "%d negative value%s found in '%s' (min = %g). Negative wait days are impossible — check for date calculation errors before modelling.",
+      n_neg, if (n_neg == 1L) "" else "s", variable, min(data_var)
+    ), call. = FALSE)
   message("Normality check for '", variable, "': n = ", length(data_var))
 
   if (length(data_var) < 3L)

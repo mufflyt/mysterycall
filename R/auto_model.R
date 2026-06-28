@@ -89,6 +89,18 @@ mysterycall_auto_model <- function(data,
          call. = FALSE)
   }
 
+  # ---- Pre-flight: reject impossible outcome values ---------------------------
+  y_check <- data[[outcome]]
+  if (!is.numeric(y_check))
+    stop(sprintf("Outcome '%s' must be numeric (count of wait days).", outcome), call. = FALSE)
+  if (any(y_check < 0, na.rm = TRUE)) {
+    n_neg <- sum(y_check < 0, na.rm = TRUE)
+    stop(sprintf(
+      "Outcome '%s' contains %d negative value%s (min = %g).\nNegative wait days are impossible — check for data entry errors or date calculation bugs.",
+      outcome, n_neg, if (n_neg == 1L) "" else "s", min(y_check, na.rm = TRUE)
+    ), call. = FALSE)
+  }
+
   # ---- Step 1: Poisson GLMM ---------------------------------------------------
   message("Step 1/", if (include_lmm) "3" else "2",
           ": Fitting Poisson GLMM to assess overdispersion...")
