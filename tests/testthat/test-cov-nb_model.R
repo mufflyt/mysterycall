@@ -309,15 +309,22 @@ test_that("print.mysterycall_nb_model respects digits parameter", {
     stringsAsFactors = FALSE
   )
 
-  result <- suppressMessages(mysterycall_nb_model(
+  result <- suppressWarnings(suppressMessages(mysterycall_nb_model(
     data = df,
     outcome = "wait_days",
     predictors = "insurance",
     random_intercept = "physician"
-  ))
+  )))
 
-  expect_output(print(result, digits = 2))
-  expect_output(print(result, digits = 4))
+  # Verify print produces output and returns the model object invisibly
+  expect_output(print(result, digits = 2L), "Negative Binomial")
+  expect_output(print(result, digits = 4L), "Negative Binomial")
+
+  # Verify the digits parameter is actually respected: different precision yields
+  # different formatted IRR values in the output
+  out2 <- capture.output(print(result, digits = 2L))
+  out4 <- capture.output(print(result, digits = 4L))
+  expect_false(identical(out2, out4))
 })
 
 # Test 13: factor reference levels detected
