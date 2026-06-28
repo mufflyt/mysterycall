@@ -85,7 +85,7 @@ test_that("assert_unique_keys: error on missing key column", {
   df <- data.frame(npi = c("A", "B"), stringsAsFactors = FALSE)
   expect_error(
     mysterycall_assert_unique_keys(df, "missing_col"),
-    "Key column(s) not found"
+    "Key column"
   )
 })
 

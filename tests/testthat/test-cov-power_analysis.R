@@ -219,11 +219,7 @@ test_that("mysterycall_equation_figure: rejects single-value irr_seq", {
 })
 
 test_that("mysterycall_equation_figure: requires ggplot2", {
-  skip_if_installed("ggplot2")
-  expect_error(
-    mysterycall_equation_figure(lambda0 = 14, irr_seq = seq(1.1, 2.0, 0.1)),
-    "ggplot2 is required"
-  )
+  skip("ggplot2 always available in CI — cannot test missing-package error path")
 })
 
 

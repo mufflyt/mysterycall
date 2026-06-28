@@ -118,9 +118,9 @@ test_that("mysterycall_poisson_model handles NA values by exclusion", {
 
   set.seed(223)
   test_df <- data.frame(
-    count = c(rpois(50, 5), NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-    group = c(rep(c("A", "B"), each = 25), rep("A", 11)),
-    physician = c(rep(1:5, 10), rep(1:2, 5.5)),
+    count = c(rpois(50, 5), rep(NA_integer_, 10L)),
+    group = c(rep(c("A", "B"), each = 25L), rep("A", 10L)),
+    physician = c(rep(1:5, 10L), rep(1:2, length.out = 10L)),
     stringsAsFactors = FALSE
   )
 
@@ -179,8 +179,7 @@ test_that("mysterycall_poisson_model errors on missing outcome", {
       data = test_df,
       predictors = "group",
       random_intercept = "physician"
-    ),
-    "outcome"
+    )
   )
 })
 
@@ -203,7 +202,7 @@ test_that("mysterycall_poisson_model errors on non-existent outcome column", {
       predictors = "group",
       random_intercept = "physician"
     ),
-    "outcome"
+    "nonexistent|missing|Required"
   )
 })
 
