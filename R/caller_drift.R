@@ -121,7 +121,10 @@ mysterycall_caller_drift <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.character(outcome_col), length(outcome_col) == 1L)
   if (!outcome_col %in% names(data)) {
-    stop("outcome_col '", outcome_col, "' not found in data.", call. = FALSE)
+    stop(sprintf(
+      "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
+      outcome_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   }
 
   y <- suppressWarnings(as.numeric(data[[outcome_col]]))
@@ -136,21 +139,30 @@ mysterycall_caller_drift <- function(
   if (!is.null(date_col)) {
     stopifnot(is.character(date_col), length(date_col) == 1L)
     if (!date_col %in% names(data)) {
-      stop("date_col '", date_col, "' not found in data.", call. = FALSE)
+      stop(sprintf(
+        "date_col '%s' not found in `data`.\nAvailable columns: %s",
+        date_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
 
   if (!is.null(call_seq_col)) {
     stopifnot(is.character(call_seq_col), length(call_seq_col) == 1L)
     if (!call_seq_col %in% names(data)) {
-      stop("call_seq_col '", call_seq_col, "' not found in data.", call. = FALSE)
+      stop(sprintf(
+        "call_seq_col '%s' not found in `data`.\nAvailable columns: %s",
+        call_seq_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
 
   if (!is.null(caller_col)) {
     stopifnot(is.character(caller_col), length(caller_col) == 1L)
     if (!caller_col %in% names(data)) {
-      stop("caller_col '", caller_col, "' not found in data.", call. = FALSE)
+      stop(sprintf(
+        "caller_col '%s' not found in `data`.\nAvailable columns: %s",
+        caller_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
     }
   }
 

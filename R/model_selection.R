@@ -38,7 +38,11 @@ mysterycall_select_best_model <- function(models,
                                            criterion = c("aic", "bic", "lrt")) {
   criterion <- match.arg(criterion)
   if (!is.list(models) || is.null(names(models)) || any(nchar(names(models)) == 0L)) {
-    stop("`models` must be a named list of fitted model objects.", call. = FALSE)
+    stop(
+      "`models` must be a named list of fitted model objects.\n",
+      "Example: list(poisson = m1, negative_binomial = m2)",
+      call. = FALSE
+    )
   }
 
   # Unwrap mysterycall wrapper objects to their inner fitted model
@@ -72,7 +76,10 @@ mysterycall_select_best_model <- function(models,
 
   } else {
     n <- length(models)
-    if (n < 2L) stop("At least 2 models are required for LRT.", call. = FALSE)
+    if (n < 2L) stop(sprintf(
+      "At least 2 models are required for LRT; %d provided.\nSupply a named list with 2 or more models.",
+      n
+    ), call. = FALSE)
     results <- lapply(seq_len(n - 1L), function(i) {
       tryCatch({
         lrt <- as.data.frame(

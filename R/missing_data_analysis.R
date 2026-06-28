@@ -70,24 +70,33 @@ mysterycall_missing_data_analysis <- function(
 ) {
 
   if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
   if (!is.character(outcome_col) || length(outcome_col) != 1L)
-    stop("`outcome_col` must be a single character string.", call. = FALSE)
+    stop("`outcome_col` must be a single character string naming a column in `data`.", call. = FALSE)
   if (!outcome_col %in% names(data))
-    stop("`outcome_col` '", outcome_col, "' not found in `data`.", call. = FALSE)
+    stop(sprintf(
+      "`outcome_col` '%s' not found in `data`.\nAvailable columns: %s",
+      outcome_col, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!is.null(group_col)) {
     if (!is.character(group_col) || length(group_col) != 1L)
       stop("`group_col` must be a single character string or NULL.", call. = FALSE)
     if (!group_col %in% names(data))
-      stop("`group_col` '", group_col, "' not found in `data`.", call. = FALSE)
+      stop(sprintf(
+        "`group_col` '%s' not found in `data`.\nAvailable columns: %s",
+        group_col, paste(names(data), collapse = ", ")
+      ), call. = FALSE)
   }
   if (!is.null(covariate_cols)) {
     bad <- setdiff(covariate_cols, names(data))
     if (length(bad))
-      stop("Columns not found in `data`: ", paste(bad, collapse = ", "), ".", call. = FALSE)
+      stop(sprintf(
+        "covariate_cols not found in `data`: %s\nAvailable columns: %s",
+        paste(bad, collapse = ", "), paste(names(data), collapse = ", ")
+      ), call. = FALSE)
   }
   if (!is.numeric(alpha) || length(alpha) != 1L || alpha <= 0 || alpha >= 1)
-    stop("`alpha` must be a single number in (0, 1).", call. = FALSE)
+    stop(sprintf("`alpha` must be a single number in (0, 1), not %s.", deparse(alpha)), call. = FALSE)
 
   missing_flag <- as.integer(is.na(data[[outcome_col]]))
   n_total   <- nrow(data)

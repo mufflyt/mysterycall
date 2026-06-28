@@ -77,17 +77,34 @@ mysterycall_sensitivity <- function(data,
                                      ...) {
 
   if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!is.character(outcome) || length(outcome) != 1L || !outcome %in% names(data))
-    stop("`outcome` must be a single column name present in `data`.", call. = FALSE)
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
+  if (!is.character(outcome) || length(outcome) != 1L)
+    stop("`outcome` must be a single character string naming a column in `data`.", call. = FALSE)
+  if (!outcome %in% names(data))
+    stop(sprintf(
+      "`outcome` column '%s' not found in `data`.\nAvailable columns: %s",
+      outcome, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!is.character(predictors) || length(predictors) == 0L)
-    stop("`predictors` must be a non-empty character vector.", call. = FALSE)
-  if (!is.character(random_intercept) || length(random_intercept) != 1L ||
-      !random_intercept %in% names(data))
-    stop("`random_intercept` must be a single column name present in `data`.", call. = FALSE)
+    stop("`predictors` must be a non-empty character vector of column names.", call. = FALSE)
+  {
+    bad_pred <- setdiff(predictors, names(data))
+    if (length(bad_pred))
+      stop(sprintf(
+        "`predictors` column(s) not found in `data`: %s\nAvailable columns: %s",
+        paste(bad_pred, collapse = ", "), paste(names(data), collapse = ", ")
+      ), call. = FALSE)
+  }
+  if (!is.character(random_intercept) || length(random_intercept) != 1L)
+    stop("`random_intercept` must be a single character string naming a column in `data`.", call. = FALSE)
+  if (!random_intercept %in% names(data))
+    stop(sprintf(
+      "`random_intercept` column '%s' not found in `data`.\nAvailable columns: %s",
+      random_intercept, paste(names(data), collapse = ", ")
+    ), call. = FALSE)
   if (!is.null(baseline_mean) &&
       (!is.numeric(baseline_mean) || length(baseline_mean) != 1L || baseline_mean <= 0))
-    stop("`baseline_mean` must be a single positive number.", call. = FALSE)
+    stop("`baseline_mean` must be a single positive number (e.g. the reference group mean wait time).", call. = FALSE)
 
   family <- match.arg(family)
 
@@ -141,7 +158,11 @@ mysterycall_sensitivity <- function(data,
         )
       } else if (family == "nb") {
         if (!requireNamespace("glmmTMB", quietly = TRUE))
-          stop("glmmTMB required for family='nb'.", call. = FALSE)
+          stop(
+            "family = 'nb' requires the glmmTMB package.\n",
+            "Install it with: install.packages(\"glmmTMB\")",
+            call. = FALSE
+          )
         mysterycall_nb_model(
           data             = sdata,
           outcome          = outcome,
