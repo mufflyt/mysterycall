@@ -73,10 +73,10 @@ Other logging:
 ``` r
 tracker <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate", "Export"))
 mysterycall:::mysterycall_progress_start(tracker, "Geocode")
-#> [18:34:40] Started Geocode
-#> [18:34:40] Progress: 0/3 steps complete (0.0%)
+#> [21:32:42] Started Geocode
+#> [21:32:42] Progress: 0/3 steps complete (0.0%)
 Sys.sleep(1)
 mysterycall:::mysterycall_progress_finish(tracker, "Geocode", score = 0.95)
-#> [18:34:41] Completed Geocode (high)
-#> [18:34:41] Progress: 1/3 steps complete (33.3%) - ETA 18:34:43
+#> [21:32:43] Completed Geocode (high)
+#> [21:32:43] Progress: 1/3 steps complete (33.3%) - ETA 21:32:45
 ```

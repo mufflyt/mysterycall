@@ -48,15 +48,15 @@ Other logging:
 ``` r
 tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
 mysterycall:::mysterycall_progress_start(tr, "Geocode")
-#> [18:34:39] Started Geocode
-#> [18:34:39] Progress: 0/2 steps complete (0.0%)
+#> [21:32:42] Started Geocode
+#> [21:32:42] Progress: 0/2 steps complete (0.0%)
 mysterycall:::mysterycall_progress_finish(tr, "Geocode", score = 0.95)
-#> [18:34:39] Completed Geocode (high)
-#> [18:34:39] Progress: 1/2 steps complete (50.0%)
+#> [21:32:42] Completed Geocode (high)
+#> [21:32:42] Progress: 1/2 steps complete (50.0%)
 mysterycall:::mysterycall_progress_summary(tr)
 #> # A tibble: 2 × 6
 #>   step     status    started_at          finished_at         quality note 
 #>   <chr>    <fct>     <dttm>              <dttm>              <chr>   <chr>
-#> 1 Geocode  completed 2026-06-28 18:34:39 2026-06-28 18:34:39 high    NA   
+#> 1 Geocode  completed 2026-06-28 21:32:42 2026-06-28 21:32:42 high    NA   
 #> 2 Validate pending   NA                  NA                  NA      NA   
 ```
