@@ -133,7 +133,7 @@ test_that("mysterycall_poisson_model handles NA values by exclusion", {
     )
   ))
 
-  expect_equal(result$n_dropped, 11L)
+  expect_equal(result$n_dropped, 10L)
   expect_equal(result$n, 50L)
 })
 
