@@ -68,5 +68,9 @@ mysterycall_flowchart(
 }
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
+
+Other visualization: 
+\code{\link{mysterycall_acceptance_waffle}()},
+\code{\link{mysterycall_bw_theme}()}
 }
 \concept{visualization}

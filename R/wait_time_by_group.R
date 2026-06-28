@@ -12,6 +12,9 @@
 #' @param digits_q Integer. Rounding digits for Q1 and Q3. Default `0`.
 #' @param filter_positive Logical. If `TRUE`, pre-filter rows where
 #'   `outcome_col > 0` before computing statistics. Default `FALSE`.
+#' @param reorder Logical. If `TRUE`, result rows are sorted from highest to
+#'   lowest `median_days` so the group with the longest wait appears first.
+#'   (Rennie 2024 — order groups by a summary statistic.)  Default `FALSE`.
 #' @param output_dir Character scalar or `NULL`. Directory for CSV output.
 #'   `NULL` writes to a session temp directory via [mysterycall_tempdir()].
 #'   Pass `NA` to skip writing.
@@ -28,7 +31,7 @@
 #' }
 #'
 #' @family outcomes
-#' @importFrom dplyr group_by summarise n
+#' @importFrom dplyr group_by summarise n arrange desc
 #' @importFrom stats median quantile na.omit
 #' @importFrom utils write.csv
 #' @importFrom checkmate assert_data_frame assert_string assert_names assert_flag assert_integerish
@@ -48,6 +51,7 @@ mysterycall_wait_time_by_group <- function(
     digits_median  = 1L,
     digits_q       = 0L,
     filter_positive = FALSE,
+    reorder        = FALSE,
     output_dir     = NULL,
     filename       = "wait_time_by_group.csv") {
 
@@ -58,6 +62,7 @@ mysterycall_wait_time_by_group <- function(
   checkmate::assert_integerish(digits_median, lower = 0, len = 1)
   checkmate::assert_integerish(digits_q,      lower = 0, len = 1)
   checkmate::assert_flag(filter_positive)
+  checkmate::assert_flag(reorder)
 
   df <- data
   if (isTRUE(filter_positive)) {
@@ -85,6 +90,11 @@ mysterycall_wait_time_by_group <- function(
       n = sum(!is.na(.data[[outcome_col]])),
       .groups = "drop"
     )
+
+  # Optional reordering (Rennie 2024: order groups by summary stat)
+  if (isTRUE(reorder)) {
+    result <- dplyr::arrange(result, dplyr::desc(median_days))
+  }
 
   # Write CSV
   if (!isTRUE(is.na(output_dir))) {

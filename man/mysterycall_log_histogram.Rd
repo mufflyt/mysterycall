@@ -16,6 +16,8 @@ mysterycall_log_histogram(
   y_label = "Count",
   title = NULL,
   base = 10,
+  monochrome = FALSE,
+  base_size = 12,
   dpi = 150,
   output_dir = NULL,
   filename = "log_histogram.png"
@@ -51,6 +53,13 @@ misleading on log scales.}
 \item{base}{Numeric.  Log base.  Must be \code{10} (uses \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_log10()}})
 or \code{2} (uses \code{scale_x_continuous(trans = "log2")}).  Default \code{10}.}
 
+\item{monochrome}{Logical. If \code{TRUE}, apply a greyscale fill and
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}} for Greene-journal submissions.
+Overrides \code{fill}.  Default \code{FALSE}.  (Rennie 2025.)}
+
+\item{base_size}{Numeric. Base font size in points.  Default \code{12}.
+(Rennie 2026.)}
+
 \item{dpi}{Integer.  Resolution for the saved PNG.  Default \code{150}.}
 
 \item{output_dir}{Character, \code{NULL}, or \code{NA}.  Directory for PNG output.
@@ -69,6 +78,13 @@ A thin wrapper around a self-contained histogram builder that applies a
 log-scale transformation to the x-axis.  Values \verb{<= 0} are silently
 removed before plotting (log of zero is \code{-Inf}).  Mirrors the source
 pattern from the analysis Rmd (lines 1152-1165).
+}
+\note{
+Axis and theme improvements inspired by Nicola Rennie:
+\code{guide_axis(check.overlap = TRUE)} on the log scale (Rennie 2026),
+\code{plot.title.position = "plot"} (Rennie 2026),
+\code{bg = "white"} in \code{ggsave} (Rennie 2026),
+monochrome palette and \code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}} (Rennie 2025).
 }
 \examples{
 set.seed(2)

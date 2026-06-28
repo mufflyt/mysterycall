@@ -17,6 +17,9 @@ mysterycall_facet_histogram(
   x_label = NULL,
   y_label = "Count",
   title = NULL,
+  monochrome = FALSE,
+  base_size = 12,
+  reorder_facets = FALSE,
   dpi = 150,
   output_dir = NULL,
   filename = "facet_histogram.png"
@@ -52,6 +55,18 @@ Median, 25th percentile, and 75th percentile?  Default \code{TRUE}.}
 \item{title}{Character or \code{NULL}.  Plot title.  Defaults to
 \code{"Distribution of [x_col] by [facet_col] (N = [n])"}.}
 
+\item{monochrome}{Logical. If \code{TRUE}, apply a greyscale fill and
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}} suitable for Greene-journal submissions.
+Overrides \code{fill} and the mean-line colour.  Default \code{FALSE}.
+(Inspired by Nicola Rennie, 2025.)}
+
+\item{base_size}{Numeric. Base font size in points passed to
+\code{theme_light()}.  Default \code{12}.  (Rennie 2026.)}
+
+\item{reorder_facets}{Logical. If \code{TRUE}, facet panels are reordered from
+highest to lowest median of \code{x_col} rather than alphabetically.
+(Rennie 2024 — order groups by a summary statistic.)  Default \code{FALSE}.}
+
 \item{dpi}{Integer.  Resolution for the saved PNG.  Default \code{150}.}
 
 \item{output_dir}{Character, \code{NULL}, or \code{NA}.  Directory for PNG output.
@@ -70,6 +85,15 @@ Produces a faceted histogram (one panel per level of \code{facet_col}) with an
 optional density-curve overlay, per-group mean line, and per-facet
 annotation of descriptive statistics.  Mirrors the source pattern from the
 analysis Rmd (lines 1094-1150).
+}
+\note{
+Several axis and theme improvements are inspired by Nicola Rennie:
+\code{guide_axis(check.overlap = TRUE)} (Rennie 2026),
+\code{size.unit = "pt"} for consistent text sizing (Rennie 2026),
+\code{plot.title.position = "plot"} (Rennie 2026),
+\code{bg = "white"} in \code{ggsave} (Rennie 2026),
+monochrome palette and \code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}} (Rennie 2025),
+facet reordering by median (Rennie 2024).
 }
 \examples{
 set.seed(1)

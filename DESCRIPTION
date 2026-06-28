@@ -102,6 +102,8 @@ Suggests:
     xml2,
     sf,
     viridis,
+    waffle,
+    ggpattern,
     webshot
 VignetteBuilder: knitr
 Config/testthat/edition: 3

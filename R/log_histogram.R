@@ -23,6 +23,11 @@
 #'   `paste0("Distribution of log(", x_col, ") by ", facet_col)`.
 #' @param base Numeric.  Log base.  Must be `10` (uses [ggplot2::scale_x_log10()])
 #'   or `2` (uses `scale_x_continuous(trans = "log2")`).  Default `10`.
+#' @param monochrome Logical. If `TRUE`, apply a greyscale fill and
+#'   [mysterycall_bw_theme()] for Greene-journal submissions.
+#'   Overrides `fill`.  Default `FALSE`.  (Rennie 2025.)
+#' @param base_size Numeric. Base font size in points.  Default `12`.
+#'   (Rennie 2026.)
 #' @param dpi Integer.  Resolution for the saved PNG.  Default `150`.
 #' @param output_dir Character, `NULL`, or `NA`.  Directory for PNG output.
 #'   `NULL` (default) writes to a session temp directory via
@@ -33,8 +38,15 @@
 #' @return A `ggplot` object, returned invisibly.  As a side effect, writes
 #'   a PNG to `output_dir` unless `output_dir` is `NA`.
 #'
+#' @note Axis and theme improvements inspired by Nicola Rennie:
+#'   `guide_axis(check.overlap = TRUE)` on the log scale (Rennie 2026),
+#'   `plot.title.position = "plot"` (Rennie 2026),
+#'   `bg = "white"` in `ggsave` (Rennie 2026),
+#'   monochrome palette and [mysterycall_bw_theme()] (Rennie 2025).
+#'
 #' @importFrom ggplot2 ggplot aes geom_histogram facet_wrap ggtitle labs
-#'   theme_light scale_x_log10 scale_x_continuous ggsave
+#'   theme_light theme element_text rel scale_x_log10 scale_x_continuous
+#'   guide_axis ggsave
 #' @importFrom stats as.formula
 #' @family descriptive helpers
 #' @export
@@ -51,17 +63,19 @@ mysterycall_log_histogram <- function(
     data,
     x_col,
     facet_col,
-    binwidth   = NULL,
-    fill       = "skyblue",
-    color      = "black",
-    alpha      = 0.7,
-    x_label    = NULL,
-    y_label    = "Count",
-    title      = NULL,
-    base       = 10,
-    dpi        = 150,
-    output_dir = NULL,
-    filename   = "log_histogram.png"
+    binwidth    = NULL,
+    fill        = "skyblue",
+    color       = "black",
+    alpha       = 0.7,
+    x_label     = NULL,
+    y_label     = "Count",
+    title       = NULL,
+    base        = 10,
+    monochrome  = FALSE,
+    base_size   = 12,
+    dpi         = 150,
+    output_dir  = NULL,
+    filename    = "log_histogram.png"
 ) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop(
@@ -135,18 +149,34 @@ mysterycall_log_histogram <- function(
     hist_args$binwidth <- binwidth
   }
 
+  # Monochrome override (Rennie 2025)
+  if (isTRUE(monochrome)) {
+    hist_args$fill <- "grey70"
+  }
+
   p <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[x_col]])) +
     do.call(ggplot2::geom_histogram, hist_args) +
     ggplot2::facet_wrap(stats::as.formula(paste("~", facet_col))) +
     ggplot2::ggtitle(title) +
     ggplot2::labs(x = x_label, y = y_label) +
-    ggplot2::theme_light()
+    ggplot2::theme_light(base_size = base_size) +
+    ggplot2::theme(
+      plot.title          = ggplot2::element_text(size = ggplot2::rel(1.1)),
+      plot.title.position = "plot"    # Rennie 2026
+    )
 
-  # Apply log scale
+  # Apply log scale with overlap-aware axis labels (Rennie 2026)
   if (base == 10) {
-    p <- p + ggplot2::scale_x_log10()
+    p <- p + ggplot2::scale_x_log10(
+      guide = ggplot2::guide_axis(check.overlap = TRUE)
+    )
   } else {
     p <- p + ggplot2::scale_x_continuous(trans = "log2")
+  }
+
+  # Apply monochrome theme on top (Rennie 2025)
+  if (isTRUE(monochrome)) {
+    p <- p + mysterycall_bw_theme(base_size = base_size)
   }
 
   # Save PNG
@@ -159,7 +189,7 @@ mysterycall_log_histogram <- function(
     }
     out_path <- file.path(output_dir, filename)
     ggplot2::ggsave(out_path, plot = p, dpi = dpi, width = 8, height = 5,
-                    units = "in")
+                    units = "in", bg = "white")   # Rennie 2026
     message("Log histogram saved to: ", out_path)
   }
 

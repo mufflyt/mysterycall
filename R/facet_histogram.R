@@ -22,6 +22,15 @@
 #' @param y_label Character.  Y-axis label.  Default `"Count"`.
 #' @param title Character or `NULL`.  Plot title.  Defaults to
 #'   `"Distribution of [x_col] by [facet_col] (N = [n])"`.
+#' @param monochrome Logical. If `TRUE`, apply a greyscale fill and
+#'   [mysterycall_bw_theme()] suitable for Greene-journal submissions.
+#'   Overrides `fill` and the mean-line colour.  Default `FALSE`.
+#'   (Inspired by Nicola Rennie, 2025.)
+#' @param base_size Numeric. Base font size in points passed to
+#'   `theme_light()`.  Default `12`.  (Rennie 2026.)
+#' @param reorder_facets Logical. If `TRUE`, facet panels are reordered from
+#'   highest to lowest median of `x_col` rather than alphabetically.
+#'   (Rennie 2024 — order groups by a summary statistic.)  Default `FALSE`.
 #' @param dpi Integer.  Resolution for the saved PNG.  Default `150`.
 #' @param output_dir Character, `NULL`, or `NA`.  Directory for PNG output.
 #'   `NULL` (default) writes to a session temp directory via
@@ -32,8 +41,17 @@
 #' @return A `ggplot` object, returned invisibly.  As a side effect, writes
 #'   a PNG to `output_dir` unless `output_dir` is `NA`.
 #'
+#' @note Several axis and theme improvements are inspired by Nicola Rennie:
+#'   `guide_axis(check.overlap = TRUE)` (Rennie 2026),
+#'   `size.unit = "pt"` for consistent text sizing (Rennie 2026),
+#'   `plot.title.position = "plot"` (Rennie 2026),
+#'   `bg = "white"` in `ggsave` (Rennie 2026),
+#'   monochrome palette and [mysterycall_bw_theme()] (Rennie 2025),
+#'   facet reordering by median (Rennie 2024).
+#'
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density facet_wrap
-#'   ggtitle labs theme_light geom_vline geom_text after_stat ggsave
+#'   ggtitle labs theme_light theme element_text rel geom_vline geom_text
+#'   after_stat ggsave scale_x_continuous guide_axis
 #' @importFrom dplyr group_by summarise
 #' @importFrom rlang .data
 #' @importFrom stats as.formula median sd quantile na.omit
@@ -61,6 +79,9 @@ mysterycall_facet_histogram <- function(
     x_label         = NULL,
     y_label         = "Count",
     title           = NULL,
+    monochrome      = FALSE,
+    base_size       = 12,
+    reorder_facets  = FALSE,
     dpi             = 150,
     output_dir      = NULL,
     filename        = "facet_histogram.png"
@@ -102,6 +123,21 @@ mysterycall_facet_histogram <- function(
     data <- data[!is.na(data[[x_col]]), , drop = FALSE]
   }
 
+  # Monochrome overrides (Rennie 2025)
+  if (isTRUE(monochrome)) {
+    fill           <- "grey70"
+    mean_line_col  <- "grey20"
+  } else {
+    mean_line_col  <- "red"
+  }
+
+  # Optional facet reordering by median (Rennie 2024 — order groups by stat)
+  if (isTRUE(reorder_facets)) {
+    med_by_grp <- tapply(data[[x_col]], data[[facet_col]], stats::median, na.rm = TRUE)
+    lvls        <- names(sort(med_by_grp, decreasing = TRUE))
+    data[[facet_col]] <- factor(data[[facet_col]], levels = lvls)
+  }
+
   # Base plot
   p <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[x_col]])) +
     ggplot2::geom_histogram(
@@ -118,7 +154,14 @@ mysterycall_facet_histogram <- function(
     ggplot2::facet_wrap(stats::as.formula(paste("~", facet_col))) +
     ggplot2::ggtitle(title) +
     ggplot2::labs(x = x_label, y = y_label) +
-    ggplot2::theme_light()
+    ggplot2::theme_light(base_size = base_size) +
+    ggplot2::theme(
+      plot.title          = ggplot2::element_text(size = ggplot2::rel(1.1)),
+      plot.title.position = "plot"    # Rennie 2026: align title with full plot width
+    ) +
+    ggplot2::scale_x_continuous(
+      guide = ggplot2::guide_axis(check.overlap = TRUE)   # Rennie 2026
+    )
 
   # Per-group stats (needed for mean line and/or text annotation)
   if (show_mean_line || show_stats_text) {
@@ -140,7 +183,7 @@ mysterycall_facet_histogram <- function(
         data      = stats_df,
         ggplot2::aes(xintercept = mean_val),
         linetype  = "dashed",
-        color     = "red",
+        color     = mean_line_col,
         linewidth = 0.8
       )
     }
@@ -156,10 +199,16 @@ mysterycall_facet_histogram <- function(
         ggplot2::aes(x = Inf, y = Inf, label = label),
         hjust       = 1.05,
         vjust       = 1.05,
-        size        = 3,
+        size        = 9,          # Rennie 2026: size in points
+        size.unit   = "pt",
         inherit.aes = FALSE
       )
     }
+  }
+
+  # Apply monochrome theme on top (Rennie 2025)
+  if (isTRUE(monochrome)) {
+    p <- p + mysterycall_bw_theme(base_size = base_size)
   }
 
   # Save PNG
@@ -172,7 +221,7 @@ mysterycall_facet_histogram <- function(
     }
     out_path <- file.path(output_dir, filename)
     ggplot2::ggsave(out_path, plot = p, dpi = dpi, width = 8, height = 5,
-                    units = "in")
+                    units = "in", bg = "white")   # Rennie 2026: explicit white bg
     message("Facet histogram saved to: ", out_path)
   }
 

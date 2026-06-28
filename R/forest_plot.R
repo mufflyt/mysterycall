@@ -122,12 +122,17 @@ mysterycall_forest_plot <- function(x,
   # ---- Factor ordering (first row of tbl -> top of plot) ----------------------
   tbl$term <- factor(tbl$term, levels = rev(as.character(tbl$term)))
 
-  # ---- Auto x-limits ---------------------------------------------------------
+  # ---- Auto x-limits (symmetric around reference_line) -----------------------
+  # Rennie 2024 axes tip #3: symmetric axis around the reference value so the
+  # null line sits at the visual centre, not squashed to one side.
   if (is.null(x_limits)) {
     lo  <- min(tbl$ci_lower, na.rm = TRUE)
     hi  <- max(tbl$ci_upper, na.rm = TRUE)
     pad <- (hi - lo) * 0.05
-    x_limits <- c(max(0.05, lo - pad), hi + pad)
+    lo_raw <- max(0.05, lo - pad)
+    hi_raw <- hi + pad
+    dist <- max(abs(hi_raw - reference_line), abs(reference_line - lo_raw))
+    x_limits <- c(max(0.05, reference_line - dist), reference_line + dist)
   }
   if (is.null(annotation_x)) annotation_x <- x_limits[2] * 1.04
 

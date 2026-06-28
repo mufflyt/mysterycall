@@ -11,6 +11,7 @@ mysterycall_wait_time_by_group(
   digits_median = 1L,
   digits_q = 0L,
   filter_positive = FALSE,
+  reorder = FALSE,
   output_dir = NULL,
   filename = "wait_time_by_group.csv"
 )
@@ -29,6 +30,10 @@ mysterycall_wait_time_by_group(
 
 \item{filter_positive}{Logical. If \code{TRUE}, pre-filter rows where
 \code{outcome_col > 0} before computing statistics. Default \code{FALSE}.}
+
+\item{reorder}{Logical. If \code{TRUE}, result rows are sorted from highest to
+lowest \code{median_days} so the group with the longest wait appears first.
+(Rennie 2024 — order groups by a summary statistic.)  Default \code{FALSE}.}
 
 \item{output_dir}{Character scalar or \code{NULL}. Directory for CSV output.
 \code{NULL} writes to a session temp directory via \code{\link[=mysterycall_tempdir]{mysterycall_tempdir()}}.
