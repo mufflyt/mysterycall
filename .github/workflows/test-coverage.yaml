@@ -61,10 +61,11 @@ jobs:
             cat(sprintf("Coverage: %.1f%%\n", pct))
           }
         shell: Rscript {0}
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: false
           file: ./cobertura.xml
           plugin: noop
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: mufflyt/mysterycall
