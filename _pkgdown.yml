@@ -512,6 +512,8 @@ reference:
       - mysterycall_kaplan_meier
       - mysterycall_flow_diagram
       - mysterycall_geographic_map
+      - mysterycall_acceptance_waffle
+      - mysterycall_bw_theme
 
   - title: "Reporting and Manuscript Tables"
     desc: >
@@ -528,6 +530,8 @@ reference:
       - mysterycall_combined_results_table
       - mysterycall_export_results_docx
       - mysterycall_table2
+      - mysterycall_irr_table
+      - mysterycall_model_gt
 
   - title: "NPI Enrichment and REDCap"
     desc: >
@@ -544,6 +548,7 @@ reference:
       - mysterycall_strobe_flow
       - mysterycall_prepare_calls
       - mysterycall_session_snapshot
+      - mysterycall_run_analysis
 
   - title: "S3 Methods"
     desc: >
