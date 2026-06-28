@@ -93,10 +93,12 @@ mysterycall_log_histogram <- function(
     stop("`facet_col` must be a single non-empty character string.", call. = FALSE)
   }
   if (!x_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", x_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 x_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!facet_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", facet_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 facet_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!base %in% c(2, 10)) {
     stop("`base` must be 2 or 10; got ", base, ".", call. = FALSE)

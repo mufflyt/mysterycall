@@ -146,7 +146,8 @@ mysterycall_impute_calls <- function(data,
   if (!is.character(outcome_col) || length(outcome_col) != 1L)
     stop("`outcome_col` must be a single character column name.", call. = FALSE)
   if (!outcome_col %in% names(data))
-    stop(sprintf("`outcome_col` '%s' not found in `data`.", outcome_col),
+    stop(sprintf("`outcome_col` '%s' not found in `data`.\nAvailable columns: %s",
+                 outcome_col, paste(names(data), collapse = ", ")),
          call. = FALSE)
 
   if (!is.character(predictors) || !length(predictors))

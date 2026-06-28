@@ -15,13 +15,17 @@
 #' mysterycall_write_arsenal_table(my_table, "output_table")
 mysterycall_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for mysterycall_write_arsenal_table()", call. = FALSE)
+    stop(
+      "This function requires the arsenal package.\n",
+      "Install it with: install.packages(\"arsenal\")",
+      call. = FALSE
+    )
   }
   if (!is.data.frame(object)) {
-    stop("Error: 'object' must be a data frame object.", call. = FALSE)
+    stop(sprintf("'object' must be a data frame, not %s.", class(object)[1L]), call. = FALSE)
   }
   if (!is.character(filename)) {
-    stop("Error: 'filename' must be a character string.", call. = FALSE)
+    stop(sprintf("'filename' must be a character string, not %s.", class(filename)[1L]), call. = FALSE)
   }
 
   if (is.null(output_dir)) {

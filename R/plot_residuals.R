@@ -88,7 +88,11 @@ mysterycall_plot_residuals <- function(model,
 
   # -- Pearson / ggplot2 path --------------------------------------------------
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required for the Pearson residual plots.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
 
   fitted_vals    <- as.numeric(fitted(fit))

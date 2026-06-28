@@ -83,17 +83,21 @@ mysterycall_plot_stacked_bar <- function(data,
                                           order_by_rate  = TRUE) {
 
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required for mysterycall_plot_stacked_bar(). Install with: install.packages('ggplot2')", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
   # ---- Validate inputs -------------------------------------------------------
   if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
   }
   if (!outcome_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", outcome_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s", outcome_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!group_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", group_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s", group_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (length(colors) < 2L) {
     stop("`colors` must have at least 2 elements.", call. = FALSE)

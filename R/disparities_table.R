@@ -73,10 +73,12 @@ mysterycall_disparities_table <- function(
     stop("`group_col` must be a single character string.", call. = FALSE)
   }
   if (!outcome_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", outcome_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 outcome_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!group_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", group_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 group_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   ov      <- data[[outcome_col]]
   ov_nona <- ov[!is.na(ov)]

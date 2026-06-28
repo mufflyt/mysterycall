@@ -31,10 +31,12 @@ mysterycall_create_formula <- function(data, response_var, random_effect = NULL)
     stop("`data` must be a data frame.", call. = FALSE)
   }
   if (!response_var %in% names(data)) {
-    stop(sprintf("Response variable '%s' not found in data.", response_var), call. = FALSE)
+    stop(sprintf("Response variable '%s' not found in `data`.\nAvailable columns: %s",
+                 response_var, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!is.null(random_effect) && !random_effect %in% names(data)) {
-    stop(sprintf("Random effect variable '%s' not found in data.", random_effect), call. = FALSE)
+    stop(sprintf("Random effect variable '%s' not found in `data`.\nAvailable columns: %s",
+                 random_effect, paste(names(data), collapse = ", ")), call. = FALSE)
   }
 
   message(sprintf("Creating formula with response variable: %s", response_var))

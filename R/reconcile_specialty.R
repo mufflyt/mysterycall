@@ -74,8 +74,11 @@ mysterycall_reconcile_specialty <- function(data,
                                              default         = "General",
                                              source_col      = "specialty_source",
                                              confidence_col  = "specialty_confidence") {
-  if (!is.data.frame(data))           stop("`data` must be a data frame.", call. = FALSE)
-  if (!primary_col %in% names(data))  stop("`primary_col` not found in data.", call. = FALSE)
+  if (!is.data.frame(data))
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
+  if (!primary_col %in% names(data))
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 primary_col, paste(names(data), collapse = ", ")), call. = FALSE)
 
   out <- data
   out[[source_col]]     <- NA_character_
@@ -91,7 +94,8 @@ mysterycall_reconcile_specialty <- function(data,
   # -- Tier 2: secondary fills the gap ------------------------------------------
   if (!is.null(secondary_col)) {
     if (!secondary_col %in% names(data)) {
-      stop("`secondary_col` not found in data.", call. = FALSE)
+      stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                   secondary_col, paste(names(data), collapse = ", ")), call. = FALSE)
     }
     secondary <- as.character(out[[secondary_col]])
     t2 <- !t1 & !is.na(secondary) & nzchar(trimws(secondary)) & secondary != default

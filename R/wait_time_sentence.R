@@ -86,8 +86,10 @@ mysterycall_wait_time_sentence <- function(
   if (is.null(reference)) {
     reference <- all_levels[1L]
   } else if (!reference %in% all_levels) {
-    stop(sprintf("Reference level '%s' not found in `%s`.", reference, group_col),
-         call. = FALSE)
+    stop(sprintf(
+      "Reference level '%s' not found in `%s`.\nAvailable levels: %s",
+      reference, group_col, paste(all_levels, collapse = ", ")
+    ), call. = FALSE)
   }
 
   non_ref_levels <- setdiff(all_levels, reference)

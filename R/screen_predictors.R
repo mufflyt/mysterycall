@@ -148,14 +148,16 @@ mysterycall_screen_predictors <- function(data,
     stop("`outcome_col` must be a single character string.", call. = FALSE)
   }
   if (!outcome_col %in% names(data)) {
-    stop(sprintf("`outcome_col` '%s' not found in `data`.", outcome_col), call. = FALSE)
+    stop(sprintf("`outcome_col` '%s' not found in `data`.\nAvailable columns: %s",
+                 outcome_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!is.character(random_intercept) || length(random_intercept) != 1L) {
     stop("`random_intercept` must be a single character string.", call. = FALSE)
   }
   if (!random_intercept %in% names(data)) {
     stop(
-      sprintf("`random_intercept` '%s' not found in `data`.", random_intercept),
+      sprintf("`random_intercept` '%s' not found in `data`.\nAvailable columns: %s",
+              random_intercept, paste(names(data), collapse = ", ")),
       call. = FALSE
     )
   }

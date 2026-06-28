@@ -86,8 +86,11 @@ mysterycall_plot_source_venn <- function(
     bg            = "white") {
 
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required",
-         call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
 
   circle_path <- function(x0, y0, r, n = 200L) {

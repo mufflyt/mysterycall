@@ -33,7 +33,11 @@ NULL
 mysterycall_plot_distribution <- function(x, title = NULL, bins = 30L) {
   if (!is.numeric(x)) stop("`x` must be a numeric vector.", call. = FALSE)
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
 
   main_title <- if (!is.null(title)) title else deparse(substitute(x))

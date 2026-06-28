@@ -224,7 +224,11 @@ mysterycall_equation_figure <- function(lambda0   = 14,
                                          power     = 0.80,
                                          both_arms = TRUE) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
   if (!is.numeric(irr_seq) || length(irr_seq) < 2L) {
     stop("`irr_seq` must be a numeric vector with at least 2 values.", call. = FALSE)

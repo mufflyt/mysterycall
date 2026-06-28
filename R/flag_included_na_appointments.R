@@ -54,11 +54,13 @@ mysterycall_flag_included_na_appointments <- function(
     filename      = "included_with_na_appointments.csv") {
 
   if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
   if (!days_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", days_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 days_col, paste(names(data), collapse = ", ")), call. = FALSE)
   if (!exclusion_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", exclusion_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 exclusion_col, paste(names(data), collapse = ", ")), call. = FALSE)
   if (!is.character(contact_value) || length(contact_value) != 1L)
     stop("`contact_value` must be a single character string.", call. = FALSE)
 

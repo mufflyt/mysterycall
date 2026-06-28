@@ -77,12 +77,14 @@ mysterycall_flag_date_outliers <- function(data,
   if (!is.character(date_col) || length(date_col) != 1L || !nzchar(date_col))
     stop("`date_col` must be a single non-empty string.", call. = FALSE)
   if (!date_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", date_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 date_col, paste(names(data), collapse = ", ")), call. = FALSE)
   if (!is.null(group_col)) {
     if (!is.character(group_col) || length(group_col) != 1L || !nzchar(group_col))
       stop("`group_col` must be a single non-empty string or NULL.", call. = FALSE)
     if (!group_col %in% names(data))
-      stop(sprintf("Column '%s' not found in `data`.", group_col), call. = FALSE)
+      stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                   group_col, paste(names(data), collapse = ", ")), call. = FALSE)
   }
   if (!is.numeric(tolerance_days) || length(tolerance_days) != 1L ||
       tolerance_days < 0 || is.na(tolerance_days))

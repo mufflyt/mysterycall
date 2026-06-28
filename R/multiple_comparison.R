@@ -66,12 +66,14 @@ mysterycall_multiple_comparison_adjust <- function(
       )
     }
     if (!p_col %in% names(x)) {
-      stop(sprintf("Column '%s' not found in `x`.", p_col), call. = FALSE)
+      stop(sprintf("Column '%s' not found in `x`.\nAvailable columns: %s",
+                   p_col, paste(names(x), collapse = ", ")), call. = FALSE)
     }
     pvals <- x[[p_col]]
     if (!is.null(label_col)) {
       if (!label_col %in% names(x)) {
-        stop(sprintf("Column '%s' not found in `x`.", label_col), call. = FALSE)
+        stop(sprintf("Column '%s' not found in `x`.\nAvailable columns: %s",
+                     label_col, paste(names(x), collapse = ", ")), call. = FALSE)
       }
       labels <- as.character(x[[label_col]])
     } else {

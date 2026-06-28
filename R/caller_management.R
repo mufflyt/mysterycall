@@ -55,10 +55,13 @@ mysterycall_check_generalist_presence <- function(data,
                                                    location_cols,
                                                    specialty_col,
                                                    generalist_level) {
-  if (!is.data.frame(data))             stop("`data` must be a data frame.", call. = FALSE)
+  if (!is.data.frame(data))             stop(sprintf("'data' must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
   missing_cols <- setdiff(c(location_cols, specialty_col), names(data))
   if (length(missing_cols) > 0L) {
-    stop("Columns not found in data: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+    stop(sprintf("Columns not found in `data`: %s\nAvailable columns: %s",
+                 paste(missing_cols, collapse = ", "),
+                 paste(names(data), collapse = ", ")),
+         call. = FALSE)
   }
 
   # Normalise location fields

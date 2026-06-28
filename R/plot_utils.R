@@ -41,7 +41,11 @@ mysterycall_save_plot <- function(plot,
                                    bg     = "white",
                                    ...) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
   if (!inherits(plot, "ggplot")) {
     stop("`plot` must be a ggplot object.", call. = FALSE)

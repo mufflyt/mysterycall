@@ -74,10 +74,18 @@ mysterycall_plot_emmeans_full <- function(model,
                                            height     = 6,
                                            dpi        = 300L) {
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("emmeans is required", call. = FALSE)
+    stop(
+      "This function requires the emmeans package.\n",
+      "Install it with: install.packages(\"emmeans\")",
+      call. = FALSE
+    )
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
   if (!is.character(variable) || length(variable) != 1L) {
     stop("`variable` must be a single character string.", call. = FALSE)

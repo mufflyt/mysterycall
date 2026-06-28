@@ -94,16 +94,18 @@ mysterycall_irr_table <- function(irr_data,
   # ---- Detect label column ----------------------------------------------------
   label_col <- if ("term"  %in% nm) "term" else
                if ("level" %in% nm) "level" else
-               stop("Column 'term' or 'level' not found in `irr_data`.",
-                    call. = FALSE)
+               stop(sprintf(
+                 "Column 'term' or 'level' not found in `irr_data`.\nAvailable columns: %s",
+                 paste(names(irr_data), collapse = ", ")), call. = FALSE)
 
   # ---- Detect / build numeric p-value -----------------------------------------
   has_pval     <- "p_value"     %in% nm
   has_pval_fmt <- "p_value_fmt" %in% nm
 
   if (!has_pval && !has_pval_fmt)
-    stop("Column 'p_value' or 'p_value_fmt' not found in `irr_data`.",
-         call. = FALSE)
+    stop(sprintf(
+      "Column 'p_value' or 'p_value_fmt' not found in `irr_data`.\nAvailable columns: %s",
+      paste(names(irr_data), collapse = ", ")), call. = FALSE)
 
   if (has_pval) {
     p_num <- irr_data[["p_value"]]

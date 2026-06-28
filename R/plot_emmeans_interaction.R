@@ -35,10 +35,18 @@ mysterycall_plot_emmeans_interaction <- function(model,
                                                   variable,
                                                   use_color = TRUE) {
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("emmeans is required", call. = FALSE)
+    stop(
+      "This function requires the emmeans package.\n",
+      "Install it with: install.packages(\"emmeans\")",
+      call. = FALSE
+    )
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
   if (!is.character(specs) || length(specs) < 1L) {
     stop("`specs` must be a character vector with at least one element.", call. = FALSE)

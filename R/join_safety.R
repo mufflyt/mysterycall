@@ -198,8 +198,9 @@ mysterycall_assert_unique_keys <- function(.data, key_cols,
     stop("`key_cols` must be a non-empty character vector.", call. = FALSE)
   missing_cols <- setdiff(key_cols, names(.data))
   if (length(missing_cols))
-    stop(sprintf("Key column(s) not found in `%s`: %s",
-                 label, paste(missing_cols, collapse = ", ")), call. = FALSE)
+    stop(sprintf("Key column(s) not found in `%s`: %s\nAvailable columns: %s",
+                 label, paste(missing_cols, collapse = ", "),
+                 paste(names(.data), collapse = ", ")), call. = FALSE)
 
   n    <- nrow(.data)
   dups <- .data |>

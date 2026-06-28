@@ -61,13 +61,15 @@ mysterycall_table2 <- function(data,
                                 include_intercept = FALSE) {
 
   if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
+    stop(sprintf("`data` must be a data frame, not %s.", class(data)[1L]), call. = FALSE)
   if (!is.character(group_col) || length(group_col) != 1L)
     stop("`group_col` must be a single character string.", call. = FALSE)
   if (!group_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", group_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 group_col, paste(names(data), collapse = ", ")), call. = FALSE)
   if (!accepted_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", accepted_col), call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 accepted_col, paste(names(data), collapse = ", ")), call. = FALSE)
   if (!inherits(model_result, c("mysterycall_poisson_model", "mysterycall_nb_model")))
     stop("`model_result` must be a `mysterycall_poisson_model` or `mysterycall_nb_model`.",
          call. = FALSE)

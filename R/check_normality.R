@@ -62,12 +62,16 @@ mysterycall_check_normality <- function(data, variable,
                                         outcome_label = NULL,
                                         group_label   = NULL) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required. Install with: install.packages('ggplot2')",
-         call. = FALSE)
+    stop(
+      "This function requires the ggplot2 package.\n",
+      "Install it with: install.packages(\"ggplot2\")",
+      call. = FALSE
+    )
   }
 
   if (!variable %in% names(data)) {
-    stop("Variable not found in data frame: ", variable, call. = FALSE)
+    stop(sprintf("Column '%s' not found in `data`.\nAvailable columns: %s",
+                 variable, paste(names(data), collapse = ", ")), call. = FALSE)
   }
 
   outcome_label <- outcome_label %||% variable
