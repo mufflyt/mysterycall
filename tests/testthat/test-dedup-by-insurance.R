@@ -55,7 +55,7 @@ test_that("dedup_by_insurance: wrong phone_col name gives error with 'not found'
   df <- data.frame(phone = "A", insurance = "X", stringsAsFactors = FALSE)
   expect_error(
     mysterycall_dedup_by_insurance(df, phone_col = "bad_col", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -63,7 +63,7 @@ test_that("dedup_by_insurance: wrong insurance_col name gives error with 'not fo
   df <- data.frame(phone = "A", insurance = "X", stringsAsFactors = FALSE)
   expect_error(
     mysterycall_dedup_by_insurance(df, insurance_col = "bad_col", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -71,7 +71,7 @@ test_that("dedup_by_insurance: wrong name_col gives error with 'not found'", {
   df <- data.frame(phone = "A", insurance = "X", stringsAsFactors = FALSE)
   expect_error(
     mysterycall_dedup_by_insurance(df, name_col = "bad_col", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -118,7 +118,7 @@ test_that("dedup_by_insurance: keep_all = TRUE retains extra columns", {
 test_that("dedup_by_insurance: non-data-frame input raises error", {
   expect_error(
     mysterycall_dedup_by_insurance(list(a = 1), output_dir = NA),
-    "data frame"
+    "data.frame"
   )
 })
 

@@ -17,15 +17,15 @@ make_medicaid_df <- function(n = 10) {
 }
 
 test_that("clean_medicaid_col errors when data is not a data frame", {
-  expect_error(mysterycall_clean_medicaid_col(list(a = 1)), "data frame")
-  expect_error(mysterycall_clean_medicaid_col("string"), "data frame")
+  expect_error(mysterycall_clean_medicaid_col(list(a = 1)), "data.frame")
+  expect_error(mysterycall_clean_medicaid_col("string"), "data.frame")
 })
 
 test_that("clean_medicaid_col errors when col is missing from data", {
   df <- data.frame(x = 1:3)
   expect_error(
     mysterycall_clean_medicaid_col(df, col = "does_the_physician_accept_medicaid"),
-    "not found"
+    "missing"
   )
 })
 

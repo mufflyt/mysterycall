@@ -33,6 +33,7 @@
 #' @importFrom dplyr group_by summarise arrange filter n desc
 #' @importFrom tibble tibble
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_number
 #' @export
 #'
 #' @examples
@@ -52,14 +53,14 @@ mysterycall_flag_repeat_physicians <- function(data,
                                                output_dir = NULL,
                                                filename   = "quality_check_repeat_physicians.csv") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!id_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", id_col), call. = FALSE)
-  if (!is.null(name_col) && !name_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", name_col), call. = FALSE)
-  if (!is.numeric(threshold) || length(threshold) != 1L || threshold < 0)
-    stop("`threshold` must be a non-negative number.", call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(id_col)
+  checkmate::assert_names(names(data), must.include = id_col)
+  checkmate::assert_string(name_col, null.ok = TRUE)
+  if (!is.null(name_col)) {
+    checkmate::assert_names(names(data), must.include = name_col)
+  }
+  checkmate::assert_number(threshold, lower = 0)
 
   threshold <- as.integer(threshold)
   group_cols <- if (!is.null(name_col)) c(id_col, name_col) else id_col

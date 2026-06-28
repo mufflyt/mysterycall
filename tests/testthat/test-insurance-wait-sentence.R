@@ -81,7 +81,7 @@ test_that("error on missing outcome column", {
   )
   expect_error(
     mysterycall_insurance_wait_sentence(df),
-    "not found"
+    "missing"
   )
 })
 
@@ -92,7 +92,7 @@ test_that("error on missing insurance column", {
   )
   expect_error(
     mysterycall_insurance_wait_sentence(df),
-    "not found"
+    "missing"
   )
 })
 
@@ -156,6 +156,6 @@ test_that("p_value is between 0 and 1", {
 test_that("error on non-data-frame input", {
   expect_error(
     mysterycall_insurance_wait_sentence(list(a = 1)),
-    "`data` must be a data frame"
+    "data.frame"
   )
 })

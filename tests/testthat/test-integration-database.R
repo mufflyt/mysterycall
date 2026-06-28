@@ -1,6 +1,6 @@
 # Integration tests with test databases
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Helper function to create a mock census database
 create_test_census_db <- function() {
@@ -238,12 +238,12 @@ test_that("Integration: Data validation across pipeline stages", {
   temp_dir <- tempdir()
 
   # Process through cleaning pipeline
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = problematic_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   expect_s3_class(result, "data.frame")
 

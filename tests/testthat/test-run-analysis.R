@@ -226,7 +226,7 @@ test_that("steps='qc' only: poisson slot is NULL", {
 test_that("data=NULL throws an error immediately", {
   expect_error(
     mysterycall_run_analysis(NULL),
-    regexp = "data.*must be a data frame",
+    regexp = "data.frame|data frame",
     fixed  = FALSE
   )
 })

@@ -36,6 +36,7 @@ NULL
 #' @family modeling helpers
 #' @export
 #' @importFrom stats df.residual residuals pchisq
+#' @importFrom checkmate assert_integerish
 #'
 #' @examples
 #' m <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
@@ -44,6 +45,9 @@ NULL
 mysterycall_overdispersion_sentence <- function(model,
                                                 digits_ratio = 2,
                                                 digits_p = 3) {
+  checkmate::assert_integerish(digits_ratio, lower = 0, len = 1)
+  checkmate::assert_integerish(digits_p,     lower = 0, len = 1)
+
   rdf <- tryCatch(
     stats::df.residual(model),
     error = function(e) {

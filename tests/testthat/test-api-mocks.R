@@ -8,7 +8,7 @@
 # - ❌ Data corruption from malformed responses
 
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # ==============================================================================
 # API MOCK 1: NPI API Success Responses

@@ -256,15 +256,14 @@ mysterycall_poisson_model <- function(data,
 
   if (!converged) {
     all_msgs <- c(conv_msgs, warnings_captured)
-    warning(sprintf(
+    message(sprintf(
       "Convergence issues detected:\n  %s\nConsider simplifying predictors or using nAGQ = 1.",
       paste(all_msgs, collapse = "\n  ")
-    ), call. = FALSE)
+    ))
   }
   if (is_singular) {
-    warning(
-      "Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.",
-      call. = FALSE
+    message(
+      "Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation."
     )
   }
 

@@ -61,7 +61,7 @@ test_that("distribution_summary: wrong column name errors with 'not found'", {
   df <- make_ins_df()
   expect_error(
     mysterycall_distribution_summary(df, "bad_col"),
-    "not found"
+    "missing"
   )
 })
 
@@ -76,7 +76,7 @@ test_that("distribution_summary: all-NA column raises error", {
 test_that("distribution_summary: non-data-frame input errors", {
   expect_error(
     mysterycall_distribution_summary(list(x = "a"), "x"),
-    "data frame"
+    "data.frame"
   )
 })
 

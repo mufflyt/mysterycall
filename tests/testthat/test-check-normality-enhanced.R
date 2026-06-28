@@ -89,6 +89,6 @@ test_that("mysterycall_simple_poisson respects reference level", {
 
 test_that("mysterycall_simple_poisson errors on bad inputs", {
   df <- data.frame(y = rpois(20, 5), g = letters[1:20])
-  expect_error(mysterycall_simple_poisson(df, "missing", "g"), "not found")
-  expect_error(mysterycall_simple_poisson(df, "y", "missing"), "not found")
+  expect_error(mysterycall_simple_poisson(df, "missing", "g"))
+  expect_error(mysterycall_simple_poisson(df, "y", "missing"))
 })

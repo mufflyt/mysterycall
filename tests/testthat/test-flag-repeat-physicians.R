@@ -57,13 +57,13 @@ test_that("writes CSV when output_dir is provided", {
 test_that("errors on missing id column", {
   expect_error(
     mysterycall_flag_repeat_physicians(df, id_col = "npi", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
 test_that("errors on missing name column", {
   expect_error(
     mysterycall_flag_repeat_physicians(df, name_col = "doctor", output_dir = NA),
-    "not found"
+    "missing"
   )
 })

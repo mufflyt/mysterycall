@@ -45,6 +45,7 @@ NULL
 #'   [mysterycall_interaction_screen()]
 #' @importFrom stats glm poisson coef as.formula na.omit p.adjust
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_number
 #' @export
 #'
 #' @examples
@@ -67,14 +68,10 @@ mysterycall_univariate_poisson_screen <- function(
     output_dir      = NULL,
     filename        = "univariate_poisson_screen.csv") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (missing(outcome_col) || !is.character(outcome_col) ||
-      length(outcome_col) != 1L)
-    stop("`outcome_col` must be a single character string.", call. = FALSE)
-  if (!outcome_col %in% names(data))
-    stop(sprintf("Outcome column '%s' not found in data.", outcome_col),
-         call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(outcome_col)
+  checkmate::assert_names(names(data), must.include = outcome_col)
+  checkmate::assert_number(alpha, lower = 0, upper = 1)
 
   predictors <- setdiff(names(data), unique(exclude_cols))
   predictors <- predictors[nzchar(predictors)]

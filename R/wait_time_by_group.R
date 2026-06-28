@@ -31,6 +31,7 @@
 #' @importFrom dplyr group_by summarise n
 #' @importFrom stats median quantile na.omit
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_flag assert_integerish
 #' @export
 #'
 #' @examples
@@ -50,16 +51,13 @@ mysterycall_wait_time_by_group <- function(
     output_dir     = NULL,
     filename       = "wait_time_by_group.csv") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (missing(group_col) || !is.character(group_col) || length(group_col) != 1L)
-    stop("`group_col` must be a single character string.", call. = FALSE)
-  if (!outcome_col %in% names(data))
-    stop(sprintf("Outcome column '%s' not found in `data`.", outcome_col),
-         call. = FALSE)
-  if (!group_col %in% names(data))
-    stop(sprintf("Group column '%s' not found in `data`.", group_col),
-         call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(outcome_col)
+  checkmate::assert_string(group_col)
+  checkmate::assert_names(names(data), must.include = c(outcome_col, group_col))
+  checkmate::assert_integerish(digits_median, lower = 0, len = 1)
+  checkmate::assert_integerish(digits_q,      lower = 0, len = 1)
+  checkmate::assert_flag(filter_positive)
 
   df <- data
   if (isTRUE(filter_positive)) {

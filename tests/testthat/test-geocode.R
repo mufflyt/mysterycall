@@ -2,8 +2,8 @@ library(testthat)
 testthat::skip_if_not_installed("dplyr")
 testthat::skip_if_not_installed("readr")
 testthat::skip_if_not_installed("ggmap")
-library(dplyr)
-library(readr)
+suppressWarnings(library(dplyr))
+suppressWarnings(library(readr))
 
 mock_geocode <- function(address, key, ...) {
   data.frame(lat = 37.7749, lon = -122.4194)

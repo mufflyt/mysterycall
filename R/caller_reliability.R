@@ -131,10 +131,10 @@ mysterycall_caller_reliability <- function(
 
   n_pairs <- length(rater1)
   if (n_pairs < 30L) {
-    warning(sprintf(
+    message(sprintf(
       "Only %d complete pair(s) found. ICC and kappa are unreliable with fewer than 30 pairs; interpret results with caution.",
       n_pairs
-    ), call. = FALSE)
+    ))
   }
   if (n_pairs < 2) stop("Too few complete pairs (n = ", n_pairs, ") to compute reliability.", call. = FALSE)
 

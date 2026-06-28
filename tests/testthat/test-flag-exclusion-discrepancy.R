@@ -72,11 +72,11 @@ test_that("errors on missing columns", {
   expect_error(
     mysterycall_flag_exclusion_discrepancy(df, days_col = "missing",
                                            output_dir = NA),
-    "not found"
+    "missing"
   )
   expect_error(
     mysterycall_flag_exclusion_discrepancy(df, exclusion_col = "missing",
                                            output_dir = NA),
-    "not found"
+    "missing"
   )
 })

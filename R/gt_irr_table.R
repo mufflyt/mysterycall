@@ -51,6 +51,7 @@
 #' @seealso [mysterycall_simple_poisson()], [mysterycall_model_gt()]
 #' @importFrom gt gt tab_header tab_source_note tab_style cell_text cells_body
 #'   cols_label
+#' @importFrom checkmate assert_data_frame assert_names assert_integerish assert_flag assert_string
 #' @export
 #'
 #' @examples
@@ -81,17 +82,14 @@ mysterycall_irr_table <- function(irr_data,
          call. = FALSE)
 
   # ---- Input checks -----------------------------------------------------------
-  if (!is.data.frame(irr_data))
-    stop("`irr_data` must be a data frame or tibble.", call. = FALSE)
+  checkmate::assert_data_frame(irr_data, min.rows = 0)
+  checkmate::assert_string(title)
+  checkmate::assert_string(outcome_label)
+  checkmate::assert_integerish(digits, lower = 0, len = 1)
+  checkmate::assert_flag(add_significance_stars)
 
   nm <- names(irr_data)
-
-  # Required numeric columns
-  for (col in c("irr", "ci_lower", "ci_upper")) {
-    if (!col %in% nm)
-      stop(sprintf("Required column '%s' not found in `irr_data`.", col),
-           call. = FALSE)
-  }
+  checkmate::assert_names(nm, must.include = c("irr", "ci_lower", "ci_upper"))
 
   # ---- Detect label column ----------------------------------------------------
   label_col <- if ("term"  %in% nm) "term" else

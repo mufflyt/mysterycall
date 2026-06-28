@@ -15,7 +15,7 @@ mock_nb_na$wait_days[3] <- NA
 # ── Input validation (no glmmTMB needed) ───────────────────────────────────────
 
 test_that("nb_model: stops when outcome column missing", {
-  skip_if_not_installed("glmmTMB")
+  suppressWarnings(skip_if_not_installed("glmmTMB"))
   expect_error(
     mysterycall_nb_model(mock_nb, "no_such_col", "insurance", "physician"),
     "no_such_col"

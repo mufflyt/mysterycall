@@ -42,6 +42,7 @@ NULL
 #' @family quality control
 #' @export
 #' @importFrom dplyr mutate
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_character
 #'
 #' @examples
 #' df <- data.frame(
@@ -68,12 +69,11 @@ mysterycall_clean_medicaid_col <- function(
     out_col_cleaned = NULL,
     out_col_numeric = NULL
 ) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
-  if (!col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in `data`.", col), call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(col)
+  checkmate::assert_names(names(data), must.include = col)
+  checkmate::assert_character(na_values, null.ok = TRUE)
+  checkmate::assert_string(yes_value)
 
   # Default output column names
   if (is.null(out_col_cleaned)) out_col_cleaned <- paste0("cleaned_", col)

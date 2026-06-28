@@ -37,6 +37,7 @@
 #'   [mysterycall_sanity_checks()] for broader pre-analysis validation.
 #' @importFrom dplyr filter arrange desc select all_of any_of
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_number
 #' @export
 #'
 #' @examples
@@ -65,16 +66,12 @@ mysterycall_flag_exclusion_discrepancy <- function(
     output_dir     = NULL,
     filename       = "discrepancy_rows.csv") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!days_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", days_col), call. = FALSE)
-  if (!exclusion_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", exclusion_col), call. = FALSE)
-  if (!is.character(contact_value) || length(contact_value) != 1L)
-    stop("`contact_value` must be a single character string.", call. = FALSE)
-  if (!is.numeric(min_days) || length(min_days) != 1L)
-    stop("`min_days` must be a single number.", call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(days_col)
+  checkmate::assert_string(exclusion_col)
+  checkmate::assert_names(names(data), must.include = c(days_col, exclusion_col))
+  checkmate::assert_string(contact_value)
+  checkmate::assert_number(min_days)
 
   result <- data |>
     dplyr::filter(

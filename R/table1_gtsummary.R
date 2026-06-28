@@ -97,13 +97,15 @@ mysterycall_table1_gtsummary <- function(data,
   missing <- match.arg(missing, c("no", "ifany", "always"))
 
   # ---- build table ---------------------------------------------------------
-  tbl <- gtsummary::tbl_summary(
-    data    = data[, c(vars, strata_col), drop = FALSE],
-    by      = strata_col,
-    label   = label_list,
-    missing = missing,
-    percent = percent,
-    ...
+  tbl <- suppressWarnings(
+    gtsummary::tbl_summary(
+      data    = data[, c(vars, strata_col), drop = FALSE],
+      by      = strata_col,
+      label   = label_list,
+      missing = missing,
+      percent = percent,
+      ...
+    )
   )
 
   if (!is.null(strata_col)) {

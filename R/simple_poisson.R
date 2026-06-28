@@ -56,6 +56,7 @@
 #'   recommends this function.
 #' @importFrom stats glm poisson coef confint complete.cases as.formula vcov
 #'   qnorm pnorm residuals relevel
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_number assert_flag
 #' @export
 #'
 #' @examples
@@ -78,12 +79,12 @@ mysterycall_simple_poisson <- function(data,
                                        use_profile_ci = TRUE) {
 
   # -- Input validation ---------------------------------------------------------
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!outcome %in% names(data))
-    stop(sprintf("Outcome column '%s' not found in data.", outcome), call. = FALSE)
-  if (!group %in% names(data))
-    stop(sprintf("Group column '%s' not found in data.", group), call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(outcome)
+  checkmate::assert_string(group)
+  checkmate::assert_names(names(data), must.include = c(outcome, group))
+  checkmate::assert_number(conf_level, lower = 0, upper = 1)
+  checkmate::assert_flag(use_profile_ci)
 
   y <- data[[outcome]]
   if (!is.numeric(y))

@@ -116,7 +116,7 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
         replacement
       ))
     } else {
-      warning(sprintf("No columns matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns matched '%s'; nothing was renamed for this pattern.", target_strings[i]), call. = FALSE)
     }
     message("")  # Adding a blank line for better separation
   }
@@ -254,12 +254,12 @@ mysterycall_clean_phase2 <- function(
   # Validate post-rename schema: every standard_name must be present
   missing_after_rename <- setdiff(standard_names, names(data))
   if (length(missing_after_rename)) {
-    warning(sprintf(
+    message(sprintf(
       "Phase 2 schema validation: %d expected column(s) missing after renaming: %s. Available: %s",
       length(missing_after_rename),
       paste(missing_after_rename, collapse = ", "),
       paste(names(data), collapse = ", ")
-    ), call. = FALSE)
+    ))
   }
 
   # Additional data processing

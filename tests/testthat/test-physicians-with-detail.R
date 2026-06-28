@@ -67,7 +67,7 @@ test_that("physicians_with_detail: wrong id_col errors with 'not found'", {
     mysterycall_physicians_with_detail(df, flagged_ids = "001",
                                        id_col = "bad_col",
                                        output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -77,7 +77,7 @@ test_that("physicians_with_detail: id_col missing from flagged_ids df errors wit
   expect_error(
     mysterycall_physicians_with_detail(df, flagged_ids = flagged,
                                        output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -140,7 +140,7 @@ test_that("physicians_with_detail: non-data-frame input raises error", {
   expect_error(
     mysterycall_physicians_with_detail(list(a = 1), flagged_ids = "001",
                                        output_dir = NA),
-    "data frame"
+    "data.frame"
   )
 })
 

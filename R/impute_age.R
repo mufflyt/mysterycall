@@ -69,10 +69,10 @@ mysterycall_impute_age <- function(grad_year,
 
   future_grad <- !is.na(grad_year) & grad_year > ref_year
   if (any(future_grad)) {
-    warning(sprintf(
+    message(sprintf(
       "%d graduation year(s) exceed ref_year (%d) and will produce NA ages.",
       sum(future_grad), ref_year
-    ), call. = FALSE)
+    ))
   }
 
   age <- as.integer(ref_year - grad_year + age_offset)

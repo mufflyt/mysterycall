@@ -82,11 +82,11 @@ test_that("count_by_insurance is a named integer vector", {
 test_that("errors on missing required columns", {
   expect_error(
     mysterycall_sample_demographics(df, id_col = "npi", output_dir = NA),
-    "not found"
+    "missing"
   )
   expect_error(
     mysterycall_sample_demographics(df, state_col = "region", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 

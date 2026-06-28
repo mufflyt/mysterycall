@@ -1,6 +1,6 @@
 # Comprehensive data validation tests
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Data validation rules and constraints
 DATA_VALIDATION_RULES <- list(
@@ -134,12 +134,12 @@ test_that("Data validation: Phone number format validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   if ("phone_number" %in% names(result)) {
     valid_phones <- result$phone_number[!is.na(result$phone_number) & result$phone_number != ""]
@@ -164,12 +164,12 @@ test_that("Data validation: State code/name validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   if ("state_name" %in% names(result)) {
     valid_states <- result$state_name[!is.na(result$state_name) & result$state_name != ""]
@@ -189,12 +189,12 @@ test_that("Data validation: Name field validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   if ("names" %in% names(result)) {
     # Empty/NA input names are flagged as NA by design; only check non-empty rows

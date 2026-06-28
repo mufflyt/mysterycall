@@ -8,7 +8,7 @@
 # - ❌ Data corruption from parallel processing
 
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # ==============================================================================
 # CONCURRENT TEST 1: Parallel File Writes
@@ -132,7 +132,7 @@ test_that("CONCURRENT: Can read existing files while writing new ones", {
         # phase1 output may include row-index column; use readr to bypass
         # base read.csv's duplicate row.names check
         existing_data <- if (requireNamespace("readr", quietly = TRUE)) {
-          suppressMessages(readr::read_csv(file_path, show_col_types = FALSE))
+          suppressWarnings(suppressMessages(readr::read_csv(file_path, show_col_types = FALSE)))
         } else {
           read.csv(file_path, row.names = NULL)
         }

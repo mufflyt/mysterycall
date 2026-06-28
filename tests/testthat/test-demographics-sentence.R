@@ -70,7 +70,7 @@ test_that("credential_col = NULL omits credential clause", {
 test_that("error on non-data-frame input", {
   expect_error(
     mysterycall_demographics_sentence(list(gender = "Male")),
-    "`data` must be a data frame"
+    "data.frame"
   )
 })
 
@@ -78,7 +78,7 @@ test_that("error when gender_col not found", {
   df <- data.frame(sex = "Male", stringsAsFactors = FALSE)
   expect_error(
     mysterycall_demographics_sentence(df, gender_col = "gender"),
-    "Column 'gender' not found"
+    "missing"
   )
 })
 
@@ -89,7 +89,7 @@ test_that("error when subspecialty_col not found in data", {
   )
   expect_error(
     mysterycall_demographics_sentence(df, subspecialty_col = "Subspecialty"),
-    "Column 'Subspecialty' not found"
+    "missing"
   )
 })
 

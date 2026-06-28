@@ -36,6 +36,7 @@ NULL
 #' @importFrom dplyr distinct all_of
 #' @importFrom tibble as_tibble
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_flag
 #' @export
 #'
 #' @examples
@@ -56,28 +57,14 @@ mysterycall_dedup_by_insurance <- function(
     output_dir    = NULL,
     filename      = "deduped_by_insurance.csv"
 ) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
-  if (!is.character(phone_col) || length(phone_col) != 1L) {
-    stop("`phone_col` must be a single character string.", call. = FALSE)
-  }
-  if (!is.character(insurance_col) || length(insurance_col) != 1L) {
-    stop("`insurance_col` must be a single character string.", call. = FALSE)
-  }
-  if (!phone_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in data.", phone_col), call. = FALSE)
-  }
-  if (!insurance_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in data.", insurance_col), call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(phone_col)
+  checkmate::assert_string(insurance_col)
+  checkmate::assert_names(names(data), must.include = c(phone_col, insurance_col))
+  checkmate::assert_string(name_col, null.ok = TRUE)
+  checkmate::assert_flag(keep_all)
   if (!is.null(name_col)) {
-    if (!is.character(name_col) || length(name_col) != 1L) {
-      stop("`name_col` must be a single character string or NULL.", call. = FALSE)
-    }
-    if (!name_col %in% names(data)) {
-      stop(sprintf("Column '%s' not found in data.", name_col), call. = FALSE)
-    }
+    checkmate::assert_names(names(data), must.include = name_col)
   }
 
   n_before <- nrow(data)

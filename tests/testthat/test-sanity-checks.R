@@ -91,7 +91,7 @@ test_that("mysterycall_scan_for_limits detects slice_head patterns", {
     "result <- process(limited)"
   ), test_file)
 
-  result <- mysterycall:::mysterycall_scan_for_limits(test_dir, recursive = FALSE)
+  result <- suppressWarnings(mysterycall:::mysterycall_scan_for_limits(test_dir, recursive = FALSE))
 
   expect_true(nrow(result) > 0)
   expect_true(any(grepl("slice_head", result$pattern)))
@@ -152,7 +152,7 @@ test_that("mysterycall_scan_for_limits detects multiple patterns", {
     "data3 <- read_csv('file2.csv', n_max = 1000)"
   ), test_file)
 
-  result <- mysterycall:::mysterycall_scan_for_limits(test_dir, recursive = FALSE)
+  result <- suppressWarnings(mysterycall:::mysterycall_scan_for_limits(test_dir, recursive = FALSE))
 
   expect_true(nrow(result) >= 3)  # Should find all three
   expect_true(any(grepl("head", result$pattern)))
@@ -358,7 +358,7 @@ test_that("Sanity checks are performant", {
 
   # Should complete quickly (< 1 second)
   start_time <- Sys.time()
-  mysterycall:::mysterycall_check_no_limits(large_data, "performance_test")
+  suppressWarnings(mysterycall:::mysterycall_check_no_limits(large_data, "performance_test"))
   end_time <- Sys.time()
 
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))

@@ -79,6 +79,7 @@
 #' }
 #'
 #' @family workflow helpers
+#' @importFrom checkmate assert_data_frame assert_flag assert_character
 #' @export
 #'
 #' @examples
@@ -126,8 +127,9 @@ mysterycall_run_analysis <- function(
 ) {
 
   # -- Upfront validation -------------------------------------------------------
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_flag(verbose)
+  checkmate::assert_character(steps)
 
   # -- Internal helpers ---------------------------------------------------------
   .msg <- function(x) if (isTRUE(verbose)) message(x)

@@ -91,7 +91,7 @@ make_nb_df <- function(seed = 42L) {
 }
 
 test_that("screen_interactions NB: returns data frame", {
-  skip_if_not_installed("glmmTMB")
+  suppressWarnings(skip_if_not_installed("glmmTMB"))
   df  <- make_nb_df()
   res <- suppressWarnings(
     mysterycall_screen_interactions(df, "wait", "ins", c("gender", "setting"),

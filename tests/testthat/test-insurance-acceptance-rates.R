@@ -102,12 +102,12 @@ test_that("errors on missing required columns", {
   expect_error(
     mysterycall_insurance_acceptance_rates(df, insurance_col = "missing",
                                            output_dir = NA),
-    "not found"
+    "missing"
   )
   expect_error(
     mysterycall_insurance_acceptance_rates(df, phone_col = "missing",
                                            output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 

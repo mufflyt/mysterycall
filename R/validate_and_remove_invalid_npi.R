@@ -91,11 +91,11 @@ mysterycall_validate_npi <- function(input_data) {
 
   n_wrong_length <- sum(!valid_format)
   if (n_wrong_length > 0) {
-    warning(sprintf(
+    message(sprintf(
       "%d NPI value(s) are not 10 digits and were dropped before Luhn validation: %s",
       n_wrong_length,
       paste(head(npi_df$npi[!valid_format], 5L), collapse = ", ")
-    ), call. = FALSE)
+    ))
   }
 
   if (any(valid_format)) {
@@ -108,11 +108,11 @@ mysterycall_validate_npi <- function(input_data) {
 
   n_luhn_fail <- sum(valid_format & !npi_df$npi_is_valid)
   if (n_luhn_fail > 0) {
-    warning(sprintf(
+    message(sprintf(
       "%d NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: %s",
       n_luhn_fail,
       paste(head(npi_df$npi[valid_format & !npi_df$npi_is_valid], 5L), collapse = ", ")
-    ), call. = FALSE)
+    ))
   }
 
   npi_df <- npi_df %>%

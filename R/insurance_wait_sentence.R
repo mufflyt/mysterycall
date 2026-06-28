@@ -35,6 +35,7 @@
 #' @family outcomes
 #' @importFrom stats glm poisson relevel confint.default median quantile
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_flag assert_integerish
 #' @export
 #'
 #' @examples
@@ -57,14 +58,16 @@ mysterycall_insurance_wait_sentence <- function(
     digits_median  = 0L,
     filter_positive = FALSE) {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!outcome_col %in% names(data))
-    stop(sprintf("Outcome column '%s' not found in `data`.", outcome_col),
-         call. = FALSE)
-  if (!insurance_col %in% names(data))
-    stop(sprintf("Insurance column '%s' not found in `data`.", insurance_col),
-         call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(outcome_col)
+  checkmate::assert_string(insurance_col)
+  checkmate::assert_names(names(data), must.include = c(outcome_col, insurance_col))
+  checkmate::assert_string(medicaid_label)
+  checkmate::assert_string(bcbs_label)
+  checkmate::assert_integerish(digits_irr,    lower = 0, len = 1)
+  checkmate::assert_integerish(digits_pct,    lower = 0, len = 1)
+  checkmate::assert_integerish(digits_median, lower = 0, len = 1)
+  checkmate::assert_flag(filter_positive)
 
   df <- data
   if (isTRUE(filter_positive)) {

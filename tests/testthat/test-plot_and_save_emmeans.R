@@ -2,9 +2,9 @@ library(testthat)
 testthat::skip_if_not_installed("ggplot2")
 testthat::skip_if_not_installed("emmeans")
 testthat::skip_if_not_installed("dplyr")
-library(ggplot2)
-library(emmeans)
-library(dplyr)
+suppressWarnings(library(ggplot2))
+suppressWarnings(library(emmeans))
+suppressWarnings(library(dplyr))
 
 message("Testing mysterycall_plot_emmeans function")
 

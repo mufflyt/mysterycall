@@ -31,6 +31,7 @@
 #' @family descriptive helpers
 #' @importFrom dplyr group_by summarise arrange desc slice n
 #' @importFrom scales comma
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_integerish
 #' @export
 #'
 #' @examples
@@ -52,12 +53,12 @@ mysterycall_demographics_sentence <- function(
     label_subspecialty = "subspecialty",
     label_credential  = "professional qualification") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!is.character(gender_col) || length(gender_col) != 1L)
-    stop("`gender_col` must be a single character string.", call. = FALSE)
-  if (!gender_col %in% names(data))
-    stop(sprintf("Column '%s' not found in `data`.", gender_col), call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(gender_col)
+  checkmate::assert_names(names(data), must.include = gender_col)
+  checkmate::assert_integerish(digits, lower = 0, len = 1)
+  checkmate::assert_string(subspecialty_col, null.ok = TRUE)
+  checkmate::assert_string(credential_col, null.ok = TRUE)
 
   # Helper: compute modal-level stats for one column
   .modal_stats <- function(col_name) {
@@ -78,9 +79,7 @@ mysterycall_demographics_sentence <- function(
 
   # Subspecialty (optional)
   if (!is.null(subspecialty_col)) {
-    if (!subspecialty_col %in% names(data))
-      stop(sprintf("Column '%s' not found in `data`.", subspecialty_col),
-           call. = FALSE)
+    checkmate::assert_names(names(data), must.include = subspecialty_col)
     s <- .modal_stats(subspecialty_col)
   } else {
     s <- NULL
@@ -88,9 +87,7 @@ mysterycall_demographics_sentence <- function(
 
   # Credential (optional)
   if (!is.null(credential_col)) {
-    if (!credential_col %in% names(data))
-      stop(sprintf("Column '%s' not found in `data`.", credential_col),
-           call. = FALSE)
+    checkmate::assert_names(names(data), must.include = credential_col)
     cr <- .modal_stats(credential_col)
   } else {
     cr <- NULL

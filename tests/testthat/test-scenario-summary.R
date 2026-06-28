@@ -110,14 +110,14 @@ test_that("scenario_summary: missing scenario_col → error", {
   df <- data.frame(x = 1:3)
   expect_error(
     mysterycall_scenario_summary(df, scenario_col = "scenario", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
 test_that("scenario_summary: non-data-frame → error", {
   expect_error(
     mysterycall_scenario_summary(list(a = 1), output_dir = NA),
-    "data frame"
+    "data.frame"
   )
 })
 

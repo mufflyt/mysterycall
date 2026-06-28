@@ -97,7 +97,7 @@ test_that("error on missing outcome column", {
   expect_error(
     mysterycall_wait_time_sentence(df, outcome_col = "days",
                                    group_col = "group"),
-    "not found"
+    "missing"
   )
 })
 
@@ -106,14 +106,14 @@ test_that("error on missing group column", {
   expect_error(
     mysterycall_wait_time_sentence(df, outcome_col = "days",
                                    group_col = "grp"),
-    "not found"
+    "missing"
   )
 })
 
 test_that("error on non-data-frame input", {
   expect_error(
     mysterycall_wait_time_sentence(list(a = 1), group_col = "a"),
-    "`data` must be a data frame"
+    "data.frame"
   )
 })
 

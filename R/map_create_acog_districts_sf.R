@@ -44,7 +44,7 @@ mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   districts <- readr::read_csv(acog_districts_file, show_col_types = FALSE, progress = FALSE)
 
   names(districts) <- gsub("^\\ufeff", "", names(districts))
-  names(districts) <- gsub("[^[:ascii:]]", "", names(districts))
+  names(districts) <- gsub("[^\\x00-\\x7F]", "", names(districts), perl = TRUE)
   bom_state_col <- grep("^\\.+State$", names(districts), value = TRUE)
   if (length(bom_state_col) && !("State" %in% names(districts))) {
     districts <- dplyr::rename(districts, State = dplyr::all_of(bom_state_col[[1]]))

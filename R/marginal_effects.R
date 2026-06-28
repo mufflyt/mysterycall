@@ -106,7 +106,15 @@ mysterycall_marginal_effects <- function(model,
     fit <- model$model
     me_args <- list(fit)
     if (!is.null(term)) me_args$variables <- term
-    raw <- do.call(marginaleffects::avg_slopes, c(me_args, list(...)))
+    raw <- withCallingHandlers(
+      do.call(marginaleffects::avg_slopes, c(me_args, list(...))),
+      warning = function(w) {
+        if (grepl("fixed.effect parameters|marginaleffects_safe|re\\.form",
+                  conditionMessage(w), ignore.case = TRUE)) {
+          invokeRestart("muffleWarning")
+        }
+      }
+    )
     raw_df <- as.data.frame(raw)
 
     # Detect variable type from the bare model frame

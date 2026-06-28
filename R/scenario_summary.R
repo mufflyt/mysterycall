@@ -48,6 +48,7 @@ NULL
 #' @importFrom dplyr count arrange desc
 #' @importFrom tibble as_tibble
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names
 #' @export
 #'
 #' @examples
@@ -80,17 +81,12 @@ mysterycall_scenario_summary <- function(
 ) {
 
   # ---- input validation -------------------------------------------------------
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!is.character(scenario_col) || length(scenario_col) != 1L)
-    stop("`scenario_col` must be a single character string.", call. = FALSE)
-  if (!scenario_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", scenario_col), call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(scenario_col)
+  checkmate::assert_names(names(data), must.include = scenario_col)
+  checkmate::assert_string(contact_col, null.ok = TRUE)
   if (!is.null(contact_col)) {
-    if (!is.character(contact_col) || length(contact_col) != 1L)
-      stop("`contact_col` must be a single character string or NULL.", call. = FALSE)
-    if (!contact_col %in% names(data))
-      stop(sprintf("Column '%s' not found in data.", contact_col), call. = FALSE)
+    checkmate::assert_names(names(data), must.include = contact_col)
   }
   if (!is.null(scenario_levels)) {
     if (!is.character(scenario_levels) || is.null(names(scenario_levels)) ||

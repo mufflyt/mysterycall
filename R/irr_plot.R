@@ -101,15 +101,22 @@ mysterycall_irr_plot <- function(x,
   tbl$term <- factor(tbl$term, levels = rev(tbl$term))
 
   # -- Build plot -------------------------------------------------------------
-  p <- ggplot2::ggplot(tbl, ggplot2::aes(x = irr, y = term)) +
-    ggplot2::geom_vline(xintercept = reference_line,
-                        linetype = "dashed", color = "grey60", linewidth = 0.5) +
+  # geom_errorbarh() is deprecated in ggplot2 >= 4.0.0; suppress the lifecycle
+  # warning here and use geom_errorbar() with orientation = "horizontal" once
+  # ggplot2 >= 4.0.0 is required.
+  errorbarh_layer <- suppressWarnings(
     ggplot2::geom_errorbarh(
       ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
       height    = 0.25,
-      color    = tbl$.sig[order(as.integer(tbl$term))],
+      color     = tbl$.sig[order(as.integer(tbl$term))],
       linewidth = 0.7
-    ) +
+    )
+  )
+
+  p <- ggplot2::ggplot(tbl, ggplot2::aes(x = irr, y = term)) +
+    ggplot2::geom_vline(xintercept = reference_line,
+                        linetype = "dashed", color = "grey60", linewidth = 0.5) +
+    errorbarh_layer +
     ggplot2::geom_point(
       size   = point_size,
       color = tbl$.sig[order(as.integer(tbl$term))],

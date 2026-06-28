@@ -54,6 +54,7 @@
 #'   [mysterycall_acceptance_rate_calc()] for a simpler rate helper.
 #' @importFrom dplyr filter distinct n
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_integerish
 #' @export
 #'
 #' @examples
@@ -85,12 +86,13 @@ mysterycall_insurance_acceptance_rates <- function(
     filename            = "insurance_acceptance_rates.csv") {
 
   # -- Validate inputs ----------------------------------------------------------
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  for (col in c(insurance_col, exclusion_col, days_col, phone_col)) {
-    if (!col %in% names(data))
-      stop(sprintf("Column '%s' not found in data.", col), call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(insurance_col)
+  checkmate::assert_string(exclusion_col)
+  checkmate::assert_string(days_col)
+  checkmate::assert_string(phone_col)
+  checkmate::assert_names(names(data), must.include = c(insurance_col, exclusion_col, days_col, phone_col))
+  checkmate::assert_integerish(digits, lower = 0, len = 1)
   if (!medicaid_accept_col %in% names(data)) {
     message(sprintf(
       "Column '%s' not found; NA-filtering step will be skipped for both groups.",

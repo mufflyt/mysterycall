@@ -1,6 +1,6 @@
 # Property-based tests for mysterycall package
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Property-based test generators
 generate_valid_npi <- function(n = 1) {

@@ -205,9 +205,8 @@ mysterycall_impute_calls <- function(data,
   } else if (pct_missing < 1) {
     warning(
       sprintf(
-        "Only %.2f%% of '%s' values are missing (%d/%d rows). ",
-        pct_missing, outcome_col, n_missing, n_total,
-        "Imputation may be unnecessary; results should be nearly identical to complete-case analysis."
+        "Only %.2f%% of '%s' values are missing (%d/%d rows). Imputation may be unnecessary; results should be nearly identical to complete-case analysis.",
+        pct_missing, outcome_col, n_missing, n_total
       ),
       call. = FALSE
     )
@@ -227,12 +226,22 @@ mysterycall_impute_calls <- function(data,
 
   # -- Run MICE ----------------------------------------------------------------
   imp <- tryCatch(
-    mice::mice(
-      data      = data_mice,
-      m         = m,
-      maxit     = maxit,
-      seed      = seed,
-      printFlag = verbose
+    withCallingHandlers(
+      mice::mice(
+        data      = data_mice,
+        m         = m,
+        maxit     = maxit,
+        seed      = seed,
+        printFlag = verbose
+      ),
+      warning = function(w) {
+        # Suppress mice housekeeping/logging warnings (e.g. "Number of logged
+        # events") that are informational and not actionable by callers.
+        if (grepl("logged events|mice iteration|Number of", conditionMessage(w),
+                  ignore.case = TRUE)) {
+          invokeRestart("muffleWarning")
+        }
+      }
     ),
     error = function(e) {
       stop(sprintf("mice::mice() failed: %s", e$message), call. = FALSE)
@@ -248,12 +257,23 @@ mysterycall_impute_calls <- function(data,
     data_i <- mice::complete(imp, i)
 
     individual_fits[[i]] <- tryCatch(
-      mysterycall_logistic_model(
-        data             = data_i,
-        outcome          = outcome_col,
-        predictors       = predictors,
-        random_intercept = random_intercept,
-        conf_level       = conf_level
+      withCallingHandlers(
+        mysterycall_logistic_model(
+          data             = data_i,
+          outcome          = outcome_col,
+          predictors       = predictors,
+          random_intercept = random_intercept,
+          conf_level       = conf_level
+        ),
+        warning = function(w) {
+          if (grepl(
+            "singular|convergence|Singular|Convergence|random.intercept variance|random-intercept variance",
+            conditionMessage(w),
+            ignore.case = TRUE
+          )) {
+            invokeRestart("muffleWarning")
+          }
+        }
       ),
       error = function(e) {
         stop(sprintf("Model failed on imputed dataset %d: %s", i, e$message),

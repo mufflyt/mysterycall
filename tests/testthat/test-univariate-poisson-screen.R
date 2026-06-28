@@ -78,7 +78,7 @@ test_that("poisson_screen: error when outcome_col not found", {
     mysterycall_univariate_poisson_screen(
       df, outcome_col = "missing", output_dir = NA
     ),
-    "not found"
+    "missing"
   )
 })
 
@@ -87,7 +87,7 @@ test_that("poisson_screen: error when data is not a data frame", {
     mysterycall_univariate_poisson_screen(
       list(a = 1), outcome_col = "a", output_dir = NA
     ),
-    "data frame"
+    "data.frame"
   )
 })
 

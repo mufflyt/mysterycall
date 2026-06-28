@@ -1,3 +1,44 @@
+# mysterycall (development version)
+
+## New functions
+- mysterycall_run_analysis(): full 9-step pipeline orchestrator
+- mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt tables
+- mysterycall_dedup_by_insurance(): deduplicate by phone x insurance
+- mysterycall_physicians_with_detail(): fetch full rows for flagged IDs
+- mysterycall_descriptive_stats(): median / Q1 / Q3 with sentence
+- mysterycall_distribution_summary(): modal category with sentence
+- mysterycall_demographics_sentence(): prose from gender/specialty/credential distributions
+- mysterycall_wait_time_by_group(): grouped median / IQR table
+- mysterycall_wait_time_sentence(): Poisson p-values woven into prose
+- mysterycall_insurance_wait_sentence(): Medicaid vs BCBS IRR paragraph
+- mysterycall_scenario_summary(): call counts by scenario with sentence
+- mysterycall_sensitivity_both_insurance(): paired-insurance sensitivity analysis
+- mysterycall_univariate_lmm_screen(): LMM univariate predictor screen with IRR
+- mysterycall_interaction_screen(): pairwise interaction LMM screen with AIC
+- mysterycall_univariate_poisson_screen(): simple GLM Poisson predictor screen
+- mysterycall_r2_sentence(): marginal / conditional R² prose
+- mysterycall_random_effect_variance(): ICC + VarCorr table with interpretation
+- mysterycall_overdispersion_sentence(): Pearson phi dispersion test with tiers
+- mysterycall_clean_medicaid_col(): recode Medicaid acceptance to 0/1
+- mysterycall_facet_histogram(): faceted histogram with stats annotation
+- mysterycall_log_histogram(): log-scale faceted histogram
+- mysterycall_simple_poisson(): simple Poisson GLM with IRR table and manuscript sentence
+- mysterycall_flag_repeat_physicians(): QC flag for repeated physician entries
+- mysterycall_flag_exclusion_discrepancy(): QC flag for excluded rows with wait times
+- mysterycall_flag_excluded_with_appointments(): QC flag for excluded rows with days > 0
+- mysterycall_flag_included_na_appointments(): QC flag for included rows with NA days
+- mysterycall_sample_demographics(): physician sample summary with sentence
+- mysterycall_insurance_acceptance_rates(): Medicaid vs BCBS acceptance rate computation
+
+## Improvements
+- Lme4 singular-fit warnings suppressed in lmm/interaction/r2/randeff functions
+- NA rows pre-filtered in histogram functions before ggplot construction
+- p_adjust_method parameter added to univariate_lmm_screen, univariate_poisson_screen, interaction_screen
+- Input validation standardised with checkmate across all new functions
+
+## Vignettes
+- "Mystery Caller Workflow" vignette added: end-to-end 12-section walkthrough
+
 # mysterycall 1.6.0
 
 Released 2026-06-25.

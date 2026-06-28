@@ -42,6 +42,7 @@ NULL
 #' @importFrom dplyr filter arrange select all_of any_of
 #' @importFrom tibble as_tibble
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names
 #' @export
 #'
 #' @examples
@@ -66,23 +67,13 @@ mysterycall_physicians_with_detail <- function(
     output_dir  = NULL,
     filename    = "physicians_with_detail.csv"
 ) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
-  if (!is.character(id_col) || length(id_col) != 1L) {
-    stop("`id_col` must be a single character string.", call. = FALSE)
-  }
-  if (!id_col %in% names(data)) {
-    stop(sprintf("Column '%s' not found in data.", id_col), call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(id_col)
+  checkmate::assert_names(names(data), must.include = id_col)
 
   # Accept a data frame or a plain vector for flagged_ids
   if (is.data.frame(flagged_ids)) {
-    if (!id_col %in% names(flagged_ids)) {
-      stop(sprintf(
-        "Column '%s' not found in `flagged_ids` data frame.", id_col
-      ), call. = FALSE)
-    }
+    checkmate::assert_names(names(flagged_ids), must.include = id_col)
     id_vec <- unique(flagged_ids[[id_col]])
   } else if (is.vector(flagged_ids) || is.factor(flagged_ids)) {
     id_vec <- unique(as.character(flagged_ids))

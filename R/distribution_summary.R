@@ -39,6 +39,7 @@ NULL
 #' @importFrom dplyr group_by summarise mutate arrange desc filter n
 #' @importFrom rlang sym !!
 #' @importFrom tibble as_tibble tibble
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_integerish
 #' @export
 #'
 #' @examples
@@ -52,18 +53,10 @@ mysterycall_distribution_summary <- function(
     column,
     digits = 1L
 ) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
-  if (!is.character(column) || length(column) != 1L) {
-    stop("`column` must be a single character string.", call. = FALSE)
-  }
-  if (!column %in% names(data)) {
-    stop(sprintf("Column '%s' not found in data.", column), call. = FALSE)
-  }
-  if (!is.numeric(digits) || length(digits) != 1L || is.na(digits)) {
-    stop("`digits` must be a single non-NA number.", call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(column)
+  checkmate::assert_names(names(data), must.include = column)
+  checkmate::assert_integerish(digits, lower = 0, len = 1)
 
   col_sym <- rlang::sym(column)
 

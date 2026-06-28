@@ -53,7 +53,7 @@ test_that("descriptive_stats: wrong column name errors with 'not found'", {
   df <- data.frame(x = 1:3)
   expect_error(
     mysterycall_descriptive_stats(df, "bad_col"),
-    "not found"
+    "missing"
   )
 })
 
@@ -68,7 +68,7 @@ test_that("descriptive_stats: non-numeric column errors with informative message
 test_that("descriptive_stats: non-data-frame input errors", {
   expect_error(
     mysterycall_descriptive_stats(list(x = 1:3), "x"),
-    "data frame"
+    "data.frame"
   )
 })
 

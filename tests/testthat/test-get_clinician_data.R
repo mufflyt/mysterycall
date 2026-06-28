@@ -1,8 +1,8 @@
 library(testthat)
 testthat::skip_if_not_installed("readr")
 testthat::skip_if_not_installed("dplyr")
-library(readr)
-library(dplyr)
+suppressWarnings(library(readr))
+suppressWarnings(library(dplyr))
 
 # Luhn-valid 10-digit NPIs (pass mysterycall_validate_npi without mocking)
 VALID_NPI_1 <- "1003000126"

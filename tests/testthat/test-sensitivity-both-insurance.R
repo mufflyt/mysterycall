@@ -160,7 +160,7 @@ test_that("sensitivity_both_insurance: wrong phone_col → error", {
     mysterycall_sensitivity_both_insurance(
       df, phone_col = "npi", output_dir = NA
     ),
-    "not found"
+    "missing"
   )
 })
 
@@ -170,7 +170,7 @@ test_that("sensitivity_both_insurance: wrong outcome_col → error", {
     mysterycall_sensitivity_both_insurance(
       df, outcome_col = "wait_calendar", output_dir = NA
     ),
-    "not found"
+    "missing"
   )
 })
 
@@ -180,7 +180,7 @@ test_that("sensitivity_both_insurance: wrong insurance_col → error", {
     mysterycall_sensitivity_both_insurance(
       df, insurance_col = "payer", output_dir = NA
     ),
-    "not found"
+    "missing"
   )
 })
 
@@ -214,7 +214,7 @@ test_that("sensitivity_both_insurance: empty data frame → n_both = 0, n_total 
 test_that("sensitivity_both_insurance: non-data-frame input → error", {
   expect_error(
     mysterycall_sensitivity_both_insurance(list(a = 1), output_dir = NA),
-    "data frame"
+    "data.frame"
   )
 })
 

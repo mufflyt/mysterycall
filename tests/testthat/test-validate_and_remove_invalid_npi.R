@@ -1,6 +1,6 @@
 library(testthat)
 testthat::skip_if_not_installed("readr")
-library(readr)
+suppressWarnings(library(readr))
 
 sample_df <- data.frame(
   npi = c("1234567893", " 123-456-7893 ", "ABCDEFGHIJ", NA, ""),

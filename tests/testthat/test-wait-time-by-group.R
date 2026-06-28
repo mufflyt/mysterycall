@@ -78,7 +78,7 @@ test_that("error on missing outcome column", {
   expect_error(
     mysterycall_wait_time_by_group(df, outcome_col = "days",
                                    group_col = "grp", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -87,7 +87,7 @@ test_that("error on missing group column", {
   expect_error(
     mysterycall_wait_time_by_group(df, outcome_col = "days",
                                    group_col = "grp", output_dir = NA),
-    "not found"
+    "missing"
   )
 })
 
@@ -108,7 +108,7 @@ test_that("all-NA outcome returns NA stats", {
 test_that("error on non-data-frame input", {
   expect_error(
     mysterycall_wait_time_by_group(list(a = 1), group_col = "a", output_dir = NA),
-    "`data` must be a data frame"
+    "data.frame"
   )
 })
 

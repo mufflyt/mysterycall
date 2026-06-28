@@ -53,6 +53,7 @@
 #'   calculations that extend this summary.
 #' @importFrom dplyr group_by distinct summarise n
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names
 #' @export
 #'
 #' @examples
@@ -76,14 +77,11 @@ mysterycall_sample_demographics <- function(
     output_dir    = NULL,
     filename      = "sample_demographics.csv") {
 
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!id_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", id_col), call. = FALSE)
-  if (!state_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", state_col), call. = FALSE)
-  if (!insurance_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", insurance_col), call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(id_col)
+  checkmate::assert_string(state_col)
+  checkmate::assert_string(insurance_col)
+  checkmate::assert_names(names(data), must.include = c(id_col, state_col, insurance_col))
 
   if (is.null(all_states)) all_states <- .us_states_dc
 

@@ -229,7 +229,7 @@ test_that("Contract: run_workflow always returns workflow_summary", {
     npi = "1234567893", for_redcap = "Yes",
     stringsAsFactors = FALSE
   )
-  result <- tryCatch(
+  result <- suppressWarnings(tryCatch(
     mysterycall_run_workflow(
       phase1_data = input,
       lab_assistant_names = c("A", "B"),
@@ -239,7 +239,7 @@ test_that("Contract: run_workflow always returns workflow_summary", {
       verbose = FALSE
     ),
     error = function(e) list(workflow_summary = data.frame(stage = character()))
-  )
+  ))
   expect_true(!is.null(result$workflow_summary),
               label = "workflow_summary must always be present in result")
 })

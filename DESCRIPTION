@@ -99,6 +99,7 @@ Suggests:
     tidycensus,
     tidyr,
     covr,
+    xml2,
     sf,
     viridis,
     webshot

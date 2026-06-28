@@ -179,7 +179,7 @@ mysterycall_prepare_table1_vars <- function(data,
   # Age from existing column
   if (!is.null(age_col)) {
     if (!age_col %in% names(out)) {
-      warning(sprintf("Column '%s' (age_col) not found in data; age_category will not be computed.", age_col), call. = FALSE)
+      message(sprintf("Column '%s' (age_col) not found in data; age_category will not be computed.", age_col))
     } else {
       out$age_category <- mysterycall_age_category(out[[age_col]])
     }
@@ -188,7 +188,7 @@ mysterycall_prepare_table1_vars <- function(data,
   # Age from graduation year (only if no direct age column)
   if (is.null(age_col) && !is.null(grad_year_col)) {
     if (!grad_year_col %in% names(out)) {
-      warning(sprintf("Column '%s' (grad_year_col) not found in data; age_imputed will not be computed.", grad_year_col), call. = FALSE)
+      message(sprintf("Column '%s' (grad_year_col) not found in data; age_imputed will not be computed.", grad_year_col))
     } else {
       out$age_imputed  <- mysterycall_impute_age(out[[grad_year_col]], ref_year = ref_year)
       out$age_category <- mysterycall_age_category(out$age_imputed)
@@ -198,7 +198,7 @@ mysterycall_prepare_table1_vars <- function(data,
   # Gender standardization
   if (!is.null(gender_col)) {
     if (!gender_col %in% names(out)) {
-      warning(sprintf("Column '%s' (gender_col) not found in data; gender_std will not be computed.", gender_col), call. = FALSE)
+      message(sprintf("Column '%s' (gender_col) not found in data; gender_std will not be computed.", gender_col))
     } else {
       g <- tolower(trimws(as.character(out[[gender_col]])))
       out$gender_std <- ifelse(
@@ -209,12 +209,12 @@ mysterycall_prepare_table1_vars <- function(data,
         !g %in% c("m", "male", "f", "female") & !is.na(out[[gender_col]])
       ])
       if (length(unexpected)) {
-        warning(sprintf(
+        message(sprintf(
           "%d value(s) in '%s' not recognised as Male/Female and bucketed to \"Unknown\": %s",
           sum(!g %in% c("m", "male", "f", "female") & !is.na(out[[gender_col]])),
           gender_col,
           paste(unexpected, collapse = ", ")
-        ), call. = FALSE)
+        ))
       }
     }
   }

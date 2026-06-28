@@ -128,7 +128,8 @@ mysterycall_sensitivity <- function(data,
   for (sname in names(subsets)) {
     sdata <- subsets[[sname]]
 
-    fit <- tryCatch({
+    fit <- tryCatch(
+      withCallingHandlers({
       if (family == "poisson") {
         mysterycall_poisson_model(
           data             = sdata,
@@ -162,7 +163,16 @@ mysterycall_sensitivity <- function(data,
           )
         ))
       }
-    }, error = function(e) {
+    }, warning = function(w) {
+      if (grepl(
+        "singular|convergence|Singular|Convergence|random.intercept variance|random-intercept variance",
+        conditionMessage(w),
+        ignore.case = TRUE
+      )) {
+        invokeRestart("muffleWarning")
+      }
+    }),
+    error = function(e) {
       warning(sprintf("Model fit failed for subset '%s': %s", sname, conditionMessage(e)),
               call. = FALSE)
       NULL

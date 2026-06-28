@@ -206,10 +206,12 @@ mysterycall_plot_disparities <- function(
   }
 
   p <- p +
-    ggplot2::geom_errorbarh(
-      ggplot2::aes(color = I(.color)),
-      height    = 0.18,
-      linewidth = 0.8
+    suppressWarnings(
+      ggplot2::geom_errorbarh(
+        ggplot2::aes(color = I(.color)),
+        height    = 0.18,
+        linewidth = 0.8
+      )
     ) +
     ggplot2::geom_point(
       ggplot2::aes(color = I(.color), shape = I(.shape)),

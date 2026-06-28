@@ -189,10 +189,10 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
   }
 
   if (nrow(coords) != nrow(unique_add)) {
-    warning(sprintf(
+    message(sprintf(
       "Geocoding returned %d row(s) but %d were expected; setting all coordinates to NA to prevent misassignment.",
       nrow(coords), nrow(unique_add)
-    ), call. = FALSE)
+    ))
     coords <- tibble::tibble(lat = rep(NA_real_, nrow(unique_add)), lon = rep(NA_real_, nrow(unique_add)))
   }
   unique_add <- dplyr::mutate(unique_add,

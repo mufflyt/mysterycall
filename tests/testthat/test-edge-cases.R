@@ -8,7 +8,7 @@
 # - ❌ Incorrect handling of special characters
 
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # ==============================================================================
 # EDGE CASE 1: Empty Strings and Whitespace
@@ -300,12 +300,12 @@ test_that("EDGE: Handles various phone number formats", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   })
 
   # Should handle various formats

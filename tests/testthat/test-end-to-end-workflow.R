@@ -1,7 +1,7 @@
 # End-to-end workflow tests with real data samples
 library(testthat)
-library(dplyr)
-library(readr)
+suppressWarnings(library(dplyr))
+suppressWarnings(library(readr))
 
 # Simulate realistic datasets that mirror actual use cases
 create_realistic_phase1_data <- function() {
@@ -369,13 +369,13 @@ test_that("End-to-end: Data quality and validation pipeline", {
 
   temp_dir <- tempdir()
 
-  # Stage 1: Initial cleaning
-  cleaned_data <- mysterycall_clean_phase1(
+  # Stage 1: Initial cleaning (suppress expected phone-length warning)
+  cleaned_data <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = problematic_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   expect_s3_class(cleaned_data, "data.frame")
 

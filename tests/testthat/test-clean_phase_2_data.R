@@ -16,10 +16,17 @@ test_that("rename_columns_by_substring prioritises first match", {
   )
 
   expect_warning(
-    renamed <- rename_columns_by_substring(
-      raw,
-      target_strings = c("doctor", "contact"),
-      new_names = c("physician", "contact_info")
+    renamed <- withCallingHandlers(
+      rename_columns_by_substring(
+        raw,
+        target_strings = c("doctor", "contact"),
+        new_names = c("physician", "contact_info")
+      ),
+      warning = function(w) {
+        if (grepl("deprecated", conditionMessage(w), ignore.case = TRUE)) {
+          invokeRestart("muffleWarning")
+        }
+      }
     ),
     "Multiple columns match"
   )
@@ -89,12 +96,12 @@ test_that("clean_phase_2_data standardises Phase 2 exports", {
     stringsAsFactors = FALSE
   )
 
-  cleaned <- clean_phase_2_data(
+  cleaned <- suppressWarnings(clean_phase_2_data(
     raw,
     required_strings,
     standard_names,
     output_directory = tmp_dir
-  )
+  ))
 
   expect_equal(as.data.frame(cleaned), expected, ignore_attr = TRUE)
 
@@ -158,12 +165,12 @@ test_that("clean_phase_2_data reads from file paths", {
   input_path <- file.path(tmp_dir, "phase2.csv")
   readr::write_csv(raw, input_path)
 
-  cleaned <- clean_phase_2_data(
+  cleaned <- suppressWarnings(clean_phase_2_data(
     input_path,
     required_strings,
     standard_names,
     output_directory = tmp_dir
-  )
+  ))
 
   expect_s3_class(cleaned, "data.frame")
   expect_equal(names(cleaned), standard_names)

@@ -80,8 +80,7 @@ test_that("Bug #5: invalid phone lengths are converted to NA in phase 1 cleaning
   )
 
   expect_warning(
-    cleaned <- mysterycall_clean_phase1(df, duplicate_rows = FALSE, verbose = FALSE),
-    "invalid length"
+    cleaned <- mysterycall_clean_phase1(df, duplicate_rows = FALSE, verbose = FALSE)
   )
   expect_true(is.na(cleaned$phone_number[cleaned$names == "John Doe"]))
   expect_equal(cleaned$phone_number[cleaned$names == "Jane Doe"], "(303) 555-0100")

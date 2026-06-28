@@ -50,6 +50,7 @@ NULL
 #' @importFrom stats t.test median IQR sd
 #' @importFrom tibble as_tibble
 #' @importFrom utils write.csv
+#' @importFrom checkmate assert_data_frame assert_string assert_names
 #' @export
 #'
 #' @examples
@@ -74,20 +75,13 @@ mysterycall_sensitivity_both_insurance <- function(
 ) {
 
   # ---- input validation -------------------------------------------------------
-  if (!is.data.frame(data))
-    stop("`data` must be a data frame.", call. = FALSE)
-  if (!is.character(phone_col) || length(phone_col) != 1L)
-    stop("`phone_col` must be a single character string.", call. = FALSE)
-  if (!phone_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", phone_col), call. = FALSE)
-  if (!is.character(insurance_col) || length(insurance_col) != 1L)
-    stop("`insurance_col` must be a single character string.", call. = FALSE)
-  if (!insurance_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", insurance_col), call. = FALSE)
-  if (!is.character(outcome_col) || length(outcome_col) != 1L)
-    stop("`outcome_col` must be a single character string.", call. = FALSE)
-  if (!outcome_col %in% names(data))
-    stop(sprintf("Column '%s' not found in data.", outcome_col), call. = FALSE)
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(phone_col)
+  checkmate::assert_string(insurance_col)
+  checkmate::assert_string(outcome_col)
+  checkmate::assert_names(names(data), must.include = c(phone_col, insurance_col, outcome_col))
+  checkmate::assert_string(medicaid_label)
+  checkmate::assert_string(bcbs_label)
 
   # ---- normalize insurance column (internal copy only) -----------------------
   df_norm <- data

@@ -8,7 +8,7 @@
 # - ❌ Data quality insufficient for research conclusions
 
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Load baseline metrics
 source(test_path("../fixtures/baseline_metrics.R"))

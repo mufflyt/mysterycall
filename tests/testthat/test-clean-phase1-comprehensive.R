@@ -1,6 +1,6 @@
 # Comprehensive tests for mysterycall_clean_phase1 function
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Helper function to create test data
 create_test_phase1_data <- function(n = 5, include_npi = TRUE, include_required = TRUE) {
@@ -285,12 +285,12 @@ test_that("mysterycall_clean_phase1: Data validation tests", {
     stringsAsFactors = FALSE
   )
 
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = edge_case_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   expect_s3_class(result, "data.frame")
   expect_gte(nrow(result), nrow(edge_case_data))

@@ -1,6 +1,6 @@
 # Regression tests for match rates and data quality
 library(testthat)
-library(dplyr)
+suppressWarnings(library(dplyr))
 
 # Store baseline match rates and quality metrics
 # These represent "known good" performance that should not degrade
@@ -145,13 +145,13 @@ test_that("Regression: mysterycall_clean_phase1 retention rates", {
     temp_dir <- tempdir()
 
     tryCatch({
-      result <- mysterycall_clean_phase1(
+      result <- suppressWarnings(mysterycall_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
         notify = FALSE,
         duplicate_rows = FALSE  # For easier comparison
-      )
+      ))
 
       # Calculate retention rate
       retention_rate <- nrow(result) / original_rows

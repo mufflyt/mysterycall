@@ -37,6 +37,7 @@ NULL
 #' @family descriptive helpers
 #' @seealso [mysterycall_distribution_summary()] for categorical summaries.
 #' @importFrom stats median quantile
+#' @importFrom checkmate assert_data_frame assert_string assert_names assert_integerish
 #' @export
 #'
 #' @examples
@@ -48,21 +49,11 @@ mysterycall_descriptive_stats <- function(
     digits   = 2L,
     digits_q = 0L
 ) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
-  if (!is.character(column) || length(column) != 1L) {
-    stop("`column` must be a single character string.", call. = FALSE)
-  }
-  if (!column %in% names(data)) {
-    stop(sprintf("Column '%s' not found in data.", column), call. = FALSE)
-  }
-  if (!is.numeric(digits)   || length(digits)   != 1L || is.na(digits)) {
-    stop("`digits` must be a single non-NA number.", call. = FALSE)
-  }
-  if (!is.numeric(digits_q) || length(digits_q) != 1L || is.na(digits_q)) {
-    stop("`digits_q` must be a single non-NA number.", call. = FALSE)
-  }
+  checkmate::assert_data_frame(data, min.rows = 0)
+  checkmate::assert_string(column)
+  checkmate::assert_names(names(data), must.include = column)
+  checkmate::assert_integerish(digits,   lower = 0, len = 1)
+  checkmate::assert_integerish(digits_q, lower = 0, len = 1)
 
   x <- data[[column]]
 

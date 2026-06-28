@@ -198,8 +198,8 @@ mysterycall_calculate_overlap <- function(block_groups,
   block_groups_proj <- sf::st_transform(block_groups, area_crs)
   isochrones_proj <- sf::st_transform(isochrones_filtered, area_crs)
 
-  # Calculate intersection in projected CRS
-  intersect <- sf::st_intersection(block_groups_proj, isochrones_proj) %>%
+  # Calculate intersection in projected CRS (suppress sf planar-coordinates warning)
+  intersect <- suppressWarnings(sf::st_intersection(block_groups_proj, isochrones_proj)) %>%
     dplyr::mutate(
       intersect_area = as.numeric(sf::st_area(.)),
       area_method = "projected:EPSG:5070"
@@ -226,7 +226,7 @@ mysterycall_calculate_overlap <- function(block_groups,
   # Write the intersection shapefile
   output_shapefile <- file.path(output_dir, sprintf("intersect_%s_minutes.shp", drive_time_minutes))
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
-  sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE)
+  suppressWarnings(sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE))
   message("Intersection calculated and saved successfully.")
 
   # Validate GEOID compatibility before join (Bug #4 fix)
