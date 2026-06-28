@@ -31,6 +31,28 @@ jobs:
           )
           covr::to_cobertura(cov)
         shell: Rscript {0}
+      - name: Show test failures
+        if: failure()
+        run: |
+          fail_files <- Sys.glob(file.path(
+            normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"),
+            "package/mysterycall/mysterycall-tests/testthat.Rout.fail"
+          ))
+          if (length(fail_files) == 0) {
+            fail_files <- Sys.glob(file.path(
+              normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"),
+              "package/*/*-tests/testthat.Rout.fail"
+            ))
+          }
+          for (f in fail_files) {
+            if (file.exists(f)) {
+              cat("── Failures from", f, "──\n")
+              lines <- readLines(f, warn = FALSE)
+              # Print last 200 lines to capture failure block without drowning in R startup noise
+              cat(tail(lines, 200), sep = "\n")
+            }
+          }
+        shell: Rscript {0}
       - uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: ${{ github.event_name != 'pull_request' && true || false }}
