@@ -167,3 +167,96 @@ test_that("check_normality still returns a result even when negatives present", 
   expect_true(is.list(result))
   expect_true("is_normal" %in% names(result))
 })
+
+# ── Year-typo guard: wait > 365 days ─────────────────────────────────────────
+# E.g. appointment date entered as 2027 instead of 2026 → wait = 400 days.
+# Should warn (not hard-error) so the analyst sees the problem but still gets
+# model output they can inspect.
+
+test_that("simple_poisson warns on wait days > 365 (year typo)", {
+  df <- make_df(c(5L, 10L, 400L, 8L))  # 400 = year-typo artifact
+  expect_warning(
+    suppressMessages(
+      mysterycall_simple_poisson(df, outcome = "wait_days", group = "insurance")
+    ),
+    "365|year.typo|one year"
+  )
+})
+
+test_that("simple_poisson warning names column, count, and max value", {
+  df <- make_df(c(7L, 366L, 400L, 5L))
+  warns <- character(0)
+  withCallingHandlers(
+    suppressMessages(
+      mysterycall_simple_poisson(df, outcome = "wait_days", group = "insurance")
+    ),
+    warning = function(w) {
+      warns <<- c(warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  long_warn <- warns[grepl("365|year", warns, ignore.case = TRUE)]
+  expect_gt(length(long_warn), 0L)
+  expect_true(any(grepl("wait_days", long_warn)))
+  expect_true(any(grepl("400", long_warn)))   # max value
+  expect_true(any(grepl("2", long_warn)))     # count of >365 values
+})
+
+test_that("simple_poisson does not warn when max wait is exactly 365", {
+  df <- make_df(c(5L, 30L, 365L, 90L))
+  expect_no_warning(
+    suppressMessages(
+      mysterycall_simple_poisson(df, outcome = "wait_days", group = "insurance")
+    )
+  )
+})
+
+test_that("auto_model warns on wait days > 365 before fitting", {
+  skip_if_not_installed("lme4")
+  set.seed(3)
+  n <- 40L
+  df <- make_df(
+    c(400L, rpois(n - 1L, 10L)),
+    insurance = rep(c("Medicaid","BCBS"), length.out = n),
+    npi       = rep(paste0("Dr", 1:10), length.out = n)
+  )
+  expect_warning(
+    suppressMessages(
+      mysterycall_auto_model(
+        df, outcome = "wait_days",
+        predictors = "insurance", random_intercept = "npi"
+      )
+    ),
+    "365|year.typo|one year"
+  )
+})
+
+test_that("check_normality warns on wait days > 365", {
+  df <- data.frame(wait_days = c(5L, 10L, 400L, 8L))
+  warns <- character(0)
+  withCallingHandlers(
+    suppressMessages(mysterycall_check_normality(df, "wait_days")),
+    warning = function(w) {
+      warns <<- c(warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  long_warn <- warns[grepl("365|year", warns, ignore.case = TRUE)]
+  expect_gt(length(long_warn), 0L)
+  expect_true(any(grepl("wait_days", long_warn)))
+  expect_true(any(grepl("400", long_warn)))
+})
+
+test_that("check_normality does not warn when all values are <= 365", {
+  df <- data.frame(wait_days = c(0L, 14L, 90L, 365L))
+  warns <- character(0)
+  withCallingHandlers(
+    suppressMessages(mysterycall_check_normality(df, "wait_days")),
+    warning = function(w) {
+      warns <<- c(warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  long_warn <- warns[grepl("365|year", warns, ignore.case = TRUE)]
+  expect_equal(length(long_warn), 0L)
+})

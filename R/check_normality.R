@@ -84,6 +84,12 @@ mysterycall_check_normality <- function(data, variable,
       "%d negative value%s found in '%s' (min = %g). Negative wait days are impossible — check for date calculation errors before modelling.",
       n_neg, if (n_neg == 1L) "" else "s", variable, min(data_var)
     ), call. = FALSE)
+  n_long <- sum(data_var > 365)
+  if (n_long > 0L)
+    warning(sprintf(
+      "%d value%s in '%s' exceed 365 days (max = %g). Wait times over one year are likely a year-typo error (e.g. 2027 instead of 2026) — verify appointment dates.",
+      n_long, if (n_long == 1L) "" else "s", variable, max(data_var)
+    ), call. = FALSE)
   message("Normality check for '", variable, "': n = ", length(data_var))
 
   if (length(data_var) < 3L)
