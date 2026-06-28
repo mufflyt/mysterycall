@@ -88,7 +88,6 @@ Suggests:
     patchwork,
     pkgdown,
     progress,
-    provider,
     purrr,
     readxl,
     rmarkdown,
@@ -102,7 +101,6 @@ Suggests:
     xml2,
     sf,
     viridis,
-    waffle,
     ggpattern,
     webshot
 VignetteBuilder: knitr
