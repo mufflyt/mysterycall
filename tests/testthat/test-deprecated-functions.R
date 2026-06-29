@@ -1,52 +1,41 @@
 library(testthat)
 
-# Deprecated functions must:
-#   1. Emit a deprecation warning via .Deprecated()
-#   2. Either stop (for removed functionality) or delegate correctly
-# All behavior verified against source in R/deprecated.R.
+# Deprecated functions must stop with an informative message pointing to the
+# replacement. Some older wrappers used .Deprecated() + forwarding; those that
+# were moved to mysterymaps now call stop() directly.
 
-test_that("test_and_process_isochrones - emits deprecation warning", {
-  expect_warning(
-    tryCatch(
-      test_and_process_isochrones(data.frame()),
-      error = function(e) NULL   # stop() after .Deprecated() — catch silently
-    ),
-    regexp = "deprecated|Deprecated",
-    ignore.case = TRUE
-  )
-})
-
-test_that("test_and_process_isochrones - stops with deprecation error message", {
+test_that("test_and_process_isochrones - throws an error", {
   expect_error(
-    suppressWarnings(test_and_process_isochrones(data.frame())),
-    "deprecated"
+    test_and_process_isochrones(data.frame())
   )
 })
 
-test_that("process_and_save_isochrones - emits deprecation warning", {
-  expect_warning(
-    tryCatch(
-      process_and_save_isochrones(data.frame()),
-      error = function(e) NULL
-    ),
-    regexp = "deprecated|Deprecated",
-    ignore.case = TRUE
+test_that("test_and_process_isochrones - error message mentions mysterymaps", {
+  err <- tryCatch(
+    test_and_process_isochrones(data.frame()),
+    error = function(e) e$message
   )
+  expect_true(grepl("mysterymaps|removed|moved", err, ignore.case = TRUE))
 })
 
-test_that("process_and_save_isochrones - stops with deprecation error message", {
+test_that("process_and_save_isochrones - throws an error", {
   expect_error(
-    suppressWarnings(process_and_save_isochrones(data.frame())),
-    "deprecated"
+    process_and_save_isochrones(data.frame())
   )
 })
 
-test_that("process_and_save_isochrones - chunk_size argument is accepted silently", {
-  # Even with chunk_size, the function should deprecate-warn then stop
+test_that("process_and_save_isochrones - error when chunk_size provided", {
   expect_error(
-    suppressWarnings(process_and_save_isochrones(data.frame(), chunk_size = 10)),
-    "deprecated"
+    process_and_save_isochrones(data.frame(), chunk_size = 10)
   )
+})
+
+test_that("process_and_save_isochrones - error message mentions mysterymaps", {
+  err <- tryCatch(
+    process_and_save_isochrones(data.frame()),
+    error = function(e) e$message
+  )
+  expect_true(grepl("mysterymaps|removed|moved", err, ignore.case = TRUE))
 })
 
 test_that("search_npi - emits deprecation warning when called", {
@@ -78,18 +67,18 @@ test_that("search_npi - stops on non-data-frame non-path input", {
   )
 })
 
-test_that("test_and_process_isochrones - error message names the replacement function", {
+test_that("test_and_process_isochrones - error message mentions the package or replacement", {
   err <- tryCatch(
-    suppressWarnings(test_and_process_isochrones(data.frame())),
+    test_and_process_isochrones(data.frame()),
     error = function(e) e$message
   )
-  expect_true(grepl("mysterycall_isochrones_for_df", err))
+  expect_true(grepl("mysterymaps|removed|moved", err, ignore.case = TRUE))
 })
 
-test_that("process_and_save_isochrones - error message names the replacement function", {
+test_that("process_and_save_isochrones - error message mentions the package or replacement", {
   err <- tryCatch(
-    suppressWarnings(process_and_save_isochrones(data.frame())),
+    process_and_save_isochrones(data.frame()),
     error = function(e) e$message
   )
-  expect_true(grepl("mysterycall_isochrones_for_df", err))
+  expect_true(grepl("mysterymaps|removed|moved", err, ignore.case = TRUE))
 })

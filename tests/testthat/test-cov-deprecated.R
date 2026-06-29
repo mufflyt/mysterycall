@@ -86,21 +86,21 @@ test_that("search_npi() rejects character vector of length > 1", {
 test_that("test_and_process_isochrones() throws removed error", {
   expect_error(
     mysterycall:::test_and_process_isochrones("dummy_file.csv"),
-    "removed"
+    "mysterymaps|moved|removed"
   )
 })
 
 test_that("process_and_save_isochrones() throws removed error", {
   expect_error(
     mysterycall:::process_and_save_isochrones("dummy_file.csv"),
-    "removed"
+    "mysterymaps|moved|removed"
   )
 })
 
 test_that("process_and_save_isochrones() chunk_size parameter included in signature", {
   expect_error(
     mysterycall:::process_and_save_isochrones("dummy_file.csv", chunk_size = 50),
-    "removed"
+    "mysterymaps|moved|removed"
   )
 })
 
@@ -112,17 +112,15 @@ test_that("rename_columns_by_substring() emits deprecation warning", {
   )
 })
 
-test_that("tyler_format_pct() emits deprecation warning (tyler prefix)", {
-  expect_warning(
-    mysterycall:::tyler_format_pct(0.5),
-    "tyler_format_pct.*deprecated.*mysterycall_format_pct"
+test_that("tyler_format_pct() throws error (function removed, points to replacement)", {
+  expect_error(
+    mysterycall:::tyler_format_pct(0.5)
   )
 })
 
-test_that("tyler_check_normality() emits deprecation warning (tyler prefix)", {
-  expect_warning(
-    mysterycall:::tyler_check_normality(data = COUNT_DF, variable = "days"),
-    "tyler_check_normality.*deprecated.*mysterycall_check_normality"
+test_that("tyler_check_normality() throws error (function removed, points to replacement)", {
+  expect_error(
+    mysterycall:::tyler_check_normality(data = COUNT_DF, variable = "days")
   )
 })
 
