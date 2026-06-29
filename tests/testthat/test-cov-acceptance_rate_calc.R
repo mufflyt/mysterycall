@@ -241,7 +241,7 @@ test_that("mysterycall_acceptance_rate_calc: error—missing insurance_col", {
 
   expect_error(
     mysterycall_acceptance_rate_calc(df),
-    "Column 'insurance' not found"
+    "insurance_col 'insurance' not found"
   )
 })
 
@@ -270,7 +270,7 @@ test_that("mysterycall_acceptance_rate_calc: error—missing inclusion_col", {
 
   expect_error(
     mysterycall_acceptance_rate_calc(df, inclusion_col = "reason_for_exclusions"),
-    "Column 'reason_for_exclusions' not found"
+    "inclusion_col 'reason_for_exclusions' not found"
   )
 })
 
@@ -335,7 +335,7 @@ test_that("mysterycall_acceptance_rate_calc: error—missing medicaid_accept_col
 
   expect_error(
     mysterycall_acceptance_rate_calc(df, medicaid_accept_col = "medicaid_accept"),
-    "Column 'medicaid_accept' not found"
+    "medicaid_accept_col 'medicaid_accept' not found"
   )
 })
 

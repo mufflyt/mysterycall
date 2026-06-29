@@ -174,7 +174,7 @@ test_that("mysterycall_sensitivity errors with invalid input types", {
       predictors = "ins",
       random_intercept = "phys"
     ),
-    "outcome.*single column name"
+    "outcome.*not found"
   )
 
   expect_error(
@@ -194,7 +194,7 @@ test_that("mysterycall_sensitivity errors with invalid input types", {
       predictors = "ins",
       random_intercept = "nonexistent_col"
     ),
-    "random_intercept.*single column name"
+    "random_intercept.*not found"
   )
 
   expect_error(

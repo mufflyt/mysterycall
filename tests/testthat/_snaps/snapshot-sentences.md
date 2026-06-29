@@ -3,7 +3,7 @@
     Code
       result$sentence
     Output
-      [1] "Median business_days: 12.00 (IQR: 10–16)."
+      [1] "Median business_days: 12.00 (IQR: 10--16)."
 
 # mysterycall_distribution_summary sentence snapshot
 

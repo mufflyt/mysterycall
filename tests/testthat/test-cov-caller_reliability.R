@@ -149,7 +149,7 @@ test_that("mysterycall_caller_reliability errors when fewer than 2 callers", {
   )
   expect_error(
     mysterycall_caller_reliability(df, "caller", "outcome"),
-    "at least 2 callers"
+    "least 2 unique callers"
   )
 })
 

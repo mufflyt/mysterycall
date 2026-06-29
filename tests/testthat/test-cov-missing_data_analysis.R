@@ -214,7 +214,7 @@ test_that("mysterycall_missing_data_analysis rejects missing covariate_cols", {
       group_col      = "group",
       covariate_cols = c("missing_var")
     ),
-    "Columns not found"
+    "covariate_cols not found"
   )
 })
 

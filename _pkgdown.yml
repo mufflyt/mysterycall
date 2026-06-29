@@ -122,31 +122,12 @@ reference:
       - NCI_CANCER_CENTERS
       - MEDICARE_GME_INDICATORS
 
-  - title: "Geocoding and Mapping"
+  - title: "Regions"
     desc: >
-      Geocode addresses, build isochrones, and produce publication maps.
+      Assign ACOG regions to physician records. Geocoding, isochrones, and
+      publication maps now live in the mysterymaps package.
     contents:
-      - mysterycall_geocode
-      - mysterycall_create_isochrones
-      - mysterycall_isochrones_for_df
-      - mysterycall_plot_isochrones
-      - mysterycall_clear_isochrone_cache
-      - mysterycall_map_base
-      - mysterycall_map_leaflet
-      - mysterycall_map_acog_districts
-      - mysterycall_map_block_group
-      - mysterycall_map_physicians
-      - mysterycall_calculate_overlap
-      - mysterycall_hrr
-      - mysterycall_hrr_maps
       - mysterycall_assign_region
-      - ensure_hrr_shapefile
-
-  - title: "Acceptance Rate Maps"
-    desc: >
-      Choropleth maps of appointment acceptance rates by state.
-    contents:
-      - mysterycall_map_acceptance_rate
 
   - title: "Census and Demographics"
     contents:
@@ -511,7 +492,6 @@ reference:
       - mysterycall_facet_histogram
       - mysterycall_kaplan_meier
       - mysterycall_flow_diagram
-      - mysterycall_geographic_map
       - mysterycall_acceptance_waffle
       - mysterycall_bw_theme
 
