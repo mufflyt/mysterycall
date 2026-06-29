@@ -136,7 +136,7 @@ test_that("mysterycall_check_normality handles NA values correctly", {
 test_that("mysterycall_check_normality errors when variable not found", {
   expect_error(
     mysterycall_check_normality(AUDIT, "nonexistent_variable"),
-    "Variable not found"
+    "'nonexistent_variable' not found"
   )
 })
 

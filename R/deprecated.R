@@ -661,6 +661,20 @@ tyler_quality_tier <- function(...) {
 }
 
 #' @rdname tyler-deprecated
+tyler_format_pct <- function(...) {
+  .Deprecated("mysterycall_format_pct", package = "mysterycall",
+              msg = paste0("tyler_format_pct() is deprecated. Use mysterycall_format_pct() instead."))
+  mysterycall_format_pct(...)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_normality <- function(...) {
+  .Deprecated("mysterycall_check_normality", package = "mysterycall",
+              msg = paste0("tyler_check_normality() is deprecated. Use mysterycall_check_normality() instead."))
+  mysterycall_check_normality(...)
+}
+
+#' @rdname tyler-deprecated
 tyler_remove_constants <- function(...) {
   .Deprecated("mysterycall_remove_constants", package = "mysterycall",
               msg = paste0("tyler_remove_constants() is deprecated. Use mysterycall_remove_constants() instead."))

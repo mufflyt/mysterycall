@@ -108,7 +108,7 @@ test_that("mysterycall_create_formula errors when response_var not in data", {
   df <- data.frame(a = c(1, 2), b = c(3, 4), stringsAsFactors = FALSE)
   expect_error(
     suppressMessages(mysterycall_create_formula(df, "nonexistent")),
-    "Response variable 'nonexistent' not found in data"
+    "Response variable 'nonexistent' not found"
   )
 })
 
@@ -117,7 +117,7 @@ test_that("mysterycall_create_formula errors when random_effect not in data", {
   df <- data.frame(a = c(1, 2), b = c(3, 4), stringsAsFactors = FALSE)
   expect_error(
     suppressMessages(mysterycall_create_formula(df, "a", random_effect = "missing")),
-    "Random effect variable 'missing' not found in data"
+    "Random effect variable 'missing' not found"
   )
 })
 

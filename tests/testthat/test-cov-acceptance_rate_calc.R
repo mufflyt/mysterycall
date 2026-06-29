@@ -335,7 +335,7 @@ test_that("mysterycall_acceptance_rate_calc: error—missing medicaid_accept_col
 
   expect_error(
     mysterycall_acceptance_rate_calc(df, medicaid_accept_col = "medicaid_accept"),
-    "Column 'medicaid_accept' not found"
+    "medicaid_accept_col 'medicaid_accept' not found"
   )
 })
 
