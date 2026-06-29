@@ -186,7 +186,7 @@ test_that("errors when date_col is not in data", {
 
   expect_error(
     mysterycall_caller_drift(df, date_col = "nonexistent_date", plot = FALSE),
-    "not found in data"
+    "not found in"
   )
 })
 
@@ -203,7 +203,7 @@ test_that("errors when outcome_col is not in data", {
   expect_error(
     mysterycall_caller_drift(df, outcome_col = "missing_outcome",
                              date_col = "call_date", plot = FALSE),
-    "not found in data"
+    "not found in"
   )
 })
 

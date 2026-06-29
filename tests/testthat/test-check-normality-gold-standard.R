@@ -52,7 +52,7 @@ test_that("mysterycall:::mysterycall_check_normality - missing variable name err
   df <- data.frame(x = 1:10)
   expect_error(
     suppressMessages(mysterycall:::mysterycall_check_normality(df, "nonexistent")),
-    "Variable not found"
+    "'nonexistent' not found"
   )
 })
 
