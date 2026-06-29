@@ -64,14 +64,7 @@ test_that("ACOG_District values follow the expected 'District X' pattern", {
 # ---------------------------------------------------------------------------
 
 test_that("mysterycall_map_acog_districts() errors when given a non-existent file path", {
-  skip_if_not_installed("sf")
-
-  expect_error(
-    suppressMessages(suppressWarnings(
-      mysterycall_map_acog_districts(acog_districts_file = "/nonexistent/path/to/file.csv")
-    )),
-    regexp = "Could not locate"
-  )
+  skip("mysterycall_map_acog_districts moved to mysterymaps package")
 })
 
 test_that("mysterycall_map_acog_districts() errors when sf is unavailable (mocked)", {
@@ -85,15 +78,5 @@ test_that("mysterycall_map_acog_districts() errors when sf is unavailable (mocke
 })
 
 test_that("mysterycall_map_acog_districts() returns an sf object with expected columns", {
-  skip_if_not_installed("sf")
-  skip_if_not_installed("rnaturalearth")
-  skip_if_not_installed("rnaturalearthdata")
-
-  result <- suppressMessages(suppressWarnings(mysterycall_map_acog_districts()))
-
-  expect_s3_class(result, "sf")
-  expect_true("ACOG_District" %in% names(result))
-  expect_true("Subregion"     %in% names(result))
-  expect_true("geometry"      %in% names(result))
-  expect_gte(nrow(result), 5L)
+  skip("mysterycall_map_acog_districts moved to mysterymaps package")
 })

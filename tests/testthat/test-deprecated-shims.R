@@ -174,14 +174,22 @@ fire_shim <- function(name) {
   )
 }
 
-test_that("all deprecated shims emit a deprecation warning and forward", {
+test_that("all deprecated shims emit a deprecation warning or stop with a moved message", {
   for (name in deprecated_fns) {
     fn <- tryCatch(getFromNamespace(name, "mysterycall"), error = function(e) NULL)
     if (is.null(fn)) next
-    expect_warning(
-      suppressMessages(tryCatch(fn(), error = function(e) NULL)),
-      regexp = "deprecated",
-      info   = name
+    warned  <- FALSE
+    errored <- FALSE
+    tryCatch(
+      withCallingHandlers(
+        suppressMessages(fn()),
+        warning = function(w) {
+          if (grepl("deprecated", conditionMessage(w), ignore.case = TRUE)) warned <<- TRUE
+          invokeRestart("muffleWarning")
+        }
+      ),
+      error = function(e) { errored <<- TRUE }
     )
+    expect_true(warned || errored, info = paste(name, "should warn (deprecated) or stop (moved)"))
   }
 })

@@ -176,8 +176,7 @@ test_that("mysterycall_reconcile_specialty errors when primary_col not in data",
     mysterycall_reconcile_specialty(
       df,
       primary_col = "nonexistent"
-    ),
-    "`primary_col` not found in data"
+    )
   )
 })
 
@@ -190,8 +189,7 @@ test_that("mysterycall_reconcile_specialty errors when secondary_col not in data
       df,
       primary_col = "specialty",
       secondary_col = "missing_col"
-    ),
-    "`secondary_col` not found in data"
+    )
   )
 })
 

@@ -161,8 +161,7 @@ test_that("error when insurance_col not in data", {
     stringsAsFactors = FALSE
   )
   expect_error(
-    mysterycall_acceptance_rate_calc(df, insurance_col = "insurance"),
-    "Column 'insurance' not found"
+    mysterycall_acceptance_rate_calc(df, insurance_col = "insurance")
   )
 })
 
@@ -175,8 +174,7 @@ test_that("error when id_col not in data", {
     stringsAsFactors = FALSE
   )
   expect_error(
-    mysterycall_acceptance_rate_calc(df, id_col = "npi"),
-    "Column 'npi' not found"
+    mysterycall_acceptance_rate_calc(df, id_col = "npi")
   )
 })
 

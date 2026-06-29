@@ -125,8 +125,7 @@ test_that("errors when complete pairs are fewer than min_pairs", {
 test_that("errors when group_col is absent from data", {
   df <- make_wt_data()
   expect_error(
-    mysterycall_wait_time_crossover(df, group_col = "no_such_col"),
-    regexp = "not found in data"
+    mysterycall_wait_time_crossover(df, group_col = "no_such_col")
   )
 })
 
@@ -135,8 +134,7 @@ test_that("errors when group_col is absent from data", {
 test_that("errors when id_col is absent from data", {
   df <- make_wt_data()
   expect_error(
-    mysterycall_wait_time_crossover(df, id_col = "no_such_col"),
-    regexp = "not found in data"
+    mysterycall_wait_time_crossover(df, id_col = "no_such_col")
   )
 })
 

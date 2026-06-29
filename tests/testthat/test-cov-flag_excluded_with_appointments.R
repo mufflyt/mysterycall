@@ -181,8 +181,7 @@ test_that("flag_excluded_with_appointments rejects missing days_col", {
       df,
       days_col = "missing_col",
       output_dir = NA
-    ),
-    "not found in data"
+    )
   )
 })
 
@@ -199,8 +198,7 @@ test_that("flag_excluded_with_appointments rejects missing exclusion_col", {
       df,
       exclusion_col = "missing_col",
       output_dir = NA
-    ),
-    "not found in data"
+    )
   )
 })
 

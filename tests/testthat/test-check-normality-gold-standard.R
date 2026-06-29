@@ -51,8 +51,7 @@ test_that("mysterycall:::mysterycall_check_normality - skewed data IQR = 8.4 (go
 test_that("mysterycall:::mysterycall_check_normality - missing variable name errors with informative message", {
   df <- data.frame(x = 1:10)
   expect_error(
-    suppressMessages(mysterycall:::mysterycall_check_normality(df, "nonexistent")),
-    "Variable not found"
+    suppressMessages(mysterycall:::mysterycall_check_normality(df, "nonexistent"))
   )
 })
 

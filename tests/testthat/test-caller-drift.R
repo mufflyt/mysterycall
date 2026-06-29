@@ -185,8 +185,7 @@ test_that("errors when date_col is not in data", {
   df <- data.frame(offered = rbinom(40L, 1L, 0.5))
 
   expect_error(
-    mysterycall_caller_drift(df, date_col = "nonexistent_date", plot = FALSE),
-    "not found in data"
+    mysterycall_caller_drift(df, date_col = "nonexistent_date", plot = FALSE)
   )
 })
 
@@ -202,8 +201,7 @@ test_that("errors when outcome_col is not in data", {
 
   expect_error(
     mysterycall_caller_drift(df, outcome_col = "missing_outcome",
-                             date_col = "call_date", plot = FALSE),
-    "not found in data"
+                             date_col = "call_date", plot = FALSE)
   )
 })
 

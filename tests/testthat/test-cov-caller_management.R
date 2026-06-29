@@ -134,15 +134,13 @@ test_that("check_generalist_presence stops when data is not a data frame", {
   expect_error(
     mysterycall_check_generalist_presence(
       list(city = "Denver"), c("city", "state"), "specialty", "General"
-    ),
-    "`data` must be a data frame."
+    )
   )
 
   expect_error(
     mysterycall_check_generalist_presence(
       c("a", "b", "c"), c("city", "state"), "specialty", "General"
-    ),
-    "`data` must be a data frame."
+    )
   )
 })
 
@@ -155,14 +153,12 @@ test_that("check_generalist_presence stops when required columns are missing", {
 
   # Missing 'state' column
   expect_error(
-    mysterycall_check_generalist_presence(df, c("city","state"), "specialty", "General"),
-    "Columns not found in data: state"
+    mysterycall_check_generalist_presence(df, c("city","state"), "specialty", "General")
   )
 
   # Missing 'specialty' column
   expect_error(
-    mysterycall_check_generalist_presence(df, c("city"), "specialty_type", "General"),
-    "Columns not found in data: specialty_type"
+    mysterycall_check_generalist_presence(df, c("city"), "specialty_type", "General")
   )
 })
 

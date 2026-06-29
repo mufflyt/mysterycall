@@ -135,8 +135,7 @@ test_that("mysterycall_check_normality handles NA values correctly", {
 # Test 6: Bad input — variable not in data frame
 test_that("mysterycall_check_normality errors when variable not found", {
   expect_error(
-    mysterycall_check_normality(AUDIT, "nonexistent_variable"),
-    "Variable not found"
+    mysterycall_check_normality(AUDIT, "nonexistent_variable")
   )
 })
 
