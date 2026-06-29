@@ -834,3 +834,167 @@ tyler_write_table_pdf <- function(...) {
               msg = paste0("tyler_write_table_pdf() is deprecated. Use mysterycall_write_table_pdf() instead."))
   mysterycall_write_table_pdf(...)
 }
+
+# ---- Stubs for functions documented in Rd but missing from code ----
+# Present only so R CMD check codoc does not warn about usage/code mismatch.
+
+#' @rdname mysterycall-deprecated
+process_and_save_isochrones <- function(input_file, chunk_size = 25, ...) {
+  stop("process_and_save_isochrones() has been removed. Use mysterymaps::mysterymaps_create_isochrones().", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker <- function(...) {
+  stop("progress_tracker() has been removed.", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker_start <- function(...) {
+  stop("progress_tracker_start() has been removed.", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker_finish <- function(...) {
+  stop("progress_tracker_finish() has been removed.", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker_fail <- function(...) {
+  stop("progress_tracker_fail() has been removed.", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker_update <- function(...) {
+  stop("progress_tracker_update() has been removed.", call. = FALSE)
+}
+
+#' @rdname mysterycall-deprecated
+progress_tracker_summary <- function(...) {
+  stop("progress_tracker_summary() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_assess_data_quality <- function(...) {
+  stop("tyler_assess_data_quality() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_calculate_overlap <- function(...) {
+  stop("tyler_calculate_overlap() has moved to mysterymaps. Use mysterymaps::mysterymaps_calculate_overlap().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_api_response <- function(...) {
+  stop("tyler_check_api_response() has been removed. Use mysterycall_check_api_response().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_data_completeness <- function(...) {
+  stop("tyler_check_data_completeness() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_dependencies <- function(...) {
+  stop("tyler_check_dependencies() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_no_data_loss <- function(...) {
+  stop("tyler_check_no_data_loss() has been removed. Use mysterycall_check_no_data_loss().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_no_limits <- function(...) {
+  stop("tyler_check_no_limits() has been removed. Use mysterycall_check_no_limits().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_check_normality <- function(...) {
+  stop("tyler_check_normality() has been removed. Use mysterycall_check_normality().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_clean_phase1 <- function(...) {
+  stop("tyler_clean_phase1() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_clean_phase2 <- function(...) {
+  stop("tyler_clean_phase2() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_clear_isochrone_cache <- function(...) {
+  stop("tyler_clear_isochrone_cache() has moved to mysterymaps. Use mysterymaps::mysterymaps_clear_isochrone_cache().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_create_formula <- function(...) {
+  stop("tyler_create_formula() has been removed. Use mysterycall_create_formula().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_create_isochrones <- function(...) {
+  stop("tyler_create_isochrones() has moved to mysterymaps. Use mysterymaps::mysterymaps_create_isochrones().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_download_file <- function(...) {
+  stop("tyler_download_file() has been removed. Use mysterycall_download_large_file().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_estimate_resources <- function(...) {
+  stop("tyler_estimate_resources() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_export_with_backup <- function(...) {
+  stop("tyler_export_with_backup() has been removed. Use mysterycall_export_with_backup().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_format_duration <- function(...) {
+  stop("tyler_format_duration() has been removed.", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_format_pct <- function(...) {
+  stop("tyler_format_pct() has been removed. Use mysterycall_format_pct().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_genderize <- function(...) {
+  stop("tyler_genderize() has been removed. Use mysterycall_genderize_physicians().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_geocode <- function(...) {
+  stop("tyler_geocode() has moved to mysterymaps. Use mysterymaps::mysterymaps_geocode().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_get_census_data <- function(...) {
+  stop("tyler_get_census_data() has been removed. Use mysterycall_get_census_data().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_get_clinician_data <- function(...) {
+  stop("tyler_get_clinician_data() has been removed. Use mysterycall_get_clinician_data().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_hrr <- function(...) {
+  stop("tyler_hrr() has moved to mysterymaps. Use mysterymaps::mysterymaps_hrr().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_hrr_maps <- function(...) {
+  stop("tyler_hrr_maps() has moved to mysterymaps. Use mysterymaps::mysterymaps_hrr_maps().", call. = FALSE)
+}
+
+#' @rdname tyler-deprecated
+tyler_isochrones_for_df <- function(...) {
+  stop("tyler_isochrones_for_df() has moved to mysterymaps. Use mysterymaps::mysterymaps_isochrones_for_df().", call. = FALSE)
+}
+
