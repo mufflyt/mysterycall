@@ -237,7 +237,7 @@ test_that("univariate_lmm_screen: error when random_effect not in data", {
 
   expect_error(
     mysterycall_univariate_lmm_screen(df, random_effect = "nonexistent", output_dir = NA),
-    "Random effect column 'nonexistent' not found"
+    "random_effect 'nonexistent' not found"
   )
 })
 

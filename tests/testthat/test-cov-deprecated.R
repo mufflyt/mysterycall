@@ -83,26 +83,14 @@ test_that("search_npi() rejects character vector of length > 1", {
   )
 })
 
-test_that("test_and_process_isochrones() throws removed error", {
+test_that("test_and_process_isochrones() stops, pointing to the mysterymaps package", {
   expect_error(
     mysterycall:::test_and_process_isochrones("dummy_file.csv"),
-    "removed"
+    "moved to the mysterymaps package"
   )
 })
-
-test_that("process_and_save_isochrones() throws removed error", {
-  expect_error(
-    mysterycall:::process_and_save_isochrones("dummy_file.csv"),
-    "removed"
-  )
-})
-
-test_that("process_and_save_isochrones() chunk_size parameter included in signature", {
-  expect_error(
-    mysterycall:::process_and_save_isochrones("dummy_file.csv", chunk_size = 50),
-    "removed"
-  )
-})
+# process_and_save_isochrones() was removed entirely (no shim) when the isochrone
+# workflow moved to the mysterymaps package, so it is no longer tested here.
 
 test_that("rename_columns_by_substring() emits deprecation warning", {
   test_df <- data.frame(old_name_1 = c(1, 2), old_name_2 = c(3, 4), stringsAsFactors = FALSE)

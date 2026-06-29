@@ -174,14 +174,34 @@ fire_shim <- function(name) {
   )
 }
 
-test_that("all deprecated shims emit a deprecation warning and forward", {
+# A deprecated shim either (a) emits a .Deprecated() warning and forwards, or
+# (b) stops outright when the functionality has moved to the mysterymaps
+# package (these wrappers were converted from warn-and-delegate to stop()).
+# Accept either signal.
+test_that("all deprecated shims warn or stop with a migration message", {
   for (name in deprecated_fns) {
     fn <- tryCatch(getFromNamespace(name, "mysterycall"), error = function(e) NULL)
     if (is.null(fn)) next
-    expect_warning(
-      suppressMessages(tryCatch(fn(), error = function(e) NULL)),
-      regexp = "deprecated",
-      info   = name
+
+    warned <- FALSE
+    stop_msg <- NULL
+    withCallingHandlers(
+      tryCatch(
+        suppressMessages(fn()),
+        error = function(e) stop_msg <<- conditionMessage(e)
+      ),
+      warning = function(w) {
+        if (grepl("deprecated|moved", conditionMessage(w), ignore.case = TRUE)) {
+          warned <<- TRUE
+        }
+        invokeRestart("muffleWarning")
+      }
     )
+
+    stopped_migration <- !is.null(stop_msg) &&
+      grepl("deprecated|moved to the mysterymaps package",
+            stop_msg, ignore.case = TRUE)
+
+    expect_true(warned || stopped_migration, info = name)
   }
 })
