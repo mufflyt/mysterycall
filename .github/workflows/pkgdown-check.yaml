@@ -1,0 +1,53 @@
+# Fast consistency check for the pkgdown reference index.
+#
+# pkgdown::check_pkgdown() verifies that every topic listed in _pkgdown.yml
+# resolves to a real documented topic/alias, and that every exported object is
+# included somewhere in the reference index. This catches reference drift
+# (e.g. functions removed/moved but still listed) in seconds — the failure
+# mode that broke the full pkgdown build during the mysterymaps refactor —
+# without building (or flakily segfaulting on) the whole site.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+name: pkgdown-check
+
+permissions: read-all
+
+jobs:
+  pkgdown-check:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libgit2-dev libgdal-dev libgeos-dev libproj-dev \
+            libudunits2-dev libfftw3-dev libtiff5-dev \
+            libjpeg-dev libpng-dev qpdf
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
+          cache: true
+
+      - name: Check pkgdown reference index
+        run: pkgdown::check_pkgdown()
+        shell: Rscript {0}

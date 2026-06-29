@@ -1,0 +1,67 @@
+# Keep generated documentation in sync with roxygen2 source comments.
+#
+# Regenerates NAMESPACE and man/*.Rd from the roxygen comments and commits any
+# changes back, so the generated docs can never silently drift from the source
+# (the failure mode that left missing aliases / a stale NAMESPACE during the
+# mysterymaps refactor). Self-healing rather than a hard gate: it commits the
+# fix instead of failing, and a second run finds no diff and stops.
+#
+# Derived from https://github.com/r-lib/actions/tree/v2/examples (document.yaml)
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+name: document
+
+permissions:
+  contents: write
+
+jobs:
+  document:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libgit2-dev libgdal-dev libgeos-dev libproj-dev \
+            libudunits2-dev libfftw3-dev libtiff5-dev \
+            libjpeg-dev libpng-dev qpdf
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::roxygen2
+          needs: roxygen2
+          cache: true
+
+      - name: Document
+        run: roxygen2::roxygenise()
+        shell: Rscript {0}
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add man/\* NAMESPACE
+          if git diff --staged --quiet; then
+            echo "Documentation already in sync."
+          else
+            git commit -m "docs: regenerate from roxygen comments"
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
+          fi
