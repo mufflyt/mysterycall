@@ -1,10 +1,10 @@
-# Build and deploy pkgdown site to GitHub Pages
-# Runs on push to main, PRs (build only), releases, and manual dispatch.
+# Build and deploy the pkgdown site to GitHub Pages.
+# Runs on push to main, releases, and manual dispatch only. Pull requests are
+# validated by the fast, segfault-immune `pkgdown-check` workflow instead, so a
+# flaky xml2 crash in the full site build can't block a PR.
 # Reference: https://github.com/r-lib/actions/tree/v2/examples#pkgdown
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   release:
     types: [published]
@@ -16,9 +16,8 @@ permissions:
   contents: write
 
 concurrency:
-  # PRs get their own group so each PR build is independent.
-  # All non-PR runs share one group so rapid pushes cancel the previous run.
-  group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+  # All runs share one group so rapid pushes cancel the previous build.
+  group: pkgdown-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

@@ -27,7 +27,12 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      # Check out the actual branch tip (not the detached PR-merge ref) so the
+      # regenerated docs can be committed and pushed back fast-forward.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-pandoc@v2
 
