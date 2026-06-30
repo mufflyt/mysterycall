@@ -21,18 +21,18 @@ mysterycall:::mysterycall_has_street_number("University Medical Center")
 
 }
 \seealso{
-Other address-normalization: 
-\code{\link{map_token}()},
-\code{\link{mysterycall_ascii_norm}()},
-\code{\link{mysterycall_caps}()},
-\code{\link{mysterycall_is_po_box}()},
-\code{\link{mysterycall_normalize_address_df}()},
-\code{\link{mysterycall_normalize_directionals}()},
-\code{\link{mysterycall_normalize_state}()},
-\code{\link{mysterycall_normalize_suffix}()},
-\code{\link{mysterycall_normalize_units}()},
-\code{\link{mysterycall_normalize_zip5}()},
-\code{\link{mysterycall_strip_suite}()}
+Other address-normalization:
+\code{\link[=map_token]{map_token()}},
+\code{\link[=mysterycall_ascii_norm]{mysterycall_ascii_norm()}},
+\code{\link[=mysterycall_caps]{mysterycall_caps()}},
+\code{\link[=mysterycall_is_po_box]{mysterycall_is_po_box()}},
+\code{\link[=mysterycall_normalize_address_df]{mysterycall_normalize_address_df()}},
+\code{\link[=mysterycall_normalize_directionals]{mysterycall_normalize_directionals()}},
+\code{\link[=mysterycall_normalize_state]{mysterycall_normalize_state()}},
+\code{\link[=mysterycall_normalize_suffix]{mysterycall_normalize_suffix()}},
+\code{\link[=mysterycall_normalize_units]{mysterycall_normalize_units()}},
+\code{\link[=mysterycall_normalize_zip5]{mysterycall_normalize_zip5()}},
+\code{\link[=mysterycall_strip_suite]{mysterycall_strip_suite()}}
 }
 \concept{address-normalization}
 \keyword{internal}

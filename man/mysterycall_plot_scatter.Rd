@@ -86,5 +86,11 @@ mysterycall_plot_scatter(
 \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for distribution density plots;
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots.
 
+Other visualization:
+\code{\link[=mysterycall_acceptance_waffle]{mysterycall_acceptance_waffle()}},
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}}
 }
 \concept{visualization}

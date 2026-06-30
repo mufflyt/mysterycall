@@ -60,13 +60,13 @@ mysterycall_dedup_by_insurance(df, output_dir = NA)
 }
 \seealso{
 \code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}} for duplicate-call detection;
-`mysterycall_sanity_checks()` for broader pre-analysis validation.
+\code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}} for broader pre-analysis validation.
 
-Other quality control: 
-\code{\link{mysterycall_clean_medicaid_col}()},
-\code{\link{mysterycall_flag_excluded_with_appointments}()},
-\code{\link{mysterycall_flag_exclusion_discrepancy}()},
-\code{\link{mysterycall_flag_included_na_appointments}()},
-\code{\link{mysterycall_flag_repeat_physicians}()}
+Other quality control:
+\code{\link[=mysterycall_clean_medicaid_col]{mysterycall_clean_medicaid_col()}},
+\code{\link[=mysterycall_flag_excluded_with_appointments]{mysterycall_flag_excluded_with_appointments()}},
+\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}},
+\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}},
+\code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}}
 }
 \concept{quality control}

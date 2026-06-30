@@ -28,10 +28,10 @@ mysterycall:::mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling
 \seealso{
 \code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 
-Other green-journal-spatial: 
-\code{\link{mysterycall_compose_map_density}()},
-\code{\link{mysterycall_crs_albers_conus}()},
-\code{\link{mysterycall_winsorize}()}
+Other green-journal-spatial:
+\code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}},
+\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}},
+\code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}
 }
 \concept{green-journal-spatial}
 \keyword{internal}

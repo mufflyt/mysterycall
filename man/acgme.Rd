@@ -166,16 +166,7 @@ print(acgme[1:3, 1:5])
 
 }
 \seealso{
-Other datasets: 
-\code{\link{acog_districts}},
-\code{\link{acog_presidents}},
-\code{\link{city_state_to_lat_long}},
-\code{\link{fips}},
-\code{\link{medicaid_expansion}},
-\code{\link{physicians}},
-\code{\link{taxonomy}}
-
-Other datasets: 
+Other datasets:
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},

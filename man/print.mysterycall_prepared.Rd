@@ -18,7 +18,7 @@
 Print method for mysterycall_prepared objects
 }
 \seealso{
-Other data-preparation: 
-\code{\link{mysterycall_prepare_calls}()}
+Other data-preparation:
+\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}
 }
 \concept{data-preparation}

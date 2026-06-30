@@ -67,7 +67,7 @@ mysterycall_validate_npi(df)
 validated NPIs; \code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}} for upstream NPI
 discovery.
 
-Other data-quality: 
-\code{\link{mysterycall_flag_date_outliers}()}
+Other data-quality:
+\code{\link[=mysterycall_flag_date_outliers]{mysterycall_flag_date_outliers()}}
 }
 \concept{data-quality}

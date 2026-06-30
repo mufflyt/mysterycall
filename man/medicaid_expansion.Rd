@@ -62,7 +62,7 @@ medicaid_expansion[!medicaid_expansion$expanded, c("state", "state_abb")]
 \code{\link{acog_districts}} for ACOG regional groupings that can
 be combined with expansion status for subgroup analyses.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

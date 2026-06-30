@@ -25,7 +25,7 @@ A named list with elements:
 \item{\code{n}}{Number of non-NA observations.}
 \item{\code{n_missing}}{Number of NA observations.}
 \item{\code{sentence}}{Character string:
-\code{"Median [column]: [median] (IQR: [q25]–[q75])."}}
+\code{"Median [column]: [median] (IQR: [q25]--[q75])."}}
 }
 }
 \description{
@@ -49,13 +49,13 @@ mysterycall_descriptive_stats(df, "wait")
 \seealso{
 \code{\link[=mysterycall_distribution_summary]{mysterycall_distribution_summary()}} for categorical summaries.
 
-Other descriptive helpers: 
-\code{\link{mysterycall_demographics_sentence}()},
-\code{\link{mysterycall_distribution_summary}()},
-\code{\link{mysterycall_facet_histogram}()},
-\code{\link{mysterycall_log_histogram}()},
-\code{\link{mysterycall_physicians_with_detail}()},
-\code{\link{mysterycall_scenario_summary}()},
-\code{\link{mysterycall_sensitivity_both_insurance}()}
+Other descriptive helpers:
+\code{\link[=mysterycall_demographics_sentence]{mysterycall_demographics_sentence()}},
+\code{\link[=mysterycall_distribution_summary]{mysterycall_distribution_summary()}},
+\code{\link[=mysterycall_facet_histogram]{mysterycall_facet_histogram()}},
+\code{\link[=mysterycall_log_histogram]{mysterycall_log_histogram()}},
+\code{\link[=mysterycall_physicians_with_detail]{mysterycall_physicians_with_detail()}},
+\code{\link[=mysterycall_scenario_summary]{mysterycall_scenario_summary()}},
+\code{\link[=mysterycall_sensitivity_both_insurance]{mysterycall_sensitivity_both_insurance()}}
 }
 \concept{descriptive helpers}

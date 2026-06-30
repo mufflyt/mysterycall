@@ -168,7 +168,7 @@ stopifnot(!"Age category" \%in\% names(cleaned3))
 retains PII columns; \code{\link[=mysterycall_reorder_by_freq]{mysterycall_reorder_by_freq()}} for the base-R
 frequency-ordering used as a \code{forcats} fallback.
 
-Other data utilities: 
-\code{\link{mysterycall_clean_data_keep_identifiers}()}
+Other data utilities:
+\code{\link[=mysterycall_clean_data_keep_identifiers]{mysterycall_clean_data_keep_identifiers()}}
 }
 \concept{data utilities}

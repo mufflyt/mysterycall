@@ -62,7 +62,7 @@ session temp directories via \code{\link{mysterycall_tempdir}}.}
 
 \item{steps}{Character vector.  Which analysis steps to run.  Any subset of
 \code{c("qc","dedup","clean_medicaid","demographics","scenarios",
-  "acceptance_rates","wait_times","poisson","sensitivity")}.
+"acceptance_rates","wait_times","poisson","sensitivity")}.
 Default runs all nine steps.}
 
 \item{verbose}{Logical.  If \code{TRUE} (default), emit progress messages

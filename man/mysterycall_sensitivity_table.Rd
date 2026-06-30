@@ -22,7 +22,7 @@ model is required.}
 \item{exposure_term}{Character scalar. The exact term name to extract from
 each model's coefficient table (e.g. \code{"insuranceMedicaid"},
 \code{"scenarioB"}). Must match the \code{term} column produced by the fitting
-function. When a model does not contain the term an em-dash (\code{"—"})
+function. When a model does not contain the term an em-dash (\code{"\\u2014"})
 is placed in that column.}
 
 \item{digits}{Integer. Number of decimal places for estimates and
@@ -42,7 +42,7 @@ A \code{data.frame} with columns:
 \item{\code{Characteristic}}{Row label: the exposure term (with metric type
 in parentheses), then optionally "Sample size" and "AIC".}
 \item{\verb{<model name>}}{One column per element of \code{models}, named by the
-list element name. The exposure row shows \code{"1.23 (0.98–1.54), p=0.071"}.
+list element name. The exposure row shows \code{"1.23 (0.98\\u20131.54), p=0.071"}.
 The footer rows show \code{"N=160"} and \code{"210.4"} respectively. An em-dash
 is used when a term is absent from a model.}
 }
@@ -61,13 +61,13 @@ This function is intentionally distinct from
 \code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}}, which compares overall model fit
 statistics (AIC, BIC, phi). Here the emphasis is on \strong{how the exposure
 effect estimate changes} as covariates are added or the analytic
-specification varies — the classic sensitivity/robustness check for a
+specification varies \u2014 the classic sensitivity/robustness check for a
 primary manuscript table.
 }
 \section{Cell format}{
 
 Each exposure-row cell follows the pattern:
-\preformatted{<estimate> (<ci_lower>–<ci_upper>), p=<p_value>}
+\preformatted{<estimate> (<ci_lower>\u2013<ci_upper>), p=<p_value>}
 where \code{estimate} is:
 \itemize{
 \item \strong{OR} for \code{mysterycall_logistic_model} (exponentiated log-odds)
@@ -93,7 +93,7 @@ and insert into the manuscript.
 }
 
 \examples{
-# ---- Build fake model objects with structure() — no lme4 required --------
+# ---- Build fake model objects with structure() \u2014 no lme4 required --------
 
 # Model 1: unadjusted logistic (only insurance)
 m1 <- structure(
@@ -193,28 +193,28 @@ print(tbl2)
 \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} for the negative binomial model;
 \code{\link[=mysterycall_lmm]{mysterycall_lmm()}} for the linear mixed model.
 
-Other manuscript: 
-\code{\link{mysterycall_combined_results_table}()},
-\code{\link{mysterycall_export_results_docx}()},
-\code{\link{mysterycall_flow_diagram}()},
-\code{\link{mysterycall_format_results_table}()},
-\code{\link{mysterycall_literature_table}()},
-\code{\link{mysterycall_materials_methods}()},
-\code{\link{mysterycall_methods_paragraph}()},
-\code{\link{mysterycall_model_comparison_table}()},
-\code{\link{mysterycall_multi_model_table}()},
-\code{\link{mysterycall_results_report}()},
-\code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_save_plot}()},
-\code{\link{mysterycall_strobe_checklist}()},
-\code{\link{mysterycall_strobe_flow}()},
-\code{\link{mysterycall_summarize_demographics}()},
-\code{\link{mysterycall_table2}()},
-\code{\link{print.mysterycall_materials_methods}()},
-\code{\link{print.mysterycall_model_comparison_table}()},
-\code{\link{print.mysterycall_multi_model_table}()},
-\code{\link{print.mysterycall_results_report}()},
-\code{\link{print.mysterycall_strobe_checklist}()},
-\code{\link{print.mysterycall_table2}()}
+Other manuscript:
+\code{\link[=mysterycall_combined_results_table]{mysterycall_combined_results_table()}},
+\code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}},
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}},
+\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
+\code{\link[=mysterycall_literature_table]{mysterycall_literature_table()}},
+\code{\link[=mysterycall_materials_methods]{mysterycall_materials_methods()}},
+\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
+\code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}},
+\code{\link[=mysterycall_multi_model_table]{mysterycall_multi_model_table()}},
+\code{\link[=mysterycall_results_report]{mysterycall_results_report()}},
+\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
+\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}},
+\code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}},
+\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}},
+\code{\link[=mysterycall_table2]{mysterycall_table2()}},
+\code{\link[=print.mysterycall_materials_methods]{print.mysterycall_materials_methods()}},
+\code{\link[=print.mysterycall_model_comparison_table]{print.mysterycall_model_comparison_table()}},
+\code{\link[=print.mysterycall_multi_model_table]{print.mysterycall_multi_model_table()}},
+\code{\link[=print.mysterycall_results_report]{print.mysterycall_results_report()}},
+\code{\link[=print.mysterycall_strobe_checklist]{print.mysterycall_strobe_checklist()}},
+\code{\link[=print.mysterycall_table2]{print.mysterycall_table2()}}
 }
 \concept{manuscript}

@@ -14,11 +14,6 @@ mysterycall_literature_table(
 )
 }
 \arguments{
-\item{prior_studies}{Data frame of published mystery-caller study results.
-Required columns: \code{author}, \code{year}, \code{specialty}, \code{insurance_comparison},
-\code{or}, \code{ci_lower}, \code{ci_upper}, \code{n}.  Optional columns: \code{setting},
-\code{outcome_label}, \code{notes}.}
-
 \item{current_study}{A named list (or \code{NULL}).  When non-\code{NULL}, a row
 labelled \code{"[Current study]"} is appended \strong{after} the prior studies but
 \strong{before} sorting.  Required list elements mirror the required columns of
@@ -122,28 +117,28 @@ result$sentence
 \seealso{
 \code{\link[=mysterycall_results_paragraph]{mysterycall_results_paragraph()}}, \code{\link[=mysterycall_forest_plot]{mysterycall_forest_plot()}}
 
-Other manuscript: 
-\code{\link{mysterycall_combined_results_table}()},
-\code{\link{mysterycall_export_results_docx}()},
-\code{\link{mysterycall_flow_diagram}()},
-\code{\link{mysterycall_format_results_table}()},
-\code{\link{mysterycall_materials_methods}()},
-\code{\link{mysterycall_methods_paragraph}()},
-\code{\link{mysterycall_model_comparison_table}()},
-\code{\link{mysterycall_multi_model_table}()},
-\code{\link{mysterycall_results_report}()},
-\code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_save_plot}()},
-\code{\link{mysterycall_sensitivity_table}()},
-\code{\link{mysterycall_strobe_checklist}()},
-\code{\link{mysterycall_strobe_flow}()},
-\code{\link{mysterycall_summarize_demographics}()},
-\code{\link{mysterycall_table2}()},
-\code{\link{print.mysterycall_materials_methods}()},
-\code{\link{print.mysterycall_model_comparison_table}()},
-\code{\link{print.mysterycall_multi_model_table}()},
-\code{\link{print.mysterycall_results_report}()},
-\code{\link{print.mysterycall_strobe_checklist}()},
-\code{\link{print.mysterycall_table2}()}
+Other manuscript:
+\code{\link[=mysterycall_combined_results_table]{mysterycall_combined_results_table()}},
+\code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}},
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}},
+\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
+\code{\link[=mysterycall_materials_methods]{mysterycall_materials_methods()}},
+\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
+\code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}},
+\code{\link[=mysterycall_multi_model_table]{mysterycall_multi_model_table()}},
+\code{\link[=mysterycall_results_report]{mysterycall_results_report()}},
+\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
+\code{\link[=mysterycall_sensitivity_table]{mysterycall_sensitivity_table()}},
+\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}},
+\code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}},
+\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}},
+\code{\link[=mysterycall_table2]{mysterycall_table2()}},
+\code{\link[=print.mysterycall_materials_methods]{print.mysterycall_materials_methods()}},
+\code{\link[=print.mysterycall_model_comparison_table]{print.mysterycall_model_comparison_table()}},
+\code{\link[=print.mysterycall_multi_model_table]{print.mysterycall_multi_model_table()}},
+\code{\link[=print.mysterycall_results_report]{print.mysterycall_results_report()}},
+\code{\link[=print.mysterycall_strobe_checklist]{print.mysterycall_strobe_checklist()}},
+\code{\link[=print.mysterycall_table2]{print.mysterycall_table2()}}
 }
 \concept{manuscript}

@@ -63,11 +63,11 @@ mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
 \code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}} for the \verb{>= 0} variant;
 \code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}} for the complementary check.
 
-Other quality control: 
-\code{\link{mysterycall_clean_medicaid_col}()},
-\code{\link{mysterycall_dedup_by_insurance}()},
-\code{\link{mysterycall_flag_exclusion_discrepancy}()},
-\code{\link{mysterycall_flag_included_na_appointments}()},
-\code{\link{mysterycall_flag_repeat_physicians}()}
+Other quality control:
+\code{\link[=mysterycall_clean_medicaid_col]{mysterycall_clean_medicaid_col()}},
+\code{\link[=mysterycall_dedup_by_insurance]{mysterycall_dedup_by_insurance()}},
+\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}},
+\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}},
+\code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}}
 }
 \concept{quality control}

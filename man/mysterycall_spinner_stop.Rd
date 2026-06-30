@@ -24,18 +24,18 @@ mysterycall:::mysterycall_spinner_stop(id, result = "done")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other progress: 
-\code{\link{mysterycall_multi_complete}()},
-\code{\link{mysterycall_multi_done}()},
-\code{\link{mysterycall_multi_progress}()},
-\code{\link{mysterycall_multi_step}()},
-\code{\link{mysterycall_multi_update}()},
-\code{\link{mysterycall_progress_bar}()},
-\code{\link{mysterycall_progress_done}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_map}()},
-\code{\link{mysterycall_progress_update}()},
-\code{\link{mysterycall_spinner_start}()}
+Other progress:
+\code{\link[=mysterycall_multi_complete]{mysterycall_multi_complete()}},
+\code{\link[=mysterycall_multi_done]{mysterycall_multi_done()}},
+\code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}},
+\code{\link[=mysterycall_multi_step]{mysterycall_multi_step()}},
+\code{\link[=mysterycall_multi_update]{mysterycall_multi_update()}},
+\code{\link[=mysterycall_progress_bar]{mysterycall_progress_bar()}},
+\code{\link[=mysterycall_progress_done]{mysterycall_progress_done()}},
+\code{\link[=mysterycall_progress_fail]{mysterycall_progress_fail()}},
+\code{\link[=mysterycall_progress_map]{mysterycall_progress_map()}},
+\code{\link[=mysterycall_progress_update]{mysterycall_progress_update()}},
+\code{\link[=mysterycall_spinner_start]{mysterycall_spinner_start()}}
 }
 \concept{progress}
 \keyword{internal}

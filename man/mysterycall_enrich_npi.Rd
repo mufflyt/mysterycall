@@ -69,9 +69,9 @@ enriched <- mysterycall_enrich_npi(roster)
 \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}}, \code{\link[=mysterycall_genderize]{mysterycall_genderize()}},
 \code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}}, \code{\link[=mysterycall_assign_region]{mysterycall_assign_region()}}
 
-Other npi: 
-\code{\link{mysterycall_get_clinician_data}()},
-\code{\link{mysterycall_search_and_process_npi}()},
-\code{\link{mysterycall_search_taxonomy}()}
+Other npi:
+\code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}},
+\code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}},
+\code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}}
 }
 \concept{npi}

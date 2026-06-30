@@ -124,7 +124,7 @@ print(result)
 \code{\link[=mysterycall_logistic_model]{mysterycall_logistic_model()}}, \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}},
 \code{\link[=mysterycall_auto_model]{mysterycall_auto_model()}}
 
-Other data-preparation: 
-\code{\link{print.mysterycall_prepared}()}
+Other data-preparation:
+\code{\link[=print.mysterycall_prepared]{print.mysterycall_prepared()}}
 }
 \concept{data-preparation}

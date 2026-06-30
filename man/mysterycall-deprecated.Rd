@@ -52,13 +52,6 @@
 \alias{validate_and_remove_invalid_npi}
 \alias{search_npi}
 \alias{test_and_process_isochrones}
-\alias{process_and_save_isochrones}
-\alias{progress_tracker}
-\alias{progress_tracker_start}
-\alias{progress_tracker_finish}
-\alias{progress_tracker_fail}
-\alias{progress_tracker_update}
-\alias{progress_tracker_summary}
 \title{Deprecated functions in mysterycall}
 \usage{
 arsenal_tables_write2word(...)
@@ -160,25 +153,9 @@ validate_and_remove_invalid_npi(...)
 search_npi(input_data, ...)
 
 test_and_process_isochrones(input_file, ...)
-
-process_and_save_isochrones(input_file, chunk_size = 25, ...)
-
-progress_tracker(...)
-
-progress_tracker_start(...)
-
-progress_tracker_finish(...)
-
-progress_tracker_fail(...)
-
-progress_tracker_update(...)
-
-progress_tracker_summary(...)
 }
 \arguments{
 \item{input_data}{A data frame or CSV path containing \code{first} and \code{last} columns.}
-
-\item{chunk_size}{Deprecated.}
 }
 \description{
 These names were used before \code{mysterycall} adopted a consistent \code{mysterycall_} prefix.

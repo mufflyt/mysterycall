@@ -42,7 +42,7 @@ Overall column appear last (\code{TRUE}) or first (\code{FALSE}, default)?}
 }
 \value{
 A \code{gtsummary} \code{tbl_summary} object. Chain additional modifiers
-(e.g. \code{\link[gtsummary:modify_caption]{gtsummary::modify_caption()}}, \code{\link[gtsummary:modify]{gtsummary::modify_spanning_header()}})
+(e.g. \code{\link[gtsummary:modify_caption]{gtsummary::modify_caption()}}, \code{\link[gtsummary:modify_spanning_header]{gtsummary::modify_spanning_header()}})
 before converting with \code{\link[gtsummary:as_gt]{gtsummary::as_gt()}} or \code{\link[gtsummary:as_flex_table]{gtsummary::as_flex_table()}}.
 }
 \description{
@@ -69,19 +69,19 @@ tbl
 \seealso{
 \code{\link[=mysterycall_table1]{mysterycall_table1()}}, \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
 
-Other table: 
-\code{\link{.t1_cat_pvalue}()},
-\code{\link{.t1_cont_pvalue}()},
-\code{\link{.t1_fmt_mean_sd}()},
-\code{\link{.t1_fmt_median_iqr}()},
-\code{\link{.t1_fmt_pct}()},
-\code{\link{.t1_fmt_pval}()},
-\code{\link{.t1_rows_categorical}()},
-\code{\link{.t1_rows_continuous}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table_overall}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_table1}()}
+Other table:
+\code{\link[=.t1_cat_pvalue]{.t1_cat_pvalue()}},
+\code{\link[=.t1_cont_pvalue]{.t1_cont_pvalue()}},
+\code{\link[=.t1_fmt_mean_sd]{.t1_fmt_mean_sd()}},
+\code{\link[=.t1_fmt_median_iqr]{.t1_fmt_median_iqr()}},
+\code{\link[=.t1_fmt_pct]{.t1_fmt_pct()}},
+\code{\link[=.t1_fmt_pval]{.t1_fmt_pval()}},
+\code{\link[=.t1_rows_categorical]{.t1_rows_categorical()}},
+\code{\link[=.t1_rows_continuous]{.t1_rows_continuous()}},
+\code{\link[=mysterycall_table1]{mysterycall_table1()}},
+\code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}},
+\code{\link[=mysterycall_write_arsenal_table]{mysterycall_write_arsenal_table()}},
+\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}},
+\code{\link[=print.mysterycall_table1]{print.mysterycall_table1()}}
 }
 \concept{table}

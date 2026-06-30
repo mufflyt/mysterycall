@@ -161,9 +161,9 @@ fpmrs_data <- mysterycall_search_taxonomy(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other npi: 
-\code{\link{mysterycall_enrich_npi}()},
-\code{\link{mysterycall_get_clinician_data}()},
-\code{\link{mysterycall_search_and_process_npi}()}
+Other npi:
+\code{\link[=mysterycall_enrich_npi]{mysterycall_enrich_npi()}},
+\code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}},
+\code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}}
 }
 \concept{npi}

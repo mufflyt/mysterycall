@@ -26,16 +26,15 @@ out  <- mysterycall_session_snapshot(file = snap, quiet = TRUE)
 print(out)
 }
 \seealso{
-Other reporting: 
-\code{\link{mysterycall_abstract_numbers}()},
-\code{\link{mysterycall_exclusion_summary}()},
-\code{mysterycall_geographic_map()} (in the mysterymaps package),
-\code{\link{mysterycall_irr_to_days}()},
-\code{\link{mysterycall_results_paragraph}()},
-\code{\link{mysterycall_session_snapshot}()},
-\code{\link{mysterycall_supplemental_tables}()},
-\code{\link{mysterycall_write_results_paragraph}()},
-\code{\link{print.mysterycall_abstract_numbers}()},
-\code{\link{print.mysterycall_irr_days}()}
+Other reporting:
+\code{\link[=mysterycall_abstract_numbers]{mysterycall_abstract_numbers()}},
+\code{\link[=mysterycall_exclusion_summary]{mysterycall_exclusion_summary()}},
+\code{\link[=mysterycall_irr_to_days]{mysterycall_irr_to_days()}},
+\code{\link[=mysterycall_results_paragraph]{mysterycall_results_paragraph()}},
+\code{\link[=mysterycall_session_snapshot]{mysterycall_session_snapshot()}},
+\code{\link[=mysterycall_supplemental_tables]{mysterycall_supplemental_tables()}},
+\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}},
+\code{\link[=print.mysterycall_abstract_numbers]{print.mysterycall_abstract_numbers()}},
+\code{\link[=print.mysterycall_irr_days]{print.mysterycall_irr_days()}}
 }
 \concept{reporting}

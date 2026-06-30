@@ -56,14 +56,14 @@ mysterycall:::mysterycall_merge_with_prefix(registry, abohns, by = "npi",
 warnings; \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for post-join specialty
 harmonization.
 
-Other data management: 
-\code{\link{mysterycall_check_duplicates}()},
-\code{\link{mysterycall_check_generalist_presence}()},
-\code{\link{mysterycall_extract_zip5}()},
-\code{\link{mysterycall_luhn_check}()},
-\code{\link{mysterycall_prepare_table1_vars}()},
-\code{\link{mysterycall_rename_columns}()},
-\code{\link{mysterycall_stratified_sample}()}
+Other data management:
+\code{\link[=mysterycall_check_duplicates]{mysterycall_check_duplicates()}},
+\code{\link[=mysterycall_check_generalist_presence]{mysterycall_check_generalist_presence()}},
+\code{\link[=mysterycall_extract_zip5]{mysterycall_extract_zip5()}},
+\code{\link[=mysterycall_luhn_check]{mysterycall_luhn_check()}},
+\code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}},
+\code{\link[=mysterycall_rename_columns]{mysterycall_rename_columns()}},
+\code{\link[=mysterycall_stratified_sample]{mysterycall_stratified_sample()}}
 }
 \concept{data management}
 \keyword{internal}

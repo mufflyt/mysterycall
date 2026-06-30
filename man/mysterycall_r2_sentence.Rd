@@ -11,7 +11,7 @@ mysterycall_r2_sentence(model, digits = 3, digits_pct = 1)
 compatible with \code{\link[performance:r2]{performance::r2()}}. Pure fixed-effects models (e.g.,
 \code{lm}, \code{glm}) are not supported and will trigger an error.}
 
-\item{digits}{Integer scalar. Number of decimal places for R² values in
+\item{digits}{Integer scalar. Number of decimal places for R\u00b2 values in
 the sentence. Default \code{3}.}
 
 \item{digits_pct}{Integer scalar. Number of decimal places for percentage
@@ -20,8 +20,8 @@ values in the sentence. Default \code{1}.}
 \value{
 A named list with:
 \describe{
-\item{\code{marginal_r2}}{Numeric. Marginal R² (fixed effects only).}
-\item{\code{conditional_r2}}{Numeric. Conditional R² (fixed + random effects).}
+\item{\code{marginal_r2}}{Numeric. Marginal R\u00b2 (fixed effects only).}
+\item{\code{conditional_r2}}{Numeric. Conditional R\u00b2 (fixed + random effects).}
 \item{\code{fixed_effects}}{Character vector of fixed-effect term names.}
 \item{\code{random_effects}}{Character vector of random-effect group names.}
 \item{\code{sentence}}{Character scalar. Full interpretive paragraph.}
@@ -29,7 +29,7 @@ A named list with:
 }
 \description{
 Extracts marginal (fixed-effects only) and conditional (fixed + random
-effects) R² values from a fitted mixed model using
+effects) R\u00b2 values from a fitted mixed model using
 \code{\link[performance:r2]{performance::r2()}}, then formats them into a manuscript-ready
 interpretive paragraph.
 }
@@ -45,14 +45,14 @@ cat(res$sentence)
 \code{\link[=mysterycall_random_effect_variance]{mysterycall_random_effect_variance()}} for ICC-based random-effect
 interpretation; \code{\link[performance:r2]{performance::r2()}} for the underlying computation.
 
-Other modeling helpers: 
-\code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_create_formula}()},
-\code{\link{mysterycall_interaction_screen}()},
-\code{\link{mysterycall_overdispersion_sentence}()},
-\code{\link{mysterycall_plot_interaction}()},
-\code{\link{mysterycall_random_effect_variance}()},
-\code{\link{mysterycall_univariate_lmm_screen}()},
-\code{\link{mysterycall_univariate_poisson_screen}()}
+Other modeling helpers:
+\code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}},
+\code{\link[=mysterycall_create_formula]{mysterycall_create_formula()}},
+\code{\link[=mysterycall_interaction_screen]{mysterycall_interaction_screen()}},
+\code{\link[=mysterycall_overdispersion_sentence]{mysterycall_overdispersion_sentence()}},
+\code{\link[=mysterycall_plot_interaction]{mysterycall_plot_interaction()}},
+\code{\link[=mysterycall_random_effect_variance]{mysterycall_random_effect_variance()}},
+\code{\link[=mysterycall_univariate_lmm_screen]{mysterycall_univariate_lmm_screen()}},
+\code{\link[=mysterycall_univariate_poisson_screen]{mysterycall_univariate_poisson_screen()}}
 }
 \concept{modeling helpers}

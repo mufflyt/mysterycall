@@ -138,7 +138,7 @@ stopifnot(nrow(kcleaned) == 2L)
 \seealso{
 \code{\link[=mysterycall_clean_data]{mysterycall_clean_data()}} for the PII-dropping variant.
 
-Other data utilities: 
-\code{\link{mysterycall_clean_data}()}
+Other data utilities:
+\code{\link[=mysterycall_clean_data]{mysterycall_clean_data()}}
 }
 \concept{data utilities}

@@ -50,7 +50,7 @@ misleading on log scales.}
 \item{title}{Character or \code{NULL}.  Plot title.  Defaults to
 \code{paste0("Distribution of log(", x_col, ") by ", facet_col)}.}
 
-\item{base}{Numeric.  Log base.  Must be \code{10} (uses \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_log10()}})
+\item{base}{Numeric.  Log base.  Must be \code{10} (uses \code{\link[ggplot2:scale_x_log10]{ggplot2::scale_x_log10()}})
 or \code{2} (uses \code{scale_x_continuous(trans = "log2")}).  Default \code{10}.}
 
 \item{monochrome}{Logical. If \code{TRUE}, apply a greyscale fill and
@@ -96,13 +96,13 @@ mysterycall_log_histogram(df, x_col = "days", facet_col = "insurance",
                            output_dir = NA)
 }
 \seealso{
-Other descriptive helpers: 
-\code{\link{mysterycall_demographics_sentence}()},
-\code{\link{mysterycall_descriptive_stats}()},
-\code{\link{mysterycall_distribution_summary}()},
-\code{\link{mysterycall_facet_histogram}()},
-\code{\link{mysterycall_physicians_with_detail}()},
-\code{\link{mysterycall_scenario_summary}()},
-\code{\link{mysterycall_sensitivity_both_insurance}()}
+Other descriptive helpers:
+\code{\link[=mysterycall_demographics_sentence]{mysterycall_demographics_sentence()}},
+\code{\link[=mysterycall_descriptive_stats]{mysterycall_descriptive_stats()}},
+\code{\link[=mysterycall_distribution_summary]{mysterycall_distribution_summary()}},
+\code{\link[=mysterycall_facet_histogram]{mysterycall_facet_histogram()}},
+\code{\link[=mysterycall_physicians_with_detail]{mysterycall_physicians_with_detail()}},
+\code{\link[=mysterycall_scenario_summary]{mysterycall_scenario_summary()}},
+\code{\link[=mysterycall_sensitivity_both_insurance]{mysterycall_sensitivity_both_insurance()}}
 }
 \concept{descriptive helpers}

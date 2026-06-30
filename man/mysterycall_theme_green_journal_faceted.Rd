@@ -33,9 +33,9 @@ ggplot(tracts_sf) +
 \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}} for single-panel maps;
 \code{\link[=mysterycall_theme_green_journal]{mysterycall_theme_green_journal()}} for non-spatial plots.
 
-Other green-journal-themes: 
-\code{\link{mysterycall_theme_green_journal}()},
-\code{\link{mysterycall_theme_green_journal_map}()}
+Other green-journal-themes:
+\code{\link[=mysterycall_theme_green_journal]{mysterycall_theme_green_journal()}},
+\code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 }
 \concept{green-journal-themes}
 \keyword{internal}

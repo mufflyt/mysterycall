@@ -76,5 +76,11 @@ mysterycall_plot_density(
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots;
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}} to export at journal resolution.
 
+Other visualization:
+\code{\link[=mysterycall_acceptance_waffle]{mysterycall_acceptance_waffle()}},
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}},
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}}
 }
 \concept{visualization}

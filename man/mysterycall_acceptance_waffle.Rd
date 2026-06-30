@@ -62,7 +62,7 @@ Each square represents one call; shading encodes Accepted vs. Declined.
 }
 \details{
 Inspired by Nicola Rennie (2024), "Five Charts You Can Make with the
-\code{waffle} Package", \url{https://nrennie.rbind.io/}.
+waffle Package", \url{https://nrennie.rbind.io/}.
 }
 \note{
 Requires the \pkg{waffle} package (GitHub-only -- not on CRAN) and
@@ -82,8 +82,11 @@ mysterycall_acceptance_waffle(acc, output_dir = NA)
 }
 }
 \seealso{
-Other visualization: 
-\code{\link{mysterycall_bw_theme}()},
-\code{\link{mysterycall_flowchart}()}
+Other visualization:
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}},
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}}
 }
 \concept{visualization}
