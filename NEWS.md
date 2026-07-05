@@ -1,6 +1,7 @@
 # mysterycall (development version)
 
 ## New functions
+- mysterycall_export_gsheet_caller_list(): write a caller list in Google Sheets import format (title row, ordered by state with matched pairs adjacent; CRLF + minimal quoting)
 - mysterycall_run_analysis(): full 9-step pipeline orchestrator
 - mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt tables
 - mysterycall_dedup_by_insurance(): deduplicate by phone x insurance
