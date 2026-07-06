@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
+- mysterycall_calculate_spatial_density(): compute local clinic concentration using vectorized Haversine distance
+- mysterycall_track_clinician_churn(): track longitudinal clinician staffing and annual churn rates at the practice level from NPPES history in DuckDB
+- mysterycall_get_acs_female_insurance(): query Census API for female insurance enrollment percentages at the census tract level
+- mysterycall_get_hrsa_ahrf(): retrieve county-level health resource and clinician metrics from HRSA AHRF
+- mysterycall_get_cms_enrollment(): extract monthly Medicare/Medicaid enrollment from CMS reports
 - mysterycall_run_analysis(): full 9-step pipeline orchestrator
 - mysterycall_irr_table(): publication-ready IRR gt table
 - mysterycall_model_gt(): publication-ready model gt table

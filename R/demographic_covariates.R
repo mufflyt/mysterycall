@@ -9,7 +9,7 @@
 #' @param zip_code Character. Five-digit ZIP code.
 #' @return A data frame containing annual staffing levels, entries, exits, and churn rates.
 #' @export
-mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code) {
+mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code, table_name = "temporal_obgyn_only_all_years") {
   if (!file.exists(db_path)) {
     stop("DuckDB database not found at the specified path.")
   }
@@ -20,14 +20,24 @@ mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code)
   addr_clean <- toupper(trimws(street_address))
   zip_clean <- substr(trimws(zip_code), 1, 5)
   
-  query <- sprintf("
-    SELECT year, npi, provider_first_name, provider_last_name
-    FROM nppes_history
-    WHERE UPPER(TRIM(practice_address_line1)) = '%s'
-      AND SUBSTR(practice_postal_code, 1, 5) = '%s'
-      AND entity_type_code = 1
-    ORDER BY year, npi
-  ", addr_clean, zip_clean)
+  if (table_name == "temporal_obgyn_only_all_years") {
+    query <- sprintf("
+      SELECT year, npi, first_name as provider_first_name, last_name as provider_last_name
+      FROM temporal_obgyn_only_all_years
+      WHERE UPPER(TRIM(practice_address_street)) = '%s'
+        AND SUBSTR(practice_address_zip, 1, 5) = '%s'
+      ORDER BY year, npi
+    ", addr_clean, zip_clean)
+  } else {
+    query <- sprintf("
+      SELECT year, npi, provider_first_name, provider_last_name
+      FROM nppes_history
+      WHERE UPPER(TRIM(practice_address_line1)) = '%s'
+        AND SUBSTR(practice_postal_code, 1, 5) = '%s'
+        AND entity_type_code = 1
+      ORDER BY year, npi
+    ", addr_clean, zip_clean)
+  }
   
   df <- DBI::dbGetQuery(con, query)
   if (nrow(df) == 0) {

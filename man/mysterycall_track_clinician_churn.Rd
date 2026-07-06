@@ -4,7 +4,12 @@
 \alias{mysterycall_track_clinician_churn}
 \title{Track Clinician Churn at a Specific Practice Location (NPPES History)}
 \usage{
-mysterycall_track_clinician_churn(db_path, street_address, zip_code)
+mysterycall_track_clinician_churn(
+  db_path,
+  street_address,
+  zip_code,
+  table_name = "temporal_obgyn_only_all_years"
+)
 }
 \arguments{
 \item{db_path}{Path to the DuckDB database (e.g. "/Volumes/MufflySamsung 1/nppes_historical.duckdb").}
