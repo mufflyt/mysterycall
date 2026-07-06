@@ -22,7 +22,7 @@ on the LMM - if the Q-Q plot shows a systematic S-shape or heavy tails,
 switch to a Poisson or negative-binomial GLMM.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   wait_days = round(rnorm(80, 21, 8)),

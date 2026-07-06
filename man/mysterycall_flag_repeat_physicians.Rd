@@ -63,7 +63,7 @@ result <- mysterycall_flag_repeat_physicians(df, output_dir = NA)
 result
 }
 \seealso{
-\code{mysterycall_sanity_checks()} for broader pre-analysis checks.
+\code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}} for broader pre-analysis checks.
 
 Other quality control: 
 \code{\link{mysterycall_clean_medicaid_col}()},

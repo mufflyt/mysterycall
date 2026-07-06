@@ -90,7 +90,7 @@ individually via \code{\link[=mysterycall_combined_results_table]{mysterycall_co
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, and \code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}}.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   wait    = rpois(60, 21),

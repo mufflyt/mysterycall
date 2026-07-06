@@ -32,7 +32,7 @@ A named list containing:
 \item{\code{p_value}}{Numeric. Shapiro-Wilk p-value.}
 \item{\code{w_statistic}}{Numeric. Shapiro-Wilk W statistic.}
 \item{\code{is_count}}{Logical. \code{TRUE} if all non-missing values are
-non-negative integers — heuristic for count outcomes.}
+non-negative integers -- heuristic for count outcomes.}
 \item{\code{mean}, \code{sd}}{Numeric scalars (present when \code{is_normal = TRUE}).}
 \item{\code{median}, \code{iqr}}{Numeric scalars (present when \code{is_normal = FALSE}).}
 \item{\code{interpretation}}{Character scalar. A single manuscript-ready
@@ -43,7 +43,7 @@ Side effects: emits a histogram + density plot and a Q-Q plot.
 }
 \description{
 Checks the normality of a variable using the Shapiro-Wilk test, returns
-summary statistics, and—crucially—generates a manuscript-ready
+summary statistics, and--crucially--generates a manuscript-ready
 \verb{$interpretation} sentence that identifies count data and recommends
 Poisson regression when appropriate.
 }
@@ -55,7 +55,7 @@ When the data are \strong{not normally distributed} and \strong{consist of count
 \emph{"The data is not normally distributed (Shapiro-Wilk W = X, p = Y). Plus it
 is count data. t-test assumes that data is normally distributed, and
 comparing the means of count data is also not appropriate. We can check the
-incidence rate ratio (IRR) for comparison of outcome among the categories
+incidence rate ratio (IRR) for comparison of \link{outcome} among the categories
 of \link{group}. Better to use Poisson regression."}
 }
 

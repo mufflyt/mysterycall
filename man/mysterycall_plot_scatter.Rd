@@ -62,7 +62,7 @@ before plotting.
 This function generates a scatter plot designed for mystery caller studies, allowing for the visualization of waiting times or similar outcomes across different categories, such as insurance types. The function supports transformations on the y-axis, custom jitter, and colors each category in the x-axis using the \code{viridis} color palette. The plot is automatically displayed and saved with a specified resolution.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
   business_days_until_appointment = c(1.5, 2.0, 2.8, 1.9, 2.4, 2.6, 2.1, 2.7, 3.0)
@@ -86,5 +86,11 @@ mysterycall_plot_scatter(
 \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for distribution density plots;
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots.
 
+Other visualization: 
+\code{\link{mysterycall_acceptance_waffle}()},
+\code{\link{mysterycall_bw_theme}()},
+\code{\link{mysterycall_flowchart}()},
+\code{\link{mysterycall_plot_density}()},
+\code{\link{mysterycall_plot_line}()}
 }
 \concept{visualization}

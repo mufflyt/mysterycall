@@ -25,7 +25,7 @@ metrics for the current step.
 Complete current step with timing
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
 mysterycall:::mysterycall_log_step("Step 1")
 mysterycall:::mysterycall_log_step_complete(n_success = 90, n_total = 100)

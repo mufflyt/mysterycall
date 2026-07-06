@@ -69,7 +69,7 @@ exponential scale are returned for convenient forest-plot input, even though
 the underlying model is linear (not Poisson).
 }
 \examples{
-\dontshow{if (requireNamespace("lmerTest", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lmerTest", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(1)
 df <- data.frame(
   business_days_until_appointment = rpois(60, 10),

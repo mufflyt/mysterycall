@@ -39,7 +39,7 @@ Invisibly returns the generated ggplot object.
 Plot the distribution of female age groups
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   mysterycall_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
 \dontshow{\}) # examplesIf}
 }

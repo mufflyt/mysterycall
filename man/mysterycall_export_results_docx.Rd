@@ -46,7 +46,7 @@ Both \code{flextable} and \code{officer} are in the package Suggests field.
 Install them with \code{install.packages(c("flextable", "officer"))}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <- data.frame(
   Term = c("Medicaid", "Uninsured"),
   IRR  = c("1.28", "0.81"),

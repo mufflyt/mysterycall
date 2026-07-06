@@ -95,7 +95,7 @@ quasi-Poisson standard errors for inference.
 }
 
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(1978)
 df <- data.frame(
   wait_days = rpois(40, lambda = 18),

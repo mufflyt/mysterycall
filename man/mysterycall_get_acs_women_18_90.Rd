@@ -39,7 +39,7 @@ All MOE values are at 90\% confidence level (Census standard).
 For both sexes in one call, use \code{\link{mysterycall_get_acs_adults_18_90}}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 co_women <- mysterycall_get_acs_women_18_90(year = 2022, states = "CO")
 west_coast <- mysterycall_get_acs_women_18_90(year = 2022, states = c("CA", "OR", "WA"))
 \dontshow{\}) # examplesIf}

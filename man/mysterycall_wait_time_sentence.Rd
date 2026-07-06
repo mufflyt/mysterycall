@@ -35,7 +35,7 @@ model. \code{NULL} defaults to the first level alphabetically.}
 \value{
 A named list:
 \describe{
-\item{\code{sentence}}{Character scalar — the full manuscript paragraph.}
+\item{\code{sentence}}{Character scalar \u2014 the full manuscript paragraph.}
 \item{\code{overall_stats}}{Named list: \code{median}, \code{q1}, \code{q3} (across all rows).}
 \item{\code{group_stats}}{Tibble from \code{\link[=mysterycall_wait_time_by_group]{mysterycall_wait_time_by_group()}}.}
 \item{\code{p_values}}{Named numeric vector of formatted p-values (one per

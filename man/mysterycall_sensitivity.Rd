@@ -72,7 +72,7 @@ zero-wait observations. Returns a combined table comparing IRRs across
 subsets so the stability of the primary result can be assessed.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   wait    = rpois(80, 18),

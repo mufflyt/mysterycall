@@ -34,7 +34,7 @@ Invisibly returns the path to the generated PDF file.
 Generate an overall table summarizing the demographics of the Table 1.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Generate the overall table
 mysterycall_table_overall("data/Table1.rds", "output_tables")
 \dontshow{\}) # examplesIf}

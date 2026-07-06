@@ -79,7 +79,7 @@ insurance group, after accounting for physician-level clustering.
 }
 
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   offered   = rbinom(80, 1L, 0.7),

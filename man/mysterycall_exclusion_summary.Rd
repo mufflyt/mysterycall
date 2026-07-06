@@ -148,7 +148,6 @@ result3$total   # unique providers, not raw call rows
 
 Other reporting: 
 \code{\link{mysterycall_abstract_numbers}()},
-\code{mysterycall_geographic_map()} (in the mysterymaps package),
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_session_snapshot}()},

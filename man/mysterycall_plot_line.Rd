@@ -56,7 +56,7 @@ shown via \code{geom_point}.
 This function creates a line plot using ggplot2 with options for transforming the y-axis, grouping lines, and saving the plot with a specified resolution. The plot can be saved in both TIFF and PNG formats with automatic filename generation.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
@@ -77,5 +77,11 @@ mysterycall_plot_line(
 \code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}} for jittered point plots;
 \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for density distribution plots.
 
+Other visualization: 
+\code{\link{mysterycall_acceptance_waffle}()},
+\code{\link{mysterycall_bw_theme}()},
+\code{\link{mysterycall_flowchart}()},
+\code{\link{mysterycall_plot_density}()},
+\code{\link{mysterycall_plot_scatter}()}
 }
 \concept{visualization}

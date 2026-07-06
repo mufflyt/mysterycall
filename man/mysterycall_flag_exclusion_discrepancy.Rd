@@ -74,7 +74,7 @@ result
 }
 \seealso{
 \code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}} for duplicate-entry checks;
-\code{mysterycall_sanity_checks()} for broader pre-analysis validation.
+\code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}} for broader pre-analysis validation.
 
 Other quality control: 
 \code{\link{mysterycall_clean_medicaid_col}()},

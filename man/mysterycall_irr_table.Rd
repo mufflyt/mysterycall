@@ -18,11 +18,11 @@ mysterycall_irr_table(
 \item{irr_data}{A data frame or tibble with at least the following columns
 (exact names are detected flexibly):
 \itemize{
-\item \code{term} \strong{or} \code{level} — row label for each contrast.
-\item \code{irr} — point estimate (incidence rate ratio).
-\item \code{ci_lower} — lower bound of the confidence interval.
-\item \code{ci_upper} — upper bound of the confidence interval.
-\item \code{p_value} \strong{or} \code{p_value_fmt} — numeric p-value \strong{or} a
+\item \code{term} \strong{or} \code{level} -- row label for each contrast.
+\item \code{irr} -- point estimate (incidence rate ratio).
+\item \code{ci_lower} -- lower bound of the confidence interval.
+\item \code{ci_upper} -- upper bound of the confidence interval.
+\item \code{p_value} \strong{or} \code{p_value_fmt} -- numeric p-value \strong{or} a
 pre-formatted character string. When both are present \code{p_value} is used
 for star assignment and \code{p_value_fmt} for display.
 }}
@@ -54,7 +54,7 @@ Formats a tibble of IRR estimates (typically the \verb{$irr_table} slot from
 with a combined "IRR (95\% CI)" column and optional significance stars.
 }
 \details{
-\strong{Column detection} — the function looks for these column names in order:
+\strong{Column detection} -- the function looks for these column names in order:
 \itemize{
 \item Label: \code{"term"}, then \code{"level"}.
 \item P-value (numeric, for stars): \code{"p_value"}, then attempts to parse
@@ -63,7 +63,7 @@ with a combined "IRR (95\% CI)" column and optional significance stars.
 \code{p_value} rounded to three decimal places.
 }
 
-\strong{Significance stars} — assigned from the numeric p-value:\tabular{ll}{
+\strong{Significance stars} -- assigned from the numeric p-value:\tabular{ll}{
    p \tab Stars \cr
    < 0.001 \tab \verb{***} \cr
    < 0.01 \tab \verb{**} \cr
@@ -72,7 +72,7 @@ with a combined "IRR (95\% CI)" column and optional significance stars.
 }
 
 
-\strong{Bold rows} — rows where \code{p_value < 0.05} are styled with bold text via
+\strong{Bold rows} -- rows where \code{p_value < 0.05} are styled with bold text via
 \code{\link[gt:tab_style]{gt::tab_style()}}.
 }
 \examples{

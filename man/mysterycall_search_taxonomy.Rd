@@ -142,7 +142,7 @@ depending on registry load. Results are cached in-memory per session when
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # National search (limited to 1200 records per taxonomy):
 go_data <- mysterycall_search_taxonomy("Gynecologic Oncology")
 

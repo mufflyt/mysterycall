@@ -24,7 +24,7 @@ Thin wrapper around \code{\link[sjPlot:plot_model]{sjPlot::plot_model()}} with \
 ggplot object that can be further customised with standard ggplot2 layers.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mysterycall_plot_sjplot_interaction(fit,
   terms = c("insurance", "gender"),
   title = "Insurance x Gender interaction"

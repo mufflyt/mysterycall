@@ -164,7 +164,6 @@ result2$abstract_sentence
 
 Other reporting: 
 \code{\link{mysterycall_exclusion_summary}()},
-mysterycall_geographic_map() (in the mysterymaps package),
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},
 \code{\link{mysterycall_session_snapshot}()},

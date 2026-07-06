@@ -29,7 +29,7 @@ Helper to catch silent API failures that return empty or partial results.
 Use after any API call where you expect a specific number of results.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Expect exactly 100 geocoding results
 coords <- geocode(addresses)
 mysterycall:::mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")

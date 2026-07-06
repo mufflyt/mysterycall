@@ -16,7 +16,7 @@ projection used by USGS and the US Census Bureau. Use with
 default plate carree projection on national choropleths.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +

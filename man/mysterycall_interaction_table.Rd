@@ -50,7 +50,7 @@ likelihood-ratio test (LRT) by refitting the model without the interaction,
 and returns a tidy list suitable for manuscript reporting.
 }
 \details{
-The LRT refits the model with \code{lme4::update()} dropping only the
+The LRT refits the model with \code{update()} dropping only the
 \code{var1:var2} term, then calls \code{\link[stats:anova]{stats::anova()}} on the two models.  If the
 refit fails for any reason (e.g. convergence, missing \code{lme4}, or a \code{NULL}
 \verb{$model} in a fake object) the LRT p-value is set to \code{NA} with a warning

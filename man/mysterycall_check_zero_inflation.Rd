@@ -41,7 +41,7 @@ underestimate the probability of zero-wait appointments.}
 }
 
 \examples{
-\dontshow{if (requireNamespace("DHARMa", quietly = TRUE) && requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("DHARMa", quietly = TRUE) && requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   wait = rpois(60, lambda = 15),

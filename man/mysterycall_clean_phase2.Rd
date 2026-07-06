@@ -64,7 +64,7 @@ wall-clock moment. To force UTC filenames, wrap the call:
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Assuming an input path to a CSV file
 input_path <- "path_to_your_data.csv"
 required_strings <- c("physician_information", "able_to_contact_office")

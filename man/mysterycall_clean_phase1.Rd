@@ -165,7 +165,7 @@ O(n) in number of rows. String normalization via \code{janitor::clean_names()} a
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mysterycall)
 file_path <- "/path/to/your/input/file.xls"
 phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files

@@ -82,7 +82,7 @@ rosters; expect ~2-5 s for 500 rows.
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 input_data <- readr::read_csv("/path/to/your/input/file.csv")
 output_directory <- "/path/to/your/output/directory"
 lab_assistant_names <- c("Label1", "Label2", "Label3")

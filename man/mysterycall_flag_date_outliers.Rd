@@ -87,7 +87,7 @@ out <- mysterycall_flag_date_outliers(df, "call_date", group_col = "wave")
 out[, c("wave", "call_date", "expected_date", "date_flag")]
 }
 \seealso{
-\code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}}, \code{mysterycall_sanity_checks()}
+\code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}}, \code{\link[=mysterycall_sanity_checks]{mysterycall_sanity_checks()}}
 
 Other data-quality: 
 \code{\link{mysterycall_validate_npi}()}

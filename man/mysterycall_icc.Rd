@@ -53,7 +53,7 @@ where \eqn{\sigma^2_u} is the physician random-intercept variance,
 approximation), and \eqn{\psi_1} is the trigamma function.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(1)
 df <- data.frame(
   wait = rpois(60, 21),

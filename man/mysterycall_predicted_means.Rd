@@ -51,7 +51,7 @@ Uses \code{\link[emmeans:emmeans]{emmeans::emmeans()}} when available (preferred
 \code{\link[marginaleffects:predictions]{marginaleffects::predictions()}} as a fallback.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE) && requireNamespace("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE) && requireNamespace("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(7)
 df <- data.frame(
   wait = rpois(60, 21),

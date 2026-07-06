@@ -52,7 +52,7 @@ analysis) and lays out exclusion boxes on the right side with dashed arrows.
 Optionally appends a subspecialty distribution table in the final node.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mysterycall_plot_inclexcl(
   counts = c(
     Identified = 612,

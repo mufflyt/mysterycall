@@ -150,7 +150,7 @@ Budget ~5-30 s per taxonomy term depending on network latency.
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 results <- mysterycall_run_workflow(
   phase1_data = data.frame(
     names = "Jane Doe", practice_name = "Clinic A",

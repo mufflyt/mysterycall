@@ -34,7 +34,7 @@ Creates an animated progress bar with ETA, percentage, and custom formatting.
 Uses the cli package for cross-platform compatibility and beautiful output.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 pb_id <- mysterycall_progress_bar("Processing", total = 10)
 for (i in 1:10) mysterycall_progress_update(pb_id)
 mysterycall:::mysterycall_progress_done(pb_id)

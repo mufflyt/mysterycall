@@ -58,7 +58,7 @@ Geometry columns (\code{sfc}) are automatically dropped from the CSV export.
 Output directories are created recursively as needed.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + mysterycall_theme_green_journal()
 mysterycall_save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png

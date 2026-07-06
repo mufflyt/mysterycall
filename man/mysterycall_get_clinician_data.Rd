@@ -35,7 +35,7 @@ and reconciled via \code{\link[=mysterycall_reconcile_specialty]{mysterycall_rec
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 \dontshow{\}) # examplesIf}
 }

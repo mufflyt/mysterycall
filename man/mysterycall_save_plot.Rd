@@ -44,7 +44,7 @@ A thin wrapper around \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} that:
 }
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 p <- ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg)) + ggplot2::geom_point()
 mysterycall_save_plot(p, "figures/mpg_vs_weight.png")
 \dontshow{\}) # examplesIf}

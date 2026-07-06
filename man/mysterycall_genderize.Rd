@@ -89,7 +89,7 @@ study date rather than relying on the auto-generated timestamp.
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 result <- mysterycall_genderize("sample.csv")
 result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame directly
 \dontshow{\}) # examplesIf}

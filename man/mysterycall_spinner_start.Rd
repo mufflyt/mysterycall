@@ -18,7 +18,7 @@ Spinner ID (a \code{cli} progress bar ID, or \code{NULL} if cli is unavailable).
 Shows an animated spinner for operations where total is unknown.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
 mysterycall:::mysterycall_spinner_stop(id)
 \dontshow{\}) # examplesIf}

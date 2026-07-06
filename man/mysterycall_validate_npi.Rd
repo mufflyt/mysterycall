@@ -56,7 +56,7 @@ Expect < 0.1 s for 10,000 rows.
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 df <- data.frame(npi = c("1234567893", "0000000000", NA_character_))
 mysterycall_validate_npi(df)
 \dontshow{\}) # examplesIf}

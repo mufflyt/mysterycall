@@ -104,7 +104,7 @@ All substantive workflow logic lives in the underlying function; any bug
 fixed there is automatically inherited here.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 results <- mysterycall_run_workflow_logged(
   phase1_data = phase1,
   phase2_data = phase2,

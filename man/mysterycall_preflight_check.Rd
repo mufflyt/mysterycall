@@ -83,7 +83,7 @@ report$issues         # list of issue records with $severity and $message
 }
 
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Basic preflight check
 mysterycall_preflight_check(
   input_data = "physicians.csv",

@@ -38,7 +38,7 @@ This function retrieves Census data of all state block groups by looping
 over the specified list of state FIPS codes.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 us_fips_list <- c("01", "02")
 census_df <- mysterycall_get_census_data(us_fips_list)
 \dontshow{\}) # examplesIf}

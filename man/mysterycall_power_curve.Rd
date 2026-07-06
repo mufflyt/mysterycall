@@ -64,7 +64,7 @@ ggplot2 figure showing how power grows with sample size under each
 IRR scenario.
 }
 \examples{
-\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 pc <- mysterycall_power_curve(
   n_range   = seq(20, 60, by = 20),
   irr_values = c(0.70, 0.80),

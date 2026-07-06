@@ -39,6 +39,9 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 \seealso{
 Other visualization: 
 \code{\link{mysterycall_acceptance_waffle}()},
-\code{\link{mysterycall_flowchart}()}
+\code{\link{mysterycall_flowchart}()},
+\code{\link{mysterycall_plot_density}()},
+\code{\link{mysterycall_plot_line}()},
+\code{\link{mysterycall_plot_scatter}()}
 }
 \concept{visualization}

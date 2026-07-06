@@ -31,7 +31,7 @@ Arranges a choropleth map above a marginal density/histogram plot in a
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
   mysterycall_theme_green_journal_map()

@@ -103,7 +103,7 @@ workflows.  Failed searches are automatically retried (up to 3 attempts)
 with exponential backoff.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 df <- data.frame(first = "John", last = "Doe")
 results <- mysterycall_search_and_process_npi(df)
 \dontshow{\}) # examplesIf}

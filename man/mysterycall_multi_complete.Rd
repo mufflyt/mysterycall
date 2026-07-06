@@ -18,7 +18,7 @@ mysterycall_multi_complete(tracker, result = NULL)
 Complete current step in multi-progress tracker
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
 mysterycall:::mysterycall_multi_step(tracker, 1, total = 5)
 mysterycall:::mysterycall_multi_complete(tracker, result = "ok")

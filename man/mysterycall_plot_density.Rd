@@ -51,7 +51,7 @@ filenames of the form \verb{<file_prefix>_<timestamp>.tiff/.png}.
 This function generates a density plot designed for mystery caller studies, allowing for the visualization of waiting times or similar outcomes across different categories, such as insurance types. The function supports transformations on the x-axis and custom labels.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial"), each = 3),
   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
@@ -76,5 +76,11 @@ mysterycall_plot_density(
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots;
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}} to export at journal resolution.
 
+Other visualization: 
+\code{\link{mysterycall_acceptance_waffle}()},
+\code{\link{mysterycall_bw_theme}()},
+\code{\link{mysterycall_flowchart}()},
+\code{\link{mysterycall_plot_line}()},
+\code{\link{mysterycall_plot_scatter}()}
 }
 \concept{visualization}

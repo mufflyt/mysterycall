@@ -20,7 +20,7 @@ Utility wrapper around \code{arsenal::write2pdf} to save a table object
 as a PDF document.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mysterycall_write_table_pdf(overall_summary, "table.pdf")
 \dontshow{\}) # examplesIf}
 }

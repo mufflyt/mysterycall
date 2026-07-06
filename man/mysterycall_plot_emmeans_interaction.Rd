@@ -29,7 +29,7 @@ point-and-error-bar ggplot2 figure. Suitable for displaying interactions
 from Poisson or linear mixed models.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mysterycall_plot_emmeans_interaction(
   model    = fit,
   specs    = c("insurance", "gender"),

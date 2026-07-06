@@ -69,7 +69,7 @@ When the number of possible pairs exceeds \code{max_pairs}, a random sample of
 \code{max_pairs} pairs is drawn with \code{set.seed(42)}.
 }
 \examples{
-\dontshow{if (requireNamespace("lmerTest", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("lmerTest", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(1)
 df <- data.frame(
   business_days_until_appointment = rpois(60, 10),

@@ -19,7 +19,7 @@ Creates a progress tracker for workflows with multiple major steps.
 Shows overall progress plus current step progress.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
 mysterycall:::mysterycall_multi_step(tracker, 1, total = 5)
 for (i in 1:5) mysterycall_multi_update(tracker)

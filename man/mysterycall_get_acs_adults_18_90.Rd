@@ -45,7 +45,7 @@ This function is more efficient than calling \code{mysterycall_get_acs_women_18_
 separately as it makes a single Census API call.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 co_adults <- mysterycall_get_acs_adults_18_90(year = 2022, states = "CO")
 west_coast <- mysterycall_get_acs_adults_18_90(year = 2022, states = c("CA", "OR", "WA"))
 \dontshow{\}) # examplesIf}
