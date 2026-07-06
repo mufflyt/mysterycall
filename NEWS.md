@@ -3,6 +3,7 @@
 ## New functions
 - mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
 - mysterycall_calculate_spatial_density(): compute local clinic concentration using vectorized Haversine distance
+- mysterycall_calculate_hq_distance(): compute Haversine distance to private equity platform regional headquarters for instrumental variable analysis
 - mysterycall_track_clinician_churn(): track longitudinal clinician staffing and annual churn rates at the practice level from NPPES history in DuckDB
 - mysterycall_get_acs_female_insurance(): query Census API for female insurance enrollment percentages at the census tract level
 - mysterycall_get_hrsa_ahrf(): retrieve county-level health resource and clinician metrics from HRSA AHRF
