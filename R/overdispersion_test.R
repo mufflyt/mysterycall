@@ -155,14 +155,34 @@ mysterycall_overdispersion_test <- function(
 
   # ---- verbal interpretation -------------------------------------------------
   if (phi < 1.0) {
-    interpretation <- sprintf(
-      "Underdispersion detected (phi=%s). Model may overfit.",
-      phi_fmt
-    )
-    recommendation <- paste(
-      "Inspect the model for unnecessary predictors or",
-      "consider a quasi-Poisson specification."
-    )
+    # Detect if the model is Negative Binomial or mixed-effects (GLMM)
+    is_nb <- inherits(model, "mysterycall_nb_model") ||
+             (inherits(model, "glmmTMB") && grepl("nbinom", tryCatch(stats::family(model)$family, error = function(e) ""))) ||
+             inherits(model, "negbin")
+    is_mixed <- inherits(model, c("glmmTMB", "merMod", "lmerMod", "glmerMod"))
+
+    if (is_nb) {
+      interpretation <- sprintf(
+        "Low residual dispersion detected (phi=%s). This is normal for Negative Binomial models where overdispersion has been successfully absorbed.",
+        phi_fmt
+      )
+      recommendation <- "No action required; the Negative Binomial model successfully resolved dispersion."
+    } else if (is_mixed) {
+      interpretation <- sprintf(
+        "Low residual dispersion detected (phi=%s). This is a common artifact in mixed-effects models as random intercepts absorb variance.",
+        phi_fmt
+      )
+      recommendation <- "No action required; verify model fit using AIC comparisons, but residual underdispersion is expected in GLMMs."
+    } else {
+      interpretation <- sprintf(
+        "Underdispersion detected (phi=%s). Model may overfit.",
+        phi_fmt
+      )
+      recommendation <- paste(
+        "Inspect the model for unnecessary predictors or",
+        "consider a quasi-Poisson specification."
+      )
+    }
     category <- "underdispersion"
 
   } else if (phi < mild_t) {
