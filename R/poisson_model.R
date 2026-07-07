@@ -153,8 +153,15 @@ mysterycall_poisson_model <- function(data,
     }
   }
 
-  # -- Complete-case filtering ---------------------------------------------------
-  model_cols <- unique(c(outcome, predictors, random_intercept, offset_col))
+  # Decompose any interaction/formula terms to actual column names for complete-case filtering
+  decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
+    if (grepl("[:\\*\\+\\|\\(\\)]", term)) {
+      tryCatch(all.vars(stats::as.formula(paste("~", term))), error = function(e) term)
+    } else {
+      term
+    }
+  })))
+  model_cols <- unique(c(outcome, decomposed_predictors, random_intercept, offset_col))
   n_before   <- nrow(data)
   cc_mask    <- stats::complete.cases(data[, model_cols, drop = FALSE])
   data_cc    <- data[cc_mask, , drop = FALSE]

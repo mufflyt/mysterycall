@@ -45,11 +45,10 @@ mysterycall_model_comparison_table <- function(models,
   if (!is.list(models) || is.null(names(models)) || length(models) < 2L)
     stop("`models` must be a named list with at least 2 elements.", call. = FALSE)
 
-  valid_classes <- c("mysterycall_poisson_model", "mysterycall_nb_model")
+  valid_classes <- c("mysterycall_poisson_model", "mysterycall_nb_model", "glmmTMB", "glm", "lm", "merMod", "lmerMod", "glmerMod")
   bad <- vapply(models, function(m) !inherits(m, valid_classes), logical(1L))
   if (any(bad))
-    stop("All elements of `models` must be `mysterycall_poisson_model` or ",
-         "`mysterycall_nb_model`. Bad elements: ",
+    stop("All elements of `models` must be `mysterycall_poisson_model`, `mysterycall_nb_model`, or standard model objects (glmmTMB, glm, lm, merMod). Bad elements: ",
          paste(names(models)[bad], collapse = ", "), ".", call. = FALSE)
 
   criterion <- match.arg(criterion)
@@ -58,38 +57,79 @@ mysterycall_model_comparison_table <- function(models,
   rows <- lapply(names(models), function(nm) {
     m <- models[[nm]]
 
-    family_str <- if (inherits(m, "mysterycall_nb_model")) "Negative Binomial" else "Poisson"
+    # Detect if it's a wrapper or a bare model
+    is_wrapper <- inherits(m, c("mysterycall_poisson_model", "mysterycall_nb_model"))
+    fit <- if (is_wrapper) m$model else m
 
-    n_obs <- tryCatch({
-      if (!is.null(m$n_obs)) {
-        as.integer(m$n_obs)
-      } else if (!is.null(m$model)) {
-        fit <- m$model
-        as.integer(tryCatch(nrow(fit@frame),
-          error = function(e) tryCatch(fit$modelInfo$nobs,
-            error = function(e2) NA_integer_)))
+    # Detect family
+    family_str <- if (is_wrapper) {
+      if (inherits(m, "mysterycall_nb_model")) "Negative Binomial" else "Poisson"
+    } else {
+      if (inherits(fit, "glmmTMB")) {
+        fit$modelInfo$family$family
+      } else if (inherits(fit, "glm") || inherits(fit, "glmerMod")) {
+        stats::family(fit)$family
+      } else if (inherits(fit, "lm") || inherits(fit, "lmerMod")) {
+        "gaussian"
       } else {
-        NA_integer_
+        class(fit)[1L]
+      }
+    }
+
+    # Number of observations
+    n_obs <- tryCatch({
+      if (is_wrapper && !is.null(m$n_obs)) {
+        as.integer(m$n_obs)
+      } else {
+        as.integer(stats::nobs(fit))
+      }
+    }, error = function(e) {
+      tryCatch({
+        as.integer(nrow(stats::model.frame(fit)))
+      }, error = function(e2) NA_integer_)
+    })
+
+    # Number of parameters
+    n_params <- tryCatch({
+      if (is_wrapper && !is.null(m$irr_table)) {
+        as.integer(nrow(m$irr_table))
+      } else {
+        as.integer(attr(stats::logLik(fit), "df"))
       }
     }, error = function(e) NA_integer_)
 
-    n_params <- tryCatch(nrow(m$irr_table), error = function(e) NA_integer_)
-
+    # AIC & BIC
     aic_val <- tryCatch({
-      if (!is.null(m$aic)) as.numeric(m$aic)
-      else AIC(m$model)
+      if (is_wrapper && !is.null(m$aic)) as.numeric(m$aic)
+      else as.numeric(stats::AIC(fit))
     }, error = function(e) NA_real_)
 
     bic_val <- tryCatch({
-      if (!is.null(m$bic)) as.numeric(m$bic)
-      else BIC(m$model)
+      if (is_wrapper && !is.null(m$bic)) as.numeric(m$bic)
+      else as.numeric(stats::BIC(fit))
     }, error = function(e) NA_real_)
 
-    phi_val   <- tryCatch({
-      v <- m$overdispersion; if (is.null(v)) NA_real_ else as.numeric(v)[[1L]]
+    # Pearson Dispersion (Phi)
+    phi_val <- tryCatch({
+      if (is_wrapper && !is.null(m$overdispersion)) {
+        as.numeric(m$overdispersion)[[1L]]
+      } else {
+        sum(stats::residuals(fit, type = "pearson")^2, na.rm = TRUE) / stats::df.residual(fit)
+      }
     }, error = function(e) NA_real_)
+
+    # Theta parameter
     theta_val <- tryCatch({
-      v <- m$theta; if (is.null(v)) NA_real_ else as.numeric(v)[[1L]]
+      if (is_wrapper && !is.null(m$theta)) {
+        as.numeric(m$theta)[[1L]]
+      } else if (inherits(fit, "glmmTMB")) {
+        # glmmTMB uses sigma(fit) to return theta for negative binomial
+        as.numeric(stats::sigma(fit))
+      } else if (inherits(fit, "negbin")) {
+        as.numeric(fit$theta)
+      } else {
+        NA_real_
+      }
     }, error = function(e) NA_real_)
 
     data.frame(

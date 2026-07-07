@@ -74,11 +74,16 @@ validate_required_columns <- function(x, required, name = "data") {
   checkmate::assert_data_frame(x, .var.name = "x")
   checkmate::assert_character(required, null.ok = TRUE, any.missing = FALSE, .var.name = "required")
   checkmate::assert_string(name, min.chars = 1, .var.name = "name")
-  if (is.null(required) || !length(required)) {
-    return(invisible(x))
-  }
+  # Decompose any formula-like terms (e.g., containing :, *, +, |) into individual variable names
+  decomposed_required <- unique(unlist(lapply(required, function(term) {
+    if (grepl("[:\\*\\+\\|\\(\\)]", term)) {
+      tryCatch(all.vars(stats::as.formula(paste("~", term))), error = function(e) term)
+    } else {
+      term
+    }
+  })))
 
-  missing_required <- setdiff(required, names(x))
+  missing_required <- setdiff(decomposed_required, names(x))
   if (length(missing_required)) {
     available_cols <- names(x)
 
