@@ -1,3 +1,18 @@
+# Helper utility to filter data to complete cases, handling interaction terms properly
+clean_complete_cases <- function(data, outcome, predictors, extra_cols = NULL) {
+  decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
+    if (grepl("[:\\*\\+\\|\\(\\)]", term)) {
+      tryCatch(stats::all.vars(stats::as.formula(paste("~", term))), error = function(e) term)
+    } else {
+      term
+    }
+  })))
+  model_cols <- unique(c(outcome, decomposed_predictors, extra_cols))
+  model_cols <- model_cols[model_cols %in% names(data)]
+  cc_mask <- stats::complete.cases(data[, model_cols, drop = FALSE])
+  data[cc_mask, , drop = FALSE]
+}
+
 #' Locked Temporal Validation for Count/Binary Models
 #'
 #' Evaluates model performance by training on historical data (before a temporal threshold)
@@ -15,6 +30,9 @@ mysterycall_temporal_validation <- function(data, outcome, predictors, time_col,
   if (!requireNamespace("glmmTMB", quietly = TRUE)) {
     stop("Package 'glmmTMB' is required.", call. = FALSE)
   }
+  
+  # Clean complete cases first to avoid NA mismatch issues in predict/metrics
+  data <- clean_complete_cases(data, outcome, predictors, time_col)
   
   # Split data
   train_data <- data[data[[time_col]] <= threshold, ]
@@ -135,6 +153,9 @@ mysterycall_provider_split_simulation <- function(data, outcome, predictors, clu
     stop("Package 'glmmTMB' is required.", call. = FALSE)
   }
   
+  # Clean complete cases first to avoid NA mismatch issues in predict/metrics
+  data <- clean_complete_cases(data, outcome, predictors, cluster_col)
+  
   # Get unique clusters
   clusters <- unique(data[[cluster_col]])
   n_clusters <- length(clusters)
@@ -202,6 +223,9 @@ mysterycall_provider_split_simulation <- function(data, outcome, predictors, clu
 #' @export
 mysterycall_bootstrap_predictor_stability <- function(data, outcome, predictors, n_boot = 100, 
                                                       p_threshold = 0.05, family = "binomial") {
+  # Clean complete cases first to avoid NA mismatch issues in bootstrap iterations
+  data <- clean_complete_cases(data, outcome, predictors)
+  
   n_obs <- nrow(data)
   selection_counts <- setNames(rep(0L, length(predictors)), predictors)
   
