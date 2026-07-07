@@ -24,6 +24,7 @@ BugReports: https://github.com/mufflyt/mysterycall/issues
 Depends:
     R (>= 4.1.0)
 Imports:
+    bizdays,
     generics,
     ggplot2,
     gt,
@@ -51,7 +52,6 @@ Suggests:
     arsenal,
     arrow,
     beepr,
-    bizdays,
     caret,
     DiagrammeR,
     censusapi,
