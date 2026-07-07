@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
 - mysterycall_calculate_spatial_density(): compute local clinic concentration using vectorized Haversine distance
+- mysterycall_model_zero_wait(): model same-day appointments (zero wait times) via binomial logistic regression
+- mysterycall_compare_count_families(): compare Poisson, linear NB, and quadratic NB mixed models via AIC/BIC
+- mysterycall_model_nonlinear(): fit natural cubic splines or polynomial terms for continuous predictors and plot curves
 - mysterycall_calculate_hq_distance(): compute Haversine distance to private equity platform regional headquarters for instrumental variable analysis
 - mysterycall_track_clinician_churn(): track longitudinal clinician staffing and annual churn rates at the practice level from NPPES history in DuckDB
 - mysterycall_get_acs_female_insurance(): query Census API for female insurance enrollment percentages at the census tract level
