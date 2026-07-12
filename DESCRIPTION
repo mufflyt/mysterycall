@@ -76,6 +76,7 @@ Suggests:
     memoise,
     mice,
     mockery,
+    naniar,
     flextable,
     officer,
     openxlsx,
