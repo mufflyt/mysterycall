@@ -155,6 +155,12 @@ reference:
       - mysterycall_plot_census_age
       - mysterycall_get_acs_adults_18_90
       - mysterycall_get_acs_women_18_90
+      - mysterycall_get_payer_mix
+      - mysterycall_get_county_provider_counts
+      - mysterycall_summarize_county_enrollment
+      - mysterycall_add_medicaid_expansion
+      - mysterycall_read_kff_hhi
+      - mysterycall_add_hhi
 
   - title: "Data Quality and Validation"
     desc: >

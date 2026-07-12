@@ -1,6 +1,22 @@
 # mysterycall (development version)
 
 ## New functions
+
+### Environment / market covariates
+- mysterycall_get_payer_mix(): county payer mix from ACS S2701 + coverage-type
+  tables (B27002/B27003/C27006/C27007/B27001) — Private / Public / Medicaid /
+  Medicare / Uninsured shares with propagated 90% MOEs
+- mysterycall_get_county_provider_counts(): distinct providers per county FIPS,
+  with optional per-100k density and specialty breakdown
+- mysterycall_summarize_county_enrollment(): aggregate county Medicare/Medicaid
+  enrollment (e.g. from mysterycall_get_cms_enrollment()) into a Medicaid-to-
+  Medicare ratio and DOJ/FTC-style access category
+- mysterycall_add_medicaid_expansion(): join ACA Medicaid-expansion status by
+  state, with an as-of-call-date flag that correctly classifies NC (2023-12-01)
+  and SD (2023-07-01) calls made before those states expanded
+- mysterycall_read_kff_hhi() / mysterycall_add_hhi(): KFF per-MSA market-
+  concentration HHI as a covariate (hhi, hhi_k = hhi/1000, DOJ/FTC hhi_cat)
+
 - mysterycall_run_analysis(): full 9-step pipeline orchestrator
 - mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt tables
 - mysterycall_dedup_by_insurance(): deduplicate by phone x insurance

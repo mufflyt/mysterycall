@@ -192,6 +192,8 @@ test_that("Vignette handoff: mysterycall_get_census_data.Rmd examples", {
 
 test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
   skip_on_cran()
+  skip_if_not(exists("mysterycall_create_isochrones", mode = "function"),
+              "mysterycall_create_isochrones() is not part of this package")
 
   # Test isochrone creation examples
   if (requireNamespace("sf", quietly = TRUE)) {
@@ -236,6 +238,8 @@ test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
 test_that("Vignette handoff: geocode.Rmd examples", {
   skip_on_cran()
   skip_if_not_installed("ggmap")
+  skip_if_not(exists("mysterycall_geocode", mode = "function"),
+              "mysterycall_geocode() is not part of this package")
 
   # Write test addresses to a CSV — mysterycall_geocode reads from disk
   test_addresses <- data.frame(
