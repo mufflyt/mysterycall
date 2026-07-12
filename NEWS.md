@@ -1,6 +1,23 @@
 # mysterycall (development version)
 
 ## New functions
+
+### Environment / market covariates
+- mysterycall_get_payer_mix(): county payer mix from ACS S2701 + coverage-type
+  tables (B27002/B27003/C27006/C27007/B27001) — Private / Public / Medicaid /
+  Medicare / Uninsured shares with propagated 90% MOEs
+- mysterycall_get_county_provider_counts(): distinct providers per county FIPS,
+  with optional per-100k density and specialty breakdown
+- mysterycall_summarize_county_enrollment(): aggregate county Medicare/Medicaid
+  enrollment (e.g. from mysterycall_get_cms_enrollment()) into a Medicaid-to-
+  Medicare ratio and DOJ/FTC-style access category
+- mysterycall_add_medicaid_expansion(): join ACA Medicaid-expansion status by
+  state, with an as-of-call-date flag that correctly classifies NC (2023-12-01)
+  and SD (2023-07-01) calls made before those states expanded
+- mysterycall_read_kff_hhi() / mysterycall_add_hhi(): KFF per-MSA market-
+  concentration HHI as a covariate (hhi, hhi_k = hhi/1000, DOJ/FTC hhi_cat)
+
+### Covariate lookups (from consolidation / isochrones)
 - mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
 - mysterycall_calculate_spatial_density(): compute local clinic concentration using vectorized Haversine distance
 - mysterycall_model_zero_wait(): model same-day appointments (zero wait times) via binomial logistic regression
@@ -11,6 +28,7 @@
 - mysterycall_get_acs_female_insurance(): query Census API for female insurance enrollment percentages at the census tract level
 - mysterycall_get_hrsa_ahrf(): retrieve county-level health resource and clinician metrics from HRSA AHRF
 - mysterycall_get_cms_enrollment(): extract monthly Medicare/Medicaid enrollment from CMS reports
+
 - mysterycall_run_analysis(): full 9-step pipeline orchestrator
 - mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt tables
 - mysterycall_dedup_by_insurance(): deduplicate by phone x insurance

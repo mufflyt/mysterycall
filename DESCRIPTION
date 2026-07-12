@@ -90,6 +90,7 @@ Suggests:
     survival,
     testthat,
     tidycensus,
+    tigris,
     tidyr,
     covr,
     forcats,
