@@ -27,6 +27,13 @@ NULL
 #' @param exclusion_reasons Named character vector. Names `"contact"` and/or
 #'   `"complete"` map to reason strings appended below the exclusion count
 #'   (e.g. `c(contact = "Retired or wrong specialty", complete = "No answer")`).
+#' @param label_identified,label_contacted,label_completed,label_analysed
+#'   Character. Box headers for the four stages (the count is appended
+#'   automatically). Override to repurpose the diagram for a non-mystery-caller
+#'   pipeline (e.g. `label_completed = "Target subspecialists"`). Defaults are
+#'   the mystery-caller wording.
+#' @param label_excluded Character. Header for the right-side exclusion boxes.
+#'   Default `"Excluded"`.
 #' @param title Character. Plot title. Default `"Study Flow Diagram"`.
 #' @param output_path Character or `NULL`. File path to save the plot via
 #'   [ggplot2::ggsave()]. Extension determines format (`.png`, `.pdf`, etc.).
@@ -62,6 +69,11 @@ mysterycall_flow_diagram <- function(n_identified,
                                       n_excluded_complete = NULL,
                                       n_analysed,
                                       exclusion_reasons   = NULL,
+                                      label_identified    = "Physicians identified",
+                                      label_contacted     = "Physicians contacted",
+                                      label_completed     = "Calls completed",
+                                      label_analysed      = "Physicians analysed",
+                                      label_excluded      = "Excluded",
                                       title               = "Study Flow Diagram",
                                       output_path         = NULL,
                                       width               = 8,
@@ -145,7 +157,7 @@ mysterycall_flow_diagram <- function(n_identified,
 
   .add_exclusion <- function(p, y_branch, n_excl, reason) {
     if (is.null(n_excl)) return(p)
-    lbl <- .box_label("Excluded", n_excl, reason)
+    lbl <- .box_label(label_excluded, n_excl, reason)
     p <- p +
       ggplot2::annotate("segment",
                          x = cx, xend = ex - bw,
@@ -162,7 +174,7 @@ mysterycall_flow_diagram <- function(n_identified,
 
   # --- Box 1: identified -------------------------------------------------------
   p <- .add_box(p, ypos["identified"],
-                .box_label("Physicians identified", n_identified))
+                .box_label(label_identified, n_identified))
 
   # exclusion after identification
   excl_y1 <- (ypos["identified"] + ypos["contacted"]) / 2
@@ -176,7 +188,7 @@ mysterycall_flow_diagram <- function(n_identified,
     from_y <- if (!is.null(n_excluded_contact)) excl_y1 - bh else ypos["identified"]
     p <- .add_arrow_down(p, from_y, ypos["contacted"])
     p <- .add_box(p, ypos["contacted"],
-                  .box_label("Physicians contacted", n_contacted))
+                  .box_label(label_contacted, n_contacted))
   }
 
   # exclusion after contact / before complete
@@ -197,7 +209,7 @@ mysterycall_flow_diagram <- function(n_identified,
     }
     p <- .add_arrow_down(p, from_y2, ypos["completed"])
     p <- .add_box(p, ypos["completed"],
-                  .box_label("Calls completed", n_completed))
+                  .box_label(label_completed, n_completed))
   }
 
   # --- Box 4: analysed ---------------------------------------------------------
@@ -212,7 +224,7 @@ mysterycall_flow_diagram <- function(n_identified,
   }
   p <- .add_arrow_down(p, prev_y, ypos["analysed"])
   p <- .add_box(p, ypos["analysed"],
-                .box_label("Physicians analysed", n_analysed))
+                .box_label(label_analysed, n_analysed))
 
   if (!is.null(output_path)) {
     ggplot2::ggsave(output_path, plot = p, width = width, height = height)
