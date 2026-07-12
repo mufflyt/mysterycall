@@ -70,6 +70,14 @@ NULL
 #' @param label_included Character. Box label for the included set.
 #' @param label_logistic Character. Box label for the logistic analysis.
 #' @param label_waittime Character. Box label for the wait-time analysis.
+#' @param label_excl_calldate Character. Header for the first (pre-call-date)
+#'   exclusion box; the count is appended automatically. Override to repurpose
+#'   the diagram for a non-mystery-caller pipeline. Default
+#'   `"No call date recorded"`.
+#' @param label_excl_screen Character. Header for the middle screening-exclusion
+#'   box. Default `"Excluded"`.
+#' @param label_excl_waittime Character. Header for the wait-time exclusion box.
+#'   Default `"No appointment date\n(not offered or pending)"`.
 #' @param title Character. Plot title.
 #' @param output_path Character or `NULL`. File path to save the diagram
 #'   (`.png`, `.tiff`, `.pdf`, `.svg`).  When `NULL` (default), no file is
@@ -125,6 +133,9 @@ mysterycall_strobe_flow <- function(
     label_included   = "Scheduling discussion possible\n(exclusion code = 0)",
     label_logistic   = "Logistic analysis\nOutcome: appointment offered (yes/no)",
     label_waittime   = "Wait-time analysis\nOutcome: days to appointment",
+    label_excl_calldate = "No call date recorded",
+    label_excl_screen   = "Excluded",
+    label_excl_waittime = "No appointment date\n(not offered or pending)",
     title            = "STROBE Flow Diagram - Mystery-Caller Study",
     output_path      = NULL,
     width            = 9,
@@ -225,17 +236,16 @@ mysterycall_strobe_flow <- function(
                           sprintf("  - %s: %d", code_labels[[code]], as.integer(n)))
     }
     excl_screen_lbl <- paste0(
-      "Excluded (n = ", .fmt_n(excl_total_screen), ")\n",
+      label_excl_screen, " (n = ", .fmt_n(excl_total_screen), ")\n",
       paste(detail_lines, collapse = "\n")
     )
   } else {
-    excl_screen_lbl <- sprintf("Excluded\n(n = %s)", .fmt_n(excl_total_screen))
+    excl_screen_lbl <- sprintf("%s\n(n = %s)", label_excl_screen, .fmt_n(excl_total_screen))
   }
 
   excl_waittime <- n_logistic - n_waittime
-  excl_ncd_lbl  <- sprintf("No call date recorded\n(n = %s)", .fmt_n(excl_no_calldate))
-  excl_wt_lbl   <- sprintf("No appointment date\n(not offered or pending)\n(n = %s)",
-                            .fmt_n(excl_waittime))
+  excl_ncd_lbl  <- sprintf("%s\n(n = %s)", label_excl_calldate, .fmt_n(excl_no_calldate))
+  excl_wt_lbl   <- sprintf("%s\n(n = %s)", label_excl_waittime, .fmt_n(excl_waittime))
 
   # ---- Layout -----------------------------------------------------------------
   # Layout - all coordinates in [0,1] (y=1 top, y=0 bottom).
