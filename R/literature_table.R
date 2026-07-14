@@ -1,9 +1,3 @@
-#' Literature comparison table for mystery-caller study Discussion sections
-#'
-#' @name mysterycall_literature_table
-NULL
-
-
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
@@ -79,18 +73,16 @@ NULL
 #'
 #' @param prior_studies A data frame of published odds-ratio estimates with the
 #'   following **required** columns:
-#'   \describe{
-#'     \item{`author`}{Character. Citation label, e.g. `"Bisgaier & Rhodes 2011"`.}
-#'     \item{`year`}{Integer. Publication year.}
-#'     \item{`specialty`}{Character. Clinical specialty studied.}
-#'     \item{`insurance_comparison`}{Character. Comparison label, e.g.
-#'       `"Medicaid vs. Private"`.}
-#'     \item{`or`}{Numeric. Odds ratio point estimate.}
-#'     \item{`ci_lower`}{Numeric. Lower bound of the 95 % CI.}
-#'     \item{`ci_upper`}{Numeric. Upper bound of the 95 % CI.}
-#'     \item{`n`}{Integer. Total calls made in that study.}
-#'   }
-#'   Optional columns — included in the formatted table when present:
+#'   - `author`: Character. Citation label, e.g. `"Bisgaier & Rhodes 2011"`.
+#'   - `year`: Integer. Publication year.
+#'   - `specialty`: Character. Clinical specialty studied.
+#'   - `insurance_comparison`: Character. Comparison label, e.g. `"Medicaid vs. Private"`.
+#'   - `or`: Numeric. Odds ratio point estimate.
+#'   - `ci_lower`: Numeric. Lower bound of the 95 % CI.
+#'   - `ci_upper`: Numeric. Upper bound of the 95 % CI.
+#'   - `n`: Integer. Total calls made in that study.
+#'
+#'   Optional columns -- included in the formatted table when present:
 #'   `setting`, `outcome_label`, `notes`.
 #' @param current_study A named list (or `NULL`).  When non-`NULL`, a row
 #'   labelled `"[Current study]"` is appended **after** the prior studies but

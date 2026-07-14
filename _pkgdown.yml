@@ -64,6 +64,7 @@ reference:
       - census_summaries
       - city_state_to_lat_long
       - fips
+      - kff_hhi
       - physicians
       - taxonomy
 

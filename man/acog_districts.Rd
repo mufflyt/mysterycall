@@ -43,6 +43,7 @@ Other datasets:
 \code{\link{acog_presidents}},
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
+\code{\link{kff_hhi}},
 \code{\link{medicaid_expansion}},
 \code{\link{physicians}},
 \code{\link{taxonomy}}

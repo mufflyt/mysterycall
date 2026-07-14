@@ -2,7 +2,7 @@
 % Please edit documentation in R/literature_table.R
 \name{mysterycall_literature_table}
 \alias{mysterycall_literature_table}
-\title{Literature comparison table for mystery-caller study Discussion sections}
+\title{Build a literature comparison table of prior mystery-caller study ORs}
 \usage{
 mysterycall_literature_table(
   prior_studies,
@@ -14,6 +14,22 @@ mysterycall_literature_table(
 )
 }
 \arguments{
+\item{prior_studies}{A data frame of published odds-ratio estimates with the
+following \strong{required} columns:
+\itemize{
+\item \code{author}: Character. Citation label, e.g. \code{"Bisgaier & Rhodes 2011"}.
+\item \code{year}: Integer. Publication year.
+\item \code{specialty}: Character. Clinical specialty studied.
+\item \code{insurance_comparison}: Character. Comparison label, e.g. \code{"Medicaid vs. Private"}.
+\item \code{or}: Numeric. Odds ratio point estimate.
+\item \code{ci_lower}: Numeric. Lower bound of the 95 \% CI.
+\item \code{ci_upper}: Numeric. Upper bound of the 95 \% CI.
+\item \code{n}: Integer. Total calls made in that study.
+}
+
+Optional columns -- included in the formatted table when present:
+\code{setting}, \code{outcome_label}, \code{notes}.}
+
 \item{current_study}{A named list (or \code{NULL}).  When non-\code{NULL}, a row
 labelled \code{"[Current study]"} is appended \strong{after} the prior studies but
 \strong{before} sorting.  Required list elements mirror the required columns of
