@@ -1,26 +1,48 @@
 #' Retrieve State-Level Medicaid-to-Medicare Fee Index Ratios
 #'
-#' Returns the Kaiser Family Foundation (KFF) Medicaid-to-Medicare fee index ratio
-#' for a vector of state abbreviations. The index represents the ratio of Medicaid
-#' reimbursement to Medicare reimbursement for primary care and specialty services.
+#' Looks up the Kaiser Family Foundation (KFF) Medicaid-to-Medicare fee index for
+#' a vector of state abbreviations. The index is the ratio of what a state's
+#' Medicaid program pays to what Medicare pays for the same services; a value
+#' below 1 means Medicaid reimburses below Medicare. Values are read from the
+#' packaged [medicaid_fee_index] dataset (2024, All Services; all 50 states + DC)
+#' so the function and the data cannot drift apart.
 #'
-#' @param states Character vector of two-letter state abbreviations (e.g. c("FL", "NJ", "PA")).
-#' @return A numeric vector of fee index ratios. Missing or invalid states default to 0.65 (national average).
+#' @param states Character vector of two-letter state abbreviations (e.g.
+#'   `c("FL", "NJ", "CA")`). Case- and whitespace-insensitive.
+#' @param fallback Numeric scalar used for states not present in the dataset
+#'   (invalid codes, territories) and for Tennessee, whose 2024 index is `NA`
+#'   (no comprehensive fee-for-service Medicaid fee schedule). Defaults to the
+#'   national All-Services average (0.75). Pass `NA` to preserve genuine
+#'   missingness instead of filling it.
+#' @return A numeric vector, the same length and order as `states`, of fee index
+#'   ratios (with `fallback` substituted as described).
 #' @export
+#' @seealso [medicaid_fee_index] for the underlying dataset.
 #' @examples
 #' mysterycall_medicaid_fee_index(c("FL", "NJ", "CA"))
-mysterycall_medicaid_fee_index <- function(states) {
-  # Dictionary mapping state abbreviations to KFF Medicaid-to-Medicare fee index ratios
-  fee_map <- c(
-    "AL" = 0.69, "AZ" = 0.78, "CA" = 0.51, "CO" = 0.68, "CT" = 0.65, "DC" = 0.90, "DE" = 0.75, 
-    "FL" = 0.66, "GA" = 0.64, "IL" = 0.53, "IN" = 0.62, "MA" = 0.70, "MD" = 0.68, "MI" = 0.61, 
-    "MN" = 0.60, "MO" = 0.66, "NC" = 0.70, "NJ" = 0.48, "NV" = 0.67, "NY" = 0.58, "OH" = 0.63, 
-    "PA" = 0.65, "TN" = 0.68, "TX" = 0.72, "UT" = 0.71, "VA" = 0.64, "WI" = 0.58
-  )
-  
-  clean_states <- toupper(trimws(states))
-  ratios <- fee_map[clean_states]
-  ratios[is.na(ratios)] <- 0.65 # Fallback to national mean
-  names(ratios) <- states
-  return(unname(ratios))
+#'
+#' # Preserve NA for Tennessee / unknown states instead of the national average
+#' mysterycall_medicaid_fee_index(c("TN", "CA", "ZZ"), fallback = NA)
+mysterycall_medicaid_fee_index <- function(states, fallback = NULL) {
+  if (!is.character(states)) {
+    states <- as.character(states)
+  }
+
+  medicaid_fee_index <- NULL  # for R CMD check; populated by utils::data()
+  utils::data("medicaid_fee_index", package = "mysterycall", envir = environment())
+
+  if (is.null(fallback)) {
+    fallback <- attr(medicaid_fee_index, "national_average")
+    if (is.null(fallback)) fallback <- 0.75
+  }
+  if (length(fallback) != 1L || !(is.numeric(fallback) || is.na(fallback))) {
+    stop("`fallback` must be a single numeric value or NA.", call. = FALSE)
+  }
+
+  lut <- stats::setNames(medicaid_fee_index$fee_index, medicaid_fee_index$state_abb)
+  clean <- toupper(trimws(states))
+  ratios <- unname(lut[clean])
+  # Fill both unrecognised states and NA-valued states (Tennessee) with fallback.
+  ratios[is.na(ratios)] <- fallback
+  ratios
 }

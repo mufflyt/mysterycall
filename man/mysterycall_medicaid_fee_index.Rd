@@ -4,19 +4,36 @@
 \alias{mysterycall_medicaid_fee_index}
 \title{Retrieve State-Level Medicaid-to-Medicare Fee Index Ratios}
 \usage{
-mysterycall_medicaid_fee_index(states)
+mysterycall_medicaid_fee_index(states, fallback = NULL)
 }
 \arguments{
-\item{states}{Character vector of two-letter state abbreviations (e.g. c("FL", "NJ", "PA")).}
+\item{states}{Character vector of two-letter state abbreviations (e.g.
+\code{c("FL", "NJ", "CA")}). Case- and whitespace-insensitive.}
+
+\item{fallback}{Numeric scalar used for states not present in the dataset
+(invalid codes, territories) and for Tennessee, whose 2024 index is \code{NA}
+(no comprehensive fee-for-service Medicaid fee schedule). Defaults to the
+national All-Services average (0.75). Pass \code{NA} to preserve genuine
+missingness instead of filling it.}
 }
 \value{
-A numeric vector of fee index ratios. Missing or invalid states default to 0.65 (national average).
+A numeric vector, the same length and order as \code{states}, of fee index
+ratios (with \code{fallback} substituted as described).
 }
 \description{
-Returns the Kaiser Family Foundation (KFF) Medicaid-to-Medicare fee index ratio
-for a vector of state abbreviations. The index represents the ratio of Medicaid
-reimbursement to Medicare reimbursement for primary care and specialty services.
+Looks up the Kaiser Family Foundation (KFF) Medicaid-to-Medicare fee index for
+a vector of state abbreviations. The index is the ratio of what a state's
+Medicaid program pays to what Medicare pays for the same services; a value
+below 1 means Medicaid reimburses below Medicare. Values are read from the
+packaged \link{medicaid_fee_index} dataset (2024, All Services; all 50 states + DC)
+so the function and the data cannot drift apart.
 }
 \examples{
 mysterycall_medicaid_fee_index(c("FL", "NJ", "CA"))
+
+# Preserve NA for Tennessee / unknown states instead of the national average
+mysterycall_medicaid_fee_index(c("TN", "CA", "ZZ"), fallback = NA)
+}
+\seealso{
+\link{medicaid_fee_index} for the underlying dataset.
 }
