@@ -37,6 +37,7 @@ Other datasets:
 \code{\link{fips}},
 \code{\link{kff_hhi}},
 \code{\link{medicaid_expansion}},
+\code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
 \code{\link{taxonomy}}
 }

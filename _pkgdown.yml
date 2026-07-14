@@ -65,6 +65,7 @@ reference:
       - city_state_to_lat_long
       - fips
       - kff_hhi
+      - medicaid_fee_index
       - physicians
       - taxonomy
 

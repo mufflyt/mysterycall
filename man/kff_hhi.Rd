@@ -72,6 +72,7 @@ Other datasets:
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
 \code{\link{medicaid_expansion}},
+\code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
 \code{\link{taxonomy}}
 }
