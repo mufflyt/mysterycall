@@ -86,52 +86,146 @@ mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code,
 }
 
 
-#' Extract Female Insurance Percentages from Census ACS Table S2701
+#' Extract Female Insurance Shares from ACS Sex-by-Coverage-Type Tables
 #'
-#' Queries the US Census Bureau API for American Community Survey (ACS) 5-year 
-#' estimates at the Census Tract level, focusing on female health insurance coverage.
+#' Computes tract-level female health-insurance shares from the ACS 5-year
+#' detailed coverage tables that are genuinely split by sex: private
+#' (**B27002**), public (**B27003**), Medicare (**C27006**), Medicaid
+#' (**C27007**), and insured/uninsured (**B27001**). Each share is the female
+#' population with that coverage divided by the female civilian
+#' noninstitutionalized population (the B27001 female universe, `B27001_030`).
 #'
-#' @param api_key Character. US Census API key.
+#' Coverage-type leaves are selected by matching the "With ..." label text
+#' inside the *Female* branch of each table, so the function self-corrects
+#' across ACS vintages instead of depending on hard-coded cell numbers. This
+#' replaces an earlier implementation that mislabelled ACS Subject table
+#' **S2701** cells: S2701 has no coverage-type breakdown and its `_010` row is
+#' the "75 years and older" age band for both sexes, so the old
+#' private/public/Medicaid/Medicare columns did not measure what their names
+#' claimed.
+#'
+#' Because a person may hold more than one coverage type (e.g. dual
+#' Medicare + Medicaid), the Private/Public/Medicaid/Medicare shares **overlap**
+#' and do not sum to 100; only insured + uninsured partition the population.
+#' Margins of error are propagated with the Census sum-of-squares rule,
+#' \eqn{MOE_{sum} = \sqrt{\sum MOE_i^2}} (90\% confidence level).
+#'
+#' @param api_key Character. US Census API key (passed to
+#'   [tidycensus::get_acs()]).
 #' @param state_fips Character. Two-digit State FIPS code.
 #' @param county_fips Character. Three-digit County FIPS code.
-#' @return A data frame containing percentages of females enrolled in Medicaid, Medicare, private plans, and uninsured.
+#' @param year Integer. ACS 5-year survey end-year. Default `2022`.
+#' @return A data frame with one row per Census tract: geography identifiers,
+#'   the female population denominator (`Total_Females`), the female counts with
+#'   each coverage type (`N_Female_*`) with propagated MOEs (`*_moe`), and the
+#'   corresponding shares of the female population (`Pct_Female_*`, 0-100).
+#' @seealso [mysterycall_get_payer_mix()] for the all-persons, multi-geography
+#'   generalisation of this builder.
+#' @family census
 #' @export
-mysterycall_get_acs_female_insurance <- function(api_key, state_fips, county_fips) {
-  base_url <- "https://api.census.gov/data/2022/acs/acs5/subject"
-  vars <- "S2701_C01_010E,S2701_C02_010E,S2701_C03_010E,S2701_C04_010E,S2701_C05_010E,S2701_C06_010E"
-  
-  url <- sprintf("%s?get=NAME,%s&for=tract:*&in=state:%s+county:%s&key=%s", 
-                 base_url, vars, state_fips, county_fips, api_key)
-  
-  response <- httr::GET(url)
-  if (httr::status_code(response) != 200) {
-    stop(paste("Census API request failed with status:", httr::status_code(response)))
+mysterycall_get_acs_female_insurance <- function(api_key, state_fips,
+                                                 county_fips, year = 2022) {
+  if (!requireNamespace("tidycensus", quietly = TRUE)) {
+    stop("Package 'tidycensus' is required for ",
+         "mysterycall_get_acs_female_insurance().", call. = FALSE)
   }
-  
-  data <- jsonlite::fromJSON(httr::content(response, "text", encoding = "UTF-8"))
-  headers <- data[1, ]
-  rows <- data[-1, ]
-  df <- as.data.frame(rows, stringsAsFactors = FALSE)
-  colnames(df) <- headers
-  
-  num_cols <- c("S2701_C01_010E", "S2701_C02_010E", "S2701_C03_010E", "S2701_C04_010E", "S2701_C05_010E", "S2701_C06_010E")
-  df[num_cols] <- lapply(df[num_cols], as.numeric)
-  
-  df_clean <- df %>%
-    dplyr::transmute(
-      Census_Tract = NAME,
-      State_FIPS = state,
-      County_FIPS = county,
-      Tract_FIPS = tract,
-      Total_Females = S2701_C01_010E,
-      Pct_Female_Private = (S2701_C02_010E / S2701_C01_010E) * 100,
-      Pct_Female_Public = (S2701_C03_010E / S2701_C01_010E) * 100,
-      Pct_Female_Medicaid = (S2701_C04_010E / S2701_C01_010E) * 100,
-      Pct_Female_Medicare = (S2701_C05_010E / S2701_C01_010E) * 100,
-      Pct_Female_Uninsured = (S2701_C06_010E / S2701_C01_010E) * 100
-    )
-  
-  return(df_clean)
+  if (!is.numeric(year) || length(year) != 1L || year < 2012 || year > 2023) {
+    stop(sprintf("Invalid `year`: %s. ACS 5-year coverage tables are available for 2012-2023.",
+                 deparse(year)), call. = FALSE)
+  }
+
+  # ---- resolve Female-branch coverage leaves by label (vintage-robust) ------
+  vars <- tryCatch(
+    tidycensus::load_variables(year = year, dataset = "acs5", cache = TRUE),
+    error = function(e) stop(sprintf(
+      "Census API error loading the variable dictionary:\n%s", e$message),
+      call. = FALSE)
+  )
+
+  female_leaf <- function(table, phrase) {
+    hit <- vars[grepl(paste0("^", table, "_"), vars$name) &
+                  grepl("Female", vars$label) &
+                  grepl(phrase, vars$label, fixed = TRUE), , drop = FALSE]
+    if (!nrow(hit)) {
+      stop(sprintf("No ACS %d Female variables in table %s match label '%s'.",
+                   year, table, phrase), call. = FALSE)
+    }
+    hit$name
+  }
+
+  groups <- list(
+    private   = female_leaf("B27002", "With private health insurance"),
+    public    = female_leaf("B27003", "With public coverage"),
+    medicare  = female_leaf("C27006", "With Medicare coverage"),
+    medicaid  = female_leaf("C27007", "With Medicaid/means-tested public coverage"),
+    uninsured = female_leaf("B27001", "No health insurance coverage")
+  )
+
+  # Female civilian noninstitutionalized population total = "...Total:!!Female:".
+  female_total_id <- vars$name[grepl("^B27001_", vars$name) &
+                                 grepl("Female:\\s*$", vars$label) &
+                                 !grepl("years", vars$label)]
+  if (length(female_total_id) != 1L) {
+    stop("Could not uniquely identify the B27001 female population total.",
+         call. = FALSE)
+  }
+
+  all_ids <- unique(c(unlist(groups, use.names = FALSE), female_total_id))
+
+  acs <- tryCatch(
+    tidycensus::get_acs(
+      geography = "tract",
+      variables = all_ids,
+      year      = year,
+      survey    = "acs5",
+      state     = state_fips,
+      county    = county_fips,
+      output    = "wide",
+      key       = api_key
+    ),
+    error = function(e) stop(sprintf(
+      "Census API error:\n%s\n\nCheck the API key, state/county FIPS, and connection.",
+      e$message), call. = FALSE)
+  )
+
+  # ---- sum leaves per group, propagate MOE ---------------------------------
+  sum_group <- function(ids) {
+    est_cols <- intersect(paste0(ids, "E"), names(acs))
+    moe_cols <- intersect(paste0(ids, "M"), names(acs))
+    est <- rowSums(as.data.frame(acs[, est_cols, drop = FALSE]), na.rm = TRUE)
+    moe <- sqrt(rowSums(as.data.frame(acs[, moe_cols, drop = FALSE])^2, na.rm = TRUE))
+    list(est = est, moe = moe)
+  }
+
+  priv <- sum_group(groups$private)
+  publ <- sum_group(groups$public)
+  mcar <- sum_group(groups$medicare)
+  mcad <- sum_group(groups$medicaid)
+  unin <- sum_group(groups$uninsured)
+
+  total_f <- acs[[paste0(female_total_id, "E")]]
+  pct <- function(n) ifelse(total_f > 0, round(n / total_f * 100, 1), NA_real_)
+
+  data.frame(
+    Census_Tract         = acs$NAME,
+    GEOID                = acs$GEOID,
+    State_FIPS           = substr(acs$GEOID, 1, 2),
+    County_FIPS          = substr(acs$GEOID, 3, 5),
+    Tract_FIPS           = substr(acs$GEOID, 6, 11),
+    Total_Females        = total_f,
+    N_Female_Private     = priv$est, N_Female_Private_moe   = priv$moe,
+    N_Female_Public      = publ$est, N_Female_Public_moe    = publ$moe,
+    N_Female_Medicare    = mcar$est, N_Female_Medicare_moe  = mcar$moe,
+    N_Female_Medicaid    = mcad$est, N_Female_Medicaid_moe  = mcad$moe,
+    N_Female_Uninsured   = unin$est, N_Female_Uninsured_moe = unin$moe,
+    Pct_Female_Private   = pct(priv$est),
+    Pct_Female_Public    = pct(publ$est),
+    Pct_Female_Medicare  = pct(mcar$est),
+    Pct_Female_Medicaid  = pct(mcad$est),
+    Pct_Female_Uninsured = pct(unin$est),
+    year                 = as.integer(year),
+    stringsAsFactors     = FALSE
+  )
 }
 
 

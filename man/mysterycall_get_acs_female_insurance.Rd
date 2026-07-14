@@ -2,21 +2,71 @@
 % Please edit documentation in R/demographic_covariates.R
 \name{mysterycall_get_acs_female_insurance}
 \alias{mysterycall_get_acs_female_insurance}
-\title{Extract Female Insurance Percentages from Census ACS Table S2701}
+\title{Extract Female Insurance Shares from ACS Sex-by-Coverage-Type Tables}
 \usage{
-mysterycall_get_acs_female_insurance(api_key, state_fips, county_fips)
+mysterycall_get_acs_female_insurance(
+  api_key,
+  state_fips,
+  county_fips,
+  year = 2022
+)
 }
 \arguments{
-\item{api_key}{Character. US Census API key.}
+\item{api_key}{Character. US Census API key (passed to
+\code{\link[tidycensus:get_acs]{tidycensus::get_acs()}}).}
 
 \item{state_fips}{Character. Two-digit State FIPS code.}
 
 \item{county_fips}{Character. Three-digit County FIPS code.}
+
+\item{year}{Integer. ACS 5-year survey end-year. Default \code{2022}.}
 }
 \value{
-A data frame containing percentages of females enrolled in Medicaid, Medicare, private plans, and uninsured.
+A data frame with one row per Census tract: geography identifiers,
+the female population denominator (\code{Total_Females}), the female counts with
+each coverage type (\verb{N_Female_*}) with propagated MOEs (\verb{*_moe}), and the
+corresponding shares of the female population (\verb{Pct_Female_*}, 0-100).
 }
 \description{
-Queries the US Census Bureau API for American Community Survey (ACS) 5-year
-estimates at the Census Tract level, focusing on female health insurance coverage.
+Computes tract-level female health-insurance shares from the ACS 5-year
+detailed coverage tables that are genuinely split by sex: private
+(\strong{B27002}), public (\strong{B27003}), Medicare (\strong{C27006}), Medicaid
+(\strong{C27007}), and insured/uninsured (\strong{B27001}). Each share is the female
+population with that coverage divided by the female civilian
+noninstitutionalized population (the B27001 female universe, \code{B27001_030}).
 }
+\details{
+Coverage-type leaves are selected by matching the "With ..." label text
+inside the \emph{Female} branch of each table, so the function self-corrects
+across ACS vintages instead of depending on hard-coded cell numbers. This
+replaces an earlier implementation that mislabelled ACS Subject table
+\strong{S2701} cells: S2701 has no coverage-type breakdown and its \verb{_010} row is
+the "75 years and older" age band for both sexes, so the old
+private/public/Medicaid/Medicare columns did not measure what their names
+claimed.
+
+Because a person may hold more than one coverage type (e.g. dual
+Medicare + Medicaid), the Private/Public/Medicaid/Medicare shares \strong{overlap}
+and do not sum to 100; only insured + uninsured partition the population.
+Margins of error are propagated with the Census sum-of-squares rule,
+\eqn{MOE_{sum} = \sqrt{\sum MOE_i^2}} (90\\% confidence level).
+}
+\seealso{
+\code{\link[=mysterycall_get_payer_mix]{mysterycall_get_payer_mix()}} for the all-persons, multi-geography
+generalisation of this builder.
+
+Other census: 
+\code{\link{mysterycall_add_hhi}()},
+\code{\link{mysterycall_add_medicaid_expansion}()},
+\code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_women_18_90}()},
+\code{\link{mysterycall_get_census_data}()},
+\code{\link{mysterycall_get_county_provider_counts}()},
+\code{\link{mysterycall_get_payer_mix}()},
+\code{\link{mysterycall_plot_census_age}()},
+\code{\link{mysterycall_read_kff_hhi}()},
+\code{\link{mysterycall_summarize_census}()},
+\code{\link{mysterycall_summarize_county_enrollment}()},
+\code{\link{print.mysterycall_provider_counts}()}
+}
+\concept{census}

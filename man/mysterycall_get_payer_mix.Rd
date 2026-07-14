@@ -83,8 +83,9 @@ head(co[, c("NAME", "pct_private", "pct_medicaid", "pct_medicare",
 }
 \seealso{
 \code{\link[=mysterycall_get_acs_female_insurance]{mysterycall_get_acs_female_insurance()}} for the female-only,
-single-county S2701 percentages this builder generalises (all persons,
-multi-state, county-level, with MOEs);
+single-county tract version built from the same sex-by-coverage-type
+tables; this builder generalises it (all persons, multi-state, any
+geography, with MOEs);
 \code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}} and \code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}}
 for other ACS covariate builders;
 \code{\link[=mysterycall_get_county_provider_counts]{mysterycall_get_county_provider_counts()}} and
@@ -95,6 +96,7 @@ Other census:
 \code{\link{mysterycall_add_hhi}()},
 \code{\link{mysterycall_add_medicaid_expansion}()},
 \code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_female_insurance}()},
 \code{\link{mysterycall_get_acs_women_18_90}()},
 \code{\link{mysterycall_get_census_data}()},
 \code{\link{mysterycall_get_county_provider_counts}()},

@@ -49,6 +49,7 @@ Other census:
 \code{\link{mysterycall_add_hhi}()},
 \code{\link{mysterycall_add_medicaid_expansion}()},
 \code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_female_insurance}()},
 \code{\link{mysterycall_get_census_data}()},
 \code{\link{mysterycall_get_county_provider_counts}()},
 \code{\link{mysterycall_get_payer_mix}()},

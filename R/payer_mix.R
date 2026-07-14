@@ -56,8 +56,9 @@
 #'   is zero.
 #'
 #' @seealso [mysterycall_get_acs_female_insurance()] for the female-only,
-#'   single-county S2701 percentages this builder generalises (all persons,
-#'   multi-state, county-level, with MOEs);
+#'   single-county tract version built from the same sex-by-coverage-type
+#'   tables; this builder generalises it (all persons, multi-state, any
+#'   geography, with MOEs);
 #'   [mysterycall_get_acs_adults_18_90()] and [mysterycall_summarize_census()]
 #'   for other ACS covariate builders;
 #'   [mysterycall_get_county_provider_counts()] and
