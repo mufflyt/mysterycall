@@ -87,7 +87,7 @@ models.
 For a simpler quick-look plot see \code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}}.
 }
 \examples{
-\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 irr_df <- data.frame(
   term     = c("Medicaid vs. BCBS [Referent: BCBS]",
                "Incontinence vs. Prolapse",

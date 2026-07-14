@@ -49,7 +49,7 @@
 #'
 #' @importFrom stats median
 #' @family data-quality
-#' @seealso [mysterycall_check_normality()], [mysterycall_sanity_checks()]
+#' @seealso [mysterycall_check_normality()], [mysterycall_preflight_check()]
 #' @export
 #'
 #' @examples

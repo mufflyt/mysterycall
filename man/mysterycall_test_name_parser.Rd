@@ -17,7 +17,7 @@ hyphenated last names, name particles, and single-word names.  Prints a
 per-case report and a summary to the console.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tbl <- mysterycall_test_name_parser()
 sum(tbl$is_valid)       # number of valid parses
 tbl$quality_issue       # per-case quality codes

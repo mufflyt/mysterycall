@@ -38,7 +38,7 @@ with any model class supported by the \strong{effects} package (lm, glm,
 glmerMod, lmerMod, ...).
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 m <- glm(mpg ~ wt + hp, data = mtcars, family = gaussian())
 mysterycall_plot_effect(m, "wt")
 \dontshow{\}) # examplesIf}

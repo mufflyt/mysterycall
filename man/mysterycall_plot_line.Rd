@@ -56,7 +56,7 @@ shown via \code{geom_point}.
 This function creates a line plot using ggplot2 with options for transforming the y-axis, grouping lines, and saving the plot with a specified resolution. The plot can be saved in both TIFF and PNG formats with automatic filename generation.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)

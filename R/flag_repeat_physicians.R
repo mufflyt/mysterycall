@@ -29,7 +29,7 @@
 #' resolved before analysis.
 #'
 #' @family quality control
-#' @seealso [mysterycall_sanity_checks()] for broader pre-analysis checks.
+#' @seealso [mysterycall_preflight_check()] for broader pre-analysis checks.
 #' @importFrom dplyr group_by summarise arrange filter n desc
 #' @importFrom tibble tibble
 #' @importFrom utils write.csv

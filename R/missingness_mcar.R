@@ -27,7 +27,7 @@
 # Tokens that are PRESENT-but-uninformative (count as "unknown").
 .MCAR_UNKNOWN_TOKENS <- c(
   "unknown", "", "na", "n/a", "missing", "none", "null",
-  "—", "-", "?", ".", "unk", "not available", "not reported"
+  "\u2014", "-", "?", ".", "unk", "not available", "not reported"
 )
 
 # NSE column names used inside dplyr/gt verbs (silence R CMD check NOTE).

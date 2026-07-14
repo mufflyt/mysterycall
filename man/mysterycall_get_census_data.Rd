@@ -38,16 +38,23 @@ This function retrieves Census data of all state block groups by looping
 over the specified list of state FIPS codes.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 us_fips_list <- c("01", "02")
 census_df <- mysterycall_get_census_data(us_fips_list)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 Other census: 
+\code{\link{mysterycall_add_hhi}()},
+\code{\link{mysterycall_add_medicaid_expansion}()},
 \code{\link{mysterycall_get_acs_adults_18_90}()},
 \code{\link{mysterycall_get_acs_women_18_90}()},
+\code{\link{mysterycall_get_county_provider_counts}()},
+\code{\link{mysterycall_get_payer_mix}()},
 \code{\link{mysterycall_plot_census_age}()},
-\code{\link{mysterycall_summarize_census}()}
+\code{\link{mysterycall_read_kff_hhi}()},
+\code{\link{mysterycall_summarize_census}()},
+\code{\link{mysterycall_summarize_county_enrollment}()},
+\code{\link{print.mysterycall_provider_counts}()}
 }
 \concept{census}

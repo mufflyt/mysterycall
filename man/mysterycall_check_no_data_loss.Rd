@@ -34,7 +34,7 @@ Use at key checkpoints in data pipelines to catch silent filtering or joins
 that lose data.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Expect no data loss in cleaning
 before <- nrow(raw_data)
 clean_data <- mysterycall_clean_phase1(raw_data)

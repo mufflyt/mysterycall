@@ -51,7 +51,7 @@ Searches for these anti-patterns:
 }
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Scan all R files in package
 issues <- mysterycall_scan_for_limits("R/")
 

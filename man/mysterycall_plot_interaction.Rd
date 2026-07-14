@@ -58,7 +58,7 @@ Use this helper when comparing how two categorical predictors jointly relate
 to a count-like outcome (for example, business days until appointment).
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: Analyzing the effect of gender and appointment center on wait times
 result <- mysterycall_plot_interaction(
   data_path = "Ari/data/Phase2/late_phase_2_ENT_analysis_3.rds",

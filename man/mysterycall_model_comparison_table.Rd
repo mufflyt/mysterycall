@@ -35,7 +35,7 @@ deltas, Pearson overdispersion (phi), and the NB dispersion parameter
 (theta). The winning model is marked with \code{"*"}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tbl <- mysterycall_model_comparison_table(
   list(
     "Base model"  = poisson_fit,

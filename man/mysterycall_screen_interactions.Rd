@@ -44,7 +44,7 @@ interaction. Results are returned sorted by smallest p-value, making it easy
 to identify the strongest potential effect modifiers.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_screen_interactions(
   data             = df,
   outcome          = "wait_days",

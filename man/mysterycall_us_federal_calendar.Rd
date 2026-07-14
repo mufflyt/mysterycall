@@ -37,7 +37,7 @@ if you want to reuse the same calendar object across many calls for
 performance, or if you need to inspect the holiday list.
 }
 \examples{
-\dontshow{if (requireNamespace("bizdays", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("bizdays", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 cal <- mysterycall_us_federal_calendar(2024, 2028)
 bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day -> FALSE
 \dontshow{\}) # examplesIf}

@@ -22,7 +22,7 @@
 #'
 #' @return A named list:
 #' \describe{
-#'   \item{`sentence`}{Character scalar \u2014 the manuscript paragraph.}
+#'   \item{`sentence`}{Character scalar -- the manuscript paragraph.}
 #'   \item{`irr`}{Numeric IRR for Medicaid vs. BCBS.}
 #'   \item{`ci_lower`}{Numeric lower 95% CI bound.}
 #'   \item{`ci_upper`}{Numeric upper 95% CI bound.}

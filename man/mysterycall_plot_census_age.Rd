@@ -39,15 +39,22 @@ Invisibly returns the generated ggplot object.
 Plot the distribution of female age groups
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   mysterycall_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 Other census: 
+\code{\link{mysterycall_add_hhi}()},
+\code{\link{mysterycall_add_medicaid_expansion}()},
 \code{\link{mysterycall_get_acs_adults_18_90}()},
 \code{\link{mysterycall_get_acs_women_18_90}()},
 \code{\link{mysterycall_get_census_data}()},
-\code{\link{mysterycall_summarize_census}()}
+\code{\link{mysterycall_get_county_provider_counts}()},
+\code{\link{mysterycall_get_payer_mix}()},
+\code{\link{mysterycall_read_kff_hhi}()},
+\code{\link{mysterycall_summarize_census}()},
+\code{\link{mysterycall_summarize_county_enrollment}()},
+\code{\link{print.mysterycall_provider_counts}()}
 }
 \concept{census}

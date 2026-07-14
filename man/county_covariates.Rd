@@ -12,9 +12,10 @@ mix from \code{\link[=mysterycall_get_payer_mix]{mysterycall_get_payer_mix()}}.
 \item \code{\link[=mysterycall_get_county_provider_counts]{mysterycall_get_county_provider_counts()}} collapses a provider roster
 (one row per NPI, or per NPI-location) to a distinct-provider count per
 county, optionally scaled to a per-capita density.
-\item \code{\link[=mysterycall_get_county_enrollment]{mysterycall_get_county_enrollment()}} aggregates CMS Medicare and Medicaid
-enrollment to the county level and derives the Medicaid-to-Medicare ratio
-and an access category.
+\item \code{\link[=mysterycall_summarize_county_enrollment]{mysterycall_summarize_county_enrollment()}} aggregates CMS Medicare and
+Medicaid enrollment to the county level and derives the Medicaid-to-Medicare
+ratio and an access category. Its input can be assembled from
+\code{\link[=mysterycall_get_cms_enrollment]{mysterycall_get_cms_enrollment()}} (single-county CMS reader).
 }
 
 Both operate on data frames you supply (an NPPES/roster extract, a CMS

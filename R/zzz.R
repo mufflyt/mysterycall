@@ -123,7 +123,26 @@ utils::globalVariables(c(
   "median_days",
   "or",
   "y_pos",
-  "current"
+  "current",
+  "Retention_Frequency",
+  "county",
+  "tract",
+  "S2701_C01_010E",
+  "S2701_C02_010E",
+  "S2701_C03_010E",
+  "S2701_C04_010E",
+  "S2701_C05_010E",
+  "S2701_C06_010E",
+  "FIPS",
+  "County",
+  "Medicare Enrollment",
+  "Medicaid/CHIP Enrollment",
+  "Report_Month",
+  "fit",
+  "low",
+  "high",
+  "Pred",
+  "Obs"
 ))
 
 .onAttach <- function(libname, pkgname) {

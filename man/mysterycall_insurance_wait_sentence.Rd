@@ -43,7 +43,7 @@ mysterycall_insurance_wait_sentence(
 \value{
 A named list:
 \describe{
-\item{\code{sentence}}{Character scalar \u2014 the manuscript paragraph.}
+\item{\code{sentence}}{Character scalar -- the manuscript paragraph.}
 \item{\code{irr}}{Numeric IRR for Medicaid vs. BCBS.}
 \item{\code{ci_lower}}{Numeric lower 95\% CI bound.}
 \item{\code{ci_upper}}{Numeric upper 95\% CI bound.}

@@ -7,6 +7,8 @@
 #' @param db_path Path to the DuckDB database (e.g. "/Volumes/MufflySamsung 1/nppes_historical.duckdb").
 #' @param street_address Character. Practice Location Address Line 1.
 #' @param zip_code Character. Five-digit ZIP code.
+#' @param table_name Character. Name of the historical NPPES table to query in
+#'   the DuckDB database. Default `"temporal_obgyn_only_all_years"`.
 #' @return A data frame containing annual staffing levels, entries, exits, and churn rates.
 #' @export
 mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code, table_name = "temporal_obgyn_only_all_years") {
@@ -172,7 +174,7 @@ mysterycall_get_cms_enrollment <- function(cms_csv_path, county_fips) {
     stop("CMS monthly enrollment file not found.")
   }
   
-  df <- read.csv(cms_csv_path, stringsAsFactors = FALSE, check.names = FALSE)
+  df <- utils::read.csv(cms_csv_path, stringsAsFactors = FALSE, check.names = FALSE)
   
   res <- df %>%
     dplyr::filter(FIPS == county_fips) %>%

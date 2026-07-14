@@ -37,7 +37,7 @@ This helper is useful for flagging repeated provider entries that may require
 manual review.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_save_quality_table(my_data, "qc.csv")
 \dontshow{\}) # examplesIf}
 }

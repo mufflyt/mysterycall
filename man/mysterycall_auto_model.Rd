@@ -91,7 +91,7 @@ The LMM and routing metadata live in \code{result$selection}.
 }
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 set.seed(1978)
 df <- data.frame(
   wait = rpois(60, 18),

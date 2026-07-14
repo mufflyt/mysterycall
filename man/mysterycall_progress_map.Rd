@@ -31,7 +31,7 @@ Convenience wrapper for processing items in batches with automatic progress
 updates and ETA calculations.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 results <- mysterycall_progress_map(
   items = 1:10,
   fn    = function(x) x^2,

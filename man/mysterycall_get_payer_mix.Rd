@@ -82,10 +82,13 @@ head(co[, c("NAME", "pct_private", "pct_medicaid", "pct_medicare",
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}} and
-\code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}} for other ACS covariate builders;
+\code{\link[=mysterycall_get_acs_female_insurance]{mysterycall_get_acs_female_insurance()}} for the female-only,
+single-county S2701 percentages this builder generalises (all persons,
+multi-state, county-level, with MOEs);
+\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}} and \code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}}
+for other ACS covariate builders;
 \code{\link[=mysterycall_get_county_provider_counts]{mysterycall_get_county_provider_counts()}} and
-\code{\link[=mysterycall_get_county_enrollment]{mysterycall_get_county_enrollment()}} for the provider-supply and
+\code{\link[=mysterycall_summarize_county_enrollment]{mysterycall_summarize_county_enrollment()}} for the provider-supply and
 Medicare/Medicaid-enrollment covariates that pair with payer mix.
 
 Other census: 
@@ -94,11 +97,11 @@ Other census:
 \code{\link{mysterycall_get_acs_adults_18_90}()},
 \code{\link{mysterycall_get_acs_women_18_90}()},
 \code{\link{mysterycall_get_census_data}()},
-\code{\link{mysterycall_get_county_enrollment}()},
 \code{\link{mysterycall_get_county_provider_counts}()},
 \code{\link{mysterycall_plot_census_age}()},
 \code{\link{mysterycall_read_kff_hhi}()},
 \code{\link{mysterycall_summarize_census}()},
+\code{\link{mysterycall_summarize_county_enrollment}()},
 \code{\link{print.mysterycall_provider_counts}()}
 }
 \concept{census}

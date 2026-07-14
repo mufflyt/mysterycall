@@ -23,7 +23,7 @@ library(mysterycall)
 if (requireNamespace("generics", quietly = TRUE)) library(generics)
 ```
 
-```{r load-packages, eval=FALSE}
+```{r load-packages, eval=FALSE, purl=FALSE}
 library(mysterycall)
 library(lme4)        # required for model fitting
 library(lmerTest)    # recommended — Satterthwaite p-values
@@ -61,7 +61,7 @@ The examples below use a synthetic dataset resembling a two-wave mystery-caller
 study comparing Medicaid and commercial insurance patients across 20 physician
 practices.
 
-```{r simulate-data}
+```{r simulate-data, purl=FALSE}
 set.seed(42)
 n_physicians <- 20
 n_calls      <- 4     # calls per physician (2 insurance types × 2 call dates)
@@ -88,7 +88,7 @@ head(sim_data)
 
 # 3. Fitting a basic LMM
 
-```{r fit-lmm}
+```{r fit-lmm, purl=FALSE}
 fit <- mysterycall_lmm(
   data              = sim_data,
   outcome           = "wait_days",
@@ -99,13 +99,13 @@ fit <- mysterycall_lmm(
 
 `print()` produces a structured report:
 
-```{r print-lmm}
+```{r print-lmm, purl=FALSE}
 print(fit)
 ```
 
 Key elements of the returned object:
 
-```{r inspect-fit}
+```{r inspect-fit, purl=FALSE}
 # Fixed-effect table in days (or log-scale if auto_log triggered)
 fit$coef_table
 
@@ -131,14 +131,14 @@ When wait times are right-skewed, `auto_log = TRUE` (the default) applies
 was triggered. When it is, coefficients are on the log scale and
 `fit$log_transformed` is `TRUE`.
 
-```{r check-log}
+```{r check-log, purl=FALSE}
 fit$log_transformed
 ```
 
 If `auto_log` did trigger, interpret results from `$gmr_table` rather than
 `$coef_table`:
 
-```{r gmr-table}
+```{r gmr-table, purl=FALSE}
 if (isTRUE(fit$log_transformed)) {
   fit$gmr_table
 } else {
@@ -163,7 +163,7 @@ By default (`sensitivity_poisson = "auto"`), a Poisson GLMM is run on the
 **original untransformed** outcome whenever the Shapiro-Wilk test on LMM
 residuals returns p < 0.05.
 
-```{r sensitivity}
+```{r sensitivity, purl=FALSE}
 # Force a sensitivity run regardless of normality
 fit_sens <- mysterycall_lmm(
   data              = sim_data,
@@ -190,7 +190,7 @@ supports robustness of the conclusion.
 The `tidy()` generic (from the `generics` package) returns a tidy tibble of
 fixed-effect estimates, making it easy to pipe into `ggplot2` or `gt`:
 
-```{r tidy}
+```{r tidy, purl=FALSE}
 tidy_result <- tidy(fit)
 tidy_result
 ```
@@ -202,7 +202,7 @@ tidy_result
 To satisfy the M&M promise of a supplemental table comparing calendar-day and
 business-day wait times, use `mysterycall_calendar_sensitivity()`:
 
-```{r calendar-sensitivity}
+```{r calendar-sensitivity, purl=FALSE}
 sens <- mysterycall_calendar_sensitivity(
   data             = sim_data,
   calendar_col     = "wait_days",
@@ -216,19 +216,19 @@ sens <- mysterycall_calendar_sensitivity(
 
 The comparison table:
 
-```{r calendar-table}
+```{r calendar-table, purl=FALSE}
 sens$summary_table
 ```
 
 Whether all term directions are consistent across both measurement approaches:
 
-```{r calendar-consistent}
+```{r calendar-consistent, purl=FALSE}
 sens$all_consistent
 ```
 
 The ready-to-paste supplemental paragraph:
 
-```{r calendar-paragraph}
+```{r calendar-paragraph, purl=FALSE}
 cat(sens$paragraph)
 ```
 
@@ -239,7 +239,7 @@ cat(sens$paragraph)
 `plot()` dispatches on the `mysterycall_lmm` class to produce Q-Q and
 residual-vs-fitted plots:
 
-```{r diagnostic-plots, fig.width=7, fig.height=5}
+```{r diagnostic-plots, fig.width=7, fig.height=5, purl=FALSE}
 plot(fit)
 ```
 
@@ -257,7 +257,7 @@ Poisson/NB GLMM is warranted.
 
 Fit two models with `REML = FALSE` for valid AIC-based comparison:
 
-```{r model-comparison}
+```{r model-comparison, purl=FALSE}
 fit_full    <- mysterycall_lmm(sim_data, "wait_days",
                                 c("insurance", "wave"), "physician",
                                 REML = FALSE)

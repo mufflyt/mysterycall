@@ -33,7 +33,7 @@ helps enforce the package policy of processing ALL available data without
 artificial limits.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 data <- read_csv("providers.csv")
 mysterycall:::mysterycall_check_no_limits(data, "provider input")
 

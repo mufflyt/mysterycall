@@ -109,7 +109,7 @@ NULL
 #' [mysterycall_model_comparison_table()], which compares overall model fit
 #' statistics (AIC, BIC, phi). Here the emphasis is on **how the exposure
 #' effect estimate changes** as covariates are added or the analytic
-#' specification varies \u2014 the classic sensitivity/robustness check for a
+#' specification varies -- the classic sensitivity/robustness check for a
 #' primary manuscript table.
 #'
 #' @param models Named list of fitted model objects. Every element must be one
@@ -120,7 +120,7 @@ NULL
 #' @param exposure_term Character scalar. The exact term name to extract from
 #'   each model's coefficient table (e.g. `"insuranceMedicaid"`,
 #'   `"scenarioB"`). Must match the `term` column produced by the fitting
-#'   function. When a model does not contain the term an em-dash (`"\u2014"`)
+#'   function. When a model does not contain the term an em-dash (`"--"`)
 #'   is placed in that column.
 #' @param digits Integer. Number of decimal places for estimates and
 #'   confidence interval bounds. Default `2L`.
@@ -136,7 +136,7 @@ NULL
 #'   \item{`Characteristic`}{Row label: the exposure term (with metric type
 #'     in parentheses), then optionally "Sample size" and "AIC".}
 #'   \item{`<model name>`}{One column per element of `models`, named by the
-#'     list element name. The exposure row shows `"1.23 (0.98\u20131.54), p=0.071"`.
+#'     list element name. The exposure row shows `"1.23 (0.98-1.54), p=0.071"`.
 #'     The footer rows show `"N=160"` and `"210.4"` respectively. An em-dash
 #'     is used when a term is absent from a model.}
 #' }
@@ -145,7 +145,7 @@ NULL
 #'
 #' @section Cell format:
 #' Each exposure-row cell follows the pattern:
-#' \preformatted{<estimate> (<ci_lower>\u2013<ci_upper>), p=<p_value>}
+#' \preformatted{<estimate> (<ci_lower>-<ci_upper>), p=<p_value>}
 #' where `estimate` is:
 #' \itemize{
 #'   \item **OR** for `mysterycall_logistic_model` (exponentiated log-odds)
@@ -177,7 +177,7 @@ NULL
 #' @export
 #'
 #' @examples
-#' # ---- Build fake model objects with structure() \u2014 no lme4 required --------
+#' # ---- Build fake model objects with structure() -- no lme4 required --------
 #'
 #' # Model 1: unadjusted logistic (only insurance)
 #' m1 <- structure(

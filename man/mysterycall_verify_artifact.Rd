@@ -51,7 +51,7 @@ digest. Any other outcome raises an error with a diagnostic message.
 }
 
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Verify an audit file written by clean_phase1
 mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
 \dontshow{\}) # examplesIf}

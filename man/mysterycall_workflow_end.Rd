@@ -18,7 +18,7 @@ mysterycall_workflow_end(final_n = NULL, input_n = NULL)
 End workflow and print summary
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall:::mysterycall_workflow_start("Demo", total_steps = 1)
 mysterycall:::mysterycall_workflow_end(final_n = 80, input_n = 100)
 \dontshow{\}) # examplesIf}

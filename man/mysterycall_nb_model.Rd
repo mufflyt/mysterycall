@@ -93,7 +93,7 @@ of theta < 5 indicate substantial overdispersion.
 }
 
 \examples{
-\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 set.seed(1978)
 df <- data.frame(
   wait_days = rnbinom(40, mu = 18, size = 2),

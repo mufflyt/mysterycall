@@ -21,7 +21,7 @@ Variant of \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_g
 to eliminate white gaps between tightly tiled map panels.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 ggplot(tracts_sf) +
   geom_sf(aes(fill = rate)) +

@@ -51,7 +51,7 @@ filenames of the form \verb{<file_prefix>_<timestamp>.tiff/.png}.
 This function generates a density plot designed for mystery caller studies, allowing for the visualization of waiting times or similar outcomes across different categories, such as insurance types. The function supports transformations on the x-axis and custom labels.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial"), each = 3),
   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)

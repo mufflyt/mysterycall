@@ -34,7 +34,7 @@
 #'
 #' @family quality control
 #' @seealso [mysterycall_flag_repeat_physicians()] for duplicate-entry checks;
-#'   [mysterycall_sanity_checks()] for broader pre-analysis validation.
+#'   [mysterycall_preflight_check()] for broader pre-analysis validation.
 #' @importFrom dplyr filter arrange desc select all_of any_of
 #' @importFrom utils write.csv
 #' @importFrom checkmate assert_data_frame assert_string assert_names assert_number

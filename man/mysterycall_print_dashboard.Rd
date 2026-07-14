@@ -18,7 +18,7 @@ Prints a Unicode-box-drawing summary table showing row counts at each stage
 of the mystery caller workflow.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 results <- mysterycall_run_workflow_logged(phase1_data = my_data)
 mysterycall:::mysterycall_print_dashboard(results)
 \dontshow{\}) # examplesIf}

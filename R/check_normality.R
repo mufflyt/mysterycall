@@ -37,7 +37,7 @@
 #' *"The data is not normally distributed (Shapiro-Wilk W = X, p = Y). Plus it
 #' is count data. t-test assumes that data is normally distributed, and
 #' comparing the means of count data is also not appropriate. We can check the
-#' incidence rate ratio (IRR) for comparison of [outcome] among the categories
+#' incidence rate ratio (IRR) for comparison of outcome among the categories
 #' of [group]. Better to use Poisson regression."*
 #'
 #' @seealso [mysterycall_simple_poisson()] for the Poisson model this function

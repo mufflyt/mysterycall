@@ -23,7 +23,7 @@ Invisibly returns \code{NULL}. Called for the side effect of writing
 Writes an Arsenal summary table to a Word document
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_write_arsenal_table(my_table, "output_table")
 \dontshow{\}) # examplesIf}
 }

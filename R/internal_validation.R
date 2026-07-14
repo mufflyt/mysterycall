@@ -2,7 +2,7 @@
 clean_complete_cases <- function(data, outcome, predictors, extra_cols = NULL) {
   decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
     if (grepl("[:\\*\\+\\|\\(\\)]", term)) {
-      tryCatch(stats::all.vars(stats::as.formula(paste("~", term))), error = function(e) term)
+      tryCatch(all.vars(stats::as.formula(paste("~", term))), error = function(e) term)
     } else {
       term
     }

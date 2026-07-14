@@ -62,7 +62,7 @@ rate ratios and optional absolute day differences (Panel B) into a single
 structured object ready for publication or export.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tbl2 <- mysterycall_table2(
   data         = study_data,
   model_result = fitted_model,

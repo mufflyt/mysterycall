@@ -31,7 +31,7 @@ Pairs where \code{end_date < start_date} or either date is \code{NA} return \cod
 Pairs where \code{end_date == start_date} return \code{0}.
 }
 \examples{
-\dontshow{if (requireNamespace("bizdays", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("bizdays", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Monday to Friday of the same week = 4 business days
 mysterycall_count_business_days("2026-02-02", "2026-02-06")
 

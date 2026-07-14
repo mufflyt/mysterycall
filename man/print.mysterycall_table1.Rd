@@ -9,14 +9,14 @@
 \arguments{
 \item{x}{A \code{mysterycall_table1} object returned by \code{\link[=mysterycall_table1]{mysterycall_table1()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[=print.tbl_df]{print.tbl_df()}}.}
+\item{...}{Additional arguments passed to \code{\link[tibble:formatting]{tibble::print.tbl_df()}}.}
 }
 \value{
 Invisibly returns \code{x}.
 }
 \description{
 Prints a formatted Table 1 with column sample sizes in the header and the
-underlying tibble displayed via \code{\link[=print.tbl_df]{print.tbl_df()}}.
+underlying tibble displayed via \code{\link[tibble:formatting]{tibble::print.tbl_df()}}.
 }
 \examples{
 \donttest{

@@ -50,7 +50,7 @@ labelled box with a count; optional exclusion side-boxes branch off to the
 right. Requires the \code{DiagrammeR} package (listed in Suggests).
 }
 \examples{
-\dontshow{if (requireNamespace("DiagrammeR", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("DiagrammeR", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 mysterycall_flowchart(
   steps = c(
     "Physicians in Directory" = "671",

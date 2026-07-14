@@ -29,7 +29,7 @@ complete. A lightweight lock file prevents concurrent downloads of
 the same target path.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_download_file(
   "https://example.org/big-file.zip",
   file.path(tempdir(), "big-file.zip")

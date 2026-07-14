@@ -22,7 +22,7 @@ when it is empty or no near-zero variance columns are found.
 This function takes a data frame and returns a new data frame with near-zero variance variables removed.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 df <- data.frame(a = 1:20, b = c(rep(1, 19), 2))
 mysterycall_remove_near_zero(df)
 \dontshow{\}) # examplesIf}

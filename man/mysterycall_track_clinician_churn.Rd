@@ -17,6 +17,9 @@ mysterycall_track_clinician_churn(
 \item{street_address}{Character. Practice Location Address Line 1.}
 
 \item{zip_code}{Character. Five-digit ZIP code.}
+
+\item{table_name}{Character. Name of the historical NPPES table to query in
+the DuckDB database. Default \code{"temporal_obgyn_only_all_years"}.}
 }
 \value{
 A data frame containing annual staffing levels, entries, exits, and churn rates.

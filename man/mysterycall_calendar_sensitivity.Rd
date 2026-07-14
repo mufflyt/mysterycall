@@ -89,7 +89,7 @@ of calendar days; \code{magnitude_ratio} near 0.71 is unremarkable.
 }
 
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 set.seed(42)
 df <- data.frame(
   wait_days     = round(rnorm(60, 21, 8)),

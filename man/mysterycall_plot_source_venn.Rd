@@ -94,7 +94,7 @@ mysterycall_plot_source_venn(d)
 }
 
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 d <- list(
   npis  = as.character(1:100),
   nppes = as.character(1:70),

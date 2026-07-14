@@ -32,7 +32,7 @@ NULL
 #'
 #' @family quality control
 #' @seealso [mysterycall_flag_repeat_physicians()] for duplicate-call detection;
-#'   [mysterycall_sanity_checks()] for broader pre-analysis validation.
+#'   [mysterycall_preflight_check()] for broader pre-analysis validation.
 #' @importFrom dplyr distinct all_of
 #' @importFrom tibble as_tibble
 #' @importFrom utils write.csv

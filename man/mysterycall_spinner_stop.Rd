@@ -18,7 +18,7 @@ mysterycall_spinner_stop(id, result = "done")
 Stop a spinner
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
 mysterycall:::mysterycall_spinner_stop(id, result = "done")
 \dontshow{\}) # examplesIf}

@@ -27,7 +27,7 @@ single \code{"lower-upper"} column (en-dash separator), and formats p-values.
 Optionally excludes the intercept row.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tbl <- mysterycall_format_results_table(model_result)
 knitr::kable(tbl)
 \dontshow{\}) # examplesIf}

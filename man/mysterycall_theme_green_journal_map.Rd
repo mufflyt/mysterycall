@@ -25,7 +25,7 @@ centers the title, and adds a framed legend. Use with
 \code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} and \code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}} for equal-area projection.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +

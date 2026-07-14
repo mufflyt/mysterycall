@@ -17,7 +17,7 @@
 #'
 #' @return A named list:
 #' \describe{
-#'   \item{`sentence`}{Character scalar \u2014 the full manuscript paragraph.}
+#'   \item{`sentence`}{Character scalar -- the full manuscript paragraph.}
 #'   \item{`overall_stats`}{Named list: `median`, `q1`, `q3` (across all rows).}
 #'   \item{`group_stats`}{Tibble from [mysterycall_wait_time_by_group()].}
 #'   \item{`p_values`}{Named numeric vector of formatted p-values (one per

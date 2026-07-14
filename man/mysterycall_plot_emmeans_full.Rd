@@ -76,7 +76,7 @@ on the count scale (rates) rather than the log scale.
 }
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 res <- mysterycall_plot_emmeans_full(
   model    = fit,
   specs    = ~ insurance | gender,

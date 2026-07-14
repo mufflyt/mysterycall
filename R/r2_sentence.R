@@ -3,25 +3,25 @@
 #' @name mysterycall_r2_sentence
 NULL
 
-#' Compute marginal and conditional R\u00b2 and generate an interpretive sentence
+#' Compute marginal and conditional R^2 and generate an interpretive sentence
 #'
 #' Extracts marginal (fixed-effects only) and conditional (fixed + random
-#' effects) R\u00b2 values from a fitted mixed model using
+#' effects) R^2 values from a fitted mixed model using
 #' [performance::r2()], then formats them into a manuscript-ready
 #' interpretive paragraph.
 #'
 #' @param model A fitted mixed model (\code{glmerMod}, \code{lmerMod}, etc.)
 #'   compatible with [performance::r2()]. Pure fixed-effects models (e.g.,
 #'   \code{lm}, \code{glm}) are not supported and will trigger an error.
-#' @param digits Integer scalar. Number of decimal places for R\u00b2 values in
+#' @param digits Integer scalar. Number of decimal places for R^2 values in
 #'   the sentence. Default \code{3}.
 #' @param digits_pct Integer scalar. Number of decimal places for percentage
 #'   values in the sentence. Default \code{1}.
 #'
 #' @return A named list with:
 #'   \describe{
-#'     \item{\code{marginal_r2}}{Numeric. Marginal R\u00b2 (fixed effects only).}
-#'     \item{\code{conditional_r2}}{Numeric. Conditional R\u00b2 (fixed + random effects).}
+#'     \item{\code{marginal_r2}}{Numeric. Marginal R^2 (fixed effects only).}
+#'     \item{\code{conditional_r2}}{Numeric. Conditional R^2 (fixed + random effects).}
 #'     \item{\code{fixed_effects}}{Character vector of fixed-effect term names.}
 #'     \item{\code{random_effects}}{Character vector of random-effect group names.}
 #'     \item{\code{sentence}}{Character scalar. Full interpretive paragraph.}

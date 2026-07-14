@@ -51,7 +51,7 @@ mystery-caller study demographics: no "Unknown" rows (use \code{missing = "ifany
 when stratified.
 }
 \examples{
-\dontshow{if (interactive() && requireNamespace("gtsummary", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive() && requireNamespace("gtsummary", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 df <- data.frame(
   gender    = sample(c("Male", "Female"), 100, replace = TRUE),
   setting   = sample(c("Academic", "Private"), 100, replace = TRUE),
