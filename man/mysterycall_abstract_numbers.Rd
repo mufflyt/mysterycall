@@ -163,6 +163,7 @@ result2$abstract_sentence
 \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}}, \code{\link[=mysterycall_lmm]{mysterycall_lmm()}}
 
 Other reporting: 
+\code{\link{mysterycall_direction_words}},
 \code{\link{mysterycall_exclusion_summary}()},
 \code{\link{mysterycall_irr_to_days}()},
 \code{\link{mysterycall_results_paragraph}()},

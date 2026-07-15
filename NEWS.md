@@ -1,5 +1,13 @@
 # mysterycall (development version)
 
+## New functions
+
+- `mysterycall_get_direction()` and `mysterycall_get_change_verb()`: manuscript/
+  abstract helpers that pick a direction word ("higher"/"lower",
+  "increasing"/"decreasing", etc.) from the **sign of the data**, so prose can
+  never contradict the numbers it describes. Vectorized, NA-safe, with a `tol`
+  no-change band and fully configurable words per subspecialty/table.
+
 ## Covariate reader hardening
 
 - `mysterycall_get_cms_enrollment()` and `mysterycall_get_hrsa_ahrf()` now
