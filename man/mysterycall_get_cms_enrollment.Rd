@@ -9,11 +9,14 @@ mysterycall_get_cms_enrollment(cms_csv_path, county_fips)
 \arguments{
 \item{cms_csv_path}{Path to the tidy CMS monthly enrollment CSV (see Details).}
 
-\item{county_fips}{Character. Five-digit State-County FIPS code to filter to.}
+\item{county_fips}{Five-digit State-County FIPS code to filter to. Leading
+zeros are handled: numeric FIPS (in the CSV or this argument) are left-padded
+to five characters before matching, so \code{"08031"} and \code{8031} both work.}
 }
 \value{
-A data frame (0 or more rows) with columns \code{FIPS}, \code{County}, \code{State},
-\verb{Medicare Enrollment}, \verb{Medicaid/CHIP Enrollment}, and \code{Report_Month}.
+A data frame (0 or more rows) with columns \code{FIPS} (a zero-padded
+five-character string), \code{County}, \code{State}, \verb{Medicare Enrollment},
+\verb{Medicaid/CHIP Enrollment}, and \code{Report_Month}.
 }
 \description{
 Reads a county-level CMS monthly enrollment CSV export and returns the row(s)

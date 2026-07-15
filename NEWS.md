@@ -9,6 +9,10 @@
   documentation now spells out the exact expected schema (`get_hrsa_ahrf`
   requires a preprocessed `ahrf_county_data` DuckDB table — the raw fixed-width
   AHRF is not read directly; CSV input is not supported).
+- `mysterycall_get_cms_enrollment()` matches FIPS leading-zero-safe:
+  `read.csv()` parses `"08031"` as the integer `8031`, so numeric FIPS (in the
+  CSV and in the `county_fips` argument) are now left-padded to five characters
+  before matching, and the returned `FIPS` column is a zero-padded string.
 - Added offline, fixture-based tests (temp CSV / temp DuckDB) for
   `mysterycall_get_cms_enrollment()`, `mysterycall_get_hrsa_ahrf()`, and
   `mysterycall_track_clinician_churn()`.

@@ -324,9 +324,12 @@ mysterycall_get_hrsa_ahrf <- function(ahrf_db_path, county_fips) {
 #' found) rather than failing deep inside `dplyr::select()`.
 #'
 #' @param cms_csv_path Path to the tidy CMS monthly enrollment CSV (see Details).
-#' @param county_fips Character. Five-digit State-County FIPS code to filter to.
-#' @return A data frame (0 or more rows) with columns `FIPS`, `County`, `State`,
-#'   `Medicare Enrollment`, `Medicaid/CHIP Enrollment`, and `Report_Month`.
+#' @param county_fips Five-digit State-County FIPS code to filter to. Leading
+#'   zeros are handled: numeric FIPS (in the CSV or this argument) are left-padded
+#'   to five characters before matching, so `"08031"` and `8031` both work.
+#' @return A data frame (0 or more rows) with columns `FIPS` (a zero-padded
+#'   five-character string), `County`, `State`, `Medicare Enrollment`,
+#'   `Medicaid/CHIP Enrollment`, and `Report_Month`.
 #' @export
 mysterycall_get_cms_enrollment <- function(cms_csv_path, county_fips) {
   if (!file.exists(cms_csv_path)) {
@@ -349,7 +352,20 @@ mysterycall_get_cms_enrollment <- function(cms_csv_path, county_fips) {
     )
   }
 
+  # Normalize FIPS on both sides: read.csv parses "08031" as the integer 8031,
+  # which would never match a "08031" filter. Left-pad purely-numeric FIPS to
+  # five digits (as characters) so leading-zero counties match and the returned
+  # FIPS column is a clean 5-character string for downstream joins.
+  pad_fips <- function(x) {
+    x <- trimws(as.character(x))
+    num <- grepl("^[0-9]+$", x)
+    x[num] <- formatC(as.integer(x[num]), width = 5L, flag = "0")
+    x
+  }
+  df$FIPS <- pad_fips(df$FIPS)
+  target  <- pad_fips(county_fips)
+
   df %>%
-    dplyr::filter(.data$FIPS == county_fips) %>%
+    dplyr::filter(.data$FIPS == target) %>%
     dplyr::select(dplyr::all_of(required_cols))
 }

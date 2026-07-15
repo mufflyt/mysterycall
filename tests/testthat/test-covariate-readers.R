@@ -29,6 +29,19 @@ test_that("get_cms_enrollment returns the requested county's row", {
                       "Medicaid/CHIP Enrollment", "Report_Month"))
 })
 
+test_that("get_cms_enrollment matches leading-zero FIPS (read.csv drops the zero)", {
+  csv <- .write_cms_csv(c(
+    "FIPS,County,State,Medicare Enrollment,Medicaid/CHIP Enrollment,Report_Month",
+    "08031,Denver,CO,45000,28000,2024-01",
+    "48113,Dallas,TX,50000,30000,2024-01"
+  ))
+  # "08031" as a string and 8031 as read from the CSV must reconcile.
+  res <- mysterycall_get_cms_enrollment(csv, "08031")
+  expect_equal(nrow(res), 1L)
+  expect_equal(res$County, "Denver")
+  expect_equal(res$FIPS, "08031")          # returned zero-padded
+})
+
 test_that("get_cms_enrollment errors clearly on a missing required column", {
   csv <- .write_cms_csv(c(
     "FIPS,County,State,Medicare Enrollment,Report_Month",   # no Medicaid/CHIP col
