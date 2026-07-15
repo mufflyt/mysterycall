@@ -95,13 +95,13 @@ test_that("nb_power: ci values are in [0, 1]", {
   expect_true(all(result$ci >= 0 & result$ci <= 1))
 })
 
-test_that("nb_power: total_n = 2 * n_physicians * calls_per_physician", {
+test_that("nb_power: total_n = n_physicians * calls_per_physician (paired)", {
   skip_if_not_installed("glmmTMB")
   result <- suppressWarnings(suppressMessages(
     mysterycall_nb_power(n_physicians = 8L, calls_per_physician = 3L,
                          irr = 0.75, n_sim = 10L, seed = 1L)
   ))
-  expect_equal(result$total_n, 2L * 8L * 3L)
+  expect_equal(result$total_n, 8L * 3L)
 })
 
 test_that("nb_power: seed produces identical results on two calls", {

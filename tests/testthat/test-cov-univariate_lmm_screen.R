@@ -59,7 +59,7 @@ test_that("univariate_lmm_screen: results has correct columns", {
 
   result <- suppressMessages(mysterycall_univariate_lmm_screen(df, output_dir = NA))
 
-  expected_cols <- c("Predictor", "P_Value", "P_Formatted", "IRR", "CI_Lower", "CI_Upper")
+  expected_cols <- c("Predictor", "P_Value", "P_Formatted", "Estimate", "CI_Lower", "CI_Upper")
   expect_true(all(expected_cols %in% names(result$results)))
 })
 

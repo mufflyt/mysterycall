@@ -158,3 +158,16 @@ test_that("mysterycall_read_table normalizes numeric-looking npi columns to char
   expect_type(df$npi, "character")
   expect_equal(df$npi, "1922051358")
 })
+
+# Regression (bug 43): a missing numeric NPI must round-trip to NA_character_,
+# not the literal string "NA" (which would collide across rows in joins).
+test_that("mysterycall_read_table - missing numeric NPI stays NA, not 'NA'", {
+  tmp <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp))
+  writeLines(c("npi,x", "1234567893,a", "NA,b", "9876543210,c"), tmp)
+  df <- mysterycall_read_table(tmp, format = "csv")
+  expect_type(df$npi, "character")
+  expect_true(is.na(df$npi[2]))
+  expect_false(any(df$npi == "NA", na.rm = TRUE))
+  expect_equal(df$npi[c(1L, 3L)], c("1234567893", "9876543210"))
+})

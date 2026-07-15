@@ -31,6 +31,10 @@ mysterycall_extract_zip5 <- function(x) {
 
   .extract_one <- function(s) {
     if (is.na(s)) return(NA_character_)
+    # Drop a ZIP+4 suffix first, otherwise substr() crosses the 5/+4 boundary
+    # when the 5-digit part has already lost its leading zero (e.g.
+    # "7001-1234" -> "70011" instead of "07001").
+    s <- sub("-.*$", "", s)
     digits <- gsub("[^0-9]", "", s)
     if (nchar(digits) < 3L) return(NA_character_)
     zip5 <- substr(digits, 1L, 5L)

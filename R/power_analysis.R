@@ -171,7 +171,9 @@ mysterycall_poisson_power <- function(irr,
     n_total_calls <- n_total * 2L
   } else {
     n_total       <- n_per_arm * 2L
-    n_total_calls <- n_total * 2L
+    # Unpaired design = one call per provider, so calls == providers. (The
+    # paired both_arms branch is what makes two calls per provider.)
+    n_total_calls <- n_total
   }
 
   message(sprintf(

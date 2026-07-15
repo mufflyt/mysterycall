@@ -126,13 +126,21 @@ mysterycall_sample_demographics <- function(
   }
 
   # 5. Summary sentence
+  # Only mention the District of Columbia when it is actually among the
+  # included states; otherwise the clause contradicts the excluded list.
+  dc_clause <- if ("District of Columbia" %in% included_states) {
+    ", including the District of Columbia"
+  } else {
+    ""
+  }
   summary_sentence <- sprintf(
     paste0(
-      "Our sample included %d calls to physician offices from %d states, ",
-      "including the District of Columbia, excluding %s."
+      "Our sample included %d calls to physician offices from %d states%s, ",
+      "excluding %s."
     ),
     unique_physicians_count,
     num_included_states,
+    dc_clause,
     excluded_states_series
   )
 

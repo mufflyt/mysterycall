@@ -10,7 +10,9 @@ mysterycall_irr_to_days(
   exposure_col = NULL,
   ref_group = NULL,
   digits = 1L,
-  irr_digits = 2L
+  irr_digits = 2L,
+  subject = "callers",
+  exposure_descriptor = "insured"
 )
 }
 \arguments{
@@ -34,6 +36,16 @@ narrative sentences (e.g. \code{"BCBS"}). When \code{NULL}, sentences omit the
 sentences. Default \code{1L}.}
 
 \item{irr_digits}{Integer. Decimal places for IRR in the sentences. Default \code{2L}.}
+
+\item{subject}{Character scalar. The noun for the units being compared in the
+narrative sentences. Default \code{"callers"}.}
+
+\item{exposure_descriptor}{Character scalar or \code{NULL}. Optional infix that
+describes the exposure, joined to the group label with a hyphen (e.g.
+\code{"insured"} yields \code{"Medicaid-insured callers"}). Default \code{"insured"} for
+backward compatibility with insurance studies; set to \code{NULL} (or \code{""}) for
+non-insurance exposures (e.g. \code{exposure_col = "ent_type"}) so sentences read
+\code{"Laryngology callers"} instead of the nonsensical \code{"Laryngology-insured"}.}
 }
 \value{
 A list of class \code{mysterycall_irr_days} with elements:

@@ -63,11 +63,28 @@ mysterycall_flag_repeat_physicians <- function(data,
   checkmate::assert_number(threshold, lower = 0)
 
   threshold <- as.integer(threshold)
-  group_cols <- if (!is.null(name_col)) c(id_col, name_col) else id_col
 
+  # Group on id_col ONLY so that name spelling variants for the same physician
+  # id are not split into separate singleton groups (which would let true
+  # duplicates go unflagged). `name_col`, when supplied, is carried through as a
+  # display annotation (first observed value per id), not a grouping key.
   result <- data |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(group_cols))) |>
-    dplyr::summarise(n_calls = dplyr::n(), .groups = "drop") |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(id_col)))
+
+  if (!is.null(name_col)) {
+    result <- result |>
+      dplyr::summarise(
+        .name_annotation = dplyr::first(.data[[name_col]]),
+        n_calls          = dplyr::n(),
+        .groups          = "drop"
+      )
+    names(result)[names(result) == ".name_annotation"] <- name_col
+  } else {
+    result <- result |>
+      dplyr::summarise(n_calls = dplyr::n(), .groups = "drop")
+  }
+
+  result <- result |>
     dplyr::arrange(dplyr::desc(.data$n_calls)) |>
     dplyr::filter(.data$n_calls > threshold)
 

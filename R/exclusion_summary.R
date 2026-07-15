@@ -233,7 +233,8 @@ mysterycall_exclusion_summary <- function(
   n_unreachable            <- sum(counts[unreachable_keys])
   n_reached                <- total - n_unreachable
   n_excluded_among_reached <- sum(counts[reached_excl_keys])
-  n_included               <- n_reached - n_excluded_among_reached
+  n_included               <- sum(col_vec == inclusion_value, na.rm = TRUE)
+  n_unrecognized           <- total - n_included - n_unreachable - n_excluded_among_reached
 
   pct_reached <- if (total > 0L) n_reached  / total * 100 else NA_real_
   percentages <- if (total > 0L) {
@@ -264,6 +265,15 @@ mysterycall_exclusion_summary <- function(
   )
   all_counts <- c(as.integer(n_included), counts)
 
+  ## Explicit bucket for outcomes matching neither the inclusion value nor any
+  ## known exclusion category (typos, NA, unmapped codes). Keeps table rows
+  ## summing to `total` instead of silently folding these into "included".
+  if (n_unrecognized > 0L) {
+    all_keys    <- c(all_keys, "unrecognized")
+    all_labels  <- c(all_labels, "Unrecognized outcome")
+    all_counts  <- c(all_counts, as.integer(n_unrecognized))
+  }
+
   tbl <- data.frame(
     category = all_keys,
     label    = all_labels,
@@ -287,6 +297,7 @@ mysterycall_exclusion_summary <- function(
       n_unreachable = as.integer(n_unreachable),
       pct_reached   = pct_reached,
       n_included    = as.integer(n_included),
+      n_unrecognized = as.integer(n_unrecognized),
       counts        = counts,
       percentages   = percentages,
       paragraph     = paragraph,

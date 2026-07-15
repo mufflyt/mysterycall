@@ -12,7 +12,8 @@ mysterycall_results_paragraph(
   alpha = 0.05,
   or_digits = 2L,
   ci_digits = 2L,
-  p_digits = 3L
+  p_digits = 3L,
+  subject = "callers"
 )
 }
 \arguments{
@@ -40,6 +41,10 @@ downstream use; does not currently filter sentences. Default \code{0.05}.}
 \item{ci_digits}{Integer scalar: decimal places for CI bounds. Default \code{2L}.}
 
 \item{p_digits}{Integer scalar: decimal places for p-values. Default \code{3L}.}
+
+\item{subject}{Character scalar: the noun for the units being narrated.
+Default \code{"callers"}. Set to another noun (e.g. \code{"patients"}) for studies
+whose exposure is not caller-based.}
 }
 \value{
 A single character string. One sentence is produced per

@@ -11,9 +11,13 @@ NULL
 #' p-value from the second row of the coefficient table (the predictor row).
 #' Predictors with only one unique non-NA value are skipped with a message.
 #'
-#' Incidence rate ratios (IRR) and 95 % Wald confidence intervals on the
-#' exponential scale are returned for convenient forest-plot input, even though
-#' the underlying model is linear (not Poisson).
+#' Because the underlying model is linear (not Poisson), each predictor's
+#' fixed-effect coefficient is an additive mean difference in the outcome's own
+#' units, returned as `Estimate` with a 95 % Wald confidence interval on the
+#' same additive scale. (Earlier versions exponentiated this coefficient and
+#' mislabelled it "IRR", which is meaningless for a linear-scale day
+#' difference.) Fit [mysterycall_univariate_poisson_screen()] instead if a true
+#' rate ratio is wanted.
 #'
 #' @param data A data frame. Rows where `outcome_col` is `NA` are dropped.
 #' @param outcome_col Character scalar. The numeric outcome column.
@@ -38,8 +42,8 @@ NULL
 #' @return A named list with four elements:
 #' \describe{
 #'   \item{`results`}{[tibble::tibble()] with columns `Predictor`, `P_Value`,
-#'     `P_Formatted`, `IRR`, `CI_Lower`, `CI_Upper` for every predictor
-#'     attempted.}
+#'     `P_Formatted`, `Estimate` (additive mean difference in outcome units),
+#'     `CI_Lower`, `CI_Upper` for every predictor attempted.}
 #'   \item{`significant`}{Subset of `results` where `P_Value < alpha`, sorted
 #'     ascending by `P_Value`.}
 #'   \item{`sentence`}{Character scalar summarising significant predictors.}
@@ -132,16 +136,19 @@ mysterycall_univariate_lmm_screen <- function(
       std_error  <- coef_tbl[2L, "Std. Error"]
       p_value    <- coef_tbl[2L, "Pr(>|t|)"]
 
-      irr      <- exp(coef_value)
-      ci_lower <- exp(coef_value - 1.96 * std_error)
-      ci_upper <- exp(coef_value + 1.96 * std_error)
+      # The model is a LINEAR mixed model on the raw outcome, so the coefficient
+      # is an additive mean difference (in outcome units), NOT a log rate ratio.
+      # Report it and its Wald CI on the additive scale; exp()-ing it (the old
+      # behaviour) produced a meaningless "IRR" such as exp(7 days) ~ 1096.
+      ci_lower <- coef_value - 1.96 * std_error
+      ci_upper <- coef_value + 1.96 * std_error
 
       data.frame(
         Predictor   = predictor,
         P_Value     = p_value,
         P_Formatted = ifelse(p_value < 0.01, "<0.01",
                              as.character(round(p_value, 2))),
-        IRR         = irr,
+        Estimate    = coef_value,
         CI_Lower    = ci_lower,
         CI_Upper    = ci_upper,
         stringsAsFactors = FALSE
@@ -160,7 +167,7 @@ mysterycall_univariate_lmm_screen <- function(
       Predictor   = character(),
       P_Value     = numeric(),
       P_Formatted = character(),
-      IRR         = numeric(),
+      Estimate    = numeric(),
       CI_Lower    = numeric(),
       CI_Upper    = numeric()
     )

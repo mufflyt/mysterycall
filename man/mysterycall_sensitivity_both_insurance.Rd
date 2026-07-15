@@ -52,8 +52,9 @@ insurance types (insurance column is normalized to lowercase).}
 \item{\code{wait_comparison}}{\code{\link[tibble:tibble]{tibble::tibble()}} with columns \code{insurance},
 \code{mean_wait}, \code{sd_wait}, \code{median_wait}, \code{iqr_wait} for each insurance
 type. Empty tibble when \code{n_both == 0}.}
-\item{\code{t_test}}{Object returned by \code{\link[stats:t.test]{stats::t.test()}}, or \code{NULL} when
-there are insufficient data.}
+\item{\code{t_test}}{Object returned by a \strong{paired} \code{\link[stats:t.test]{stats::t.test()}} on one
+observation per physician (their mean wait in each arm), reflecting the
+paired design, or \code{NULL} when there are insufficient data.}
 \item{\code{sentence}}{Character scalar. Manuscript-ready descriptive sentence.}
 \item{\code{phone_ids}}{Character vector of phone numbers (or IDs) for
 physicians called under both insurance types.}

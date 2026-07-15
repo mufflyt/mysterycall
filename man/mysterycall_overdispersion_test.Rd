@@ -70,6 +70,18 @@ absorbed.
 }
 }
 
+\section{Mixed-effects caveat}{
+
+For mixed-effects models (\code{glmmTMB}, \code{merMod}), \code{\link[=df.residual]{df.residual()}} counts only
+the fixed-effect parameters and ignores the effective degrees of freedom
+consumed by the random effects, so phi is an \strong{approximation} rather than an
+exact dispersion ratio. The verbal interpretation accounts for this by
+treating low residual phi as expected for negative-binomial and mixed models
+(dispersion absorbed by the NB variance or random intercepts) rather than as
+overfitting. For a formal simulation-based check on a GLMM, prefer
+\code{DHARMa::testDispersion()}.
+}
+
 \examples{
 ## Poisson GLM on count data ------------------------------------------------
 set.seed(42)

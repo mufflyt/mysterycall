@@ -93,3 +93,67 @@ test_that("Insufficient lab assistant names handling", {
     fixed = TRUE
   )
 })
+
+# Regression (BUG 25): round-robin must be balanced across the WHOLE roster,
+# not restart within each insurance group (which skewed counts by >1).
+test_that("Assignment is balanced within one row across the full frame", {
+  output_dir <- file.path(tempdir(), paste0("split_balance_", as.integer(Sys.time())))
+  dir.create(output_dir, showWarnings = FALSE)
+  on.exit(unlink(output_dir, recursive = TRUE), add = TRUE)
+
+  data <- data.frame(
+    for_redcap = 1:10,
+    id         = 1:10,
+    doctor_id  = 1:10,
+    insurance  = rep(c("Medicaid", "Blue Cross/Blue Shield"), length.out = 10),
+    stringsAsFactors = FALSE
+  )
+  lab_assistant_names <- c("Ann", "Bob", "Cy")
+
+  suppressMessages(suppressWarnings(
+    mysterycall_split_and_save(
+      data_or_path        = data,
+      output_directory    = output_dir,
+      lab_assistant_names = lab_assistant_names
+    )
+  ))
+
+  complete_file <- list.files(output_dir, pattern = "complete_non_split_version",
+                              full.names = TRUE)
+  combined <- openxlsx::read.xlsx(complete_file[[1]])
+  counts   <- table(combined$lab_assistant_assigned)
+  expect_lte(max(counts) - min(counts), 1L)
+})
+
+# Regression (BUG 26): output must follow roster order and include empty
+# assistants as zero-row workbooks (base::split() dropped them).
+test_that("Every roster name gets a workbook, including zero-row assistants", {
+  output_dir <- file.path(tempdir(), paste0("split_roster_", as.integer(Sys.time())))
+  dir.create(output_dir, showWarnings = FALSE)
+  on.exit(unlink(output_dir, recursive = TRUE), add = TRUE)
+
+  data <- data.frame(
+    for_redcap = 1:2,
+    id         = 1:2,
+    doctor_id  = 1:2,
+    insurance  = c("Medicaid", "Blue Cross/Blue Shield"),
+    stringsAsFactors = FALSE
+  )
+  # More assistants than rows -> at least two assistants receive zero rows.
+  lab_assistant_names <- c("Ann", "Bob", "Cy", "Dee")
+
+  paths <- suppressMessages(suppressWarnings(
+    mysterycall_split_and_save(
+      data_or_path        = data,
+      output_directory    = output_dir,
+      lab_assistant_names = lab_assistant_names
+    )
+  ))
+
+  # One combined workbook + one per assistant, in roster order.
+  expect_length(paths, length(lab_assistant_names) + 1L)
+  for (i in seq_along(lab_assistant_names)) {
+    expect_true(grepl(lab_assistant_names[[i]], basename(paths[[i + 1L]]), fixed = TRUE))
+    expect_true(file.exists(paths[[i + 1L]]))
+  }
+})

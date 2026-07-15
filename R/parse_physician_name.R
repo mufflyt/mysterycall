@@ -43,6 +43,28 @@ NULL
   x
 }
 
+#' Test whether a post-comma name segment is a suffix or credential
+#'
+#' Distinguishes a genuine generational suffix / professional credential
+#' (`"Jr."`, `"MD"`, `"PhD"`, ...) from a given name.  Used to tell the
+#' documented `"Last, First"` format apart from `"First Last, MD"`.
+#'
+#' @param x Character scalar (a single comma-delimited segment, trimmed).
+#'
+#' @return Logical scalar; `TRUE` when `x` looks like a suffix/credential.
+#' @family name-parsing
+#' @keywords internal
+.is_name_suffix <- function(x) {
+  x <- stringr::str_trim(x)
+  if (!nzchar(x)) return(FALSE)
+  grepl(
+    paste0("^(jr|sr|ii|iii|iv|v|2nd|3rd|4th|md|do|phd|mph|mba|msc|ms|",
+           "facog|facs|faap|facp|mbbs|rn|np|pa|pa-c|esq|",
+           "m\\.d\\.|d\\.o\\.|ph\\.d\\.|m\\.p\\.h\\.)\\.?$"),
+    x, ignore.case = TRUE, perl = TRUE
+  )
+}
+
 # -- Core implementation (uncached) -------------------------------------------
 
 #' Core implementation of physician name parsing
@@ -79,10 +101,29 @@ NULL
     stringr::str_replace_all("\\s+", " ") |>
     stringr::str_trim()
 
-  # Split on first comma to separate primary name from suffix.
-  parts    <- stringr::str_split(prepped, ",", n = 2)
-  primary  <- vapply(parts, function(p) if (length(p) == 0L || is.na(p[[1L]])) "" else p[[1L]], character(1L))
-  suffixes <- vapply(parts, function(p) if (length(p) > 1L && !is.na(p[[2L]])) stringr::str_trim(p[[2L]]) else "", character(1L))
+  # Split on comma, then decide whether the post-comma segment is a suffix /
+  # credential ("First Last, MD") or a given name ("Last, First"). For the
+  # documented "Last, First[, credential]" format, reorder to "First Last" so
+  # humaniformat parses the components correctly instead of treating the first
+  # name as a suffix.
+  seg_list <- stringr::str_split(prepped, ",")
+  reorg <- lapply(seg_list, function(segs) {
+    segs <- stringr::str_trim(segs)
+    segs <- segs[!is.na(segs)]
+    if (length(segs) == 0L) return(list(primary = "", suffix = ""))
+    if (length(segs) == 1L) return(list(primary = segs[[1L]], suffix = ""))
+    if (.is_name_suffix(segs[[2L]])) {
+      # "First Last, MD[, FACOG]" -- everything after the first comma is suffix.
+      list(primary = segs[[1L]],
+           suffix  = paste(segs[-1L], collapse = ", "))
+    } else {
+      # "Last, First[, credential]" -- reorder to "First Last".
+      list(primary = stringr::str_trim(paste(segs[[2L]], segs[[1L]])),
+           suffix  = if (length(segs) > 2L) paste(segs[-(1:2)], collapse = ", ") else "")
+    }
+  })
+  primary  <- vapply(reorg, function(r) r$primary, character(1L))
+  suffixes <- vapply(reorg, function(r) r$suffix,  character(1L))
 
   primary_safe <- ifelse(nzchar(primary), primary, "x x")
   parsed <- humaniformat::parse_names(primary_safe)

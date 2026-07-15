@@ -33,10 +33,13 @@ mysterycall_save_quality_table <- function(data, filepath, output_format = c("cs
     stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "), call. = FALSE)
   }
 
-  # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
+  # Group by 'npi' ONLY so that variant spellings of 'name' for the same NPI are
+  # not split into separate singleton groups (which would let true duplicates go
+  # unflagged). 'name' is carried through as a display annotation (first observed
+  # value per NPI), not a grouping key.
   filtered_data <- data %>%
-    dplyr::group_by(.data$npi, .data$name) %>%
-    dplyr::summarize(count = n(), .groups = 'drop') %>%
+    dplyr::group_by(.data$npi) %>%
+    dplyr::summarize(name = dplyr::first(.data$name), count = n(), .groups = 'drop') %>%
     dplyr::filter(.data$count > 2) %>%
     dplyr::arrange(desc(.data$count))
 

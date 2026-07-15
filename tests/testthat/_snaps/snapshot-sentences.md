@@ -80,7 +80,7 @@
     Code
       result$sentence
     Output
-      [1] "Of 30 physicians called, 30 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 13.1 days (SD 4.1) for Medicaid vs 12.8 days (SD 3.9) for BCBS (t-test p = 0.774)."
+      [1] "Of 30 physicians called, 30 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 13.1 days (SD 4.1) for Medicaid vs 12.8 days (SD 3.9) for BCBS (t-test p = 0.747)."
 
 # mysterycall_overdispersion_sentence sentence snapshot
 
@@ -108,5 +108,5 @@
     Code
       result$summary_sentence
     Output
-      [1] "Our sample included 60 calls to physician offices from 10 states, including the District of Columbia, excluding Alabama, Alaska, Arizona, Arkansas, Connecticut, Delaware, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia."
+      [1] "Our sample included 60 calls to physician offices from 10 states, excluding Alabama, Alaska, Arizona, Arkansas, Connecticut, Delaware, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia."
 

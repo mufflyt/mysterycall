@@ -237,3 +237,60 @@ test_that("lmm: all-NA outcome throws an error", {
     "No complete cases"
   )
 })
+
+# ── Regression: bug fixes (CI/df/label) ───────────────────────────────────────
+
+# BUG 44: fixed-effect CI must use the matching t quantile so it agrees with
+# the Satterthwaite t-based p-value. Invariant: a term's CI excludes 0 iff its
+# p-value < (1 - conf_level).
+test_that("lmm: CI agreement with p-value uses t (not z) quantile", {
+  fit <- suppressWarnings(
+    mysterycall_lmm(sym_df, "wait_days", "scenario", "physician")
+  )
+  ct <- fit$coef_table
+  excludes_zero <- ct$ci_lower > 0 | ct$ci_upper < 0
+  sig_p         <- ct$p_value < 0.05
+  expect_equal(excludes_zero, sig_p)
+})
+
+test_that("lmm: CI half-width matches per-term t quantile times SE", {
+  fit <- suppressWarnings(
+    mysterycall_lmm(sym_df, "wait_days", "scenario", "physician")
+  )
+  ct <- fit$coef_table
+  t_crit   <- stats::qt(0.975, df = ct$df)
+  expected <- t_crit * ct$se
+  observed <- (ct$ci_upper - ct$ci_lower) / 2
+  expect_equal(observed, expected, tolerance = 1e-8)
+  # t quantile is strictly wider than the z quantile at finite df
+  expect_true(all(t_crit > stats::qnorm(0.975)))
+})
+
+# BUG 46: transformed-scale SD units must be labelled log1p(days), not "days".
+test_that("lmm: print labels residual/RE SD with log1p units when log-transformed", {
+  fit <- suppressWarnings(suppressMessages(
+    mysterycall_lmm(skewed_df, "wait_days", "scenario", "physician")
+  ))
+  out <- capture.output(print(fit))
+  resid_line <- grep("Residual SD", out, value = TRUE)
+  expect_match(resid_line, "log1p\\(days\\)")
+  # raw-scale model keeps plain days
+  fit_raw <- suppressWarnings(
+    mysterycall_lmm(sym_df, "wait_days", "scenario", "physician")
+  )
+  out_raw <- capture.output(print(fit_raw))
+  resid_raw <- grep("Residual SD", out_raw, value = TRUE)
+  expect_match(resid_raw, "SD = [0-9.]+ days")
+  expect_false(grepl("log1p", resid_raw))
+})
+
+# BUG 47: fallback residual df (no lmerTest) is n - est_df, not n - est_df - 1.
+test_that("lmm: fallback residual df does not double-count the intercept", {
+  skip_if(requireNamespace("lmerTest", quietly = TRUE),
+          "lmerTest present: Satterthwaite df path used, not the fallback")
+  fit <- suppressWarnings(
+    mysterycall_lmm(sym_df, "wait_days", "scenario", "physician")
+  )
+  # n = 60, scenario has 3 levels -> est_df = 1 (intercept) + 2 = 3
+  expect_equal(unique(fit$coef_table$df), fit$n - 3L)
+})

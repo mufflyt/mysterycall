@@ -288,3 +288,27 @@ test_that("Setting, Notes, Outcome absent from $table when not in prior_studies"
   expect_false("Notes"   %in% names(result$table))
   expect_false("Outcome" %in% names(result$table))
 })
+
+# ---------------------------------------------------------------------------
+# Regression (BUG 37): $or_range describes PRIOR studies only, excluding the
+# current-study row, since the sentence reads "N published studies ... ranged
+# from {or_range}".
+# ---------------------------------------------------------------------------
+
+test_that("or_range excludes the current-study row", {
+  prior   <- make_prior()  # prior ORs: 0.38, 0.61, 0.45, 0.87 -> range 0.38-0.87
+  current <- make_current()
+  current$or       <- 0.10   # extreme value OUTSIDE the prior range
+  current$ci_lower <- 0.05
+  current$ci_upper <- 0.20
+
+  res <- mysterycall_literature_table(prior, current_study = current)
+  expect_equal(res$or_range, "0.38-0.87")
+  expect_false(grepl("0.10", res$or_range, fixed = TRUE))
+})
+
+test_that("or_range spans all rows when current_study is NULL", {
+  prior <- make_prior()
+  res   <- mysterycall_literature_table(prior, current_study = NULL)
+  expect_equal(res$or_range, "0.38-0.87")
+})

@@ -62,7 +62,7 @@ mysterycall_plot_effect <- function(model,
     effects::effect(term, model),
     error = function(e) stop("effects::effect() failed: ", conditionMessage(e), call. = FALSE)
   )
-  df <- as.data.frame(eff)
+  df <- as.data.frame(eff, type = type)
 
   x_col <- intersect(term, names(df))
   if (length(x_col) == 0L) x_col <- names(df)[[1L]]

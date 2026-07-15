@@ -38,8 +38,9 @@ NULL
 #'   \item{`wait_comparison`}{[tibble::tibble()] with columns `insurance`,
 #'     `mean_wait`, `sd_wait`, `median_wait`, `iqr_wait` for each insurance
 #'     type. Empty tibble when `n_both == 0`.}
-#'   \item{`t_test`}{Object returned by [stats::t.test()], or `NULL` when
-#'     there are insufficient data.}
+#'   \item{`t_test`}{Object returned by a **paired** [stats::t.test()] on one
+#'     observation per physician (their mean wait in each arm), reflecting the
+#'     paired design, or `NULL` when there are insufficient data.}
 #'   \item{`sentence`}{Character scalar. Manuscript-ready descriptive sentence.}
 #'   \item{`phone_ids`}{Character vector of phone numbers (or IDs) for
 #'     physicians called under both insurance types.}
@@ -130,20 +131,26 @@ mysterycall_sensitivity_both_insurance <- function(
     )
   }
 
-  # ---- t-test ----------------------------------------------------------------
+  # ---- paired t-test ---------------------------------------------------------
+  # The design is PAIRED: every included physician was called under both arms.
+  # Compare one observation per physician (their mean wait in each arm) with a
+  # paired t-test. An unpaired test (the old `outcome ~ insurance` form) ignores
+  # the within-physician correlation, inflating the SE and understating power.
   t_test <- NULL
   if (n_both > 0L) {
-    ttest_rows <- both_data[
-      both_data[[insurance_col]] %in% c(medicaid_label, bcbs_label) &
-        !is.na(both_data[[outcome_col]]),
-      , drop = FALSE
-    ]
-    n_groups <- length(unique(ttest_rows[[insurance_col]]))
-    if (nrow(ttest_rows) >= 2L && n_groups == 2L) {
+    per_phys <- lapply(phones_with_both, function(ph) {
+      rows <- both_data[both_data[[phone_col]] == ph, , drop = FALSE]
+      mcd  <- rows[[outcome_col]][rows[[insurance_col]] == medicaid_label]
+      bcb  <- rows[[outcome_col]][rows[[insurance_col]] == bcbs_label]
+      mcd  <- mcd[!is.na(mcd)]
+      bcb  <- bcb[!is.na(bcb)]
+      if (length(mcd) == 0L || length(bcb) == 0L) return(NULL)
+      c(medicaid = mean(mcd), bcbs = mean(bcb))
+    })
+    per_phys <- do.call(rbind, per_phys[!vapply(per_phys, is.null, logical(1L))])
+    if (!is.null(per_phys) && nrow(per_phys) >= 2L) {
       t_test <- tryCatch(
-        stats::t.test(
-          ttest_rows[[outcome_col]] ~ ttest_rows[[insurance_col]]
-        ),
+        stats::t.test(per_phys[, "medicaid"], per_phys[, "bcbs"], paired = TRUE),
         error = function(e) NULL
       )
     }

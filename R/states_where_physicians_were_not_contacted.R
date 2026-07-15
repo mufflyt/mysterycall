@@ -128,11 +128,19 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
     paste0("The excluded states include ", excluded_states_series, ".")
   }
 
+  # Only mention the District of Columbia when it is actually among the
+  # included states; otherwise the clause contradicts the excluded list.
+  dc_clause <- if ("District of Columbia" %in% included_states$state) {
+    " including the District of Columbia"
+  } else {
+    ""
+  }
+
   output_string <- paste0(
     "A total of ", unique_physicians,
     " unique physicians were identified in the dataset and were successfully contacted",
     " (i.e., with a recorded wait time for an appointment) in ",
-    num_included_states, " states including the District of Columbia. ",
+    num_included_states, " states", dc_clause, ". ",
     exclusion_sentence
   )
 

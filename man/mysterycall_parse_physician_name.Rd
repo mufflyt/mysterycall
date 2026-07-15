@@ -88,6 +88,7 @@ names; \code{\link[=mysterycall_test_name_parser]{mysterycall_test_name_parser()
 Other name-parsing: 
 \code{\link{.handle_do_credential}()},
 \code{\link{.handle_three_part_comma}()},
+\code{\link{.is_name_suffix}()},
 \code{\link{.parse_physician_name_impl}()},
 \code{\link{mysterycall_format_physician_name}()},
 \code{\link{mysterycall_test_name_parser}()},

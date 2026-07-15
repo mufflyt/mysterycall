@@ -524,3 +524,31 @@ test_that("print.mysterycall_wait_time_crossover returns x invisibly", {
   expect_s3_class(x, "mysterycall_wait_time_crossover")
   expect_identical(result, x)
 })
+
+# Regression (BUG 27): beyond the crossover, group1 (x-axis) has the longer wait
+test_that("crossover sentence attributes longer waits to group1 beyond crossover", {
+  # Construct data yielding a finite crossover with 0 < slope < 1 (log scale).
+  set.seed(271)
+  n_doc <- 40
+  g1 <- pmax(1, round(rnorm(n_doc, mean = 15, sd = 4)))
+  # y = 0.5*x + noise on original scale keeps slope in (0,1)
+  g2 <- pmax(1, round(0.5 * g1 + rnorm(n_doc, sd = 1)))
+
+  df <- data.frame(
+    phone = rep(sprintf("555-%04d", seq_len(n_doc)), times = 2L),
+    insurance = rep(c("GroupA", "GroupB"), each = n_doc),
+    business_days_until_appointment = c(g1, g2),
+    stringsAsFactors = FALSE
+  )
+
+  result <- mysterycall_wait_time_crossover(
+    df, group1 = "GroupA", group2 = "GroupB",
+    log_transform = FALSE, min_pairs = 5L
+  )
+
+  if (!is.na(result$crossover_days) && result$crossover_days > 0) {
+    # group1 (GroupA) waits longer beyond the crossover, not group2
+    expect_match(result$sentence, "GroupA patients experienced longer waits")
+    expect_false(grepl("GroupB patients experienced longer waits", result$sentence))
+  }
+})

@@ -48,8 +48,8 @@ Default \code{"univariate_lmm_screen.csv"}.}
 A named list with four elements:
 \describe{
 \item{\code{results}}{\code{\link[tibble:tibble]{tibble::tibble()}} with columns \code{Predictor}, \code{P_Value},
-\code{P_Formatted}, \code{IRR}, \code{CI_Lower}, \code{CI_Upper} for every predictor
-attempted.}
+\code{P_Formatted}, \code{Estimate} (additive mean difference in outcome units),
+\code{CI_Lower}, \code{CI_Upper} for every predictor attempted.}
 \item{\code{significant}}{Subset of \code{results} where \code{P_Value < alpha}, sorted
 ascending by \code{P_Value}.}
 \item{\code{sentence}}{Character scalar summarising significant predictors.}
@@ -64,9 +64,13 @@ p-value from the second row of the coefficient table (the predictor row).
 Predictors with only one unique non-NA value are skipped with a message.
 }
 \details{
-Incidence rate ratios (IRR) and 95 \% Wald confidence intervals on the
-exponential scale are returned for convenient forest-plot input, even though
-the underlying model is linear (not Poisson).
+Because the underlying model is linear (not Poisson), each predictor's
+fixed-effect coefficient is an additive mean difference in the outcome's own
+units, returned as \code{Estimate} with a 95 \% Wald confidence interval on the
+same additive scale. (Earlier versions exponentiated this coefficient and
+mislabelled it "IRR", which is meaningless for a linear-scale day
+difference.) Fit \code{\link[=mysterycall_univariate_poisson_screen]{mysterycall_univariate_poisson_screen()}} instead if a true
+rate ratio is wanted.
 }
 \examples{
 \dontshow{if (requireNamespace("lmerTest", quietly = TRUE)) withAutoprint(\{ # examplesIf}

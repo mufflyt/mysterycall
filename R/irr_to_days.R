@@ -30,6 +30,14 @@ NULL
 #' @param digits Integer. Decimal places for days in the output table and
 #'   sentences. Default `1L`.
 #' @param irr_digits Integer. Decimal places for IRR in the sentences. Default `2L`.
+#' @param subject Character scalar. The noun for the units being compared in the
+#'   narrative sentences. Default `"callers"`.
+#' @param exposure_descriptor Character scalar or `NULL`. Optional infix that
+#'   describes the exposure, joined to the group label with a hyphen (e.g.
+#'   `"insured"` yields `"Medicaid-insured callers"`). Default `"insured"` for
+#'   backward compatibility with insurance studies; set to `NULL` (or `""`) for
+#'   non-insurance exposures (e.g. `exposure_col = "ent_type"`) so sentences read
+#'   `"Laryngology callers"` instead of the nonsensical `"Laryngology-insured"`.
 #'
 #' @return A list of class `mysterycall_irr_days` with elements:
 #' \describe{
@@ -74,11 +82,23 @@ mysterycall_irr_to_days <- function(model_result,
                                      exposure_col  = NULL,
                                      ref_group     = NULL,
                                      digits        = 1L,
-                                     irr_digits    = 2L) {
+                                     irr_digits    = 2L,
+                                     subject             = "callers",
+                                     exposure_descriptor = "insured") {
 
   # -- validate baseline_mean ---------------------------------------------------
   if (!is.numeric(baseline_mean) || length(baseline_mean) != 1L || baseline_mean <= 0) {
     stop("`baseline_mean` must be a single positive number (the reference-group mean wait days).",
+         call. = FALSE)
+  }
+
+  # -- validate narrative wording -----------------------------------------------
+  if (!is.character(subject) || length(subject) != 1L || is.na(subject)) {
+    stop("`subject` must be a single character string.", call. = FALSE)
+  }
+  if (!is.null(exposure_descriptor) &&
+      (!is.character(exposure_descriptor) || length(exposure_descriptor) != 1L)) {
+    stop("`exposure_descriptor` must be a single character string or NULL.",
          call. = FALSE)
   }
 
@@ -180,23 +200,37 @@ mysterycall_irr_to_days <- function(model_result,
     "compared with the reference group"
   }
 
+  use_infix <- !is.null(exposure_descriptor) && nzchar(exposure_descriptor)
+
   sentences <- character(nrow(tbl))
   for (i in seq_len(nrow(tbl))) {
     r         <- tbl[i, ]
     abs_diff  <- abs(r$days_diff)
-    abs_lo    <- abs(r$days_ci_lower)
-    abs_hi    <- abs(r$days_ci_upper)
     irr_str   <- formatC(r$irr,      digits = irr_digits, format = "f")
     diff_str  <- formatC(abs_diff,   digits = digits,     format = "f")
-    lo_str    <- formatC(abs_lo,     digits = digits,     format = "f")
-    hi_str    <- formatC(abs_hi,     digits = digits,     format = "f")
+    # Keep the SIGN of the CI bounds: abs() would flip a negative (protective)
+    # lower bound positive and hide a zero-crossing (null) result, misreporting
+    # a non-significant estimate as bounded away from zero. Bounds are already
+    # ordered (days_ci_lower < days_ci_upper) since baseline_mean > 0.
+    lo_str    <- formatC(r$days_ci_lower, digits = digits, format = "f", flag = "+")
+    hi_str    <- formatC(r$days_ci_upper, digits = digits, format = "f", flag = "+")
+
+    lead <- if (use_infix) {
+      paste0(r$level, "-", exposure_descriptor, " ", subject)
+    } else {
+      paste0(r$level, " ", subject)
+    }
 
     p_part <- if (!is.na(r$p_value_fmt)) sprintf("; p = %s", r$p_value_fmt) else ""
 
+    crosses_zero <- !is.na(r$days_ci_lower) && !is.na(r$days_ci_upper) &&
+      r$days_ci_lower < 0 && r$days_ci_upper > 0
+    ns_part <- if (crosses_zero) " (difference not statistically significant)" else ""
+
     sentences[i] <- sprintf(
-      "%s-insured callers waited a mean of %s %s days %s (95%% CI %s to %s days; IRR %s%s).",
-      r$level, diff_str, r$direction, ref_clause,
-      lo_str, hi_str, irr_str, p_part
+      "%s waited a mean of %s %s days %s (95%% CI %s to %s days; IRR %s%s)%s.",
+      lead, diff_str, r$direction, ref_clause,
+      lo_str, hi_str, irr_str, p_part, ns_part
     )
   }
 

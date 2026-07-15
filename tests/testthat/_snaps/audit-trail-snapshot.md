@@ -4,11 +4,11 @@
       names(normalized)
     Output
        [1] "artifact_id"            "cohort_hash"            "empty_names_count"     
-       [4] "function_name"          "input_colnames"         "input_cols"            
-       [7] "input_npi_count"        "input_rows"             "no_last_name_count"    
-      [10] "original_npi_preserved" "output_cols"            "output_rows"           
-      [13] "quality_metrics"        "rows_duplicated"        "rows_retained_pct"     
-      [16] "schema_version"        
+       [4] "function_name"          "generated_ids_count"    "input_colnames"        
+       [7] "input_cols"             "input_npi_count"        "input_rows"            
+      [10] "no_last_name_count"     "original_npi_preserved" "output_cols"           
+      [13] "output_rows"            "quality_metrics"        "rows_duplicated"       
+      [16] "rows_retained_pct"      "schema_version"        
 
 # Snapshot: quality_metrics keys are stable
 

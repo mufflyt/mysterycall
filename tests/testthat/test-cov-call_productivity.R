@@ -92,7 +92,8 @@ test_that("mysterycall_call_productivity handles NA values in outcome column", {
 
   expect_equal(result$n_calls, c(3L, 2L))
   expect_equal(result$n_accepted, c(1, 2))
-  expect_equal(result$acceptance_rate, c("33.3%", "100.0%"))
+  # Denominator excludes the NA-outcome row: Alice = 1/2 = 50.0%, not 1/3.
+  expect_equal(result$acceptance_rate, c("50.0%", "100.0%"))
 })
 
 # ====== TEST 4: Edge case - time format conversion (MM:SS and numeric mixed) ======
@@ -272,4 +273,29 @@ test_that("mysterycall_call_productivity works with realistic AUDIT dataset", {
   expect_equal(result$n_calls, c(3L, 3L))
   expect_true(!is.na(result$n_days[1]))
   expect_true(!is.na(result$acceptance_rate[1]))
+})
+
+# Regression (BUG 30): a caller with an NA-outcome row is not penalized; the
+# acceptance-rate denominator excludes NA outcomes.
+test_that("acceptance_rate denominator excludes NA-outcome rows", {
+  df <- data.frame(
+    caller  = c("Alice", "Alice", "Bob", "Bob"),
+    # Alice: 1 accepted + 1 NA-outcome -> 1/1 = 100%, not 1/2 = 50%
+    outcome = c(1, NA, 1, 0),
+    stringsAsFactors = FALSE
+  )
+
+  result <- suppressMessages(
+    mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
+  )
+
+  alice <- result[result$caller == "Alice", ]
+  bob   <- result[result$caller == "Bob", ]
+
+  # n_calls still reports total calls including the NA-outcome row
+  expect_equal(alice$n_calls, 2L)
+  expect_equal(alice$n_accepted, 1)
+  # Rate uses non-NA-outcome denominator (1/1 = 100%), not 1/2 = 50%
+  expect_equal(alice$acceptance_rate, "100.0%")
+  expect_equal(bob$acceptance_rate, "50.0%")
 })

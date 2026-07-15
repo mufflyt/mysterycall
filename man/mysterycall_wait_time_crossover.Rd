@@ -92,8 +92,8 @@ intersection with the 45-degree (y = x) line was computed as
 and \eqn{b} is the intercept.
 }
 \details{
-Beyond the crossover point, \code{group2} patients experience longer waits
-than \code{group1} patients (when \eqn{0 < m < 1} and the crossover exists).
+Beyond the crossover point, \code{group1} patients experience longer waits
+than \code{group2} patients (when \eqn{0 < m < 1} and the crossover exists).
 
 \strong{Crossover formula.}
 The regression line is \eqn{y = m x + b}.  Setting \eqn{y = x} (the 45-degree

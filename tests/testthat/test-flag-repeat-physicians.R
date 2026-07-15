@@ -67,3 +67,19 @@ test_that("errors on missing name column", {
     "missing"
   )
 })
+
+# Regression (bug 23): grouping on id_col only so that name spelling variants
+# for one physician id are not split into singletons and left unflagged.
+test_that("same id with different name spellings is flagged as a repeat", {
+  df_variant <- data.frame(
+    id_number             = c("A", "A", "A"),
+    physician_information = c("Dr Smith", "Dr. Smith", "SMITH"),
+    stringsAsFactors      = FALSE
+  )
+  res <- suppressMessages(
+    mysterycall_flag_repeat_physicians(df_variant, output_dir = NA)
+  )
+  expect_equal(nrow(res), 1L)
+  expect_equal(res$id_number, "A")
+  expect_equal(res$n_calls, 3L)
+})

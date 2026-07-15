@@ -278,3 +278,26 @@ test_that("validate_phone: bad nanp_path raises informative error", {
     "NANP area-code lookup not found"
   )
 })
+
+# ── 12. US territory primary area codes (regression: BUG 35) ──────────────────
+
+# The bundled NANP lookup must include US territory PRIMARY area codes
+# (787 Puerto Rico, 671 Guam, 340 US Virgin Islands), not only the PR overlay
+# 939.  A valid number in one of these codes must validate against the shipped
+# CSV rather than being flagged as an unknown area code.
+test_that("validate_phone: 787 (Puerto Rico primary) validates against shipped CSV", {
+  result <- mysterycall_validate_phone("(787) 555-1234", practice_state = "PR")
+  expect_equal(result$phone_state_from_npa, "PR")
+  expect_equal(result$phone_validity_flag, "valid")
+  expect_true(result$phone_e164_valid)
+})
+
+test_that("validate_phone: 671 (Guam) and 340 (USVI) resolve to their territories", {
+  guam <- mysterycall_validate_phone("(671) 555-1234", practice_state = "GU")
+  expect_equal(guam$phone_state_from_npa, "GU")
+  expect_equal(guam$phone_validity_flag, "valid")
+
+  usvi <- mysterycall_validate_phone("(340) 555-1234", practice_state = "VI")
+  expect_equal(usvi$phone_state_from_npa, "VI")
+  expect_equal(usvi$phone_validity_flag, "valid")
+})

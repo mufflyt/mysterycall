@@ -26,6 +26,19 @@ test_that("plot_effect: link type label differs from response", {
   expect_equal(out_link$labels$y, "Linear predictor")
 })
 
+test_that("plot_effect: type is passed to data extraction (BUG 41)", {
+  set.seed(1)
+  d <- data.frame(y = rpois(60, 4), x = rnorm(60))
+  m <- glm(y ~ x, data = d, family = poisson())
+  out_resp <- mysterycall_plot_effect(m, "x", type = "response")
+  out_link <- mysterycall_plot_effect(m, "x", type = "link")
+
+  # Link-scale fit must be the log of the response-scale fit for a Poisson
+  # model; if type were ignored the two would be identical (the bug).
+  expect_false(isTRUE(all.equal(out_resp$data$fit, out_link$data$fit)))
+  expect_equal(log(out_resp$data$fit), out_link$data$fit, tolerance = 1e-6)
+})
+
 test_that("plot_effect: rejects non-character term", {
   m <- lm(mpg ~ wt, data = mtcars)
   expect_error(mysterycall_plot_effect(m, 42), "single character")

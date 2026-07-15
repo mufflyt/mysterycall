@@ -108,3 +108,44 @@ test_that("mysterycall_government_patterns: returns character vector", {
   expect_true(is.character(gp))
   expect_gt(length(gp), 3L)
 })
+
+# ── BUG 32 regression: unanchored government/academic substrings ─────────────
+
+test_that("classify_setting: 'Nova Southeastern Medical Center' not Government (va in nova)", {
+  expect_equal(
+    mysterycall_classify_practice_setting("Nova Southeastern Medical Center"),
+    "Academic"
+  )
+})
+
+test_that("classify_setting: 'Pennsylvania ENT Associates' not Academic (penn substring)", {
+  expect_equal(
+    mysterycall_classify_practice_setting("Pennsylvania ENT Associates"),
+    "Private Practice"
+  )
+})
+
+test_that("classify_setting: 'Tuscaloosa' not Academic (usc substring)", {
+  expect_equal(
+    mysterycall_classify_practice_setting("DCH Tuscaloosa Otolaryngology"),
+    "Private Practice"
+  )
+})
+
+test_that("classify_setting: genuine VA facilities still Government", {
+  expect_equal(
+    mysterycall_classify_practice_setting("VA Medical Center Denver"),
+    "Government"
+  )
+  expect_equal(
+    mysterycall_classify_practice_setting("Veterans Affairs Outpatient Clinic"),
+    "Government"
+  )
+})
+
+test_that("classify_setting: genuine Penn academic name still Academic", {
+  expect_equal(
+    mysterycall_classify_practice_setting("Penn Medicine University City"),
+    "Academic"
+  )
+})

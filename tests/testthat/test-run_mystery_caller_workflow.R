@@ -91,7 +91,7 @@ test_that("mysterycall_run_workflow orchestrates pipeline without mocks", {
   )
   expect_true(all(expected_phase2_columns %in% names(result$cleaned_phase2)))
 
-  coverage_message <- "A total of 1 unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in 1 states including the District of Columbia. The excluded states include Wyoming."
+  coverage_message <- "A total of 1 unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in 1 states. The excluded states include Wyoming."
   expect_identical(result$coverage_summary, coverage_message)
 
   expect_true(file.exists(qc_path))

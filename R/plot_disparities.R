@@ -102,6 +102,11 @@ mysterycall_plot_disparities <- function(
 
   tbl <- as.data.frame(x)
 
+  # Capture reference-group rate / n before any row filtering so that a proper
+  # difference-of-proportions CI can be built for metric = "abs_diff".
+  ref_rate <- if ("rate" %in% names(tbl)) tbl$rate[tbl$group == ref_group][1L] else NA_real_
+  ref_n    <- if ("n"    %in% names(tbl)) tbl$n[tbl$group == ref_group][1L]    else NA_real_
+
   required_cols <- switch(metric,
     rate     = c("group", "rate", "lower_ci", "upper_ci"),
     abs_diff = c("group", "abs_diff", "lower_ci", "upper_ci"),
@@ -135,10 +140,25 @@ mysterycall_plot_disparities <- function(
     auto_pct   <- TRUE
   } else if (metric == "abs_diff") {
     tbl$.x    <- tbl$abs_diff
-    # CI half-width from the rate CI, re-centered on abs_diff
-    hw        <- (tbl$upper_ci - tbl$lower_ci) / 2
+    # A difference-of-proportions CI must include the reference group's
+    # variance -- reconstructing it from a single group's rate CI understates
+    # the width. Use the standard two-proportion difference CI in percentage
+    # points when rate / n are available; otherwise fall back to re-centering.
+    z_crit <- stats::qnorm(1 - alpha_val / 2)
+    if (all(c("rate", "n") %in% names(tbl)) &&
+        !is.na(ref_rate) && !is.na(ref_n) && ref_n > 0) {
+      se_diff <- sqrt(tbl$rate * (1 - tbl$rate) / tbl$n +
+                        ref_rate * (1 - ref_rate) / ref_n)
+      hw      <- z_crit * se_diff * 100  # percentage points, matching abs_diff
+    } else {
+      hw      <- (tbl$upper_ci - tbl$lower_ci) / 2
+    }
     tbl$.xmin <- tbl$abs_diff - hw
     tbl$.xmax <- tbl$abs_diff + hw
+    # The reference group has abs_diff = 0 by construction; draw no interval.
+    is_ref_abs        <- tbl$group == ref_group
+    tbl$.xmin[is_ref_abs] <- 0
+    tbl$.xmax[is_ref_abs] <- 0
     ref_line  <- 0
     auto_label <- paste0("Absolute difference (pp vs. ", ref_group, ")")
     auto_pct   <- TRUE

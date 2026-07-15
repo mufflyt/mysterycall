@@ -93,7 +93,9 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
         sum(non_integer), npi_vals[which(non_integer)[1L]]
       ), call. = FALSE)
     }
-    df[["npi"]] <- sprintf("%.0f", npi_vals)
+    out <- sprintf("%.0f", npi_vals)
+    out[is.na(npi_vals)] <- NA_character_
+    df[["npi"]] <- out
   }
   df
 }

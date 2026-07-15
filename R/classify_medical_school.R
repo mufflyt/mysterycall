@@ -27,23 +27,27 @@ NULL
   "university of montreal", "universite de montreal",
   "universite de sherbrooke", "university of ottawa",
   "university of saskatchewan", "university of toronto",
-  "university of western ontario", "western university",
+  "university of western ontario", "western university(?! of health sciences)",
   "queen's university", "queens university", "northern ontario"
 )
 
-# International indicators  --  country names, known IMG schools, Spanish prefix
+# International indicators  --  country names, known IMG schools, Spanish prefix.
+# Short country tokens are anchored with word boundaries so they do not match
+# inside legitimate US school names (e.g. "india" in "Indiana University",
+# "mexico" in "University of New Mexico").
 .mc_img_patterns <- c(
-  "mexico", "india", "china", "pakistan", "egypt", "philippines",
-  "grenada", "ross university", "st\\. george", "\\bsgu\\b",
+  "(?<!new )\\bmexico\\b", "\\bindia\\b", "\\bchina\\b", "\\bpakistan\\b",
+  "\\begypt\\b", "\\bphilippines\\b",
+  "\\bgrenada\\b", "ross university", "st\\. george", "\\bsgu\\b",
   "american university of the caribbean", "saba university",
-  "\\bcaribbean\\b", "dominica", "universidad", "foreign",
-  "international", "manila", "cebu", "iran", "syria", "iraq",
-  "korea", "japan", "taiwan", "vietnam", "thailand",
-  "nigeria", "ghana", "sudan", "ethiopia", "kenya",
-  "brazil", "argentina", "colombia", "peru",
-  "united kingdom", "\\buk\\b medical", "ireland", "australia",
-  "new zealand", "south africa", "israel", "turkey",
-  "poland", "romania", "ukraine", "russia", "czech"
+  "\\bcaribbean\\b", "\\bdominica\\b", "universidad", "foreign",
+  "international", "\\bmanila\\b", "\\bcebu\\b", "\\biran\\b", "\\bsyria\\b", "\\biraq\\b",
+  "\\bkorea\\b", "\\bjapan\\b", "\\btaiwan\\b", "\\bvietnam\\b", "\\bthailand\\b",
+  "\\bnigeria\\b", "\\bghana\\b", "\\bsudan\\b", "\\bethiopia\\b", "\\bkenya\\b",
+  "\\bbrazil\\b", "\\bargentina\\b", "\\bcolombia\\b", "\\bperu\\b",
+  "united kingdom", "\\buk\\b medical", "\\bireland\\b", "\\baustralia\\b",
+  "new zealand", "south africa", "\\bisrael\\b", "\\bturkey\\b",
+  "\\bpoland\\b", "\\bromania\\b", "\\bukraine\\b", "\\brussia\\b", "\\bczech\\b"
 )
 
 

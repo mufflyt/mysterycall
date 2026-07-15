@@ -169,12 +169,14 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
     data <- data %>%
       dplyr::group_by(.data$insurance_rank) %>%
       dplyr::slice_sample(prop = 1) %>%   # random shuffle within group (seed-controlled)
+      dplyr::ungroup() %>%
+      # Round-robin over the full sorted frame (counter carried across insurance
+      # groups) so no assistant receives more than one row more than any other.
       dplyr::mutate(
         lab_assistant_assigned = lab_assistant_names[
           (seq_len(dplyr::n()) - 1L) %% length(lab_assistant_names) + 1L
         ]
-      ) %>%
-      dplyr::ungroup()
+      )
   }
 
   # Create output directory if it doesn't exist
@@ -197,18 +199,22 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
     stop("Error saving the complete file. Check if the output directory is writable.", call. = FALSE)
   })
 
-  # Split the data into parts based on lab assistants and save each part
-  splits <- base::split(data, data$lab_assistant_assigned)
-  split_paths <- character(length(splits))
-  for (i in seq_along(splits)) {
-    lab_assistant_name <- names(splits)[[i]]
+  # Split the data into parts based on lab assistants and save each part.
+  # Iterate `lab_assistant_names` explicitly (rather than base::split(), which
+  # orders groups alphabetically and drops zero-row assistants) so workbooks are
+  # written in roster order, including empty assistants as zero-row files.
+  split_paths <- character(length(lab_assistant_names))
+  for (i in seq_along(lab_assistant_names)) {
+    lab_assistant_name <- lab_assistant_names[[i]]
+    assistant_rows <- data[!is.na(data$lab_assistant_assigned) &
+                             data$lab_assistant_assigned == lab_assistant_name, , drop = FALSE]
     output_file <- file.path(output_directory,
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
-      openxlsx::write.xlsx(splits[[lab_assistant_name]], output_file)
+      openxlsx::write.xlsx(assistant_rows, output_file)
       message(sprintf(
         "Saved %d row(s) for %s to: %s",
-        nrow(splits[[lab_assistant_name]]),
+        nrow(assistant_rows),
         lab_assistant_name,
         output_file
       ))
@@ -217,7 +223,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
     })
     split_paths[[i]] <- output_file
   }
-  message(sprintf("Split run complete: generated %d workbook(s).", length(splits)))
+  message(sprintf("Split run complete: generated %d workbook(s).", length(lab_assistant_names)))
   if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   invisible(c(complete_output_file, split_paths))
 }

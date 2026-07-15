@@ -228,3 +228,24 @@ test_that("arithmetic is correct against hand-calculated values", {
   expect_equal(result$n_included,    10L)
   expect_equal(round(result$pct_reached, 4L), round(17 / 27 * 100, 4L))
 })
+
+# Regression (bug 22): reason strings outside the known set (typos/unmapped
+# codes) must NOT be counted as included; they land in an "unrecognized" bucket.
+test_that("unrecognized reason strings are not counted as included", {
+  df <- data.frame(
+    reason_for_exclusions = c(
+      rep("Able to contact",   100L),
+      rep("Went to voicemail",  10L),
+      rep("Deceased",            5L)   # not a known category
+    ),
+    stringsAsFactors = FALSE
+  )
+  result <- mysterycall_exclusion_summary(df)
+
+  expect_equal(result$total,          115L)
+  expect_equal(result$n_included,     100L)   # NOT 105
+  expect_equal(result$n_unrecognized,   5L)
+  # Table rows still account for every record.
+  expect_equal(sum(result$table$n),   115L)
+  expect_true("unrecognized" %in% result$table$category)
+})

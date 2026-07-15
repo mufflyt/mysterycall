@@ -358,3 +358,34 @@ test_that("format_physician_name: vectorised over multiple inputs", {
   expect_equal(result[1], "Smith, John, MD")
   expect_equal(result[2], "Cruz, Maria")
 })
+
+# ── BUG 33 regression: "Last, First" format parsed correctly ────────────────
+
+test_that("parse_physician_name: 'Last, First' -> first/last (not suffix)", {
+  result <- mysterycall_parse_physician_name("Smith, John")
+  expect_equal(result$first_name, "John")
+  expect_equal(result$last_name,  "Smith")
+  expect_true(is.na(result$suffix))
+  expect_equal(result$parse_confidence, "high")
+})
+
+test_that("parse_physician_name: 'Last, First, MD' -> first/last with credential suffix", {
+  result <- mysterycall_parse_physician_name("Garcia, Robert, MD")
+  expect_equal(result$first_name, "Robert")
+  expect_equal(result$last_name,  "Garcia")
+  expect_equal(result$suffix,     "MD")
+})
+
+test_that("parse_physician_name: 'First Last, MD' still treats MD as suffix", {
+  result <- mysterycall_parse_physician_name("Mary Johnson, MD")
+  expect_equal(result$first_name, "Mary")
+  expect_equal(result$last_name,  "Johnson")
+  expect_equal(result$suffix,     "MD")
+})
+
+test_that("parse_physician_name: 'First Last, MD, FACOG' keeps multi-credential suffix", {
+  result <- mysterycall_parse_physician_name("John Smith, MD, FACOG")
+  expect_equal(result$first_name, "John")
+  expect_equal(result$last_name,  "Smith")
+  expect_equal(result$suffix,     "MD, FACOG")
+})

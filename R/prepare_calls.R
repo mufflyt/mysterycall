@@ -161,8 +161,10 @@ mysterycall_prepare_calls <- function(
   }
 
   if (na_exclusions == "drop") {
-    d   <- d[!is_na_exc, , drop = FALSE]
-    exc <- exc[!is_na_exc]
+    keep      <- !is_na_exc
+    d         <- d[keep, , drop = FALSE]
+    exc       <- exc[keep]
+    is_na_exc <- is_na_exc[keep]
     wf  <- .wf_step(wf, nrow(d), "NA exclusion codes dropped")
   }
 

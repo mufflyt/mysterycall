@@ -106,7 +106,10 @@ mysterycall_wait_time_sentence <- function(
         term_name <- paste0("grp_factor", lvl)
         if (term_name %in% rownames(coef_sum)) {
           p_raw           <- coef_sum[term_name, "Pr(>|z|)"]
-          p_values[lvl]   <- round(p_raw, digits = digits_p)
+          # Store the RAW p-value; rounding here (then format()-ing it below)
+          # collapses any p < 5e-4 to a literal "0". Formatting with a <0.001
+          # guard happens at print time instead.
+          p_values[lvl]   <- p_raw
         }
       }
     }, error = function(e) {
@@ -146,9 +149,16 @@ mysterycall_wait_time_sentence <- function(
   pval_clauses <- character(length(p_values))
   pv_names     <- names(p_values)
   for (j in seq_along(p_values)) {
+    p_txt <- if (is.na(p_values[j])) {
+      "NA"
+    } else if (p_values[j] < 0.001) {
+      "< 0.001"
+    } else {
+      formatC(p_values[j], digits = digits_p, format = "f")
+    }
     pval_clauses[j] <- sprintf(
       "The p-value for %s vs %s was %s.",
-      pv_names[j], reference, format(p_values[j], digits = digits_p)
+      pv_names[j], reference, p_txt
     )
   }
 

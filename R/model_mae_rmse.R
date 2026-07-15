@@ -301,14 +301,16 @@ mysterycall_model_mae_rmse <- function(fit,
     )
   }
 
-  # -- Back-transform via exp() ---------------------------------------------------
-  # When back_transform = TRUE (auto-set for LMM with log_transformed = TRUE),
-  # both the log-scale predictions from predict() and the log-scale actual values
-  # stored in the model frame are exponentiated so that MAE / RMSE are reported
-  # in the units of the original outcome (days).
+  # -- Back-transform via expm1() -------------------------------------------------
+  # The LMM stores the outcome as log1p(days) = log(days + 1), so the correct
+  # inverse is expm1() = exp(x) - 1, NOT exp() (which returns days + 1 and adds a
+  # +1 bias that also prevents true 0-day waits from being dropped from the MAPE
+  # denominator). When back_transform = TRUE (auto-set for LMM with
+  # log_transformed = TRUE), both the log1p-scale predictions and actuals are
+  # back-transformed so MAE / RMSE / MAPE are reported in original units (days).
   if (back_transform) {
-    actual    <- exp(actual_raw)
-    predicted <- exp(predicted_raw)
+    actual    <- expm1(actual_raw)
+    predicted <- expm1(predicted_raw)
   } else {
     actual    <- actual_raw
     predicted <- predicted_raw

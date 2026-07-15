@@ -17,11 +17,12 @@ test_that("impute_age: vectorized", {
   expect_equal(res, c(73L, 58L, 43L, NA_integer_))
 })
 
-test_that("impute_age: implausible age < min_age set to NA with warning", {
-  # grad_year=2030 → 2026-2030+27 = 23, which is < min_age=25
-  expect_warning(
+test_that("impute_age: future graduation year set to NA (with message)", {
+  # grad_year 2030 > ref_year 2026: the physician has not graduated, so the
+  # age is NA via the future-grad guard (a message, not the min_age warning).
+  expect_message(
     res <- mysterycall_impute_age(2030L, ref_year = 2026L, age_offset = 27L),
-    "outside"
+    "exceed ref_year"
   )
   expect_true(is.na(res))
 })

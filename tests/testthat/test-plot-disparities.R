@@ -67,6 +67,39 @@ test_that("plot_disparities: respects custom colors", {
   expect_s3_class(p, "ggplot")
 })
 
+# ── BUG 39: abs_diff CI includes reference-group variance ─────────────────────
+
+test_that("plot_disparities: abs_diff reference row has a zero-width interval", {
+  tbl <- make_disparity_tbl()
+  p   <- mysterycall_plot_disparities(tbl, metric = "abs_diff")
+  ref <- attr(tbl, "ref_group")
+  d   <- p$data
+  ref_row <- d[as.character(d$group) == ref, , drop = FALSE]
+  expect_equal(ref_row$.x, 0)
+  expect_equal(ref_row$.xmin, 0)
+  expect_equal(ref_row$.xmax, 0)
+})
+
+test_that("plot_disparities: abs_diff CI is wider than one-group rate half-width", {
+  tbl <- make_disparity_tbl()
+  p   <- mysterycall_plot_disparities(tbl, metric = "abs_diff")
+  ref <- attr(tbl, "ref_group")
+  d   <- p$data
+  nonref <- d[as.character(d$group) != ref, , drop = FALSE]
+
+  # Half-width actually drawn (two-proportion difference CI, in pp).
+  hw_drawn <- (nonref$.xmax - nonref$.xmin) / 2
+
+  # Old (buggy) half-width: derived from a single group's rate CI (proportion
+  # scale). The correct two-proportion CI, on the pp scale, must be wider.
+  tbl_df   <- as.data.frame(tbl)
+  tbl_df   <- tbl_df[as.character(tbl_df$group) != ref, , drop = FALSE]
+  hw_old   <- (tbl_df$upper_ci - tbl_df$lower_ci) / 2
+
+  expect_true(all(hw_drawn > hw_old))
+  expect_true(all(hw_drawn > 0))
+})
+
 # ── plain data frame inputs ───────────────────────────────────────────────────
 
 test_that("plot_disparities: accepts plain data frame with rate columns", {

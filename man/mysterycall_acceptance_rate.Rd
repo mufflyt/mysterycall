@@ -58,8 +58,9 @@ test or Fisher's exact test (when any cell falls below \code{min_cell}).
 \details{
 The acceptance column is interpreted generously: logical \code{TRUE}, non-zero
 numerics, and character strings \code{"yes"}, \code{"y"}, \code{"true"}, and \code{"1"}
-(case-insensitive) all count as accepted. Everything else -- including
-\code{NA} -- counts as not accepted.
+(case-insensitive) all count as accepted. Any other non-\code{NA} value counts
+as not accepted, while \code{NA} values are treated as missing and excluded from
+the denominator (they count as neither accepted nor rejected).
 }
 \examples{
 df <- data.frame(

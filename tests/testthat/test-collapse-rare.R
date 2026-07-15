@@ -66,3 +66,19 @@ test_that("collapse_rare: preserves length", {
   res <- mysterycall:::mysterycall_collapse_rare(x, threshold = 10)
   expect_length(res, length(x))
 })
+
+# Regression (BUG 24): no phantom empty "Other" level when nothing collapses.
+test_that("collapse_rare: does not add an empty Other level when nothing is collapsed", {
+  x   <- factor(c(rep("A", 10), rep("B", 20)))
+  res <- mysterycall:::mysterycall_collapse_rare(x, threshold = 5)
+  expect_s3_class(res, "factor")
+  expect_false("Other" %in% levels(res))
+  expect_equal(sort(levels(res)), c("A", "B"))
+})
+
+test_that("collapse_rare: adds Other level only when a level is collapsed", {
+  x   <- factor(c(rep("A", 10), rep("B", 20), rep("C", 2)))
+  res <- mysterycall:::mysterycall_collapse_rare(x, threshold = 5)
+  expect_true("Other" %in% levels(res))
+  expect_false("C" %in% levels(res))
+})

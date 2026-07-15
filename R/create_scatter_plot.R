@@ -68,8 +68,14 @@ mysterycall_plot_scatter <- function(plot_data,
   }
   y_transform <- match.arg(y_transform, c("none", "log", "sqrt"))
 
-  # Filter out zero or negative values and NAs from the y_var column
-  plot_data <- dplyr::filter(plot_data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
+  # Drop NAs from the y_var column. Zero and negative values are only removed
+  # for log/sqrt transforms that require positive input; with
+  # y_transform = "none", zero-day (same-day) appointments are retained.
+  if (y_transform == "none") {
+    plot_data <- dplyr::filter(plot_data, !is.na(.data[[y_var]]))
+  } else {
+    plot_data <- dplyr::filter(plot_data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
+  }
 
   # Handle transformations
   if (y_transform == "log") {

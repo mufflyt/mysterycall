@@ -125,7 +125,10 @@ mysterycall_call_productivity <- function(
 
     n_accepted   <- if (!is.null(outcomes))  sum(outcomes[idx], na.rm = TRUE) else NA_real_
     accept_rate  <- if (!is.null(outcomes)) {
-      sprintf("%.1f%%", n_accepted / n_calls * 100)
+      # Denominator excludes NA-outcome rows so callers are not penalized for
+      # calls whose outcome was never recorded (consistent with n_accepted).
+      n_outcome <- sum(!is.na(outcomes[idx]))
+      if (n_outcome > 0) sprintf("%.1f%%", n_accepted / n_outcome * 100) else NA_character_
     } else NA_character_
 
     m_hold <- if (!is.null(hold_secs)) mean(hold_secs[idx], na.rm = TRUE) else NA_real_

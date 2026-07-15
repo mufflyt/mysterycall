@@ -72,10 +72,13 @@ Rmd analysis: distinct-phone numerator (accepted + appointment), distinct-phone
 denominator (total minus excluded), and a manuscript-ready paragraph.
 }
 \details{
-\strong{Numerator} (per insurance type): physicians who (a) have a non-\code{NA}
-value in \code{medicaid_accept_col}, (b) match the insurance label, (c) are
-coded as \code{contact_value} in \code{exclusion_col}, and (d) have
-\code{business_days_until_appointment > 0}; counted by distinct \code{phone_col}.
+\strong{Numerator} (per insurance type): physicians who (a) match the insurance
+label, (b) are coded as \code{contact_value} in \code{exclusion_col}, and (c) have
+\code{business_days_until_appointment > 0}; counted by distinct \code{phone_col}. The
+Medicaid numerator additionally requires a non-\code{NA} value in
+\code{medicaid_accept_col}; the BCBS numerator does \strong{not} apply that
+Medicaid-only screen (doing so previously biased the BCBS rate, or forced it
+to 0\% when the Medicaid field was \code{NA} on BCBS rows).
 
 \strong{Denominator}: total distinct phones with that insurance minus distinct
 phones that were excluded (not \code{contact_value}).

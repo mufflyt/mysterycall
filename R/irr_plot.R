@@ -108,7 +108,7 @@ mysterycall_irr_plot <- function(x,
     ggplot2::geom_errorbarh(
       ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
       height    = 0.25,
-      color     = tbl$.sig[order(as.integer(tbl$term))],
+      color     = tbl$.sig,
       linewidth = 0.7
     )
   )
@@ -119,7 +119,7 @@ mysterycall_irr_plot <- function(x,
     errorbarh_layer +
     ggplot2::geom_point(
       size   = point_size,
-      color = tbl$.sig[order(as.integer(tbl$term))],
+      color = tbl$.sig,
       shape  = 18
     ) +
     ggplot2::labs(

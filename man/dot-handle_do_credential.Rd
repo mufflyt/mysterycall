@@ -19,6 +19,7 @@ Converts "Linda Smith D.O." -> "Linda Smith, D.O." while leaving
 \seealso{
 Other name-parsing: 
 \code{\link{.handle_three_part_comma}()},
+\code{\link{.is_name_suffix}()},
 \code{\link{.parse_physician_name_impl}()},
 \code{\link{mysterycall_format_physician_name}()},
 \code{\link{mysterycall_parse_physician_name}()},

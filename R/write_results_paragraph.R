@@ -97,9 +97,18 @@ mysterycall_write_results_paragraph <- function(
 
   # ---- build sentences --------------------------------------------------------
   model_type <- if (is_nb) "negative binomial regression" else "Poisson regression"
+  # Only claim significance when at least one exposure level actually clears
+  # alpha; otherwise the intro would assert an association that the p-values
+  # (printed in the very next sentences) contradict.
+  any_sig <- any(as.numeric(matched$p_value) < alpha, na.rm = TRUE)
+  assoc_phrase <- if (any_sig) {
+    "was significantly associated with"
+  } else {
+    "was not significantly associated with"
+  }
   intro <- paste0(
     "In multivariable ", model_type, ", ", exposure_col,
-    " was significantly associated with ", outcome_label, " (see Table X)."
+    " ", assoc_phrase, " ", outcome_label, " (see Table X)."
   )
 
   level_sentences <- character(nrow(matched))

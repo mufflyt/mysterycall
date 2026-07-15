@@ -11,17 +11,17 @@ NULL
   "children's hospital", "childrens hospital",
   "mayo clinic", "cleveland clinic", "johns hopkins",
   "memorial sloan", "md anderson", "duke", "stanford",
-  "ucsf", "ucla", "usc", "nyu", "columbia", "harvard",
-  "yale", "penn", "cornell", "upmc", "vanderbilt",
+  "\\bucsf\\b", "\\bucla\\b", "\\busc\\b", "\\bnyu\\b", "columbia", "harvard",
+  "yale", "\\bpenn\\b", "cornell", "\\bupmc\\b", "vanderbilt",
   "emory", "baylor", "ohio state", "michigan medicine",
   "northwestern", "mount sinai", "brigham", "jefferson",
   "health sciences center", "cancer center", "cancer ctr",
   "sch of med", "dept of oto", "infirmary", "health system",
-  "henry ford", "uab", "suny", "oto dept"
+  "henry ford", "\\buab\\b", "\\bsuny\\b", "oto dept"
 )
 
 .mc_government_patterns <- c(
-  "va ", "va medical", "veterans", "veteran affairs",
+  "\\bvamc\\b", "\\bva medical", "\\bva hospital", "veterans", "veteran affairs",
   "dod ", "department of defense", "military",
   "army", "navy", "air force", "walter reed",
   "tricare", "indian health", "ihs",

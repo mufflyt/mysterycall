@@ -71,6 +71,7 @@ area_code,state
 336,NC
 337,LA
 339,MA
+340,VI
 341,CA
 346,TX
 347,NY
@@ -192,6 +193,7 @@ area_code,state
 662,MS
 667,MD
 669,CA
+671,GU
 678,GA
 679,MI
 680,NY
@@ -242,6 +244,7 @@ area_code,state
 781,MA
 785,KS
 786,FL
+787,PR
 801,UT
 802,VT
 803,SC

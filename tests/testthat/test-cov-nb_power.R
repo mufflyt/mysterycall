@@ -57,7 +57,9 @@ test_that("mysterycall_nb_power: returns correct types and values", {
   expect_type(result$power, "double")
   expect_true(result$power >= 0 && result$power <= 1)
   expect_equal(result$n_physicians, 10L)
-  expect_equal(result$total_n, 40L)
+  # Paired design: total calls = n_physicians * calls_per_physician (each
+  # physician is called under both arms; not doubled as in the old unpaired sim).
+  expect_equal(result$total_n, 20L)
   expect_equal(result$irr, 0.75)
   expect_equal(result$theta, 2.0)
   expect_equal(result$alpha, 0.05)
@@ -82,7 +84,7 @@ test_that("mysterycall_nb_power: custom calls_per_physician parameter", {
   ))
 
   expect_equal(result$n_physicians, 15L)
-  expect_equal(result$total_n, 90L)
+  expect_equal(result$total_n, 45L)  # paired: 15 physicians * 3 calls
 })
 
 test_that("mysterycall_nb_power: custom parameters (effect size, theta, alpha)", {

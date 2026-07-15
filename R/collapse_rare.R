@@ -48,7 +48,10 @@ mysterycall_collapse_rare <- function(x, threshold = 50L, other_label = "Other")
   x_chr[x_chr %in% rare] <- other_label
 
   if (was_factor) {
-    keep <- c(setdiff(orig_levels, rare), other_label)
+    keep <- setdiff(orig_levels, rare)
+    # Only introduce the `other_label` level when something was actually
+    # collapsed; otherwise a phantom empty "Other" category is created.
+    if (length(rare) > 0L) keep <- c(keep, other_label)
     factor(x_chr, levels = unique(keep))
   } else {
     x_chr

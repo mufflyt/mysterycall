@@ -1,5 +1,66 @@
 # mysterycall (development version)
 
+## Source-audit bug fixes (waves 1-3)
+
+A full read of `R/` surfaced correctness bugs that fed wrong numbers into data,
+models, and manuscript text. Fixed in this version (BUGS.md #5-#20, #22-#47):
+
+- **Data integrity / joins:** missing NPIs no longer stringify to `"NA"` in the
+  shared reader (`utils-io.R`) or `clean_phase_1_results()`, which had collapsed
+  every missing-NPI row to a colliding `doctor_id`; `flag_repeat_physicians()` /
+  `save_quality_check_table()` now key duplicate detection on id only (not id +
+  name); `prepare_calls()` no longer injects phantom all-NA rows in the
+  `na_exclusions = "drop"` branch; `exclusion_summary()` reports an explicit
+  `n_unrecognized` bucket instead of silently counting unknown reasons as
+  included.
+- **Statistics / models:** `nb_power()` and `sensitivity_both_insurance()` now
+  treat the paired (within-physician) design as paired; `power_analysis()`
+  no longer double-counts calls in the unpaired branch; `model_mae_rmse()` uses
+  `expm1()` (not `exp()`) to invert `log1p`; `univariate_lmm_screen()` returns an
+  additive `Estimate` (renamed from the meaningless exponentiated "IRR");
+  `interaction_screen()` bases significance on interaction terms only (not
+  `min(p)` over main effects) and uses `<= alpha`; `lmm.R` builds Wald CIs with a
+  t quantile matching the Satterthwaite p-value.
+- **Reporting / plots:** `wait_time_sentence()` prints `< 0.001` instead of `0`;
+  `write_results_paragraph()` only claims significance when a level clears alpha;
+  `wait_time_crossover()` reports the correct group beyond the crossover;
+  `irr_plot()` no longer permutes significance colors; `icc` prints the
+  confidence level (not `n_boot`) in its CI label; `plot_emmeans_interaction()`
+  handles Poisson (`type = "response"`); `plot_effects()` respects `type`;
+  `plot_disparities()` uses a proper difference-of-proportions CI; density/scatter
+  plots keep same-day (0-day) appointments under `transform = "none"`.
+- **Classifiers / parsers / data:** anchored country/brand substrings in
+  `classify_medical_school()` and `classify_practice_setting()` (Indiana/New
+  Mexico/Nova/Penn no longer misclassified); `parse_physician_name()` handles the
+  documented "Last, First" format; NANP table adds PR 787 / GU 671 / VI 340; the
+  `fips` dataset docs now match the shipped state table; hardcoded "including the
+  District of Columbia" clauses are gated on DC actually being present.
+
+  Note: BUGS.md #21 (non-duplicate-mode insurance assignment) was left as-is;
+  the proposed change conflicts with the package's intended and tested
+  insurance-assignment behavior and warrants a product decision.
+
+## Bug fixes
+
+- `mysterycall_irr_to_days()`: the narrative sentences no longer take `abs()`
+  of the day-scale confidence-interval bounds. Signs are preserved, so a
+  zero-crossing (non-significant) CI such as `[-6.5, +11.4]` is printed with
+  its negative lower bound instead of being flipped to a spurious positive
+  interval; interval-crossing estimates are now flagged
+  "(difference not statistically significant)".
+- `mysterycall_irr_to_days()` and `mysterycall_results_paragraph()`: report
+  wording is parameterized via new `subject` (default `"callers"`) and, for
+  `mysterycall_irr_to_days()`, `exposure_descriptor` (default `"insured"`)
+  arguments. Set `exposure_descriptor = NULL` for non-insurance exposures so
+  sentences read "Laryngology callers" rather than "Laryngology-insured
+  callers". Defaults preserve existing insurance-study output.
+- `mysterycall_overdispersion_test()`: documented (new "Mixed-effects caveat"
+  section) that `df.residual()` counts only fixed-effect parameters for GLMMs,
+  so phi is an approximation there; `DHARMa::testDispersion()` is recommended
+  for a formal GLMM dispersion check. The NB/GLMM-aware interpretation branch
+  (low residual phi is expected, not overfitting) is now shipped in the built
+  package.
+
 ## New functions
 
 ### Environment / market covariates

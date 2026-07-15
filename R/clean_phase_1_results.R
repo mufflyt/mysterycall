@@ -223,7 +223,15 @@ mysterycall_clean_phase1 <- function(phase1_data,
   phase1_data <- suppressWarnings(readr::type_convert(phase1_data))
 
   if (length(npi_col_before_clean) == 1 && npi_col_before_clean %in% names(phase1_data)) {
-    phase1_data[[npi_col_before_clean]] <- trimws(format(phase1_data[[npi_col_before_clean]], scientific = FALSE, trim = TRUE))
+    # Preserve genuine NA: format() renders NA as the literal string "NA", which
+    # defeats every downstream is.na(npi) missing-NPI fallback (all missing rows
+    # would otherwise collapse to doctor_id = "NA" and collide in joins).
+    npi_vec <- phase1_data[[npi_col_before_clean]]
+    phase1_data[[npi_col_before_clean]] <- ifelse(
+      is.na(npi_vec),
+      NA_character_,
+      trimws(format(npi_vec, scientific = FALSE, trim = TRUE))
+    )
   }
 
   announce("Cleaning column names...")

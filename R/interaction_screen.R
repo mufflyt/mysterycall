@@ -147,20 +147,20 @@ mysterycall_interaction_screen <- function(
       )
       coef_tbl <- summary(model)$coefficients
 
-      # Exclude intercept; look at all other rows
-      non_intercept <- coef_tbl[rownames(coef_tbl) != "(Intercept)", ,
-                                 drop = FALSE]
-      if (nrow(non_intercept) > 0L) {
-        p_col_name <- "Pr(>|t|)"
-        if (p_col_name %in% colnames(non_intercept)) {
-          p_vals <- non_intercept[, p_col_name]
-          # Collect all pairs; filtering against alpha is done after p.adjust
-          interaction_rows[[length(interaction_rows) + 1L]] <- data.frame(
-            Interaction = interaction_label,
-            P_Value     = min(p_vals, na.rm = TRUE),
-            stringsAsFactors = FALSE
-          )
-        }
+      # Restrict to genuine interaction terms (":" in the name); the pair's
+      # significance must NOT be driven by a significant main effect. Taking
+      # min() over all non-intercept coefficients (main effects included) would
+      # flag a pair whenever either main effect is significant.
+      p_col_name  <- "Pr(>|t|)"
+      inter_terms <- coef_tbl[grepl(":", rownames(coef_tbl)), , drop = FALSE]
+      if (nrow(inter_terms) > 0L && p_col_name %in% colnames(inter_terms)) {
+        p_vals <- inter_terms[, p_col_name]
+        # Collect all pairs; filtering against alpha is done after p.adjust
+        interaction_rows[[length(interaction_rows) + 1L]] <- data.frame(
+          Interaction = interaction_label,
+          P_Value     = min(p_vals, na.rm = TRUE),
+          stringsAsFactors = FALSE
+        )
       }
 
       # AIC for every converged model
@@ -199,7 +199,7 @@ mysterycall_interaction_screen <- function(
 
   interaction_results <- all_interactions[
     !is.na(all_interactions[[sig_col]]) &
-      all_interactions[[sig_col]] < alpha, , drop = FALSE]
+      all_interactions[[sig_col]] <= alpha, , drop = FALSE]
 
   if (length(aic_rows) > 0L) {
     aic_results <- tibble::as_tibble(do.call(rbind, aic_rows))

@@ -105,6 +105,50 @@ test_that("mysterycall_plot_scatter: edge case with negative, zero, and NA value
 })
 
 
+test_that("mysterycall_plot_scatter: retains zero-day values when transform = 'none' (BUG 42)", {
+  skip_if_not_installed("ggplot2")
+  test_data <- data.frame(
+    category = c("A", "A", "A", "B", "B", "B"),
+    value    = c(0, 5, 0, 10, 0, 20),
+    stringsAsFactors = FALSE
+  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_plot_scatter(
+      plot_data = test_data,
+      x_var = "category",
+      y_var = "value",
+      y_transform = "none",
+      output_dir = tempdir(),
+      verbose = FALSE
+    )
+  ))
+  # Same-day (0-day) appointments must be kept when no transform is applied.
+  expect_true(any(result$data$value == 0))
+  expect_equal(nrow(result$data), 6L)
+})
+
+test_that("mysterycall_plot_scatter: drops zeros for log/sqrt transforms (BUG 42)", {
+  skip_if_not_installed("ggplot2")
+  test_data <- data.frame(
+    category = c("A", "A", "A", "B", "B", "B"),
+    value    = c(0, 5, 0, 10, 0, 20),
+    stringsAsFactors = FALSE
+  )
+  result <- suppressMessages(suppressWarnings(
+    mysterycall_plot_scatter(
+      plot_data = test_data,
+      x_var = "category",
+      y_var = "value",
+      y_transform = "log",
+      output_dir = tempdir(),
+      verbose = FALSE
+    )
+  ))
+  # log1p filtering removes the three zero rows for positive-only transforms.
+  expect_equal(nrow(result$data), 3L)
+})
+
+
 test_that("mysterycall_plot_scatter: custom labels and jitter parameters", {
   skip_if_not_installed("ggplot2")
   result <- suppressMessages(suppressWarnings(

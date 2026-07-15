@@ -76,6 +76,10 @@ mysterycall_impute_age <- function(grad_year,
   }
 
   age <- as.integer(ref_year - grad_year + age_offset)
+  # Graduation years after the reference year describe physicians who have not
+  # graduated; force NA rather than relying on the min_age filter to catch them
+  # (a 1-2 year-future grad year otherwise yields a plausible-looking age).
+  age[future_grad] <- NA_integer_
 
   implausible <- !is.na(age) & (age < min_age | age > max_age)
   n_impl <- sum(implausible)

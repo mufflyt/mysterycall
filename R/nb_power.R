@@ -84,28 +84,32 @@ mysterycall_nb_power <- function(n_physicians,
 
   if (!is.null(seed)) set.seed(seed)
 
-  log_baseline <- log(baseline_mean)
-  log_irr      <- log(irr)
-  sig_count    <- 0L
-  n_per_group  <- n_physicians * calls_per_physician
+  log_baseline  <- log(baseline_mean)
+  log_irr       <- log(irr)
+  sig_count     <- 0L
+  n_total_calls <- n_physicians * calls_per_physician
+
+  # PAIRED design: the same physicians are called under BOTH insurances. Each
+  # physician's calls alternate insurance (default 2 -> one reference, one
+  # treatment) and share ONE random intercept, so `ins` varies WITHIN physician.
+  # (The old code drew two DISJOINT physician sets with one insurance each,
+  # simulating a between-physician/unpaired design that overstates required N.)
+  ins_pattern <- rep(c("ref", "trt"), length.out = calls_per_physician)
+  ins_vec     <- rep(ins_pattern, times = n_physicians)
+  phys_vec    <- rep(paste0("P", seq_len(n_physicians)), each = calls_per_physician)
+  trt_offset  <- ifelse(ins_vec == "trt", log_irr, 0)
 
   for (i in seq_len(n_sim)) {
-    u_ref <- stats::rnorm(n_physicians, 0, sigma_u)
-    u_trt <- stats::rnorm(n_physicians, 0, sigma_u)
+    u     <- stats::rnorm(n_physicians, 0, sigma_u)
+    u_vec <- rep(u, each = calls_per_physician)
 
-    mu_ref <- exp(log_baseline + rep(u_ref, each = calls_per_physician))
-    y_ref  <- stats::rnbinom(n_per_group, mu = mu_ref, size = theta)
-
-    mu_trt <- exp(log_baseline + log_irr + rep(u_trt, each = calls_per_physician))
-    y_trt  <- stats::rnbinom(n_per_group, mu = mu_trt, size = theta)
+    mu <- exp(log_baseline + trt_offset + u_vec)
+    y  <- stats::rnbinom(n_total_calls, mu = mu, size = theta)
 
     sim_data <- data.frame(
-      y    = c(y_ref, y_trt),
-      ins  = rep(c("ref", "trt"), each = n_per_group),
-      phys = c(
-        rep(paste0("R", seq_len(n_physicians)), each = calls_per_physician),
-        rep(paste0("T", seq_len(n_physicians)), each = calls_per_physician)
-      ),
+      y    = y,
+      ins  = ins_vec,
+      phys = phys_vec,
       stringsAsFactors = FALSE
     )
 
@@ -143,7 +147,7 @@ mysterycall_nb_power <- function(n_physicians,
     list(
       power        = power_est,
       n_physicians = n_physicians,
-      total_n      = 2L * n_per_group,
+      total_n      = n_total_calls,
       irr          = irr,
       theta        = theta,
       alpha        = alpha,

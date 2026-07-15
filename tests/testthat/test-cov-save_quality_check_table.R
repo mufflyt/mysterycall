@@ -162,3 +162,20 @@ test_that("invisibly returns filtered data frame", {
   expect_true("name" %in% names(result))
   expect_true("count" %in% names(result))
 })
+
+# Regression (bug 23): group by npi ONLY so name spelling variants for the same
+# provider are not split into singletons and left unflagged.
+test_that("groups by npi despite differing name spellings", {
+  skip_if_not_installed("readr")
+  df <- data.frame(
+    npi  = rep("1234567893", 3L),
+    name = c("Smith, John", "Smith John", "SMITH, J"),
+    stringsAsFactors = FALSE
+  )
+  tmp <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp))
+  result <- suppressMessages(mysterycall_save_quality_table(df, tmp))
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$npi, "1234567893")
+  expect_equal(result$count, 3L)
+})

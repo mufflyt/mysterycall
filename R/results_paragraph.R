@@ -29,6 +29,9 @@ NULL
 #'   `2L`.
 #' @param ci_digits Integer scalar: decimal places for CI bounds. Default `2L`.
 #' @param p_digits Integer scalar: decimal places for p-values. Default `3L`.
+#' @param subject Character scalar: the noun for the units being narrated.
+#'   Default `"callers"`. Set to another noun (e.g. `"patients"`) for studies
+#'   whose exposure is not caller-based.
 #'
 #' @return A single character string. One sentence is produced per
 #'   non-intercept term matching `exposure_col`. Sentences are separated by a
@@ -66,7 +69,8 @@ mysterycall_results_paragraph <- function(model_result,
                                           alpha         = 0.05,
                                           or_digits     = 2L,
                                           ci_digits     = 2L,
-                                          p_digits      = 3L) {
+                                          p_digits      = 3L,
+                                          subject       = "callers") {
 
   required_cols <- c("term", "or", "ci_lower", "ci_upper", "p_value")
 
@@ -99,6 +103,7 @@ mysterycall_results_paragraph <- function(model_result,
   stopifnot(is.character(ref_group),    length(ref_group)    == 1L, nchar(ref_group) > 0L)
   stopifnot(is.character(exposure_col), length(exposure_col) == 1L, nchar(exposure_col) > 0L)
   stopifnot(is.character(outcome_label),length(outcome_label)== 1L)
+  stopifnot(is.character(subject), length(subject) == 1L, !is.na(subject))
   stopifnot(is.numeric(alpha), length(alpha) == 1L, alpha > 0, alpha < 1)
 
   or_digits <- as.integer(or_digits)
@@ -140,16 +145,16 @@ mysterycall_results_paragraph <- function(model_result,
 
     if (abs(or - 1) < 10^(-or_digits)) {
       direction <- paste0(
-        level, " callers had similar odds of being offered ", outcome_label,
+        level, " ", subject, " had similar odds of being offered ", outcome_label,
         " compared with ", ref_group
       )
     } else if (or < 1) {
       direction <- paste0(
-        level, " callers were ", pct, "% less likely to be offered ", outcome_label
+        level, " ", subject, " were ", pct, "% less likely to be offered ", outcome_label
       )
     } else {
       direction <- paste0(
-        level, " callers were ", pct, "% more likely to be offered ", outcome_label
+        level, " ", subject, " were ", pct, "% more likely to be offered ", outcome_label
       )
     }
 

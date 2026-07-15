@@ -214,6 +214,61 @@ test_that("mysterycall_plot_density: filters out zero and negative values", {
   )
 })
 
+test_that("mysterycall_plot_density: retains zero-day values when transform = 'none' (BUG 42)", {
+  skip_if_not_installed("ggplot2")
+
+  test_data <- data.frame(
+    waiting_days = c(0, 0, 1, 2, 3, 0, 4, 5, 6, 7),
+    insurance = c("Medicaid", "Medicaid", "Medicaid", "Medicaid", "Medicaid",
+                  "BCBS", "BCBS", "BCBS", "BCBS", "BCBS"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- suppressMessages(
+    suppressWarnings(
+      mysterycall_plot_density(
+        data = test_data,
+        x_var = "waiting_days",
+        fill_var = "insurance",
+        x_transform = "none",
+        output_dir = NA,
+        verbose = FALSE
+      )
+    )
+  )
+
+  # Same-day (0-day) appointments are a legitimate outcome and must be kept.
+  expect_true(any(result$data$waiting_days == 0))
+  expect_equal(nrow(result$data), 10L)
+})
+
+test_that("mysterycall_plot_density: drops zeros for log/sqrt transforms (BUG 42)", {
+  skip_if_not_installed("ggplot2")
+
+  test_data <- data.frame(
+    waiting_days = c(0, 0, 1, 2, 3, 0, 4, 5, 6, 7),
+    insurance = c("Medicaid", "Medicaid", "Medicaid", "Medicaid", "Medicaid",
+                  "BCBS", "BCBS", "BCBS", "BCBS", "BCBS"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- suppressMessages(
+    suppressWarnings(
+      mysterycall_plot_density(
+        data = test_data,
+        x_var = "waiting_days",
+        fill_var = "insurance",
+        x_transform = "sqrt",
+        output_dir = NA,
+        verbose = FALSE
+      )
+    )
+  )
+
+  # sqrt requires positive input; the three zero rows are removed.
+  expect_equal(nrow(result$data), 7L)
+})
+
 test_that("mysterycall_plot_density: handles NA values", {
   skip_if_not_installed("ggplot2")
 

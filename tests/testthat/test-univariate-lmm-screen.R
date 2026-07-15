@@ -36,7 +36,7 @@ test_that("lmm_screen: $results has expected column names", {
   res <- suppressMessages(
     mysterycall_univariate_lmm_screen(df, output_dir = NA)
   )
-  expected_cols <- c("Predictor", "P_Value", "P_Formatted", "IRR",
+  expected_cols <- c("Predictor", "P_Value", "P_Formatted", "Estimate",
                      "CI_Lower", "CI_Upper")
   expect_true(all(expected_cols %in% names(res$results)))
 })

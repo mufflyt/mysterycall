@@ -543,3 +543,21 @@ test_that("print.mysterycall_prepared handles NULL na_exclusion_records", {
   expect_true(length(output) > 0)
   expect_null(result$na_exclusion_records)
 })
+
+# Regression (bug 36): with na_exclusions = "drop", the NA-flag vector must be
+# subset alongside `d`/`exc` so downstream logical combining does not recycle a
+# longer-than-nrow index and select phantom out-of-range rows.
+test_that("na_exclusions = 'drop' does not create phantom rows", {
+  df <- data.frame(
+    calldate1  = rep("2024-01-10", 5L),
+    contacted1 = rep(1, 5L),
+    exclusions = c(0, NA, 0, NA, 7),
+    stringsAsFactors = FALSE
+  )
+  result <- suppressWarnings(suppressMessages(
+    mysterycall_prepare_calls(df, na_exclusions = "drop")
+  ))
+  # 2 NA-exclusion rows dropped -> 3 rows remain, all reached & in include codes.
+  expect_equal(nrow(result$logistic_data), 3L)
+  expect_false(any(is.na(result$logistic_data$exclusions_int)))
+})

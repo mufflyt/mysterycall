@@ -300,3 +300,27 @@ test_that("mysterycall_insurance_acceptance_rates output contains meaningful sen
   expect_true(grepl("Blue Cross", result$paragraph))
   expect_true(grepl("acceptance rate", result$summary_sentence))
 })
+
+# Regression (BUG 28): BCBS acceptance must not be screened by the Medicaid-only
+# accept field. When that field is NA on BCBS rows, BCBS acceptances still count.
+test_that("BCBS rate ignores the Medicaid-accept NA screen", {
+  df <- data.frame(
+    phone = c("555-0001", "555-0002", "555-0003", "555-0004"),
+    insurance = c("Blue Cross/Blue Shield", "Blue Cross/Blue Shield",
+                  "Medicaid", "Medicaid"),
+    reason_for_exclusions = rep("Able to contact", 4),
+    business_days_until_appointment = c(5L, 8L, 6L, 4L),
+    # Medicaid-only field is NA on BCBS rows (as expected in real data)
+    does_the_physician_accept_medicaid = c(NA, NA, "Yes", "Yes"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- suppressMessages(
+    mysterycall_insurance_acceptance_rates(df, output_dir = NA)
+  )
+
+  # Both BCBS physicians were reachable with an appointment -> 2 accepts, 100%.
+  expect_equal(result$count_accepts_bcbs, 2L)
+  expect_equal(result$total_count_bcbs, 2L)
+  expect_equal(result$bcbs_acceptance_rate, 100)
+})

@@ -69,7 +69,7 @@
 mysterycall_irr_table <- function(irr_data,
                                    title                  = "Incidence Rate Ratios",
                                    subtitle               = NULL,
-                                   outcome_label          = "IRR (95 95% CI)",
+                                   outcome_label          = "IRR (95% CI)",
                                    digits                 = 2L,
                                    add_significance_stars = TRUE,
                                    footnote               = paste0(

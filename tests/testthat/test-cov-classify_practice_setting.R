@@ -173,7 +173,7 @@ test_that("mysterycall_government_patterns returns built-in patterns", {
   result <- mysterycall_government_patterns()
   expect_type(result, "character")
   expect_true(length(result) > 0L)
-  expect_true("va " %in% result)
+  expect_true("\\bva medical" %in% result)
   expect_true("veterans" %in% result)
   expect_true("military" %in% result)
 })

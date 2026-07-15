@@ -37,6 +37,25 @@ test_that("plot_emmeans_interaction: use_color=FALSE returns ggplot", {
   expect_s3_class(res, "ggplot")
 })
 
+test_that("plot_emmeans_interaction: handles Poisson model on response scale (BUG 38)", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ggplot2")
+  set.seed(3)
+  d <- data.frame(
+    count = rpois(80, 5),
+    grp   = factor(rep(c("a", "b"), each = 40L))
+  )
+  m   <- glm(count ~ grp, data = d, family = poisson())
+  res <- mysterycall_plot_emmeans_interaction(m, specs = "grp", variable = "count")
+
+  expect_s3_class(res, "ggplot")
+  # type = "response" produces a rate column (not emmean) with asymptotic CIs;
+  # the plot must build without the old hardcoded lower.CL/upper.CL error.
+  expect_true("rate" %in% names(res$data))
+  expect_true(any(c("asymp.LCL", "lower.CL") %in% names(res$data)))
+  expect_no_error(ggplot2::ggplot_build(res))
+})
+
 test_that("plot_emmeans_interaction: empty specs errors", {
   skip_if_not_installed("emmeans")
   expect_error(

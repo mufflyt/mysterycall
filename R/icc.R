@@ -114,6 +114,7 @@ mysterycall_icc <- function(model_result,
       method      = method,
       ci          = ci,
       n_boot      = n_boot,
+      conf_level  = conf_level,
       interpretation = interp,
       model_class = class(model_result)[1L]
     ),
@@ -216,8 +217,9 @@ print.mysterycall_icc <- function(x, ...) {
   cat(sprintf("  ICC       = %.4f\n", x$icc))
   cat(sprintf("  sigma2_u  = %.4f  (physician random-intercept variance)\n", x$sigma2_u))
   if (!is.na(x$ci[1])) {
+    cl <- if (is.null(x$conf_level)) 0.95 else x$conf_level
     cat(sprintf("  %d%% CI  = [%.4f, %.4f]  (%d bootstrap replicates)\n",
-                round(x$n_boot), x$ci[1], x$ci[2], x$n_boot))
+                round(cl * 100), x$ci[1], x$ci[2], x$n_boot))
   }
   cat("\n", x$interpretation, "\n", sep = "")
   invisible(x)

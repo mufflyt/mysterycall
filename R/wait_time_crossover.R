@@ -14,8 +14,8 @@ NULL
 #' \eqn{x_{\text{cross}} = b / (1 - m)}, where \eqn{m} is the regression slope
 #' and \eqn{b} is the intercept.
 #'
-#' Beyond the crossover point, \code{group2} patients experience longer waits
-#' than \code{group1} patients (when \eqn{0 < m < 1} and the crossover exists).
+#' Beyond the crossover point, \code{group1} patients experience longer waits
+#' than \code{group2} patients (when \eqn{0 < m < 1} and the crossover exists).
 #'
 #' @param data A \code{data.frame} containing the study data.
 #' @param time_col Character scalar.  Name of the column containing the wait
@@ -294,7 +294,7 @@ mysterycall_wait_time_crossover <- function(
         "At approximately %.0f business days, wait times were equal for %s ",
         "and %s patients. Beyond this point, %s patients experienced longer waits."
       ),
-      crossover_days, group1, group2, group2
+      crossover_days, group1, group2, group1
     )
   } else if (!is.na(m) && m >= 1) {
     sprintf(

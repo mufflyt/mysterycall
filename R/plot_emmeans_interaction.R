@@ -52,7 +52,7 @@ mysterycall_plot_emmeans_interaction <- function(model,
     stop("`specs` must be a character vector with at least one element.", call. = FALSE)
   }
 
-  em  <- emmeans::emmeans(model, specs = specs)
+  em  <- emmeans::emmeans(model, specs = specs, type = "response")
   df  <- as.data.frame(em)
 
   x_col   <- specs[[1L]]
@@ -65,6 +65,18 @@ mysterycall_plot_emmeans_interaction <- function(model,
     stop("Second spec '", grp_col, "' not found in emmeans output.", call. = FALSE)
   }
 
+  # y / CI column names differ by model family and emmeans type: Gaussian /
+  # identity scale yields emmean + lower.CL/upper.CL, whereas a Poisson glmer
+  # on the response scale yields rate + asymp.LCL/asymp.UCL.
+  y_col   <- intersect(c("rate", "response", "emmean", "prob"), names(df))
+  lcl_col <- intersect(c("asymp.LCL", "lower.CL", "lower.HPD"), names(df))
+  ucl_col <- intersect(c("asymp.UCL", "upper.CL", "upper.HPD"), names(df))
+  if (length(y_col) == 0L || length(lcl_col) == 0L || length(ucl_col) == 0L) {
+    stop("Could not detect y / CI columns in emmeans output. ",
+         "Available: ", paste(names(df), collapse = ", "), call. = FALSE)
+  }
+  y_col <- y_col[[1L]]; lcl_col <- lcl_col[[1L]]; ucl_col <- ucl_col[[1L]]
+
   dodge <- ggplot2::position_dodge(width = 0.4)
 
   if (use_color && !is.null(grp_col)) {
@@ -72,9 +84,9 @@ mysterycall_plot_emmeans_interaction <- function(model,
       df,
       ggplot2::aes(
         x     = .data[[x_col]],
-        y     = .data[["emmean"]],
-        ymin  = .data[["lower.CL"]],
-        ymax  = .data[["upper.CL"]],
+        y     = .data[[y_col]],
+        ymin  = .data[[lcl_col]],
+        ymax  = .data[[ucl_col]],
         color = .data[[grp_col]],
         group = .data[[grp_col]]
       )
@@ -86,9 +98,9 @@ mysterycall_plot_emmeans_interaction <- function(model,
       df,
       ggplot2::aes(
         x    = .data[[x_col]],
-        y    = .data[["emmean"]],
-        ymin = .data[["lower.CL"]],
-        ymax = .data[["upper.CL"]],
+        y    = .data[[y_col]],
+        ymin = .data[[lcl_col]],
+        ymax = .data[[ucl_col]],
         fill = .data[[grp_col]],
         group = .data[[grp_col]]
       )
@@ -100,9 +112,9 @@ mysterycall_plot_emmeans_interaction <- function(model,
       df,
       ggplot2::aes(
         x    = .data[[x_col]],
-        y    = .data[["emmean"]],
-        ymin = .data[["lower.CL"]],
-        ymax = .data[["upper.CL"]]
+        y    = .data[[y_col]],
+        ymin = .data[[lcl_col]],
+        ymax = .data[[ucl_col]]
       )
     ) +
       ggplot2::geom_point(size = 3) +

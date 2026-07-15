@@ -113,3 +113,47 @@ test_that("classify_school: custom na_label", {
     "No data"
   )
 })
+
+# ── BUG 31 regression: country substrings must not match US school names ──────
+
+test_that("classify_school: 'Indiana University' is not IMG (india substring)", {
+  expect_false(grepl("\\bindia\\b", "Indiana University School of Medicine", perl = TRUE))
+  expect_equal(
+    mysterycall_classify_medical_school("Indiana University School of Medicine"),
+    "US_MD"
+  )
+})
+
+test_that("classify_school: 'University of New Mexico' is not IMG (mexico substring)", {
+  expect_equal(
+    mysterycall_classify_medical_school("University of New Mexico School of Medicine"),
+    "US_MD"
+  )
+})
+
+test_that("classify_school: 'Western University of Health Sciences' (US DO) not CAN_MD", {
+  expect_equal(
+    mysterycall_classify_medical_school(
+      "Western University of Health Sciences College of Osteopathic Medicine"
+    ),
+    "US_DO"
+  )
+})
+
+test_that("classify_school: genuine country matches still classify as IMG", {
+  expect_equal(
+    mysterycall_classify_medical_school("Universidad Autonoma de Guadalajara Mexico"),
+    "IMG"
+  )
+  expect_equal(
+    mysterycall_classify_medical_school("Ross University School of Medicine"),
+    "IMG"
+  )
+})
+
+test_that("classify_school: genuine Canadian 'Western University' still CAN_MD", {
+  expect_equal(
+    mysterycall_classify_medical_school("Western University Schulich School of Medicine"),
+    "CAN_MD"
+  )
+})

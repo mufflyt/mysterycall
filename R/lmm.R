@@ -307,8 +307,7 @@ mysterycall_lmm <- function(data,
   }
 
   # -- Coefficient table ---------------------------------------------------------
-  z_crit <- stats::qnorm(1 - (1 - conf_level) / 2)
-  fe     <- as.data.frame(coef(summary(model)))
+  fe <- as.data.frame(coef(summary(model)))
 
   # Column names differ between lmer and lmerTest::lmer
   est_col  <- "Estimate"
@@ -320,14 +319,18 @@ mysterycall_lmm <- function(data,
   p_values <- if (!is.null(pval_col)) {
     fe[[pval_col]]
   } else {
-    # Conservative fallback: t with residual df
-    df_resid <- nrow(data_cc) - est_df - 1L
+    # Conservative fallback: t with residual df (est_df already counts intercept)
+    df_resid <- nrow(data_cc) - est_df
     2 * stats::pt(abs(fe[[t_col]]), df = df_resid, lower.tail = FALSE)
   }
 
   df_values <- if (!is.null(df_col)) fe[[df_col]] else {
-    rep(nrow(data_cc) - est_df - 1L, nrow(fe))
+    rep(nrow(data_cc) - est_df, nrow(fe))
   }
+
+  # Per-term t critical value so the CI matches the Satterthwaite t-based
+  # p-value (a normal z quantile would disagree at small residual df).
+  t_crit <- stats::qt(1 - (1 - conf_level) / 2, df = df_values)
 
   coef_table <- tibble::tibble(
     term        = rownames(fe),
@@ -337,8 +340,8 @@ mysterycall_lmm <- function(data,
     df          = df_values,
     p_value     = p_values,
     p_value_fmt = .fmt_lmm_pval(p_values),
-    ci_lower    = fe[[est_col]] - z_crit * fe[[se_col]],
-    ci_upper    = fe[[est_col]] + z_crit * fe[[se_col]]
+    ci_lower    = fe[[est_col]] - t_crit * fe[[se_col]],
+    ci_upper    = fe[[est_col]] + t_crit * fe[[se_col]]
   )
 
   # -- Back-transform to geometric mean ratios when log-transformed -------------
@@ -517,12 +520,13 @@ mysterycall_lmm <- function(data,
 #' @export
 print.mysterycall_lmm <- function(x, digits = 2, ...) {
   reml_label <- if (x$REML) "REML" else "ML"
+  log_label  <- if (isTRUE(x$log_transformed)) "log1p(days)" else "days"
   cat(sprintf(
     "Linear Mixed Model (%s)  n = %d  physicians = %d\n",
     reml_label, x$n, x$n_clusters
   ))
-  cat(sprintf("  AIC = %.1f   BIC = %.1f   Residual SD = %.2f days\n",
-              x$aic, x$bic, x$sigma))
+  cat(sprintf("  AIC = %.1f   BIC = %.1f   Residual SD = %.2f %s\n",
+              x$aic, x$bic, x$sigma, log_label))
 
   if (!is.na(x$r_squared$marginal)) {
     cat(sprintf("  R^2 marginal = %.3f   conditional = %.3f\n",
@@ -557,7 +561,6 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
     ))
   }
 
-  log_label <- if (isTRUE(x$log_transformed)) "log1p(days)" else "days"
   cat(sprintf("\nFixed effects (%s):\n", log_label))
   tbl <- as.data.frame(x$coef_table[, c("term", "estimate", "se", "ci_lower", "ci_upper", "p_value_fmt")])
   tbl$estimate <- round(tbl$estimate, digits)
@@ -582,8 +585,8 @@ print.mysterycall_lmm <- function(x, digits = 2, ...) {
     drop = FALSE
   ]
   if (nrow(re)) {
-    cat(sprintf("\nRandom intercept (%s):  variance = %.4f  SD = %.4f days\n",
-                re$grp[[1L]], re$vcov[[1L]], re$sdcor[[1L]]))
+    cat(sprintf("\nRandom intercept (%s):  variance = %.4f  SD = %.4f %s\n",
+                re$grp[[1L]], re$vcov[[1L]], re$sdcor[[1L]], log_label))
   }
 
   if (!is.null(x$sensitivity)) {

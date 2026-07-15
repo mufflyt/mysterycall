@@ -52,6 +52,16 @@
 #'   \item{phi >= 2.0}{Severe overdispersion.}
 #' }
 #'
+#' @section Mixed-effects caveat:
+#' For mixed-effects models (`glmmTMB`, `merMod`), [df.residual()] counts only
+#' the fixed-effect parameters and ignores the effective degrees of freedom
+#' consumed by the random effects, so phi is an **approximation** rather than an
+#' exact dispersion ratio. The verbal interpretation accounts for this by
+#' treating low residual phi as expected for negative-binomial and mixed models
+#' (dispersion absorbed by the NB variance or random intercepts) rather than as
+#' overfitting. For a formal simulation-based check on a GLMM, prefer
+#' `DHARMa::testDispersion()`.
+#'
 #' @family outcomes
 #' @seealso [mysterycall_poisson_model()], [mysterycall_nb_model()],
 #'   [mysterycall_check_zero_inflation()]

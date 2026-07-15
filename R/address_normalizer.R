@@ -368,7 +368,15 @@ normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); m
 mysterycall_normalize_zip5 <- function(zip) {
   if (is.null(zip)) return(NA_character_)
   if (length(zip) == 0L) return(character(0))
-  z <- stringr::str_extract(as.character(zip), "\\d{5}")
+  # A numeric ZIP with a leading zero (e.g. 7001 for "07001") has only four
+  # digits, so a bare "\\d{5}" extraction returns NA and blanks the ZIP for all
+  # of CT/MA/ME/NH/NJ/RI/VT/PR/VI. Left-pad numerics to 5 digits first.
+  if (is.numeric(zip)) {
+    raw <- ifelse(is.na(zip), NA_character_, sprintf("%05.0f", zip))
+  } else {
+    raw <- as.character(zip)
+  }
+  z <- stringr::str_extract(raw, "\\d{5}")
   ifelse(is.na(z), NA_character_, z)
 }
 

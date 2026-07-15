@@ -351,9 +351,11 @@ mysterycall_literature_table <- function(prior_studies,
   # ---------------------------------------------------------------------------
   # 8. Summary values for $or_range and $sentence
   # ---------------------------------------------------------------------------
-  all_or   <- combined$or
-  or_min   <- min(all_or, na.rm = TRUE)
-  or_max   <- max(all_or, na.rm = TRUE)
+  # The sentence describes the range of *prior* published studies, so exclude
+  # the current-study row (if any) from the OR range.
+  or_source <- if (!is.null(current_study)) combined$or[!is_current_row] else combined$or
+  or_min   <- min(or_source, na.rm = TRUE)
+  or_max   <- max(or_source, na.rm = TRUE)
   or_range <- paste0(fmt(or_min), "-", fmt(or_max))
 
   n_studies  <- nrow(combined)

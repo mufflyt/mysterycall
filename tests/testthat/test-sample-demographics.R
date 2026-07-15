@@ -97,3 +97,26 @@ test_that("writes CSV when output_dir supplied", {
   )
   expect_true(file.exists(file.path(td, "demo.csv")))
 })
+
+# Regression (BUG 40): the "including the District of Columbia" clause must be
+# gated on DC actually being present among the included states.
+test_that("summary_sentence omits DC clause when DC is absent", {
+  res <- suppressMessages(
+    mysterycall_sample_demographics(df, all_states = custom_states,
+                                    output_dir = NA)
+  )
+  expect_false(grepl("District of Columbia", res$summary_sentence))
+})
+
+test_that("summary_sentence includes DC clause when DC is present", {
+  dc_df <- df
+  dc_df$state[1] <- "District of Columbia"
+  res <- suppressMessages(
+    mysterycall_sample_demographics(
+      dc_df,
+      all_states = c(custom_states, "District of Columbia"),
+      output_dir = NA
+    )
+  )
+  expect_true(grepl("including the District of Columbia", res$summary_sentence))
+})

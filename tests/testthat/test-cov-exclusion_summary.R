@@ -47,7 +47,8 @@ test_that("mysterycall_exclusion_summary returns correct structure with valid in
   expect_s3_class(result, "mysterycall_exclusion_summary")
   expect_type(result, "list")
   expect_named(result, c("total", "n_reached", "n_unreachable", "pct_reached",
-                         "n_included", "counts", "percentages", "paragraph", "table"))
+                         "n_included", "n_unrecognized", "counts", "percentages",
+                         "paragraph", "table"))
   expect_equal(result$total, 240L)
   expect_type(result$paragraph, "character")
   expect_length(result$paragraph, 1L)
@@ -266,11 +267,12 @@ test_that("mysterycall_exclusion_summary handles unrecognized exclusion values",
 
   result <- mysterycall_exclusion_summary(df)
 
-  # Unknown values contribute to total and n_reached but not to named exclusion buckets
+  # Unknown values contribute to total but are now their own "unrecognized"
+  # bucket (bug 22 fix); they no longer inflate n_included.
   expect_equal(result$total, 4L)
-  # n_included = n_reached - excluded_among_reached = 4 - 0 = 4
-  expect_equal(result$n_included, 4L)
-  expect_equal(sum(result$counts), 0L)  # No recognized exclusions
+  expect_equal(result$n_included, 2L)      # only the two "Able to contact" rows
+  expect_equal(result$n_unrecognized, 2L)  # the two unknown reasons
+  expect_equal(sum(result$counts), 0L)     # No recognized exclusions
 })
 
 # Test 14: All calls are included (no exclusions)

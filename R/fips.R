@@ -1,22 +1,18 @@
-#' Data of FIPS codes
+#' State-level FIPS codes
 #'
-#' This dataset maps state and county names to Federal Information Processing 
-#' Standards (FIPS) codes, which are essential for merging spatial and census
-#' data in healthcare access research.
+#' This dataset maps U.S. states (plus the District of Columbia) to their
+#' Federal Information Processing Standards (FIPS) state codes, which are
+#' essential for merging state-level spatial and census data in healthcare
+#' access research. The object is **state-level only**; it does not contain
+#' county rows, so county-level merges are not supported by this object.
 #'
-#' @format A tibble with 3142 rows and 10 variables containing Federal
-#'   Information Processing Standards (FIPS) codes for states and counties:
+#' @format A data frame with 51 rows (50 states plus the District of Columbia)
+#'   and 3 variables:
 #' \describe{
-#'   \item{state}{Two-letter postal abbreviation.}
-#'   \item{state_name}{Full state name.}
-#'   \item{state_fips}{Two-digit state FIPS code.}
-#'   \item{county_fips}{Three-digit county FIPS code.}
-#'   \item{fips}{Combined five-digit state and county code.}
-#'   \item{class}{Geography class indicator.}
-#'   \item{county}{County name.}
-#'   \item{county_ansi}{County ANSI code.}
-#'   \item{county_short}{Simplified county name.}
-#'   \item{state_ansi}{State ANSI code.}
+#'   \item{state}{Two-letter postal abbreviation (e.g. `"AL"`).}
+#'   \item{state_code}{Two-digit state FIPS code, stored as character so
+#'     leading zeros are preserved (e.g. `"01"`).}
+#'   \item{state_name}{Full state name (e.g. `"Alabama"`).}
 #' }
 #' @source \url{https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv}
 #' @examples

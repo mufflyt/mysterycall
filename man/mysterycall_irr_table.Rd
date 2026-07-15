@@ -8,7 +8,7 @@ mysterycall_irr_table(
   irr_data,
   title = "Incidence Rate Ratios",
   subtitle = NULL,
-  outcome_label = "IRR (95 95\% CI)",
+  outcome_label = "IRR (95\% CI)",
   digits = 2L,
   add_significance_stars = TRUE,
   footnote = paste0("IRR = Incidence Rate Ratio. ", "* p<0.05; ** p<0.01; *** p<0.001.")

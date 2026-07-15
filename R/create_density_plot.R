@@ -61,8 +61,14 @@ mysterycall_plot_density <- function(data,
   }
   x_transform <- match.arg(x_transform, c("none", "log", "sqrt"))
 
-  # Filter out zero or negative values and NAs from the x_var column
-  data <- dplyr::filter(data, .data[[x_var]] > 0, !is.na(.data[[x_var]]))
+  # Drop NAs from the x_var column. Zero and negative values are only removed
+  # for log/sqrt transforms that require positive input; with
+  # x_transform = "none", zero-day (same-day) appointments are retained.
+  if (x_transform == "none") {
+    data <- dplyr::filter(data, !is.na(.data[[x_var]]))
+  } else {
+    data <- dplyr::filter(data, .data[[x_var]] > 0, !is.na(.data[[x_var]]))
+  }
 
   # Handle transformations
   if (x_transform == "log") {
