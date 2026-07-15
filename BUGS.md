@@ -8,6 +8,18 @@ _Found while using the package to model ENT appointment access/timeliness (grace
 > A separate effort is actively editing `~/mysterycall/R/` — ~20 files modified, uncommitted. Several catalogued bugs are **already fixed in source**, verified: **#22** (`exclusion_summary` now `n_included <- sum(col_vec == inclusion_value)`), **#41** (`plot_effects` now `as.data.frame(eff, type = type)`), plus reported-fixed **#9, #12, #13, #38, #39**. The whole emmeans `asymp.LCL`/`lower.CL` contract class is resolved (all 8 consumers now use `intersect(...)` + `type="response"`).
 > **Treat the test suite as the arbiter of what is still live** — do not assume an item here is unfixed without re-checking current source. A full `devtools::test()` run was in progress at commit time.
 
+> ### RECONCILIATION against current source (2026-07-14, verified by source inspection)
+> The concurrent fixer resolved **most** of the 50. Verified **FIXED** in source:
+> #1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 22, 23, 24, 27, 28, 31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45 (33 items).
+>
+> **STILL LIVE (not yet fixed — the actionable remaining work):**
+> - **#50** `acceptance_waffle.R:57` — `"Blue Cross / Blue Shield"` label (file untouched) — MED
+> - **#48** `city_state_to_lat_long.rda` — dataset not rebuilt; `$lat`/`$long` still NULL — MED-HIGH
+> - **#2** `irr_to_days.R` — `"%s-insured callers"` wording still hardcoded (the `abs()` CI bug #1 was fixed, but the insurance-specific phrasing was not) — MED
+> - **#16** `power_analysis.R` — unpaired branch still `n_total * 2L` (double-counts calls) — LOW
+> - **#42** `create_density_plot.R` / `create_scatter_plot.R` — still `filter(x > 0)`, dropping same-day (0-day) appointments — LOW
+> - **Not re-verified (likely still live, LOW):** #18 (`<=`/`<`), #25/#26 (caller-splitting balance/order), #29/#30 (doc), #34 (`fips` schema — `man/fips.Rd` was edited; re-check), #46/#47 (`lmm` SD-units label / fallback df), #49 (benchmark dead code).
+
 ---
 
 ## ⚠️ Critical context: installed binary and source are both `1.6.0` but differ
