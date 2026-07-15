@@ -55,6 +55,7 @@
 ^TESTING_ACTION_PLAN\.md$
 ^TEST_RESULTS_SUMMARY\.md$
 ^WEAKEST_LINKS_ANALYSIS\.md$
+^BUGS\.md$
 ^index\.md$
 ^tables$
 ^Rplots\.pdf$
