@@ -527,3 +527,13 @@ modeling, data/geo/NPI, stats/screening, reporting); 22–47 from waves 2–3 (6
 rates/survival, data-integrity/joins, parsers/classifiers, sampling/scenario, remaining-logic
 incl. `lmm.R`, cosmetic/infra). HIGH/MED-HIGH items were re-verified by hand against source;
 MED/LOW items marked "reviewer-verified" were verified in-R by the reviewing agent.
+
+---
+
+# Wave 5 — hands-on (item 51)
+
+### 51 — `strobe_flow.R:~233` — `excl_detail[[code]]` throws "subscript out of bounds" on a non-named value — MED — FIXED
+- **Found** generating the ENT STROBE figure with `mysterycall_strobe_flow()`.
+- **What's wrong:** the per-code detail loop did `n <- excl_detail[[code]]` for each `code` in `code_labels`. When `excl_detail` is anything other than a *named* vector (e.g. a bare scalar `18`), `[[` by name on an unnamed atomic errors with "subscript out of bounds", killing the whole call. Custom **labels are unaffected** (they work) — only `excl_detail` triggers it.
+- **Failure:** `mysterycall_strobe_flow(n_total=960, ..., excl_detail=18)` → error; the figure never renders.
+- **Fix (applied):** validate `excl_detail` is named (else warn and ignore), and guard the lookup with `if (code %in% names(excl_detail)) excl_detail[[code]] else NULL`. Verified: unnamed value degrades gracefully with a warning; named `excl_detail` and custom labels both render.

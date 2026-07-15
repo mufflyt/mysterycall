@@ -227,10 +227,19 @@ mysterycall_strobe_flow <- function(
 
   excl_total_screen <- n_calldate - n_included
 
+  # excl_detail must be a NAMED integer vector (code -> count). A non-named
+  # value (e.g. a bare scalar) previously caused excl_detail[[code]] to throw
+  # "subscript out of bounds"; validate and degrade gracefully instead.
+  if (!is.null(excl_detail) && is.null(names(excl_detail))) {
+    warning("`excl_detail` must be a named integer vector (code -> count); ",
+            "ignoring the unnamed value.", call. = FALSE)
+    excl_detail <- NULL
+  }
+
   if (!is.null(excl_detail)) {
     detail_lines <- character(0)
     for (code in names(code_labels)) {
-      n <- excl_detail[[code]]
+      n <- if (code %in% names(excl_detail)) excl_detail[[code]] else NULL
       if (!is.null(n) && !is.na(n) && n > 0)
         detail_lines <- c(detail_lines,
                           sprintf("  - %s: %d", code_labels[[code]], as.integer(n)))
