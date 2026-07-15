@@ -7,13 +7,29 @@
 mysterycall_get_cms_enrollment(cms_csv_path, county_fips)
 }
 \arguments{
-\item{cms_csv_path}{Path to the downloaded CMS monthly enrollment CSV.}
+\item{cms_csv_path}{Path to the tidy CMS monthly enrollment CSV (see Details).}
 
-\item{county_fips}{Character. Five-digit State-County FIPS code.}
+\item{county_fips}{Character. Five-digit State-County FIPS code to filter to.}
 }
 \value{
-A data frame with monthly Medicare and Medicaid/CHIP enrollment counts.
+A data frame (0 or more rows) with columns \code{FIPS}, \code{County}, \code{State},
+\verb{Medicare Enrollment}, \verb{Medicaid/CHIP Enrollment}, and \code{Report_Month}.
 }
 \description{
-Retrieve CMS Monthly County-Level Enrollment Reports
+Reads a county-level CMS monthly enrollment CSV export and returns the row(s)
+for a single county. The CSV must already be in the tidy county format used
+by this function; the raw CMS release is reshaped into these columns upstream.
+}
+\details{
+The CSV is expected to contain (with these exact, case-sensitive headers):
+\describe{
+\item{\code{FIPS}}{Five-digit state-county FIPS code.}
+\item{\code{County}, \code{State}}{County and state names.}
+\item{\verb{Medicare Enrollment}}{Medicare beneficiary count.}
+\item{\verb{Medicaid/CHIP Enrollment}}{Medicaid/CHIP beneficiary count.}
+\item{\code{Report_Month}}{Reporting month label.}
+}
+The function validates that every one of these columns is present and errors
+with an explicit message (naming the missing columns and the columns actually
+found) rather than failing deep inside \code{dplyr::select()}.
 }

@@ -7,13 +7,34 @@
 mysterycall_get_hrsa_ahrf(ahrf_db_path, county_fips)
 }
 \arguments{
-\item{ahrf_db_path}{Path to the local AHRF DuckDB or CSV database.}
+\item{ahrf_db_path}{Path to a DuckDB database holding the preprocessed
+\code{ahrf_county_data} table (see Details).}
 
 \item{county_fips}{Character. Five-digit State-County FIPS code.}
 }
 \value{
-A data frame containing total population, OB-GYN supply, and public coverage metrics.
+A data frame containing total population, OB-GYN supply, and public
+coverage metrics for the requested county (0 rows if the FIPS is absent).
 }
 \description{
-Extract County-Level Metrics from HRSA Area Health Resources File (AHRF)
+Reads county-level population, OB-GYN supply, and public-coverage metrics from
+a \strong{preprocessed} AHRF DuckDB database.
+}
+\details{
+The raw HRSA Area Health Resources File ships as fixed-width ASCII with
+cryptic field codes, so this function does \strong{not} read it directly. It
+expects a DuckDB database containing a table named \code{ahrf_county_data} that has
+already been reshaped to the following columns (built upstream, e.g. in a
+\verb{data-raw/} script):
+\describe{
+\item{\code{fips}}{Five-digit state-county FIPS code.}
+\item{\code{county_name}, \code{state_abbrev}}{County name and state abbreviation.}
+\item{\code{pop_total}}{Total county population.}
+\item{\code{obgyn_count}}{OB-GYN clinician supply.}
+\item{\code{medicaid_enrolled}}{Medicaid enrollment count.}
+}
+The function validates that the \code{ahrf_county_data} table and every required
+column exist, erroring with an explicit message (naming what is missing and
+what was found) rather than emitting an opaque SQL error. CSV input is not
+currently supported.
 }

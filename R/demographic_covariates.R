@@ -231,48 +231,125 @@ mysterycall_get_acs_female_insurance <- function(api_key, state_fips,
 
 #' Extract County-Level Metrics from HRSA Area Health Resources File (AHRF)
 #'
-#' @param ahrf_db_path Path to the local AHRF DuckDB or CSV database.
+#' Reads county-level population, OB-GYN supply, and public-coverage metrics from
+#' a **preprocessed** AHRF DuckDB database.
+#'
+#' @details
+#' The raw HRSA Area Health Resources File ships as fixed-width ASCII with
+#' cryptic field codes, so this function does **not** read it directly. It
+#' expects a DuckDB database containing a table named `ahrf_county_data` that has
+#' already been reshaped to the following columns (built upstream, e.g. in a
+#' `data-raw/` script):
+#' \describe{
+#'   \item{`fips`}{Five-digit state-county FIPS code.}
+#'   \item{`county_name`, `state_abbrev`}{County name and state abbreviation.}
+#'   \item{`pop_total`}{Total county population.}
+#'   \item{`obgyn_count`}{OB-GYN clinician supply.}
+#'   \item{`medicaid_enrolled`}{Medicaid enrollment count.}
+#' }
+#' The function validates that the `ahrf_county_data` table and every required
+#' column exist, erroring with an explicit message (naming what is missing and
+#' what was found) rather than emitting an opaque SQL error. CSV input is not
+#' currently supported.
+#'
+#' @param ahrf_db_path Path to a DuckDB database holding the preprocessed
+#'   `ahrf_county_data` table (see Details).
 #' @param county_fips Character. Five-digit State-County FIPS code.
-#' @return A data frame containing total population, OB-GYN supply, and public coverage metrics.
+#' @return A data frame containing total population, OB-GYN supply, and public
+#'   coverage metrics for the requested county (0 rows if the FIPS is absent).
 #' @export
 mysterycall_get_hrsa_ahrf <- function(ahrf_db_path, county_fips) {
   if (!file.exists(ahrf_db_path)) {
-    stop("AHRF database file not found.")
+    stop("AHRF database file not found at: ", ahrf_db_path, call. = FALSE)
   }
-  
+
   con <- DBI::dbConnect(duckdb::duckdb(), ahrf_db_path, read_only = TRUE)
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
-  
+
+  # ---- validate the expected schema before querying ------------------------
+  if (!"ahrf_county_data" %in% DBI::dbListTables(con)) {
+    stop(
+      "AHRF database does not contain the required table 'ahrf_county_data'.\n",
+      "Tables found: ",
+      paste(DBI::dbListTables(con), collapse = ", "), ".\n",
+      "This function expects a preprocessed county-level table with columns: ",
+      "fips, county_name, state_abbrev, pop_total, obgyn_count, medicaid_enrolled.",
+      call. = FALSE
+    )
+  }
+
+  required_cols <- c("fips", "county_name", "state_abbrev",
+                     "pop_total", "obgyn_count", "medicaid_enrolled")
+  have_cols <- DBI::dbListFields(con, "ahrf_county_data")
+  missing_cols <- setdiff(required_cols, have_cols)
+  if (length(missing_cols)) {
+    stop(
+      "Table 'ahrf_county_data' is missing required column(s): ",
+      paste(missing_cols, collapse = ", "), ".\n",
+      "Columns found: ", paste(have_cols, collapse = ", "), ".",
+      call. = FALSE
+    )
+  }
+
   query <- sprintf("
     SELECT fips, county_name, state_abbrev,
-           pop_total, 
-           obgyn_count, 
+           pop_total,
+           obgyn_count,
            medicaid_enrolled
     FROM ahrf_county_data
     WHERE fips = '%s'
   ", county_fips)
-  
-  res <- DBI::dbGetQuery(con, query)
-  return(res)
+
+  DBI::dbGetQuery(con, query)
 }
 
 
 #' Retrieve CMS Monthly County-Level Enrollment Reports
 #'
-#' @param cms_csv_path Path to the downloaded CMS monthly enrollment CSV.
-#' @param county_fips Character. Five-digit State-County FIPS code.
-#' @return A data frame with monthly Medicare and Medicaid/CHIP enrollment counts.
+#' Reads a county-level CMS monthly enrollment CSV export and returns the row(s)
+#' for a single county. The CSV must already be in the tidy county format used
+#' by this function; the raw CMS release is reshaped into these columns upstream.
+#'
+#' @details
+#' The CSV is expected to contain (with these exact, case-sensitive headers):
+#' \describe{
+#'   \item{`FIPS`}{Five-digit state-county FIPS code.}
+#'   \item{`County`, `State`}{County and state names.}
+#'   \item{`Medicare Enrollment`}{Medicare beneficiary count.}
+#'   \item{`Medicaid/CHIP Enrollment`}{Medicaid/CHIP beneficiary count.}
+#'   \item{`Report_Month`}{Reporting month label.}
+#' }
+#' The function validates that every one of these columns is present and errors
+#' with an explicit message (naming the missing columns and the columns actually
+#' found) rather than failing deep inside `dplyr::select()`.
+#'
+#' @param cms_csv_path Path to the tidy CMS monthly enrollment CSV (see Details).
+#' @param county_fips Character. Five-digit State-County FIPS code to filter to.
+#' @return A data frame (0 or more rows) with columns `FIPS`, `County`, `State`,
+#'   `Medicare Enrollment`, `Medicaid/CHIP Enrollment`, and `Report_Month`.
 #' @export
 mysterycall_get_cms_enrollment <- function(cms_csv_path, county_fips) {
   if (!file.exists(cms_csv_path)) {
-    stop("CMS monthly enrollment file not found.")
+    stop("CMS monthly enrollment file not found at: ", cms_csv_path, call. = FALSE)
   }
-  
+
   df <- utils::read.csv(cms_csv_path, stringsAsFactors = FALSE, check.names = FALSE)
-  
-  res <- df %>%
-    dplyr::filter(FIPS == county_fips) %>%
-    dplyr::select(FIPS, County, State, `Medicare Enrollment`, `Medicaid/CHIP Enrollment`, Report_Month)
-  
-  return(res)
+
+  required_cols <- c("FIPS", "County", "State",
+                     "Medicare Enrollment", "Medicaid/CHIP Enrollment", "Report_Month")
+  missing_cols <- setdiff(required_cols, names(df))
+  if (length(missing_cols)) {
+    stop(
+      "CMS enrollment CSV is missing required column(s): ",
+      paste(missing_cols, collapse = ", "), ".\n",
+      "Columns found: ", paste(names(df), collapse = ", "), ".\n",
+      "Expected a tidy county-level CMS enrollment export with columns: ",
+      paste(required_cols, collapse = ", "), ".",
+      call. = FALSE
+    )
+  }
+
+  df %>%
+    dplyr::filter(.data$FIPS == county_fips) %>%
+    dplyr::select(dplyr::all_of(required_cols))
 }

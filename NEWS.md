@@ -1,5 +1,18 @@
 # mysterycall (development version)
 
+## Covariate reader hardening
+
+- `mysterycall_get_cms_enrollment()` and `mysterycall_get_hrsa_ahrf()` now
+  validate their input schema up front and fail with an explicit message that
+  names the missing column(s)/table and what was actually found, instead of an
+  opaque `dplyr::select()` or SQL error deep in the call. Both functions'
+  documentation now spells out the exact expected schema (`get_hrsa_ahrf`
+  requires a preprocessed `ahrf_county_data` DuckDB table — the raw fixed-width
+  AHRF is not read directly; CSV input is not supported).
+- Added offline, fixture-based tests (temp CSV / temp DuckDB) for
+  `mysterycall_get_cms_enrollment()`, `mysterycall_get_hrsa_ahrf()`, and
+  `mysterycall_track_clinician_churn()`.
+
 ## Source-audit bug fixes (waves 1-3)
 
 A full read of `R/` surfaced correctness bugs that fed wrong numbers into data,
