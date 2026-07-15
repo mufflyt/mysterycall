@@ -30,7 +30,7 @@ test_that("mysterycall_acceptance_waffle happy path with default parameters", {
   skip_if_not_installed("patchwork")
 
   acc_df <- data.frame(
-    insurance_type = c("Medicaid", "Medicaid", "Blue Cross / Blue Shield", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Medicaid", "Blue Cross/Blue Shield", "Blue Cross/Blue Shield"),
     outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
     n              = c(47L, 53L, 72L, 28L),
     stringsAsFactors = FALSE
@@ -50,7 +50,7 @@ test_that("mysterycall_acceptance_waffle returns ggplot/patchwork object", {
   skip_if_not_installed("patchwork")
 
   acc_df <- data.frame(
-    insurance_type = c("Medicaid", "Medicaid", "Blue Cross / Blue Shield", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Medicaid", "Blue Cross/Blue Shield", "Blue Cross/Blue Shield"),
     outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
     n              = c(47L, 53L, 72L, 28L),
     stringsAsFactors = FALSE
@@ -84,7 +84,7 @@ test_that("mysterycall_acceptance_waffle errors when required columns are missin
 
   # Missing outcome column
   acc_missing <- data.frame(
-    insurance_type = c("Medicaid", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Blue Cross/Blue Shield"),
     n              = c(47L, 72L),
     stringsAsFactors = FALSE
   )
@@ -154,7 +154,7 @@ test_that("mysterycall_acceptance_waffle with flip=TRUE", {
   skip_if_not_installed("patchwork")
 
   acc_df <- data.frame(
-    insurance_type = c("Medicaid", "Medicaid", "Blue Cross / Blue Shield", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Medicaid", "Blue Cross/Blue Shield", "Blue Cross/Blue Shield"),
     outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
     n              = c(47L, 53L, 72L, 28L),
     stringsAsFactors = FALSE
@@ -174,7 +174,7 @@ test_that("mysterycall_acceptance_waffle errors on invalid rows parameter", {
   skip_if_not_installed("patchwork")
 
   acc_df <- data.frame(
-    insurance_type = c("Medicaid", "Medicaid", "Blue Cross / Blue Shield", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Medicaid", "Blue Cross/Blue Shield", "Blue Cross/Blue Shield"),
     outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
     n              = c(47L, 53L, 72L, 28L),
     stringsAsFactors = FALSE
@@ -194,7 +194,7 @@ test_that("mysterycall_acceptance_waffle errors on non-flag flip parameter", {
   skip_if_not_installed("patchwork")
 
   acc_df <- data.frame(
-    insurance_type = c("Medicaid", "Medicaid", "Blue Cross / Blue Shield", "Blue Cross / Blue Shield"),
+    insurance_type = c("Medicaid", "Medicaid", "Blue Cross/Blue Shield", "Blue Cross/Blue Shield"),
     outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
     n              = c(47L, 53L, 72L, 28L),
     stringsAsFactors = FALSE
@@ -206,4 +206,12 @@ test_that("mysterycall_acceptance_waffle errors on non-flag flip parameter", {
     })),
     "flag"
   )
+})
+
+
+test_that("bcbs_label default matches the package-canonical BCBS string (bug 50)", {
+  # The canonical insurance string is "Blue Cross/Blue Shield" (no spaces);
+  # a spaced default silently produced "No rows found" on canonical data.
+  expect_equal(formals(mysterycall_acceptance_waffle)$bcbs_label,
+               "Blue Cross/Blue Shield")
 })

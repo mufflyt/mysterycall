@@ -81,8 +81,8 @@ test_that("city_state_to_lat_long has 31909 rows", {
   expect_equal(nrow(mysterycall::city_state_to_lat_long), 31909L)
 })
 
-test_that("city_state_to_lat_long has expected columns (state, city, latitude, longitude)", {
-  expect_true(all(c("state", "city", "latitude", "longitude") %in%
+test_that("city_state_to_lat_long has expected columns (city, state, lat, long)", {
+  expect_true(all(c("city", "state", "lat", "long") %in%
                     names(mysterycall::city_state_to_lat_long)))
 })
 
@@ -241,15 +241,15 @@ test_that("acgme director_date_appointed column exists", {
 # 7. Property: city_state_to_lat_long lat/lon within world bounds
 # ---------------------------------------------------------------------------
 
-test_that("city_state_to_lat_long latitude is within world bounds (-90 to 90)", {
-  lats <- mysterycall::city_state_to_lat_long$latitude
+test_that("city_state_to_lat_long lat is within world bounds (-90 to 90)", {
+  lats <- mysterycall::city_state_to_lat_long$lat
   non_na <- lats[!is.na(lats)]
   expect_true(all(non_na >= -90), label = paste("Min lat:", min(non_na)))
   expect_true(all(non_na <=  90), label = paste("Max lat:", max(non_na)))
 })
 
-test_that("city_state_to_lat_long longitude is within world bounds (-180 to 180)", {
-  lons <- mysterycall::city_state_to_lat_long$longitude
+test_that("city_state_to_lat_long long is within world bounds (-180 to 180)", {
+  lons <- mysterycall::city_state_to_lat_long$long
   non_na <- lons[!is.na(lons)]
   expect_true(all(non_na >= -180), label = paste("Min lon:", min(non_na)))
   expect_true(all(non_na <=  180), label = paste("Max lon:", max(non_na)))

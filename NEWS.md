@@ -25,6 +25,19 @@
   `mysterycall_get_cms_enrollment()`, `mysterycall_get_hrsa_ahrf()`, and
   `mysterycall_track_clinician_churn()`.
 
+## Source-audit bug fixes (wave 4)
+
+- `city_state_to_lat_long` dataset now matches its documented schema: columns
+  `city`, `state` (two-letter USPS abbreviation incl. DC/PR), `lat`, `long`. It
+  previously shipped `state` full names plus `latitude`/`longitude`, so `$lat` /
+  `$long` returned `NULL` and any two-letter-`state` join matched zero rows. The
+  `data-raw/` build script now performs the rename + abbreviation.
+- `mysterycall_acceptance_waffle()` default `bcbs_label` corrected to the
+  package-canonical `"Blue Cross/Blue Shield"` (no spaces); the old spaced
+  default `stop()`ed with "No rows found" on canonical data.
+- Removed a contradictory (always-FALSE) dead predicate in
+  `data-raw/benchmark_name_parser.R`.
+
 ## Source-audit bug fixes (waves 1-3)
 
 A full read of `R/` surfaced correctness bugs that fed wrong numbers into data,

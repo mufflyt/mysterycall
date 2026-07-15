@@ -54,7 +54,7 @@
 mysterycall_acceptance_waffle <- function(
     acceptance_result,
     medicaid_label = "Medicaid",
-    bcbs_label     = "Blue Cross / Blue Shield",
+    bcbs_label     = "Blue Cross/Blue Shield",
     colors         = c(Accepted = "grey20", Declined = "grey85"),
     rows           = 10L,
     title          = NULL,

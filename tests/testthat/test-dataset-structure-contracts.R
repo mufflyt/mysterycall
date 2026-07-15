@@ -150,20 +150,20 @@ test_that("city_state_to_lat_long - row count is 31909", {
   expect_equal(nrow(d), 31909L)
 })
 
-test_that("city_state_to_lat_long - required columns: state, city, latitude, longitude", {
+test_that("city_state_to_lat_long - required columns: city, state, lat, long", {
   d <- load_dataset("city_state_to_lat_long")
-  expect_true(all(c("state", "city", "latitude", "longitude") %in% names(d)))
+  expect_true(all(c("city", "state", "lat", "long") %in% names(d)))
 })
 
-test_that("city_state_to_lat_long - latitude values are in valid range [-90, 90]", {
+test_that("city_state_to_lat_long - lat values are in valid range [-90, 90]", {
   d <- load_dataset("city_state_to_lat_long")
-  lats <- d$latitude[!is.na(d$latitude)]
+  lats <- d$lat[!is.na(d$lat)]
   expect_true(all(lats >= -90 & lats <= 90))
 })
 
-test_that("city_state_to_lat_long - longitude values are in valid range [-180, 180]", {
+test_that("city_state_to_lat_long - long values are in valid range [-180, 180]", {
   d <- load_dataset("city_state_to_lat_long")
-  lons <- d$longitude[!is.na(d$longitude)]
+  lons <- d$long[!is.na(d$long)]
   expect_true(all(lons >= -180 & lons <= 180))
 })
 
@@ -173,8 +173,8 @@ test_that("city_state_to_lat_long - continental US cities have negative longitud
   # Denver, CO should be around -104.9
   denver <- d[tolower(d$city) == "denver" & d$state == "CO", ]
   if (nrow(denver) > 0) {
-    expect_true(all(denver$longitude < 0))
-    expect_true(all(denver$longitude > -115))
+    expect_true(all(denver$long < 0))
+    expect_true(all(denver$long > -115))
   } else {
     skip("Denver not found in lookup table")
   }
@@ -182,13 +182,14 @@ test_that("city_state_to_lat_long - continental US cities have negative longitud
 
 test_that("city_state_to_lat_long - has expected columns", {
   d <- load_dataset("city_state_to_lat_long")
-  expect_true(all(c("city", "state", "latitude", "longitude") %in% names(d)))
+  expect_true(all(c("city", "state", "lat", "long") %in% names(d)))
 })
 
-test_that("city_state_to_lat_long - covers all 50 states by full name", {
+test_that("city_state_to_lat_long - covers states by two-letter USPS abbreviation", {
   d <- load_dataset("city_state_to_lat_long")
-  # state column uses full state names, not abbreviations
-  expect_true(all(c("California", "Texas", "New York", "Florida") %in% unique(d$state)))
+  # state column uses two-letter USPS abbreviations (incl. DC and PR)
+  expect_true(all(c("CA", "TX", "NY", "FL", "DC", "PR") %in% unique(d$state)))
+  expect_true(all(nchar(d$state) == 2L))
 })
 
 # ── taxonomy (862 rows) ───────────────────────────────────────────────────────

@@ -42,10 +42,10 @@ eval_df <- bind_cols(
     correct = first_ok & last_ok & suffix_ok
   )
 
-# Exclude rows where all expected fields are blank (don't-care rows like
-# single-word names where any parse is acceptable).
-dont_care <- is.na(corpus$expected_first) & corpus$expected_first == "" &
-             is.na(corpus$expected_last)  & corpus$expected_last  == ""
+# Exclude "don't-care" rows (all expected fields blank, e.g. single-word names
+# where any parse is acceptable) by keeping only rows with a non-blank expected
+# first or last name. (A prior `is.na(x) & x == ""` guard here was a
+# contradiction that could never be TRUE, and was unused.)
 evaluated <- eval_df |> filter(!is.na(exp_first) | !is.na(exp_last))
 
 n_total   <- nrow(evaluated)
