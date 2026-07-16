@@ -13,6 +13,7 @@ mysterycall_kaplan_meier(
   conf_level = 0.95,
   plot = TRUE,
   plot_title = "Time to Appointment by Insurance Type",
+  legend_title = NULL,
   palette = NULL,
   risk_table = TRUE
 )
@@ -44,6 +45,12 @@ installed, produce a Kaplan-Meier plot.}
 
 \item{plot_title}{Character. Title for the plot. Default
 \code{"Time to Appointment by Insurance Type"}.}
+
+\item{legend_title}{Character scalar or \code{NULL}. Title shown above the
+colour/fill legend. Default \code{NULL} uses a prettified \code{group_col}
+(underscores to spaces, title case) rather than the raw variable name;
+pass an explicit string (e.g. \code{"Subspecialty"}) to override, or
+\code{""} to drop the legend title entirely.}
 
 \item{palette}{Character vector of colors, one per group level. Default
 \code{NULL} uses \pkg{viridis} if installed, otherwise \pkg{ggplot2}

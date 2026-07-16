@@ -31,6 +31,11 @@ NULL
 #'   installed, produce a Kaplan-Meier plot.
 #' @param plot_title Character. Title for the plot. Default
 #'   \code{"Time to Appointment by Insurance Type"}.
+#' @param legend_title Character scalar or \code{NULL}. Title shown above the
+#'   colour/fill legend. Default \code{NULL} uses a prettified \code{group_col}
+#'   (underscores to spaces, title case) rather than the raw variable name;
+#'   pass an explicit string (e.g. \code{"Subspecialty"}) to override, or
+#'   \code{""} to drop the legend title entirely.
 #' @param palette Character vector of colors, one per group level. Default
 #'   \code{NULL} uses \pkg{viridis} if installed, otherwise \pkg{ggplot2}
 #'   defaults.
@@ -105,12 +110,13 @@ mysterycall_kaplan_meier <- function(
     time_col,
     event_col  = "offered",
     group_col,
-    max_days   = 90,
-    conf_level = 0.95,
-    plot       = TRUE,
-    plot_title = "Time to Appointment by Insurance Type",
-    palette    = NULL,
-    risk_table = TRUE
+    max_days     = 90,
+    conf_level   = 0.95,
+    plot         = TRUE,
+    plot_title   = "Time to Appointment by Insurance Type",
+    legend_title = NULL,
+    palette      = NULL,
+    risk_table   = TRUE
 ) {
 
   # ---- Guard: survival must be installed -------------------------------------
@@ -169,9 +175,23 @@ mysterycall_kaplan_meier <- function(
   df <- data.frame(
     time  = as.numeric(data[[time_col]]),
     event = as.integer(ev_raw),
-    group = as.factor(data[[group_col]]),
+    # droplevels() removes empty factor levels: an unused level would make
+    # nlevels() over-count relative to the strata survfit actually fits,
+    # desyncing the curves/palette/risk-table (it surfaced as stray "-N"
+    # suffixes on the risk-table row labels, or a hard row-count error).
+    group = droplevels(as.factor(data[[group_col]])),
     stringsAsFactors = FALSE
   )
+
+  # Legend title: default to a prettified group_col rather than the raw
+  # variable name (e.g. "sub4" -> "Sub4"; "insurance_type" -> "Insurance Type").
+  if (is.null(legend_title)) {
+    legend_title <- tools::toTitleCase(gsub("[_.]+", " ", group_col))
+  }
+  if (!is.character(legend_title) || length(legend_title) != 1L) {
+    stop("'legend_title' must be a single character string or NULL.",
+         call. = FALSE)
+  }
 
   # Impute censored rows that have NA time: set time = max_days
   censored_na_time <- is.na(df$time) & (is.na(df$event) | df$event == 0L)
@@ -280,6 +300,7 @@ mysterycall_kaplan_meier <- function(
       df          = df,
       n_groups    = n_groups,
       group_col   = group_col,
+      legend_title = legend_title,
       grp_labels  = grp_labels,
       logrank_p_fmt = logrank_p_fmt,
       plot_title  = plot_title,
@@ -325,6 +346,7 @@ mysterycall_kaplan_meier <- function(
     df,
     n_groups,
     group_col,
+    legend_title,
     grp_labels,
     logrank_p_fmt,
     plot_title,
@@ -335,8 +357,14 @@ mysterycall_kaplan_meier <- function(
   # Extract per-strata vectors from survfit
   strata_lengths <- as.integer(sf$strata)
 
-  # Clean group labels: remove "group=" prefix from strata names
-  clean_labels <- gsub("^group=", "", names(sf$strata))
+  # Clean group labels: strip any "<variable>=" prefix from strata names
+  # (generic, not just "group="), so display labels never carry raw internals.
+  clean_labels <- sub("^[^=]*=", "", names(sf$strata))
+
+  # Shared x-axis breaks so the risk-table columns line up under the curve
+  # gridlines instead of on their own irregular ticks.
+  x_breaks <- pretty(c(0, max_days))
+  x_breaks <- x_breaks[x_breaks >= 0 & x_breaks <= max_days]
 
   plot_df <- data.frame(
     time   = sf$time,
@@ -388,7 +416,7 @@ mysterycall_kaplan_meier <- function(
       alpha  = 0.15,
       colour = NA
     ) +
-    ggplot2::geom_step(linewidth = 0.9) +
+    ggplot2::geom_step(linewidth = 0.8) +
     ggplot2::annotate(
       "text",
       x        = ann_x,
@@ -407,32 +435,47 @@ mysterycall_kaplan_meier <- function(
     ggplot2::scale_x_continuous(
       name   = "Days",
       limits = c(0, max_days),
-      expand = ggplot2::expansion(mult = c(0, 0.02))
+      breaks = x_breaks,
+      expand = ggplot2::expansion(mult = c(0.02, 0.02))
     ) +
     ggplot2::labs(
       title  = plot_title,
-      colour = group_col,
-      fill   = group_col
+      colour = legend_title,
+      fill   = legend_title
+    ) +
+    ggplot2::guides(
+      colour = ggplot2::guide_legend(
+        nrow = 1, override.aes = list(linewidth = 1.4, alpha = 1)
+      ),
+      fill = "none"
     ) +
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(
-      legend.position  = "bottom",
-      plot.title       = ggplot2::element_text(face = "bold"),
-      panel.grid.minor = ggplot2::element_blank()
+      legend.position   = "bottom",
+      legend.key        = ggplot2::element_blank(),
+      legend.title      = if (nzchar(legend_title)) {
+        ggplot2::element_text(face = "bold")
+      } else {
+        ggplot2::element_blank()
+      },
+      plot.title        = ggplot2::element_text(face = "bold", size = 13),
+      plot.title.position = "plot",
+      panel.grid.minor  = ggplot2::element_blank(),
+      panel.grid.major.x = ggplot2::element_line(colour = "grey92"),
+      axis.title.y      = ggplot2::element_text(margin = ggplot2::margin(r = 6))
     )
 
   # Apply custom / viridis colors
   if (!is.null(fill_colors)) {
     km <- km +
-      ggplot2::scale_colour_manual(values = fill_colors, name = group_col) +
-      ggplot2::scale_fill_manual(values = fill_colors, name = group_col)
+      ggplot2::scale_colour_manual(values = fill_colors, name = legend_title) +
+      ggplot2::scale_fill_manual(values = fill_colors, name = legend_title)
   }
 
   # ---- Risk table ------------------------------------------------------------
   if (isTRUE(risk_table)) {
-    # Choose ~8 evenly spaced tick times across [0, max_days]
-    n_ticks    <- min(9L, max_days + 1L)
-    tick_times <- round(seq(0, max_days, length.out = n_ticks))
+    # Count at the SAME x-axis breaks as the curve so the columns line up.
+    tick_times <- x_breaks
 
     risk_list <- lapply(clean_labels, function(grp) {
       grp_df <- df[df$group == grp, ]
@@ -444,32 +487,47 @@ mysterycall_kaplan_meier <- function(
       data.frame(
         time   = tick_times,
         n_risk = n_risk,
-        strata = factor(grp, levels = clean_labels),
+        # rev() so the first group sits at the TOP of the table, matching the
+        # reading order of the legend.
+        strata = factor(grp, levels = rev(clean_labels)),
         stringsAsFactors = FALSE
       )
     })
     risk_df <- do.call(rbind, risk_list)
 
+    # Colour the row labels to match the curves (top-to-bottom = rev of the
+    # strata order used on the discrete y axis). Falls back to grey20 when no
+    # palette is available. Numbers stay dark grey for guaranteed legibility.
+    risk_label_cols <- if (!is.null(fill_colors)) {
+      rev(fill_colors[seq_len(n_groups)])
+    } else {
+      "grey20"
+    }
+
     risk_tbl_plot <- ggplot2::ggplot(
       risk_df,
       ggplot2::aes(x = time, y = strata, label = n_risk)
     ) +
-      ggplot2::geom_text(size = 3) +
+      ggplot2::geom_text(size = 3, colour = "grey20") +
       ggplot2::scale_x_continuous(
         limits = c(0, max_days),
-        expand = ggplot2::expansion(mult = c(0, 0.02)),
-        name   = "Days"
+        breaks = x_breaks,
+        expand = ggplot2::expansion(mult = c(0.02, 0.02)),
+        name   = NULL
       ) +
       ggplot2::scale_y_discrete(name = NULL) +
-      ggplot2::labs(title = "Number at Risk") +
-      ggplot2::theme_bw(base_size = 10) +
+      ggplot2::labs(title = "Number at risk") +
+      ggplot2::theme_minimal(base_size = 10) +
       ggplot2::theme(
-        panel.grid   = ggplot2::element_blank(),
-        plot.title   = ggplot2::element_text(size = 9, face = "plain"),
-        axis.text.y  = ggplot2::element_text(size = 9),
-        axis.title.x = ggplot2::element_blank(),
-        axis.text.x  = ggplot2::element_blank(),
-        axis.ticks.x = ggplot2::element_blank()
+        panel.grid          = ggplot2::element_blank(),
+        plot.title          = ggplot2::element_text(size = 10, face = "bold"),
+        plot.title.position = "plot",
+        axis.text.y         = ggplot2::element_text(size = 9, hjust = 0,
+                                                    face = "bold",
+                                                    colour = risk_label_cols),
+        axis.title.x        = ggplot2::element_blank(),
+        axis.text.x         = ggplot2::element_blank(),
+        axis.ticks          = ggplot2::element_blank()
       )
 
     if (requireNamespace("patchwork", quietly = TRUE)) {
@@ -477,7 +535,7 @@ mysterycall_kaplan_meier <- function(
         km,
         risk_tbl_plot,
         ncol    = 1,
-        heights = c(3, 1)
+        heights = c(3.4, 1)
       )
     }
   }

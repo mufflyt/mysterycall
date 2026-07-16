@@ -186,3 +186,50 @@ test_that("works with exactly two groups", {
   grp_levels <- sort(result$median_by_group$group)
   expect_equal(grp_levels, sort(c("Private", "Medicaid")))
 })
+
+
+test_that("kaplan_meier drops empty factor levels (no phantom strata / -N labels)", {
+  skip_if_not_installed("survival")
+  set.seed(3)
+  n  <- 120
+  g  <- sample(c("A", "B", "C"), n, replace = TRUE)
+  df <- data.frame(
+    # a 4th factor level with zero observations must not create a phantom stratum
+    grp       = factor(g, levels = c("A", "B", "Empty", "C")),
+    wait_days = pmin(round(rexp(n, 1 / 20)), 90),
+    appt      = rbinom(n, 1, 0.6)
+  )
+  result <- mysterycall_kaplan_meier(
+    data = df, time_col = "wait_days", event_col = "appt",
+    group_col = "grp", plot = FALSE
+  )
+  expect_equal(nrow(result$median_by_group), 3L)                  # A, B, C only
+  expect_setequal(result$median_by_group$group, c("A", "B", "C"))
+  expect_equal(length(result$survfit$strata), 3L)
+})
+
+test_that("kaplan_meier legend_title defaults to a prettified group_col and validates", {
+  skip_if_not_installed("survival")
+  skip_if_not_installed("ggplot2")
+  df <- data.frame(
+    wait_days = c(3, 7, 14, 21, 90, 5, 10, 30, 90, 90),
+    appt      = c(1, 1, 1, 1, 0, 1, 1, 1, 0, 0),
+    sub_type  = rep(c("x", "y"), each = 5),
+    stringsAsFactors = FALSE
+  )
+  res <- mysterycall_kaplan_meier(
+    data = df, time_col = "wait_days", event_col = "appt",
+    group_col = "sub_type", risk_table = FALSE
+  )
+  # default legend title is the prettified column name, not the raw "sub_type"
+  gg <- if (inherits(res$plot, "patchwork")) res$plot[[1]] else res$plot
+  expect_equal(gg$labels$colour, "Sub Type")
+
+  expect_error(
+    mysterycall_kaplan_meier(
+      data = df, time_col = "wait_days", event_col = "appt",
+      group_col = "sub_type", legend_title = c("a", "b"), plot = FALSE
+    ),
+    "single character string"
+  )
+})

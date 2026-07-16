@@ -1,5 +1,22 @@
 # mysterycall (development version)
 
+## Improvements
+
+- `mysterycall_kaplan_meier()` figure polish:
+  - New `legend_title` argument. The legend title now defaults to a prettified
+    `group_col` (e.g. `"sub4"` -> `"Sub4"`, `"insurance_type"` -> `"Insurance
+    Type"`) instead of the raw variable name; pass an explicit string
+    (`legend_title = "Subspecialty"`) or `""` to drop it.
+  - Empty factor levels in `group_col` are now dropped (`droplevels()`). An
+    unused level previously desynced `nlevels()` from the fitted strata, which
+    surfaced as stray `-N` suffixes on the risk-table row labels (or a hard
+    row-count error).
+  - Tightened styling: risk-table columns align with the curve gridlines (shared
+    breaks), the first group sits at the top of the risk table, the number-at-
+    risk counts at day 0 are no longer clipped, the risk-table row labels are
+    bold and colour-matched to the curves, and the legend renders on a single
+    row with thicker keys.
+
 ## New functions
 
 - `mysterycall_get_direction()` and `mysterycall_get_change_verb()`: manuscript/
