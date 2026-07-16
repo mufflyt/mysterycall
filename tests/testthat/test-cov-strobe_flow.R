@@ -69,6 +69,19 @@ test_that("mysterycall_strobe_flow includes exclusion details when provided", {
   expect_s3_class(result, "ggplot")
 })
 
+test_that("mysterycall_strobe_flow warns and degrades on an unnamed excl_detail (bug 51)", {
+  # A bare/unnamed excl_detail previously crashed with "subscript out of bounds"
+  # from excl_detail[[code]]. It must now warn and ignore the value, not error.
+  expect_warning(
+    result <- mysterycall_strobe_flow(
+      n_total = 960, n_calldate = 900, n_included = 800,
+      n_logistic = 790, n_waittime = 780, excl_detail = 18
+    ),
+    "named integer vector"
+  )
+  expect_s3_class(result, "ggplot")
+})
+
 test_that("mysterycall_strobe_flow handles small sample sizes (edge case)", {
   result <- suppressMessages(suppressWarnings(
     mysterycall_strobe_flow(
