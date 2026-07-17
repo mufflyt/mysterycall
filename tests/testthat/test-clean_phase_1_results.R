@@ -44,8 +44,17 @@ test_that("mysterycall_clean_phase1 adds insurance correctly", {
     npi = c(123456, 654321),
     stringsAsFactors = FALSE
   )
-  result <- mysterycall_clean_phase1(df_with_insurance, duplicate_rows = FALSE, verbose = FALSE)
+  # Paired design assigns both insurance types.
+  result <- mysterycall_clean_phase1(df_with_insurance, duplicate_rows = TRUE, verbose = FALSE)
   expect_setequal(result$insurance, c("Blue Cross/Blue Shield", "Medicaid"))
+
+  # Non-paired mode no longer fabricates insurance by row parity: it warns and
+  # leaves the column NA for the caller to fill from real data.
+  expect_warning(
+    result_np <- mysterycall_clean_phase1(df_with_insurance, duplicate_rows = FALSE, verbose = FALSE),
+    "insurance not assigned"
+  )
+  expect_true(all(is.na(result_np$insurance)))
 })
 
 test_that("mysterycall_clean_phase1 removes duplicates correctly", {
@@ -71,8 +80,8 @@ test_that("mysterycall_clean_phase1 random IDs are reproducible with a seed", {
     stringsAsFactors = FALSE
   )
 
-  result_1 <- mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
-  result_2 <- mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
+  result_1 <- suppressWarnings(mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42))
+  result_2 <- suppressWarnings(mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42))
 
   expect_equal(result_1$random_id, result_2$random_id)
 })

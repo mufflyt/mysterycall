@@ -31,10 +31,16 @@ Defaults to \code{TRUE}.}
 \item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when
 the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 
-\item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is duplicated
-to retain the previous behavior that paired insurance entries for each
-physician. Set to \code{FALSE} to keep the original number of rows. A
-\code{processing_flag_is_duplicate} column tracks which rows are duplicates.}
+\item{duplicate_rows}{Logical. If \code{TRUE} (default), each row in \code{phase1_data}
+is duplicated to build the paired insurance design: the original rows are
+labelled \code{"Blue Cross/Blue Shield"} and the duplicated rows \code{"Medicaid"}.
+A \code{processing_flag_is_duplicate} column tracks which rows are duplicates.
+If \code{FALSE}, the original number of rows is kept and \strong{no insurance is
+assigned} — the \code{insurance} column is set to \code{NA} (with a warning), because
+there is no paired design from which to derive it. Set \code{insurance} yourself
+from a real input column in that mode. (Earlier versions assigned insurance
+by row-number parity here, i.e. by alphabetical sort position, which was
+arbitrary.)}
 
 \item{id_seed}{Optional integer seed used when generating fallback random IDs so
 runs can be reproduced without permanently mutating the global RNG state.}

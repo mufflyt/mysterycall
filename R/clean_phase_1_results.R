@@ -25,10 +25,16 @@
 #'   Defaults to `TRUE`.
 #' @param notify Logical. If `TRUE`, play a notification sound on completion when
 #'   the optional `beepr` package is available. Defaults to `TRUE`.
-#' @param duplicate_rows Logical. If `TRUE`, each row in `phase1_data` is duplicated
-#'   to retain the previous behavior that paired insurance entries for each
-#'   physician. Set to `FALSE` to keep the original number of rows. A
-#'   `processing_flag_is_duplicate` column tracks which rows are duplicates.
+#' @param duplicate_rows Logical. If `TRUE` (default), each row in `phase1_data`
+#'   is duplicated to build the paired insurance design: the original rows are
+#'   labelled `"Blue Cross/Blue Shield"` and the duplicated rows `"Medicaid"`.
+#'   A `processing_flag_is_duplicate` column tracks which rows are duplicates.
+#'   If `FALSE`, the original number of rows is kept and **no insurance is
+#'   assigned** — the `insurance` column is set to `NA` (with a warning), because
+#'   there is no paired design from which to derive it. Set `insurance` yourself
+#'   from a real input column in that mode. (Earlier versions assigned insurance
+#'   by row-number parity here, i.e. by alphabetical sort position, which was
+#'   arbitrary.)
 #' @param id_seed Optional integer seed used when generating fallback random IDs so
 #'   runs can be reproduced without permanently mutating the global RNG state.
 #' @param output_format File format to use when writing the cleaned dataset.
@@ -353,9 +359,10 @@ mysterycall_clean_phase1 <- function(phase1_data,
         "Skipping row duplication as requested; keeping %d original row(s).",
         nrow(phase1_data)
       ))
+      # No rows are duplicates in non-paired mode.
       phase1_data <- dplyr::mutate(
         phase1_data,
-        processing_flag_is_duplicate = dplyr::row_number() %% 2 == 0
+        processing_flag_is_duplicate = FALSE
       )
       audit_trail$rows_duplicated <- FALSE
     }
@@ -365,17 +372,32 @@ mysterycall_clean_phase1 <- function(phase1_data,
     phase1_data <- dplyr::arrange(phase1_data, .data$names)
 
     announce("Adding insurance information...")
-    # Assign insurance via processing_flag_is_duplicate rather than positional
-    # alternation: original rows -> Blue Cross/Blue Shield, duplicate rows ->
-    # Medicaid. This is invariant to sort order and row additions.
-    phase1_data <- dplyr::mutate(
-      phase1_data,
-      insurance = dplyr::if_else(
-        .data$processing_flag_is_duplicate,
-        "Medicaid",
-        "Blue Cross/Blue Shield"
+    if (isTRUE(duplicate_rows)) {
+      # Paired design: original rows -> Blue Cross/Blue Shield, duplicate rows ->
+      # Medicaid. Keyed on processing_flag_is_duplicate, so it is invariant to
+      # sort order and row additions.
+      phase1_data <- dplyr::mutate(
+        phase1_data,
+        insurance = dplyr::if_else(
+          .data$processing_flag_is_duplicate,
+          "Medicaid",
+          "Blue Cross/Blue Shield"
+        )
       )
-    )
+    } else {
+      # Non-paired mode: there is no basis to fabricate an insurance label (the
+      # old code assigned it by row-number parity, i.e. by alphabetical sort
+      # position). Leave it NA and warn so the caller sets it from real data.
+      warning(
+        "duplicate_rows = FALSE: insurance not assigned (no paired design); ",
+        "set it from your own data.",
+        call. = FALSE
+      )
+      phase1_data <- dplyr::mutate(
+        phase1_data,
+        insurance = NA_character_
+      )
+    }
 
     announce("Adding a numbered 'id' column...")
     phase1_data <- dplyr::mutate(

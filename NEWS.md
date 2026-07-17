@@ -25,6 +25,14 @@
   never contradict the numbers it describes. Vectorized, NA-safe, with a `tol`
   no-change band and fully configurable words per subspecialty/table.
 
+## Bug fixes
+
+- `mysterycall_clean_phase1(duplicate_rows = FALSE)` no longer fabricates an
+  `insurance` label by row-number parity (which made a physician's insurance
+  depend on alphabetical sort position). In non-paired mode the `insurance`
+  column is now set to `NA` with a warning, so callers assign it from their own
+  data. The default paired path (`duplicate_rows = TRUE`) is unchanged. (Bug 21)
+
 ## Documentation
 
 - New vignette **"Writing the Results Section"** (`writing-results-section`):

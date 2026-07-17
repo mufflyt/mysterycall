@@ -72,7 +72,24 @@ physician (cluster), inducing within-cluster correlation that inflates
 effective sample-size requirements relative to an independence assumption.
 }
 \details{
+The unadjusted sample size per group (\eqn{n_{\text{simple}}}) comes from
+the standard unpooled two-proportion \eqn{z}-test:
 
+\deqn{n_{\text{simple}} = \frac{(z_{\alpha/2} + z_{\beta})^2
+  [p_1(1-p_1) + p_2(1-p_2)]}{(p_1 - p_2)^2}}
+
+The clustering adjustment uses the variance inflation factor:
+
+\deqn{\text{VIF} = 1 + (m - 1)\,\rho}
+
+where \eqn{m} is the average cluster size (calls per physician) and
+\eqn{\rho} is the intraclass correlation (ICC). The adjusted sample size is:
+
+\deqn{n_{\text{adjusted}} = \lceil n_{\text{simple}} \times \text{VIF} \rceil}
+
+When \code{n} is supplied instead of leaving it \code{NULL}, the function
+back-calculates the achieved power at that \code{n} (treated as
+\eqn{n_{\text{simple}}}, before clustering).
 }
 \examples{
 # Solve for n: Medicaid acceptance (p2 = 0.50) vs commercial (p1 = 0.70)

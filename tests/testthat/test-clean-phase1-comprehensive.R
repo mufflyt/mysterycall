@@ -81,14 +81,14 @@ test_that("mysterycall_clean_phase1: Duplicate row functionality", {
     duplicate_rows = TRUE
   )
 
-  # Test with duplicate_rows = FALSE
-  result_no_dup <- mysterycall_clean_phase1(
+  # Test with duplicate_rows = FALSE (warns: no insurance assigned in non-paired mode)
+  result_no_dup <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE,
     duplicate_rows = FALSE
-  )
+  ))
 
   expect_equal(nrow(result_dup), nrow(test_data) * 2)
   expect_equal(nrow(result_no_dup), nrow(test_data))

@@ -290,7 +290,7 @@ mysterycall_equation_figure <- function(lambda0   = 14,
 #'
 #' When \code{n} is supplied instead of leaving it \code{NULL}, the function
 #' back-calculates the achieved power at that \code{n} (treated as
-#' \eqn{n_{\text{simple}}, before clustering).
+#' \eqn{n_{\text{simple}}}, before clustering).
 #'
 #' @param p1 Numeric. Baseline acceptance probability for the reference group
 #'   (e.g. commercial insurance). Must be in (0, 1). Default \code{0.70}.
