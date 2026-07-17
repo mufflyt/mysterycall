@@ -25,6 +25,17 @@
   never contradict the numbers it describes. Vectorized, NA-safe, with a `tol`
   no-change band and fully configurable words per subspecialty/table.
 
+## Documentation
+
+- New vignette **"Writing the Results Section"** (`writing-results-section`):
+  assembles a ready-to-paste manuscript Results narrative from the prose builders
+  (`mysterycall_results_paragraph()`, `mysterycall_write_results_paragraph()`,
+  `mysterycall_irr_to_days()`, `mysterycall_wait_time_sentence()`,
+  `mysterycall_get_direction()` / `mysterycall_get_change_verb()`), with every
+  direction word tied to the sign of the data so the prose can never contradict
+  the tables. Runs on plain data frames, so it builds fast and needs no model
+  fitting.
+
 ## Covariate reader hardening
 
 - `mysterycall_get_cms_enrollment()` and `mysterycall_get_hrsa_ahrf()` now

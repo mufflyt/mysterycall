@@ -648,6 +648,7 @@ articles:
       - adding-covariates
       - power-analysis
       - table-generation
+      - writing-results-section
 
   - title: "News"
     navbar: ~

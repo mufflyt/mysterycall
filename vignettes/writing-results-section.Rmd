@@ -1,0 +1,236 @@
+---
+title: "Writing the Results Section"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    df_print: kable
+description: >
+  Assemble a ready-to-paste manuscript Results section from mysterycall's prose
+  builders, with every direction word tied to the sign of the data so the
+  narrative can never contradict the tables.
+vignette: >
+  %\VignetteIndexEntry{Writing the Results Section}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+library(mysterycall)
+```
+
+## Why generate Results prose programmatically?
+
+The Results section of an access-disparities manuscript restates numbers that
+already live in your model output and tables. Re-typing them by hand invites a
+whole class of bug: the sentence says "increasing" while the coefficient is
+negative, an odds ratio below 1 is described as "more likely", or a confidence
+interval that crosses the null is written as if it were bounded away from zero.
+
+`mysterycall` provides a family of **prose builders** that take your estimates
+and emit manuscript-ready sentences whose wording is derived from the *sign and
+magnitude of the data*. Wire the narrative to these builders and the words can
+never drift out of step with the tables.
+
+| Builder | Input | Produces |
+|---|---|---|
+| `mysterycall_results_paragraph()` | OR table (logistic) | odds-of-acceptance sentences |
+| `mysterycall_write_results_paragraph()` | IRR table (Poisson/NB) | wait-time IRR sentences |
+| `mysterycall_irr_to_days()` | IRR table + reference mean | absolute day differences (signed CI) |
+| `mysterycall_wait_time_sentence()` | raw data | median/IQR + log-rank-style summary |
+| `mysterycall_get_direction()` | any signed number | "higher"/"lower" (configurable) |
+| `mysterycall_get_change_verb()` | any signed number | "increasing"/"decreasing" (configurable) |
+
+Every builder here works on a plain data frame, so this vignette needs no model
+fitting — but the same objects are returned by `mysterycall_logistic_model()`,
+`mysterycall_poisson_model()`, and `mysterycall_nb_model()`.
+
+## A worked example
+
+Two physician subspecialties are compared with a reference group for (a) whether
+a new-patient appointment was offered and (b) how long the wait was. We build the
+estimate tables directly; in practice they come from your fitted models'
+`$or_table` / `$irr_table` elements.
+
+```{r tables}
+# Odds ratios for "appointment offered" (logistic regression output)
+or_tbl <- data.frame(
+  term     = c("(Intercept)", "insuranceMedicaid", "insuranceMedicare"),
+  or       = c(2.10, 0.62, 0.88),
+  ci_lower = c(1.20, 0.41, 0.63),
+  ci_upper = c(3.68, 0.94, 1.23),
+  p_value  = c(0.008, 0.024, 0.451),
+  stringsAsFactors = FALSE
+)
+
+# Incidence rate ratios for wait days (Poisson/NB regression output).
+# `p_value` (numeric) is used by write_results_paragraph(); `p_value_fmt`
+# (character) is used by irr_to_days() for the in-sentence p-value.
+irr_tbl <- data.frame(
+  term        = c("(Intercept)", "insuranceMedicaid", "insuranceMedicare"),
+  irr         = c(1.00, 1.28, 1.04),
+  ci_lower    = c(NA,   1.05, 0.90),
+  ci_upper    = c(NA,   1.56, 1.20),
+  p_value     = c(NA,   0.014, 0.590),
+  p_value_fmt = c(NA,   "0.014", "0.590"),
+  stringsAsFactors = FALSE
+)
+```
+
+### Appointment acceptance (odds ratios)
+
+```{r acceptance}
+acceptance <- mysterycall_results_paragraph(
+  or_tbl,
+  ref_group     = "commercial insurance",
+  exposure_col  = "insurance",
+  outcome_label = "a new-patient appointment"
+)
+cat(acceptance)
+```
+
+The intro clause claims significance **only** when a level actually clears
+`alpha`; the direction ("less likely" / "more likely" / "similar odds") is chosen
+from whether each OR sits below, above, or at 1.
+
+### Wait-time incidence rate ratios
+
+```{r wait-irr}
+wait_irr <- mysterycall_write_results_paragraph(
+  irr_tbl,
+  ref_group     = "commercial insurance",
+  exposure_col  = "insurance",
+  outcome_label = "time to appointment"
+)
+cat(wait_irr)
+```
+
+### Translating IRRs to absolute days (signed CIs)
+
+IRRs are hard for readers to feel. `mysterycall_irr_to_days()` multiplies them by
+the reference-group mean wait to report absolute day differences — and it keeps
+the **sign** of the confidence interval, flagging any interval that crosses zero
+as not statistically significant.
+
+```{r irr-days}
+days <- mysterycall_irr_to_days(
+  irr_tbl,
+  baseline_mean = 21,          # mean wait (days) in the reference group
+  exposure_col  = "insurance",
+  ref_group     = "commercial insurance"
+)
+cat(days$paragraph)
+```
+
+Note the Medicare row: because its day-scale CI spans zero, the sentence says so
+rather than implying a real effect.
+
+For a non-insurance exposure (e.g. subspecialty), drop the insurance-specific
+wording with `exposure_descriptor = NULL`:
+
+```{r irr-days-ent}
+ent_tbl <- data.frame(
+  term        = c("(Intercept)", "ent_typeLaryngology"),
+  irr         = c(1.00, 1.20),
+  ci_lower    = c(NA,   1.02),
+  ci_upper    = c(NA,   1.41),
+  p_value_fmt = c(NA,   "0.028"),
+  stringsAsFactors = FALSE
+)
+ent_days <- mysterycall_irr_to_days(
+  ent_tbl, baseline_mean = 23, exposure_col = "ent_type",
+  ref_group = "General", subject = "callers", exposure_descriptor = NULL
+)
+cat(ent_days$sentences[1])
+```
+
+### Descriptive wait-time sentence
+
+Straight from the raw data, no model required:
+
+```{r wait-sentence}
+set.seed(1)
+raw <- data.frame(
+  wait_days = c(rpois(60, 12), rpois(60, 16)),
+  insurance = rep(c("Private", "Medicaid"), each = 60)
+)
+wt <- mysterycall_wait_time_sentence(
+  raw, outcome_col = "wait_days", group_col = "insurance",
+  reference = "Private"
+)
+cat(wt$sentence)
+```
+
+### Direction words tied to the data sign
+
+For any custom sentence — a change over time, a difference between groups — let
+the builder choose the word from the sign so the prose cannot contradict the
+number. This is exactly the tool for subspecialty/workforce framing.
+
+```{r direction}
+# A projected annual change in provider supply
+slope <- -0.8
+sprintf(
+  "The maternal-fetal-medicine workforce is %s (%+.1f providers per year).",
+  mysterycall_get_change_verb(slope), slope
+)
+
+# A between-group wait difference, with custom vocabulary
+diff_days <- 4.3
+sprintf(
+  "Medicaid callers waited %s than commercial-insurance callers (%.1f days).",
+  mysterycall_get_direction(diff_days, positive = "longer", negative = "shorter"),
+  abs(diff_days)
+)
+```
+
+Both are vectorized and `NA`-safe, and a `tol` argument defines a no-change band
+around zero (e.g. `mysterycall_get_change_verb(x, tol = 0.5)` calls anything
+within ±0.5 `"stable"`).
+
+## Assembling the full Results section
+
+Concatenate the pieces into one narrative. Because every clause was generated
+from the estimates, editing a number in the model re-flows the prose correctly.
+
+```{r assemble}
+results_section <- paste(
+  acceptance,
+  wait_irr,
+  days$paragraph,
+  sep = "\n\n"
+)
+cat(results_section)
+```
+
+## Model-diagnostic prose
+
+Two more builders describe the model itself. They take a *fitted* model object,
+so they are shown here without evaluation:
+
+```{r diagnostics, eval = FALSE}
+# Variance explained (marginal / conditional R-squared) for a mixed model
+cat(mysterycall_r2_sentence(fit))
+
+# Dispersion check for a count model
+cat(mysterycall_overdispersion_sentence(fit))
+```
+
+## Best practice
+
+- **Never hand-type a direction word.** Feed the estimate to
+  `mysterycall_get_direction()` / `mysterycall_get_change_verb()` (or use a
+  builder that does). A sentence that says "increasing" over a negative slope is
+  a data-integrity bug, not a typo.
+- **Report absolute effects alongside ratios.** `mysterycall_irr_to_days()`
+  gives readers days, with signed CIs that honestly flag null results.
+- **Regenerate, don't edit.** Re-run the builders after any model change so the
+  Results text and the tables always agree.
+
+```{r session, echo = FALSE}
+sessionInfo()
+```
