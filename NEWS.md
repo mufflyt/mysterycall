@@ -1,3 +1,24 @@
+# mysterycall (development version)
+
+## New functions
+
+- **Guideline-concordance scoring engine** (`R/concordance.R`), scaffolded from a
+  synthesis of eight mystery-caller audit studies. Scores what staff *said* or
+  *did* against a reference standard at the item level, then rolls up to call-
+  and study-level summaries:
+  - `mysterycall_concordance_rubric()` builds the reference standard from four
+    item types — `binary`, `expected_present`, `reference_match` (per-row gold
+    standard), and `evidence_tier` (named options scored against a date-versioned
+    lookup).
+  - `mysterycall_score_concordance()` returns per-item concordance rates with
+    Wilson CIs, per-call composite scores, an overall summary, and an optional
+    per-group breakdown. Item denominators track applicability separately from
+    the call count, so within-encounter conversation exits are handled natively.
+  - `mysterycall_concordance_kappa()` computes per-item Cohen's kappa and percent
+    agreement across two raters.
+  - `mysterycall_concordance_sentence()` emits numbers-locked manuscript prose
+    (overall composite or per item), in the existing prose-builder family.
+
 # mysterycall 1.6.1
 
 ## Improvements
