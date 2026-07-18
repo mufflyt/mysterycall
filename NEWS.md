@@ -2,6 +2,23 @@
 
 ## New functions
 
+- **Small-sample categorical statistics toolkit** (`R/categorical.R`), the
+  second roadmap item from the audit-study synthesis. A dependency-free layer
+  for the contingency-table designs these studies actually use, where the GLMM
+  core is overkill:
+  - `mysterycall_test_categorical()` cross-tabulates two variables and tests
+    association, auto-selecting between Pearson's chi-squared and an exact test
+    (Fisher, or Fisher-Freeman-Halton for larger tables) by expected cell
+    counts, reports Cramer's V, and can add Benjamini-Hochberg-adjusted
+    post-hoc pairwise proportion comparisons for a binary outcome.
+  - `mysterycall_cmh_test()` runs a Cochran-Mantel-Haenszel test across a
+    matching stratum (within-unit / paired persona designs), with the common
+    odds ratio for the 2x2xK case.
+  - `mysterycall_prevalence_ci()` gives per-category prevalences with Wilson,
+    Clopper-Pearson, or Wald intervals, optionally within a grouping variable.
+  - `mysterycall_compare_ranks()` runs Kruskal-Wallis / Mann-Whitney with an
+    effect size and per-group medians (IQR) for skewed numeric outcomes.
+
 - **Guideline-concordance scoring engine** (`R/concordance.R`), scaffolded from a
   synthesis of eight mystery-caller audit studies. Scores what staff *said* or
   *did* against a reference standard at the item level, then rolls up to call-
