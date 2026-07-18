@@ -1,5 +1,21 @@
 # mysterycall (development version)
 
+## Bug fixes
+
+- Adversarial / semantic / boundary-value test suites for the concordance,
+  categorical, and call-outcome modules (211 new tests) surfaced and fixed:
+  - `mysterycall_multiresponse_tabulate()` now counts **distinct** options per
+    call, so a call listing the same option twice no longer inflates
+    `mean_options_per_call` (prevalence and co-occurrence already deduped).
+  - `mysterycall_concordance_kappa()` now errors when the two rater frames have
+    unequal row counts and no `call_id_col` (previously it silently recycled the
+    shorter column and misreported `n`); it also validates that the item columns
+    are present.
+  - `mysterycall_cmh_test()` and `mysterycall_ordinal_model()` now raise clear,
+    actionable errors for degenerate inputs (a single stratum; a fewer-than-3
+    level outcome) instead of leaking the underlying `mantelhaen.test` / `polr`
+    messages.
+
 ## New functions
 
 - **Multi-category / multi-response call outcomes** (`R/call_outcomes.R`), the

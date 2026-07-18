@@ -131,7 +131,9 @@ mysterycall_multiresponse_tabulate <- function(
   }
 
   n_resp <- sum(responding)
-  n_opts_per <- vapply(sets[responding], length, integer(1))
+  # count DISTINCT options per call so a call listing "a;a" counts one, matching
+  # how prevalence (%in%) and co-occurrence (intersect) dedupe.
+  n_opts_per <- vapply(sets[responding], function(s) length(unique(s)), integer(1))
   summary <- list(
     n_calls               = nrow(data),
     n_responding          = n_resp,
@@ -364,6 +366,12 @@ mysterycall_ordinal_model <- function(
     levels <- if (is.factor(y)) levels(y) else sort(unique(y[!is.na(y)]))
   }
   data[[outcome_var]] <- factor(y, levels = levels, ordered = TRUE)
+  if (nlevels(data[[outcome_var]]) < 3L) {
+    stop(sprintf(
+      paste0("`%s` has %d ordered level(s); mysterycall_ordinal_model() needs ",
+             "an outcome with 3+ levels. For a binary outcome use a logistic model."),
+      outcome_var, nlevels(data[[outcome_var]])), call. = FALSE)
+  }
 
   fml <- stats::as.formula(
     paste(outcome_var, "~", paste(predictors, collapse = " + "))

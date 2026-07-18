@@ -255,6 +255,11 @@ mysterycall_cmh_test <- function(
 
   tab <- table(data[[outcome_var]], data[[group_var]], data[[strata_var]])
   is_2x2xk <- all(dim(tab)[1:2] == 2L)
+  if (dim(tab)[3] < 2L) {
+    stop("`strata_var` must define at least two strata for a Cochran-Mantel-",
+         "Haenszel test; with a single stratum use mysterycall_test_categorical() ",
+         "on the two-way table.", call. = FALSE)
+  }
 
   ht <- stats::mantelhaen.test(
     tab, correct = correct,

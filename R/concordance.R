@@ -509,12 +509,20 @@ mysterycall_concordance_kappa <- function(rater1, rater2, rubric, call_id_col = 
     stop("`rubric` must come from mysterycall_concordance_rubric().", call. = FALSE)
   }
 
+  items <- rubric$items$item
+  checkmate::assert_names(names(rater1), must.include = items)
+  checkmate::assert_names(names(rater2), must.include = items)
+
   if (!is.null(call_id_col)) {
+    checkmate::assert_names(names(rater1), must.include = call_id_col)
+    checkmate::assert_names(names(rater2), must.include = call_id_col)
     ord2 <- match(rater1[[call_id_col]], rater2[[call_id_col]])
     rater2 <- rater2[ord2, , drop = FALSE]
+  } else if (nrow(rater1) != nrow(rater2)) {
+    stop("`rater1` and `rater2` must have the same number of rows when ",
+         "`call_id_col` is NULL; pass `call_id_col` to align the two raters by key.",
+         call. = FALSE)
   }
-
-  items <- rubric$items$item
   rows <- lapply(items, function(it) {
     k <- .mc_cohen_kappa(rater1[[it]], rater2[[it]])
     tibble::tibble(
