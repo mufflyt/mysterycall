@@ -1,5 +1,14 @@
 # mysterycall (development version)
 
+## New functions
+
+- `mysterycall_export_gsheet_caller_list()`: writes a mystery-caller list in
+  Google-Sheets import format (study-title row; name/phone/NPI/`<stage>` header;
+  ordered by state with matched pairs kept adjacent; CRLF line endings and
+  minimal quoting for clean spreadsheet round-tripping). Depends only on
+  `readr`/`checkmate`. (Recovered from a stale feature branch and re-landed on
+  current `main`.)
+
 ## Manuscript-output improvements
 
 Fixes for issues previously worked around by editing package source or
