@@ -2,6 +2,35 @@
 
 ## New functions
 
+Generalized from analysis logic that the downstream ENT study (`grace-ent`) had
+been hand-rolling in its own scripts, so every mystery-caller study inherits it:
+
+- `mysterycall_access_cascade()` (+ `mysterycall_cascade_stage()`): summarizes a
+  sequence of access constructs across the call pathway (reached a live office ->
+  accepting new patients -> sees the presented complaint -> appointment offered ->
+  with whom) as a tidy count / denominator / percent table with Wilson
+  confidence intervals, plus an optional funnel figure. Denominators may be the
+  full analytic sample (`"total"`), a strictly nested previous stage
+  (`"previous"`), another named stage (for "share of offers"-style
+  sub-breakdowns), or a fixed number -- so one call mixes a nested funnel with
+  conditional sub-measures. Depends only on base R (+ `ggplot2` for the figure).
+- `mysterycall_reconcile_offer_outcome()`: finds and optionally fixes rows where
+  a coarse binary "appointment offered" flag contradicts a granular disposition
+  field, in both directions (flag understates vs. overstates the outcome),
+  treating the granular outcome as authoritative and clearing dependent fields
+  (wait time, appointment date) when a row flips to "not offered". Fills a gap
+  the `mysterycall_flag_*` family did not cover (they compare exclusion reason
+  vs. wait time, never a summary boolean vs. a disposition).
+- `mysterycall_check_consistency()` (+ `mysterycall_consistency_rule()` and
+  `mysterycall_default_consistency_rules()`): a declarative cross-field rule
+  engine -- the general form of the one-off `mysterycall_flag_*` checks. Runs a
+  list of rules over a call log and returns a single priority-sorted correction
+  worklist (flag / priority / description / action per flagged row). Ships a
+  study-agnostic starter rule set (appointment date with no answered office,
+  taking-new-patients with no appointment date, complete record with no call
+  date, missing caller) whose column names are configurable and which no-op on
+  logs missing those fields.
+
 - `mysterycall_export_gsheet_caller_list()`: writes a mystery-caller list in
   Google-Sheets import format (study-title row; name/phone/NPI/`<stage>` header;
   ordered by state with matched pairs kept adjacent; CRLF line endings and
