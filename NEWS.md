@@ -2,6 +2,38 @@
 
 ## New functions
 
+A second batch generalized from the downstream ENT study (`grace-ent`) --
+clustering, single-contact time-to-appointment, and simulation-based power for
+the two-part / population-marginal designs these studies actually use:
+
+- `mysterycall_cluster_id()`: coalesce a random-intercept/grouping key from an
+  ordered list of columns (e.g. CBSA -> county FIPS), giving each still-missing
+  row its own singleton cluster. Closes a footgun -- the model fitters require a
+  `random_intercept` column but the package previously gave you nothing to build
+  one, and blank/`NA` keys silently collapse into one giant cluster and corrupt
+  the random-effect variance.
+- `mysterycall_cumulative_access_curve()`: the empirical cumulative proportion of
+  calls that had secured an appointment by business-day `t` -- the correct
+  primitive for a single-contact design, where `mysterycall_kaplan_meier()`'s
+  right-censoring of non-offered calls implies follow-up the design does not
+  have. Each curve plateaus at the share obtained within the horizon (the offer
+  rate when every wait falls inside it). Optional step-curve figure.
+- `mysterycall_twopart_power()`: Monte Carlo power for the two-part outcome
+  (offer as a Bernoulli on the full sample; wait as a negative binomial on the
+  offered subset) that access audits universally have -- reports the power for
+  each part separately, since a single-outcome calculator understates the wait
+  model's sample (it runs on the offered subset). Depends only on `MASS`.
+- `mysterycall_marginal_power()`: Monte Carlo power for a
+  post-stratification-weighted, population-marginal effect in a paired-call
+  design (each subject called under two conditions; a stratum oversampled in the
+  sample but reweighted to a target population mix). Reports power for the
+  conditional interaction, the unweighted marginal effect, and the
+  population-weighted marginal effect. Needs `glmmTMB` + `marginaleffects`.
+- `mysterycall_type_i_check()` and `mysterycall_find_mde()`: generic companions
+  to any simulation power function -- a null-calibration self-check (observed
+  type I rate + exact binomial CI + verdict) and a minimum-detectable-effect
+  binary search over a user-supplied power function.
+
 Generalized from analysis logic that the downstream ENT study (`grace-ent`) had
 been hand-rolling in its own scripts, so every mystery-caller study inherits it:
 
