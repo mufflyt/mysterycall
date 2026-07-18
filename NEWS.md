@@ -28,8 +28,10 @@ been hand-rolling in its own scripts, so every mystery-caller study inherits it:
   worklist (flag / priority / description / action per flagged row). Ships a
   study-agnostic starter rule set (appointment date with no answered office,
   taking-new-patients with no appointment date, complete record with no call
-  date, missing caller) whose column names are configurable and which no-op on
-  logs missing those fields.
+  date, missing caller, and `WAIT_NO_OFFER` -- a wait time recorded when no
+  appointment was offered, the detector companion to
+  `mysterycall_reconcile_offer_outcome()`) whose column names are configurable
+  and which no-op on logs missing those fields.
 
 - `mysterycall_export_gsheet_caller_list()`: writes a mystery-caller list in
   Google-Sheets import format (study-title row; name/phone/NPI/`<stage>` header;

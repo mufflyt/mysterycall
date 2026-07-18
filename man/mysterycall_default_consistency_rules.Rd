@@ -9,11 +9,12 @@ mysterycall_default_consistency_rules(cols = list(), values = list())
 \arguments{
 \item{cols}{Named list mapping roles to column names. Recognized roles:
 \code{answered}, \code{appointment_date}, \code{taking_new}, \code{complete}, \code{call_date},
-\code{caller}. Override any you use; unmatched roles keep their defaults.}
+\code{caller}, \code{offered}, \code{wait}. Override any you use; unmatched roles keep
+their defaults.}
 
 \item{values}{Named list of the values that trigger each rule: \code{answered_no}
 (default \code{FALSE}), \code{taking_new_yes} (default \code{"Yes"}), \code{complete_yes}
-(default \code{"Complete"}).}
+(default \code{"Complete"}), \code{offered_no} (default \code{c(FALSE, "FALSE")}).}
 }
 \value{
 A list of \code{\link[=mysterycall_consistency_rule]{mysterycall_consistency_rule()}} objects.
@@ -22,10 +23,12 @@ A list of \code{\link[=mysterycall_consistency_rule]{mysterycall_consistency_rul
 A starter set of study-agnostic rules covering contradictions common to
 mystery-caller call logs: an appointment date recorded when the office was
 never reached, a practice marked as taking new patients yet with no
-appointment recorded, a record marked complete but missing its call date, and
-a missing caller assignment. Column names are supplied via \code{cols} so the
-rules travel across studies; any rule whose columns are absent from the data
-silently no-ops.
+appointment recorded, a record marked complete but missing its call date, a
+missing caller assignment, and a wait time recorded when no appointment was
+offered (the "a wait exists only when offered" invariant, the companion
+detector to \code{\link[=mysterycall_reconcile_offer_outcome]{mysterycall_reconcile_offer_outcome()}}). Column names are
+supplied via \code{cols} so the rules travel across studies; any rule whose
+columns are absent from the data silently no-ops.
 }
 \examples{
 rules <- mysterycall_default_consistency_rules()

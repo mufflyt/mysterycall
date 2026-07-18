@@ -92,6 +92,31 @@ test_that("summary counts match the report", {
   expect_equal(sum(res$summary$n), nrow(res$report))
 })
 
+test_that("WAIT_NO_OFFER is in the default set and flags wait-without-offer rows", {
+  flags <- vapply(mysterycall_default_consistency_rules(), `[[`, character(1),
+                  "flag")
+  expect_true("WAIT_NO_OFFER" %in% flags)
+
+  d <- data.frame(
+    record_id           = 1:4,
+    appointment_offered = c(FALSE, FALSE, TRUE, FALSE),
+    wait_days_business  = c(12, NA, 5, 0),   # rows 1 and 4 = wait but not offered
+    stringsAsFactors = FALSE)
+  res <- mysterycall_check_consistency(d, id_col = "record_id")
+  hit <- res$report$record_id[res$report$flag == "WAIT_NO_OFFER"]
+  expect_setequal(hit, c(1L, 4L))            # wait==0 with offered=FALSE still flags
+})
+
+test_that("WAIT_NO_OFFER treats empty-string waits as no wait, and honours 'FALSE' strings", {
+  d <- data.frame(
+    appointment_offered = c("FALSE", "FALSE", "TRUE"),
+    wait_days_business  = c("", "8", "3"),   # only row 2 is a recorded wait w/o offer
+    stringsAsFactors = FALSE)
+  res <- mysterycall_check_consistency(d)
+  hit <- res$report$row[res$report$flag == "WAIT_NO_OFFER"]
+  expect_equal(hit, 2L)
+})
+
 test_that("custom column mapping is honoured", {
   d <- data.frame(
     answered_flag = c(FALSE, TRUE),

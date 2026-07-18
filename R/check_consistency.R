@@ -158,17 +158,20 @@ mysterycall_check_consistency <- function(
 #' A starter set of study-agnostic rules covering contradictions common to
 #' mystery-caller call logs: an appointment date recorded when the office was
 #' never reached, a practice marked as taking new patients yet with no
-#' appointment recorded, a record marked complete but missing its call date, and
-#' a missing caller assignment. Column names are supplied via `cols` so the
-#' rules travel across studies; any rule whose columns are absent from the data
-#' silently no-ops.
+#' appointment recorded, a record marked complete but missing its call date, a
+#' missing caller assignment, and a wait time recorded when no appointment was
+#' offered (the "a wait exists only when offered" invariant, the companion
+#' detector to [mysterycall_reconcile_offer_outcome()]). Column names are
+#' supplied via `cols` so the rules travel across studies; any rule whose
+#' columns are absent from the data silently no-ops.
 #'
 #' @param cols Named list mapping roles to column names. Recognized roles:
 #'   `answered`, `appointment_date`, `taking_new`, `complete`, `call_date`,
-#'   `caller`. Override any you use; unmatched roles keep their defaults.
+#'   `caller`, `offered`, `wait`. Override any you use; unmatched roles keep
+#'   their defaults.
 #' @param values Named list of the values that trigger each rule: `answered_no`
 #'   (default `FALSE`), `taking_new_yes` (default `"Yes"`), `complete_yes`
-#'   (default `"Complete"`).
+#'   (default `"Complete"`), `offered_no` (default `c(FALSE, "FALSE")`).
 #'
 #' @return A list of [mysterycall_consistency_rule()] objects.
 #' @seealso [mysterycall_check_consistency()]
@@ -180,12 +183,16 @@ mysterycall_default_consistency_rules <- function(cols = list(), values = list()
   cc <- utils::modifyList(list(
     answered = "office_answered", appointment_date = "appointment_date",
     taking_new = "taking_new_patients", complete = "complete",
-    call_date = "call_date", caller = "caller"), cols)
+    call_date = "call_date", caller = "caller",
+    offered = "appointment_offered", wait = "wait_days_business"), cols)
   vv <- utils::modifyList(list(
-    answered_no = FALSE, taking_new_yes = "Yes", complete_yes = "Complete"), values)
+    answered_no = FALSE, taking_new_yes = "Yes", complete_yes = "Complete",
+    offered_no = c(FALSE, "FALSE")), values)
 
   # helper: guard so a rule referencing an absent column flags nothing
   has <- function(d, ...) all(c(...) %in% names(d))
+  # a wait is "recorded" when it is neither NA nor an empty string
+  recorded <- function(x) !is.na(x) & (!is.character(x) | nzchar(trimws(x)))
 
   list(
     mysterycall_consistency_rule(
@@ -220,6 +227,15 @@ mysterycall_default_consistency_rules <- function(cols = list(), values = list()
         if (!has(d, cc$caller)) return(rep(FALSE, nrow(d)))
         cal <- d[[cc$caller]]
         is.na(cal) | tolower(trimws(as.character(cal))) %in% c("", "na")
+      }),
+    mysterycall_consistency_rule(
+      flag = "WAIT_NO_OFFER", priority = "HIGH",
+      description = "A wait time is recorded but no appointment was offered",
+      action = paste("Clear the wait time, or correct the appointment-offered",
+                     "flag / outcome (see mysterycall_reconcile_offer_outcome())."),
+      predicate = function(d) {
+        if (!has(d, cc$offered, cc$wait)) return(rep(FALSE, nrow(d)))
+        recorded(d[[cc$wait]]) & (d[[cc$offered]] %in% vv$offered_no)
       })
   )
 }
