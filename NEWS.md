@@ -1,6 +1,42 @@
 # mysterycall (development version)
 
+## Bug fixes
+
+- Adversarial / semantic / boundary-value test suites for the concordance,
+  categorical, and call-outcome modules (211 new tests) surfaced and fixed:
+  - `mysterycall_multiresponse_tabulate()` now counts **distinct** options per
+    call, so a call listing the same option twice no longer inflates
+    `mean_options_per_call` (prevalence and co-occurrence already deduped).
+  - `mysterycall_concordance_kappa()` now errors when the two rater frames have
+    unequal row counts and no `call_id_col` (previously it silently recycled the
+    shorter column and misreported `n`); it also validates that the item columns
+    are present.
+  - `mysterycall_cmh_test()` and `mysterycall_ordinal_model()` now raise clear,
+    actionable errors for degenerate inputs (a single stratum; a fewer-than-3
+    level outcome) instead of leaking the underlying `mantelhaen.test` / `polr`
+    messages.
+
 ## New functions
+
+- **Multi-category / multi-response call outcomes** (`R/call_outcomes.R`), the
+  third roadmap item, turning the binary "did they book?" into the graded,
+  multi-state outcomes these audits actually measured:
+  - `mysterycall_multiresponse_tabulate()` summarises a "check-all-that-apply"
+    outcome (e.g. the set of pain options a clinic offers): per-option
+    prevalence with Wilson intervals, an option co-occurrence matrix, and
+    options-per-call summaries, optionally by group. Non-responding calls (`NA`)
+    are excluded from denominators; a call that responded but named nothing
+    still counts.
+  - `mysterycall_classify_call_outcome()` maps raw/free-text dispositions to a
+    standard call-outcome taxonomy (appointment offered, declined,
+    insurance-verification / referral / records required, new-patient
+    restriction, phone gatekeeping, not reached) via an overridable keyword map.
+  - `mysterycall_outcome_gradient()` summarises an ordered multi-category
+    outcome (an access tier, a triage disposition) with per-level Wilson
+    intervals and cumulative proportions.
+  - `mysterycall_ordinal_model()` fits a proportional-odds model (via
+    `MASS::polr`) for a graded ordinal outcome, returning odds ratios with Wald
+    intervals and p-values.
 
 - **Small-sample categorical statistics toolkit** (`R/categorical.R`), the
   second roadmap item from the audit-study synthesis. A dependency-free layer
