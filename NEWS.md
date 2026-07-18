@@ -2,6 +2,26 @@
 
 ## New functions
 
+- **Multi-category / multi-response call outcomes** (`R/call_outcomes.R`), the
+  third roadmap item, turning the binary "did they book?" into the graded,
+  multi-state outcomes these audits actually measured:
+  - `mysterycall_multiresponse_tabulate()` summarises a "check-all-that-apply"
+    outcome (e.g. the set of pain options a clinic offers): per-option
+    prevalence with Wilson intervals, an option co-occurrence matrix, and
+    options-per-call summaries, optionally by group. Non-responding calls (`NA`)
+    are excluded from denominators; a call that responded but named nothing
+    still counts.
+  - `mysterycall_classify_call_outcome()` maps raw/free-text dispositions to a
+    standard call-outcome taxonomy (appointment offered, declined,
+    insurance-verification / referral / records required, new-patient
+    restriction, phone gatekeeping, not reached) via an overridable keyword map.
+  - `mysterycall_outcome_gradient()` summarises an ordered multi-category
+    outcome (an access tier, a triage disposition) with per-level Wilson
+    intervals and cumulative proportions.
+  - `mysterycall_ordinal_model()` fits a proportional-odds model (via
+    `MASS::polr`) for a graded ordinal outcome, returning odds ratios with Wald
+    intervals and p-values.
+
 - **Small-sample categorical statistics toolkit** (`R/categorical.R`), the
   second roadmap item from the audit-study synthesis. A dependency-free layer
   for the contingency-table designs these studies actually use, where the GLMM
