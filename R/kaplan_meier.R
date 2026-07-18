@@ -31,6 +31,11 @@ NULL
 #'   installed, produce a Kaplan-Meier plot.
 #' @param plot_title Character. Title for the plot. Default
 #'   \code{"Time to Appointment by Insurance Type"}.
+#' @param ylab Character. Label for the y-axis, which shows the survival
+#'   function \eqn{S(t)} -- the fraction of callers who have \emph{not yet}
+#'   secured an appointment by day \eqn{t}. Default
+#'   \code{"Callers still awaiting an appointment (\%)"}, a plain-language
+#'   phrasing; pass any string to override.
 #' @param legend_title Character scalar or \code{NULL}. Title shown above the
 #'   colour/fill legend. Default \code{NULL} uses a prettified \code{group_col}
 #'   (underscores to spaces, title case) rather than the raw variable name;
@@ -114,6 +119,7 @@ mysterycall_kaplan_meier <- function(
     conf_level   = 0.95,
     plot         = TRUE,
     plot_title   = "Time to Appointment by Insurance Type",
+    ylab         = "Callers still awaiting an appointment (%)",
     legend_title = NULL,
     palette      = NULL,
     risk_table   = TRUE
@@ -304,6 +310,7 @@ mysterycall_kaplan_meier <- function(
       grp_labels  = grp_labels,
       logrank_p_fmt = logrank_p_fmt,
       plot_title  = plot_title,
+      ylab        = ylab,
       palette     = palette,
       risk_table  = risk_table,
       max_days    = max_days
@@ -350,6 +357,7 @@ mysterycall_kaplan_meier <- function(
     grp_labels,
     logrank_p_fmt,
     plot_title,
+    ylab,
     palette,
     risk_table,
     max_days
@@ -429,7 +437,7 @@ mysterycall_kaplan_meier <- function(
     ggplot2::scale_y_continuous(
       limits = c(0, 1),
       labels = scales::percent_format(accuracy = 1),
-      name   = "Probability of Appointment Not Yet Received",
+      name   = ylab,
       expand = ggplot2::expansion(mult = c(0, 0.04))
     ) +
     ggplot2::scale_x_continuous(

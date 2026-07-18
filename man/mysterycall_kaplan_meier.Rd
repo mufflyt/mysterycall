@@ -13,6 +13,7 @@ mysterycall_kaplan_meier(
   conf_level = 0.95,
   plot = TRUE,
   plot_title = "Time to Appointment by Insurance Type",
+  ylab = "Callers still awaiting an appointment (\%)",
   legend_title = NULL,
   palette = NULL,
   risk_table = TRUE
@@ -45,6 +46,12 @@ installed, produce a Kaplan-Meier plot.}
 
 \item{plot_title}{Character. Title for the plot. Default
 \code{"Time to Appointment by Insurance Type"}.}
+
+\item{ylab}{Character. Label for the y-axis, which shows the survival
+function \eqn{S(t)} -- the fraction of callers who have \emph{not yet}
+secured an appointment by day \eqn{t}. Default
+\code{"Callers still awaiting an appointment (\%)"}, a plain-language
+phrasing; pass any string to override.}
 
 \item{legend_title}{Character scalar or \code{NULL}. Title shown above the
 colour/fill legend. Default \code{NULL} uses a prettified \code{group_col}

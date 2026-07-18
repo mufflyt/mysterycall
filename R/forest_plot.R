@@ -39,6 +39,10 @@ NULL
 #' @param subtitle Character or `NULL`. Plot subtitle.
 #' @param sig_threshold Numeric. P-value threshold for significance. Default
 #'   `0.05`.
+#' @param show_significance_legend Logical. When `FALSE` (default) no
+#'   significance legend is drawn; the point shape and error-bar linetype still
+#'   encode significance. When `TRUE`, a single legend labelled `"p < 0.05"` /
+#'   `"n.s."` is placed above the plot.
 #' @param output_path Character or `NULL`. When non-`NULL`, both a TIFF
 #'   (`lzw` compression) and PNG are saved using the same file stem (extension
 #'   is replaced). Requires `ggplot2`.
@@ -83,6 +87,7 @@ mysterycall_forest_plot <- function(x,
                                      title             = NULL,
                                      subtitle          = NULL,
                                      sig_threshold     = 0.05,
+                                     show_significance_legend = FALSE,
                                      output_path       = NULL,
                                      width             = 13,
                                      height            = NULL,
@@ -143,6 +148,10 @@ mysterycall_forest_plot <- function(x,
   n_rows  <- nrow(tbl)
   shade_y <- seq(0.5, n_rows - 0.5, by = 2)
 
+  # ---- Significance legend (off by default) ----------------------------------
+  sig_guide <- if (isTRUE(show_significance_legend)) "legend" else "none"
+  leg_pos   <- if (isTRUE(show_significance_legend)) "top" else "none"
+
   # ---- Build plot ------------------------------------------------------------
   p <- ggplot2::ggplot(tbl, ggplot2::aes(x = .data$irr, y = .data$term))
 
@@ -180,10 +189,16 @@ mysterycall_forest_plot <- function(x,
       hjust = 0, size = 3.1, color = "black"
     ) +
     ggplot2::scale_linetype_manual(
-      values = c("TRUE" = "solid", "FALSE" = "dashed"), guide = "none"
+      values = c("TRUE" = "solid", "FALSE" = "dashed"),
+      breaks = c("TRUE", "FALSE"),
+      labels = c("TRUE" = "p < 0.05", "FALSE" = "n.s."),
+      name   = NULL, guide = sig_guide
     ) +
     ggplot2::scale_shape_manual(
-      values = c("TRUE" = 18L, "FALSE" = 5L), guide = "none"
+      values = c("TRUE" = 18L, "FALSE" = 5L),
+      breaks = c("TRUE", "FALSE"),
+      labels = c("TRUE" = "p < 0.05", "FALSE" = "n.s."),
+      name   = NULL, guide = sig_guide
     ) +
     ggplot2::coord_cartesian(xlim = x_limits, clip = "off") +
     ggplot2::labs(x = x_label, y = NULL, title = title, subtitle = subtitle) +
@@ -199,7 +214,7 @@ mysterycall_forest_plot <- function(x,
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor   = ggplot2::element_blank(),
       panel.grid.major.x = ggplot2::element_line(color = "grey88", linewidth = 0.4),
-      legend.position    = "none",
+      legend.position    = leg_pos,
       plot.margin        = ggplot2::margin(t = 8, r = 160, b = 8, l = 10)
     )
 
