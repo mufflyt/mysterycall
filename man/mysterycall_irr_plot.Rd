@@ -13,7 +13,8 @@ mysterycall_irr_plot(
   color_ns = "#2C3E50",
   x_label = "Incidence Rate Ratio (IRR)",
   title = NULL,
-  x_log = FALSE
+  x_log = FALSE,
+  show_significance_legend = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,10 @@ line. Default \code{1} (IRR = 1).}
 
 \item{x_log}{Logical. When \code{TRUE} the X axis is log-transformed so that
 equal-ratio distances look equal. Default \code{FALSE}.}
+
+\item{show_significance_legend}{Logical. When \code{FALSE} (default) the points
+are coloured by significance with no legend; when \code{TRUE} a \code{"p < 0.05"} /
+\code{"n.s."} colour legend is drawn above the plot.}
 }
 \value{
 A \code{ggplot} object. Print it or save with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.

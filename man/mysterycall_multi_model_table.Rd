@@ -11,7 +11,8 @@ mysterycall_multi_model_table(
   estimate_col_label = NULL,
   include_n = TRUE,
   include_aic = TRUE,
-  ref_symbol = "Ref."
+  ref_symbol = "Ref.",
+  cell_layout = c("stacked", "inline")
 )
 }
 \arguments{
@@ -43,6 +44,14 @@ fitted with \code{REML = TRUE}; those cells are labelled
 
 \item{ref_symbol}{Character. Symbol placed in reference-category cells.
 Default \code{"Ref."}.}
+
+\item{cell_layout}{Character. How the p-value sits relative to the estimate
+within a cell. \code{"stacked"} (default) puts the p-value on a second line
+(\code{"1.45 (1.02-2.05)\\np=0.038"}) -- correct for \pkg{gt}/HTML and the
+console print method. \code{"inline"} keeps the whole cell on one line
+(\code{"1.45 (1.02-2.05), p=0.038"}) so the table renders correctly in a
+Markdown/pandoc \strong{pipe table}, which cannot contain a multi-line cell (an
+embedded newline otherwise spills every p-value onto its own row).}
 }
 \value{
 A \code{data.frame} with class
@@ -64,8 +73,9 @@ header with its model type.
 }
 \details{
 \strong{Cell format.} Each non-reference cell contains the point estimate and
-95\\% CI on the first line and the formatted p-value on the second line,
-e.g. \code{"1.45 (1.02-2.05)\\np=0.038"}. Reference-category cells
+95\\% CI followed by the formatted p-value; with \code{cell_layout = "stacked"}
+the p-value is on a second line, e.g. \code{"1.45 (1.02-2.05)\\np=0.038"}, and
+with \code{"inline"} it follows on the same line. Reference-category cells
 show \code{ref_symbol}. Terms absent from a particular model show an
 empty string.
 

@@ -15,6 +15,7 @@ mysterycall_forest_plot(
   title = NULL,
   subtitle = NULL,
   sig_threshold = 0.05,
+  show_significance_legend = FALSE,
   output_path = NULL,
   width = 13,
   height = NULL,
@@ -57,6 +58,11 @@ Defaults to just past the right x-limit.}
 
 \item{sig_threshold}{Numeric. P-value threshold for significance. Default
 \code{0.05}.}
+
+\item{show_significance_legend}{Logical. When \code{FALSE} (default) no
+significance legend is drawn; the point shape and error-bar linetype still
+encode significance. When \code{TRUE}, a single legend labelled \code{"p < 0.05"} /
+\code{"n.s."} is placed above the plot.}
 
 \item{output_path}{Character or \code{NULL}. When non-\code{NULL}, both a TIFF
 (\code{lzw} compression) and PNG are saved using the same file stem (extension

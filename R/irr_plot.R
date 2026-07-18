@@ -28,6 +28,9 @@ NULL
 #' @param title Character. Plot title. `NULL` (default) produces no title.
 #' @param x_log Logical. When `TRUE` the X axis is log-transformed so that
 #'   equal-ratio distances look equal. Default `FALSE`.
+#' @param show_significance_legend Logical. When `FALSE` (default) the points
+#'   are coloured by significance with no legend; when `TRUE` a `"p < 0.05"` /
+#'   `"n.s."` colour legend is drawn above the plot.
 #'
 #' @return A `ggplot` object. Print it or save with [ggplot2::ggsave()].
 #'
@@ -58,7 +61,8 @@ mysterycall_irr_plot <- function(x,
                                   color_ns          = "#2C3E50",
                                   x_label           = "Incidence Rate Ratio (IRR)",
                                   title             = NULL,
-                                  x_log             = FALSE) {
+                                  x_log             = FALSE,
+                                  show_significance_legend = FALSE) {
 
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package 'ggplot2' is required for mysterycall_irr_plot(). Install with: install.packages('ggplot2')", call. = FALSE)
@@ -90,12 +94,11 @@ mysterycall_irr_plot <- function(x,
   }
 
   # -- Significance coloring -------------------------------------------------
-  if ("p_value" %in% names(tbl) && is.numeric(tbl$p_value)) {
-    tbl$.sig <- ifelse(!is.na(tbl$p_value) & tbl$p_value < 0.05,
-                       color_sig, color_ns)
-  } else {
-    tbl$.sig <- color_ns
-  }
+  has_p  <- "p_value" %in% names(tbl) && is.numeric(tbl$p_value)
+  is_sig <- if (has_p) !is.na(tbl$p_value) & tbl$p_value < 0.05 else rep(FALSE, nrow(tbl))
+  tbl$.sig       <- ifelse(is_sig, color_sig, color_ns)
+  tbl$.sig_label <- factor(ifelse(is_sig, "p < 0.05", "n.s."),
+                           levels = c("p < 0.05", "n.s."))
 
   # -- Term ordering: bottom-to-top matches table reading order --------------
   tbl$term <- factor(tbl$term, levels = rev(tbl$term))
@@ -104,24 +107,32 @@ mysterycall_irr_plot <- function(x,
   # geom_errorbarh() is deprecated in ggplot2 >= 4.0.0; suppress the lifecycle
   # warning here and use geom_errorbar() with orientation = "horizontal" once
   # ggplot2 >= 4.0.0 is required.
-  errorbarh_layer <- suppressWarnings(
-    ggplot2::geom_errorbarh(
-      ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
-      height    = 0.25,
-      color     = tbl$.sig,
-      linewidth = 0.7
+  show_leg <- isTRUE(show_significance_legend)
+  if (show_leg) {
+    errorbarh_layer <- suppressWarnings(
+      ggplot2::geom_errorbarh(
+        ggplot2::aes(xmin = ci_lower, xmax = ci_upper, color = .data$.sig_label),
+        height = 0.25, linewidth = 0.7
+      )
     )
-  )
+    point_layer <- ggplot2::geom_point(
+      ggplot2::aes(color = .data$.sig_label), size = point_size, shape = 18
+    )
+  } else {
+    errorbarh_layer <- suppressWarnings(
+      ggplot2::geom_errorbarh(
+        ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
+        height = 0.25, color = tbl$.sig, linewidth = 0.7
+      )
+    )
+    point_layer <- ggplot2::geom_point(size = point_size, color = tbl$.sig, shape = 18)
+  }
 
   p <- ggplot2::ggplot(tbl, ggplot2::aes(x = irr, y = term)) +
     ggplot2::geom_vline(xintercept = reference_line,
                         linetype = "dashed", color = "grey60", linewidth = 0.5) +
     errorbarh_layer +
-    ggplot2::geom_point(
-      size   = point_size,
-      color = tbl$.sig,
-      shape  = 18
-    ) +
+    point_layer +
     ggplot2::labs(
       x     = x_label,
       y     = NULL,
@@ -132,8 +143,15 @@ mysterycall_irr_plot <- function(x,
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor   = ggplot2::element_blank(),
       axis.text.y        = ggplot2::element_text(size = 10),
-      plot.title         = ggplot2::element_text(size = 12, face = "bold")
+      plot.title         = ggplot2::element_text(size = 12, face = "bold"),
+      legend.position    = if (show_leg) "top" else "none"
     )
+
+  if (show_leg) {
+    p <- p + ggplot2::scale_color_manual(
+      values = c("p < 0.05" = color_sig, "n.s." = color_ns), name = NULL
+    )
+  }
 
   if (x_log) {
     p <- p + ggplot2::scale_x_log10()

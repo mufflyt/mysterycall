@@ -1,5 +1,28 @@
 # mysterycall (development version)
 
+## Manuscript-output improvements
+
+Fixes for issues previously worked around by editing package source or
+post-processing in downstream study scripts -- now parameters/functions so every
+study inherits them:
+
+- `mysterycall_multi_model_table()` gains `cell_layout`. The default
+  `"stacked"` keeps the p-value on a second line (correct for gt/HTML and the
+  console print method); `"inline"` puts the whole cell on one line
+  (`"1.45 (1.02-2.05), p=0.038"`) so the table renders correctly in a
+  Markdown/pandoc **pipe table**, which cannot hold a multi-line cell (the
+  embedded newline otherwise spilled every p-value onto its own row).
+- `mysterycall_kaplan_meier()` gains `ylab` (was a hardcoded label). The default
+  is now the plain-language `"Callers still awaiting an appointment (%)"`.
+- `mysterycall_forest_plot()` and `mysterycall_irr_plot()` gain
+  `show_significance_legend` (default `FALSE`). When `TRUE`, a single
+  `"p < 0.05"` / `"n.s."` legend is drawn; the default keeps the current
+  legend-free look.
+- New `mysterycall_region_labels()`: one row per US state with its AAO-HNS
+  (or ACOG / Census) region and an approximate centroid, ready to overlay on a
+  state choropleth as a `geom_text()` layer. Dependency-free (base
+  `state.center` + `mysterycall_assign_region()`).
+
 ## Bug fixes
 
 - Adversarial / semantic / boundary-value test suites for the concordance,
