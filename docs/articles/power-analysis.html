@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,9 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -52,6 +54,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -64,8 +67,12 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -305,8 +312,8 @@ negligible.</p>
 <div class="section level3">
 <h3 id="mathematical-basis-1">Mathematical basis<a class="anchor" aria-label="anchor" href="#mathematical-basis-1"></a>
 </h3>
-<p>Wait times (business days until appointment) are count data analysed
-with a Poisson generalised linear model (or mixed model when physicians
+<p>Wait times (business days until appointment) are count data analyzed
+with a Poisson generalized linear model (or mixed model when physicians
 are called with both insurance types). The parameter of interest is the
 <strong>incidence rate ratio</strong> (IRR): how many times longer is
 the Medicaid wait compared with the private-insurance wait?</p>
@@ -648,7 +655,7 @@ as a function of the minimum detectable IRR.
 <span><span class="co">#&gt; Poisson power: IRR=1.95, lambda_ref=14.0, lambda_trt=27.3 | n_per_arm=3, n_total=3, calls=6</span></span>
 <span><span class="co">#&gt; Poisson power: IRR=2.00, lambda_ref=14.0, lambda_trt=28.0 | n_per_arm=3, n_total=3, calls=6</span></span>
 <span></span>
-<span><span class="va">curve_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span><span class="va">curve_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="va">irr_seq</span>, n <span class="op">=</span> <span class="va">pw_80</span>, power <span class="op">=</span> <span class="st">"80%"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="va">irr_seq</span>, n <span class="op">=</span> <span class="va">pw_90</span>, power <span class="op">=</span> <span class="st">"90%"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -816,7 +823,7 @@ Holm–Bonferroni correction for multiple insurance comparisons</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

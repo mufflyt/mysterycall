@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,9 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -31,6 +33,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -43,8 +46,12 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -87,11 +94,11 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisible NULL.</p>
+    <p><code>invisible(NULL)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other progress-bars:
+    <div class="dont-index"><p>Other progress:
 <code><a href="mysterycall_multi_complete.html">mysterycall_multi_complete()</a></code>,
 <code><a href="mysterycall_multi_done.html">mysterycall_multi_done()</a></code>,
 <code><a href="mysterycall_multi_progress.html">mysterycall_multi_progress()</a></code>,
@@ -107,9 +114,9 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_progress_bar.html">mysterycall_progress_bar</a></span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_bar.html">mysterycall_progress_bar</a></span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Processing (10 items)</span>
-<span class="r-in"><span><span class="fu">mysterycall_progress_fail</span><span class="op">(</span><span class="va">pb</span>, msg <span class="op">=</span> <span class="st">"Geocoding API unreachable"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_progress_fail</span><span class="op">(</span><span class="va">pb</span>, msg <span class="op">=</span> <span class="st">"Geocoding API unreachable"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   ✗ Processing failed: Geocoding API unreachable</span>
 </code></pre></div>
     </div>
@@ -122,7 +129,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer></div>

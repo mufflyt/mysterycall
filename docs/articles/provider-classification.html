@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,9 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -61,6 +63,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -73,8 +76,12 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -116,7 +123,7 @@
 </h2>
 <p>A mystery-caller study begins with a <strong>provider
 roster</strong>: a list of physicians whose appointment-scheduling
-behaviour will be tested. Before any statistical model can be estimated,
+behavior will be tested. Before any statistical model can be estimated,
 that roster must be enriched with demographic, geographic, and
 practice-setting variables. Raw data from the National Provider
 Identifier (NPI) registry and related sources are not analysis-ready on
@@ -157,7 +164,7 @@ incomplete.</p>
 [8] mysterycall_genderize()                   -- API gender backfill for ~5% missing
         |
         v
-[9] mysterycall_prepare_table1_vars()         -- standardise and combine all vars
+[9] mysterycall_prepare_table1_vars()         -- standardize and combine all vars
         |
         v
 [10] Analysis-ready data frame</code></pre>
@@ -165,7 +172,7 @@ incomplete.</p>
 matters: you cannot classify RUCA codes until you have joined the
 crosswalk, and you cannot call
 <code><a href="../reference/mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> until you have raw gender
-values to standardise.</p>
+values to standardize.</p>
 <p><strong>Target audience:</strong> Physician researchers who will
 execute this code themselves. No prior experience with the NPPES API or
 USDA geographic data systems is assumed.</p>
@@ -180,7 +187,7 @@ USDA geographic data systems is assumed.</p>
 </h3>
 <p>In mystery-caller research, <strong>practice setting</strong> is one
 of the strongest predictors of appointment availability and wait time.
-Academic medical centres have complex scheduling systems, residents who
+Academic medical centers have complex scheduling systems, residents who
 share patient loads, and often longer wait times. Government facilities
 (VA, military) operate under federal mandates and may have different
 referral patterns. Private practices behave differently again.</p>
@@ -233,7 +240,7 @@ that are academically affiliated even when the word “university” does
 not appear in their name: <code>"mayo clinic"</code>,
 <code>"cleveland clinic"</code>, <code>"johns hopkins"</code>,
 <code>"memorial sloan"</code>, <code>"md anderson"</code>, and flagship
-programmes at <code>"duke"</code>, <code>"stanford"</code>,
+programs at <code>"duke"</code>, <code>"stanford"</code>,
 <code>"ucsf"</code>, <code>"yale"</code>, <code>"upmc"</code>,
 <code>"vanderbilt"</code>, and dozens more.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -276,7 +283,7 @@ add your own. This is the recommended approach for most researchers.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><strong>Option 2 — Replace:</strong> Supply your own complete pattern
-vectors. Do this only if your study uses a highly specialised provider
+vectors. Do this only if your study uses a highly specialized provider
 population (e.g., only correctional health facilities) where the
 built-in patterns are likely to produce false positives.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -367,7 +374,7 @@ geographic classification system developed by the USDA Economic Research
 Service (ERS). They assign a numeric code to each US ZIP code based on
 the population density of the area and the proportion of workers who
 commute to an urban core. RUCA codes are widely used in health services
-research to characterise provider practice locations on an
+research to characterize provider practice locations on an
 urban-to-rural continuum.</p>
 <p>RUCA codes range from 1 to 10:</p>
 <table class="table">
@@ -448,7 +455,7 @@ access studies and by the Federal Office of Rural Health Policy.</p>
 </h3>
 <p>The USDA ERS publishes a ZIP-to-RUCA crosswalk at:</p>
 <blockquote>
-<p><a href="https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/" class="external-link uri">https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/</a></p>
+<p><a href="https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes" class="external-link uri">https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes</a></p>
 </blockquote>
 <p>Download the <strong>ZIP code file</strong> (not the census tract
 file). As of 2023, the file is named something like
@@ -795,7 +802,7 @@ in NPPES who graduated from a US osteopathic school is classified as
 <code>"US_DO"</code>. But a physician with an <code>"MD"</code>
 credential who graduated from a school matching the IMG pattern is
 classified as <code>"IMG"</code> — international medical graduates who
-obtained USMLE equivalence and a US medical license still practise with
+obtained USMLE equivalence and a US medical license still practice with
 MD credentials in the US.</p>
 <p>Do not substitute the credential column
 (<code>basic_credential</code>) for the medical school column. They
@@ -1054,7 +1061,7 @@ authoritative than a name-based prediction.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Summarise coverage improvement</span></span>
+<span><span class="co"># Summarize coverage improvement</span></span>
 <span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">roster</span><span class="op">$</span><span class="va">basic_gender</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">after</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">genderized</span><span class="op">$</span><span class="va">gender_combined</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span></span>
@@ -1072,13 +1079,13 @@ authoritative than a name-based prediction.</p>
 </h3>
 <p>Once you have run all the enrichment steps above, the resulting data
 frame contains a mix of raw NPPES values, API outputs, and
-custom-classified columns — often with inconsistent capitalisation and
+custom-classified columns — often with inconsistent capitalization and
 coding. <code><a href="../reference/mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> is a convenience
-wrapper that standardises all demographic columns in a single call,
+wrapper that standardizes all demographic columns in a single call,
 producing consistently named output columns ready for Table 1.</p>
 <p>It does four things: 1. Imputes age from graduation year (if
 <code>grad_year_col</code> is supplied and <code>age_col</code> is not).
-2. Creates decade-bracket age categories. 3. Standardises gender to
+2. Creates decade-bracket age categories. 3. Standardizes gender to
 <code>"Male"</code> / <code>"Female"</code> / <code>"Unknown"</code>. 4.
 Passes through practice setting and region columns under standard
 names.</p>
@@ -1111,7 +1118,7 @@ names.</p>
 <tr class="odd">
 <td><code>gender_col</code></td>
 <td><code>NULL</code></td>
-<td>Raw gender column to standardise</td>
+<td>Raw gender column to standardize</td>
 </tr>
 <tr class="even">
 <td><code>setting_col</code></td>
@@ -1133,7 +1140,7 @@ names.</p>
 </table>
 </div>
 <div class="section level3">
-<h3 id="gender-standardisation-and-the-binary-warning">Gender standardisation and the binary warning<a class="anchor" aria-label="anchor" href="#gender-standardisation-and-the-binary-warning"></a>
+<h3 id="gender-standardization-and-the-binary-warning">Gender standardization and the binary warning<a class="anchor" aria-label="anchor" href="#gender-standardization-and-the-binary-warning"></a>
 </h3>
 <p><code><a href="../reference/mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> maps gender values to
 a <strong>binary classification</strong>: <code>"Male"</code>,
@@ -1173,7 +1180,7 @@ ambiguous values are silently bucketed into <code>"Unknown"</code> with
 a warning message. <strong>Before calling this function</strong>,
 inspect your gender column for unexpected values:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Always inspect before standardising</span></span>
+<code class="sourceCode R"><span><span class="co"># Always inspect before standardizing</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">roster</span><span class="op">$</span><span class="va">gender_combined</span>, useNA <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    F    M    NA</span></span>
 <span><span class="co">#&gt;  142  155    3</span></span>
@@ -1184,7 +1191,7 @@ inspect your gender column for unexpected values:</p>
 studies typically report binary sex assigned at registry registration,
 not gender identity. If your study protocol requires tracking non-binary
 providers separately, do not use this wrapper — handle gender
-standardisation manually.</p>
+standardization manually.</p>
 </div>
 <div class="section level3">
 <h3 id="complete-example">Complete example<a class="anchor" aria-label="anchor" href="#complete-example"></a>
@@ -1252,13 +1259,13 @@ need a balanced random sample.
 </table>
 </div>
 <div class="section level3">
-<h3 id="behaviour-when-a-group-is-smaller-than-n_per_group">Behaviour when a group is smaller than <code>n_per_group</code><a class="anchor" aria-label="anchor" href="#behaviour-when-a-group-is-smaller-than-n_per_group"></a>
+<h3 id="behavior-when-a-group-is-smaller-than-n_per_group">Behavior when a group is smaller than <code>n_per_group</code><a class="anchor" aria-label="anchor" href="#behavior-when-a-group-is-smaller-than-n_per_group"></a>
 </h3>
 <p>Groups with fewer rows than <code>n_per_group</code> are
 <strong>returned in full without upsampling</strong>. Upsampling
 (returning a group with replacement) would duplicate physician records,
 creating artificial inflation of the study denominator. If you have only
-15 paediatric otolaryngologists in your roster and request
+15 pediatric otolaryngologists in your roster and request
 <code>n_per_group = 30</code>, all 15 will be returned.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42L</span><span class="op">)</span>  <span class="co"># for documentation; pass seed= instead in production</span></span>
@@ -1542,7 +1549,7 @@ usage, replace this with the downloaded USDA ERS file.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">roster_with_ruca</span><span class="op">$</span><span class="va">med_school_type</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="step-6-impute-age-and-categorise">Step 6: Impute age and categorise<a class="anchor" aria-label="anchor" href="#step-6-impute-age-and-categorise"></a>
+<h3 id="step-6-impute-age-and-categorize">Step 6: Impute age and categorize<a class="anchor" aria-label="anchor" href="#step-6-impute-age-and-categorize"></a>
 </h3>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roster_with_ruca</span> <span class="op">&lt;-</span> <span class="va">roster_with_ruca</span> <span class="op">|&gt;</span></span>
@@ -1702,7 +1709,7 @@ $ gender_std       &lt;chr&gt; "Male", "Female", "Male", ...</code></pre>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

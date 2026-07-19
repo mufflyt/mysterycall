@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,9 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -31,6 +33,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -42,9 +45,14 @@
     <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -66,8 +74,12 @@
       <h3>Getting Started</h3>
       <div class="section-desc"></div>
 
-      <dl><dt><a href="my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></dt>
+      <dl><dt><a href="getting_started.html">Getting Started with mysterycall</a></dt>
+        <dd>
+        </dd><dt><a href="my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></dt>
         <dd><p>A comprehensive guide with examples on searching the NPI Database using taxonomy codes.</p>
+        </dd><dt><a href="mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></dt>
+        <dd>
         </dd><dt><a href="aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></dt>
         <dd><p>Build an analysis-ready provider table by combining roster, enrichment, geography, and call-outcome data.</p>
         </dd><dt><a href="pipeline-guarantees.html">Pipeline Guarantees</a></dt>
@@ -88,6 +100,8 @@
 
       <dl><dt><a href="data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></dt>
         <dd><p>How to validate NANP phone numbers, parse physician names into structured components, and perform audited joins that guard against row duplication and coverage loss.</p>
+        </dd><dt><a href="data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></dt>
+        <dd><p>End-to-end data cleaning for mystery caller studies: NPI validation, phone validation, address normalization, Phase 1 and Phase 2 log cleaning, duplicate detection, and clinician data retrieval.</p>
       </dd></dl></div>
     <div class="section ">
       <h3>Geospatial</h3>
@@ -113,12 +127,22 @@
       <h3>Analysis and Reporting</h3>
       <div class="section-desc"></div>
 
-      <dl><dt><a href="statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></dt>
+      <dl><dt><a href="matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></dt>
+        <dd>
+        </dd><dt><a href="statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></dt>
         <dd><p>Poisson mixed-effects regression for wait-time analysis, disparity metrics across insurance types, bootstrap confidence intervals, and multiple- comparison adjustment for mystery-caller studies.</p>
+        </dd><dt><a href="linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></dt>
+        <dd><p>When and how to use mysterycall_lmm() for appointment wait-time outcomes, including auto-log transforms, geometric mean ratios, Poisson sensitivity analysis, and the calendar vs. business-day comparison.</p>
+        </dd><dt><a href="logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></dt>
+        <dd>
+        </dd><dt><a href="adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></dt>
+        <dd>
         </dd><dt><a href="power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></dt>
         <dd>
         </dd><dt><a href="table-generation.html">Generating Publication Tables</a></dt>
         <dd><p>Build Table 1 (baseline characteristics), percentage tables, disparity summaries, and export-ready PDFs from mystery-caller study data.</p>
+        </dd><dt><a href="writing-results-section.html">Writing the Results Section</a></dt>
+        <dd><p>Assemble a ready-to-paste manuscript Results section from mysterycall’s prose builders, with every direction word tied to the sign of the data so the narrative can never contradict the tables.</p>
       </dd></dl></div>
     <div class="section ">
       <h3>News</h3>
@@ -136,7 +160,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer></div>

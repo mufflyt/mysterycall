@@ -612,6 +612,15 @@ reference:
       - mysterycall_paired_acceptance_mcnemar
       - mysterycall_paired_wait_within_practice
 
+  - title: "Matched-Control Design and Geocoding"
+    desc: >
+      Build a propensity-score-matched control cohort for a case-control audit,
+      geocode a city/state roster, and normalize organization names for joins.
+    contents:
+      - mysterycall_build_matched_controls
+      - mysterycall_geocode_city_state
+      - mysterycall_normalize_org_name
+
   - title: "Additional Models and Diagnostics"
     contents:
       - mysterycall_compare_count_families
@@ -766,6 +775,7 @@ articles:
     navbar: Analysis and Reporting
     contents:
       - matched-pair-analysis
+      - matched-control-design
       - statistical-analysis
       - linear-mixed-models
       - logistic-model

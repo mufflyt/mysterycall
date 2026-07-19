@@ -17,7 +17,7 @@ Returns the output path invisibly so calls can be piped.
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,9 @@ Returns the output path invisibly so calls can be piped.
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -41,6 +43,7 @@ Returns the output path invisibly so calls can be piped.
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -53,8 +56,12 @@ Returns the output path invisibly so calls can be piped.
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -120,7 +127,7 @@ where the plot should be saved. Common extensions: <code>.png</code>, <code>.pdf
 
 
 <dt id="arg-bg">bg<a class="anchor" aria-label="anchor" href="#arg-bg"></a></dt>
-<dd><p>Character scalar. Background colour. Default <code>"white"</code>.</p></dd>
+<dd><p>Character scalar. Background color. Default <code>"white"</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -137,10 +144,28 @@ value to capture the path for downstream use; printing is suppressed.</p>
     <div class="dont-index"><p><code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>, <code><a href="mysterycall_plot_scatter.html">mysterycall_plot_scatter()</a></code>,
 <code><a href="mysterycall_plot_density.html">mysterycall_plot_density()</a></code> for functions that produce plots to pass here.</p>
 <p>Other manuscript:
+<code><a href="mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code>,
+<code><a href="mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>,
+<code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
 <code><a href="mysterycall_format_results_table.html">mysterycall_format_results_table()</a></code>,
+<code><a href="mysterycall_literature_table.html">mysterycall_literature_table()</a></code>,
+<code><a href="mysterycall_materials_methods.html">mysterycall_materials_methods()</a></code>,
 <code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>,
+<code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>,
+<code><a href="mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code>,
+<code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>,
 <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
-<code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code></p></div>
+<code><a href="mysterycall_sensitivity_table.html">mysterycall_sensitivity_table()</a></code>,
+<code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code>,
+<code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>,
+<code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code>,
+<code><a href="mysterycall_table2.html">mysterycall_table2()</a></code>,
+<code><a href="print.mysterycall_materials_methods.html">print.mysterycall_materials_methods()</a></code>,
+<code><a href="print.mysterycall_model_comparison_table.html">print.mysterycall_model_comparison_table()</a></code>,
+<code><a href="print.mysterycall_multi_model_table.html">print.mysterycall_multi_model_table()</a></code>,
+<code><a href="print.mysterycall_results_report.html">print.mysterycall_results_report()</a></code>,
+<code><a href="print.mysterycall_strobe_checklist.html">print.mysterycall_strobe_checklist()</a></code>,
+<code><a href="print.mysterycall_table2.html">print.mysterycall_table2()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -160,7 +185,7 @@ value to capture the path for downstream use; printing is suppressed.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer></div>

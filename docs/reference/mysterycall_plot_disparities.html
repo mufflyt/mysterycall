@@ -13,7 +13,7 @@ call mysterycall_disparities_table() first, then pipe the result here."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,9 @@ call mysterycall_disparities_table() first, then pipe the result here."><meta pr
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -37,6 +39,7 @@ call mysterycall_disparities_table() first, then pipe the result here."><meta pr
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -49,8 +52,12 @@ call mysterycall_disparities_table() first, then pipe the result here."><meta pr
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -134,17 +141,17 @@ annotated to the right of each non-reference point.</p></dd>
 
 
 <dt id="arg-color-sig">color_sig<a class="anchor" aria-label="anchor" href="#arg-color-sig"></a></dt>
-<dd><p>Character. Colour for groups whose <code>p_value &lt; 0.05</code>.
+<dd><p>Character. Color for groups whose <code>p_value &lt; 0.05</code>.
 Default <code>"#C0392B"</code> (red).</p></dd>
 
 
 <dt id="arg-color-ns">color_ns<a class="anchor" aria-label="anchor" href="#arg-color-ns"></a></dt>
-<dd><p>Character. Colour for non-significant groups (or when
+<dd><p>Character. Color for non-significant groups (or when
 <code>p_value</code> is absent). Default <code>"#2C3E50"</code> (dark navy).</p></dd>
 
 
 <dt id="arg-color-ref">color_ref<a class="anchor" aria-label="anchor" href="#arg-color-ref"></a></dt>
-<dd><p>Character. Colour for the reference group point.
+<dd><p>Character. Color for the reference group point.
 Default <code>"#2166AC"</code> (blue).</p></dd>
 
 
@@ -178,7 +185,7 @@ the x-axis is formatted as a percentage. Ignored when <code>metric = "rel_risk"<
 
 <dt><code>"abs_diff"</code></dt>
 <dd><p><code>group</code>, <code>abs_diff</code>, <code>lower_ci</code>, <code>upper_ci</code>
-(CIs are re-centred automatically)</p></dd>
+(CIs are re-centered automatically)</p></dd>
 
 <dt><code>"rel_risk"</code></dt>
 <dd><p><code>group</code>, <code>rel_risk</code>, <code>rr_lower</code>, <code>rr_upper</code></p></dd>
@@ -187,7 +194,7 @@ the x-axis is formatted as a percentage. Ignored when <code>metric = "rel_risk"<
 </dl><p>When <code>x</code> is a <code>mysterycall_disparities_table</code> object the reference group
 and significance attributes are read directly from the object's attributes.
 When <code>x</code> is a plain data frame, a <code>p_value</code> column is used for significance
-colouring if present, and the first row is treated as the reference group
+coloring if present, and the first row is treated as the reference group
 when <code>show_ref = TRUE</code>.</p>
     </div>
     <div class="section level2">
@@ -230,7 +237,7 @@ when <code>show_ref = TRUE</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer></div>

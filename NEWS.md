@@ -1,7 +1,34 @@
 # mysterycall (development version)
 
+## New functions
+
+Case-control design tooling, generalized from a private-equity-ownership
+mystery-caller study:
+
+- `mysterycall_build_matched_controls()`: builds a propensity-score-matched
+  control cohort -- fit a propensity model on treated units vs. a candidate pool,
+  then greedily match each treated unit 1:1 to its nearest control on the
+  propensity score, within an exact stratum (e.g. same state) and an optional
+  geographic caliper, without replacement. Returns matched pairs, the matched
+  rows from each arm, the propensity model, and a covariate-balance table. The
+  "callable control" constraints (same state, short drive) are the ones audit
+  teams actually impose and that off-the-shelf matchers do not express directly.
+- `mysterycall_geocode_city_state()`: look up latitude/longitude for a city +
+  two-letter state against the bundled ~32,000-place table (no network, no API
+  key) -- enough to seed a distance caliper or QC how far apart matched practices
+  sit. Supports a manual-override table for places the bundled data misses.
+- `mysterycall_normalize_org_name()`: normalize organization / practice names to
+  a canonical join key (upper-case, expand `&`, drop apostrophes/periods and
+  legal-entity suffixes like LLC/PC/PA, squish) so the same practice compares
+  equal when matching a caller cohort against an external roster.
+
 ## Documentation
 
+- New vignette **"Designing a matched-control mystery-caller audit"**: an
+  end-to-end case-control workflow (geocode a roster, build a
+  propensity-score-matched control cohort inside a geographic caliper, assemble
+  the paired calling list, and analyse the completed audit with the matched
+  McNemar and paired-wait tests), motivated by a private-equity-ownership study.
 - New vignette **"A matched-pair mystery-caller analysis"**: a worked, end-to-end
   analysis on a simulated paired call log that exercises the tools added in
   1.6.2 together -- a clustering key, two data-integrity passes, the access

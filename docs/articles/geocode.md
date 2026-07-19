@@ -1,0 +1,220 @@
+# Geocoding
+
+## Overview
+
+The `geocode` function is designed to help you geocode datasets
+containing addresses and change them to latitude and longitude.
+
+### Step 1
+
+#### Installation
+
+Before you can harness the power of the `mysterycall_search_taxonomy`
+function, it is essential to ensure that you have the `mysterycall`
+package installed. You can effortlessly install it using the following
+command:
+
+``` r
+library(mysterycall)
+```
+
+## Example Usage
+
+### Understanding Geocoding
+
+Certainly! Geocoding, the process of converting addresses or place names
+into geographic coordinates (latitude and longitude), has its advantages
+and disadvantages. Here’s an overview of the pluses and minuses of
+geocoding:
+
+**Pluses of Geocoding:**
+
+- 1.  **Location Accuracy:** Geocoding provides precise location
+      information, allowing you to pinpoint addresses or places on a map
+      with high accuracy. This is crucial for various applications such
+      as mapping, navigation, and location-based services.
+- 2.  **Spatial Analysis:** Geocoded data enables spatial analysis,
+      allowing you to perform tasks like proximity analysis, spatial
+      clustering, and spatial interpolation. It’s invaluable for
+      geographic information systems (GIS) and geographic research.
+- 3.  **Geographic Visualization:** Geocoded data can be visualized on
+      maps, making it easier to understand and communicate spatial
+      patterns and trends. This is particularly useful for data
+      presentation and decision-making.
+- 4.  **Routing and Navigation:** Geocoding is essential for navigation
+      systems, delivery route optimization, and location-based apps that
+      provide directions and estimated travel times.
+
+**Minuses of Geocoding:**
+
+- 1.  **Data Quality Issues:** Geocoding accuracy heavily relies on the
+      quality of the underlying address data. Inaccurate or outdated
+      address information can lead to geocoding errors.
+- 2.  **Costs:** Geocoding services or software often come with
+      associated costs, particularly for large-scale geocoding
+      operations. These costs can include data licensing fees and usage
+      charges.
+- 3.  **Complexity:** Advanced geocoding tasks, such as reverse
+      geocoding (converting coordinates to addresses) and batch
+      geocoding, can be technically complex and may require expertise or
+      specialized tools.
+
+In summary, geocoding offers numerous benefits in terms of location
+accuracy, spatial analysis, visualization, and navigation. However, it
+also comes with challenges related to data quality, costs, and
+complexity. Careful consideration of these factors is essential when
+using geocoding in various applications.
+
+**Do not geocode from Zip codes** There are several issues and
+limitations associated with geocoding solely based on zip codes:
+
+- Lack of Precision: Zip codes are designed to cover a group of
+  addresses or an area, not specific points. Therefore, geocoding based
+  solely on a zip code provides only an approximation of the location,
+  often at the center or centroid of the zip code area. This lack of
+  precision can be problematic for applications that require accurate
+  coordinates.
+
+- Zip Code Boundaries: Zip code boundaries can be irregular and may not
+  align with natural or administrative boundaries. This means that
+  geocoding based on zip codes can result in coordinates that do not
+  reflect the actual geography of the area, leading to inaccuracies.
+
+- Zip Code Changes: Zip code boundaries and assignments can change over
+  time due to population growth, urban development, or administrative
+  reasons. Geocoding based on outdated zip code data can lead to
+  incorrect locations.
+
+- Large Zip Codes: Some zip codes cover vast geographic areas,
+  especially in rural regions. Geocoding to the center of such large zip
+  code areas can be highly inaccurate for specific locations within that
+  area.
+
+- Overlapping Zip Codes: In some cases, zip codes may overlap with one
+  another. Geocoding based solely on a zip code may not distinguish
+  between the overlapping areas, leading to ambiguity.
+
+- Urban Density: In densely populated urban areas, zip codes can be
+  small and densely packed with addresses. Geocoding solely by zip code
+  may still result in a lack of precision when trying to identify a
+  particular location within a zip code.
+
+### Step 2: Prepare Your Data
+
+`mysterycall_geocode()` accepts a CSV file path. Under the hood it calls
+the Google Maps Geocoding API via
+[`ggmap::geocode()`](https://rdrr.io/pkg/ggmap/man/geocode.html) — the
+same service AHRQ uses for practice-location geocoding. You will need a
+Google Maps API key with the Geocoding API enabled; set it in your
+`.Renviron` file:
+
+    GOOGLE_MAPS_API_KEY=AIza...
+
+**Deduplicate addresses before geocoding.** If 300 providers share 150
+unique practice addresses, geocode the 150 unique addresses and join
+back — this halves your API usage and cost.
+
+``` r
+roster <- readr::read_csv("providers.csv")
+
+# Deduplicate: geocode each unique address once
+unique_addresses <- roster |>
+  dplyr::distinct(address, .keep_all = FALSE)
+
+readr::write_csv(unique_addresses, "data/unique_addresses.csv")
+
+geocoded <- mysterycall_geocode(
+  file_path           = "data/unique_addresses.csv",
+  google_maps_api_key = Sys.getenv("GOOGLE_MAPS_API_KEY"),
+  output_file_path    = "data/geocoded_unique_addresses.csv"
+)
+```
+
+The output CSV adds `lon` and `lat` columns (decimal degrees, WGS84)
+plus a `geocode_status` column (`"OK"`, `"ZERO_RESULTS"`, or
+`"REQUEST_DENIED"`). Always inspect the status column before proceeding:
+
+``` r
+table(geocoded$geocode_status)
+#> OK            ZERO_RESULTS
+#> 147           3
+
+# Rows with ZERO_RESULTS need manual address correction
+failed <- geocoded[geocoded$geocode_status != "OK", ]
+```
+
+### Step 3: Extract lat / long and rejoin to the full roster
+
+The geocoded result has one row per unique address. Rejoin to the full
+provider roster with
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+so every provider row gets coordinates, and so any address-matching
+failures are visible rather than silent.
+
+``` r
+# Rename output columns to match the isochrone workflow expectation
+geocoded_clean <- geocoded |>
+  dplyr::filter(geocode_status == "OK") |>
+  dplyr::rename(lat = lat, long = lon) |>
+  dplyr::select(address, lat, long)
+
+roster_geocoded <- mysterycall_safe_left_join(
+  left         = roster,
+  right        = geocoded_clean,
+  by           = "address",
+  label_left   = "provider_roster",
+  label_right  = "geocoded_addresses",
+  min_coverage = 0.97   # flag if > 3 % of providers have no coordinates
+)
+```
+
+### Step 4: Extract coordinate columns when needed
+
+Some downstream functions
+(e.g. [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md))
+expect separate numeric `lat` and `long` columns rather than an `sf`
+geometry column. If you are working with an `sf` object, extract
+coordinates with:
+
+``` r
+roster_geocoded <- roster_geocoded |>
+  dplyr::mutate(
+    lat  = sf::st_coordinates(.)[, "Y"],
+    long = sf::st_coordinates(.)[, "X"]
+  )
+```
+
+### Common address formatting issues
+
+Google’s geocoder is tolerant but some patterns fail consistently:
+
+| Problem | Example | Fix |
+|----|----|----|
+| Suite/unit in wrong position | `"Suite 200, 123 Main St"` | Move to end: `"123 Main St Suite 200"` |
+| Missing state | `"123 Main St, Denver"` | Append state: `"123 Main St, Denver, CO"` |
+| PO Box | `"PO Box 1234, Denver CO"` | Use physical address instead |
+| Abbreviation mismatch | `"St." vs "Street"` | Standardize before geocoding |
+| ZIP+4 format | `"80202-1234"` | Truncate to 5-digit ZIP |
+
+**Do not geocode from ZIP codes alone.** ZIP-code centroids place
+practices at the post-office, not the clinic — a meaningful spatial
+error that compounds in the isochrone step.
+
+## Conclusion
+
+`mysterycall_geocode()` converts raw practice addresses into
+latitude/longitude coordinates suitable for mapping, drive-time
+modeling, and spatial joins. Combine it with
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+to build a fully enriched provider roster — from NPI retrieval through
+geocoded locations — in a single reproducible pipeline. Next, pass the
+geocoded file into
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+to build drive-time polygons (see
+[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md)).
+
+## Features and bugs
+
+If you have ideas for other features that would make geocoding easier,
+or find a bug, the best approach is to report it at the package issue
+tracker.

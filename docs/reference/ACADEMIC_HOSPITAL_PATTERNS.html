@@ -11,7 +11,7 @@ and moderate (0.75-0.84)."><meta property="og:image" content="https://github.com
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,9 @@ and moderate (0.75-0.84)."><meta property="og:image" content="https://github.com
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started with mysterycall</a></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
+    <li><a class="dropdown-item" href="../articles/mystery-caller-workflow.html">Mystery Caller Workflow: From Raw Data to Manuscript</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
@@ -35,6 +37,7 @@ and moderate (0.75-0.84)."><meta property="og:image" content="https://github.com
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -47,8 +50,12 @@ and moderate (0.75-0.84)."><meta property="og:image" content="https://github.com
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -93,6 +100,11 @@ and moderate (0.75-0.84).</p>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A named list of character vectors of hospital name patterns,
+grouped by confidence tier.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns</a></code>,
 <code><a href="KNOWN_ACADEMIC_INSTITUTIONS.html">KNOWN_ACADEMIC_INSTITUTIONS</a></code></p>
@@ -103,7 +115,10 @@ and moderate (0.75-0.84).</p>
 <code><a href="MEDICAL_SCHOOL_INDICATORS.html">MEDICAL_SCHOOL_INDICATORS</a></code>,
 <code><a href="MEDICARE_GME_INDICATORS.html">MEDICARE_GME_INDICATORS</a></code>,
 <code><a href="NCI_CANCER_CENTERS.html">NCI_CANCER_CENTERS</a></code>,
-<code><a href="NIH_CTSA_HUBS.html">NIH_CTSA_HUBS</a></code></p></div>
+<code><a href="NIH_CTSA_HUBS.html">NIH_CTSA_HUBS</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
+<code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -114,7 +129,6 @@ and moderate (0.75-0.84).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UNIVERSITY OF"           "MEDICAL SCHOOL"         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "SCHOOL OF MEDICINE"      "TEACHING HOSPITAL"      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "ACADEMIC MEDICAL CENTER" "ACADEMIC HEALTH CENTER" </span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -126,7 +140,7 @@ and moderate (0.75-0.84).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer></div>

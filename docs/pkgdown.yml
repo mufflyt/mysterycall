@@ -2,14 +2,20 @@ pandoc: 3.6.4
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  adding-covariates: adding-covariates.html
   aggregating_provider_data: aggregating_provider_data.html
   create_isochrones: create_isochrones.html
+  data-cleaning: data-cleaning.html
   data-quality: data-quality.html
   geocode: geocode.html
   get_census_data: get_census_data.html
+  getting_started: getting_started.html
   imotive-news: imotive-news.html
+  linear-mixed-models: linear-mixed-models.html
+  logistic-model: logistic-model.html
   mapping: mapping.html
   my-vignette: my-vignette.html
+  mystery-caller-workflow: mystery-caller-workflow.html
   pipeline-guarantees: pipeline-guarantees.html
   power-analysis: power-analysis.html
   provider-classification: provider-classification.html
@@ -17,7 +23,8 @@ articles:
   statistical-analysis: statistical-analysis.html
   table-generation: table-generation.html
   workflow-orchestration: workflow-orchestration.html
-last_built: 2026-05-17T03:05Z
+  writing-results-section: writing-results-section.html
+last_built: 2026-07-19T03:32Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles
