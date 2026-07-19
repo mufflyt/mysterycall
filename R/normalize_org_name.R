@@ -47,7 +47,7 @@ mysterycall_normalize_org_name <- function(
   # delete apostrophes/quotes entirely so "Women's" and "Womens" collapse alike,
   # and delete periods so abbreviated suffixes like "P.A." become "PA" and get
   # dropped below (rather than splitting into stray single letters)
-  x <- gsub("[‘’'`]", "", x)
+  x <- gsub("[\u2018\u2019'`]", "", x)
   x <- gsub(".", "", x, fixed = TRUE)
   x <- toupper(x)
   if (expand_ampersand) x <- gsub("&", " AND ", x, fixed = TRUE)

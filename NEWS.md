@@ -1,4 +1,4 @@
-# mysterycall (development version)
+# mysterycall 1.6.3
 
 ## New functions
 
