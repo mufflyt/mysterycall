@@ -2,6 +2,28 @@
 
 ## New functions
 
+Matched-pair within-practice analyses, generalized from the `labubu`
+mystery-caller study (which hand-rolled them). The matched-pair design -- the
+same practice called under two scenarios (insurance types, caller personas) --
+is the package's core paradigm, but the package previously offered only the
+unmatched GLMM; these add the matched comparison that removes each practice's
+baseline generosity:
+
+- `mysterycall_paired_acceptance_mcnemar()`: exact McNemar test on a binary
+  acceptance outcome for each pairwise scenario contrast -- discordant split,
+  odds ratio, exact p-value, and the minimum detectable odds ratio at a chosen
+  power (effective n is the discordant count, since only discordant practices
+  carry information).
+- `mysterycall_paired_wait_within_practice()`: the continuous analogue -- pairs
+  practices called under both scenarios, reports the mean within-practice wait
+  difference with a paired-t CI, the paired t-test and Wilcoxon signed-rank
+  p-values, and the minimum detectable difference in days.
+
+(Scenario-stratified acceptance/wait summaries the same study also produced are
+already covered by `mysterycall_acceptance_rate()` and
+`mysterycall_wait_time_summary()` with `group_by = "scenario"`, so no new
+function was added for those.)
+
 A third batch, generalized from `grace-ent`'s reviewer-response analyses --
 model-robustness and non-response reporting helpers:
 
