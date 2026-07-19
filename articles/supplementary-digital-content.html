@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +143,8 @@ offer and a Poisson GLMM for the wait.</p>
 <span>  call_date  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2026-01-05"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">40</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  state      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">st</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  city       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cities</span><span class="op">)</span><span class="op">[</span><span class="va">st</span><span class="op">]</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  area       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metro"</span>, <span class="st">"Nonmetro"</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  area       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metro"</span>, <span class="st">"Nonmetro"</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  degree     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MD"</span>, <span class="st">"DO"</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">med</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">insurance</span> <span class="op">==</span> <span class="st">"Medicaid"</span></span>
 <span><span class="va">d</span><span class="op">$</span><span class="va">reached</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0.92</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>   <span class="co"># some calls never reached a live office</span></span>
@@ -188,13 +189,13 @@ coefficient to its term.</p>
 <span><span class="va">tS1</span></span>
 <span><span class="co">#&gt; Multi-model regression table  [OR (95% CI)]</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;  Term                Crude                        Adjusted                    </span></span>
-<span><span class="co">#&gt;  insuranceCommercial Ref.                         Ref.                        </span></span>
-<span><span class="co">#&gt;  insuranceMedicaid   0.38 (0.23-0.64) | p=&lt; 0.001 0.38 (0.22-0.64) | p=&lt; 0.001</span></span>
-<span><span class="co">#&gt;  areaMetro                                        Ref.                        </span></span>
-<span><span class="co">#&gt;  areaNonmetro                                     0.67 (0.39-1.12) | p=0.126  </span></span>
-<span><span class="co">#&gt;  N                   300                          300                         </span></span>
-<span><span class="co">#&gt;  AIC                 353.5                        353.1                       </span></span>
+<span><span class="co">#&gt;  Term                Crude                      Adjusted                  </span></span>
+<span><span class="co">#&gt;  insuranceCommercial Ref.                       Ref.                      </span></span>
+<span><span class="co">#&gt;  insuranceMedicaid   0.49 (0.30-0.80) | p=0.005 0.49 (0.30-0.80) | p=0.005</span></span>
+<span><span class="co">#&gt;  areaMetro                                      Ref.                      </span></span>
+<span><span class="co">#&gt;  areaNonmetro                                   0.86 (0.52-1.41) | p=0.538</span></span>
+<span><span class="co">#&gt;  N                   300                        300                       </span></span>
+<span><span class="co">#&gt;  AIC                 372.4                      374.0                     </span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------</span></span></code></pre></div>
 <p><strong>Table S2 — the disparity, with confidence
 intervals.</strong></p>
@@ -205,14 +206,14 @@ intervals.</strong></p>
 <span><span class="co">#&gt; Disparity table -- 2 groups | ref: 'Commercial' | wilson 95% CI</span></span>
 <span><span class="co">#&gt; Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; Commercial                150    121    80.7%  73.6%-86.2%          (ref)  1.00 (ref)              (ref)</span></span>
-<span><span class="co">#&gt; Medicaid                  150     92    61.3%  53.3%-68.8%       -19.3 pp  0.76 (0.65-0.88)        p &lt; 0.001</span></span></code></pre></div>
+<span><span class="co">#&gt; Commercial                150    114    76.0%  68.6%-82.1%          (ref)  1.00 (ref)              (ref)</span></span>
+<span><span class="co">#&gt; Medicaid                  150     91    60.7%  52.7%-68.1%       -15.3 pp  0.80 (0.68-0.93)        p = 0.004</span></span></code></pre></div>
 <p><strong>Table S3 — adjusted effect on the absolute
 scale.</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_combined_results_table.html">mysterycall_combined_results_table</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance</span></span>
-<span><span class="co">#&gt; 1 insuranceMedicaid 1.56  1.44-1.68 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;            *</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 insuranceMedicaid 1.52  1.41-1.64 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;            *</span></span></code></pre></div>
 <p><strong>Table S4 — this study against prior work.</strong></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -248,9 +249,9 @@ completely at random” and a threat to validity.</p>
 <span>  <span class="va">d</span>, outcome_col <span class="op">=</span> <span class="st">"wait_days"</span>, group_col <span class="op">=</span> <span class="st">"insurance"</span><span class="op">)</span></span>
 <span><span class="va">miss</span><span class="op">$</span><span class="va">summary</span></span>
 <span><span class="co">#&gt;    variable n_observed n_missing pct_missing       test statistic df    p_value</span></span>
-<span><span class="co">#&gt; 1 insurance        300         0        38.3 Chi-square  4.075206  1 0.04351697</span></span>
+<span><span class="co">#&gt; 1 insurance        300         0        40.7 Chi-square  2.707681  1 0.09986607</span></span>
 <span><span class="co">#&gt;   significant</span></span>
-<span><span class="co">#&gt; 1        TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1       FALSE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="per-caller-evaluation">5. Per-caller evaluation<a class="anchor" aria-label="anchor" href="#per-caller-evaluation"></a>
@@ -264,11 +265,11 @@ would flag a standardization problem.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span>, caller_col <span class="op">=</span> <span class="st">"caller"</span>, date_col <span class="op">=</span> <span class="st">"call_date"</span>, outcome_col <span class="op">=</span> <span class="st">"appt_offered"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   caller n_calls n_days calls_per_day n_accepted acceptance_rate mean_hold_sec</span></span>
-<span><span class="co">#&gt; 1    RA2      74     23      3.217391         52           70.3%            NA</span></span>
-<span><span class="co">#&gt; 2    RA4      58     18      3.222222         44           75.9%            NA</span></span>
-<span><span class="co">#&gt; 3    RA5      58     21      2.761905         41           70.7%            NA</span></span>
-<span><span class="co">#&gt; 4    RA1      56     18      3.111111         39           69.6%            NA</span></span>
-<span><span class="co">#&gt; 5    RA3      54     19      2.842105         37           68.5%            NA</span></span>
+<span><span class="co">#&gt; 1    RA2      74     23      3.217391         45           60.8%            NA</span></span>
+<span><span class="co">#&gt; 2    RA4      58     18      3.222222         41           70.7%            NA</span></span>
+<span><span class="co">#&gt; 3    RA5      58     21      2.761905         43           74.1%            NA</span></span>
+<span><span class="co">#&gt; 4    RA1      56     18      3.111111         40           71.4%            NA</span></span>
+<span><span class="co">#&gt; 5    RA3      54     19      2.842105         36           66.7%            NA</span></span>
 <span><span class="co">#&gt;   mean_call_sec</span></span>
 <span><span class="co">#&gt; 1            NA</span></span>
 <span><span class="co">#&gt; 2            NA</span></span>
@@ -395,9 +396,9 @@ to failure, then to success:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_outcome_bounds.html">mysterycall_outcome_bounds</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"appt_offered"</span>, observed <span class="op">=</span> <span class="st">"reached"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mysterycall outcome bounds under non-response&gt;</span></span>
-<span><span class="co">#&gt;   universe 300 = observed 270 + missing 30; positives 191</span></span>
-<span><span class="co">#&gt;   complete-case rate: 70.7%  (95% CI 65.1%-75.8%)</span></span>
-<span><span class="co">#&gt;   bounds over universe: [63.7% (all missing fail), 73.7% (all succeed)]  width 10.0%</span></span></code></pre></div>
+<span><span class="co">#&gt;   universe 300 = observed 280 + missing 20; positives 191</span></span>
+<span><span class="co">#&gt;   complete-case rate: 68.2%  (95% CI 62.5%-73.4%)</span></span>
+<span><span class="co">#&gt;   bounds over universe: [63.7% (all missing fail), 70.3% (all succeed)]  width 6.7%</span></span></code></pre></div>
 <p><strong>Leave-one-caller-out.</strong> Confirm the exposure effect
 does not hinge on a single research assistant by refitting with each
 caller dropped in turn:</p>
@@ -405,15 +406,15 @@ caller dropped in turn:</p>
 <code class="sourceCode R"><span><span class="va">fit_glm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">appt_offered</span> <span class="op">~</span> <span class="va">insurance</span> <span class="op">+</span> <span class="va">area</span>, <span class="va">binomial</span>, <span class="va">d</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_leave_one_out.html">mysterycall_leave_one_out</a></span><span class="op">(</span><span class="va">fit_glm</span>, <span class="va">d</span>, group <span class="op">=</span> <span class="st">"caller"</span>, term <span class="op">=</span> <span class="st">"insuranceMedicaid"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mysterycall leave-one-group-out: term 'insuranceMedicaid', 5 refits&gt;</span></span>
-<span><span class="co">#&gt;   full-data ratio: 0.38 (p = 0.000266)</span></span>
+<span><span class="co">#&gt;   full-data ratio: 0.49 (p = 0.00459)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   group_excluded     n estimate ratio std_error  p_value converged</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> RA1              244   -<span style="color: #BB0000;">0.998</span> 0.369     0.298 0.000<span style="text-decoration: underline;">807</span> TRUE     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> RA2              226   -<span style="color: #BB0000;">1.06</span>  0.345     0.316 0.000<span style="text-decoration: underline;">743</span> TRUE     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> RA3              246   -<span style="color: #BB0000;">0.824</span> 0.439     0.294 0.004<span style="text-decoration: underline;">99</span>  TRUE     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> RA4              242   -<span style="color: #BB0000;">1.01</span>  0.363     0.294 0.000<span style="text-decoration: underline;">570</span> TRUE     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> RA5              242   -<span style="color: #BB0000;">1.00</span>  0.368     0.298 0.000<span style="text-decoration: underline;">796</span> TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;   group_excluded     n estimate ratio std_error p_value converged</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> RA1              244   -<span style="color: #BB0000;">0.570</span> 0.566     0.278 0.040<span style="text-decoration: underline;">5</span>  TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> RA2              226   -<span style="color: #BB0000;">0.786</span> 0.455     0.301 0.009<span style="text-decoration: underline;">10</span> TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> RA3              246   -<span style="color: #BB0000;">0.730</span> 0.482     0.282 0.009<span style="text-decoration: underline;">56</span> TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> RA4              242   -<span style="color: #BB0000;">0.614</span> 0.541     0.280 0.028<span style="text-decoration: underline;">4</span>  TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> RA5              242   -<span style="color: #BB0000;">0.918</span> 0.399     0.283 0.001<span style="text-decoration: underline;">19</span> TRUE</span></span></code></pre></div>
 <p>Other analyses worth including, each a single call: the wait model
 under an alternative count family
 (<code><a href="../reference/mysterycall_compare_count_families.html">mysterycall_compare_count_families()</a></code>), calendar vs.
@@ -423,26 +424,145 @@ physician”), and Benjamini–Hochberg-adjusted p-values
 (<code><a href="../reference/mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust()</a></code>).</p>
 </div>
 <div class="section level2">
-<h2 id="export-and-manifest">10. Export and manifest<a class="anchor" aria-label="anchor" href="#export-and-manifest"></a>
+<h2 id="baseline-characteristics-table-1">10. Baseline characteristics (Table 1)<a class="anchor" aria-label="anchor" href="#baseline-characteristics-table-1"></a>
+</h2>
+<p>Reviewers want to know who was sampled.
+<code><a href="../reference/mysterycall_table1.html">mysterycall_table1()</a></code> builds a publication-ready baseline
+table at the practice level:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">practices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"state"</span>, <span class="st">"area"</span>, <span class="st">"degree"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/mysterycall_table1.html">mysterycall_table1</a></span><span class="op">(</span><span class="va">practices</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"degree"</span><span class="op">)</span>,</span>
+<span>                   stratify_by <span class="op">=</span> <span class="st">"area"</span>, include_overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Table 1 (Overall N=150, Metro N=67, Nonmetro N=83)</span></span>
+<span><span class="co">#&gt; Stratified by: area</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 6</span></span></span>
+<span><span class="co">#&gt;   variable level Overall     `Metro (N=67)` `Nonmetro (N=83)` p_value</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> state    CA    29 (19.3%)  16 (23.9%)     13 (15.7%)        0.046  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> state    CO    27 (18.0%)  12 (17.9%)     15 (18.1%)        <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> state    FL    36 (24.0%)  11 (16.4%)     25 (30.1%)        <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> state    IL    15 (10.0%)  4 (6.0%)       11 (13.3%)        <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> state    NY    20 (13.3%)  14 (20.9%)     6 (7.2%)          <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> state    TX    23 (15.3%)  10 (14.9%)     13 (15.7%)        <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> degree   DO    42 (28.0%)  16 (23.9%)     26 (31.3%)        0.313  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> degree   MD    108 (72.0%) 51 (76.1%)     57 (68.7%)        <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="full-model-output-icc-and-variance-components">11. Full model output: ICC and variance components<a class="anchor" aria-label="anchor" href="#full-model-output-icc-and-variance-components"></a>
+</h2>
+<p>The SDC should report more than the exposure coefficient — the
+clustering matters. <code><a href="../reference/mysterycall_icc.html">mysterycall_icc()</a></code> gives the intraclass
+correlation (how much of the variation sits between practices), and
+<code><a href="../reference/mysterycall_random_effect_variance.html">mysterycall_random_effect_variance()</a></code> the variance
+components:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_icc.html">mysterycall_icc</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Intraclass Correlation Coefficient (latent_variable_poisson)</span></span>
+<span><span class="co">#&gt;   ICC       = 0.0000</span></span>
+<span><span class="co">#&gt;   sigma2_u  = 0.0000  (physician random-intercept variance)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ICC = 0.000: 0.0% of outcome variance is attributable to between-physician clustering.</span></span>
+<span><span class="fu"><a href="../reference/mysterycall_random_effect_variance.html">mysterycall_random_effect_variance</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">$</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $icc</span></span>
+<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $random_variance</span></span>
+<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $residual_variance</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $random_effect_group</span></span>
+<span><span class="co">#&gt; [1] "npi"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $var_table</span></span>
+<span><span class="co">#&gt;   grp        var1 var2 vcov sdcor Significant</span></span>
+<span><span class="co">#&gt; 1 npi (Intercept) &lt;NA&gt;    0     0          No</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $interpretation</span></span>
+<span><span class="co">#&gt; [1] "low"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $sentence</span></span>
+<span><span class="co">#&gt; [1] "The intraclass correlation (ICC) of the model for the random effect group 'npi' is 0. An ICC of 0 is considered low, suggesting that most variance is at the individual level rather than between groups of 'npi'."</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="a-priori-power">12. A priori power<a class="anchor" aria-label="anchor" href="#a-priori-power"></a>
+</h2>
+<p>Journals require the pre-specified power calculation.
+<code><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power()</a></code> sizes the wait-time comparison
+for a target incidence-rate ratio:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.40</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>, power <span class="op">=</span> <span class="fl">0.80</span>,</span>
+<span>                          both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $n_per_arm</span></span>
+<span><span class="co">#&gt; [1] 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $n_total</span></span>
+<span><span class="co">#&gt; [1] 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $n_total_calls</span></span>
+<span><span class="co">#&gt; [1] 18</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $irr</span></span>
+<span><span class="co">#&gt; [1] 1.4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $lambda_ref</span></span>
+<span><span class="co">#&gt; [1] 14</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $lambda_trt</span></span>
+<span><span class="co">#&gt; [1] 19.6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $alpha</span></span>
+<span><span class="co">#&gt; [1] 0.05</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $power</span></span>
+<span><span class="co">#&gt; [1] 0.8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $design_effect</span></span>
+<span><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="model-diagnostics">13. Model diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
+</h2>
+<p>A residual figure justifies the model.
+<code><a href="../reference/mysterycall_plot_residuals.html">mysterycall_plot_residuals()</a></code> draws the diagnostic panel,
+and the fitted object already carries the overdispersion check:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_plot_residuals.html">mysterycall_plot_residuals</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="supplementary-digital-content_files/figure-html/diagnostics-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level2">
+<h2 id="reproducibility">14. Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
+</h2>
+<p>Finally, a reproducibility appendix — the R and package versions the
+analysis ran under, so the SDC is a complete, re-runnable record:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_session_snapshot.html">mysterycall_session_snapshot</a></span><span class="op">(</span></span>
+<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"session_snapshot.txt"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  notes <span class="op">=</span> <span class="st">"Supplementary digital content build"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="export-and-manifest">15. Export and manifest<a class="anchor" aria-label="anchor" href="#export-and-manifest"></a>
 </h2>
 <p>Write each artifact in the format the journal wants — a CSV per table
 is the most portable, <code><a href="../reference/mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>
 gives formatted Word (needs officer/flextable), and
 <code><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables()</a></code> bundles every model table
 into one workbook (needs openxlsx):</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">tS1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS1_models.csv"</span><span class="op">)</span>,</span>
 <span>          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">tS2</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS2_disparities.csv"</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">crisp</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"ChecklistS1_CRiSP.csv"</span><span class="op">)</span>,</span>
 <span>          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables</a></span><span class="op">(</span></span>
 <span>  logistic_fit <span class="op">=</span> <span class="va">offer_adjusted</span>, poisson_fit <span class="op">=</span> <span class="va">wait_model</span>,</span>
 <span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"supplemental_tables.xlsx"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, a manifest — reviewers appreciate it, and it doubles as a
 build check:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">sdc_dir</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  file <span class="op">=</span> <span class="va">files</span>,</span>
@@ -455,20 +575,24 @@ build check:</p>
 <span><span class="co">#&gt; 3         figS1_forest.pdf figure</span></span>
 <span><span class="co">#&gt; 4         figS1_forest.png figure</span></span>
 <span><span class="co">#&gt; 5        figS1_forest.tiff figure</span></span>
-<span><span class="co">#&gt; 6 supplemental_tables.xlsx bundle</span></span>
-<span><span class="co">#&gt; 7       TableS1_models.csv  table</span></span>
-<span><span class="co">#&gt; 8  TableS2_disparities.csv  table</span></span></code></pre></div>
+<span><span class="co">#&gt; 6     session_snapshot.txt  other</span></span>
+<span><span class="co">#&gt; 7 supplemental_tables.xlsx bundle</span></span>
+<span><span class="co">#&gt; 8       TableS1_models.csv  table</span></span>
+<span><span class="co">#&gt; 9  TableS2_disparities.csv  table</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="recap">Recap<a class="anchor" aria-label="anchor" href="#recap"></a>
 </h2>
 <p>Every piece of a mystery-caller study’s supplementary digital content
-— the model equations, the crude-vs-adjusted and disparity tables, the
-missingness analysis, the per-caller evaluation, the forest and
-cumulative-access figures at journal specification, the practice and
-district maps, and the STROBE <strong>and</strong> CRiSP reporting
-checklists — comes from the same fitted models and call log with one
-call apiece, so the SDC regenerates itself whenever the analysis is
+— the model equations, a baseline Table 1, the crude-vs-adjusted and
+disparity tables, the ICC and variance components, the missingness
+analysis, the per-caller evaluation, the a-priori power calculation, the
+forest, cumulative-access, and residual figures at journal
+specification, the practice and district maps, the STROBE
+<strong>and</strong> CRiSP reporting checklists, non-response and
+leave-one-caller-out sensitivity analyses, and a reproducibility
+appendix — comes from the same fitted models and call log with one call
+apiece, so the SDC regenerates itself whenever the analysis is
 re-run.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
