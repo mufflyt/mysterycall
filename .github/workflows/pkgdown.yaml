@@ -23,13 +23,7 @@ concurrency:
 
 jobs:
   pkgdown:
-    # Pinned to 22.04: on ubuntu-latest (24.04) pkgdown segfaults (exit 139,
-    # "memory not mapped") inside xml2::xml_add_sibling() while inserting the
-    # site logo on the home page. The crash is independent of the xml2 R-package
-    # version (both 1.6.0 and 1.5.2 crash on 24.04, yet 1.5.2 builds cleanly
-    # locally), so the trigger is 24.04's system libxml2. 22.04's libxml2 builds
-    # the site without crashing.
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -46,6 +40,15 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
+          # Pinned to 4.5.1: the latest R (4.6.1) segfaults pkgdown (exit 139,
+          # "memory not mapped") inside xml2::xml_add_sibling() while inserting
+          # the site logo on the home page. Verified by elimination -- the crash
+          # is independent of the xml2 package version (both 1.6.0 and 1.5.2
+          # crash, even a source rebuild) and of the runner OS (24.04 and 22.04
+          # both crash), while pkgdown 2.2.1 + xml2 1.5.2 build cleanly on R
+          # 4.4.2/4.5.x. It is an R 4.6.1 / xml2 ABI incompatibility. Unpin once
+          # a CRAN xml2 compatible with R 4.6 is released.
+          r-version: '4.5.1'
           use-public-rspm: true
 
       - name: Install system dependencies (Linux)
@@ -64,7 +67,7 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
           cache: true
-          cache-version: 5
+          cache-version: 6
 
       - name: Build pkgdown site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
