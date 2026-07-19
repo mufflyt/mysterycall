@@ -130,6 +130,9 @@
   mysterycall’s prose builders, with every direction word tied to the
   sign of the data so the narrative can never contradict the tables.
 
+- [Assembling supplementary digital
+  content](https://mufflyt.github.io/mysterycall/articles/supplementary-digital-content.md):
+
 ### News
 
 - [Imotive News &

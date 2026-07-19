@@ -25,6 +25,7 @@ You will need:
     before running:
 
 ``` r
+
 Sys.setenv(HERE_API_KEY = "your-here-key")
 ```
 
@@ -63,6 +64,7 @@ traced back to the originating provider.
 The typical four-step pattern:
 
 ``` r
+
 library(mysterycall)
 
 # 1. Geocode practice addresses → lat/long
@@ -122,6 +124,7 @@ row is one isochrone polygon. Key added columns:
 | all input columns | All non-geometry columns from the source row are retained |
 
 ``` r
+
 # Inspect the result
 names(isochrones_sf)
 
@@ -156,6 +159,7 @@ recent checkpoint and pass the completed `point_index` values so they
 are skipped:
 
 ``` r
+
 # Load the most recent checkpoint
 checkpoints <- list.files("data/isochrone_checkpoints", pattern = "\\.rds$",
                            full.names = TRUE)
@@ -207,6 +211,7 @@ geometries to calculate the reachable female population within each
 travel-time band:
 
 ``` r
+
 # Load the enriched block group layer (built in the Census vignette)
 bg_sf <- readr::read_rds("data/block_groups_with_demographics.rds")
 

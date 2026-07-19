@@ -16,9 +16,8 @@ Please read it before participating.
 1.  Search [existing
     issues](https://github.com/mufflyt/mysterycall/issues) first.
 2.  Open a new issue using the **Bug report** template.
-3.  Include a minimal reproducible example
-    ([`reprex::reprex()`](https://reprex.tidyverse.org/reference/reprex.html)),
-    the output of
+3.  Include a minimal reproducible example (`reprex::reprex()`), the
+    output of
     [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html), and the
     exact error message.
 
@@ -32,6 +31,7 @@ X because Y” — rather than jumping to a proposed implementation.
 ## Development setup
 
 ``` r
+
 # Clone and open the project
 usethis::create_from_github("mufflyt/mysterycall", fork = TRUE)
 
@@ -78,12 +78,14 @@ Key tools used in this project:
 5.  Regenerate documentation:
 
     ``` r
+
     devtools::document()
     ```
 
 6.  Run the full check and fix any errors, warnings, or notes:
 
     ``` r
+
     devtools::check()
     ```
 
@@ -92,8 +94,7 @@ Key tools used in this project:
 
 ### PR checklist
 
-[`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
-produces 0 errors and 0 warnings
+`devtools::check()` produces 0 errors and 0 warnings
 
 New or changed functions have roxygen docs (`@param`, `@return`,
 `@examples`)
@@ -132,6 +133,7 @@ Tests added or updated
 - Test labels follow `"function: case → expected"`, e.g.:
 
   ``` r
+
   test_that("validate_phone: NA input → flag 'missing'", { ... })
   ```
 
@@ -150,9 +152,7 @@ Tests added or updated
 2.  Add the function to the appropriate section of `_pkgdown.yml`.
 3.  Write tests in `tests/testthat/test-function-name.R`.
 4.  Add a `NEWS.md` entry under `## New features`.
-5.  Run
-    [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-    to update `NAMESPACE` and `.Rd` files.
+5.  Run `devtools::document()` to update `NAMESPACE` and `.Rd` files.
 
 ------------------------------------------------------------------------
 

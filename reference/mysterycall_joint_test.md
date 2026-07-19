@@ -59,6 +59,6 @@ d <- data.frame(
 fit <- glm(y ~ grp + x, family = binomial, data = d)
 mysterycall_joint_test(fit, "grp")
 #> <mysterycall joint LRT: grp>
-#>   chi-square(3) = 6.83, p = 0.0775
+#>   chi-square(3) = 7.15, p = 0.0673
 #>   dropped: grp
 ```

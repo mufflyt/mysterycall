@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Data Quality: Phone Validation, Name Parsing, and Safe Joins">
@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
+    <li><a class="dropdown-item" href="../articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -110,7 +111,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Data Quality: Phone Validation, Name Parsing, and Safe Joins</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/data-quality.Rmd" class="external-link"><code>vignettes/data-quality.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/data-quality.Rmd" class="external-link"><code>vignettes/data-quality.Rmd</code></a></small>
       <div class="d-none name"><code>data-quality.Rmd</code></div>
     </div>
 
@@ -167,12 +168,24 @@ belongs to the provider’s reported practice state using the bundled
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A well-formed Colorado number</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"(303) 555-1234"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
+<span><span class="co">#&gt; 1             TRUE       303                   CO                            NA</span></span>
+<span><span class="co">#&gt;   phone_validity_flag</span></span>
+<span><span class="co">#&gt; 1               valid</span></span>
 <span></span>
 <span><span class="co"># Missing number</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="cn">NA_character_</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
+<span><span class="co">#&gt; 1            FALSE      &lt;NA&gt;                 &lt;NA&gt;                            NA</span></span>
+<span><span class="co">#&gt;   phone_validity_flag</span></span>
+<span><span class="co">#&gt; 1             missing</span></span>
 <span></span>
 <span><span class="co"># Non-NANP format (too few digits)</span></span>
-<span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"555-1234"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"555-1234"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
+<span><span class="co">#&gt; 1            FALSE      &lt;NA&gt;                 &lt;NA&gt;                            NA</span></span>
+<span><span class="co">#&gt;   phone_validity_flag</span></span>
+<span><span class="co">#&gt; 1      invalid_format</span></span></code></pre></div>
 <p>The function always returns a data frame with five columns:</p>
 <table class="table">
 <colgroup>
@@ -259,7 +272,11 @@ table</td>
 whose area code is registered to a different state:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colorado provider with a New York area code</span></span>
-<span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"(212) 555-0199"</span>, practice_state <span class="op">=</span> <span class="st">"CO"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"(212) 555-0199"</span>, practice_state <span class="op">=</span> <span class="st">"CO"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
+<span><span class="co">#&gt; 1            FALSE       212                   NY                         FALSE</span></span>
+<span><span class="co">#&gt;        phone_validity_flag</span></span>
+<span><span class="co">#&gt; 1 area_code_state_mismatch</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="validating-a-full-roster-column">Validating a full roster column<a class="anchor" aria-label="anchor" href="#validating-a-full-roster-column"></a>
@@ -279,7 +296,11 @@ whose area code is registered to a different state:</p>
 <span>  practice_state <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">practice_state</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">roster</span><span class="op">[</span><span class="st">"npi"</span><span class="op">]</span>, <span class="va">phone_results</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phone_e164_valid"</span>, <span class="st">"phone_validity_flag"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">roster</span><span class="op">[</span><span class="st">"npi"</span><span class="op">]</span>, <span class="va">phone_results</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phone_e164_valid"</span>, <span class="st">"phone_validity_flag"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                       npi phone_e164_valid phone_validity_flag</span></span>
+<span><span class="co">#&gt; (720) 555-0101 1234567890             TRUE               valid</span></span>
+<span><span class="co">#&gt; 999-0000       0987654321            FALSE      invalid_format</span></span>
+<span><span class="co">#&gt; (303) 867-5309 1111111111             TRUE               valid</span></span></code></pre></div>
 <p>The NANP lookup table is lazy-loaded once per session and cached
 internally, so repeated calls in a loop incur no extra I/O.</p>
 <hr>
@@ -324,7 +345,11 @@ review.</p>
 <h3 id="single-name">Single name<a class="anchor" aria-label="anchor" href="#single-name"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_parse_physician_name.html">mysterycall_parse_physician_name</a></span><span class="op">(</span><span class="st">"Smith, Jane, Jr."</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_parse_physician_name.html">mysterycall_parse_physician_name</a></span><span class="op">(</span><span class="st">"Smith, Jane, Jr."</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span></span>
+<span><span class="co">#&gt;   first_name middle_name last_name suffix title parse_confidence parse_warnings</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Jane       <span style="color: #BB0000;">NA</span>          Smith     Jr.    <span style="color: #BB0000;">NA</span>    high             <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="vectorised-over-a-column">Vectorised over a column<a class="anchor" aria-label="anchor" href="#vectorised-over-a-column"></a>
@@ -339,7 +364,15 @@ review.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_parse_physician_name.html">mysterycall_parse_physician_name</a></span><span class="op">(</span><span class="va">raw_names</span><span class="op">)</span></span>
-<span><span class="va">parsed</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first_name"</span>, <span class="st">"last_name"</span>, <span class="st">"suffix"</span>, <span class="st">"parse_confidence"</span>, <span class="st">"parse_warnings"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<span><span class="va">parsed</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first_name"</span>, <span class="st">"last_name"</span>, <span class="st">"suffix"</span>, <span class="st">"parse_confidence"</span>, <span class="st">"parse_warnings"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
+<span><span class="co">#&gt;   first_name last_name  suffix parse_confidence parse_warnings</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Maria      de la Cruz <span style="color: #BB0000;">NA</span>     high             <span style="color: #BB0000;">NA</span>            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> John       Smith      Jr.    high             <span style="color: #BB0000;">NA</span>            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Robert     Smith      DO     high             <span style="color: #BB0000;">NA</span>            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Linda      Do         <span style="color: #BB0000;">NA</span>     high             <span style="color: #BB0000;">NA</span>            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>     low              parsing_failed</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-the-built-in-physicians-dataset">Using the built-in <code>physicians</code> dataset<a class="anchor" aria-label="anchor" href="#using-the-built-in-physicians-dataset"></a>
@@ -351,7 +384,10 @@ review.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Confidence breakdown</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">parsed_physicians</span><span class="op">$</span><span class="va">parse_confidence</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">parsed_physicians</span><span class="op">$</span><span class="va">parse_confidence</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; high </span></span>
+<span><span class="co">#&gt; 4659</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="validating-parsed-output">Validating parsed output<a class="anchor" aria-label="anchor" href="#validating-parsed-output"></a>
@@ -364,10 +400,17 @@ quality problems in each row:</p>
 <span></span>
 <span><span class="co"># Overview of quality issues</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">validated</span><span class="op">$</span><span class="va">quality_issue</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; low_confidence_parse                 &lt;NA&gt; </span></span>
+<span><span class="co">#&gt;                    1                    4</span></span>
 <span></span>
 <span><span class="co"># Rows that are not valid (missing first or last name)</span></span>
 <span><span class="va">validated</span><span class="op">[</span><span class="op">!</span><span class="va">validated</span><span class="op">$</span><span class="va">is_valid</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first_name"</span>, <span class="st">"last_name"</span>,</span>
-<span>                                  <span class="st">"parse_confidence"</span>, <span class="st">"quality_issue"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<span>                                  <span class="st">"parse_confidence"</span>, <span class="st">"quality_issue"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   first_name last_name parse_confidence quality_issue       </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>        low              low_confidence_parse</span></span></code></pre></div>
 <p>Rows with <code>parse_confidence == "low"</code> or a
 non-<code>NA</code> <code>quality_issue</code> should be reviewed
 manually before use in call scripts.</p>
@@ -386,6 +429,7 @@ render names in a consistent house style:</p>
 <span>  format         <span class="op">=</span> <span class="st">"last_first"</span>,</span>
 <span>  include_suffix <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Smith, Jane A., MD"</span></span>
 <span></span>
 <span><span class="co"># Vectorised</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_format_physician_name.html">mysterycall_format_physician_name</a></span><span class="op">(</span></span>
@@ -393,7 +437,8 @@ render names in a consistent house style:</p>
 <span>  last_name   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Smith"</span>, <span class="st">"Cruz"</span><span class="op">)</span>,</span>
 <span>  suffix      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MD"</span>,    <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  format      <span class="op">=</span> <span class="st">"first_last"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "John Smith, MD" "Maria Cruz"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="built-in-edge-case-test-suite">Built-in edge-case test suite<a class="anchor" aria-label="anchor" href="#built-in-edge-case-test-suite"></a>
@@ -403,9 +448,66 @@ Vietnamese surnames, three-part comma, hyphenated names) that you can
 run at any time to verify parser behavior after an upgrade:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_test_name_parser.html">mysterycall_test_name_parser</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; === mysterycall name parser -- edge-case suite ===</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [1] 'John Smith'</span></span>
+<span><span class="co">#&gt;     first='John'  last='Smith'  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [2] 'Mary Johnson, MD'</span></span>
+<span><span class="co">#&gt;     first='Mary'  last='Johnson'  middle=''  suffix='MD'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [3] 'Robert Brown, Jr.'</span></span>
+<span><span class="co">#&gt;     first='Robert'  last='Brown'  middle=''  suffix='Jr.'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [4] 'Robert Smith DO'</span></span>
+<span><span class="co">#&gt;     first='Robert'  last='Smith'  middle=''  suffix='DO'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [5] 'Linda Do'</span></span>
+<span><span class="co">#&gt;     first='Linda'  last='Do'  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [6] 'Smith, John, Jr.'</span></span>
+<span><span class="co">#&gt;     first='John'  last='Smith'  middle=''  suffix='Jr.'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [7] 'Williams, Mary, Sr.'</span></span>
+<span><span class="co">#&gt;     first='Mary'  last='Williams'  middle=''  suffix='Sr.'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [8] 'Maria de la Cruz'</span></span>
+<span><span class="co">#&gt;     first='Maria'  last='de la Cruz'  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [9] 'Jan van der Berg'</span></span>
+<span><span class="co">#&gt;     first='Jan'  last='van der Berg'  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [10] 'Jean-Anthony P. Do'</span></span>
+<span><span class="co">#&gt;     first='Jean-Anthony'  last='Do'  middle='P.'  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [11] 'Mary-Ann O'Connor, MD, PhD'</span></span>
+<span><span class="co">#&gt;     first='Mary-Ann'  last='O'Connor'  middle=''  suffix='MD, PhD'</span></span>
+<span><span class="co">#&gt;     confidence=high  [OK]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [12] 'Madonna'</span></span>
+<span><span class="co">#&gt;     first='Madonna'  last=''  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=medium  [FAIL]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [13] 'Prince'</span></span>
+<span><span class="co">#&gt;     first='Prince'  last=''  middle=''  suffix=''</span></span>
+<span><span class="co">#&gt;     confidence=medium  [FAIL]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; --- 11/13 valid  |  11/13 high-confidence  |  0 quality issues ---</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%d / %d high-confidence valid parses\n"</span>,</span>
 <span>            <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">$</span><span class="va">is_valid</span> <span class="op">&amp;</span> <span class="va">tbl</span><span class="op">$</span><span class="va">parse_confidence</span> <span class="op">==</span> <span class="st">"high"</span><span class="op">)</span>,</span>
-<span>            <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 11 / 13 high-confidence valid parses</span></span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -462,6 +564,7 @@ these failures loud.</p>
 <span>  <span class="op">)</span><span class="op">)</span>,</span>
 <span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Caught: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Caught: Join coverage 66.7% below 95.0% threshold -- lost 1 rows. call_log -&gt; demographics on npi.</span></span>
 <span></span>
 <span><span class="co"># Lower threshold to match the actual coverage</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>
@@ -472,7 +575,11 @@ these failures loud.</p>
 <span>  label_right  <span class="op">=</span> <span class="st">"demographics"</span>,</span>
 <span>  min_coverage <span class="op">=</span> <span class="fl">0.60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">result</span></span></code></pre></div>
+<span><span class="va">result</span></span>
+<span><span class="co">#&gt;          npi       date gender</span></span>
+<span><span class="co">#&gt; 1 1111111111 2025-01-10 Female</span></span>
+<span><span class="co">#&gt; 2 2222222222 2025-01-11   Male</span></span>
+<span><span class="co">#&gt; 3 3333333333 2025-01-12   &lt;NA&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="key-type-harmonization">Key-type harmonization<a class="anchor" aria-label="anchor" href="#key-type-harmonization"></a>
@@ -489,7 +596,9 @@ sides to character:</p>
 <span>  label_left  <span class="op">=</span> <span class="st">"left"</span>,</span>
 <span>  label_right <span class="op">=</span> <span class="st">"right"</span>,</span>
 <span>  min_coverage <span class="op">=</span> <span class="fl">0</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          npi  x</span></span>
+<span><span class="co">#&gt; 1 1111111111 42</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="asserting-uniqueness-before-a-join">Asserting uniqueness before a join<a class="anchor" aria-label="anchor" href="#asserting-uniqueness-before-a-join"></a>
@@ -509,13 +618,15 @@ join:</p>
 <span>  <span class="fu"><a href="../reference/mysterycall_assert_unique_keys.html">mysterycall_assert_unique_keys</a></span><span class="op">(</span><span class="va">dupes</span>, key_cols <span class="op">=</span> <span class="st">"npi"</span>, label <span class="op">=</span> <span class="st">"demographics"</span><span class="op">)</span>,</span>
 <span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Caught: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Caught: demographics: expected unique key(s) [npi] but found 1 duplicate group(s) affecting 2 row(s). Samples: npi = 1111111111</span></span>
 <span></span>
 <span><span class="co"># Pass dedupe = TRUE to drop duplicates instead:</span></span>
 <span><span class="va">clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/mysterycall_assert_unique_keys.html">mysterycall_assert_unique_keys</a></span><span class="op">(</span><span class="va">dupes</span>, key_cols <span class="op">=</span> <span class="st">"npi"</span>,</span>
 <span>                                  label <span class="op">=</span> <span class="st">"demographics"</span>, dedupe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">clean</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">clean</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="inner-semi-and-anti-joins">Inner, semi, and anti joins<a class="anchor" aria-label="anchor" href="#inner-semi-and-anti-joins"></a>
@@ -531,6 +642,7 @@ join:</p>
 <span>  min_coverage <span class="op">=</span> <span class="fl">0.60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">result_inner</span><span class="op">)</span>   <span class="co"># 2 rows: only matched NPIs</span></span>
+<span><span class="co">#&gt; [1] 2</span></span>
 <span></span>
 <span><span class="co"># Semi join — keep left rows that match; no right columns added</span></span>
 <span><span class="va">matched_calls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_safe_semi_join.html">mysterycall_safe_semi_join</a></span><span class="op">(</span></span>
@@ -542,6 +654,9 @@ join:</p>
 <span>  min_coverage <span class="op">=</span> <span class="fl">0.60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">matched_calls</span>   <span class="co"># 2 rows, same columns as calls</span></span>
+<span><span class="co">#&gt;          npi       date</span></span>
+<span><span class="co">#&gt; 1 1111111111 2025-01-10</span></span>
+<span><span class="co">#&gt; 2 2222222222 2025-01-11</span></span>
 <span></span>
 <span><span class="co"># Anti join — keep left rows with NO match</span></span>
 <span><span class="va">unmatched_calls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_safe_anti_join.html">mysterycall_safe_anti_join</a></span><span class="op">(</span></span>
@@ -551,7 +666,9 @@ join:</p>
 <span>  label_left  <span class="op">=</span> <span class="st">"call_log"</span>,</span>
 <span>  label_right <span class="op">=</span> <span class="st">"demographics"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">unmatched_calls</span>   <span class="co"># 1 row: NPI 3333333333</span></span></code></pre></div>
+<span><span class="va">unmatched_calls</span>   <span class="co"># 1 row: NPI 3333333333</span></span>
+<span><span class="co">#&gt;          npi       date</span></span>
+<span><span class="co">#&gt; 1 3333333333 2025-01-12</span></span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -563,6 +680,14 @@ subspecialists with NPI and name. The block below demonstrates the full
 data-quality pipeline without any API calls.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span></span>
 <span><span class="co"># ── 1. Parse physician names ──────────────────────────────────────────────────</span></span>
 <span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">::</span><span class="va"><a href="../reference/physicians.html">physicians</a></span> <span class="op">|&gt;</span></span>
@@ -574,12 +699,17 @@ data-quality pipeline without any API calls.</p>
 <span><span class="va">low_conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">roster</span>, <span class="va">parse_confidence</span> <span class="op">==</span> <span class="st">"low"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%d name(s) flagged as low-confidence (%.1f%%)"</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">low_conf</span><span class="op">)</span>, <span class="fl">100</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">low_conf</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 0 name(s) flagged as low-confidence (0.0%)</span></span>
 <span></span>
 <span><span class="co"># ── 2. Validate parsed names ──────────────────────────────────────────────────</span></span>
 <span><span class="va">validated_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_validate_parsed_names.html">mysterycall_validate_parsed_names</a></span><span class="op">(</span><span class="va">parsed_names</span><span class="op">)</span></span>
 <span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">validated_names</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">quality_issue</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%d name quality issue(s) detected:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">issues</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 21 name quality issue(s) detected:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">issues</span><span class="op">$</span><span class="va">quality_issue</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; last_name_suspiciously_short      name_particle_in_middle </span></span>
+<span><span class="co">#&gt;                           19                            2</span></span>
 <span></span>
 <span><span class="co"># ── 3. Illustrate a safe join with a synthetic demographics sidecar ───────────</span></span>
 <span><span class="co"># In a real study this would be CMS Care Compare or similar</span></span>
@@ -606,7 +736,8 @@ data-quality pipeline without any API calls.</p>
 <span>  <span class="st">"Roster rows: %d  |  Enriched rows: %d  |  Coverage: %.1f%%\n"</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">roster_enriched</span><span class="op">)</span>,</span>
 <span>  <span class="fl">100</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">roster_enriched</span><span class="op">$</span><span class="va">gender</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Roster rows: 4659  |  Enriched rows: 4659  |  Coverage: 85.9%</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -619,7 +750,7 @@ data-quality pipeline without any API calls.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

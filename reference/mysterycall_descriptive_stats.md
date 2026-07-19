@@ -4,6 +4,7 @@ Computes the median, 25th and 75th percentiles, non-missing count, and
 missing count for a named numeric column in a data frame, mirroring the
 source-Rmd pattern:
 
+
     median_val <- round(median(df[[column]], na.rm = TRUE), 2)
     q25 <- quantile(df[[column]], probs = 0.25, na.rm = TRUE)
     q75 <- quantile(df[[column]], probs = 0.75, na.rm = TRUE)

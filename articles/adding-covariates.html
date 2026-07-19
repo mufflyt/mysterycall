@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Adding Physician Covariates to the Wait-Time Model">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,7 @@
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
+    <li><a class="dropdown-item" href="../articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -101,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Adding Physician Covariates to the Wait-Time Model</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/adding-covariates.Rmd" class="external-link"><code>vignettes/adding-covariates.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/adding-covariates.Rmd" class="external-link"><code>vignettes/adding-covariates.Rmd</code></a></small>
       <div class="d-none name"><code>adding-covariates.Rmd</code></div>
     </div>
 
@@ -410,7 +411,7 @@ registry fields for your physician list:</p>
 </h3>
 <p>The recommended multilevel negative binomial model with physician
 covariates is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mtext mathvariant="normal">Medicaid</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mtext mathvariant="normal">Incontinence</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><msub><mtext mathvariant="normal">Prolapse</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>4</mn></msub><msub><mtext mathvariant="normal">Male</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>5</mn></msub><msub><mtext mathvariant="normal">Academic</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>6</mn></msub><msub><mtext mathvariant="normal">Rural</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>2</mn></mrow><mn>12</mn></munderover><msub><mi>γ</mi><mi>k</mi></msub><msub><mtext mathvariant="normal">ACOGDistrict</mtext><mrow><mi>k</mi><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>u</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\log(\mu_{ij}) = \beta_0
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mtext mathvariant="normal">Medicaid</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mtext mathvariant="normal">Incontinence</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><msub><mtext mathvariant="normal">Prolapse</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>4</mn></msub><msub><mtext mathvariant="normal">Male</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>5</mn></msub><msub><mtext mathvariant="normal">Academic</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>6</mn></msub><msub><mtext mathvariant="normal">Rural</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>2</mn></mrow><mn>12</mn></munderover><msub><mi>γ</mi><mi>k</mi></msub><msub><mtext mathvariant="normal">ACOGDistrict</mtext><mrow><mi>k</mi><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>u</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\log(\mu_{ij}) = \beta_0
   + \beta_1 \text{Medicaid}_{ij}
   + \beta_2 \text{Incontinence}_{ij}
   + \beta_3 \text{Prolapse}_{ij}
@@ -510,7 +511,7 @@ reduces the <strong>residual standard deviation</strong>
 The power formula for detecting an IRR of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
 is approximately:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≈</mo><mfrac><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>log</mi><mo>⁡</mo><mi>δ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n \approx \frac{2\sigma^2 (z_{\alpha/2} + z_\beta)^2}{(\log \delta)^2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≈</mo><mfrac><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>δ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n \approx \frac{2\sigma^2 (z_{\alpha/2} + z_\beta)^2}{(\log \delta)^2}</annotation></semantics></math></p>
 <p>If a covariate reduces
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
 by 15%, the required
@@ -704,7 +705,7 @@ derivation</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

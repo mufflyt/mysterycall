@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Statistical Analysis of Mystery-Caller Data">
@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
+    <li><a class="dropdown-item" href="../articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -110,7 +111,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Statistical Analysis of Mystery-Caller Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/statistical-analysis.Rmd" class="external-link"><code>vignettes/statistical-analysis.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/statistical-analysis.Rmd" class="external-link"><code>vignettes/statistical-analysis.Rmd</code></a></small>
       <div class="d-none name"><code>statistical-analysis.Rmd</code></div>
     </div>
 
@@ -485,9 +486,9 @@ variance = mean by definition).</li>
 </ul>
 <p><strong>Poisson regression</strong> models the natural logarithm of
 the expected count as a linear function of covariates:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mspace width="-0.167em"></mspace><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>Y</mi><mo stretchy="false" form="postfix">]</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi></mrow><annotation encoding="application/x-tex">\log\!\bigl(E[Y]\bigr) = \mathbf{X}\boldsymbol{\beta}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>Y</mi><mo stretchy="false" form="postfix">]</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi></mrow><annotation encoding="application/x-tex">\log\!\bigl(E[Y]\bigr) = \mathbf{X}\boldsymbol{\beta}</annotation></semantics></math></p>
 <p>The exponentiated coefficients
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>exp</mi><mo>⁡</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\exp(\beta_k)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\exp(\beta_k)</annotation></semantics></math>
 are <strong>incidence rate ratios (IRRs)</strong>, which have a natural
 clinical interpretation: an IRR of 1.40 for Medicaid vs. Private
 insurance means that Medicaid patients waited 40 % longer than privately
@@ -526,7 +527,7 @@ times. The random intercept γ_j for physician j captures that
 physician’s baseline tendency to have long or short wait times—whatever
 drives their scheduling behavior that is <em>not</em> explained by the
 covariates. Formally, the model is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mspace width="-0.167em"></mspace><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><msub><mtext mathvariant="normal">wait_days</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>γ</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">]</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicaid</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicare</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Uninsured</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>γ</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>γ</mi><mi>j</mi></msub><mo>∼</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><msubsup><mi>σ</mi><mtext mathvariant="normal">physician</mtext><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><msub><mtext mathvariant="normal">wait_days</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>γ</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">]</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicaid</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Medicare</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">Uninsured</mtext><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mi>γ</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>γ</mi><mi>j</mi></msub><mo>∼</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><msubsup><mi>σ</mi><mtext mathvariant="normal">physician</mtext><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 \log\!\bigl(E[\text{wait\_days}_{ij} \mid \gamma_j]\bigr)
   = \beta_0
   + \beta_1\,\text{Medicaid}_{ij}
@@ -1181,7 +1182,7 @@ threshold by the number of tests
 capping at 1.0). The adjusted p-value for test
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>k</mi><mtext mathvariant="normal">Bonf</mtext></msubsup><mo>=</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>⋅</mo><msub><mi>p</mi><mi>k</mi></msub><mo>,</mo><mspace width="0.278em"></mspace><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_k^{\text{Bonf}} = \min(m \cdot p_k,\; 1)</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>k</mi><mtext mathvariant="normal">Bonf</mtext></msubsup><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>⋅</mo><msub><mi>p</mi><mi>k</mi></msub><mo>,</mo><mspace width="0.278em"></mspace><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_k^{\text{Bonf}} = \min(m \cdot p_k,\; 1)</annotation></semantics></math></p>
 <p>This controls the family-wise error rate exactly but is underpowered
 when
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
@@ -1192,9 +1193,7 @@ the raw p-values from smallest to largest:
 The adjusted p-value for the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-th
 ordered test is:</p>
-<p><span class="math display">$$p_{(k)}^{\text{Holm}} =
-\min\!\Bigl(\max_{j \le k}\!\bigl[(m - j + 1)\,p_{(j)}\bigr],\;
-1\Bigr)$$</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><mtext mathvariant="normal">Holm</mtext></msubsup><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><munder><mi mathvariant="normal">max</mi><mrow><mi>j</mi><mo>≤</mo><mi>k</mi></mrow></munder><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>−</mo><mi>j</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>,</mo><mspace width="0.278em"></mspace><mn>1</mn><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_{(k)}^{\text{Holm}} = \min\!\Bigl(\max_{j \le k}\!\bigl[(m - j + 1)\,p_{(j)}\bigr],\; 1\Bigr)</annotation></semantics></math></p>
 <p>Holm-Bonferroni is uniformly more powerful than Bonferroni while
 still controlling the family-wise error rate. <strong>Prefer
 Holm-Bonferroni in almost all situations.</strong></p>
@@ -1907,7 +1906,7 @@ reference-arm mean
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\lambda_0</annotation></semantics></math>),
 type I error, and whether each provider is called once (unpaired) or
 twice (paired with both insurance types):</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>0</mn></msub></mfrac></mstyle><mo>+</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>1</mn></msub></mfrac></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>log</mi><mo>⁡</mo><mtext mathvariant="normal">IRR</mtext><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>0</mn></msub></mfrac></mstyle><mo>+</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>1</mn></msub></mfrac></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mtext mathvariant="normal">IRR</mtext><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}</annotation></semantics></math></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days</span></span>
 <span><span class="va">pw_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.40</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>,</span>
@@ -2086,7 +2085,7 @@ Association</em>, 22(158), 209–212. <a href="https://doi.org/10.1080/01621459.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

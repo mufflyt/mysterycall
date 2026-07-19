@@ -30,6 +30,12 @@ mystery-caller study:
 
 ### Documentation
 
+- New vignette **“Assembling supplementary digital content”**: generates
+  a journal manuscript’s supplementary package from the fitted models –
+  the crude-vs-adjusted model table, disparity table, absolute-scale
+  effect, literature comparison, forest / IRR / cumulative-access
+  figures at journal specification, the STROBE checklist, and export to
+  workbook / Word / CSV.
 - New vignette **“Designing a matched-control mystery-caller audit”**:
   an end-to-end case-control workflow (geocode a roster, build a
   propensity-score-matched control cohort inside a geographic caliper,
@@ -723,10 +729,9 @@ Released 2026-06-25.
 - Fixed a namespace-locking bug in the test suite: 37 test files were
   calling
   [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/)
-  inside
-  [`devtools::test()`](https://devtools.r-lib.org/reference/test.html),
-  which locked the package namespace and silently broke all subsequent
-  `with_mocked_bindings()` calls. All such calls have been removed.
+  inside `devtools::test()`, which locked the package namespace and
+  silently broke all subsequent `with_mocked_bindings()` calls. All such
+  calls have been removed.
 
 - Fixed 11-digit NPI generation in regression-match-rate mocks when *n*
   \> 10 (changed from `paste0("123456789", 0:(n-1))` to
@@ -843,13 +848,11 @@ Released 2026-06-02.
   (`imager`, `leaflet.extras`, `tmap`, `tigris`) plus `ggforce`.
   Suggests count: 48 → 43.
 
-- **Documentation hygiene.**
-  [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-  now runs cleanly; data documentation converted from the
-  trailing-string-literal pattern to the universal `@name + NULL`
-  pattern. New tests added for `R/academic_indicators.R` and
-  `R/audit-verify.R`. ORCID and R-version badges added to README and
-  pkgdown index.
+- **Documentation hygiene.** `devtools::document()` now runs cleanly;
+  data documentation converted from the trailing-string-literal pattern
+  to the universal `@name + NULL` pattern. New tests added for
+  `R/academic_indicators.R` and `R/audit-verify.R`. ORCID and R-version
+  badges added to README and pkgdown index.
 
 ## mysterycall 1.3.0
 

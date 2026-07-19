@@ -17,12 +17,19 @@ The current exported interface expects a data frame passed through the
 ### Minimal input
 
 ``` r
+
 sample_names <- tibble::tibble(
   first = c("Jane", "Maria", "Alex"),
   last = c("Smith", "Garcia", "Johnson")
 )
 
 sample_names
+#> # A tibble: 3 × 2
+#>   first last   
+#>   <chr> <chr>  
+#> 1 Jane  Smith  
+#> 2 Maria Garcia 
+#> 3 Alex  Johnson
 ```
 
 ### Basic search
@@ -30,6 +37,7 @@ sample_names
 The simplest call looks like this:
 
 ``` r
+
 results <- mysterycall_search_and_process_npi(
   data = sample_names,
   notify = FALSE
@@ -45,6 +53,7 @@ For most projects you will want to set a few operational parameters
 explicitly, especially if the roster is large.
 
 ``` r
+
 results <- mysterycall_search_and_process_npi(
   data = sample_names,
   enumeration_type = "ind",
@@ -61,6 +70,7 @@ Large name-based searches can take time. The function supports progress
 logs, chunked saves, and resumable accumulation files.
 
 ``` r
+
 results <- mysterycall_search_and_process_npi(
   data = sample_names,
   limit = 10,
@@ -96,6 +106,7 @@ columns:
 | `search_term` | The `"first last"` input pair that produced this match |
 
 ``` r
+
 dplyr::glimpse(results)
 
 results |>
@@ -108,6 +119,7 @@ Name-based matches are often one-to-many. A common first cleanup step is
 to deduplicate on `npi` and then inspect specialty or geography fields.
 
 ``` r
+
 results_unique <- results |>
   dplyr::distinct(npi, .keep_all = TRUE)
 
@@ -121,6 +133,7 @@ After deduplication, run the data quality helpers on the raw NPPES
 fields before any downstream joins:
 
 ``` r
+
 # Parse names returned from NPPES into structured components
 parsed_names <- do.call(rbind, lapply(
   paste(results_unique$basic_first_name, results_unique$basic_last_name),
@@ -148,6 +161,7 @@ when attaching CMS Care Compare data to catch NPI type mismatches and
 coverage gaps:
 
 ``` r
+
 clinician_data <- mysterycall_get_clinician_data(results_unique)
 
 roster_enriched <- mysterycall_safe_left_join(

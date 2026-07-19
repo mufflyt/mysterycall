@@ -22,10 +22,10 @@ mysterycall_get_clinician_data(input_data)
 ## Value
 
 A tibble with one row per valid NPI and columns from
-[`provider::clinicians()`](https://andrewallenbruce.github.io/provider/reference/clinicians.html)
-(name, specialty, address, etc.), plus an `npi_is_valid` column. Returns
-a zero-row tibble when no valid NPIs are found. Returns `NULL` silently
-per NPI when the `provider` package is not installed.
+`provider::clinicians()` (name, specialty, address, etc.), plus an
+`npi_is_valid` column. Returns a zero-row tibble when no valid NPIs are
+found. Returns `NULL` silently per NPI when the `provider` package is
+not installed.
 
 ## Subspecialty source warning
 

@@ -56,10 +56,8 @@ mysterycall_flowchart(
 ## Value
 
 A `DiagrammeR` / `htmlwidget` object. Print it to view in the RStudio
-Viewer or a browser; use
-[`DiagrammeRsvg::export_svg()`](https://rdrr.io/pkg/DiagrammeRsvg/man/export_svg.html) +
-[`rsvg::rsvg_pdf()`](https://docs.ropensci.org/rsvg/reference/rsvg.html)
-to save to PDF.
+Viewer or a browser; use `DiagrammeRsvg::export_svg()` +
+`rsvg::rsvg_pdf()` to save to PDF.
 
 ## See also
 

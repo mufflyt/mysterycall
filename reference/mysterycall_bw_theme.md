@@ -54,5 +54,4 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
     geom_histogram(bins = 10) +
     mysterycall_bw_theme()
 }
-#> Warning: package ‘ggplot2’ was built under R version 4.4.3
 ```
