@@ -2,6 +2,27 @@
 
 ## New functions
 
+A third batch, generalized from `grace-ent`'s reviewer-response analyses --
+model-robustness and non-response reporting helpers:
+
+- `mysterycall_outcome_bounds()`: Manski-style worst-case / best-case bounds on
+  a proportion under non-response (assign every incomplete call first to failure,
+  then to success, over the full sampling universe), alongside the complete-case
+  rate with a Wilson CI. The assumption-free interval reviewers ask for so a
+  headline offer/acceptance rate is not quietly conditioned on completed calls.
+- `mysterycall_joint_test()`: joint likelihood-ratio test of a multi-level
+  predictor (is subspecialty / caller / insurance significant *as a block*?),
+  refitting without every term that involves the predictor. The statistic is
+  computed from the log-likelihoods (`chi^2 = 2 dlogLik`, `df =` parameter-count
+  difference), which sidesteps a real footgun -- `lme4::glmer` labels the LRT
+  degrees-of-freedom column `"Df"` while `glmmTMB` labels it `"Chi Df"`, and
+  reading the wrong one yields the total parameter count and a wrong p-value.
+- `mysterycall_leave_one_out()`: leave-one-group-out refit sensitivity -- drop
+  each level of a grouping variable (e.g. each caller/site), refit, and tabulate
+  how a target coefficient (and, optionally, a factor's joint p) moves, to show
+  an estimate does not hinge on any single group. Composes with
+  `mysterycall_joint_test()`.
+
 A second batch generalized from the downstream ENT study (`grace-ent`) --
 clustering, single-contact time-to-appointment, and simulation-based power for
 the two-part / population-marginal designs these studies actually use:
