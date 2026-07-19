@@ -765,6 +765,7 @@ articles:
   - title: "Analysis and Reporting"
     navbar: Analysis and Reporting
     contents:
+      - matched-pair-analysis
       - statistical-analysis
       - linear-mixed-models
       - logistic-model
