@@ -58,19 +58,22 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
           cache: true
-          cache-version: 3
+          cache-version: 4
 
-      - name: Rebuild xml2 from source to match system libxml2
-        # The public RSPM binary xml2 is compiled against a libxml2 that can
-        # differ from the one apt installs on the runner. That ABI mismatch
-        # corrupts memory inside xml2::xml_add_sibling() and segfaults pkgdown
-        # (exit 139) exactly where it inserts the site logo on the home page.
-        # Recompiling xml2 against the runner's own libxml2-dev removes the
-        # mismatch. Fast (~30s) and deterministic.
+      - name: Pin xml2 to 1.5.2 (1.6.0 segfaults in pkgdown logo insertion)
+        # xml2 1.6.0 segfaults (exit 139, "memory not mapped") inside
+        # xml2::xml_add_sibling() when pkgdown inserts the site logo on the home
+        # page -- reproduced twice on ubuntu-24.04, and NOT an ABI mismatch
+        # (a source rebuild of 1.6.0 crashed identically). Version 1.5.2 builds
+        # the site cleanly. Pin to it until a fixed xml2 is released; this step
+        # runs after setup-r-dependencies so it downgrades the 1.6.0 that
+        # pkgdown pulls in as a dependency.
         run: |
-          install.packages("xml2", type = "source",
-                            repos = "https://cloud.r-project.org")
-          xml2::read_xml("<a><b/></a>")  # smoke-test the fresh build
+          install.packages(
+            "https://cran.r-project.org/src/contrib/Archive/xml2/xml2_1.5.2.tar.gz",
+            repos = NULL, type = "source")
+          stopifnot(packageVersion("xml2") == "1.5.2")
+          xml2::read_xml("<a><b/></a>")  # smoke-test the pinned build
         shell: Rscript {0}
 
       - name: Build pkgdown site
