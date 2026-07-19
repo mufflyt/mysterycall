@@ -538,10 +538,133 @@ reference:
       - mysterycall_session_snapshot
       - mysterycall_run_analysis
 
+  - title: "Guideline Concordance"
+    desc: >
+      Score call transcripts against a clinical-guideline rubric and quantify
+      inter-rater agreement.
+    contents:
+      - mysterycall_concordance_rubric
+      - mysterycall_score_concordance
+      - mysterycall_concordance_kappa
+      - mysterycall_concordance_sentence
+
+  - title: "Small-Sample Categorical and Rank Tests"
+    desc: >
+      Chi-square / Fisher / Freeman-Halton, Cochran-Mantel-Haenszel, prevalence
+      CIs, and Kruskal-Wallis / Mann-Whitney comparisons for small audit samples.
+    contents:
+      - mysterycall_test_categorical
+      - mysterycall_cmh_test
+      - mysterycall_prevalence_ci
+      - mysterycall_compare_ranks
+
+  - title: "Call Outcomes"
+    desc: >
+      Multi-category and multi-response call-outcome tabulation, classification,
+      gradients, and ordinal models.
+    contents:
+      - mysterycall_multiresponse_tabulate
+      - mysterycall_classify_call_outcome
+      - mysterycall_outcome_gradient
+      - mysterycall_ordinal_model
+
+  - title: "Access Cascade and Call-Log Integrity"
+    desc: >
+      Summarize the access cascade across the call pathway, reconcile
+      offer/outcome discordance, run cross-field consistency rules, and bound a
+      rate under non-response.
+    contents:
+      - mysterycall_access_cascade
+      - mysterycall_cascade_stage
+      - mysterycall_reconcile_offer_outcome
+      - mysterycall_check_consistency
+      - mysterycall_consistency_rule
+      - mysterycall_default_consistency_rules
+      - mysterycall_outcome_bounds
+
+  - title: "Clustering and Single-Contact Curves"
+    desc: >
+      Build a random-intercept clustering key and plot the empirical cumulative
+      appointment-acquisition curve for single-contact designs.
+    contents:
+      - mysterycall_cluster_id
+      - mysterycall_cumulative_access_curve
+
+  - title: "Simulation Power and Model Robustness"
+    desc: >
+      Monte Carlo power for two-part and population-marginal designs, a type-I
+      calibration check, minimum-detectable-effect search, joint likelihood-ratio
+      tests, and leave-one-group-out refit sensitivity.
+    contents:
+      - mysterycall_twopart_power
+      - mysterycall_marginal_power
+      - mysterycall_type_i_check
+      - mysterycall_find_mde
+      - mysterycall_joint_test
+      - mysterycall_leave_one_out
+      - mysterycall_provider_split_simulation
+
+  - title: "Matched-Pair Analyses"
+    desc: >
+      Within-practice paired comparisons for the matched-pair design (same
+      practice called under two scenarios).
+    contents:
+      - mysterycall_paired_acceptance_mcnemar
+      - mysterycall_paired_wait_within_practice
+
+  - title: "Additional Models and Diagnostics"
+    contents:
+      - mysterycall_compare_count_families
+      - mysterycall_model_nonlinear
+      - mysterycall_model_zero_wait
+      - mysterycall_bootstrap_predictor_stability
+      - mysterycall_temporal_validation
+      - mysterycall_recalibration_assessment
+      - mysterycall_test_interaction_effect
+      - mysterycall_validate_residuals_dharma
+
+  - title: "Additional Covariates and Geography"
+    contents:
+      - mysterycall_region_labels
+      - mysterycall_get_acs_female_insurance
+      - mysterycall_get_cms_enrollment
+      - mysterycall_get_hrsa_ahrf
+      - mysterycall_medicaid_fee_index
+      - mysterycall_track_clinician_churn
+      - mysterycall_calculate_hq_distance
+      - mysterycall_calculate_spatial_density
+      - ensure_hrr_shapefile
+      - county_covariates
+      - hhi
+
+  - title: "Caller List Export and Direction Helpers"
+    contents:
+      - mysterycall_export_gsheet_caller_list
+      - mysterycall_get_direction
+      - mysterycall_get_change_verb
+      - mysterycall_no_longer_in_service
+      - mystercall_no_longer_in_service
+
+  - title: "Package Constants"
+    desc: >
+      Exported pattern and indicator vectors used by the academic and
+      practice-setting classifiers.
+    contents:
+      - ACADEMIC_HOSPITAL_PATTERNS
+      - ACGME_PROGRAM_INDICATORS
+      - COTH_TEACHING_INDICATORS
+      - KNOWN_ACADEMIC_INSTITUTIONS
+      - MEDICAL_SCHOOL_INDICATORS
+      - MEDICARE_GME_INDICATORS
+      - NCI_CANCER_CENTERS
+      - NIH_CTSA_HUBS
+      - build_missingness_mcar_table
+
   - title: "S3 Methods"
     desc: >
       print(), tidy(), plot(), and coercion methods for mysterycall objects.
     contents:
+      - print.mysterycall_provider_counts
       - plot.mysterycall_lmm
       - tidy.mysterycall_lmm
       - tidy.mysterycall_logistic_model
