@@ -28,7 +28,6 @@ are:
 | `medicaid_status` | 1–4       | Insurance type for this call              |
 
 ``` r
-
 raw <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
                 stringsAsFactors = FALSE)
 dim(raw)  # e.g. 743 rows, 17 columns
@@ -42,7 +41,6 @@ dim(raw)  # e.g. 743 rows, 17 columns
 encodes the standard mystery-caller filtering pipeline in a single call:
 
 ``` r
-
 prepped <- mysterycall_prepare_calls(raw)
 print(prepped)
 ```
@@ -80,7 +78,6 @@ unknown, so they are dropped.
 outcome (appointment offered: yes/no) can be determined:
 
 ``` r
-
 nrow(prepped$logistic_data)  # office reached, appt_offered column ready
 table(prepped$logistic_data$appt_offered)
 ```
@@ -90,7 +87,6 @@ with
 [`mysterycall_auto_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.md)):
 
 ``` r
-
 nrow(prepped$waittime_data)
 summary(prepped$waittime_data$calendar_days)
 ```
@@ -102,7 +98,6 @@ exclusion codes. The default `na_exclusions = "warn"` keeps them but
 flags them:
 
 ``` r
-
 # Inspect before analysis
 prepped$na_exclusion_records[, c("record_id", "calldate1", "initials")]
 ```
@@ -120,7 +115,6 @@ code them in REDCap and re-export.
 modeling:
 
 ``` r
-
 d <- prepped$logistic_data
 d$insurance <- factor(
   d$medicaid_status,
@@ -145,7 +139,6 @@ Caller names are standardized to title case by
 Verify the `caller` column before modeling:
 
 ``` r
-
 table(d_model$caller)
 # Should show 3–5 named callers, not dozens of duplicates with case typos
 ```
@@ -155,7 +148,6 @@ table(d_model$caller)
 ## Step 4 — Fit the logistic GLMM
 
 ``` r
-
 fit_log <- mysterycall_logistic_model(
   data             = d_model,
   outcome          = "appt_offered",
@@ -170,7 +162,6 @@ The `$or_table` contains odds ratios (OR) with 95% Wald confidence
 intervals:
 
 ``` r
-
 fit_log$or_table
 ```
 
@@ -184,7 +175,6 @@ fit_log$or_table
 ## Step 5 — Forest plot
 
 ``` r
-
 mysterycall_forest_plot(
   fit_log,
   x_label = "Odds Ratio (95% CI)",
@@ -207,7 +197,6 @@ the variation in scheduling is explained by the physician (vs. insurance
 type or other patient/call factors):
 
 ``` r
-
 fit_log$random_effects
 # $var_physician  — variance of physician random intercept on logit scale
 # Latent ICC = var_physician / (var_physician + pi^2/3)
@@ -221,7 +210,6 @@ than insurance type — a meaningful finding for access research.
 ## Full pipeline in \< 20 lines
 
 ``` r
-
 library(mysterycall)
 
 raw     <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
@@ -253,7 +241,6 @@ If you also want to model **how long** patients waited (among those who
 got appointments), use `$waittime_data` directly:
 
 ``` r
-
 wt <- prepped$waittime_data
 
 fit_wt <- mysterycall_auto_model(

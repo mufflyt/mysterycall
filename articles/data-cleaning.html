@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Data Cleaning: A Complete Workflow for Mystery Caller Studies">
@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Data Cleaning: A Complete Workflow for Mystery Caller Studies</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/data-cleaning.Rmd" class="external-link"><code>vignettes/data-cleaning.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/data-cleaning.Rmd" class="external-link"><code>vignettes/data-cleaning.Rmd</code></a></small>
       <div class="d-none name"><code>data-cleaning.Rmd</code></div>
     </div>
 
@@ -159,13 +159,7 @@ mandates).</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">validated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_validate_npi.html">mysterycall_validate_npi</a></span><span class="op">(</span><span class="va">raw</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1 NPI value(s) are not 10 digits and were dropped before Luhn validation: 123456789</span></span>
-<span><span class="co">#&gt; 1 NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: 0000000000</span></span>
-<span><span class="co">#&gt; Validated 4 candidate NPI(s): 1 wrong length, 1 failed Luhn, 2 passed.</span></span>
-<span><span class="va">validated</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"npi_is_valid"</span>, <span class="st">"physician_name"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;          npi npi_is_valid physician_name</span></span>
-<span><span class="co">#&gt; 1 1234567893         TRUE   Smith, Alice</span></span>
-<span><span class="co">#&gt; 2 1234567893         TRUE   Smith, Alice</span></span></code></pre></div>
+<span><span class="va">validated</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"npi_is_valid"</span>, <span class="st">"physician_name"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>Only rows where <code>npi_is_valid == TRUE</code> survive. The
 returned data frame is a strict subset of the input — no rows are ever
 added.</p>
@@ -191,19 +185,7 @@ cross-check the area code against the physician’s reported state.</p>
 <span>  <span class="va">phones</span>,</span>
 <span>  practice_state <span class="op">=</span> <span class="st">"CO"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">phone_results</span></span>
-<span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
-<span><span class="co">#&gt; 1             TRUE       303                   CO                          TRUE</span></span>
-<span><span class="co">#&gt; 2            FALSE       800            toll-free                         FALSE</span></span>
-<span><span class="co">#&gt; 3            FALSE      &lt;NA&gt;                 &lt;NA&gt;                         FALSE</span></span>
-<span><span class="co">#&gt; 4            FALSE      &lt;NA&gt;                 &lt;NA&gt;                         FALSE</span></span>
-<span><span class="co">#&gt; 5             TRUE       303                   CO                          TRUE</span></span>
-<span><span class="co">#&gt;        phone_validity_flag</span></span>
-<span><span class="co">#&gt; 1                    valid</span></span>
-<span><span class="co">#&gt; 2 area_code_state_mismatch</span></span>
-<span><span class="co">#&gt; 3           invalid_format</span></span>
-<span><span class="co">#&gt; 4                  missing</span></span>
-<span><span class="co">#&gt; 5                    valid</span></span></code></pre></div>
+<span><span class="va">phone_results</span></span></code></pre></div>
 <p>The <code>phone_validity_flag</code> column distinguishes five
 outcomes:</p>
 <table class="table">
@@ -364,32 +346,9 @@ performs:</p>
 <span>  verbose          <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  duplicate_rows   <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; cols(</span></span>
-<span><span class="co">#&gt;   Names = <span style="color: #BB0000;">col_character()</span>,</span></span>
-<span><span class="co">#&gt;   practice_name = <span style="color: #BB0000;">col_character()</span>,</span></span>
-<span><span class="co">#&gt;   phone_number = <span style="color: #BB0000;">col_character()</span>,</span></span>
-<span><span class="co">#&gt;   state_name = <span style="color: #BB0000;">col_character()</span>,</span></span>
-<span><span class="co">#&gt;   npi = <span style="color: #00BB00;">col_double()</span></span></span>
-<span><span class="co">#&gt; )</span></span>
 <span></span>
 <span><span class="va">result_phase1</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"dr_name"</span>, <span class="st">"insurance"</span>, <span class="st">"phone_number"</span>, <span class="st">"academic"</span>,</span>
-<span>                  <span class="st">"processing_flag_generated_id"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;   id   dr_name              insurance   phone_number         academic</span></span>
-<span><span class="co">#&gt; 1  1    Dr. DO Blue Cross/Blue Shield (720) 555-9999 Private Practice</span></span>
-<span><span class="co">#&gt; 2  2    Dr. DO               Medicaid (720) 555-9999 Private Practice</span></span>
-<span><span class="co">#&gt; 3  3 Dr. Carol Blue Cross/Blue Shield (303) 555-8888 Private Practice</span></span>
-<span><span class="co">#&gt; 4  4 Dr. Carol               Medicaid (303) 555-8888 Private Practice</span></span>
-<span><span class="co">#&gt; 5  5 Dr. Alice Blue Cross/Blue Shield (303) 555-1212       University</span></span>
-<span><span class="co">#&gt; 6  6 Dr. Alice               Medicaid (303) 555-1212       University</span></span>
-<span><span class="co">#&gt;   processing_flag_generated_id</span></span>
-<span><span class="co">#&gt; 1                         TRUE</span></span>
-<span><span class="co">#&gt; 2                         TRUE</span></span>
-<span><span class="co">#&gt; 3                        FALSE</span></span>
-<span><span class="co">#&gt; 4                        FALSE</span></span>
-<span><span class="co">#&gt; 5                        FALSE</span></span>
-<span><span class="co">#&gt; 6                        FALSE</span></span></code></pre></div>
+<span>                  <span class="st">"processing_flag_generated_id"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>The function invisibly returns the cleaned data frame and writes two
 files to <code>output_directory</code>:</p>
 <ul>
@@ -433,11 +392,7 @@ and bias results. Flag repeat calls before analysis:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dup_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_check_duplicates.html">mysterycall_check_duplicates</a></span><span class="op">(</span><span class="va">calls</span>, id_col <span class="op">=</span> <span class="st">"npi"</span>, max_calls <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span>
-<span><span class="va">dup_report</span></span>
-<span><span class="co">#&gt;          npi  call_date insurance n_calls</span></span>
-<span><span class="co">#&gt; 1 1234567893 2024-01-10      BCBS       3</span></span>
-<span><span class="co">#&gt; 2 1234567893 2024-01-12  Medicaid       3</span></span>
-<span><span class="co">#&gt; 3 1234567893 2024-01-15      BCBS       3</span></span></code></pre></div>
+<span><span class="va">dup_report</span></span></code></pre></div>
 <p>Rows flagged by <code><a href="../reference/mysterycall_check_duplicates.html">mysterycall_check_duplicates()</a></code> should be
 reviewed and removed (or justified) before the primary analysis.</p>
 <hr>
@@ -461,19 +416,7 @@ to rename by substring match:</p>
 <span>  target_strings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physician_full_name"</span>, <span class="st">"telephone"</span>, <span class="st">"national_provider"</span><span class="op">)</span>,</span>
 <span>  new_names      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physician_name"</span>, <span class="st">"phone"</span>, <span class="st">"npi"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; --- Starting to search and rename columns based on target substrings ---</span></span>
-<span><span class="co">#&gt; Matched 1 column(s) by substring match for 'physician_full_name': physician_full_name_as_entered</span></span>
-<span><span class="co">#&gt; Renamed 'physician_full_name_as_entered' to 'physician_name'.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Matched 1 column(s) by substring match for 'telephone': office_telephone_number</span></span>
-<span><span class="co">#&gt; Renamed 'office_telephone_number' to 'phone'.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Matched 1 column(s) by substring match for 'national_provider': national_provider_identifier</span></span>
-<span><span class="co">#&gt; Renamed 'national_provider_identifier' to 'npi'.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; --- Column renaming complete. Final column set: physician_name, phone, npi ---</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">clean</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "physician_name" "phone"          "npi"</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">clean</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -485,7 +428,7 @@ to rename by substring match:</p>
 This step requires the <code>provider</code> package to be installed
 from GitHub:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/provider"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"andrewallenbruce/provider"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">npi_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  npi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1234567893"</span>, <span class="st">"1578798779"</span><span class="op">)</span>,</span>
@@ -494,12 +437,7 @@ from GitHub:</p>
 <span></span>
 <span><span class="co"># Returns NULL silently per NPI when 'provider' is not installed.</span></span>
 <span><span class="va">clinician_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data</a></span><span class="op">(</span><span class="va">npi_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1 NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: 1578798779</span></span>
-<span><span class="co">#&gt; Validated 2 candidate NPI(s): 0 wrong length, 1 failed Luhn, 1 passed.</span></span>
-<span><span class="co">#&gt; NPI 1234567893: package 'provider' is not installed.</span></span>
-<span><span class="va">clinician_info</span></span>
-<span><span class="co">#&gt; [1] npi          npi_is_valid</span></span>
-<span><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span></code></pre></div>
+<span><span class="va">clinician_info</span></span></code></pre></div>
 <p>The returned tibble has one row per NPI and carries columns such as
 <code>taxonomies_desc</code> (NPPES taxonomy code),
 <code>basic_first_name</code>, <code>basic_last_name</code>, and
@@ -643,7 +581,7 @@ subspecialty assignment.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

@@ -159,7 +159,6 @@ The JSON audit trail written to
 `<output_directory>/audit_trail_<timestamp>.json` always contains these
 required fields (see also `tests/fixtures/audit_trail_schema.json`):
 
-
     {
       "function_name":        "mysterycall_clean_phase1",
       "input_rows":           <integer>,

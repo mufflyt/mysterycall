@@ -1,5 +1,5 @@
-pandoc: 3.8.3
-pkgdown: 2.2.1
+pandoc: 3.6.4
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   adding-covariates: adding-covariates.html
@@ -27,7 +27,7 @@ articles:
   table-generation: table-generation.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-07-19T19:09Z
+last_built: 2026-07-19T19:25Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

@@ -15,7 +15,6 @@ package installed. You can effortlessly install it using the following
 command:
 
 ``` r
-
 library(mysterycall)
 ```
 
@@ -116,7 +115,6 @@ unique practice addresses, geocode the 150 unique addresses and join
 back — this halves your API usage and cost.
 
 ``` r
-
 roster <- readr::read_csv("providers.csv")
 
 # Deduplicate: geocode each unique address once
@@ -137,7 +135,6 @@ plus a `geocode_status` column (`"OK"`, `"ZERO_RESULTS"`, or
 `"REQUEST_DENIED"`). Always inspect the status column before proceeding:
 
 ``` r
-
 table(geocoded$geocode_status)
 #> OK            ZERO_RESULTS
 #> 147           3
@@ -155,7 +152,6 @@ so every provider row gets coordinates, and so any address-matching
 failures are visible rather than silent.
 
 ``` r
-
 # Rename output columns to match the isochrone workflow expectation
 geocoded_clean <- geocoded |>
   dplyr::filter(geocode_status == "OK") |>
@@ -181,7 +177,6 @@ geometry column. If you are working with an `sf` object, extract
 coordinates with:
 
 ``` r
-
 roster_geocoded <- roster_geocoded |>
   dplyr::mutate(
     lat  = sf::st_coordinates(.)[, "Y"],

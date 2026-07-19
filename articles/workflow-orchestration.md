@@ -1,7 +1,6 @@
 # End-to-End Mystery-Caller Workflow Orchestration
 
 ``` r
-
 library(mysterycall)
 ```
 
@@ -102,7 +101,6 @@ single canonical code) so that the merged file is analysis-ready.
 **Option A — One-call orchestration (recommended for routine studies):**
 
 ``` r
-
 result <- mysterycall_run_workflow(
   taxonomy_terms      = c("207V00000X", "207VB0002X"),
   name_data           = provider_names_df,
@@ -153,7 +151,6 @@ untouched.
 ### 2.2 Key parameters
 
 ``` r
-
 result <- mysterycall_clean_phase1(
   phase1_data      = raw_roster,        # required: raw data frame or file path
   output_directory = "/study/output",   # required: directory for CSV + audit JSON
@@ -200,7 +197,6 @@ filter, weight, or report on data-quality issues without re-running the
 cleaning step.
 
 ``` r
-
 # How many rows were assigned a generated ID?
 sum(result$processing_flag_generated_id, na.rm = TRUE)
 
@@ -260,7 +256,6 @@ The returned data frame carries two attributes that link it to the audit
 trail:
 
 ``` r
-
 # The cohort hash uniquely identifies this batch
 cohort_id <- attr(result, "cohort_hash")
 cat("Cohort hash:", cohort_id, "\n")
@@ -287,7 +282,6 @@ If `phase1_data` does not contain an `npi` column,
 throws an informative error immediately:
 
 ``` r
-
 # This will fail with a clear error message
 bad_data <- data.frame(
   provider_first_name = "Jane",
@@ -330,7 +324,6 @@ prevents these problems entirely.
 ### 3.2 Using the function
 
 ``` r
-
 validated <- mysterycall_validate_npi(
   data       = phase1_result,
   npi_column = "npi"    # default; change if your column has a different name
@@ -367,7 +360,6 @@ assigned to different callers, result in the same provider being called
 twice — a protocol violation in most IRB applications.
 
 ``` r
-
 dup_report <- mysterycall_check_duplicates(
   data       = validated,
   id_column  = "npi",
@@ -403,7 +395,6 @@ function solves all three problems.
 ### 4.2 Key parameters
 
 ``` r
-
 workbooks <- mysterycall_split_and_save(
   data                = clean_roster,
   lab_assistant_names = c("Alice", "Bob", "Carol", "Dana", "Eve"),
@@ -449,7 +440,6 @@ order of rows in `data`, and the order of names in
 `lab_assistant_names`.
 
 ``` r
-
 callers   <- c("Alice", "Bob", "Carol", "Dana", "Eve")
 n_total   <- 198L
 base_load <- n_total %/% length(callers)
@@ -488,7 +478,6 @@ Before sending workbooks to callers, verify that every provider appears
 in exactly one workbook:
 
 ``` r
-
 # Read all workbooks back and combine
 all_workbooks <- lapply(workbooks$file_paths, readxl::read_excel)
 combined      <- dplyr::bind_rows(all_workbooks)
@@ -536,7 +525,6 @@ with.
 ### 5.2 `mysterycall_rename_columns()`: fuzzy column name matching
 
 ``` r
-
 # Standardize column names across all returned workbooks
 renamed <- mysterycall_rename_columns(
   data           = raw_returned_workbook,
@@ -561,7 +549,6 @@ you decide whether the missing column is a problem without crashing the
 pipeline.
 
 ``` r
-
 # If no column contains "wait", you get:
 #> Warning in mysterycall_rename_columns():
 #>   Target substring 'wait' did not match any column name.
@@ -572,7 +559,6 @@ pipeline.
 ### 5.3 `mysterycall_clean_phase2()`: the full Phase 2 cleaning step
 
 ``` r
-
 phase2_result <- mysterycall_clean_phase2(
   data             = "/study/returned_workbooks",  # directory of Excel files
   output_directory = "/study/phase2_output",
@@ -597,7 +583,6 @@ to process a single file.
 A complete example showing messy column normalization:
 
 ``` r
-
 # Simulate two messy returned workbooks
 alice_wb <- data.frame(
   NPI          = c("1234567893", "9876543210"),
@@ -630,7 +615,6 @@ quality check table provides this.
 ### 6.1 What the table contains
 
 ``` r
-
 mysterycall_save_quality_table(
   data        = phase2_result,
   output_path = "/study/qa/quality_table.csv",
@@ -657,7 +641,6 @@ The standard threshold in most mystery-caller protocols is 80%
 completion. Read the table back and flag callers below that threshold:
 
 ``` r
-
 qa <- read.csv("/study/qa/quality_table.csv")
 
 # Flag callers below 80% completion
@@ -686,7 +669,6 @@ identifies states with zero completed calls.
 ### 7.1 The `all_states` parameter
 
 ``` r
-
 not_contacted <- mysterycall_not_contacted_states(
   data       = phase2_result,
   all_states = state.abb           # all 50 states, or a custom list
@@ -702,7 +684,6 @@ non-missing.
 ### 7.2 Visualizing contacted vs not-contacted states
 
 ``` r
-
 # Quick cross-tabulation of states by contact status
 contacted_states <- unique(phase2_result$state[
   !is.na(phase2_result$call_outcome)
@@ -722,7 +703,6 @@ print(table(status_vec))
 ### 7.3 Filtering for follow-up prioritization
 
 ``` r
-
 # Which specific states need follow-up?
 cat("States with zero completed calls:\n")
 cat(paste(not_contacted$state, collapse = ", "), "\n")
@@ -768,7 +748,6 @@ intermediate and final artifacts.
 ### 8.2 The returned list structure
 
 ``` r
-
 names(result)
 #>  [1] "phase1_result"           "validated_npi"
 #>  [3] "workbook_paths"          "phase2_result"
@@ -786,7 +765,6 @@ directly.
 ### 8.3 A complete realistic call
 
 ``` r
-
 result <- mysterycall_run_workflow(
   taxonomy_terms      = c(
     "207V00000X",   # Obstetrics & Gynecology
@@ -816,7 +794,6 @@ It is **functionally identical** to
 but wraps every pipeline stage in structured JSON logging:
 
 ``` r
-
 result <- mysterycall_run_workflow_logged(
   # ... same parameters as mysterycall_run_workflow() ...
   log_file = "/network/obgyn_study/logs/workflow_run.jsonl"
@@ -846,7 +823,6 @@ returns, the first thing to inspect is `result$workflow_summary`. This
 is a data frame with one row per pipeline stage:
 
 ``` r
-
 knitr::kable(
   result$workflow_summary,
   caption = "Row counts through the pipeline"
@@ -879,7 +855,6 @@ flowchart.
     your lab notebook entry for this wave of data collection.
 
 ``` r
-
 # Programmatic pre-analysis checks
 stopifnot(
   result$workflow_summary$rows_retained[1] == 100,
@@ -897,7 +872,6 @@ stopifnot(
 Before passing any data to the workflow, run:
 
 ``` r
-
 mysterycall_preflight_check(phase1_data = raw_roster)
 ```
 
@@ -919,7 +893,6 @@ and that coordinators can monitor progress in real time.
 Avoid paths with spaces. Use hyphens or underscores:
 
 ``` r
-
 # Good
 output_directory = "/Volumes/ResearchDrive/obgyn_mystery_caller_2024"
 
@@ -955,7 +928,6 @@ large studies, Phase 1 with `duplicate_rows = TRUE` and
 faster than CSV for \> 5,000 rows).
 
 ``` r
-
 # Recommended settings for large studies
 result <- mysterycall_run_workflow_logged(
   phase1_data      = large_roster,
@@ -978,7 +950,6 @@ counts business days between two dates;
 applies the calculation to every row of a data frame.
 
 ``` r
-
 # How many business days between a call on a Monday and an appointment on
 # Friday of the following week?  (Calendar days = 11; business days = 10)
 bd <- mysterycall_count_business_days(
@@ -990,7 +961,6 @@ cat("Business days:", bd, "\n")
 ```
 
 ``` r
-
 # Apply to a data frame of completed calls
 calls_df <- data.frame(
   npi       = paste0("NPI-", 1:6),
@@ -1028,7 +998,6 @@ knitr::kable(
 
 Business-day wait times computed by
 [`mysterycall_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_business_days.md).
-{.table}
 
 ------------------------------------------------------------------------
 
@@ -1045,7 +1014,6 @@ correlation coefficient (for numeric outcomes) on records audited by two
 callers.
 
 ``` r
-
 set.seed(7)
 # Long-format audit sample: each record appears twice — once per caller
 n_records <- 30L
@@ -1081,7 +1049,6 @@ tallies completed, pending, and failed calls by caller and returns a
 summary data frame for QC review.
 
 ``` r
-
 set.seed(8)
 n_rows <- 80L
 prod_df <- data.frame(

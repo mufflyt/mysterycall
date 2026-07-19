@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Linear Mixed Models for Wait-Time Analysis">
@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Linear Mixed Models for Wait-Time Analysis</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/linear-mixed-models.Rmd" class="external-link"><code>vignettes/linear-mixed-models.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/linear-mixed-models.Rmd" class="external-link"><code>vignettes/linear-mixed-models.Rmd</code></a></small>
       <div class="d-none name"><code>linear-mixed-models.Rmd</code></div>
     </div>
 
@@ -202,14 +202,7 @@ patients across 20 physician practices.</p>
 <span><span class="co"># Add a business-days column (≈ 5/7 of calendar days)</span></span>
 <span><span class="va">sim_data</span><span class="op">$</span><span class="va">business_days</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">wait_days</span> <span class="op">*</span> <span class="fl">0.71</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   physician insurance  wave wait_days business_days</span></span>
-<span><span class="co">#&gt; 1      Dr01  Medicaid Wave1        43            31</span></span>
-<span><span class="co">#&gt; 2      Dr01  Medicaid Wave2        23            16</span></span>
-<span><span class="co">#&gt; 3      Dr01      BCBS Wave1        25            18</span></span>
-<span><span class="co">#&gt; 4      Dr01      BCBS Wave2        27            19</span></span>
-<span><span class="co">#&gt; 5      Dr02  Medicaid Wave1        33            23</span></span>
-<span><span class="co">#&gt; 6      Dr02  Medicaid Wave2        28            20</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -221,35 +214,14 @@ patients across 20 physician practices.</p>
 <span>  outcome           <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
 <span>  predictors        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"wave"</span><span class="op">)</span>,</span>
 <span>  random_intercept  <span class="op">=</span> <span class="st">"physician"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Fitting LMM: wait_days ~ insurance + wave + (1 | physician)</span></span>
-<span><span class="co">#&gt; Model fitted: n=80, physicians=20, AIC=600.2, sigma=10.40, R2m=0.128, R2c=0.136</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> produces a structured report:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linear Mixed Model (REML)  n = 80  physicians = 20</span></span>
-<span><span class="co">#&gt;   AIC = 600.2   BIC = 612.1   Residual SD = 10.40 days</span></span>
-<span><span class="co">#&gt;   R^2 marginal = 0.128   conditional = 0.136</span></span>
-<span><span class="co">#&gt;   Normality: Residuals consistent with normality (p &gt;= 0.05).</span></span>
-<span><span class="co">#&gt;   Reference levels: insurance='BCBS', wave='Wave1'</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Fixed effects (days):</span></span>
-<span><span class="co">#&gt;               term estimate   se ci_lower ci_upper p-value</span></span>
-<span><span class="co">#&gt;        (Intercept)    21.66 2.03    17.62    25.70 &lt; 0.001</span></span>
-<span><span class="co">#&gt;  insuranceMedicaid     7.93 2.33     3.27    12.58   0.001</span></span>
-<span><span class="co">#&gt;          waveWave2    -0.53 2.33    -5.18     4.13   0.822</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Random intercept (physician):  variance = 1.0448  SD = 1.0221 days</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <p>Key elements of the returned object:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fixed-effect table in days (or log-scale if auto_log triggered)</span></span>
 <span><span class="va">fit</span><span class="op">$</span><span class="va">coef_table</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 9</span></span></span>
-<span><span class="co">#&gt;   term       estimate    se t_value    df  p_value p_value_fmt ci_lower ci_upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercep…   21.7    2.03  10.7    73.4 1.28<span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span> &lt; 0.001        17.6     25.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> insurance…    7.93   2.33   3.41   58.0 1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> 0.001           3.27    12.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> waveWave2    -<span style="color: #BB0000;">0.525</span>  2.33  -<span style="color: #BB0000;">0.226</span>  58.0 8.22<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.822          -<span style="color: #BB0000;">5.18</span>     4.13</span></span>
 <span></span>
 <span><span class="co"># Model fit: R-squared, ICC, sigma</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -259,34 +231,9 @@ patients across 20 physician practices.</p>
 <span>  n_obs          <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">n</span>,</span>
 <span>  n_physicians   <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">n_clusters</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; $marginal_R2</span></span>
-<span><span class="co">#&gt; [1] 0.127619</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $conditional_R2</span></span>
-<span><span class="co">#&gt; [1] 0.1359681</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $sigma</span></span>
-<span><span class="co">#&gt; [1] 10.39821</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $n_obs</span></span>
-<span><span class="co">#&gt; [1] 80</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $n_physicians</span></span>
-<span><span class="co">#&gt; [1] 20</span></span>
 <span></span>
 <span><span class="co"># Normality of residuals</span></span>
-<span><span class="va">fit</span><span class="op">$</span><span class="va">normality</span></span>
-<span><span class="co">#&gt; $statistic</span></span>
-<span><span class="co">#&gt; [1] 0.9854161</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p_value</span></span>
-<span><span class="co">#&gt; [1] 0.4990939</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $interpretation</span></span>
-<span><span class="co">#&gt; [1] "Residuals consistent with normality (p &gt;= 0.05)."</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $method</span></span>
-<span><span class="co">#&gt; [1] "Shapiro-Wilk"</span></span></code></pre></div>
+<span><span class="va">fit</span><span class="op">$</span><span class="va">normality</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -298,8 +245,7 @@ indicates whether the transform was triggered. When it is, coefficients
 are on the log scale and <code>fit$log_transformed</code> is
 <code>TRUE</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">log_transformed</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">log_transformed</span></span></code></pre></div>
 <p>If <code>auto_log</code> did trigger, interpret results from
 <code>$gmr_table</code> rather than <code>$coef_table</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -307,8 +253,7 @@ are on the log scale and <code>fit$log_transformed</code> is
 <span>  <span class="va">fit</span><span class="op">$</span><span class="va">gmr_table</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"auto_log did not trigger; use $coef_table directly."</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; auto_log did not trigger; use $coef_table directly.</span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <p><strong>How to report GMRs:</strong> A GMR of 0.87 for
 <code>insuranceMedicaid</code> means Medicaid callers wait, on average,
 13% fewer days (× (days + 1)) than the BCBS reference group (GMR = 0.87,
@@ -334,21 +279,11 @@ whenever the Shapiro-Wilk test on LMM residuals returns p &lt; 0.05.</p>
 <span>  random_intercept  <span class="op">=</span> <span class="st">"physician"</span>,</span>
 <span>  sensitivity_poisson <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Fitting LMM: wait_days ~ insurance + wave + (1 | physician)</span></span>
-<span><span class="co">#&gt; Warning: Overdispersion detected (phi = 3.72). Standard errors may be</span></span>
-<span><span class="co">#&gt; underestimated. Consider a negative binomial model.</span></span>
-<span><span class="co">#&gt; Model fitted: n=80, physicians=20, AIC=600.2, sigma=10.40, R2m=0.128, R2c=0.136</span></span>
 <span></span>
 <span><span class="co"># Inspect the Poisson IRR table</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">fit_sens</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">fit_sens</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">$</span><span class="va">irr_table</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 9</span></span></span>
-<span><span class="co">#&gt;   term     estimate     se z_value  p_value p_value_fmt    irr ci_lower ci_upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Interc…   3.06   0.057<span style="text-decoration: underline;">2</span>  53.6   0   <span style="color: #949494;"> </span>    &lt;0.001      21.4     19.1      23.9 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> insuran…   0.315  0.045<span style="text-decoration: underline;">0</span>   7.01  2.41<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> &lt;0.001       1.37     1.25      1.50</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> waveWav…  -<span style="color: #BB0000;">0.020</span><span style="color: #BB0000; text-decoration: underline;">7</span> 0.044<span style="text-decoration: underline;">4</span>  -<span style="color: #BB0000;">0.466</span> 6.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.641        0.980    0.898     1.07</span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Report the sensitivity Poisson model in a supplemental table
 alongside the primary LMM. Consistent direction of effects (same sign
 across both models) supports robustness of the conclusion.</p>
@@ -362,13 +297,7 @@ package) returns a tidy tibble of fixed-effect estimates, making it easy
 to pipe into <code>ggplot2</code> or <code>gt</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidy_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="va">tidy_result</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 8</span></span></span>
-<span><span class="co">#&gt;   term            estimate std.error statistic    df  p.value conf.low conf.high</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)       21.7        2.03    10.7    73.4 1.28<span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span>    17.6      25.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> insuranceMedic…    7.93       2.33     3.41   58.0 1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>     3.27     12.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> waveWave2         -<span style="color: #BB0000;">0.525</span>      2.33    -<span style="color: #BB0000;">0.226</span>  58.0 8.22<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>    -<span style="color: #BB0000;">5.18</span>      4.13</span></span></code></pre></div>
+<span><span class="va">tidy_result</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -386,27 +315,17 @@ calendar-day and business-day wait times, use
 <span>  random_intercept <span class="op">=</span> <span class="st">"physician"</span>,</span>
 <span>  ref_label        <span class="op">=</span> <span class="st">"BCBS (commercial)"</span>,</span>
 <span>  supp_table_num   <span class="op">=</span> <span class="st">"S2"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Fitting calendar-days model (wait_days)...</span></span>
-<span><span class="co">#&gt; Fitting business-days model (business_days)...</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The comparison table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sens</span><span class="op">$</span><span class="va">summary_table</span></span>
-<span><span class="co">#&gt;                Term                 Calendar days                 Business days</span></span>
-<span><span class="co">#&gt; 1 insuranceMedicaid  7.9 (3.3 to 12.6), p = 0.001     5.7 (2.4 to 9), p = 0.001</span></span>
-<span><span class="co">#&gt; 2         waveWave2 -0.5 (-5.2 to 4.1), p = 0.822 -0.5 (-3.8 to 2.8), p = 0.775</span></span>
-<span><span class="co">#&gt;   Consistent</span></span>
-<span><span class="co">#&gt; 1        Yes</span></span>
-<span><span class="co">#&gt; 2        Yes</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sens</span><span class="op">$</span><span class="va">summary_table</span></span></code></pre></div>
 <p>Whether all term directions are consistent across both measurement
 approaches:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sens</span><span class="op">$</span><span class="va">all_consistent</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sens</span><span class="op">$</span><span class="va">all_consistent</span></span></code></pre></div>
 <p>The ready-to-paste supplemental paragraph:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">sens</span><span class="op">$</span><span class="va">paragraph</span><span class="op">)</span></span>
-<span><span class="co">#&gt; As a pre-specified sensitivity analysis, we repeated the secondary wait-time analysis substituting business days (Monday through Friday, excluding the 11 U.S. federal holidays) for calendar days. Business days were computed using the R package \emph{bizdays} with a US Federal holiday calendar. The calendar-day model included 80 observations with a recorded appointment date; the business-day model included 80 observations. Both models used the same mixed-effects linear regression specification (insurance and wave as fixed effect compared with BCBS (commercial) (reference); physician practice as random intercept). Results were directionally consistent across both metrics for all comparisons. Business-day estimates were on average 81% of calendar-day estimates (median ratio = 0.81), consistent with the expected 5/7 weekday fraction. Shapiro-Wilk normality tests on model residuals: calendar-day model: W = 0.985, p = 0.499; business-day model: W = 0.987, p = 0.595. Full results are presented in Supplemental Table S2.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">sens</span><span class="op">$</span><span class="va">paragraph</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -416,7 +335,6 @@ approaches:</p>
 class to produce Q-Q and residual-vs-fitted plots:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="linear-mixed-models_files/figure-html/diagnostic-plots-1.png" class="r-plt" alt="" width="672"></p>
 <p>A well-specified LMM shows:</p>
 <ul>
 <li>
@@ -439,22 +357,15 @@ comparison:</p>
 <code class="sourceCode R"><span><span class="va">fit_full</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_lmm.html">mysterycall_lmm</a></span><span class="op">(</span><span class="va">sim_data</span>, <span class="st">"wait_days"</span>,</span>
 <span>                                <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"wave"</span><span class="op">)</span>, <span class="st">"physician"</span>,</span>
 <span>                                REML <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Fitting LMM: wait_days ~ insurance + wave + (1 | physician)</span></span>
-<span><span class="co">#&gt; Model fitted: n=80, physicians=20, AIC=609.4, sigma=10.22, R2m=0.132, R2c=0.136</span></span>
 <span><span class="va">fit_reduced</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_lmm.html">mysterycall_lmm</a></span><span class="op">(</span><span class="va">sim_data</span>, <span class="st">"wait_days"</span>,</span>
 <span>                                <span class="st">"insurance"</span>, <span class="st">"physician"</span>,</span>
 <span>                                REML <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Fitting LMM: wait_days ~ insurance + (1 | physician)</span></span>
-<span><span class="co">#&gt; Model fitted: n=80, physicians=20, AIC=607.4, sigma=10.23, R2m=0.131, R2c=0.136</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Full (insurance + wave)"</span>, <span class="st">"Reduced (insurance only)"</span><span class="op">)</span>,</span>
 <span>  AIC   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit_full</span><span class="op">$</span><span class="va">aic</span>,    <span class="va">fit_reduced</span><span class="op">$</span><span class="va">aic</span><span class="op">)</span>,</span>
 <span>  BIC   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit_full</span><span class="op">$</span><span class="va">bic</span>,    <span class="va">fit_reduced</span><span class="op">$</span><span class="va">bic</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;                      model      AIC      BIC</span></span>
-<span><span class="co">#&gt; 1  Full (insurance + wave) 609.3901 621.3003</span></span>
-<span><span class="co">#&gt; 2 Reduced (insurance only) 607.4428 616.9709</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Lower AIC/BIC favours the more parsimonious model. Use
 <code><a href="../reference/mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code> for a print-ready
 table.</p>
@@ -514,7 +425,7 @@ access to urgent ambulatory care follow-up appointments. <em>JAMA</em>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

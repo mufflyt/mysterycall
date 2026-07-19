@@ -106,13 +106,13 @@ mysterycall_session_snapshot(
 # Inspect what was written
 out <- mysterycall_session_snapshot(file = snap, append = TRUE, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/RtmpztgZNl/file21dd2ba958da.txt
+#> Session snapshot: /var/folders/39/5l91m_5d02l3kl5z8_1s9pmr0000gn/T//RtmpDaona5/file53f739701b3d.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-07-19 19:15:43 UTC
-#> R Version: R version 4.6.1 (2026-06-24)
-#> Platform:  x86_64-pc-linux-gnu
+#> Date/Time: 2026-07-19 13:44:54 MDT
+#> R Version: R version 4.4.2 (2024-10-31)
+#> Platform:  x86_64-apple-darwin20
 #> 
 #> === SEEDS ===
 #> bootstrap                      42
@@ -120,12 +120,12 @@ print(out)
 #> 
 #> === LOADED PACKAGES ===
 #> ggplot2                        4.0.3
-#> mysterycall                    1.6.2.9003
+#> mysterycall                    1.6.2.9004
 #> 
 #> === FULL SESSION INFO ===
-#> R version 4.6.1 (2026-06-24)
-#> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.4 LTS
+#> R version 4.4.2 (2024-10-31)
+#> Platform: x86_64-apple-darwin20
+#> Running under: macOS Ventura 13.7.8
 #> 
-#> ... (177 more lines not shown)
+#> ... (185 more lines not shown)
 ```

@@ -60,7 +60,6 @@ Census demographics, and producing publication-ready tables and maps.
 ## Installation
 
 ``` r
-
 # install.packages("pak")
 pak::pkg_install("mufflyt/mysterycall")
 ```
@@ -69,7 +68,6 @@ The package loads quickly. Geospatial and modelling packages are
 optional and loaded only when first needed:
 
 ``` r
-
 install.packages(c("hereR", "sf", "lwgeom"))  # drive-time isochrones
 install.packages("leaflet")                            # interactive maps
 install.packages("ggmap")                              # Google Maps geocoding
@@ -83,7 +81,6 @@ install.packages("censusapi")                          # Census block-group data
 A typical mystery caller study moves through four stages:
 
 ``` r
-
 library(mysterycall)
 library(dplyr)
 
@@ -187,7 +184,6 @@ output.
 | `census_summaries` | Pre-computed Census block-group demographics |
 
 ``` r
-
 # Example: find all OBGYN taxonomy codes
 library(mysterycall)
 library(dplyr)
@@ -240,7 +236,6 @@ Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
 ## Citing mysterycall
 
 ``` r
-
 citation("mysterycall")
 ```
 

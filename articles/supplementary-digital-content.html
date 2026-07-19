@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Assembling supplementary digital content">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,63 +96,93 @@
 
 
 
-
-<div class="row">
+<link href="supplementary-digital-content_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="supplementary-digital-content_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="supplementary-digital-content_files/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="supplementary-digital-content_files/leaflet-1.3.1/leaflet.js"></script><link href="supplementary-digital-content_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="supplementary-digital-content_files/proj4-2.6.2/proj4.min.js"></script><script src="supplementary-digital-content_files/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="supplementary-digital-content_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="supplementary-digital-content_files/leaflet-binding-2.2.3/leaflet.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Assembling supplementary digital content</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/supplementary-digital-content.Rmd" class="external-link"><code>vignettes/supplementary-digital-content.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/supplementary-digital-content.Rmd" class="external-link"><code>vignettes/supplementary-digital-content.Rmd</code></a></small>
       <div class="d-none name"><code>supplementary-digital-content.Rmd</code></div>
     </div>
 
     
     
 <p>Journals rarely print a mystery-caller study’s full model tables,
-sensitivity analyses, reporting checklist, and participant-flow diagram
+sensitivity analyses, reporting checklists, participant flow, and maps
 in the main text — those go in the <strong>supplementary digital content
 (SDC)</strong>, uploaded as separate files. This vignette assembles that
-package: the supplementary tables and figures, a STROBE checklist, and
-the export steps, each generated from the fitted models so the SDC stays
-consistent with the manuscript and is trivial to regenerate when the
-data change.</p>
+package: model equations, supplementary tables and figures, a
+missingness analysis, a per-caller evaluation, maps, and two reporting
+checklists, each generated from the fitted models and the call log so
+the SDC stays consistent with the manuscript and regenerates itself when
+the data change.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="the-analysis-behind-the-sdc">1. The analysis behind the SDC<a class="anchor" aria-label="anchor" href="#the-analysis-behind-the-sdc"></a>
 </h2>
-<p>A mystery-caller study of insurance-based access has two outcomes:
-whether an appointment was offered, and the wait in business days among
-offers. We simulate a small paired call log and fit both models — a
-logistic GLMM for the offer and a Poisson GLMM for the wait.</p>
+<p>A mystery-caller study of insurance-based access has two outcomes —
+whether an appointment was offered and the wait in business days among
+offers — and a call log carrying the caller, the call date, and the
+practice location. We simulate it, then fit a logistic GLMM for the
+offer and a Poisson GLMM for the wait.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">120</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">150</span></span>
+<span><span class="va">cities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CO <span class="op">=</span> <span class="st">"Denver"</span>, TX <span class="op">=</span> <span class="st">"Dallas"</span>, NY <span class="op">=</span> <span class="st">"New York"</span>,</span>
+<span>               CA <span class="op">=</span> <span class="st">"Los Angeles"</span>, FL <span class="op">=</span> <span class="st">"Miami"</span>, IL <span class="op">=</span> <span class="st">"Chicago"</span><span class="op">)</span></span>
+<span><span class="va">st</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cities</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  npi        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"1%09d"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  insurance  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Commercial"</span>, <span class="st">"Medicaid"</span><span class="op">)</span>, <span class="va">n</span><span class="op">)</span>,</span>
-<span>  region     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Northeast"</span>, <span class="st">"South"</span>, <span class="st">"West"</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  caller     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"RA"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  call_date  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2026-01-05"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">40</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  state      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">st</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  city       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cities</span><span class="op">)</span><span class="op">[</span><span class="va">st</span><span class="op">]</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  area       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metro"</span>, <span class="st">"Nonmetro"</span><span class="op">)</span>, <span class="va">n</span>, <span class="cn">TRUE</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">med</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">insurance</span> <span class="op">==</span> <span class="st">"Medicaid"</span></span>
-<span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fl">1.1</span> <span class="op">-</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">med</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">d</span><span class="op">$</span><span class="va">wait_days</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">==</span> <span class="fl">1</span>,</span>
-<span>                         <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">med</span>, <span class="fl">18</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">reached</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0.92</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>   <span class="co"># some calls never reached a live office</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fl">1.1</span> <span class="op">-</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">med</span> <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">area</span> <span class="op">==</span> <span class="st">"Metro"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># a few calls never resolved the wait (incomplete) -&gt; missing outcome</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">wait_days</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0.9</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                      <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">med</span>, <span class="fl">18</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">offer_crude</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"appt_offered"</span>, <span class="st">"insurance"</span>, <span class="st">"npi"</span><span class="op">)</span></span>
-<span><span class="va">offer_adjusted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">d</span>, <span class="st">"appt_offered"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"region"</span><span class="op">)</span>, <span class="st">"npi"</span><span class="op">)</span></span>
+<span><span class="va">offer_adjusted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"appt_offered"</span>,</span>
+<span>                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"area"</span><span class="op">)</span>, <span class="st">"npi"</span><span class="op">)</span></span>
 <span><span class="va">wait_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">d</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span>, outcome <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
+<span>  <span class="va">d</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">appt_offered</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">wait_days</span><span class="op">)</span>, <span class="op">]</span>, outcome <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
 <span>  predictors <span class="op">=</span> <span class="st">"insurance"</span>, random_intercept <span class="op">=</span> <span class="st">"npi"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="supplementary-tables">2. Supplementary tables<a class="anchor" aria-label="anchor" href="#supplementary-tables"></a>
+<h2 id="model-equations">2. Model equations<a class="anchor" aria-label="anchor" href="#model-equations"></a>
 </h2>
-<p><strong>Table S1 — model estimates (crude vs. adjusted).</strong>
-<code><a href="../reference/mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code> places nested models side
-by side, the usual “did adjustment move the estimate?” supplementary
-table.</p>
+<p>Supplementary methods print the statistical model.
+<code><a href="../reference/mysterycall_model_equation.html">mysterycall_model_equation()</a></code> renders a fitted GLM(M) as
+LaTeX — no <code>equatiomatic</code> dependency — reading the link,
+terms, and random intercept off the fit.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_model_equation.html">mysterycall_model_equation</a></span><span class="op">(</span><span class="va">offer_adjusted</span><span class="op">)</span>, <span class="st">"\n\n"</span><span class="op">)</span></span></code></pre></div>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>logit</mi><mo>⁡</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>Pr</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">appt_offered</mtext><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mspace width="0.167em"></mspace><mtext mathvariant="normal">insurance</mtext><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mspace width="0.167em"></mspace><mtext mathvariant="normal">area</mtext><mo>+</mo><msub><mi>u</mi><mtext mathvariant="normal">npi</mtext></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>u</mi><mtext mathvariant="normal">npi</mtext></msub><mo>∼</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.222em"></mspace><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{logit}\left(\Pr(\text{appt\_offered}=1)\right) = \beta_0 + \beta_{1}\,\text{insurance} + \beta_{2}\,\text{area} + u_{\text{npi}}, \quad u_{\text{npi}} \sim \mathcal{N}(0,\ \sigma^2)</annotation></semantics></math></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_model_equation.html">mysterycall_model_equation</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝔼</mi><mo stretchy="false" form="prefix">[</mo><mtext mathvariant="normal">wait_days</mtext><mo stretchy="false" form="postfix">]</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mspace width="0.167em"></mspace><mtext mathvariant="normal">insurance</mtext><mo>+</mo><msub><mi>u</mi><mtext mathvariant="normal">npi</mtext></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>u</mi><mtext mathvariant="normal">npi</mtext></msub><mo>∼</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.222em"></mspace><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\log\left(\mathbb{E}[\text{wait\_days}]\right) = \beta_0 + \beta_{1}\,\text{insurance} + u_{\text{npi}}, \quad u_{\text{npi}} \sim \mathcal{N}(0,\ \sigma^2)</annotation></semantics></math></p>
+<p>Pass <code>coefficients = TRUE</code> for the fitted form with
+numbers in place of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>s;
+the symbolic form carries a <code>legend</code> attribute mapping each
+coefficient to its term.</p>
+</div>
+<div class="section level2">
+<h2 id="supplementary-tables">3. Supplementary tables<a class="anchor" aria-label="anchor" href="#supplementary-tables"></a>
+</h2>
+<p><strong>Table S1 — model estimates (crude vs. adjusted).</strong></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tS1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_multi_model_table.html">mysterycall_multi_model_table</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Crude <span class="op">=</span> <span class="va">offer_crude</span>, Adjusted <span class="op">=</span> <span class="va">offer_adjusted</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">tS1</span></span>
@@ -160,41 +190,34 @@ table.</p>
 <span><span class="co">#&gt; ------------------------------------------------------------ </span></span>
 <span><span class="co">#&gt;  Term                Crude                        Adjusted                    </span></span>
 <span><span class="co">#&gt;  insuranceCommercial Ref.                         Ref.                        </span></span>
-<span><span class="co">#&gt;  insuranceMedicaid   0.29 (0.16-0.50) | p=&lt; 0.001 0.28 (0.16-0.50) | p=&lt; 0.001</span></span>
-<span><span class="co">#&gt;  regionNortheast                                  Ref.                        </span></span>
-<span><span class="co">#&gt;  regionSouth                                      1.16 (0.59-2.28) | p=0.669  </span></span>
-<span><span class="co">#&gt;  regionWest                                       1.44 (0.72-2.85) | p=0.299  </span></span>
-<span><span class="co">#&gt;  N                   240                          240                         </span></span>
-<span><span class="co">#&gt;  AIC                 297.8                        300.7                       </span></span>
+<span><span class="co">#&gt;  insuranceMedicaid   0.38 (0.23-0.64) | p=&lt; 0.001 0.38 (0.22-0.64) | p=&lt; 0.001</span></span>
+<span><span class="co">#&gt;  areaMetro                                        Ref.                        </span></span>
+<span><span class="co">#&gt;  areaNonmetro                                     0.67 (0.39-1.12) | p=0.126  </span></span>
+<span><span class="co">#&gt;  N                   300                          300                         </span></span>
+<span><span class="co">#&gt;  AIC                 353.5                        353.1                       </span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------</span></span></code></pre></div>
 <p><strong>Table S2 — the disparity, with confidence
 intervals.</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tS2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"appt_offered"</span>, <span class="st">"insurance"</span>,</span>
 <span>                                     ref_group <span class="op">=</span> <span class="st">"Commercial"</span><span class="op">)</span></span>
 <span><span class="va">tS2</span></span>
 <span><span class="co">#&gt; Disparity table -- 2 groups | ref: 'Commercial' | wilson 95% CI</span></span>
 <span><span class="co">#&gt; Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; Commercial                120     94    78.3%  70.1%-84.8%          (ref)  1.00 (ref)              (ref)</span></span>
-<span><span class="co">#&gt; Medicaid                  120     61    50.8%  42.0%-59.6%       -27.5 pp  0.65 (0.53-0.79)        p &lt; 0.001</span></span></code></pre></div>
-<p><strong>Table S3 — adjusted effect on the absolute scale.</strong>
-<code><a href="../reference/mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code> reports the wait
-model’s rate ratio alongside the implied difference in days.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tS3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_combined_results_table.html">mysterycall_combined_results_table</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span>
-<span><span class="va">tS3</span></span>
+<span><span class="co">#&gt; Commercial                150    121    80.7%  73.6%-86.2%          (ref)  1.00 (ref)              (ref)</span></span>
+<span><span class="co">#&gt; Medicaid                  150     92    61.3%  53.3%-68.8%       -19.3 pp  0.76 (0.65-0.88)        p &lt; 0.001</span></span></code></pre></div>
+<p><strong>Table S3 — adjusted effect on the absolute
+scale.</strong></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_combined_results_table.html">mysterycall_combined_results_table</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance</span></span>
-<span><span class="co">#&gt; 1 insuranceMedicaid 1.41  1.30-1.54 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;            *</span></span></code></pre></div>
-<p><strong>Table S4 — this study in the context of prior work.</strong>
-<code><a href="../reference/mysterycall_literature_table.html">mysterycall_literature_table()</a></code> stacks your estimate against
-published ones.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; 1 insuranceMedicaid 1.56  1.44-1.68 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;            *</span></span></code></pre></div>
+<p><strong>Table S4 — this study against prior work.</strong></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  author <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pollack 2016"</span>, <span class="st">"Sharma 2025"</span><span class="op">)</span>,</span>
-<span>  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2016</span>, <span class="fl">2025</span><span class="op">)</span>,</span>
-<span>  insurance_comparison <span class="op">=</span> <span class="st">"Medicaid vs Commercial"</span>,</span>
-<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1200</span>, <span class="fl">480</span><span class="op">)</span>,</span>
+<span>  author <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pollack 2016"</span>, <span class="st">"Sharma 2025"</span><span class="op">)</span>, year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2016</span>, <span class="fl">2025</span><span class="op">)</span>,</span>
+<span>  insurance_comparison <span class="op">=</span> <span class="st">"Medicaid vs Commercial"</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1200</span>, <span class="fl">480</span><span class="op">)</span>,</span>
 <span>  or <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.42</span>, <span class="fl">0.55</span><span class="op">)</span>, ci_lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.40</span><span class="op">)</span>, ci_upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.51</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
 <span>  specialty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Urology"</span>, <span class="st">"OBGYN"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_literature_table.html">mysterycall_literature_table</a></span><span class="op">(</span><span class="va">prior</span><span class="op">)</span></span>
@@ -212,59 +235,113 @@ published ones.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Discussion sentence:</span></span>
 <span><span class="co">#&gt; Across 2 mystery-caller studies, ORs for Medicaid vs Commercial ranged from 0.42-0.55.</span></span></code></pre></div>
-<p><strong>A one-file bundle.</strong>
-<code><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables()</a></code> writes every model table
-into a single formatted workbook for upload (needs the openxlsx
-package).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">xlsx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables</a></span><span class="op">(</span></span>
-<span>  logistic_fit <span class="op">=</span> <span class="va">offer_adjusted</span>, poisson_fit <span class="op">=</span> <span class="va">wait_model</span>,</span>
-<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"supplemental_tables.xlsx"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">xlsx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "supplemental_tables.xlsx"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="supplementary-figures-at-journal-specification">3. Supplementary figures, at journal specification<a class="anchor" aria-label="anchor" href="#supplementary-figures-at-journal-specification"></a>
+<h2 id="missing-data-analysis">4. Missing-data analysis<a class="anchor" aria-label="anchor" href="#missing-data-analysis"></a>
+</h2>
+<p>Reviewers want to know whether missingness is benign.
+<code><a href="../reference/mysterycall_missing_data_analysis.html">mysterycall_missing_data_analysis()</a></code> quantifies it and tests
+whether it depends on the exposure — the difference between “missing
+completely at random” and a threat to validity.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">miss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_missing_data_analysis.html">mysterycall_missing_data_analysis</a></span><span class="op">(</span></span>
+<span>  <span class="va">d</span>, outcome_col <span class="op">=</span> <span class="st">"wait_days"</span>, group_col <span class="op">=</span> <span class="st">"insurance"</span><span class="op">)</span></span>
+<span><span class="va">miss</span><span class="op">$</span><span class="va">summary</span></span>
+<span><span class="co">#&gt;    variable n_observed n_missing pct_missing       test statistic df    p_value</span></span>
+<span><span class="co">#&gt; 1 insurance        300         0        38.3 Chi-square  4.075206  1 0.04351697</span></span>
+<span><span class="co">#&gt;   significant</span></span>
+<span><span class="co">#&gt; 1        TRUE</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="per-caller-evaluation">5. Per-caller evaluation<a class="anchor" aria-label="anchor" href="#per-caller-evaluation"></a>
+</h2>
+<p>Standardization is central to a covert audit, so the SDC should show
+each caller behaved comparably.
+<code><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code> summarizes volume and
+outcomes by caller; large between-caller swings in the acceptance rate
+would flag a standardization problem.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity</a></span><span class="op">(</span></span>
+<span>  <span class="va">d</span>, caller_col <span class="op">=</span> <span class="st">"caller"</span>, date_col <span class="op">=</span> <span class="st">"call_date"</span>, outcome_col <span class="op">=</span> <span class="st">"appt_offered"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   caller n_calls n_days calls_per_day n_accepted acceptance_rate mean_hold_sec</span></span>
+<span><span class="co">#&gt; 1    RA2      74     23      3.217391         52           70.3%            NA</span></span>
+<span><span class="co">#&gt; 2    RA4      58     18      3.222222         44           75.9%            NA</span></span>
+<span><span class="co">#&gt; 3    RA5      58     21      2.761905         41           70.7%            NA</span></span>
+<span><span class="co">#&gt; 4    RA1      56     18      3.111111         39           69.6%            NA</span></span>
+<span><span class="co">#&gt; 5    RA3      54     19      2.842105         37           68.5%            NA</span></span>
+<span><span class="co">#&gt;   mean_call_sec</span></span>
+<span><span class="co">#&gt; 1            NA</span></span>
+<span><span class="co">#&gt; 2            NA</span></span>
+<span><span class="co">#&gt; 3            NA</span></span>
+<span><span class="co">#&gt; 4            NA</span></span>
+<span><span class="co">#&gt; 5            NA</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="supplementary-figures-at-journal-specification">6. Supplementary figures, at journal specification<a class="anchor" aria-label="anchor" href="#supplementary-figures-at-journal-specification"></a>
 </h2>
 <p><strong>Figure S1 — forest plot of the offer model.</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">figS1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot</a></span><span class="op">(</span><span class="va">offer_adjusted</span>, x_label <span class="op">=</span> <span class="st">"Odds ratio (95% CI)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="supplementary-digital-content_files/figure-html/figS1-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">figS1</span></span></code></pre></div>
 <p><img src="supplementary-digital-content_files/figure-html/figS1-2.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
-<p><strong>Figure S2 — incidence-rate-ratio plot of the wait
-model.</strong></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_irr_plot.html">mysterycall_irr_plot</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="supplementary-digital-content_files/figure-html/figS2-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
-<p><strong>Figure S3 — cumulative time to an appointment</strong>, the
+<p><strong>Figure S2 — cumulative time to an appointment</strong>, the
 correct single-contact time-to-event display:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_cumulative_access_curve.html">mysterycall_cumulative_access_curve</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_cumulative_access_curve.html">mysterycall_cumulative_access_curve</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span>, time_col <span class="op">=</span> <span class="st">"wait_days"</span>, offered_col <span class="op">=</span> <span class="st">"appt_offered"</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"insurance"</span>, horizon <span class="op">=</span> <span class="fl">45</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">curve</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
-<p><img src="supplementary-digital-content_files/figure-html/figS3-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
-<p><strong>Save at the journal’s column width.</strong>
-<code><a href="../reference/mysterycall_save_green_journal_figure.html">mysterycall_save_green_journal_figure()</a></code> writes a figure at
-<em>Obstetrics &amp; Gynecology</em> specifications (sized to a single
-or double column, at print DPI) and returns the path.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_save_green_journal_figure.html">mysterycall_save_green_journal_figure</a></span><span class="op">(</span></span>
-<span>  <span class="va">figS1</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"figS1_forest"</span><span class="op">)</span>, layout <span class="op">=</span> <span class="st">"single_column"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">paths</span><span class="op">)</span></span>
+<span>  group_col <span class="op">=</span> <span class="st">"insurance"</span>, horizon <span class="op">=</span> <span class="fl">45</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
+<p><img src="supplementary-digital-content_files/figure-html/figS2-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
+<p><code><a href="../reference/mysterycall_save_green_journal_figure.html">mysterycall_save_green_journal_figure()</a></code> writes any
+figure at <em>Obstetrics &amp; Gynecology</em> column width and print
+DPI:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_save_green_journal_figure.html">mysterycall_save_green_journal_figure</a></span><span class="op">(</span></span>
+<span>  <span class="va">figS1</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"figS1_forest"</span><span class="op">)</span>, layout <span class="op">=</span> <span class="st">"single_column"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "figS1_forest.tiff"     "figS1_forest.pdf"      "figS1_forest.png"     </span></span>
 <span><span class="co">#&gt; [4] "figS1_forest_data.csv"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="the-reporting-checklist">4. The reporting checklist<a class="anchor" aria-label="anchor" href="#the-reporting-checklist"></a>
+<h2 id="maps">7. Maps<a class="anchor" aria-label="anchor" href="#maps"></a>
 </h2>
-<p>Observational studies ship a STROBE checklist.
-<code><a href="../reference/mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code> builds one from the fitted
-model, pre-filling the items it can verify:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_strobe_checklist.html">mysterycall_strobe_checklist</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span>, <span class="fl">8</span><span class="op">)</span></span>
+<p><strong>An interactive practice map.</strong> Geocode the roster and
+drop the practices onto a Leaflet map — an interactive supplement that
+print cannot show.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">practices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"city"</span>, <span class="st">"state"</span>, <span class="st">"insurance"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_geocode_city_state.html">mysterycall_geocode_city_state</a></span><span class="op">(</span><span class="va">practices</span><span class="op">$</span><span class="va">city</span>, <span class="va">practices</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
+<span><span class="va">practices</span><span class="op">$</span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="va">g</span><span class="op">$</span><span class="va">lat</span>; <span class="va">practices</span><span class="op">$</span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="va">g</span><span class="op">$</span><span class="va">lon</span></span>
+<span><span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addCircleMarkers</a></span><span class="op">(</span></span>
+<span>  <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span><span class="va">practices</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  lng <span class="op">=</span> <span class="op">~</span><span class="va">lon</span>, lat <span class="op">=</span> <span class="op">~</span><span class="va">lat</span>, radius <span class="op">=</span> <span class="fl">4</span>, stroke <span class="op">=</span> <span class="cn">FALSE</span>, fillOpacity <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  popup <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">city</span>, <span class="st">", "</span>, <span class="va">state</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:624px;height:384px;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[25.775163,25.775163,39.76185,39.76185,39.76185,39.76185,41.837045,41.837045,25.775163,25.775163,40.662712,40.662712,34.019394,34.019394,34.019394,34.019394,25.775163,25.775163,34.019394,34.019394,32.793333,32.793333,32.793333,32.793333,40.662712,40.662712,25.775163,25.775163,41.837045,41.837045,39.76185,39.76185,34.019394,34.019394,32.793333,32.793333,41.837045,41.837045,32.793333,32.793333,41.837045,41.837045,32.793333,32.793333,25.775163,25.775163,25.775163,25.775163,34.019394,34.019394,25.775163,25.775163,40.662712,40.662712,34.019394,34.019394,40.662712,40.662712,40.662712,40.662712,32.793333,32.793333,25.775163,25.775163,34.019394,34.019394,32.793333,32.793333,32.793333,32.793333,25.775163,25.775163,34.019394,34.019394,25.775163,25.775163,25.775163,25.775163,39.76185,39.76185,34.019394,34.019394,25.775163,25.775163,39.76185,39.76185,25.775163,25.775163,32.793333,32.793333,39.76185,39.76185,40.662712,40.662712,32.793333,32.793333,41.837045,41.837045,25.775163,25.775163,25.775163,25.775163,40.662712,40.662712,25.775163,25.775163,34.019394,34.019394,39.76185,39.76185,39.76185,39.76185,40.662712,40.662712,25.775163,25.775163,25.775163,25.775163,39.76185,39.76185,34.019394,34.019394,39.76185,39.76185,41.837045,41.837045,34.019394,34.019394,39.76185,39.76185,39.76185,39.76185,34.019394,34.019394,41.837045,41.837045,25.775163,25.775163,34.019394,34.019394,25.775163,25.775163,40.662712,40.662712,41.837045,41.837045,41.837045,41.837045,39.76185,39.76185,34.019394,34.019394,40.662712,40.662712,39.76185,39.76185,39.76185,39.76185,34.019394,34.019394,41.837045,41.837045,25.775163,25.775163,39.76185,39.76185,40.662712,40.662712,34.019394,34.019394,39.76185,39.76185,25.775163,25.775163,25.775163,25.775163,34.019394,34.019394,25.775163,25.775163,25.775163,25.775163,39.76185,39.76185,32.793333,32.793333,34.019394,34.019394,40.662712,40.662712,41.837045,41.837045,25.775163,25.775163,40.662712,40.662712,25.775163,25.775163,39.76185,39.76185,40.662712,40.662712,41.837045,41.837045,25.775163,25.775163,32.793333,32.793333,34.019394,34.019394,32.793333,32.793333,39.76185,39.76185,34.019394,34.019394,32.793333,32.793333,34.019394,34.019394,25.775163,25.775163,32.793333,32.793333,34.019394,34.019394,25.775163,25.775163,40.662712,40.662712,39.76185,39.76185,39.76185,39.76185,39.76185,39.76185,39.76185,39.76185,39.76185,39.76185,25.775163,25.775163,34.019394,34.019394,40.662712,40.662712,25.775163,25.775163,32.793333,32.793333,34.019394,34.019394,34.019394,34.019394,39.76185,39.76185,40.662712,40.662712,32.793333,32.793333,32.793333,32.793333,39.76185,39.76185,32.793333,32.793333,40.662712,40.662712,32.793333,32.793333,25.775163,25.775163,32.793333,32.793333,25.775163,25.775163,40.662712,40.662712,41.837045,41.837045,41.837045,41.837045,25.775163,25.775163,32.793333,32.793333,41.837045,41.837045,40.662712,40.662712,34.019394,34.019394,34.019394,34.019394,34.019394,34.019394,25.775163,25.775163,32.793333,32.793333],[-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-104.881105,-104.881105,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-118.410825,-118.410825,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-96.766513,-96.766513,-96.766513,-96.766513,-73.938677,-73.938677,-80.20861499999999,-80.20861499999999,-87.684939,-87.684939,-104.881105,-104.881105,-118.410825,-118.410825,-96.766513,-96.766513,-87.684939,-87.684939,-96.766513,-96.766513,-87.684939,-87.684939,-96.766513,-96.766513,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-118.410825,-118.410825,-73.938677,-73.938677,-73.938677,-73.938677,-96.766513,-96.766513,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-96.766513,-96.766513,-96.766513,-96.766513,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-104.881105,-104.881105,-73.938677,-73.938677,-96.766513,-96.766513,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-104.881105,-104.881105,-104.881105,-104.881105,-73.938677,-73.938677,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-118.410825,-118.410825,-104.881105,-104.881105,-87.684939,-87.684939,-118.410825,-118.410825,-104.881105,-104.881105,-104.881105,-104.881105,-118.410825,-118.410825,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-87.684939,-87.684939,-87.684939,-87.684939,-104.881105,-104.881105,-118.410825,-118.410825,-73.938677,-73.938677,-104.881105,-104.881105,-104.881105,-104.881105,-118.410825,-118.410825,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-73.938677,-73.938677,-118.410825,-118.410825,-104.881105,-104.881105,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-96.766513,-96.766513,-118.410825,-118.410825,-73.938677,-73.938677,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-80.20861499999999,-80.20861499999999,-104.881105,-104.881105,-73.938677,-73.938677,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-118.410825,-118.410825,-96.766513,-96.766513,-104.881105,-104.881105,-118.410825,-118.410825,-96.766513,-96.766513,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-104.881105,-80.20861499999999,-80.20861499999999,-118.410825,-118.410825,-73.938677,-73.938677,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-118.410825,-118.410825,-118.410825,-118.410825,-104.881105,-104.881105,-73.938677,-73.938677,-96.766513,-96.766513,-96.766513,-96.766513,-104.881105,-104.881105,-96.766513,-96.766513,-73.938677,-73.938677,-96.766513,-96.766513,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-80.20861499999999,-80.20861499999999,-73.938677,-73.938677,-87.684939,-87.684939,-87.684939,-87.684939,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513,-87.684939,-87.684939,-73.938677,-73.938677,-118.410825,-118.410825,-118.410825,-118.410825,-118.410825,-118.410825,-80.20861499999999,-80.20861499999999,-96.766513,-96.766513],4,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.6},null,null,["Miami, FL","Miami, FL","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","New York, NY","New York, NY","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Dallas, TX","Dallas, TX","Dallas, TX","Dallas, TX","New York, NY","New York, NY","Miami, FL","Miami, FL","Chicago, IL","Chicago, IL","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Dallas, TX","Dallas, TX","Chicago, IL","Chicago, IL","Dallas, TX","Dallas, TX","Chicago, IL","Chicago, IL","Dallas, TX","Dallas, TX","Miami, FL","Miami, FL","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","New York, NY","New York, NY","Los Angeles, CA","Los Angeles, CA","New York, NY","New York, NY","New York, NY","New York, NY","Dallas, TX","Dallas, TX","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Dallas, TX","Dallas, TX","Dallas, TX","Dallas, TX","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Miami, FL","Miami, FL","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Denver, CO","Denver, CO","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Denver, CO","Denver, CO","New York, NY","New York, NY","Dallas, TX","Dallas, TX","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","Miami, FL","Miami, FL","New York, NY","New York, NY","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Denver, CO","Denver, CO","Denver, CO","Denver, CO","New York, NY","New York, NY","Miami, FL","Miami, FL","Miami, FL","Miami, FL","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Denver, CO","Denver, CO","Chicago, IL","Chicago, IL","Los Angeles, CA","Los Angeles, CA","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","New York, NY","New York, NY","Chicago, IL","Chicago, IL","Chicago, IL","Chicago, IL","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","New York, NY","New York, NY","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","Denver, CO","Denver, CO","New York, NY","New York, NY","Los Angeles, CA","Los Angeles, CA","Denver, CO","Denver, CO","Miami, FL","Miami, FL","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Miami, FL","Miami, FL","Denver, CO","Denver, CO","Dallas, TX","Dallas, TX","Los Angeles, CA","Los Angeles, CA","New York, NY","New York, NY","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","New York, NY","New York, NY","Miami, FL","Miami, FL","Denver, CO","Denver, CO","New York, NY","New York, NY","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Los Angeles, CA","Los Angeles, CA","Dallas, TX","Dallas, TX","Denver, CO","Denver, CO","Los Angeles, CA","Los Angeles, CA","Dallas, TX","Dallas, TX","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","New York, NY","New York, NY","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Denver, CO","Miami, FL","Miami, FL","Los Angeles, CA","Los Angeles, CA","New York, NY","New York, NY","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Denver, CO","Denver, CO","New York, NY","New York, NY","Dallas, TX","Dallas, TX","Dallas, TX","Dallas, TX","Denver, CO","Denver, CO","Dallas, TX","Dallas, TX","New York, NY","New York, NY","Dallas, TX","Dallas, TX","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Miami, FL","Miami, FL","New York, NY","New York, NY","Chicago, IL","Chicago, IL","Chicago, IL","Chicago, IL","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX","Chicago, IL","Chicago, IL","New York, NY","New York, NY","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Los Angeles, CA","Miami, FL","Miami, FL","Dallas, TX","Dallas, TX"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[25.775163,41.837045],"lng":[-118.410825,-73.938677]}},"evals":[],"jsHooks":[]}</script><p><strong>A choropleth by region/district.</strong> Assign every state
+its ACOG district with <code><a href="../reference/mysterycall_assign_region.html">mysterycall_assign_region()</a></code> and
+shade a US map:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="va">us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/map_data.html" class="external-link">map_data</a></span><span class="op">(</span><span class="st">"state"</span><span class="op">)</span></span>
+<span><span class="va">districts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">state.name</span><span class="op">)</span>,</span>
+<span>                        district <span class="op">=</span> <span class="fu"><a href="../reference/mysterycall_assign_region.html">mysterycall_assign_region</a></span><span class="op">(</span><span class="va">state.abb</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">choro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">us</span>, <span class="va">districts</span>, by <span class="op">=</span> <span class="st">"region"</span><span class="op">)</span></span>
+<span><span class="va">choro</span> <span class="op">&lt;-</span> <span class="va">choro</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">choro</span><span class="op">$</span><span class="va">order</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">choro</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">long</span>, <span class="va">lat</span>, group <span class="op">=</span> <span class="va">group</span>, fill <span class="op">=</span> <span class="va">district</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html" class="external-link">geom_polygon</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_map.html" class="external-link">coord_quickmap</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"ACOG district"</span>, title <span class="op">=</span> <span class="st">"Sampling frame by ACOG district"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="supplementary-digital-content_files/figure-html/regionmap-1.png" class="r-plt" alt="" width="624" style="display: block; margin: auto;"></p>
+<p>(<code><a href="../reference/mysterycall_region_labels.html">mysterycall_region_labels()</a></code> returns the same
+state-to-region assignment with centroids for labelling.)</p>
+</div>
+<div class="section level2">
+<h2 id="reporting-checklists">8. Reporting checklists<a class="anchor" aria-label="anchor" href="#reporting-checklists"></a>
+</h2>
+<p>Observational studies ship a <strong>STROBE</strong> checklist, built
+from the fitted model:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_strobe_checklist.html">mysterycall_strobe_checklist</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span></span>
 <span><span class="co">#&gt; STROBE Checklist for Mystery-Caller Study</span></span>
 <span><span class="co">#&gt; ================================================== </span></span>
 <span><span class="co">#&gt; [WARN] Item  1  Title/Abstract: Study design stated in title or abstract</span></span>
@@ -279,67 +356,120 @@ model, pre-filling the items it can verify:</p>
 <span><span class="co">#&gt;          Cannot auto-detect; verify manually.</span></span>
 <span><span class="co">#&gt; [WARN] Item  6  Methods: Sample size justified</span></span>
 <span><span class="co">#&gt;          No power/sample_size field found. Verify that a power analysis is reported.</span></span>
-<span><span class="co">#&gt; [PASS] Item  7  Methods: Statistical methods: model family specified</span></span>
-<span><span class="co">#&gt;          Model class 'mysterycall_poisson_model' detected; model family is unambiguous.</span></span>
-<span><span class="co">#&gt; [PASS] Item  8  Methods: Physician random intercepts included and stated</span></span>
-<span><span class="co">#&gt;          Random-effects term detected in model formula.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Summary: 2 PASS, 6 WARN, 0 FAIL</span></span></code></pre></div>
-<p>The participant-flow diagram (a near-universal Figure S1) comes from
-<code><a href="../reference/mysterycall_flowchart.html">mysterycall_flowchart()</a></code> /
-<code><a href="../reference/mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>; it renders with the DiagrammeR
+<span><span class="co">#&gt; Summary: 0 PASS, 6 WARN, 0 FAIL</span></span></code></pre></div>
+<p>But mystery-caller studies are <em>simulated-patient</em> research,
+and STROBE omits the covert-methodology items reviewers ask for — why
+the covert method was justified, how callers were trained, how detection
+was handled, how the deception was ethically managed.
+<code><a href="../reference/mysterycall_crisp_checklist.html">mysterycall_crisp_checklist()</a></code> supplies that companion:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">crisp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_crisp_checklist.html">mysterycall_crisp_checklist</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">crisp</span><span class="op">[</span><span class="va">crisp</span><span class="op">$</span><span class="va">section</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Callers"</span>, <span class="st">"Detection"</span>, <span class="st">"Ethics"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"section"</span>, <span class="st">"item"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; &lt;CRiSP-style simulated-patient reporting checklist: 6 items, 3 sections&gt;</span></span>
+<span><span class="co">#&gt;    section                                   item</span></span>
+<span><span class="co">#&gt;    Callers Caller recruitment and characteristics</span></span>
+<span><span class="co">#&gt;    Callers                        Caller training</span></span>
+<span><span class="co">#&gt;    Callers             Standardization monitoring</span></span>
+<span><span class="co">#&gt;  Detection            Detection and contamination</span></span>
+<span><span class="co">#&gt;     Ethics         Ethical approval and deception</span></span>
+<span><span class="co">#&gt;     Ethics                        Provider burden</span></span></code></pre></div>
+<p>The participant-flow diagram (Figure S-flow) comes from
+<code><a href="../reference/mysterycall_flowchart.html">mysterycall_flowchart()</a></code>, which renders with the DiagrammeR
 package:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_flowchart.html">mysterycall_flowchart</a></span><span class="op">(</span></span>
 <span>  counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sampled"</span> <span class="op">=</span> <span class="fl">240</span>, <span class="st">"Reached"</span> <span class="op">=</span> <span class="fl">226</span>, <span class="st">"Analyzed"</span> <span class="op">=</span> <span class="fl">218</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="export-for-upload">5. Export for upload<a class="anchor" aria-label="anchor" href="#export-for-upload"></a>
+<h2 id="sensitivity-analyses">9. Sensitivity analyses<a class="anchor" aria-label="anchor" href="#sensitivity-analyses"></a>
 </h2>
-<p>Each table can be written in whatever format the journal wants. A CSV
-per table is the most portable:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">tS1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS1_models.csv"</span><span class="op">)</span>,</span>
-<span>          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">tS2</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS2_disparities.csv"</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>For a formatted Word document (with a results paragraph on top), use
-<code><a href="../reference/mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code> — it needs the
-officer/flextable packages:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_export_results_docx.html">mysterycall_export_results_docx</a></span><span class="op">(</span></span>
-<span>  table <span class="op">=</span> <span class="va">tS2</span>, title <span class="op">=</span> <span class="st">"Table S2. Insurance-based access disparities"</span>,</span>
-<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS2.docx"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>A covert audit invites a predictable set of “but what if…” questions,
+and the SDC is where you answer them. Two are near-universal.</p>
+<p><strong>Non-response bounds.</strong> Not every call reaches a live
+office, so the offer rate is not point-identified. Rather than quietly
+condition on completed calls, <code><a href="../reference/mysterycall_outcome_bounds.html">mysterycall_outcome_bounds()</a></code>
+reports the assumption-free interval — assign every unreached call first
+to failure, then to success:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_outcome_bounds.html">mysterycall_outcome_bounds</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"appt_offered"</span>, observed <span class="op">=</span> <span class="st">"reached"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;mysterycall outcome bounds under non-response&gt;</span></span>
+<span><span class="co">#&gt;   universe 300 = observed 270 + missing 30; positives 191</span></span>
+<span><span class="co">#&gt;   complete-case rate: 70.7%  (95% CI 65.1%-75.8%)</span></span>
+<span><span class="co">#&gt;   bounds over universe: [63.7% (all missing fail), 73.7% (all succeed)]  width 10.0%</span></span></code></pre></div>
+<p><strong>Leave-one-caller-out.</strong> Confirm the exposure effect
+does not hinge on a single research assistant by refitting with each
+caller dropped in turn:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_glm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">appt_offered</span> <span class="op">~</span> <span class="va">insurance</span> <span class="op">+</span> <span class="va">area</span>, <span class="va">binomial</span>, <span class="va">d</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/mysterycall_leave_one_out.html">mysterycall_leave_one_out</a></span><span class="op">(</span><span class="va">fit_glm</span>, <span class="va">d</span>, group <span class="op">=</span> <span class="st">"caller"</span>, term <span class="op">=</span> <span class="st">"insuranceMedicaid"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;mysterycall leave-one-group-out: term 'insuranceMedicaid', 5 refits&gt;</span></span>
+<span><span class="co">#&gt;   full-data ratio: 0.38 (p = 0.000266)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
+<span><span class="co">#&gt;   group_excluded     n estimate ratio std_error  p_value converged</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> RA1              244   -<span style="color: #BB0000;">0.998</span> 0.369     0.298 0.000<span style="text-decoration: underline;">807</span> TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> RA2              226   -<span style="color: #BB0000;">1.06</span>  0.345     0.316 0.000<span style="text-decoration: underline;">743</span> TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> RA3              246   -<span style="color: #BB0000;">0.824</span> 0.439     0.294 0.004<span style="text-decoration: underline;">99</span>  TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> RA4              242   -<span style="color: #BB0000;">1.01</span>  0.363     0.294 0.000<span style="text-decoration: underline;">570</span> TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> RA5              242   -<span style="color: #BB0000;">1.00</span>  0.368     0.298 0.000<span style="text-decoration: underline;">796</span> TRUE</span></span></code></pre></div>
+<p>Other analyses worth including, each a single call: the wait model
+under an alternative count family
+(<code><a href="../reference/mysterycall_compare_count_families.html">mysterycall_compare_count_families()</a></code>), calendar vs.
+business days (<code><a href="../reference/mysterycall_calendar_sensitivity.html">mysterycall_calendar_sensitivity()</a></code>), a
+stricter outcome definition (re-fit on “offer with the sampled
+physician”), and Benjamini–Hochberg-adjusted p-values
+(<code><a href="../reference/mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust()</a></code>).</p>
 </div>
 <div class="section level2">
-<h2 id="a-manifest">6. A manifest<a class="anchor" aria-label="anchor" href="#a-manifest"></a>
+<h2 id="export-and-manifest">10. Export and manifest<a class="anchor" aria-label="anchor" href="#export-and-manifest"></a>
 </h2>
-<p>Finally, list what the SDC package contains — reviewers appreciate a
-manifest, and it doubles as a build check.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<p>Write each artifact in the format the journal wants — a CSV per table
+is the most portable, <code><a href="../reference/mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>
+gives formatted Word (needs officer/flextable), and
+<code><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables()</a></code> bundles every model table
+into one workbook (needs openxlsx):</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">tS1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS1_models.csv"</span><span class="op">)</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">tS2</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"TableS2_disparities.csv"</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">crisp</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"ChecklistS1_CRiSP.csv"</span><span class="op">)</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_supplemental_tables.html">mysterycall_supplemental_tables</a></span><span class="op">(</span></span>
+<span>  logistic_fit <span class="op">=</span> <span class="va">offer_adjusted</span>, poisson_fit <span class="op">=</span> <span class="va">wait_model</span>,</span>
+<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">sdc_dir</span>, <span class="st">"supplemental_tables.xlsx"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Finally, a manifest — reviewers appreciate it, and it doubles as a
+build check:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">sdc_dir</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  file <span class="op">=</span> <span class="va">files</span>,</span>
 <span>  kind <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"\\.csv$"</span>, <span class="va">files</span><span class="op">)</span>, <span class="st">"table"</span>,</span>
-<span>         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"\\.(png|pdf|tiff)$"</span>, <span class="va">files</span><span class="op">)</span>, <span class="st">"figure"</span>, <span class="st">"bundle"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"\\.(png|pdf|tiff)$"</span>, <span class="va">files</span><span class="op">)</span>, <span class="st">"figure"</span>,</span>
+<span>         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"\\.xlsx$"</span>, <span class="va">files</span><span class="op">)</span>, <span class="st">"bundle"</span>, <span class="st">"other"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       file   kind</span></span>
-<span><span class="co">#&gt; 1    figS1_forest_data.csv  table</span></span>
-<span><span class="co">#&gt; 2         figS1_forest.pdf figure</span></span>
-<span><span class="co">#&gt; 3         figS1_forest.png figure</span></span>
-<span><span class="co">#&gt; 4        figS1_forest.tiff figure</span></span>
-<span><span class="co">#&gt; 5 supplemental_tables.xlsx bundle</span></span>
-<span><span class="co">#&gt; 6       TableS1_models.csv  table</span></span>
-<span><span class="co">#&gt; 7  TableS2_disparities.csv  table</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    ChecklistS1_CRiSP.csv  table</span></span>
+<span><span class="co">#&gt; 2    figS1_forest_data.csv  table</span></span>
+<span><span class="co">#&gt; 3         figS1_forest.pdf figure</span></span>
+<span><span class="co">#&gt; 4         figS1_forest.png figure</span></span>
+<span><span class="co">#&gt; 5        figS1_forest.tiff figure</span></span>
+<span><span class="co">#&gt; 6 supplemental_tables.xlsx bundle</span></span>
+<span><span class="co">#&gt; 7       TableS1_models.csv  table</span></span>
+<span><span class="co">#&gt; 8  TableS2_disparities.csv  table</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="recap">Recap<a class="anchor" aria-label="anchor" href="#recap"></a>
 </h2>
 <p>Every piece of a mystery-caller study’s supplementary digital content
-— the crude-vs-adjusted model table, the disparity table, the
-absolute-scale effect, the literature comparison, the forest / IRR /
-cumulative-access figures at journal specification, the STROBE
-checklist, and the export to workbook / Word / CSV — comes from the same
-fitted models with one call apiece, so the SDC regenerates itself
-whenever the analysis is re-run.</p>
+— the model equations, the crude-vs-adjusted and disparity tables, the
+missingness analysis, the per-caller evaluation, the forest and
+cumulative-access figures at journal specification, the practice and
+district maps, and the STROBE <strong>and</strong> CRiSP reporting
+checklists — comes from the same fitted models and call log with one
+call apiece, so the SDC regenerates itself whenever the analysis is
+re-run.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -352,7 +482,7 @@ whenever the analysis is re-run.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

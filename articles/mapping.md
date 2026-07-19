@@ -23,7 +23,6 @@ the bottom-left. An optional `title` argument accepts an HTML string
 that is placed in a control panel at the top-left of the map.
 
 ``` r
-
 library(mysterycall)
 library(leaflet)
 
@@ -57,7 +56,6 @@ geometries and returns a dissolved `sf` polygon object — one row per
 district — that is ready for mapping or spatial joins.
 
 ``` r
-
 library(mysterycall)
 
 # Build the sf object (requires rnaturalearth)
@@ -79,7 +77,6 @@ state-to-district mapping and can be inspected without building the sf
 object:
 
 ``` r
-
 library(mysterycall)
 
 data(acog_districts)
@@ -98,7 +95,6 @@ head(acog_districts)
 The table below summarizes how many states each district covers:
 
 ``` r
-
 data(acog_districts)
 dist_summary <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_summary)[2] <- "n_states"
@@ -125,10 +121,9 @@ knitr::kable(
 | District XI   |      1 |
 | District XII  |      1 |
 
-Number of US states (and territories) in each ACOG district. {.table}
+Number of US states (and territories) in each ACOG district.
 
 ``` r
-
 data(acog_districts)
 dist_counts <- aggregate(State ~ ACOG_District, data = acog_districts, FUN = length)
 names(dist_counts)[2] <- "n_states"
@@ -167,7 +162,6 @@ saves the result as a self-contained HTML file plus a PNG screenshot to
 `output_dir`.
 
 ``` r
-
 library(mysterycall)
 
 # Synthetic provider data — replace with your own data frame
@@ -211,7 +205,6 @@ first use, caches it in the user’s R cache directory, and returns an
 `remove_HI_AK = FALSE` to retain all regions.
 
 ``` r
-
 library(mysterycall)
 library(ggplot2)
 
@@ -226,7 +219,6 @@ The returned sf object can be passed directly to
 for static publication-ready maps:
 
 ``` r
-
 ggplot(hrr_sf) +
   geom_sf(fill = "#f0f0f0", color = "#999999", linewidth = 0.15) +
   theme_void() +
@@ -240,7 +232,6 @@ Rico insets. The result is saved as both TIFF and PNG at journal-ready
 resolution (600 dpi by default).
 
 ``` r
-
 # physician_sf must be an sf object with point geometries
 hrr_generate_maps(
   physician_sf = physician_sf,
@@ -270,7 +261,6 @@ minutes) in a distinct color. The map is exported as an HTML file and a
 PNG screenshot to `output_dir`.
 
 ``` r
-
 library(mysterycall)
 
 # bg_data and isochrones_data are sf objects produced by the isochrone workflow

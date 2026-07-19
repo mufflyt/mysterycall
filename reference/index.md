@@ -865,6 +865,10 @@ Prepare call lists, STROBE checklists, and session snapshots.
 
 - [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md)
   : STROBE reporting checklist for mystery-caller studies
+- [`mysterycall_crisp_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crisp_checklist.md)
+  : Simulated-patient (CRiSP-style) reporting checklist
+- [`mysterycall_model_equation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_equation.md)
+  : Render a fitted model as a LaTeX equation
 - [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
   : Draw a STROBE-compliant flow diagram for mystery-caller
   (secret-shopper) studies
