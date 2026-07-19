@@ -9,17 +9,31 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE
+  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 3.6, fig.align = "center"
 )
 ```
 
 Some mystery-caller studies are **case–control** by design: a treated group of
 practices — private-equity-owned, hospital-acquired, or a specific chain — is
-compared against otherwise-similar practices. To keep the comparison fair and
-the calling burden bounded, each treated practice is matched to a nearby,
-comparable control *before* any calls are placed. This vignette builds that
-matched cohort and then analyses the resulting paired audit, motivated by a
-study of private-equity ownership of OB/GYN practices.
+compared against otherwise-similar practices. Two problems have to be solved
+*before* any calls are placed:
+
+1. **Fairness.** Treated and control practices differ on things other than the
+   exposure (physician age, degree, gender, local market). If controls are drawn
+   at random, an apparent access difference may just reflect those imbalances.
+2. **Feasibility.** Callers can only place so many calls, and a control is only
+   useful if it is genuinely *callable* — ideally in the same state and a short
+   drive from its treated counterpart, so the two share a labor market and payer
+   mix.
+
+Matching each treated practice to a nearby, comparable control addresses both.
+This vignette walks that design end to end — geocoding a roster, building a
+propensity-score-matched control cohort inside a geographic caliper, assembling
+the paired calling list, and analysing the completed audit — motivated by a
+study of private-equity ownership of OB/GYN practices. (Deriving the treated
+cohort itself — tying practice names back to an ownership reference — is an
+upstream step outside the package.)
 
 ```{r}
 library(mysterycall)
@@ -30,7 +44,9 @@ library(mysterycall)
 We simulate 60 private-equity-owned ("treated") practices concentrated in three
 metros, plus a large pool of independent candidate controls in the same metros.
 Each practice carries the covariates we want to balance — years in practice,
-physician gender, and degree — and a city/state.
+physician gender, and degree (MD vs DO) — and a city/state. The treated
+practices are drawn slightly younger and more often DO-led, so the arms are *not*
+balanced to begin with.
 
 ```{r simulate}
 set.seed(2026)
@@ -47,7 +63,7 @@ draw <- function(n, treated) {
     city  = vapply(st, function(s) sample(metros[[s]], 1), character(1)),
     years = round(rpois(n, if (treated) 11 else 12)),
     female = rbinom(n, 1, if (treated) 0.45 else 0.55),
-    md = rbinom(n, 1, 0.8),
+    md = rbinom(n, 1, if (treated) 0.72 else 0.82),
     stringsAsFactors = FALSE
   )
 }
@@ -56,31 +72,91 @@ candidates <- draw(600, FALSE); candidates$npi <- 1001:1600
 head(treated)
 ```
 
-## 2. Geocode from city + state
+## 2. Aligning rosters by name
 
-A caliper needs coordinates, but the roster only has a city and a state.
-`mysterycall_geocode_city_state()` looks them up in the bundled place table — no
-network, no API key — enough to seed a distance caliper.
+Before matching, you often have to reconcile two rosters that spell the same
+practice differently — the ownership list that defines "treated", and the NPPES
+or CMS roster the candidate pool comes from. Exact joins fail on `LLC` vs `PC`,
+`&` vs `and`, and stray punctuation. `mysterycall_normalize_org_name()` collapses
+those variants to a single canonical key:
+
+```{r normalize}
+messy <- c("Women's Health Specialists, LLC", "Womens Health Specialists PC",
+           "Rocky Mountain OB & GYN, P.A.")
+mysterycall_normalize_org_name(messy)
+```
+
+In practice you would add the key to both frames and merge on it:
+
+```{r normalize-join}
+cohort <- data.frame(name = messy)
+roster <- data.frame(name = c("WOMENS HEALTH SPECIALISTS", "ROCKY MOUNTAIN OB AND GYN"),
+                     owner = c("PE-backed", "Independent"))
+cohort$key <- mysterycall_normalize_org_name(cohort$name)
+merge(cohort, roster, by.x = "key", by.y = "name")
+```
+
+## 3. Geocode from city + state
+
+A geographic caliper needs coordinates, but the roster only has a city and a
+state. `mysterycall_geocode_city_state()` looks them up in the bundled place
+table (~32,000 US places) — no network, no API key — enough to seed a caliper or
+QC how far apart matched practices sit. For rooftop-accurate coordinates from
+full street addresses, use a dedicated geocoding service instead.
 
 ```{r geocode}
 tg <- mysterycall_geocode_city_state(treated$city, treated$state)
 treated$lat <- tg$lat; treated$lon <- tg$lon
 cg <- mysterycall_geocode_city_state(candidates$city, candidates$state)
 candidates$lat <- cg$lat; candidates$lon <- cg$lon
-head(tg)
+c(treated_resolved = mean(!is.na(treated$lat)),
+  candidate_resolved = mean(!is.na(candidates$lat)))
 ```
 
-(If instead you needed to align two rosters that spell practice names
-differently, `mysterycall_normalize_org_name()` builds a join key:
-`mysterycall_normalize_org_name(c("Women's Health Specialists, LLC", "Womens Health Specialists PC"))`
-collapses both to `"WOMENS HEALTH SPECIALISTS"`.)
+Places the bundled table misses (townships, renamed municipalities) can be
+supplied through the `overrides` argument rather than dropped.
 
-## 3. Build the matched control cohort
+## 4. The propensity model and common support
 
-`mysterycall_build_matched_controls()` fits a propensity model (treated vs. the
-candidate pool), then greedily matches each treated practice 1:1 to its nearest
-control on the propensity score — within the **same state** and a **25-mile**
-caliper, without replacement.
+Matching rests on the **propensity score** — the modeled probability of being
+treated given the covariates. `mysterycall_build_matched_controls()` fits it
+internally, but it is worth inspecting. Here is the same model, fit directly:
+
+```{r ps-model}
+ps_df <- rbind(cbind(treatment = 1, treated[, c("years", "female", "md")]),
+               cbind(treatment = 0, candidates[, c("years", "female", "md")]))
+ps_fit <- glm(treatment ~ years + female + md, binomial, ps_df)
+round(coef(summary(ps_fit)), 3)
+```
+
+Matching only works where treated and control scores **overlap** (the
+common-support assumption). A treated practice with a score no control comes
+close to has no honest match. Compare the two score distributions:
+
+```{r overlap}
+treated$ps    <- predict(ps_fit, treated, type = "response")
+candidates$ps <- predict(ps_fit, candidates, type = "response")
+library(ggplot2)
+ggplot(mapping = aes(x = ps)) +
+  geom_density(data = candidates, aes(fill = "Candidate pool"), alpha = 0.5) +
+  geom_density(data = treated, aes(fill = "Treated (PE)"), alpha = 0.5) +
+  scale_fill_manual(NULL, values = c("Candidate pool" = "grey70",
+                                     "Treated (PE)" = "#08519c")) +
+  labs(x = "Propensity score", y = "Density",
+       title = "Propensity-score overlap between arms") +
+  theme_minimal(base_size = 12) + theme(legend.position = "top")
+```
+
+Good overlap here: every treated score is well inside the candidate range.
+
+## 5. Build the matched control cohort
+
+Now the match itself. `mysterycall_build_matched_controls()` fits the propensity
+model, then greedily matches each treated practice 1:1 to its nearest control on
+the propensity score — within the **same state** and a **25-mile** caliper,
+**without replacement** (each control is used at most once). The greedy scheme,
+with a hard state + distance constraint, is what makes every control genuinely
+callable.
 
 ```{r match}
 m <- mysterycall_build_matched_controls(
@@ -94,18 +170,55 @@ m <- mysterycall_build_matched_controls(
 m
 ```
 
-The `balance` table shows the covariates are well-aligned between arms after
-matching (small standardized mean differences), and every control is a distinct
-practice within 25 miles of its PE match:
-
 ```{r pairs}
 head(m$pairs)
 ```
 
-## 4. The matched calling list
+## 6. Did matching work? Balance before and after
 
-Stack the two arms into one long calling list, tagged by matched pair. This is
-what the callers would work from.
+The point of matching is to erase the covariate imbalance we built in. Compare
+the standardized mean difference (SMD) of each covariate **before** matching
+(treated vs. the whole candidate pool) and **after** (treated vs. matched
+controls). An SMD below about 0.1 is the usual "well-balanced" rule of thumb.
+
+```{r balance}
+smd <- function(a, b) {
+  (mean(a) - mean(b)) / sqrt((var(a) + var(b)) / 2)
+}
+before <- vapply(c("years", "female", "md"),
+                 function(v) smd(treated[[v]], candidates[[v]]), numeric(1))
+after  <- setNames(m$balance$smd, m$balance$covariate)
+round(data.frame(before_matching = before, after_matching = after[names(before)]), 3)
+```
+
+Every covariate moves toward zero after matching.
+
+## 7. How tight a caliper? A sensitivity sweep
+
+The caliper trades geographic closeness against how many treated practices find
+a match. Tighten it and controls are nearer but more treated practices go
+unmatched. Sweep a few values:
+
+```{r caliper-sweep}
+sweep <- sapply(c(5, 10, 25, 50, 100), function(cm) {
+  mm <- mysterycall_build_matched_controls(
+    treated, candidates, treatment ~ years + female + md,
+    id_col = "npi", exact = "state", coords = c("lat", "lon"),
+    caliper_miles = cm)
+  c(caliper_miles = cm, matched = mm$n_matched,
+    median_dist = round(stats::median(mm$pairs$distance_miles, na.rm = TRUE), 1))
+})
+t(sweep)
+```
+
+Report the caliper you chose and this trade-off in the methods; it is a
+reviewer's first question.
+
+## 8. The matched calling list
+
+Stack the two arms into one long calling list, tagged by matched pair — what the
+callers work from. (`mysterycall_export_gsheet_caller_list()` writes this out in
+a Google-Sheets-ready format.)
 
 ```{r callist}
 pe   <- m$matched_treated;  pe$arm   <- "PE";      pe$pair_id   <- m$pairs$pair_id
@@ -115,9 +228,9 @@ call_list <- rbind(pe[, cols], ctl[, cols])
 table(call_list$arm)
 ```
 
-## 5. Analyse the paired audit
+## 9. Analyse the paired audit
 
-Now suppose the calls are complete. We simulate an offer and a wait time for each
+Suppose the calls are complete. We simulate an offer and a wait time for each
 practice, with PE practices a little less likely to accept and a little slower:
 
 ```{r outcomes}
@@ -128,27 +241,32 @@ call_list$wait_days <- ifelse(
   rnbinom(nrow(call_list), mu = ifelse(is_pe, 24, 18), size = 3), NA)
 ```
 
-Because the design is matched, the comparison is *within pair*. The same
-within-cluster tools used for insurance-scenario studies apply here, with the
-matched pair as the unit and the arm as the "scenario". Acceptance, via the exact
-McNemar test:
+Because the design is matched, the comparison is *within pair*, and only the
+**discordant** pairs (one arm accepted, the other did not) carry information
+about the exposure. The same within-cluster tools used for insurance-scenario
+studies apply, with the matched pair as the unit and the arm as the "scenario".
+Acceptance, via the exact McNemar test:
 
 ```{r mcnemar}
 mysterycall_paired_acceptance_mcnemar(
   call_list, id_col = "pair_id", scenario_col = "arm", outcome_col = "accepted")
 ```
 
-Wait time, via the within-pair paired comparison:
+The `discordant`, `disc_favor_a`/`disc_favor_b`, and `odds_ratio` columns show
+how many pairs split each way and the direction of the effect; `mde_or_power` is
+the smallest odds ratio this many discordant pairs could detect. Wait time, via
+the within-pair paired comparison (mean difference with a paired-t CI, plus the
+Wilcoxon signed-rank p-value):
 
 ```{r paired-wait}
 mysterycall_paired_wait_within_practice(
   call_list, id_col = "pair_id", scenario_col = "arm", wait_col = "wait_days")
 ```
 
-## 6. Power for the next matched study
+## 10. Power for the next matched study
 
-Sizing a follow-up matched audit uses the two-part power tools, treating the arm
-as the exposure:
+Sizing a follow-up uses the two-part power tools, treating the arm as the
+exposure — a binary offer on every call plus a wait time only among offers:
 
 ```{r power, eval = requireNamespace("MASS", quietly = TRUE)}
 mysterycall_twopart_power(
@@ -156,11 +274,29 @@ mysterycall_twopart_power(
   wait_ref = 18, wait_trt = 24, phi = 3, n_sim = 50, seed = 1)
 ```
 
+## Assumptions and limitations
+
+- **Matching balances only *observed* covariates.** Unmeasured differences
+  between PE-owned and independent practices can still confound the comparison;
+  matching is not randomization.
+- **Greedy, not optimal.** Matches are made one treated unit at a time in a fixed
+  order, so the total distance is not globally minimized. For this design — where
+  a callable, in-caliper control matters more than the global optimum — greedy is
+  the right trade-off; when it is not, an optimal matcher (e.g. the \pkg{MatchIt}
+  package) is the alternative.
+- **City-level geocoding.** `mysterycall_geocode_city_state()` places every
+  practice at its city centroid, so within-city pairs read as zero miles apart.
+  That is fine for a coarse caliper; a study reporting exact separations should
+  geocode full street addresses.
+- **Report the unmatched.** Treated practices with no in-caliper control are
+  dropped from the analysis; state how many (`m$n_unmatched`) and whether they
+  differ systematically, since that shapes who the study generalizes to.
+
 ## Recap
 
 From a treated cohort and a candidate pool to a fair, callable comparison and its
-analysis: geocode the roster, build a propensity-score-matched control group
-inside a geographic caliper, assemble the paired calling list, and analyse the
-completed audit with the matched McNemar and paired-wait tests — then power the
-next one. Deriving the treated cohort itself (e.g. tying practice names back to a
-private-equity ownership reference) is an upstream step outside the package.
+analysis: reconcile rosters by normalized name, geocode, check propensity-score
+overlap, build a matched control group inside a geographic caliper, confirm
+balance improved, choose the caliper deliberately, assemble the paired calling
+list, and analyse the completed audit with the matched McNemar and paired-wait
+tests — then power the next one.
