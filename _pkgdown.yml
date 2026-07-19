@@ -533,6 +533,8 @@ reference:
       Prepare call lists, STROBE checklists, and session snapshots.
     contents:
       - mysterycall_strobe_checklist
+      - mysterycall_crisp_checklist
+      - mysterycall_model_equation
       - mysterycall_strobe_flow
       - mysterycall_prepare_calls
       - mysterycall_session_snapshot

@@ -252,7 +252,7 @@ cat(mysterycall_overdispersion_sentence(fit))
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] mysterycall_1.6.2
+    #> [1] mysterycall_1.6.2.9001
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] gtable_0.3.6       xfun_0.56          bslib_0.10.0       ggplot2_4.0.3     

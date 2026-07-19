@@ -14,6 +14,8 @@ articles:
   linear-mixed-models: linear-mixed-models.html
   logistic-model: logistic-model.html
   mapping: mapping.html
+  matched-control-design: matched-control-design.html
+  matched-pair-analysis: matched-pair-analysis.html
   my-vignette: my-vignette.html
   mystery-caller-workflow: mystery-caller-workflow.html
   pipeline-guarantees: pipeline-guarantees.html
@@ -24,7 +26,7 @@ articles:
   table-generation: table-generation.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-07-19T03:32Z
+last_built: 2026-07-19T18:32Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

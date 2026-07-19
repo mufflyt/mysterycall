@@ -2,6 +2,19 @@
 
 ## New functions
 
+Reporting artifacts for supplementary digital content:
+
+- `mysterycall_crisp_checklist()`: a fillable simulated-patient (CRiSP-style)
+  reporting checklist covering the covert-methodology items a generic STROBE
+  checklist omits (justification of the covert method, caller recruitment and
+  training, detection/contamination, ethics of deception, limitations of the
+  method). Companion to `mysterycall_strobe_checklist()`.
+- `mysterycall_model_equation()`: render a fitted GLM(M) as a LaTeX equation
+  (link-transformed outcome over the fixed-effect terms plus a random intercept),
+  dependency-free -- reads the family/link, terms, and grouping factor off the
+  fit. Symbolic form by default (with a term legend) or with fitted coefficients
+  substituted; wraps in `$$...$$` for R Markdown.
+
 Case-control design tooling, generalized from a private-equity-ownership
 mystery-caller study:
 
@@ -25,10 +38,14 @@ mystery-caller study:
 ## Documentation
 
 - New vignette **"Assembling supplementary digital content"**: generates a
-  journal manuscript's supplementary package from the fitted models -- the
-  crude-vs-adjusted model table, disparity table, absolute-scale effect,
-  literature comparison, forest / IRR / cumulative-access figures at journal
-  specification, the STROBE checklist, and export to workbook / Word / CSV.
+  journal manuscript's supplementary package from the fitted models and call
+  log -- model equations in LaTeX, the crude-vs-adjusted model table, disparity
+  table, absolute-scale effect, literature comparison, a missing-data analysis, a
+  per-caller evaluation, forest / cumulative-access figures at journal
+  specification, an interactive Leaflet practice map and an ACOG-district
+  choropleth, the STROBE **and** CRiSP reporting checklists, non-response bounds
+  and leave-one-caller-out sensitivity analyses, and export to workbook / Word /
+  CSV.
 - New vignette **"Designing a matched-control mystery-caller audit"**: an
   end-to-end case-control workflow (geocode a roster, build a
   propensity-score-matched control cohort inside a geographic caliper, assemble

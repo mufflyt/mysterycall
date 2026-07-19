@@ -17,12 +17,13 @@ dir.create(sdc_dir, showWarnings = FALSE)
 ```
 
 Journals rarely print a mystery-caller study's full model tables, sensitivity
-analyses, reporting checklist, and participant-flow diagram in the main text —
+analyses, reporting checklists, participant flow, and maps in the main text —
 those go in the **supplementary digital content (SDC)**, uploaded as separate
-files. This vignette assembles that package: the supplementary tables and
-figures, a STROBE checklist, and the export steps, each generated from the
-fitted models so the SDC stays consistent with the manuscript and is trivial to
-regenerate when the data change.
+files. This vignette assembles that package: model equations, supplementary
+tables and figures, a missingness analysis, a per-caller evaluation, maps, and
+two reporting checklists, each generated from the fitted models and the call log
+so the SDC stays consistent with the manuscript and regenerates itself when the
+data change.
 
 ```{r}
 library(mysterycall)
@@ -30,37 +31,59 @@ library(mysterycall)
 
 ## 1. The analysis behind the SDC
 
-A mystery-caller study of insurance-based access has two outcomes: whether an
-appointment was offered, and the wait in business days among offers. We simulate
-a small paired call log and fit both models — a logistic GLMM for the offer and
-a Poisson GLMM for the wait.
+A mystery-caller study of insurance-based access has two outcomes — whether an
+appointment was offered and the wait in business days among offers — and a call
+log carrying the caller, the call date, and the practice location. We simulate
+it, then fit a logistic GLMM for the offer and a Poisson GLMM for the wait.
 
 ```{r fit}
 set.seed(2026)
-n <- 120
+n <- 150
+cities <- list(CO = "Denver", TX = "Dallas", NY = "New York",
+               CA = "Los Angeles", FL = "Miami", IL = "Chicago")
+st <- sample(names(cities), n, TRUE)
 d <- data.frame(
   npi        = rep(sprintf("1%09d", seq_len(n)), each = 2),
   insurance  = rep(c("Commercial", "Medicaid"), n),
-  region     = rep(sample(c("Northeast", "South", "West"), n, TRUE), each = 2)
+  caller     = rep(sample(paste0("RA", 1:5), n, TRUE), each = 2),
+  call_date  = rep(as.Date("2026-01-05") + sample(0:40, n, TRUE), each = 2),
+  state      = rep(st, each = 2),
+  city       = rep(unlist(cities)[st], each = 2),
+  area       = rep(sample(c("Metro", "Nonmetro"), n, TRUE), each = 2)
 )
 med <- d$insurance == "Medicaid"
-d$appt_offered <- rbinom(nrow(d), 1, plogis(1.1 - 0.9 * med))
-d$wait_days    <- ifelse(d$appt_offered == 1,
-                         rpois(nrow(d), ifelse(med, 18, 12)), NA)
+d$reached <- rbinom(nrow(d), 1, 0.92) == 1   # some calls never reached a live office
+d$appt_offered <- rbinom(nrow(d), 1, plogis(1.1 - 0.9 * med + 0.3 * (d$area == "Metro")))
+# a few calls never resolved the wait (incomplete) -> missing outcome
+d$wait_days <- ifelse(d$appt_offered == 1 & rbinom(nrow(d), 1, 0.9) == 1,
+                      rpois(nrow(d), ifelse(med, 18, 12)), NA)
 
 offer_crude    <- mysterycall_logistic_model(d, "appt_offered", "insurance", "npi")
-offer_adjusted <- mysterycall_logistic_model(
-  d, "appt_offered", c("insurance", "region"), "npi")
+offer_adjusted <- mysterycall_logistic_model(d, "appt_offered",
+                                             c("insurance", "area"), "npi")
 wait_model <- mysterycall_poisson_model(
-  d[d$appt_offered == 1, ], outcome = "wait_days",
+  d[d$appt_offered == 1 & !is.na(d$wait_days), ], outcome = "wait_days",
   predictors = "insurance", random_intercept = "npi")
 ```
 
-## 2. Supplementary tables
+## 2. Model equations
+
+Supplementary methods print the statistical model. `mysterycall_model_equation()`
+renders a fitted GLM(M) as LaTeX — no `equatiomatic` dependency — reading the
+link, terms, and random intercept off the fit.
+
+```{r eq, results = "asis"}
+cat(mysterycall_model_equation(offer_adjusted), "\n\n")
+cat(mysterycall_model_equation(wait_model))
+```
+
+Pass `coefficients = TRUE` for the fitted form with numbers in place of the
+$\beta$s; the symbolic form carries a `legend` attribute mapping each
+coefficient to its term.
+
+## 3. Supplementary tables
 
 **Table S1 — model estimates (crude vs. adjusted).**
-`mysterycall_multi_model_table()` places nested models side by side, the usual
-"did adjustment move the estimate?" supplementary table.
 
 ```{r tableS1}
 tS1 <- mysterycall_multi_model_table(
@@ -77,39 +100,48 @@ tS2
 ```
 
 **Table S3 — adjusted effect on the absolute scale.**
-`mysterycall_combined_results_table()` reports the wait model's rate ratio
-alongside the implied difference in days.
 
 ```{r tableS3}
-tS3 <- mysterycall_combined_results_table(wait_model)
-tS3
+mysterycall_combined_results_table(wait_model)
 ```
 
-**Table S4 — this study in the context of prior work.**
-`mysterycall_literature_table()` stacks your estimate against published ones.
+**Table S4 — this study against prior work.**
 
 ```{r tableS4}
 prior <- data.frame(
-  author = c("Pollack 2016", "Sharma 2025"),
-  year = c(2016, 2025),
-  insurance_comparison = "Medicaid vs Commercial",
-  n = c(1200, 480),
+  author = c("Pollack 2016", "Sharma 2025"), year = c(2016, 2025),
+  insurance_comparison = "Medicaid vs Commercial", n = c(1200, 480),
   or = c(0.42, 0.55), ci_lower = c(0.35, 0.40), ci_upper = c(0.51, 0.75),
   specialty = c("Urology", "OBGYN"))
 mysterycall_literature_table(prior)
 ```
 
-**A one-file bundle.** `mysterycall_supplemental_tables()` writes every model
-table into a single formatted workbook for upload (needs the openxlsx package).
+## 4. Missing-data analysis
 
-```{r bundle, eval = requireNamespace("openxlsx", quietly = TRUE)}
-xlsx <- mysterycall_supplemental_tables(
-  logistic_fit = offer_adjusted, poisson_fit = wait_model,
-  file = file.path(sdc_dir, "supplemental_tables.xlsx"), overwrite = TRUE)
-basename(xlsx)
+Reviewers want to know whether missingness is benign.
+`mysterycall_missing_data_analysis()` quantifies it and tests whether it depends
+on the exposure — the difference between "missing completely at random" and a
+threat to validity.
+
+```{r missing}
+miss <- mysterycall_missing_data_analysis(
+  d, outcome_col = "wait_days", group_col = "insurance")
+miss$summary
 ```
 
-## 3. Supplementary figures, at journal specification
+## 5. Per-caller evaluation
+
+Standardization is central to a covert audit, so the SDC should show each caller
+behaved comparably. `mysterycall_call_productivity()` summarizes volume and
+outcomes by caller; large between-caller swings in the acceptance rate would flag
+a standardization problem.
+
+```{r caller}
+mysterycall_call_productivity(
+  d, caller_col = "caller", date_col = "call_date", outcome_col = "appt_offered")
+```
+
+## 6. Supplementary figures, at journal specification
 
 **Figure S1 — forest plot of the offer model.**
 
@@ -118,88 +150,150 @@ figS1 <- mysterycall_forest_plot(offer_adjusted, x_label = "Odds ratio (95% CI)"
 figS1
 ```
 
-**Figure S2 — incidence-rate-ratio plot of the wait model.**
-
-```{r figS2}
-mysterycall_irr_plot(wait_model)
-```
-
-**Figure S3 — cumulative time to an appointment**, the correct single-contact
+**Figure S2 — cumulative time to an appointment**, the correct single-contact
 time-to-event display:
 
-```{r figS3, fig.height = 3.4}
-curve <- mysterycall_cumulative_access_curve(
+```{r figS2, fig.height = 3.4}
+mysterycall_cumulative_access_curve(
   d, time_col = "wait_days", offered_col = "appt_offered",
-  group_col = "insurance", horizon = 45, plot = TRUE)
-curve$plot
+  group_col = "insurance", horizon = 45, plot = TRUE)$plot
 ```
 
-**Save at the journal's column width.** `mysterycall_save_green_journal_figure()`
-writes a figure at *Obstetrics & Gynecology* specifications (sized to a single or
-double column, at print DPI) and returns the path.
+`mysterycall_save_green_journal_figure()` writes any figure at *Obstetrics &
+Gynecology* column width and print DPI:
 
 ```{r savefig}
-paths <- mysterycall_save_green_journal_figure(
-  figS1, file.path(sdc_dir, "figS1_forest"), layout = "single_column")
-basename(paths)
+basename(mysterycall_save_green_journal_figure(
+  figS1, file.path(sdc_dir, "figS1_forest"), layout = "single_column"))
 ```
 
-## 4. The reporting checklist
+## 7. Maps
 
-Observational studies ship a STROBE checklist. `mysterycall_strobe_checklist()`
-builds one from the fitted model, pre-filling the items it can verify:
+**An interactive practice map.** Geocode the roster and drop the practices onto a
+Leaflet map — an interactive supplement that print cannot show.
+
+```{r leaflet, eval = requireNamespace("leaflet", quietly = TRUE), fig.height = 4}
+practices <- unique(d[, c("npi", "city", "state", "insurance")])
+g <- mysterycall_geocode_city_state(practices$city, practices$state)
+practices$lat <- g$lat; practices$lon <- g$lon
+leaflet::addCircleMarkers(
+  leaflet::addTiles(leaflet::leaflet(practices)),
+  lng = ~lon, lat = ~lat, radius = 4, stroke = FALSE, fillOpacity = 0.6,
+  popup = ~paste0(city, ", ", state))
+```
+
+**A choropleth by region/district.** Assign every state its ACOG district with
+`mysterycall_assign_region()` and shade a US map:
+
+```{r regionmap, eval = requireNamespace("maps", quietly = TRUE), fig.height = 4}
+library(ggplot2)
+us <- map_data("state")
+districts <- data.frame(region = tolower(state.name),
+                        district = mysterycall_assign_region(state.abb))
+choro <- merge(us, districts, by = "region")
+choro <- choro[order(choro$order), ]
+ggplot(choro, aes(long, lat, group = group, fill = district)) +
+  geom_polygon(colour = "white", linewidth = 0.2) +
+  coord_quickmap() + theme_void() +
+  labs(fill = "ACOG district", title = "Sampling frame by ACOG district")
+```
+
+(`mysterycall_region_labels()` returns the same state-to-region assignment with
+centroids for labelling.)
+
+## 8. Reporting checklists
+
+Observational studies ship a **STROBE** checklist, built from the fitted model:
 
 ```{r strobe}
-head(mysterycall_strobe_checklist(wait_model), 8)
+head(mysterycall_strobe_checklist(wait_model), 6)
 ```
 
-The participant-flow diagram (a near-universal Figure S1) comes from
-`mysterycall_flowchart()` / `mysterycall_strobe_flow()`; it renders with the
-DiagrammeR package:
+But mystery-caller studies are *simulated-patient* research, and STROBE omits the
+covert-methodology items reviewers ask for — why the covert method was justified,
+how callers were trained, how detection was handled, how the deception was
+ethically managed. `mysterycall_crisp_checklist()` supplies that companion:
+
+```{r crisp}
+crisp <- mysterycall_crisp_checklist()
+crisp[crisp$section %in% c("Callers", "Detection", "Ethics"),
+      c("section", "item")]
+```
+
+The participant-flow diagram (Figure S-flow) comes from
+`mysterycall_flowchart()`, which renders with the DiagrammeR package:
 
 ```{r flow, eval = FALSE}
 mysterycall_flowchart(
   counts = c("Sampled" = 240, "Reached" = 226, "Analyzed" = 218))
 ```
 
-## 5. Export for upload
+## 9. Sensitivity analyses
 
-Each table can be written in whatever format the journal wants. A CSV per table
-is the most portable:
+A covert audit invites a predictable set of "but what if..." questions, and the
+SDC is where you answer them. Two are near-universal.
 
-```{r csv}
+**Non-response bounds.** Not every call reaches a live office, so the offer rate
+is not point-identified. Rather than quietly condition on completed calls,
+`mysterycall_outcome_bounds()` reports the assumption-free interval — assign every
+unreached call first to failure, then to success:
+
+```{r bounds}
+mysterycall_outcome_bounds(d, "appt_offered", observed = "reached")
+```
+
+**Leave-one-caller-out.** Confirm the exposure effect does not hinge on a single
+research assistant by refitting with each caller dropped in turn:
+
+```{r loco}
+fit_glm <- glm(appt_offered ~ insurance + area, binomial, d)
+mysterycall_leave_one_out(fit_glm, d, group = "caller", term = "insuranceMedicaid")
+```
+
+Other analyses worth including, each a single call: the wait model under an
+alternative count family (`mysterycall_compare_count_families()`), calendar vs.
+business days (`mysterycall_calendar_sensitivity()`), a stricter outcome
+definition (re-fit on "offer with the sampled physician"), and
+Benjamini–Hochberg-adjusted p-values
+(`mysterycall_multiple_comparison_adjust()`).
+
+## 10. Export and manifest
+
+Write each artifact in the format the journal wants — a CSV per table is the most
+portable, `mysterycall_export_results_docx()` gives formatted Word (needs
+officer/flextable), and `mysterycall_supplemental_tables()` bundles every model
+table into one workbook (needs openxlsx):
+
+```{r export}
 write.csv(as.data.frame(tS1), file.path(sdc_dir, "TableS1_models.csv"),
           row.names = FALSE)
 write.csv(tS2, file.path(sdc_dir, "TableS2_disparities.csv"), row.names = FALSE)
+write.csv(as.data.frame(crisp), file.path(sdc_dir, "ChecklistS1_CRiSP.csv"),
+          row.names = FALSE)
 ```
 
-For a formatted Word document (with a results paragraph on top), use
-`mysterycall_export_results_docx()` — it needs the officer/flextable packages:
-
-```{r docx, eval = FALSE}
-mysterycall_export_results_docx(
-  table = tS2, title = "Table S2. Insurance-based access disparities",
-  output_path = file.path(sdc_dir, "TableS2.docx"))
+```{r bundle, eval = requireNamespace("openxlsx", quietly = TRUE)}
+mysterycall_supplemental_tables(
+  logistic_fit = offer_adjusted, poisson_fit = wait_model,
+  file = file.path(sdc_dir, "supplemental_tables.xlsx"), overwrite = TRUE)
 ```
 
-## 6. A manifest
-
-Finally, list what the SDC package contains — reviewers appreciate a manifest,
-and it doubles as a build check.
+Finally, a manifest — reviewers appreciate it, and it doubles as a build check:
 
 ```{r manifest}
 files <- list.files(sdc_dir)
 data.frame(
   file = files,
   kind = ifelse(grepl("\\.csv$", files), "table",
-         ifelse(grepl("\\.(png|pdf|tiff)$", files), "figure", "bundle")))
+         ifelse(grepl("\\.(png|pdf|tiff)$", files), "figure",
+         ifelse(grepl("\\.xlsx$", files), "bundle", "other"))))
 ```
 
 ## Recap
 
-Every piece of a mystery-caller study's supplementary digital content — the
-crude-vs-adjusted model table, the disparity table, the absolute-scale effect,
-the literature comparison, the forest / IRR / cumulative-access figures at
-journal specification, the STROBE checklist, and the export to workbook / Word /
-CSV — comes from the same fitted models with one call apiece, so the SDC
-regenerates itself whenever the analysis is re-run.
+Every piece of a mystery-caller study's supplementary digital content — the model
+equations, the crude-vs-adjusted and disparity tables, the missingness analysis,
+the per-caller evaluation, the forest and cumulative-access figures at journal
+specification, the practice and district maps, and the STROBE **and** CRiSP
+reporting checklists — comes from the same fitted models and call log with one
+call apiece, so the SDC regenerates itself whenever the analysis is re-run.

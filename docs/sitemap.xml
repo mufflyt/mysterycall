@@ -19,6 +19,8 @@
 <url><loc>https://mufflyt.github.io/mysterycall/articles/linear-mixed-models.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/logistic-model.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/mapping.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/articles/matched-control-design.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/articles/matched-pair-analysis.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/my-vignette.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/mystery-caller-workflow.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/pipeline-guarantees.html</loc></url>
@@ -165,6 +167,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_predictor_stability.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_build_matched_controls.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_business_days.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_cache_dir.html</loc></url>
@@ -246,6 +249,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_format_physician_name.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_format_results_table.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode_city_state.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_female_insurance.html</loc></url>
@@ -320,6 +324,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_address_df.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_directionals.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_file_format.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_org_name.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_state.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_suffix.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_units.html</loc></url>
