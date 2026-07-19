@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,8 @@
     <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
@@ -2879,6 +2881,36 @@
 
         </dt>
         <dd>Within-practice paired wait-time comparison</dd>
+      </dl></div><div class="section level2">
+      <h2 id="matched-control-design-and-geocoding">Matched-Control Design and Geocoding<a class="anchor" aria-label="anchor" href="#matched-control-design-and-geocoding"></a></h2>
+
+      <div class="section-desc"><p>Build a propensity-score-matched control cohort for a case-control audit, geocode a city/state roster, and normalize organization names for joins.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_build_matched_controls.html">mysterycall_build_matched_controls()</a></code>
+
+        </dt>
+        <dd>Build a propensity-score-matched control cohort</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_geocode_city_state.html">mysterycall_geocode_city_state()</a></code>
+
+        </dt>
+        <dd>Look up latitude/longitude for city + state</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_org_name.html">mysterycall_normalize_org_name()</a></code>
+
+        </dt>
+        <dd>Normalize an organization / practice name for matching</dd>
       </dl></div><div class="section level2">
       <h2 id="additional-models-and-diagnostics">Additional Models and Diagnostics<a class="anchor" aria-label="anchor" href="#additional-models-and-diagnostics"></a></h2>
 

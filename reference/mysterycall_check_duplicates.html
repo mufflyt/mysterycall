@@ -11,7 +11,7 @@ column."><meta property="og:image" content="https://github.com/mufflyt/mysteryca
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,8 @@ column."><meta property="og:image" content="https://github.com/mufflyt/mysteryca
     <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
@@ -129,9 +131,9 @@ physicians flagged.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_duplicates</span><span class="op">(</span><span class="va">df</span>, id_col <span class="op">=</span> <span class="st">"physician_id"</span>, max_calls <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   physician_id  call_date n_calls</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1            A 2026-07-18       3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            A 2026-07-19       3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3            A 2026-07-20       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            A 2026-07-19       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            A 2026-07-20       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            A 2026-07-21       3</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

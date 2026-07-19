@@ -87,6 +87,12 @@
 
 ### Analysis and Reporting
 
+- [A matched-pair mystery-caller
+  analysis](https://mufflyt.github.io/mysterycall/articles/matched-pair-analysis.md):
+
+- [Designing a matched-control mystery-caller
+  audit](https://mufflyt.github.io/mysterycall/articles/matched-control-design.md):
+
 - [Statistical Analysis of Mystery-Caller
   Data](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md):
 

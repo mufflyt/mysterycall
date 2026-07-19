@@ -981,6 +981,19 @@ practice called under two scenarios).
 - [`mysterycall_paired_wait_within_practice()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_wait_within_practice.md)
   : Within-practice paired wait-time comparison
 
+## Matched-Control Design and Geocoding
+
+Build a propensity-score-matched control cohort for a case-control
+audit, geocode a city/state roster, and normalize organization names for
+joins.
+
+- [`mysterycall_build_matched_controls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_build_matched_controls.md)
+  : Build a propensity-score-matched control cohort
+- [`mysterycall_geocode_city_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode_city_state.md)
+  : Look up latitude/longitude for city + state
+- [`mysterycall_normalize_org_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_org_name.md)
+  : Normalize an organization / practice name for matching
+
 ## Additional Models and Diagnostics
 
 - [`mysterycall_compare_count_families()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_count_families.md)

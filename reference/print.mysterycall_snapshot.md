@@ -48,11 +48,11 @@ Other reporting:
 snap <- tempfile(fileext = ".txt")
 out  <- mysterycall_session_snapshot(file = snap, quiet = TRUE)
 print(out)
-#> Session snapshot: /var/folders/39/5l91m_5d02l3kl5z8_1s9pmr0000gn/T//RtmpgR4QpJ/file124c1361b13ca.txt
+#> Session snapshot: /var/folders/39/5l91m_5d02l3kl5z8_1s9pmr0000gn/T//Rtmp8v3XIO/file1ff51821c6b3.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-07-18 21:49:57 MDT
+#> Date/Time: 2026-07-19 12:51:57 MDT
 #> R Version: R version 4.4.2 (2024-10-31)
 #> Platform:  x86_64-apple-darwin20
 #> 
@@ -61,7 +61,7 @@ print(out)
 #> 
 #> === LOADED PACKAGES ===
 #> ggplot2                        4.0.3
-#> mysterycall                    1.6.2
+#> mysterycall                    1.6.2.9001
 #> 
 #> === FULL SESSION INFO ===
 #> R version 4.4.2 (2024-10-31)
