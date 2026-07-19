@@ -49,7 +49,8 @@ d <- data.frame(
   call_date  = rep(as.Date("2026-01-05") + sample(0:40, n, TRUE), each = 2),
   state      = rep(st, each = 2),
   city       = rep(unlist(cities)[st], each = 2),
-  area       = rep(sample(c("Metro", "Nonmetro"), n, TRUE), each = 2)
+  area       = rep(sample(c("Metro", "Nonmetro"), n, TRUE), each = 2),
+  degree     = rep(sample(c("MD", "DO"), n, TRUE, c(.8, .2)), each = 2)
 )
 med <- d$insurance == "Medicaid"
 d$reached <- rbinom(nrow(d), 1, 0.92) == 1   # some calls never reached a live office
@@ -257,7 +258,62 @@ definition (re-fit on "offer with the sampled physician"), and
 Benjamini–Hochberg-adjusted p-values
 (`mysterycall_multiple_comparison_adjust()`).
 
-## 10. Export and manifest
+## 10. Baseline characteristics (Table 1)
+
+Reviewers want to know who was sampled. `mysterycall_table1()` builds a
+publication-ready baseline table at the practice level:
+
+```{r table1}
+practices <- unique(d[, c("npi", "state", "area", "degree")])
+mysterycall_table1(practices, covariates = c("state", "degree"),
+                   stratify_by = "area", include_overall = TRUE)
+```
+
+## 11. Full model output: ICC and variance components
+
+The SDC should report more than the exposure coefficient — the clustering matters.
+`mysterycall_icc()` gives the intraclass correlation (how much of the variation
+sits between practices), and `mysterycall_random_effect_variance()` the variance
+components:
+
+```{r icc}
+mysterycall_icc(wait_model)
+mysterycall_random_effect_variance(wait_model$model)
+```
+
+## 12. A priori power
+
+Journals require the pre-specified power calculation.
+`mysterycall_poisson_power()` sizes the wait-time comparison for a target
+incidence-rate ratio:
+
+```{r power}
+mysterycall_poisson_power(irr = 1.40, lambda_ref = 14, power = 0.80,
+                          both_arms = TRUE)
+```
+
+## 13. Model diagnostics
+
+A residual figure justifies the model.
+`mysterycall_plot_residuals()` draws the diagnostic panel, and the fitted object
+already carries the overdispersion check:
+
+```{r diagnostics, fig.height = 3.2}
+mysterycall_plot_residuals(wait_model)
+```
+
+## 14. Reproducibility
+
+Finally, a reproducibility appendix — the R and package versions the analysis ran
+under, so the SDC is a complete, re-runnable record:
+
+```{r repro}
+mysterycall_session_snapshot(
+  file = file.path(sdc_dir, "session_snapshot.txt"), quiet = TRUE,
+  notes = "Supplementary digital content build")
+```
+
+## 15. Export and manifest
 
 Write each artifact in the format the journal wants — a CSV per table is the most
 portable, `mysterycall_export_results_docx()` gives formatted Word (needs
@@ -292,8 +348,11 @@ data.frame(
 ## Recap
 
 Every piece of a mystery-caller study's supplementary digital content — the model
-equations, the crude-vs-adjusted and disparity tables, the missingness analysis,
-the per-caller evaluation, the forest and cumulative-access figures at journal
-specification, the practice and district maps, and the STROBE **and** CRiSP
-reporting checklists — comes from the same fitted models and call log with one
-call apiece, so the SDC regenerates itself whenever the analysis is re-run.
+equations, a baseline Table 1, the crude-vs-adjusted and disparity tables, the
+ICC and variance components, the missingness analysis, the per-caller evaluation,
+the a-priori power calculation, the forest, cumulative-access, and residual
+figures at journal specification, the practice and district maps, the STROBE
+**and** CRiSP reporting checklists, non-response and leave-one-caller-out
+sensitivity analyses, and a reproducibility appendix — comes from the same fitted
+models and call log with one call apiece, so the SDC regenerates itself whenever
+the analysis is re-run.
