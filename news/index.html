@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
     <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
@@ -70,6 +71,13 @@
       <small>Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="mysterycall-development-version">mysterycall (development version)<a class="anchor" aria-label="anchor" href="#mysterycall-development-version"></a></h2>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>New vignette <strong>“A matched-pair mystery-caller analysis”</strong>: a worked, end-to-end analysis on a simulated paired call log that exercises the tools added in 1.6.2 together – a clustering key, two data-integrity passes, the access cascade, non-response bounds, the cumulative-access curve, the matched McNemar and paired-wait comparisons, small-sample categorical and rank tests, outcome classification and guideline concordance, an adjusted model with a joint test and leave-one-out sensitivity, and simulation-based power.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.2" id="mysterycall-162">mysterycall 1.6.2<a class="anchor" aria-label="anchor" href="#mysterycall-162"></a></h2>
 <div class="section level3">
@@ -113,7 +121,7 @@
 <code><a href="../reference/mysterycall_kaplan_meier.html">mysterycall_kaplan_meier()</a></code> gains <code>ylab</code> (was a hardcoded label). The default is now the plain-language <code>"Callers still awaiting an appointment (%)"</code>.</li>
 <li>
 <code><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code> and <code><a href="../reference/mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code> gain <code>show_significance_legend</code> (default <code>FALSE</code>). When <code>TRUE</code>, a single <code>"p &lt; 0.05"</code> / <code>"n.s."</code> legend is drawn; the default keeps the current legend-free look.</li>
-<li>New <code><a href="../reference/mysterycall_region_labels.html">mysterycall_region_labels()</a></code>: one row per US state with its AAO-HNS (or ACOG / Census) region and an approximate centroid, ready to overlay on a state choropleth as a <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> layer. Dependency-free (base <code>state.center</code> + <code><a href="../reference/mysterycall_assign_region.html">mysterycall_assign_region()</a></code>).</li>
+<li>New <code><a href="../reference/mysterycall_region_labels.html">mysterycall_region_labels()</a></code>: one row per US state with its AAO-HNS (or ACOG / Census) region and an approximate centroid, ready to overlay on a state choropleth as a <code>geom_text()</code> layer. Dependency-free (base <code>state.center</code> + <code><a href="../reference/mysterycall_assign_region.html">mysterycall_assign_region()</a></code>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-6-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-2"></a></h3>
@@ -301,7 +309,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="sparkles-improvements-1-6-0">✨ Improvements<a class="anchor" aria-label="anchor" href="#sparkles-improvements-1-6-0"></a></h3>
-<ul><li><p><strong>broom-compatible <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> methods</strong> added for <code>mysterycall_lmm</code>, <code>mysterycall_logistic_model</code>, and <code>mysterycall_poisson_model</code> result objects via the <code>generics</code> package (now in <code>Imports</code>).</p></li>
+<ul><li><p><strong>broom-compatible <code>tidy()</code> methods</strong> added for <code>mysterycall_lmm</code>, <code>mysterycall_logistic_model</code>, and <code>mysterycall_poisson_model</code> result objects via the <code>generics</code> package (now in <code>Imports</code>).</p></li>
 <li><p><strong><code><a href="../reference/mysterycall_lmm.html">mysterycall_lmm()</a></code></strong> — auto log-transform now reports geometric-mean ratios (GMR) with confidence intervals alongside the standard coefficient table.</p></li>
 <li><p><strong><code>assign_region()</code></strong> — factor inputs are now silently coerced to character rather than erroring; non-character, non-factor input gives a clear error.</p></li>
 <li><p><strong><code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code></strong> — duplicate columns are dropped before column-binding to prevent <code>cbind</code> errors when API responses overlap with base data frame columns.</p></li>
@@ -324,7 +332,7 @@
 <ul><li><p><strong><code><a href="../reference/mysterycall_prepare_calls.html">mysterycall_prepare_calls()</a></code></strong> — merges phase-1 provider list with REDCap wave schedule, assigns callers, and exports call sheets ready for upload.</p></li>
 <li><p><strong><code><a href="../reference/mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code></strong> — generates a STROBE-compliant participant flow diagram (DiagrammeR / Graphviz) from a named list of screening counts.</p></li>
 <li><p><strong><code><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code></strong> — fits a mixed-effects logistic regression for binary outcomes (e.g., appointment offered yes/no), returns odds ratios, CIs, and a publication-ready OR table.</p></li>
-<li><p><strong><code><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code></strong> — renders a forest plot from any <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>- compatible model object, with optional reference-line and faceting by outcome variable.</p></li>
+<li><p><strong><code><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code></strong> — renders a forest plot from any <code>tidy()</code>- compatible model object, with optional reference-line and faceting by outcome variable.</p></li>
 <li><p><strong><code><a href="../reference/mysterycall_auto_model.html">mysterycall_auto_model()</a></code></strong> — selects the best GLMM family (Poisson, negative-binomial, zero-inflated) by AIC/BIC and overdispersion diagnostics, with an optional linear mixed-model evaluation step.</p></li>
 </ul></div>
 <div class="section level3">
