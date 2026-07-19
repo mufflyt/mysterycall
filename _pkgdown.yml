@@ -212,6 +212,7 @@ reference:
       - mysterycall_acceptance_rate
       - mysterycall_wait_time_summary
       - mysterycall_poisson_model
+      - mysterycall_hurdle_wait
       - mysterycall_irr_plot
       - mysterycall_model_table
       - mysterycall_model_metrics

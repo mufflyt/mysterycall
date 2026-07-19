@@ -1,3 +1,22 @@
+# mysterycall 1.6.3.9000 (development version)
+
+## New functions
+
+- `mysterycall_hurdle_wait()`: a two-part hurdle model for a mystery-caller wait
+  time, generalized from the private-equity urogynecology audit. Fits a binary
+  hurdle (appointment obtained yes/no) and a zero-truncated negative-binomial
+  count model for the wait among obtained appointments, each with an optional
+  practice random intercept so the clustered structure of an audit is respected
+  -- an advantage over `pscl::hurdle()`, which cannot cluster. The
+  negative-binomial count part absorbs the skew and overdispersion that a
+  normal-outcome selection (Heckman) model cannot; it assumes selection on
+  observables, and any residual selection-on-unobservables concern is addressed
+  with a sensitivity analysis (`mysterycall_outcome_bounds()` Manski bounds or
+  `mysterycall_leave_one_out()`) rather than a Heckman correction. Returns
+  odds-ratio and incidence-rate-ratio tables plus both fitted models, with
+  `print()` and `as.data.frame()` methods.
+
+
 # mysterycall 1.6.3
 
 ## New functions
