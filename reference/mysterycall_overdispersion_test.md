@@ -119,6 +119,19 @@ confirms that the dispersion was adequately absorbed.
 
   Severe overdispersion.
 
+## Mixed-effects caveat
+
+For mixed-effects models (`glmmTMB`, `merMod`),
+[`df.residual()`](https://rdrr.io/r/stats/df.residual.html) counts only
+the fixed-effect parameters and ignores the effective degrees of freedom
+consumed by the random effects, so phi is an **approximation** rather
+than an exact dispersion ratio. The verbal interpretation accounts for
+this by treating low residual phi as expected for negative-binomial and
+mixed models (dispersion absorbed by the NB variance or random
+intercepts) rather than as overfitting. For a formal simulation-based
+check on a GLMM, prefer
+[`DHARMa::testDispersion()`](https://rdrr.io/pkg/DHARMa/man/testDispersion.html).
+
 ## See also
 
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),

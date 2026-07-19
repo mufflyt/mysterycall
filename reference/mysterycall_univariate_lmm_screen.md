@@ -78,8 +78,9 @@ A named list with four elements:
 - `results`:
 
   [`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
-  with columns `Predictor`, `P_Value`, `P_Formatted`, `IRR`, `CI_Lower`,
-  `CI_Upper` for every predictor attempted.
+  with columns `Predictor`, `P_Value`, `P_Formatted`, `Estimate`
+  (additive mean difference in outcome units), `CI_Lower`, `CI_Upper`
+  for every predictor attempted.
 
 - `significant`:
 
@@ -96,9 +97,14 @@ A named list with four elements:
 
 ## Details
 
-Incidence rate ratios (IRR) and 95 % Wald confidence intervals on the
-exponential scale are returned for convenient forest-plot input, even
-though the underlying model is linear (not Poisson).
+Because the underlying model is linear (not Poisson), each predictor's
+fixed-effect coefficient is an additive mean difference in the outcome's
+own units, returned as `Estimate` with a 95 % Wald confidence interval
+on the same additive scale. (Earlier versions exponentiated this
+coefficient and mislabelled it "IRR", which is meaningless for a
+linear-scale day difference.) Fit
+[`mysterycall_univariate_poisson_screen()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_univariate_poisson_screen.md)
+instead if a true rate ratio is wanted.
 
 ## See also
 

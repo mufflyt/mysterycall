@@ -246,11 +246,8 @@ does not prevent the Phase 1 output from being written and returned.
 
 ## Spatial Contract Guarantees
 
-**CRS consistency:** All spatial outputs from
-[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),
-[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
-and
-[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md)
+**CRS consistency:** All spatial outputs from `mysterycall_geocode()`,
+`mysterycall_create_isochrones()`, and `mysterycall_calculate_overlap()`
 use EPSG:4326 (WGS 84) unless explicitly transformed by the caller.
 
 **Bounding-box validity:** Latitude values are constrained to \[18°,
@@ -269,10 +266,9 @@ paginates in 200-record pages up to `max_records` (default 1,200). The
 returned data frame is deduplicated on NPI to prevent double-counting
 providers that appear in multiple pages.
 
-**Geocoding idempotency:**
-[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-returns cached coordinates for addresses already geocoded in the current
-session, preventing redundant API charges.
+**Geocoding idempotency:** `mysterycall_geocode()` returns cached
+coordinates for addresses already geocoded in the current session,
+preventing redundant API charges.
 
 ------------------------------------------------------------------------
 

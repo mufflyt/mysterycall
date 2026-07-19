@@ -18,7 +18,8 @@ mysterycall_results_paragraph(
   alpha = 0.05,
   or_digits = 2L,
   ci_digits = 2L,
-  p_digits = 3L
+  p_digits = 3L,
+  subject = "callers"
 )
 ```
 
@@ -65,6 +66,12 @@ mysterycall_results_paragraph(
 
   Integer scalar: decimal places for p-values. Default `3L`.
 
+- subject:
+
+  Character scalar: the noun for the units being narrated. Default
+  `"callers"`. Set to another noun (e.g. `"patients"`) for studies whose
+  exposure is not caller-based.
+
 ## Value
 
 A single character string. One sentence is produced per non-intercept
@@ -89,8 +96,8 @@ When `p < 0.001` the p-value is rendered as `"p < 0.001"`.
 
 Other reporting:
 [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
+[`mysterycall_direction_words`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md),
 [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md),
-[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
 [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
 [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md),
 [`mysterycall_supplemental_tables()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_supplemental_tables.md),

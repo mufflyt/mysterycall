@@ -17,7 +17,8 @@ mysterycall_multi_model_table(
   estimate_col_label = NULL,
   include_n = TRUE,
   include_aic = TRUE,
-  ref_symbol = "Ref."
+  ref_symbol = "Ref.",
+  cell_layout = c("stacked", "inline")
 )
 ```
 
@@ -64,6 +65,16 @@ mysterycall_multi_model_table(
   Character. Symbol placed in reference-category cells. Default
   `"Ref."`.
 
+- cell_layout:
+
+  Character. How the p-value sits relative to the estimate within a
+  cell. `"stacked"` (default) puts the p-value on a second line
+  (`"1.45 (1.02-2.05)\np=0.038"`) – correct for gt/HTML and the console
+  print method. `"inline"` keeps the whole cell on one line
+  (`"1.45 (1.02-2.05), p=0.038"`) so the table renders correctly in a
+  Markdown/pandoc **pipe table**, which cannot contain a multi-line cell
+  (an embedded newline otherwise spills every p-value onto its own row).
+
 ## Value
 
 A `data.frame` with class
@@ -76,8 +87,10 @@ stores a logical indicating whether multiple model classes are present.
 ## Details
 
 **Cell format.** Each non-reference cell contains the point estimate and
-95\\ e.g. `"1.45 (1.02-2.05)\np=0.038"`. Reference-category cells show
-`ref_symbol`. Terms absent from a particular model show an empty string.
+95\\ the p-value is on a second line, e.g.
+`"1.45 (1.02-2.05)\np=0.038"`, and with `"inline"` it follows on the
+same line. Reference-category cells show `ref_symbol`. Terms absent from
+a particular model show an empty string.
 
 **Row ordering.** Rows follow the union of all unique terms across
 models. For categorical predictors, the reference-category row is

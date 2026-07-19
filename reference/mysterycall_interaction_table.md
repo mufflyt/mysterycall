@@ -87,7 +87,8 @@ A list of class `mysterycall_interaction_table` containing:
 
 ## Details
 
-The LRT refits the model with `lme4::update()` dropping only the
+The LRT refits the model with
+[`update()`](https://rdrr.io/r/stats/update.html) dropping only the
 `var1:var2` term, then calls
 [`stats::anova()`](https://rdrr.io/r/stats/anova.html) on the two
 models. If the refit fails for any reason (e.g. convergence, missing

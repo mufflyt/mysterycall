@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Mystery Caller Study Tools for Healthcare Access Research">
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@
     <li><a class="dropdown-item" href="articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -154,7 +155,7 @@
 <span><span class="co"># ── 2. Geocode ────────────────────────────────────────────────────────────────</span></span>
 <span></span>
 <span><span class="co"># Requires a Google Maps API key in GOOGLE_API_KEY env var</span></span>
-<span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_geocode.html">mysterycall_geocode</a></span><span class="op">(</span></span>
+<span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_geocode</span><span class="op">(</span></span>
 <span>  <span class="va">gyn_onc_enriched</span>,</span>
 <span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -162,17 +163,17 @@
 <span><span class="co"># ── 3. Drive-time isochrones ──────────────────────────────────────────────────</span></span>
 <span></span>
 <span><span class="co"># Requires a routing API key in HERE_API_KEY env var</span></span>
-<span><span class="va">isochrones</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df</a></span><span class="op">(</span></span>
+<span><span class="va">isochrones</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_isochrones_for_df</span><span class="op">(</span></span>
 <span>  <span class="va">geocoded</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="fl">3600</span>, <span class="fl">7200</span>, <span class="fl">10800</span><span class="op">)</span>   <span class="co"># 30 / 60 / 120 / 180 min</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Free the in-memory isochrone cache after a large batch</span></span>
-<span><span class="fu"><a href="reference/mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">mysterycall_clear_isochrone_cache</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ── 4. Map ────────────────────────────────────────────────────────────────────</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/mysterycall_map_physicians.html">mysterycall_map_physicians</a></span><span class="op">(</span><span class="va">geocoded</span>, popup_var <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">mysterycall_map_physicians</span><span class="op">(</span><span class="va">geocoded</span>, popup_var <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="gallery">Gallery<a class="anchor" aria-label="anchor" href="#gallery"></a>
@@ -380,22 +381,22 @@
 </tr>
 <tr>
 <td><strong>Geocode</strong></td>
-<td><code><a href="reference/mysterycall_geocode.html">mysterycall_geocode()</a></code></td>
+<td><code>mysterycall_geocode()</code></td>
 <td>Convert addresses to lat/lon via Google Maps</td>
 </tr>
 <tr>
 <td><strong>Isochrones</strong></td>
-<td><code><a href="reference/mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code></td>
+<td><code>mysterycall_isochrones_for_df()</code></td>
 <td>Drive-time polygons for every row using a drive-time routing service</td>
 </tr>
 <tr>
 <td></td>
-<td><code><a href="reference/mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code></td>
+<td><code>mysterycall_create_isochrones()</code></td>
 <td>Single-location drive-time polygon</td>
 </tr>
 <tr>
 <td></td>
-<td><code><a href="reference/mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code></td>
+<td><code>mysterycall_clear_isochrone_cache()</code></td>
 <td>Release the in-session memoization cache</td>
 </tr>
 <tr>
@@ -405,22 +406,22 @@
 </tr>
 <tr>
 <td></td>
-<td><code><a href="reference/mysterycall_calculate_overlap.html">mysterycall_calculate_overlap()</a></code></td>
+<td><code>mysterycall_calculate_overlap()</code></td>
 <td>Overlap area between isochrones and block groups</td>
 </tr>
 <tr>
 <td><strong>Maps</strong></td>
-<td><code><a href="reference/mysterycall_map_physicians.html">mysterycall_map_physicians()</a></code></td>
+<td><code>mysterycall_map_physicians()</code></td>
 <td>Interactive Leaflet dot map colored by ACOG district</td>
 </tr>
 <tr>
 <td></td>
-<td><code><a href="reference/mysterycall_map_block_group.html">mysterycall_map_block_group()</a></code></td>
+<td><code>mysterycall_map_block_group()</code></td>
 <td>Block-group overlap map exported to HTML + PNG</td>
 </tr>
 <tr>
 <td></td>
-<td><code><a href="reference/mysterycall_hrr_maps.html">mysterycall_hrr_maps()</a></code></td>
+<td><code>mysterycall_hrr_maps()</code></td>
 <td>Hexagon density map by Hospital Referral Region</td>
 </tr>
 <tr>

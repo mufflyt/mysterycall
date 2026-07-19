@@ -19,6 +19,8 @@ mysterycall_kaplan_meier(
   conf_level = 0.95,
   plot = TRUE,
   plot_title = "Time to Appointment by Insurance Type",
+  ylab = "Callers still awaiting an appointment (%)",
+  legend_title = NULL,
   palette = NULL,
   risk_table = TRUE
 )
@@ -67,6 +69,22 @@ mysterycall_kaplan_meier(
 
   Character. Title for the plot. Default
   `"Time to Appointment by Insurance Type"`.
+
+- ylab:
+
+  Character. Label for the y-axis, which shows the survival function
+  \\S(t)\\ – the fraction of callers who have *not yet* secured an
+  appointment by day \\t\\. Default
+  `"Callers still awaiting an appointment (%)"`, a plain-language
+  phrasing; pass any string to override.
+
+- legend_title:
+
+  Character scalar or `NULL`. Title shown above the colour/fill legend.
+  Default `NULL` uses a prettified `group_col` (underscores to spaces,
+  title case) rather than the raw variable name; pass an explicit string
+  (e.g. `"Subspecialty"`) to override, or `""` to drop the legend title
+  entirely.
 
 - palette:
 

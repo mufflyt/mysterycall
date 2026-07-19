@@ -40,7 +40,10 @@ five ggplot2 functions
 
 Other visualization:
 [`mysterycall_acceptance_waffle()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_waffle.md),
-[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
+[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md),
+[`mysterycall_plot_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_density.md),
+[`mysterycall_plot_line()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_line.md),
+[`mysterycall_plot_scatter()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_scatter.md)
 
 ## Examples
 
@@ -51,4 +54,5 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
     geom_histogram(bins = 10) +
     mysterycall_bw_theme()
 }
+#> Warning: package ‘ggplot2’ was built under R version 4.4.3
 ```

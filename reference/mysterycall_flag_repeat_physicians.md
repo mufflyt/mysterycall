@@ -67,7 +67,8 @@ should be resolved before analysis.
 
 ## See also
 
-`mysterycall_sanity_checks()` for broader pre-analysis checks.
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+for broader pre-analysis checks.
 
 Other quality control:
 [`mysterycall_clean_medicaid_col()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_medicaid_col.md),

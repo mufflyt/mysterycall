@@ -25,14 +25,12 @@ You will need:
     before running:
 
 ``` r
-
 Sys.setenv(HERE_API_KEY = "your-here-key")
 ```
 
 2.  **Geocoded practice locations** — a data frame with `lat` and `long`
-    columns in WGS84 decimal degrees. Run
-    [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-    first if you are starting from street addresses (see
+    columns in WGS84 decimal degrees. Run `mysterycall_geocode()` first
+    if you are starting from street addresses (see
     [`vignette("geocode", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/geocode.md)).
 
 3.  **A stable output directory** — used for checkpoint files. Do not
@@ -65,7 +63,6 @@ traced back to the originating provider.
 The typical four-step pattern:
 
 ``` r
-
 library(mysterycall)
 
 # 1. Geocode practice addresses → lat/long
@@ -125,7 +122,6 @@ row is one isochrone polygon. Key added columns:
 | all input columns | All non-geometry columns from the source row are retained |
 
 ``` r
-
 # Inspect the result
 names(isochrones_sf)
 
@@ -160,7 +156,6 @@ recent checkpoint and pass the completed `point_index` values so they
 are skipped:
 
 ``` r
-
 # Load the most recent checkpoint
 checkpoints <- list.files("data/isochrone_checkpoints", pattern = "\\.rds$",
                            full.names = TRUE)
@@ -212,7 +207,6 @@ geometries to calculate the reachable female population within each
 travel-time band:
 
 ``` r
-
 # Load the enriched block group layer (built in the Census vignette)
 bg_sf <- readr::read_rds("data/block_groups_with_demographics.rds")
 

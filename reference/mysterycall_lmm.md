@@ -352,8 +352,8 @@ print(fit)
 #> 
 #> Fixed effects (days):
 #>               term estimate   se ci_lower ci_upper p-value
-#>        (Intercept)    21.10 1.37    18.42    23.78 < 0.001
-#>  insuranceMedicaid     0.15 1.93    -3.63     3.93   0.938
+#>        (Intercept)    21.10 1.37    18.36    23.84 < 0.001
+#>  insuranceMedicaid     0.15 1.93    -3.71     4.01   0.938
 #> 
 #> Random intercept (physician):  variance = 0.2004  SD = 0.4476 days
 ```

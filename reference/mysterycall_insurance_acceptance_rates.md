@@ -130,10 +130,13 @@ A named list:
 
 ## Details
 
-**Numerator** (per insurance type): physicians who (a) have a non-`NA`
-value in `medicaid_accept_col`, (b) match the insurance label, (c) are
-coded as `contact_value` in `exclusion_col`, and (d) have
-`business_days_until_appointment > 0`; counted by distinct `phone_col`.
+**Numerator** (per insurance type): physicians who (a) match the
+insurance label, (b) are coded as `contact_value` in `exclusion_col`,
+and (c) have `business_days_until_appointment > 0`; counted by distinct
+`phone_col`. The Medicaid numerator additionally requires a non-`NA`
+value in `medicaid_accept_col`; the BCBS numerator does **not** apply
+that Medicaid-only screen (doing so previously biased the BCBS rate, or
+forced it to 0% when the Medicaid field was `NA` on BCBS rows).
 
 **Denominator**: total distinct phones with that insurance minus
 distinct phones that were excluded (not `contact_value`).
@@ -244,7 +247,7 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 rates <- mysterycall_insurance_acceptance_rates(df, output_dir = NA)
-#> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 27 accepted this insurance and provided an appointment, yielding an acceptance rate of 75.0%.
+#> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 35 accepted this insurance and provided an appointment, yielding an acceptance rate of 97.2%.
 cat(rates$paragraph)
-#> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 27 accepted this insurance and provided an appointment, yielding an acceptance rate of 75.0%.
+#> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 35 accepted this insurance and provided an appointment, yielding an acceptance rate of 97.2%.
 ```

@@ -115,6 +115,27 @@ A named list with elements:
 
 ## Details
 
+The unadjusted sample size per group (\\n\_{\text{simple}}\\) comes from
+the standard unpooled two-proportion \\z\\-test:
+
+\$\$n\_{\text{simple}} = \frac{(z\_{\alpha/2} + z\_{\beta})^2
+\[p_1(1-p_1) + p_2(1-p_2)\]}{(p_1 - p_2)^2}\$\$
+
+The clustering adjustment uses the variance inflation factor:
+
+\$\$\text{VIF} = 1 + (m - 1)\\\rho\$\$
+
+where \\m\\ is the average cluster size (calls per physician) and
+\\\rho\\ is the intraclass correlation (ICC). The adjusted sample size
+is:
+
+\$\$n\_{\text{adjusted}} = \lceil n\_{\text{simple}} \times \text{VIF}
+\rceil\$\$
+
+When `n` is supplied instead of leaving it `NULL`, the function
+back-calculates the achieved power at that `n` (treated as
+\\n\_{\text{simple}}\\, before clustering).
+
 ## References
 
 Donner A, Klar N (2000). *Design and Analysis of Cluster Randomization

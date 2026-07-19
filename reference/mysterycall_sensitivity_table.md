@@ -33,7 +33,8 @@ mysterycall_sensitivity_table(
   Character scalar. The exact term name to extract from each model's
   coefficient table (e.g. `"insuranceMedicaid"`, `"scenarioB"`). Must
   match the `term` column produced by the fitting function. When a model
-  does not contain the term an em-dash (`"—"`) is placed in that column.
+  does not contain the term an em-dash (`"--"`) is placed in that
+  column.
 
 - digits:
 
@@ -64,7 +65,7 @@ A `data.frame` with columns:
 - `<model name>`:
 
   One column per element of `models`, named by the list element name.
-  The exposure row shows `"1.23 (0.98–1.54), p=0.071"`. The footer rows
+  The exposure row shows `"1.23 (0.98-1.54), p=0.071"`. The footer rows
   show `"N=160"` and `"210.4"` respectively. An em-dash is used when a
   term is absent from a model.
 
@@ -80,14 +81,14 @@ This function is intentionally distinct from
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 which compares overall model fit statistics (AIC, BIC, phi). Here the
 emphasis is on **how the exposure effect estimate changes** as
-covariates are added or the analytic specification varies — the classic
+covariates are added or the analytic specification varies – the classic
 sensitivity/robustness check for a primary manuscript table.
 
 ## Cell format
 
 Each exposure-row cell follows the pattern:
 
-    <estimate> (<ci_lower>–<ci_upper>), p=<p_value>
+    <estimate> (<ci_lower>-<ci_upper>), p=<p_value>
 
 where `estimate` is:
 
@@ -155,7 +156,7 @@ Other manuscript:
 ## Examples
 
 ``` r
-# ---- Build fake model objects with structure() — no lme4 required --------
+# ---- Build fake model objects with structure() -- no lme4 required --------
 
 # Model 1: unadjusted logistic (only insurance)
 m1 <- structure(

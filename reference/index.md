@@ -13,7 +13,11 @@
 - [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md)
   : City/state latitude and longitude reference data
 - [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md) :
-  Data of FIPS codes
+  State-level FIPS codes
+- [`kff_hhi`](https://mufflyt.github.io/mysterycall/reference/kff_hhi.md)
+  : KFF Hospital-Market Concentration (HHI) by Metropolitan Area, 2024
+- [`medicaid_fee_index`](https://mufflyt.github.io/mysterycall/reference/medicaid_fee_index.md)
+  : KFF Medicaid-to-Medicare Fee Index (All Services), 2024
 - [`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md)
   : Physician Location and Specialty Data
 - [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
@@ -112,65 +116,13 @@ tiered confidence scoring and institution name patterns.
 - [`MEDICARE_GME_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.md)
   : Medicare GME Payment Indicators
 
-## Geocoding and Mapping
+## Regions
 
-Geocode addresses, build isochrones, and produce publication maps.
-
-- [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-  : Geocode unique addresses from a file
-
-- [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
-  : Calculate drive-time isochrones for a location
-
-- [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
-  : Get isochrones for each point in a dataframe
-
-- [`mysterycall_plot_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_isochrones.md)
-  : Create Individual Isochrone Maps and Shapefiles
-
-- [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md)
-  : Clear the isochrone memoization cache
-
-- [`mysterycall_map_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_base.md)
-  : Create a Configurable Leaflet Base Map
-
-- [`mysterycall_map_leaflet()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_leaflet.md)
-  : Create a Leaflet Base Map
-
-- [`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md)
-  :
-
-  Create `sf` Polygons for ACOG Districts
-
-- [`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md)
-  : Function to create and export a map showing block group overlap with
-  isochrones
-
-- [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md)
-  : Create and Save a Leaflet Dot Map of Physicians
-
-- [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md)
-  : Calculate intersection overlap and save results to shapefiles.
-
-- [`mysterycall_hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr.md)
-  : Get Hospital Referral Region Shapefile
-
-- [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md)
-  : Generate honeycomb hex maps for Hospital Referral Regions
+Assign ACOG regions to physician records. Geocoding, isochrones, and
+publication maps now live in the mysterymaps package.
 
 - [`mysterycall_assign_region()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_region.md)
   : Map US states to medical society districts and Census regions
-
-- [`ensure_hrr_shapefile()`](https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.md)
-  : Ensure the Dartmouth Atlas HRR boundary shapefile is available
-  locally
-
-## Acceptance Rate Maps
-
-Choropleth maps of appointment acceptance rates by state.
-
-- [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md)
-  : Choropleth map of appointment acceptance rates by US state
 
 ## Census and Demographics
 
@@ -184,6 +136,20 @@ Choropleth maps of appointment acceptance rates by state.
   : Get ACS Adult Population (Ages 18-90, Both Sexes) by Census Tract
 - [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
   : Get ACS Female Population (Ages 18-90) by Census Tract
+- [`mysterycall_get_payer_mix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_payer_mix.md)
+  : Build a county payer mix from ACS health-insurance coverage tables
+- [`mysterycall_get_county_provider_counts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_county_provider_counts.md)
+  : Count distinct providers per county
+- [`mysterycall_summarize_county_enrollment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_county_enrollment.md)
+  : Summarize county Medicare/Medicaid enrollment and derive access
+  ratio
+- [`mysterycall_add_medicaid_expansion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_add_medicaid_expansion.md)
+  : Join ACA Medicaid-expansion status onto study data (optionally as of
+  the call date)
+- [`mysterycall_read_kff_hhi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_read_kff_hhi.md)
+  : Read the KFF per-MSA HHI dataset and crosswalk it to CBSA
+- [`mysterycall_add_hhi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_add_hhi.md)
+  : Join a market HHI covariate onto office data
 
 ## Data Quality and Validation
 
@@ -844,8 +810,6 @@ flow diagrams.
   : Kaplan-Meier time-to-appointment analysis by insurance group
 - [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
   : Draw a participant flow diagram for a mystery-caller study
-- [`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md)
-  : State-Level Choropleth Map of Acceptance Rates
 - [`mysterycall_acceptance_waffle()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_waffle.md)
   : Waffle chart of insurance acceptance rates
 - [`mysterycall_bw_theme()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.md)
@@ -863,8 +827,8 @@ Generate methods paragraphs, results sentences, and supplemental tables.
 - [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md)
   : Generate a complete manuscript results report from a fitted model
 - [`mysterycall_literature_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_literature_table.md)
-  : Literature comparison table for mystery-caller study Discussion
-  sections
+  : Build a literature comparison table of prior mystery-caller study
+  ORs
 - [`mysterycall_interaction_sentences()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_sentences.md)
   [`print(`*`<mysterycall_interaction_sentences>`*`)`](https://mufflyt.github.io/mysterycall/reference/mysterycall_interaction_sentences.md)
   : Auto-generate manuscript sentences for a two-way interaction
@@ -911,10 +875,200 @@ Prepare call lists, STROBE checklists, and session snapshots.
 - [`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
   : Run the Full Mystery-Caller Analysis Pipeline
 
+## Guideline Concordance
+
+Score call transcripts against a clinical-guideline rubric and quantify
+inter-rater agreement.
+
+- [`mysterycall_concordance_rubric()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_rubric.md)
+  : Define a Guideline-Concordance Rubric
+- [`mysterycall_score_concordance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_score_concordance.md)
+  : Score Captured Calls Against a Concordance Rubric
+- [`mysterycall_concordance_kappa()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_kappa.md)
+  : Per-Item Inter-Rater Agreement for a Concordance Rubric
+- [`mysterycall_concordance_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_sentence.md)
+  : Manuscript-Ready Concordance Sentence
+
+## Small-Sample Categorical and Rank Tests
+
+Chi-square / Fisher / Freeman-Halton, Cochran-Mantel-Haenszel,
+prevalence CIs, and Kruskal-Wallis / Mann-Whitney comparisons for small
+audit samples.
+
+- [`mysterycall_test_categorical()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_test_categorical.md)
+  : Association Test for a Contingency Table (auto chi-squared / Fisher)
+- [`mysterycall_cmh_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cmh_test.md)
+  : Cochran-Mantel-Haenszel Test for a Matched / Stratified Design
+- [`mysterycall_prevalence_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prevalence_ci.md)
+  : Category Prevalence with Wilson or Clopper-Pearson Intervals
+- [`mysterycall_compare_ranks()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_ranks.md)
+  : Rank-Based Comparison of a Numeric Outcome Across Groups
+
+## Call Outcomes
+
+Multi-category and multi-response call-outcome tabulation,
+classification, gradients, and ordinal models.
+
+- [`mysterycall_multiresponse_tabulate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiresponse_tabulate.md)
+  : Tabulate a Multi-Response ("Check-All-That-Apply") Call Outcome
+- [`mysterycall_classify_call_outcome()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_call_outcome.md)
+  : Map Raw Call Dispositions to a Standard Outcome Taxonomy
+- [`mysterycall_outcome_gradient()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_gradient.md)
+  : Ordered Multi-Category Outcome Summary (Access Gradient)
+- [`mysterycall_ordinal_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ordinal_model.md)
+  : Proportional-Odds Model for a Graded Ordinal Outcome
+
+## Access Cascade and Call-Log Integrity
+
+Summarize the access cascade across the call pathway, reconcile
+offer/outcome discordance, run cross-field consistency rules, and bound
+a rate under non-response.
+
+- [`mysterycall_access_cascade()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_access_cascade.md)
+  : Summarize an access cascade across the call pathway
+- [`mysterycall_cascade_stage()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cascade_stage.md)
+  : Define one stage of an access cascade
+- [`mysterycall_reconcile_offer_outcome()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_offer_outcome.md)
+  : Reconcile a binary "offered" flag against a granular outcome field
+- [`mysterycall_check_consistency()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_consistency.md)
+  : Apply a battery of consistency rules to a call log
+- [`mysterycall_consistency_rule()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_consistency_rule.md)
+  : Define one cross-field consistency rule
+- [`mysterycall_default_consistency_rules()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_default_consistency_rules.md)
+  : Default cross-field consistency rules for a call log
+- [`mysterycall_outcome_bounds()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_bounds.md)
+  : Worst-case / best-case bounds on a proportion under non-response
+
+## Clustering and Single-Contact Curves
+
+Build a random-intercept clustering key and plot the empirical
+cumulative appointment-acquisition curve for single-contact designs.
+
+- [`mysterycall_cluster_id()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cluster_id.md)
+  : Build a random-intercept clustering key by coalescing columns
+- [`mysterycall_cumulative_access_curve()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cumulative_access_curve.md)
+  : Cumulative appointment-acquisition curve for single-contact designs
+
+## Simulation Power and Model Robustness
+
+Monte Carlo power for two-part and population-marginal designs, a type-I
+calibration check, minimum-detectable-effect search, joint
+likelihood-ratio tests, and leave-one-group-out refit sensitivity.
+
+- [`mysterycall_twopart_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_twopart_power.md)
+  : Monte Carlo power for a two-part (offer + conditional wait) design
+- [`mysterycall_marginal_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_power.md)
+  : Monte Carlo power for a population-marginal,
+  post-stratification-weighted effect in a paired-call design
+- [`mysterycall_type_i_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_type_i_check.md)
+  : Type I error calibration check for a simulation-based test
+- [`mysterycall_find_mde()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_find_mde.md)
+  : Minimum detectable effect by binary search over a power function
+- [`mysterycall_joint_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_joint_test.md)
+  : Joint likelihood-ratio test for a multi-level predictor
+- [`mysterycall_leave_one_out()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_leave_one_out.md)
+  : Leave-one-group-out refit sensitivity
+- [`mysterycall_provider_split_simulation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_provider_split_simulation.md)
+  : Site/Provider Split Simulation (Cluster Cross-Validation)
+
+## Matched-Pair Analyses
+
+Within-practice paired comparisons for the matched-pair design (same
+practice called under two scenarios).
+
+- [`mysterycall_paired_acceptance_mcnemar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_acceptance_mcnemar.md)
+  : Within-practice paired McNemar test for a binary acceptance outcome
+- [`mysterycall_paired_wait_within_practice()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_wait_within_practice.md)
+  : Within-practice paired wait-time comparison
+
+## Additional Models and Diagnostics
+
+- [`mysterycall_compare_count_families()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_count_families.md)
+  : Compare Count Mixed Model Families (Poisson, nbinom1, nbinom2)
+- [`mysterycall_model_nonlinear()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_nonlinear.md)
+  : Model Non-Linear Relationships with Splines or Polynomials
+- [`mysterycall_model_zero_wait()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_zero_wait.md)
+  : Model Same-Day Appointments (Wait Time is Zero)
+- [`mysterycall_bootstrap_predictor_stability()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_predictor_stability.md)
+  : Bootstrap Predictor-Retention Stability Analysis
+- [`mysterycall_temporal_validation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_temporal_validation.md)
+  : Locked Temporal Validation for Count/Binary Models
+- [`mysterycall_recalibration_assessment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_recalibration_assessment.md)
+  : Recalibration Assessment for Fitted Models
+- [`mysterycall_test_interaction_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_test_interaction_effect.md)
+  : Test for Interaction Effect in Wait-Time GLMM
+- [`mysterycall_validate_residuals_dharma()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_residuals_dharma.md)
+  : Run DHARMa Residual Diagnostics for GLMM Validation
+
+## Additional Covariates and Geography
+
+- [`mysterycall_region_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_region_labels.md)
+  : Region Labels for a US State Choropleth
+- [`mysterycall_get_acs_female_insurance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_female_insurance.md)
+  : Extract Female Insurance Shares from ACS Sex-by-Coverage-Type Tables
+- [`mysterycall_get_cms_enrollment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_cms_enrollment.md)
+  : Retrieve CMS Monthly County-Level Enrollment Reports
+- [`mysterycall_get_hrsa_ahrf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_hrsa_ahrf.md)
+  : Extract County-Level Metrics from HRSA Area Health Resources File
+  (AHRF)
+- [`mysterycall_medicaid_fee_index()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_medicaid_fee_index.md)
+  : Retrieve State-Level Medicaid-to-Medicare Fee Index Ratios
+- [`mysterycall_track_clinician_churn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_track_clinician_churn.md)
+  : Track Clinician Churn at a Specific Practice Location (NPPES
+  History)
+- [`mysterycall_calculate_hq_distance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_hq_distance.md)
+  : Calculate Haversine Distance to Platform Headquarters
+- [`mysterycall_calculate_spatial_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_spatial_density.md)
+  : Calculate Spatial Density of Clinics (Local Concentration Index)
+- [`ensure_hrr_shapefile()`](https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.md)
+  : Ensure the Dartmouth Atlas HRR boundary shapefile is available
+  locally
+- [`county_covariates`](https://mufflyt.github.io/mysterycall/reference/county_covariates.md)
+  : County provider counts and Medicare/Medicaid enrollment covariates
+- [`hhi`](https://mufflyt.github.io/mysterycall/reference/hhi.md) :
+  Market concentration (HHI) covariates from KFF data
+
+## Caller List Export and Direction Helpers
+
+- [`mysterycall_export_gsheet_caller_list()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_gsheet_caller_list.md)
+  : Export a caller list in Google Sheets import format
+- [`mysterycall_get_direction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md)
+  [`mysterycall_get_change_verb()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md)
+  : Direction and change words wired to the sign of the data
+- [`mystercall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)
+  [`mysterycall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)
+  : Dial phone numbers and flag lines that appear no longer in service
+
+## Package Constants
+
+Exported pattern and indicator vectors used by the academic and
+practice-setting classifiers.
+
+- [`ACADEMIC_HOSPITAL_PATTERNS`](https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.md)
+  : Academic Hospital Name Patterns
+- [`ACGME_PROGRAM_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/ACGME_PROGRAM_INDICATORS.md)
+  : ACGME Program Indicators
+- [`COTH_TEACHING_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/COTH_TEACHING_INDICATORS.md)
+  : COTH (Council of Teaching Hospitals) Indicators
+- [`KNOWN_ACADEMIC_INSTITUTIONS`](https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.md)
+  : Known Academic Medical Centers
+- [`MEDICAL_SCHOOL_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICAL_SCHOOL_INDICATORS.md)
+  : Medical School Affiliation Patterns
+- [`MEDICARE_GME_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.md)
+  : Medicare GME Payment Indicators
+- [`NCI_CANCER_CENTERS`](https://mufflyt.github.io/mysterycall/reference/NCI_CANCER_CENTERS.md)
+  : NCI-Designated Cancer Center Patterns
+- [`NIH_CTSA_HUBS`](https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.md)
+  : NIH CTSA Hub Patterns
+- [`build_missingness_mcar_table()`](https://mufflyt.github.io/mysterycall/reference/build_missingness_mcar_table.md)
+  : Per-variable missingness table paired with Little's MCAR test
+
 ## S3 Methods
 
 print(), tidy(), plot(), and coercion methods for mysterycall objects.
 
+- [`print(`*`<mysterycall_provider_counts>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_provider_counts.md)
+  : Print method for mysterycall_provider_counts
 - [`plot(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/plot.mysterycall_lmm.md)
   : Q-Q and residual diagnostic plots for a fitted LMM
 - [`tidy(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/tidy.mysterycall_lmm.md)
@@ -1075,13 +1229,6 @@ Unqualified alias names for frequently used functions.
   [`validate_and_remove_invalid_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   [`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   [`test_and_process_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`process_and_save_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker_fail()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker_update()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  [`progress_tracker_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   : Deprecated functions in mysterycall
 - [`mystercall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)
   [`mysterycall_no_longer_in_service()`](https://mufflyt.github.io/mysterycall/reference/mystercall_no_longer_in_service.md)

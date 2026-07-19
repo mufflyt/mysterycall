@@ -21,7 +21,6 @@ addresses can change; NPI is usually the most stable identifier across
 roster creation, enrichment, and call outcome files.
 
 ``` r
-
 roster <- mysterycall_search_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
@@ -43,7 +42,6 @@ least 90 % of roster rows find a match, so silent data-loss from
 mis-typed join keys surfaces immediately.
 
 ``` r
-
 clinician_data <- mysterycall_get_clinician_data(roster)
 
 # Assert the enrichment table is unique before joining
@@ -69,7 +67,6 @@ address, it is more efficient to geocode the unique site once and join
 the coordinates back.
 
 ``` r
-
 site_table <- analysis_base |>
   dplyr::distinct(npi, address, .keep_all = TRUE)
 ```
@@ -80,7 +77,6 @@ problem when the geocoder normalizes whitespace or abbreviations
 differently from the original roster.
 
 ``` r
-
 analysis_with_geo <- mysterycall_safe_left_join(
   left         = analysis_base,
   right        = site_geography,
@@ -100,7 +96,6 @@ the Phase 2 file has one row per call attempt rather than one row per
 provider.
 
 ``` r
-
 phase2_clean <- clean_phase_2_data("phase2_results.xlsx")
 
 analysis_ready <- mysterycall_safe_left_join(
@@ -122,25 +117,13 @@ summary layers.
 #### Count providers by subspecialty
 
 ``` r
-
 mysterycall::physicians |>
   dplyr::count(subspecialty, sort = TRUE)
-#> # A tibble: 7 × 2
-#>   subspecialty                                          n
-#>   <chr>                                             <int>
-#> 1 Maternal-Fetal Medicine                            1757
-#> 2 Gynecologic Oncology                                904
-#> 3 Female Pelvic Medicine and Reconstructive Surgery   682
-#> 4 Reproductive Endocrinology and Infertility          629
-#> 5 Minimally Invasive Gynecologic Surgery              435
-#> 6 Complex Family Planning                             163
-#> 7 Pediatric and Adolescent Gynecology                  89
 ```
 
 #### Summarize access outcomes
 
 ``` r
-
 analysis_ready |>
   dplyr::count(subspecialty, medicaid_accepted)
 ```
@@ -148,7 +131,6 @@ analysis_ready |>
 #### Build publication tables
 
 ``` r
-
 table_generate_overall(
   analysis_ready,
   vars = c("subspecialty", "medicaid_accepted", "appointment_offered")

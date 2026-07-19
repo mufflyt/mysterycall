@@ -106,7 +106,7 @@ the model converges; otherwise Wald CIs fall back.
 
 Coxe, S., West, S. G., & Aiken, L. S. (2009). The analysis of count
 data: A gentle introduction to Poisson regression and its alternatives.
-*Journal of Personality Assessment*, 91(2), 121–136.
+*Journal of Personality Assessment*, 91(2), 121-136.
 
 Cameron, A. C., & Trivedi, P. K. (2013). *Regression Analysis of Count
 Data* (2nd ed.). Cambridge University Press.

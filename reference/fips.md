@@ -1,53 +1,28 @@
-# Data of FIPS codes
+# State-level FIPS codes
 
-This dataset maps state and county names to Federal Information
-Processing Standards (FIPS) codes, which are essential for merging
-spatial and census data in healthcare access research.
+This dataset maps U.S. states (plus the District of Columbia) to their
+Federal Information Processing Standards (FIPS) state codes, which are
+essential for merging state-level spatial and census data in healthcare
+access research. The object is **state-level only**; it does not contain
+county rows, so county-level merges are not supported by this object.
 
 ## Format
 
-A tibble with 3142 rows and 10 variables containing Federal Information
-Processing Standards (FIPS) codes for states and counties:
+A data frame with 51 rows (50 states plus the District of Columbia) and
+3 variables:
 
 - state:
 
-  Two-letter postal abbreviation.
+  Two-letter postal abbreviation (e.g. `"AL"`).
+
+- state_code:
+
+  Two-digit state FIPS code, stored as character so leading zeros are
+  preserved (e.g. `"01"`).
 
 - state_name:
 
-  Full state name.
-
-- state_fips:
-
-  Two-digit state FIPS code.
-
-- county_fips:
-
-  Three-digit county FIPS code.
-
-- fips:
-
-  Combined five-digit state and county code.
-
-- class:
-
-  Geography class indicator.
-
-- county:
-
-  County name.
-
-- county_ansi:
-
-  County ANSI code.
-
-- county_short:
-
-  Simplified county name.
-
-- state_ansi:
-
-  State ANSI code.
+  Full state name (e.g. `"Alabama"`).
 
 ## Source
 
@@ -60,7 +35,9 @@ Other datasets:
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
+[`kff_hhi`](https://mufflyt.github.io/mysterycall/reference/kff_hhi.md),
 [`medicaid_expansion`](https://mufflyt.github.io/mysterycall/reference/medicaid_expansion.md),
+[`medicaid_fee_index`](https://mufflyt.github.io/mysterycall/reference/medicaid_fee_index.md),
 [`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 

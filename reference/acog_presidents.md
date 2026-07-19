@@ -43,7 +43,9 @@ Other datasets:
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`city_state_to_lat_long`](https://mufflyt.github.io/mysterycall/reference/city_state_to_lat_long.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`kff_hhi`](https://mufflyt.github.io/mysterycall/reference/kff_hhi.md),
 [`medicaid_expansion`](https://mufflyt.github.io/mysterycall/reference/medicaid_expansion.md),
+[`medicaid_fee_index`](https://mufflyt.github.io/mysterycall/reference/medicaid_fee_index.md),
 [`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 

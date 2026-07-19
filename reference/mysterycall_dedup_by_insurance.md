@@ -70,8 +70,9 @@ with one row per unique `phone_col` \\\times\\ `insurance_col` (and
 ## See also
 
 [`mysterycall_flag_repeat_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_repeat_physicians.md)
-for duplicate-call detection; `mysterycall_sanity_checks()` for broader
-pre-analysis validation.
+for duplicate-call detection;
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+for broader pre-analysis validation.
 
 Other quality control:
 [`mysterycall_clean_medicaid_col()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_medicaid_col.md),

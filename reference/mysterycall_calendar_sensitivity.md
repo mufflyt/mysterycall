@@ -256,12 +256,9 @@ print(res)
 #>   Calendar model: n = 60  |  Business model: n = 60
 #>   Direction consistent across all terms: NO -- see Consistent column
 #> 
-#>              Term               Calendar days              Business days
-#>    scenarioSingle  0 (-5.8 to 5.8), p = 1.000 2 (-1.4 to 5.3), p = 0.265
-#>  scenarioStraight -1 (-6.8 to 4.8), p = 0.736 2 (-1.4 to 5.4), p = 0.253
-#>  Consistent
-#>         Yes
-#>          No
+#>              Term           Calendar days              Business days Consistent
+#>    scenarioSingle  0 (-6 to 6), p = 1.000 2 (-1.5 to 5.4), p = 0.265        Yes
+#>  scenarioStraight -1 (-7 to 5), p = 0.736 2 (-1.5 to 5.5), p = 0.253         No
 #> 
 #> -- Supplemental paragraph --
 #> As a pre-specified sensitivity analysis, we repeated the secondary wait-time

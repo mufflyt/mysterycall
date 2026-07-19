@@ -39,7 +39,9 @@ Other datasets:
 [`acog_districts`](https://mufflyt.github.io/mysterycall/reference/acog_districts.md),
 [`acog_presidents`](https://mufflyt.github.io/mysterycall/reference/acog_presidents.md),
 [`fips`](https://mufflyt.github.io/mysterycall/reference/fips.md),
+[`kff_hhi`](https://mufflyt.github.io/mysterycall/reference/kff_hhi.md),
 [`medicaid_expansion`](https://mufflyt.github.io/mysterycall/reference/medicaid_expansion.md),
+[`medicaid_fee_index`](https://mufflyt.github.io/mysterycall/reference/medicaid_fee_index.md),
 [`physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md),
 [`taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
 
@@ -49,12 +51,12 @@ Other datasets:
 data(city_state_to_lat_long)
 head(city_state_to_lat_long)
 #> # A tibble: 6 × 4
-#>   state   city       latitude longitude
-#>   <chr>   <chr>         <dbl>     <dbl>
-#> 1 Alabama Abanda         33.1     -85.5
-#> 2 Alabama Abbeville      31.6     -85.3
-#> 3 Alabama Adamsville     33.6     -87.0
-#> 4 Alabama Addison        34.2     -87.2
-#> 5 Alabama Akron          32.9     -87.7
-#> 6 Alabama Alabaster      33.2     -86.8
+#>   city       state   lat  long
+#>   <chr>      <chr> <dbl> <dbl>
+#> 1 Abanda     AL     33.1 -85.5
+#> 2 Abbeville  AL     31.6 -85.3
+#> 3 Adamsville AL     33.6 -87.0
+#> 4 Addison    AL     34.2 -87.2
+#> 5 Akron      AL     32.9 -87.7
+#> 6 Alabaster  AL     33.2 -86.8
 ```

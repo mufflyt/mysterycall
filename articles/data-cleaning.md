@@ -31,7 +31,6 @@ applies three checks in order:
     mandates).
 
 ``` r
-
 raw <- data.frame(
   npi           = c("1234567893", "0000000000", "123456789X", NA, "1234567893 "),
   physician_name = c("Smith, Alice", "Jones, Bob", "Park, Carol",
@@ -40,13 +39,7 @@ raw <- data.frame(
 )
 
 validated <- mysterycall_validate_npi(raw)
-#> 1 NPI value(s) are not 10 digits and were dropped before Luhn validation: 123456789
-#> 1 NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: 0000000000
-#> Validated 4 candidate NPI(s): 1 wrong length, 1 failed Luhn, 2 passed.
 validated[, c("npi", "npi_is_valid", "physician_name")]
-#>          npi npi_is_valid physician_name
-#> 1 1234567893         TRUE   Smith, Alice
-#> 2 1234567893         TRUE   Smith, Alice
 ```
 
 Only rows where `npi_is_valid == TRUE` survive. The returned data frame
@@ -62,7 +55,6 @@ against North American Numbering Plan (NANP) rules and optionally
 cross-check the area code against the physician’s reported state.
 
 ``` r
-
 phones <- c(
   "(303) 555-1212",   # valid CO number
   "800-555-0199",     # toll-free — valid syntax, no state match
@@ -76,18 +68,6 @@ phone_results <- mysterycall_validate_phone(
   practice_state = "CO"
 )
 phone_results
-#>   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state
-#> 1             TRUE       303                   CO                          TRUE
-#> 2            FALSE       800            toll-free                         FALSE
-#> 3            FALSE      <NA>                 <NA>                         FALSE
-#> 4            FALSE      <NA>                 <NA>                         FALSE
-#> 5             TRUE       303                   CO                          TRUE
-#>        phone_validity_flag
-#> 1                    valid
-#> 2 area_code_state_mismatch
-#> 3           invalid_format
-#> 4                  missing
-#> 5                    valid
 ```
 
 The `phone_validity_flag` column distinguishes five outcomes:
@@ -117,7 +97,6 @@ Apply the functions in this order:
 ### 3a. ASCII normalization
 
 ``` r
-
 # mysterycall_ascii_norm() is an internal helper; shown here for illustration.
 raw_addr <- "123 Cafe Boulevard, Suite 4A"
 mysterycall:::mysterycall_ascii_norm(raw_addr)
@@ -126,7 +105,6 @@ mysterycall:::mysterycall_ascii_norm(raw_addr)
 ### 3b. Directional normalization (North → N, Northeast → NE)
 
 ``` r
-
 mysterycall_normalize_directionals("1400 North Main Street")
 mysterycall_normalize_directionals("201 Southeast Oak Avenue")
 ```
@@ -134,7 +112,6 @@ mysterycall_normalize_directionals("201 Southeast Oak Avenue")
 ### 3c. Street suffix normalization (Street → ST, Boulevard → BLVD)
 
 ``` r
-
 mysterycall_normalize_suffix("100 MAIN STREET")
 mysterycall_normalize_suffix("500 OAK BOULEVARD SUITE 3")
 ```
@@ -142,7 +119,6 @@ mysterycall_normalize_suffix("500 OAK BOULEVARD SUITE 3")
 ### 3d. Unit designator normalization (Suite → STE, Apartment → APT)
 
 ``` r
-
 mysterycall_normalize_units("100 Main St Suite 4", addr2 = NA)
 mysterycall_normalize_units("200 Elm Ave", addr2 = "Apartment 7B")
 ```
@@ -150,7 +126,6 @@ mysterycall_normalize_units("200 Elm Ave", addr2 = "Apartment 7B")
 ### 3e. State abbreviation normalization
 
 ``` r
-
 mysterycall_normalize_state("California")
 mysterycall_normalize_state("new york")
 mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
@@ -159,7 +134,6 @@ mysterycall_normalize_state("CO")   # already abbreviated — returned as-is
 ### 3f. ZIP code normalization (zero-pad to 5 digits)
 
 ``` r
-
 mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 ```
 
@@ -168,7 +142,6 @@ mysterycall_normalize_zip5(c("80202", "1234", "12345-6789", NA))
 Flag addresses that cannot be visited in person:
 
 ``` r
-
 mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 ```
 
@@ -177,7 +150,6 @@ mysterycall_is_po_box(c("P.O. Box 123", "100 Main Street", "PO Box 99", NA))
 Pipe all steps together for a data frame:
 
 ``` r
-
 df_addr <- data.frame(
   addr1 = c("1234 north main street", "500 Oak Blvd Suite 3A",
              "P.O. Box 77", "789 Southeast Elm Avenue"),
@@ -219,7 +191,6 @@ performs:
 - Audit trail generation (JSON) for data provenance
 
 ``` r
-
 phase1_raw <- data.frame(
   Names         = c("Smith, Alice MD", "Jones, Bob DO", "Park, Carol MD"),
   practice_name = c("Denver University Medical", "Downtown Family Clinic",
@@ -237,32 +208,9 @@ result_phase1 <- mysterycall_clean_phase1(
   verbose          = FALSE,
   duplicate_rows   = TRUE
 )
-#> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   Names = col_character(),
-#>   practice_name = col_character(),
-#>   phone_number = col_character(),
-#>   state_name = col_character(),
-#>   npi = col_double()
-#> )
 
 result_phase1[, c("id", "dr_name", "insurance", "phone_number", "academic",
                   "processing_flag_generated_id")]
-#>   id   dr_name              insurance   phone_number         academic
-#> 1  1    Dr. DO Blue Cross/Blue Shield (720) 555-9999 Private Practice
-#> 2  2    Dr. DO               Medicaid (720) 555-9999 Private Practice
-#> 3  3 Dr. Carol Blue Cross/Blue Shield (303) 555-8888 Private Practice
-#> 4  4 Dr. Carol               Medicaid (303) 555-8888 Private Practice
-#> 5  5 Dr. Alice Blue Cross/Blue Shield (303) 555-1212       University
-#> 6  6 Dr. Alice               Medicaid (303) 555-1212       University
-#>   processing_flag_generated_id
-#> 1                        FALSE
-#> 2                        FALSE
-#> 3                        FALSE
-#> 4                        FALSE
-#> 5                        FALSE
-#> 6                        FALSE
 ```
 
 The function invisibly returns the cleaned data frame and writes two
@@ -275,7 +223,6 @@ files to `output_directory`:
 ### Accessing the audit trail
 
 ``` r
-
 trail <- attr(result_phase1, "audit_trail")
 cat(sprintf(
   "Rows: %d → %d  |  Duration: %.2fs  |  NPI completeness: %.0f%%\n",
@@ -294,7 +241,6 @@ Physicians called more than the protocol allows inflate your sample and
 bias results. Flag repeat calls before analysis:
 
 ``` r
-
 calls <- data.frame(
   npi         = c("1234567893", "1234567893", "1234567893",
                   "9876543210", "9876543210"),
@@ -307,10 +253,6 @@ calls <- data.frame(
 
 dup_report <- mysterycall_check_duplicates(calls, id_col = "npi", max_calls = 2L)
 dup_report
-#>          npi  call_date insurance n_calls
-#> 1 1234567893 2024-01-10      BCBS       3
-#> 2 1234567893 2024-01-12  Medicaid       3
-#> 3 1234567893 2024-01-15      BCBS       3
 ```
 
 Rows flagged by
@@ -328,7 +270,6 @@ inconsistent column names. Use
 to rename by substring match:
 
 ``` r
-
 messy <- data.frame(
   physician_full_name_as_entered = "Smith, Alice",
   office_telephone_number        = "303-555-1212",
@@ -341,19 +282,7 @@ clean <- mysterycall_rename_columns(
   target_strings = c("physician_full_name", "telephone", "national_provider"),
   new_names      = c("physician_name", "phone", "npi")
 )
-#> --- Starting to search and rename columns based on target substrings ---
-#> Matched 1 column(s) by substring match for 'physician_full_name': physician_full_name_as_entered
-#> Renamed 'physician_full_name_as_entered' to 'physician_name'.
-#> 
-#> Matched 1 column(s) by substring match for 'telephone': office_telephone_number
-#> Renamed 'office_telephone_number' to 'phone'.
-#> 
-#> Matched 1 column(s) by substring match for 'national_provider': national_provider_identifier
-#> Renamed 'national_provider_identifier' to 'npi'.
-#> 
-#> --- Column renaming complete. Final column set: physician_name, phone, npi ---
 names(clean)
-#> [1] "physician_name" "phone"          "npi"
 ```
 
 ------------------------------------------------------------------------
@@ -365,12 +294,10 @@ address, credential) via the `provider` package. This step requires the
 `provider` package to be installed from GitHub:
 
 ``` r
-
 remotes::install_github("andrewallenbruce/provider")
 ```
 
 ``` r
-
 npi_df <- data.frame(
   npi = c("1234567893", "1578798779"),
   stringsAsFactors = FALSE
@@ -378,12 +305,7 @@ npi_df <- data.frame(
 
 # Returns NULL silently per NPI when 'provider' is not installed.
 clinician_info <- mysterycall_get_clinician_data(npi_df)
-#> 1 NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: 1578798779
-#> Validated 2 candidate NPI(s): 0 wrong length, 1 failed Luhn, 1 passed.
-#> NPI 1234567893: package 'provider' is not installed.
 clinician_info
-#> [1] npi          npi_is_valid
-#> <0 rows> (or 0-length row.names)
 ```
 
 The returned tibble has one row per NPI and carries columns such as
@@ -402,7 +324,6 @@ The returned tibble has one row per NPI and carries columns such as
 A complete cleaning pipeline for a new mystery caller dataset:
 
 ``` r
-
 library(mysterycall)
 
 # 1. Validate NPIs

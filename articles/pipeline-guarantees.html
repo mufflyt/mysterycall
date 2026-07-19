@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Pipeline Guarantees">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,7 @@
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -98,7 +99,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Pipeline Guarantees</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/pipeline-guarantees.Rmd" class="external-link"><code>vignettes/pipeline-guarantees.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/pipeline-guarantees.Rmd" class="external-link"><code>vignettes/pipeline-guarantees.Rmd</code></a></small>
       <div class="d-none name"><code>pipeline-guarantees.Rmd</code></div>
     </div>
 
@@ -354,9 +355,9 @@ the Phase 1 output from being written and returned.</p>
 <h2 id="spatial-contract-guarantees">Spatial Contract Guarantees<a class="anchor" aria-label="anchor" href="#spatial-contract-guarantees"></a>
 </h2>
 <p><strong>CRS consistency:</strong> All spatial outputs from
-<code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code>,
-<code><a href="../reference/mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>, and
-<code><a href="../reference/mysterycall_calculate_overlap.html">mysterycall_calculate_overlap()</a></code> use EPSG:4326 (WGS 84)
+<code>mysterycall_geocode()</code>,
+<code>mysterycall_create_isochrones()</code>, and
+<code>mysterycall_calculate_overlap()</code> use EPSG:4326 (WGS 84)
 unless explicitly transformed by the caller.</p>
 <p><strong>Bounding-box validity:</strong> Latitude values are
 constrained to [18°, 72°] and longitude values to [−180°, −65°] for US
@@ -374,7 +375,7 @@ up to <code>max_records</code> (default 1,200). The returned data frame
 is deduplicated on NPI to prevent double-counting providers that appear
 in multiple pages.</p>
 <p><strong>Geocoding idempotency:</strong>
-<code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> returns cached coordinates for
+<code>mysterycall_geocode()</code> returns cached coordinates for
 addresses already geocoded in the current session, preventing redundant
 API charges.</p>
 <hr>

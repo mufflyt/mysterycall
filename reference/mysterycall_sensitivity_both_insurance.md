@@ -92,9 +92,10 @@ A named list with seven elements:
 
 - `t_test`:
 
-  Object returned by
-  [`stats::t.test()`](https://rdrr.io/r/stats/t.test.html), or `NULL`
-  when there are insufficient data.
+  Object returned by a **paired**
+  [`stats::t.test()`](https://rdrr.io/r/stats/t.test.html) on one
+  observation per physician (their mean wait in each arm), reflecting
+  the paired design, or `NULL` when there are insufficient data.
 
 - `sentence`:
 
@@ -130,5 +131,5 @@ df <- data.frame(
 )
 res <- mysterycall_sensitivity_both_insurance(df, output_dir = NA)
 cat(res$sentence)
-#> Of 10 physicians called, 10 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 15.8 days (SD 3.3) for Medicaid vs 13.5 days (SD 5.1) for BCBS (t-test p = 0.248).
+#> Of 10 physicians called, 10 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 15.8 days (SD 3.3) for Medicaid vs 13.5 days (SD 5.1) for BCBS (t-test p = 0.323).
 ```

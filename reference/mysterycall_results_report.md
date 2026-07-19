@@ -205,13 +205,13 @@ print(report)
 #>  insMedicaid 1.01  0.90-1.12   0.912      +0.1 -2.0 to 2.5             
 #> 
 #> -- Results Paragraph --
-#> In multivariable Poisson regression, ins was significantly associated with
+#> In multivariable Poisson regression, ins was not significantly associated with
 #> appointment wait time (see Table X). Compared with BCBS, callers presenting as
 #> Medicaid had an IRR of 1.01 (95% CI 0.90-1.12; p = 0.912) for appointment wait
 #> time.
 #> 
 #> 
 #> -- Absolute Day-Difference Sentences --
-#>   Medicaid-insured callers waited a mean of 0.1 more days compared with BCBS (95% CI 2.0 to 2.5 days; IRR 1.01; p = 0.912). 
+#>   Medicaid-insured callers waited a mean of 0.1 more days compared with BCBS (95% CI -2.0 to +2.5 days; IRR 1.01; p = 0.912) (difference not statistically significant). 
 #> 
 ```

@@ -1,7 +1,7 @@
 # Check Normality and Summarize Data
 
 Checks the normality of a variable using the Shapiro-Wilk test, returns
-summary statistics, and—crucially—generates a manuscript-ready
+summary statistics, and–crucially–generates a manuscript-ready
 `$interpretation` sentence that identifies count data and recommends
 Poisson regression when appropriate.
 
@@ -57,7 +57,7 @@ A named list containing:
 
 - `is_count`:
 
-  Logical. `TRUE` if all non-missing values are non-negative integers —
+  Logical. `TRUE` if all non-missing values are non-negative integers –
   heuristic for count outcomes.
 
 - `mean`, `sd`:
@@ -118,7 +118,7 @@ result <- mysterycall_check_normality(
   group_label   = "insurance type"
 )
 #> Normality check for 'business_days_until_appointment': n = 10
-#> Not normally distributed. Median = 2.5, IQR = 3.5 [count data — Poisson recommended]
+#> Not normally distributed. Median = 2.5, IQR = 3.5 [count data -- Poisson recommended]
 #> The data is not normally distributed (Shapiro-Wilk W = 0.813, p = 0.021). Plus it is count data. t-test assumes that data is normally distributed, and comparing the means of count data is also not appropriate. We can check the incidence rate ratio (IRR) for comparison of days until appointment among the categories of insurance type. Better to use Poisson regression. Median days until appointment: 2.5 (IQR: 3.5).
 cat(result$interpretation)
 #> The data is not normally distributed (Shapiro-Wilk W = 0.813, p = 0.021). Plus it is count data. t-test assumes that data is normally distributed, and comparing the means of count data is also not appropriate. We can check the incidence rate ratio (IRR) for comparison of days until appointment among the categories of insurance type. Better to use Poisson regression. Median days until appointment: 2.5 (IQR: 3.5).

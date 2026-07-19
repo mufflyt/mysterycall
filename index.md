@@ -59,7 +59,6 @@ Census demographics, and producing publication-ready tables and maps.
 ## Installation
 
 ``` r
-
 # install.packages("pak")
 pak::pkg_install("mufflyt/mysterycall")
 ```
@@ -68,7 +67,6 @@ The package loads quickly. Geospatial and modelling packages are
 optional and loaded only when first needed:
 
 ``` r
-
 install.packages(c("hereR", "sf", "lwgeom"))  # drive-time isochrones
 install.packages("leaflet")                            # interactive maps
 install.packages("ggmap")                              # Google Maps geocoding
@@ -82,7 +80,6 @@ install.packages("censusapi")                          # Census block-group data
 A typical mystery caller study moves through four stages:
 
 ``` r
-
 library(mysterycall)
 library(dplyr)
 
@@ -160,15 +157,15 @@ output.
 |  | [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md) | Remove invalid NPI numbers before enrichment |
 |  | [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md) | Pull demographics from CMS Physician Compare |
 |  | [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md) | Estimate physician gender via the Genderize.io API |
-| **Geocode** | [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md) | Convert addresses to lat/lon via Google Maps |
-| **Isochrones** | [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md) | Drive-time polygons for every row using a drive-time routing service |
-|  | [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md) | Single-location drive-time polygon |
-|  | [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md) | Release the in-session memoization cache |
+| **Geocode** | `mysterycall_geocode()` | Convert addresses to lat/lon via Google Maps |
+| **Isochrones** | `mysterycall_isochrones_for_df()` | Drive-time polygons for every row using a drive-time routing service |
+|  | `mysterycall_create_isochrones()` | Single-location drive-time polygon |
+|  | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
 | **Census** | [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md) | ACS block-group demographics by state FIPS |
-|  | [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md) | Overlap area between isochrones and block groups |
-| **Maps** | [`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md) | Interactive Leaflet dot map colored by ACOG district |
-|  | [`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md) | Block-group overlap map exported to HTML + PNG |
-|  | [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md) | Hexagon density map by Hospital Referral Region |
+|  | `mysterycall_calculate_overlap()` | Overlap area between isochrones and block groups |
+| **Maps** | `mysterycall_map_physicians()` | Interactive Leaflet dot map colored by ACOG district |
+|  | `mysterycall_map_block_group()` | Block-group overlap map exported to HTML + PNG |
+|  | `mysterycall_hrr_maps()` | Hexagon density map by Hospital Referral Region |
 | **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |
 |  | [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md) | Column-percentage tables |
 
@@ -186,7 +183,6 @@ output.
 | `census_summaries` | Pre-computed Census block-group demographics |
 
 ``` r
-
 # Example: find all OBGYN taxonomy codes
 library(mysterycall)
 library(dplyr)
@@ -239,7 +235,6 @@ Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
 ## Citing mysterycall
 
 ``` r
-
 citation("mysterycall")
 ```
 

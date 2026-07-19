@@ -94,7 +94,7 @@ call logs. Common causes: month transposition (06 vs 07), year rollover
 ## See also
 
 [`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
-`mysterycall_sanity_checks()`
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
 
 Other data-quality:
 [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)

@@ -11,7 +11,7 @@ Declined.
 mysterycall_acceptance_waffle(
   acceptance_result,
   medicaid_label = "Medicaid",
-  bcbs_label = "Blue Cross / Blue Shield",
+  bcbs_label = "Blue Cross/Blue Shield",
   colors = c(Accepted = "grey20", Declined = "grey85"),
   rows = 10L,
   title = NULL,
@@ -87,23 +87,27 @@ A `patchwork` / `ggplot` object, returned invisibly.
 ## Details
 
 Inspired by Nicola Rennie (2024), "Five Charts You Can Make with the
-`waffle` Package", <https://nrennie.rbind.io/>.
+waffle Package", <https://nrennie.rbind.io/>.
 
 ## Note
 
-Requires the waffle and patchwork packages (listed in `Suggests`).
-Install with: `install.packages(c("waffle", "patchwork"))`.
+Requires the waffle package (GitHub-only – not on CRAN) and patchwork.
+Install with: `remotes::install_github("hrbrmstr/waffle")` and
+`install.packages("patchwork")`.
 
 ## See also
 
 Other visualization:
 [`mysterycall_bw_theme()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.md),
-[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
+[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md),
+[`mysterycall_plot_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_density.md),
+[`mysterycall_plot_line()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_line.md),
+[`mysterycall_plot_scatter()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_scatter.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # requireNamespace("waffle", quietly = TRUE) && requireNamespace("patchwork", quietly = TRUE)
+if (FALSE) { # \dontrun{
 acc <- data.frame(
   insurance_type = c("Medicaid", "Medicaid", "BCBS", "BCBS"),
   outcome        = c("Accepted", "Declined", "Accepted", "Declined"),
@@ -111,5 +115,5 @@ acc <- data.frame(
   stringsAsFactors = FALSE
 )
 mysterycall_acceptance_waffle(acc, output_dir = NA)
-}
+} # }
 ```

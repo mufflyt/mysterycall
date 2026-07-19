@@ -149,7 +149,7 @@ contributes to the denominator but not to any named exclusion bucket.
 
 Other reporting:
 [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
-[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
+[`mysterycall_direction_words`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md),
 [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
 [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
 [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md),
@@ -182,7 +182,7 @@ df <- data.frame(
 
 result <- mysterycall_exclusion_summary(df)
 print(result)       # prints the prose paragraph
-#> A total of 240 phone calls were made. Of these, 80 (33.3%) calls were unsuccessful connections, including calls in which the phone was not answered or the caller received a busy signal (n = 40), calls that went to voicemail (n = 30), and calls for which the number reached did not correspond to the expected office or specialty (n = 10). The remaining 160 (66.7%) calls resulted in a successful connection with office staff. Among successfully connected calls, 15 offices required a physician referral before an appointment could be scheduled, 20 offices were not accepting new patients, and 5 calls were placed on hold for more than 5 minutes. After applying all exclusion criteria, 120 (50.0%) calls were included in the final analysis. 
+#> A total of 240 phone calls were made. Of these, 80 (33.3%) calls were unsuccessful connections, including calls in which the phone was not answered or the caller received a busy signal (n = 40), calls that went to voicemail (n = 30), and calls for which the number reached did not correspond to the expected office or specialty (n = 10). The remaining 160 (66.7%) calls resulted in a successful connection with office staff. Among successfully connected calls, 15 offices required a physician referral before an appointment could be scheduled, 20 offices were not accepting new patients, and 5 calls were placed on hold for more than 5 minutes. After applying all exclusion criteria, 120 (50.0%) calls were included in the final analysis. 
 result$table        # tabyl-style counts
 #>             category
 #> 1           included
@@ -226,19 +226,17 @@ result2 <- mysterycall_exclusion_summary(
   )
 )
 cat(result2$paragraph)
-#> A total of 240 phone calls were made. Of these, 80 (33.3%) calls were unsuccessful connections, including calls in which the phone was not answered or the caller received a busy signal (n = 40), calls that went to voicemail (n = 30), and calls for which the number reached did not correspond to the expected office or specialty (n = 10). The remaining 160 (66.7%) calls resulted in a successful connection with office staff. Among successfully connected calls, 15 offices required a physician referral before an appointment could be scheduled, 20 offices were not accepting new patients, and 5 calls were placed on hold for more than 5 minutes. After applying all exclusion criteria, 120 (50.0%) calls were included in the final analysis.
+#> A total of 240 phone calls were made. Of these, 80 (33.3%) calls were unsuccessful connections, including calls in which the phone was not answered or the caller received a busy signal (n = 40), calls that went to voicemail (n = 30), and calls for which the number reached did not correspond to the expected office or specialty (n = 10). The remaining 160 (66.7%) calls resulted in a successful connection with office staff. Among successfully connected calls, 15 offices required a physician referral before an appointment could be scheduled, 20 offices were not accepting new patients, and 5 calls were placed on hold for more than 5 minutes. After applying all exclusion criteria, 120 (50.0%) calls were included in the final analysis.
 
 ## --- deduplicate by provider before counting ------------------------------
 df3 <- df
 df3$npi <- c(
   seq_len(120L),                  # included (unique)
   rep(121L, 40L),                 # one provider, 40 no-answer attempts
-  122L + seq_len(sum(n_each[-c(1L, 2L)]) - 1L)  # remaining
+  seq_len(sum(n_each[-c(1L, 2L)])) + 121L  # remaining unique providers
 )
-#> Error in `$<-.data.frame`(`*tmp*`, npi, value = c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 30L, 31L, 32L, 33L, 34L, 35L, 36L, 37L, 38L, 39L, 40L, 41L, 42L, 43L, 44L, 45L, 46L, 47L, 48L, 49L, 50L, 51L, 52L, 53L, 54L, 55L, 56L, 57L, 58L, 59L, 60L, 61L, 62L, 63L, 64L, 65L, 66L, 67L, 68L, 69L, 70L, 71L, 72L, 73L, 74L, 75L, 76L, 77L, 78L, 79L, 80L, 81L, 82L, 83L, 84L, 85L, 86L, 87L, 88L, 89L, 90L, 91L, 92L, 93L, 94L, 95L, 96L, 97L, 98L, 99L, 100L, 101L, 102L, 103L, 104L, 105L, 106L, 107L, 108L, 109L, 110L, 111L, 112L, 113L, 114L, 115L, 116L, 117L, 118L, 119L, 120L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 121L, 123L, 124L, 125L, 126L, 127L, 128L, 129L, 130L, 131L, 132L, 133L, 134L, 135L, 136L, 137L, 138L, 139L, 140L, 141L, 142L, 143L, 144L, 145L, 146L, 147L, 148L, 149L, 150L, 151L, 152L, 153L, 154L, 155L, 156L, 157L, 158L, 159L, 160L, 161L, 162L, 163L, 164L, 165L, 166L, 167L, 168L, 169L, 170L, 171L, 172L, 173L, 174L, 175L, 176L, 177L, 178L, 179L, 180L, 181L, 182L, 183L, 184L, 185L, 186L, 187L, 188L, 189L, 190L, 191L, 192L, 193L, 194L, 195L, 196L, 197L, 198L, 199L, 200L, 201L)): replacement has 239 rows, data has 240
 # id_col collapses repeated dials to the same NPI
 result3 <- mysterycall_exclusion_summary(df3, id_col = "npi")
-#> Error: Column 'npi' (id_col) not found in `data`.
 result3$total   # unique providers, not raw call rows
-#> Error: object 'result3' not found
+#> [1] 201
 ```

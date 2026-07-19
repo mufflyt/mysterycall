@@ -1,50 +1,590 @@
 # Changelog
 
-## mysterycall (development version)
+## mysterycall 1.6.2
 
 ### New functions
 
+Matched-pair within-practice analyses, generalized from the `labubu`
+mystery-caller study (which hand-rolled them). The matched-pair design –
+the same practice called under two scenarios (insurance types, caller
+personas) – is the package’s core paradigm, but the package previously
+offered only the unmatched GLMM; these add the matched comparison that
+removes each practice’s baseline generosity:
+
+- [`mysterycall_paired_acceptance_mcnemar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_acceptance_mcnemar.md):
+  exact McNemar test on a binary acceptance outcome for each pairwise
+  scenario contrast – discordant split, odds ratio, exact p-value, and
+  the minimum detectable odds ratio at a chosen power (effective n is
+  the discordant count, since only discordant practices carry
+  information).
+- [`mysterycall_paired_wait_within_practice()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_wait_within_practice.md):
+  the continuous analogue – pairs practices called under both scenarios,
+  reports the mean within-practice wait difference with a paired-t CI,
+  the paired t-test and Wilcoxon signed-rank p-values, and the minimum
+  detectable difference in days.
+
+(Scenario-stratified acceptance/wait summaries the same study also
+produced are already covered by
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
+and
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+with `group_by = "scenario"`, so no new function was added for those.)
+
+A third batch, generalized from `grace-ent`’s reviewer-response analyses
+– model-robustness and non-response reporting helpers:
+
+- [`mysterycall_outcome_bounds()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_bounds.md):
+  Manski-style worst-case / best-case bounds on a proportion under
+  non-response (assign every incomplete call first to failure, then to
+  success, over the full sampling universe), alongside the complete-case
+  rate with a Wilson CI. The assumption-free interval reviewers ask for
+  so a headline offer/acceptance rate is not quietly conditioned on
+  completed calls.
+- [`mysterycall_joint_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_joint_test.md):
+  joint likelihood-ratio test of a multi-level predictor (is
+  subspecialty / caller / insurance significant *as a block*?),
+  refitting without every term that involves the predictor. The
+  statistic is computed from the log-likelihoods (`chi^2 = 2 dlogLik`,
+  `df =` parameter-count difference), which sidesteps a real footgun –
+  [`lme4::glmer`](https://rdrr.io/pkg/lme4/man/glmer.html) labels the
+  LRT degrees-of-freedom column `"Df"` while `glmmTMB` labels it
+  `"Chi Df"`, and reading the wrong one yields the total parameter count
+  and a wrong p-value.
+- [`mysterycall_leave_one_out()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_leave_one_out.md):
+  leave-one-group-out refit sensitivity – drop each level of a grouping
+  variable (e.g. each caller/site), refit, and tabulate how a target
+  coefficient (and, optionally, a factor’s joint p) moves, to show an
+  estimate does not hinge on any single group. Composes with
+  [`mysterycall_joint_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_joint_test.md).
+
+A second batch generalized from the downstream ENT study (`grace-ent`) –
+clustering, single-contact time-to-appointment, and simulation-based
+power for the two-part / population-marginal designs these studies
+actually use:
+
+- [`mysterycall_cluster_id()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cluster_id.md):
+  coalesce a random-intercept/grouping key from an ordered list of
+  columns (e.g. CBSA -\> county FIPS), giving each still-missing row its
+  own singleton cluster. Closes a footgun – the model fitters require a
+  `random_intercept` column but the package previously gave you nothing
+  to build one, and blank/`NA` keys silently collapse into one giant
+  cluster and corrupt the random-effect variance.
+- [`mysterycall_cumulative_access_curve()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cumulative_access_curve.md):
+  the empirical cumulative proportion of calls that had secured an
+  appointment by business-day `t` – the correct primitive for a
+  single-contact design, where
+  [`mysterycall_kaplan_meier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_kaplan_meier.md)’s
+  right-censoring of non-offered calls implies follow-up the design does
+  not have. Each curve plateaus at the share obtained within the horizon
+  (the offer rate when every wait falls inside it). Optional step-curve
+  figure.
+- [`mysterycall_twopart_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_twopart_power.md):
+  Monte Carlo power for the two-part outcome (offer as a Bernoulli on
+  the full sample; wait as a negative binomial on the offered subset)
+  that access audits universally have – reports the power for each part
+  separately, since a single-outcome calculator understates the wait
+  model’s sample (it runs on the offered subset). Depends only on
+  `MASS`.
+- [`mysterycall_marginal_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_power.md):
+  Monte Carlo power for a post-stratification-weighted,
+  population-marginal effect in a paired-call design (each subject
+  called under two conditions; a stratum oversampled in the sample but
+  reweighted to a target population mix). Reports power for the
+  conditional interaction, the unweighted marginal effect, and the
+  population-weighted marginal effect. Needs `glmmTMB` +
+  `marginaleffects`.
+- [`mysterycall_type_i_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_type_i_check.md)
+  and
+  [`mysterycall_find_mde()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_find_mde.md):
+  generic companions to any simulation power function – a
+  null-calibration self-check (observed type I rate + exact binomial
+  CI + verdict) and a minimum-detectable-effect binary search over a
+  user-supplied power function.
+
+Generalized from analysis logic that the downstream ENT study
+(`grace-ent`) had been hand-rolling in its own scripts, so every
+mystery-caller study inherits it:
+
+- [`mysterycall_access_cascade()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_access_cascade.md)
+  (+
+  [`mysterycall_cascade_stage()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cascade_stage.md)):
+  summarizes a sequence of access constructs across the call pathway
+  (reached a live office -\> accepting new patients -\> sees the
+  presented complaint -\> appointment offered -\> with whom) as a tidy
+  count / denominator / percent table with Wilson confidence intervals,
+  plus an optional funnel figure. Denominators may be the full analytic
+  sample (`"total"`), a strictly nested previous stage (`"previous"`),
+  another named stage (for “share of offers”-style sub-breakdowns), or a
+  fixed number – so one call mixes a nested funnel with conditional
+  sub-measures. Depends only on base R (+ `ggplot2` for the figure).
+
+- [`mysterycall_reconcile_offer_outcome()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_offer_outcome.md):
+  finds and optionally fixes rows where a coarse binary “appointment
+  offered” flag contradicts a granular disposition field, in both
+  directions (flag understates vs. overstates the outcome), treating the
+  granular outcome as authoritative and clearing dependent fields (wait
+  time, appointment date) when a row flips to “not offered”. Fills a gap
+  the `mysterycall_flag_*` family did not cover (they compare exclusion
+  reason vs. wait time, never a summary boolean vs. a disposition).
+
+- [`mysterycall_check_consistency()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_consistency.md)
+  (+
+  [`mysterycall_consistency_rule()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_consistency_rule.md)
+  and
+  [`mysterycall_default_consistency_rules()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_default_consistency_rules.md)):
+  a declarative cross-field rule engine – the general form of the
+  one-off `mysterycall_flag_*` checks. Runs a list of rules over a call
+  log and returns a single priority-sorted correction worklist (flag /
+  priority / description / action per flagged row). Ships a
+  study-agnostic starter rule set (appointment date with no answered
+  office, taking-new-patients with no appointment date, complete record
+  with no call date, missing caller, and `WAIT_NO_OFFER` – a wait time
+  recorded when no appointment was offered, the detector companion to
+  [`mysterycall_reconcile_offer_outcome()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_offer_outcome.md))
+  whose column names are configurable and which no-op on logs missing
+  those fields.
+
+- [`mysterycall_export_gsheet_caller_list()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_gsheet_caller_list.md):
+  writes a mystery-caller list in Google-Sheets import format
+  (study-title row; name/phone/NPI/`<stage>` header; ordered by state
+  with matched pairs kept adjacent; CRLF line endings and minimal
+  quoting for clean spreadsheet round-tripping). Depends only on
+  `readr`/`checkmate`. (Recovered from a stale feature branch and
+  re-landed on current `main`.)
+
+### Manuscript-output improvements
+
+Fixes for issues previously worked around by editing package source or
+post-processing in downstream study scripts – now parameters/functions
+so every study inherits them:
+
+- [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md)
+  gains `cell_layout`. The default `"stacked"` keeps the p-value on a
+  second line (correct for gt/HTML and the console print method);
+  `"inline"` puts the whole cell on one line
+  (`"1.45 (1.02-2.05), p=0.038"`) so the table renders correctly in a
+  Markdown/pandoc **pipe table**, which cannot hold a multi-line cell
+  (the embedded newline otherwise spilled every p-value onto its own
+  row).
+- [`mysterycall_kaplan_meier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_kaplan_meier.md)
+  gains `ylab` (was a hardcoded label). The default is now the
+  plain-language `"Callers still awaiting an appointment (%)"`.
+- [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md)
+  and
+  [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md)
+  gain `show_significance_legend` (default `FALSE`). When `TRUE`, a
+  single `"p < 0.05"` / `"n.s."` legend is drawn; the default keeps the
+  current legend-free look.
+- New
+  [`mysterycall_region_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_region_labels.md):
+  one row per US state with its AAO-HNS (or ACOG / Census) region and an
+  approximate centroid, ready to overlay on a state choropleth as a
+  [`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
+  layer. Dependency-free (base `state.center` +
+  [`mysterycall_assign_region()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_region.md)).
+
+### Bug fixes
+
+- Adversarial / semantic / boundary-value test suites for the
+  concordance, categorical, and call-outcome modules (211 new tests)
+  surfaced and fixed:
+  - [`mysterycall_multiresponse_tabulate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiresponse_tabulate.md)
+    now counts **distinct** options per call, so a call listing the same
+    option twice no longer inflates `mean_options_per_call` (prevalence
+    and co-occurrence already deduped).
+  - [`mysterycall_concordance_kappa()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_kappa.md)
+    now errors when the two rater frames have unequal row counts and no
+    `call_id_col` (previously it silently recycled the shorter column
+    and misreported `n`); it also validates that the item columns are
+    present.
+  - [`mysterycall_cmh_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cmh_test.md)
+    and
+    [`mysterycall_ordinal_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ordinal_model.md)
+    now raise clear, actionable errors for degenerate inputs (a single
+    stratum; a fewer-than-3 level outcome) instead of leaking the
+    underlying `mantelhaen.test` / `polr` messages.
+
+### New functions
+
+- **Multi-category / multi-response call outcomes**
+  (`R/call_outcomes.R`), the third roadmap item, turning the binary “did
+  they book?” into the graded, multi-state outcomes these audits
+  actually measured:
+  - [`mysterycall_multiresponse_tabulate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiresponse_tabulate.md)
+    summarises a “check-all-that-apply” outcome (e.g. the set of pain
+    options a clinic offers): per-option prevalence with Wilson
+    intervals, an option co-occurrence matrix, and options-per-call
+    summaries, optionally by group. Non-responding calls (`NA`) are
+    excluded from denominators; a call that responded but named nothing
+    still counts.
+  - [`mysterycall_classify_call_outcome()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_call_outcome.md)
+    maps raw/free-text dispositions to a standard call-outcome taxonomy
+    (appointment offered, declined, insurance-verification / referral /
+    records required, new-patient restriction, phone gatekeeping, not
+    reached) via an overridable keyword map.
+  - [`mysterycall_outcome_gradient()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_gradient.md)
+    summarises an ordered multi-category outcome (an access tier, a
+    triage disposition) with per-level Wilson intervals and cumulative
+    proportions.
+  - [`mysterycall_ordinal_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ordinal_model.md)
+    fits a proportional-odds model (via
+    [`MASS::polr`](https://rdrr.io/pkg/MASS/man/polr.html)) for a graded
+    ordinal outcome, returning odds ratios with Wald intervals and
+    p-values.
+- **Small-sample categorical statistics toolkit** (`R/categorical.R`),
+  the second roadmap item from the audit-study synthesis. A
+  dependency-free layer for the contingency-table designs these studies
+  actually use, where the GLMM core is overkill:
+  - [`mysterycall_test_categorical()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_test_categorical.md)
+    cross-tabulates two variables and tests association, auto-selecting
+    between Pearson’s chi-squared and an exact test (Fisher, or
+    Fisher-Freeman-Halton for larger tables) by expected cell counts,
+    reports Cramer’s V, and can add Benjamini-Hochberg-adjusted post-hoc
+    pairwise proportion comparisons for a binary outcome.
+  - [`mysterycall_cmh_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cmh_test.md)
+    runs a Cochran-Mantel-Haenszel test across a matching stratum
+    (within-unit / paired persona designs), with the common odds ratio
+    for the 2x2xK case.
+  - [`mysterycall_prevalence_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prevalence_ci.md)
+    gives per-category prevalences with Wilson, Clopper-Pearson, or Wald
+    intervals, optionally within a grouping variable.
+  - [`mysterycall_compare_ranks()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_ranks.md)
+    runs Kruskal-Wallis / Mann-Whitney with an effect size and per-group
+    medians (IQR) for skewed numeric outcomes.
+- **Guideline-concordance scoring engine** (`R/concordance.R`),
+  scaffolded from a synthesis of eight mystery-caller audit studies.
+  Scores what staff *said* or *did* against a reference standard at the
+  item level, then rolls up to call- and study-level summaries:
+  - [`mysterycall_concordance_rubric()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_rubric.md)
+    builds the reference standard from four item types — `binary`,
+    `expected_present`, `reference_match` (per-row gold standard), and
+    `evidence_tier` (named options scored against a date-versioned
+    lookup).
+  - [`mysterycall_score_concordance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_score_concordance.md)
+    returns per-item concordance rates with Wilson CIs, per-call
+    composite scores, an overall summary, and an optional per-group
+    breakdown. Item denominators track applicability separately from the
+    call count, so within-encounter conversation exits are handled
+    natively.
+  - [`mysterycall_concordance_kappa()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_kappa.md)
+    computes per-item Cohen’s kappa and percent agreement across two
+    raters.
+  - [`mysterycall_concordance_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_sentence.md)
+    emits numbers-locked manuscript prose (overall composite or per
+    item), in the existing prose-builder family.
+
+## mysterycall 1.6.1
+
+### Improvements
+
+- [`mysterycall_kaplan_meier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_kaplan_meier.md)
+  figure polish:
+  - New `legend_title` argument. The legend title now defaults to a
+    prettified `group_col` (e.g. `"sub4"` -\> `"Sub4"`,
+    `"insurance_type"` -\> `"Insurance Type"`) instead of the raw
+    variable name; pass an explicit string
+    (`legend_title = "Subspecialty"`) or `""` to drop it.
+  - Empty factor levels in `group_col` are now dropped
+    ([`droplevels()`](https://rdrr.io/r/base/droplevels.html)). An
+    unused level previously desynced
+    [`nlevels()`](https://rdrr.io/r/base/nlevels.html) from the fitted
+    strata, which surfaced as stray `-N` suffixes on the risk-table row
+    labels (or a hard row-count error).
+  - Tightened styling: risk-table columns align with the curve gridlines
+    (shared breaks), the first group sits at the top of the risk table,
+    the number-at- risk counts at day 0 are no longer clipped, the
+    risk-table row labels are bold and colour-matched to the curves, and
+    the legend renders on a single row with thicker keys.
+
+### New functions
+
+- [`mysterycall_get_direction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md)
+  and
+  [`mysterycall_get_change_verb()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md):
+  manuscript/ abstract helpers that pick a direction word
+  (“higher”/“lower”, “increasing”/“decreasing”, etc.) from the **sign of
+  the data**, so prose can never contradict the numbers it describes.
+  Vectorized, NA-safe, with a `tol` no-change band and fully
+  configurable words per subspecialty/table.
+
+### Bug fixes
+
+- `mysterycall_clean_phase1(duplicate_rows = FALSE)` no longer
+  fabricates an `insurance` label by row-number parity (which made a
+  physician’s insurance depend on alphabetical sort position). In
+  non-paired mode the `insurance` column is now set to `NA` with a
+  warning, so callers assign it from their own data. The default paired
+  path (`duplicate_rows = TRUE`) is unchanged. (Bug 21)
+
+### Documentation
+
+- New vignette **“Writing the Results Section”**
+  (`writing-results-section`): assembles a ready-to-paste manuscript
+  Results narrative from the prose builders
+  ([`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
+  [`mysterycall_write_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_results_paragraph.md),
+  [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
+  [`mysterycall_wait_time_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_sentence.md),
+  [`mysterycall_get_direction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md)
+  /
+  [`mysterycall_get_change_verb()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md)),
+  with every direction word tied to the sign of the data so the prose
+  can never contradict the tables. Runs on plain data frames, so it
+  builds fast and needs no model fitting.
+
+### Covariate reader hardening
+
+- [`mysterycall_get_cms_enrollment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_cms_enrollment.md)
+  and
+  [`mysterycall_get_hrsa_ahrf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_hrsa_ahrf.md)
+  now validate their input schema up front and fail with an explicit
+  message that names the missing column(s)/table and what was actually
+  found, instead of an opaque
+  [`dplyr::select()`](https://dplyr.tidyverse.org/reference/select.html)
+  or SQL error deep in the call. Both functions’ documentation now
+  spells out the exact expected schema (`get_hrsa_ahrf` requires a
+  preprocessed `ahrf_county_data` DuckDB table — the raw fixed-width
+  AHRF is not read directly; CSV input is not supported).
+- [`mysterycall_get_cms_enrollment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_cms_enrollment.md)
+  matches FIPS leading-zero-safe:
+  [`read.csv()`](https://rdrr.io/r/utils/read.table.html) parses
+  `"08031"` as the integer `8031`, so numeric FIPS (in the CSV and in
+  the `county_fips` argument) are now left-padded to five characters
+  before matching, and the returned `FIPS` column is a zero-padded
+  string.
+- Added offline, fixture-based tests (temp CSV / temp DuckDB) for
+  [`mysterycall_get_cms_enrollment()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_cms_enrollment.md),
+  [`mysterycall_get_hrsa_ahrf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_hrsa_ahrf.md),
+  and
+  [`mysterycall_track_clinician_churn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_track_clinician_churn.md).
+
+### Source-audit bug fixes (wave 4)
+
+- `city_state_to_lat_long` dataset now matches its documented schema:
+  columns `city`, `state` (two-letter USPS abbreviation incl. DC/PR),
+  `lat`, `long`. It previously shipped `state` full names plus
+  `latitude`/`longitude`, so `$lat` / `$long` returned `NULL` and any
+  two-letter-`state` join matched zero rows. The `data-raw/` build
+  script now performs the rename + abbreviation.
+- [`mysterycall_acceptance_waffle()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_waffle.md)
+  default `bcbs_label` corrected to the package-canonical
+  `"Blue Cross/Blue Shield"` (no spaces); the old spaced default
+  [`stop()`](https://rdrr.io/r/base/stop.html)ed with “No rows found” on
+  canonical data.
+- Removed a contradictory (always-FALSE) dead predicate in
+  `data-raw/benchmark_name_parser.R`.
+
+### Source-audit bug fixes (waves 1-3)
+
+A full read of `R/` surfaced correctness bugs that fed wrong numbers
+into data, models, and manuscript text. Fixed in this version (BUGS.md
+[\#5](https://github.com/mufflyt/mysterycall/issues/5)-#20,
+[\#22](https://github.com/mufflyt/mysterycall/issues/22)-#47):
+
+- **Data integrity / joins:** missing NPIs no longer stringify to `"NA"`
+  in the shared reader (`utils-io.R`) or
+  [`clean_phase_1_results()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+  which had collapsed every missing-NPI row to a colliding `doctor_id`;
+  `flag_repeat_physicians()` /
+  [`save_quality_check_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  now key duplicate detection on id only (not id + name);
+  [`prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/prepare_calls.md)
+  no longer injects phantom all-NA rows in the `na_exclusions = "drop"`
+  branch; `exclusion_summary()` reports an explicit `n_unrecognized`
+  bucket instead of silently counting unknown reasons as included.
+
+- **Statistics / models:** `nb_power()` and
+  `sensitivity_both_insurance()` now treat the paired (within-physician)
+  design as paired; `power_analysis()` no longer double-counts calls in
+  the unpaired branch;
+  [`model_mae_rmse()`](https://mufflyt.github.io/mysterycall/reference/model_mae_rmse.md)
+  uses [`expm1()`](https://rdrr.io/r/base/Log.html) (not
+  [`exp()`](https://rdrr.io/r/base/Log.html)) to invert `log1p`;
+  `univariate_lmm_screen()` returns an additive `Estimate` (renamed from
+  the meaningless exponentiated “IRR”); `interaction_screen()` bases
+  significance on interaction terms only (not `min(p)` over main
+  effects) and uses `<= alpha`; `lmm.R` builds Wald CIs with a t
+  quantile matching the Satterthwaite p-value.
+
+- **Reporting / plots:** `wait_time_sentence()` prints `< 0.001` instead
+  of `0`; `write_results_paragraph()` only claims significance when a
+  level clears alpha; `wait_time_crossover()` reports the correct group
+  beyond the crossover; `irr_plot()` no longer permutes significance
+  colors; `icc` prints the confidence level (not `n_boot`) in its CI
+  label; `plot_emmeans_interaction()` handles Poisson
+  (`type = "response"`);
+  [`plot_effects()`](https://mufflyt.github.io/mysterycall/reference/plot_effects.md)
+  respects `type`; `plot_disparities()` uses a proper
+  difference-of-proportions CI; density/scatter plots keep same-day
+  (0-day) appointments under `transform = "none"`.
+
+- **Classifiers / parsers / data:** anchored country/brand substrings in
+  `classify_medical_school()` and `classify_practice_setting()`
+  (Indiana/New Mexico/Nova/Penn no longer misclassified);
+  `parse_physician_name()` handles the documented “Last, First” format;
+  NANP table adds PR 787 / GU 671 / VI 340; the `fips` dataset docs now
+  match the shipped state table; hardcoded “including the District of
+  Columbia” clauses are gated on DC actually being present.
+
+  Note: BUGS.md [\#21](https://github.com/mufflyt/mysterycall/issues/21)
+  (non-duplicate-mode insurance assignment) was left as-is; the proposed
+  change conflicts with the package’s intended and tested
+  insurance-assignment behavior and warrants a product decision.
+
+### Bug fixes
+
+- [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md):
+  the narrative sentences no longer take
+  [`abs()`](https://rdrr.io/r/base/MathFun.html) of the day-scale
+  confidence-interval bounds. Signs are preserved, so a zero-crossing
+  (non-significant) CI such as `[-6.5, +11.4]` is printed with its
+  negative lower bound instead of being flipped to a spurious positive
+  interval; interval-crossing estimates are now flagged “(difference not
+  statistically significant)”.
+- [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md)
+  and
+  [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md):
+  report wording is parameterized via new `subject` (default
+  `"callers"`) and, for
+  [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
+  `exposure_descriptor` (default `"insured"`) arguments. Set
+  `exposure_descriptor = NULL` for non-insurance exposures so sentences
+  read “Laryngology callers” rather than “Laryngology-insured callers”.
+  Defaults preserve existing insurance-study output.
+- [`mysterycall_overdispersion_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_test.md):
+  documented (new “Mixed-effects caveat” section) that
+  [`df.residual()`](https://rdrr.io/r/stats/df.residual.html) counts
+  only fixed-effect parameters for GLMMs, so phi is an approximation
+  there;
+  [`DHARMa::testDispersion()`](https://rdrr.io/pkg/DHARMa/man/testDispersion.html)
+  is recommended for a formal GLMM dispersion check. The NB/GLMM-aware
+  interpretation branch (low residual phi is expected, not overfitting)
+  is now shipped in the built package.
+
+### New functions
+
+#### Environment / market covariates
+
+- mysterycall_get_payer_mix(): county payer mix from ACS S2701 +
+  coverage-type tables (B27002/B27003/C27006/C27007/B27001) — Private /
+  Public / Medicaid / Medicare / Uninsured shares with propagated 90%
+  MOEs
+- mysterycall_get_county_provider_counts(): distinct providers per
+  county FIPS, with optional per-100k density and specialty breakdown
+- mysterycall_summarize_county_enrollment(): aggregate county
+  Medicare/Medicaid enrollment (e.g. from
+  mysterycall_get_cms_enrollment()) into a Medicaid-to- Medicare ratio
+  and DOJ/FTC-style access category
+- mysterycall_add_medicaid_expansion(): join ACA Medicaid-expansion
+  status by state, with an as-of-call-date flag that correctly
+  classifies NC (2023-12-01) and SD (2023-07-01) calls made before those
+  states expanded
+- mysterycall_read_kff_hhi() / mysterycall_add_hhi(): KFF per-MSA
+  market- concentration HHI as a covariate (hhi, hhi_k = hhi/1000,
+  DOJ/FTC hhi_cat)
+
+#### Covariate lookups (from consolidation / isochrones)
+
+- mysterycall_medicaid_fee_index(): retrieve KFF state-level
+  Medicaid-to-Medicare fee index ratios
+
+- mysterycall_calculate_spatial_density(): compute local clinic
+  concentration using vectorized Haversine distance
+
+- mysterycall_model_zero_wait(): model same-day appointments (zero wait
+  times) via binomial logistic regression
+
+- mysterycall_compare_count_families(): compare Poisson, linear NB, and
+  quadratic NB mixed models via AIC/BIC
+
+- mysterycall_model_nonlinear(): fit natural cubic splines or polynomial
+  terms for continuous predictors and plot curves
+
+- mysterycall_calculate_hq_distance(): compute Haversine distance to
+  private equity platform regional headquarters for instrumental
+  variable analysis
+
+- mysterycall_track_clinician_churn(): track longitudinal clinician
+  staffing and annual churn rates at the practice level from NPPES
+  history in DuckDB
+
+- mysterycall_get_acs_female_insurance(): query Census API for female
+  insurance enrollment percentages at the census tract level
+
+- mysterycall_get_hrsa_ahrf(): retrieve county-level health resource and
+  clinician metrics from HRSA AHRF
+
+- mysterycall_get_cms_enrollment(): extract monthly Medicare/Medicaid
+  enrollment from CMS reports
+
 - mysterycall_run_analysis(): full 9-step pipeline orchestrator
+
 - mysterycall_irr_table() / mysterycall_model_gt(): publication-ready gt
   tables
+
 - mysterycall_dedup_by_insurance(): deduplicate by phone x insurance
+
 - mysterycall_physicians_with_detail(): fetch full rows for flagged IDs
+
 - mysterycall_descriptive_stats(): median / Q1 / Q3 with sentence
+
 - mysterycall_distribution_summary(): modal category with sentence
+
 - mysterycall_demographics_sentence(): prose from
   gender/specialty/credential distributions
+
 - mysterycall_wait_time_by_group(): grouped median / IQR table
+
 - mysterycall_wait_time_sentence(): Poisson p-values woven into prose
+
 - mysterycall_insurance_wait_sentence(): Medicaid vs BCBS IRR paragraph
+
 - mysterycall_scenario_summary(): call counts by scenario with sentence
+
 - mysterycall_sensitivity_both_insurance(): paired-insurance sensitivity
   analysis
+
 - mysterycall_univariate_lmm_screen(): LMM univariate predictor screen
   with IRR
+
 - mysterycall_interaction_screen(): pairwise interaction LMM screen with
   AIC
+
 - mysterycall_univariate_poisson_screen(): simple GLM Poisson predictor
   screen
+
 - mysterycall_r2_sentence(): marginal / conditional R² prose
+
 - mysterycall_random_effect_variance(): ICC + VarCorr table with
   interpretation
+
 - mysterycall_overdispersion_sentence(): Pearson phi dispersion test
   with tiers
+
 - mysterycall_clean_medicaid_col(): recode Medicaid acceptance to 0/1
+
 - mysterycall_facet_histogram(): faceted histogram with stats annotation
+
 - mysterycall_log_histogram(): log-scale faceted histogram
+
 - mysterycall_simple_poisson(): simple Poisson GLM with IRR table and
   manuscript sentence
+
 - mysterycall_flag_repeat_physicians(): QC flag for repeated physician
   entries
+
 - mysterycall_flag_exclusion_discrepancy(): QC flag for excluded rows
   with wait times
+
 - mysterycall_flag_excluded_with_appointments(): QC flag for excluded
   rows with days \> 0
+
 - mysterycall_flag_included_na_appointments(): QC flag for included rows
   with NA days
+
 - mysterycall_sample_demographics(): physician sample summary with
   sentence
+
 - mysterycall_insurance_acceptance_rates(): Medicaid vs BCBS acceptance
   rate computation
 
@@ -138,9 +678,10 @@ Released 2026-06-25.
 - Fixed a namespace-locking bug in the test suite: 37 test files were
   calling
   [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/)
-  inside `devtools::test()`, which locked the package namespace and
-  silently broke all subsequent `with_mocked_bindings()` calls. All such
-  calls have been removed.
+  inside
+  [`devtools::test()`](https://devtools.r-lib.org/reference/test.html),
+  which locked the package namespace and silently broke all subsequent
+  `with_mocked_bindings()` calls. All such calls have been removed.
 
 - Fixed 11-digit NPI generation in regression-match-rate mocks when *n*
   \> 10 (changed from `paste0("123456789", 0:(n-1))` to
@@ -257,11 +798,13 @@ Released 2026-06-02.
   (`imager`, `leaflet.extras`, `tmap`, `tigris`) plus `ggforce`.
   Suggests count: 48 → 43.
 
-- **Documentation hygiene.** `devtools::document()` now runs cleanly;
-  data documentation converted from the trailing-string-literal pattern
-  to the universal `@name + NULL` pattern. New tests added for
-  `R/academic_indicators.R` and `R/audit-verify.R`. ORCID and R-version
-  badges added to README and pkgdown index.
+- **Documentation hygiene.**
+  [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
+  now runs cleanly; data documentation converted from the
+  trailing-string-literal pattern to the universal `@name + NULL`
+  pattern. New tests added for `R/academic_indicators.R` and
+  `R/audit-verify.R`. ORCID and R-version badges added to README and
+  pkgdown index.
 
 ## mysterycall 1.3.0
 
@@ -274,7 +817,7 @@ Released 2026-05-08.
   no longer work; use
   [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/).
 - All 100 exported functions now carry the `mysterycall_` prefix (e.g.,
-  [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),
+  `mysterycall_geocode()`,
   [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)).
   The previous `mysterycall_` prefix names are retained as deprecated
   shims that emit a warning and forward to the new name. The even-older
@@ -395,8 +938,8 @@ Released 2026-05-04.
 - [`create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   no longer accumulates memoized results in RAM indefinitely. The
   internal memoization object is now exposed through
-  [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md).
-  Call it after processing a large batch to reclaim memory.
+  `mysterycall_clear_isochrone_cache()`. Call it after processing a
+  large batch to reclaim memory.
 
 - [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   and
@@ -451,11 +994,9 @@ Released 2025-10-23.
   → use
   [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
 - [`test_and_process_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  → use
-  [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
-- [`process_and_save_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  → use
-  [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
+  → use `mysterycall_isochrones_for_df()`
+- `process_and_save_isochrones()` → use
+  `mysterycall_isochrones_for_df()`
 
 ------------------------------------------------------------------------
 
@@ -470,7 +1011,6 @@ Released 2025-10-23.
   [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
   to use the Genderize.io API, removing the dependency on the non-CRAN
   `genderdata` package.
-- Added
-  [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-  to simplify geocoding lists of addresses.
+- Added `mysterycall_geocode()` to simplify geocoding lists of
+  addresses.
 - Added vignette skeleton on aggregating provider data.

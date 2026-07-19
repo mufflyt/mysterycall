@@ -117,6 +117,13 @@
   Build Table 1 (baseline characteristics), percentage tables, disparity
   summaries, and export-ready PDFs from mystery-caller study data.
 
+- [Writing the Results
+  Section](https://mufflyt.github.io/mysterycall/articles/writing-results-section.md):
+
+  Assemble a ready-to-paste manuscript Results section from
+  mysterycall’s prose builders, with every direction word tied to the
+  sign of the data so the narrative can never contradict the tables.
+
 ### News
 
 - [Imotive News &

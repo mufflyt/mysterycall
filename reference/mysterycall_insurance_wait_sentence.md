@@ -69,7 +69,7 @@ A named list:
 
 - `sentence`:
 
-  Character scalar — the manuscript paragraph.
+  Character scalar – the manuscript paragraph.
 
 - `irr`:
 

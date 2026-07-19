@@ -3,7 +3,6 @@
 Returns the modal (most frequent) level of a categorical column together
 with a full frequency table, mirroring the source-Rmd pattern:
 
-
     df %>%
       filter(!is.na(!!sym(column))) %>%
       group_by(!!sym(column)) %>%

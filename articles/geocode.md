@@ -15,7 +15,6 @@ package installed. You can effortlessly install it using the following
 command:
 
 ``` r
-
 library(mysterycall)
 ```
 
@@ -102,9 +101,8 @@ limitations associated with geocoding solely based on zip codes:
 
 ### Step 2: Prepare Your Data
 
-[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-accepts a CSV file path. Under the hood it calls the Google Maps
-Geocoding API via
+`mysterycall_geocode()` accepts a CSV file path. Under the hood it calls
+the Google Maps Geocoding API via
 [`ggmap::geocode()`](https://rdrr.io/pkg/ggmap/man/geocode.html) — the
 same service AHRQ uses for practice-location geocoding. You will need a
 Google Maps API key with the Geocoding API enabled; set it in your
@@ -117,7 +115,6 @@ unique practice addresses, geocode the 150 unique addresses and join
 back — this halves your API usage and cost.
 
 ``` r
-
 roster <- readr::read_csv("providers.csv")
 
 # Deduplicate: geocode each unique address once
@@ -138,7 +135,6 @@ plus a `geocode_status` column (`"OK"`, `"ZERO_RESULTS"`, or
 `"REQUEST_DENIED"`). Always inspect the status column before proceeding:
 
 ``` r
-
 table(geocoded$geocode_status)
 #> OK            ZERO_RESULTS
 #> 147           3
@@ -156,7 +152,6 @@ so every provider row gets coordinates, and so any address-matching
 failures are visible rather than silent.
 
 ``` r
-
 # Rename output columns to match the isochrone workflow expectation
 geocoded_clean <- geocoded |>
   dplyr::filter(geocode_status == "OK") |>
@@ -182,7 +177,6 @@ geometry column. If you are working with an `sf` object, extract
 coordinates with:
 
 ``` r
-
 roster_geocoded <- roster_geocoded |>
   dplyr::mutate(
     lat  = sf::st_coordinates(.)[, "Y"],
@@ -208,10 +202,9 @@ error that compounds in the isochrone step.
 
 ## Conclusion
 
-[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-converts raw practice addresses into latitude/longitude coordinates
-suitable for mapping, drive-time modeling, and spatial joins. Combine it
-with
+`mysterycall_geocode()` converts raw practice addresses into
+latitude/longitude coordinates suitable for mapping, drive-time
+modeling, and spatial joins. Combine it with
 [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
 to build a fully enriched provider roster — from NPI retrieval through
 geocoded locations — in a single reproducible pipeline. Next, pass the

@@ -21,6 +21,7 @@ mysterycall_forest_plot(
   title = NULL,
   subtitle = NULL,
   sig_threshold = 0.05,
+  show_significance_legend = FALSE,
   output_path = NULL,
   width = 13,
   height = NULL,
@@ -82,6 +83,13 @@ mysterycall_forest_plot(
 - sig_threshold:
 
   Numeric. P-value threshold for significance. Default `0.05`.
+
+- show_significance_legend:
+
+  Logical. When `FALSE` (default) no significance legend is drawn; the
+  point shape and error-bar linetype still encode significance. When
+  `TRUE`, a single legend labelled `"p < 0.05"` / `"n.s."` is placed
+  above the plot.
 
 - output_path:
 

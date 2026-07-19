@@ -84,8 +84,10 @@ A named list with:
 
 The acceptance column is interpreted generously: logical `TRUE`,
 non-zero numerics, and character strings `"yes"`, `"y"`, `"true"`, and
-`"1"` (case-insensitive) all count as accepted. Everything else –
-including `NA` – counts as not accepted.
+`"1"` (case-insensitive) all count as accepted. Any other non-`NA` value
+counts as not accepted, while `NA` values are treated as missing and
+excluded from the denominator (they count as neither accepted nor
+rejected).
 
 ## See also
 

@@ -26,7 +26,7 @@ the directory is not created in that case.
 
 ``` r
 mysterycall:::mysterycall_cache_dir()
-#> [1] "/home/runner/.cache/R/mysterycall"
+#> [1] "/Users/tylermuffly/Library/Caches/org.R-project.R/R/mysterycall"
 mysterycall:::mysterycall_cache_dir("hrr")
-#> [1] "/home/runner/.cache/R/mysterycall/hrr"
+#> [1] "/Users/tylermuffly/Library/Caches/org.R-project.R/R/mysterycall/hrr"
 ```

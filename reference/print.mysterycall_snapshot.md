@@ -32,8 +32,8 @@ print(x, n = 20L, ...)
 
 Other reporting:
 [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
+[`mysterycall_direction_words`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md),
 [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md),
-[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
 [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
 [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
 [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md),
@@ -48,26 +48,26 @@ Other reporting:
 snap <- tempfile(fileext = ".txt")
 out  <- mysterycall_session_snapshot(file = snap, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/RtmpoDxQpl/file22e92343bcbf.txt
+#> Session snapshot: /var/folders/39/5l91m_5d02l3kl5z8_1s9pmr0000gn/T//RtmpgR4QpJ/file124c1361b13ca.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-06-28 21:33:34 UTC
-#> R Version: R version 4.6.1 (2026-06-24)
-#> Platform:  x86_64-pc-linux-gnu
+#> Date/Time: 2026-07-18 21:49:57 MDT
+#> R Version: R version 4.4.2 (2024-10-31)
+#> Platform:  x86_64-apple-darwin20
 #> 
 #> === SEEDS ===
 #> (none supplied)
 #> 
 #> === LOADED PACKAGES ===
 #> ggplot2                        4.0.3
-#> mysterycall                    1.6.0
+#> mysterycall                    1.6.2
 #> 
 #> === FULL SESSION INFO ===
-#> R version 4.6.1 (2026-06-24)
-#> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.4 LTS
+#> R version 4.4.2 (2024-10-31)
+#> Platform: x86_64-apple-darwin20
+#> Running under: macOS Ventura 13.7.8
 #> 
 #> Matrix products: default
-#> ... (81 more lines not shown)
+#> ... (82 more lines not shown)
 ```

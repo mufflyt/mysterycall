@@ -45,9 +45,8 @@ companion tools that pair naturally with the workflow:
 - [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
   for backfilling gender information from the Genderize.io API while
   respecting daily rate limits.
-- [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
-  to convert deduplicated practice locations into latitude/longitude for
-  mapping or travel-time modeling.
+- `mysterycall_geocode()` to convert deduplicated practice locations
+  into latitude/longitude for mapping or travel-time modeling.
 
 Surfacing these touchpoints alongside the workflow helps teams decide
 which optional enrichments to run before distributing call lists.

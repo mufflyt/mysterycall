@@ -27,6 +27,9 @@ mysterycall_strobe_flow(
   label_included = "Scheduling discussion possible\n(exclusion code = 0)",
   label_logistic = "Logistic analysis\nOutcome: appointment offered (yes/no)",
   label_waittime = "Wait-time analysis\nOutcome: days to appointment",
+  label_excl_calldate = "No call date recorded",
+  label_excl_screen = "Excluded",
+  label_excl_waittime = "No appointment date\n(not offered or pending)",
   title = "STROBE Flow Diagram - Mystery-Caller Study",
   output_path = NULL,
   width = 9,
@@ -121,6 +124,22 @@ mysterycall_strobe_flow(
 - label_waittime:
 
   Character. Box label for the wait-time analysis.
+
+- label_excl_calldate:
+
+  Character. Header for the first (pre-call-date) exclusion box; the
+  count is appended automatically. Override to repurpose the diagram for
+  a non-mystery-caller pipeline. Default `"No call date recorded"`.
+
+- label_excl_screen:
+
+  Character. Header for the middle screening-exclusion box. Default
+  `"Excluded"`.
+
+- label_excl_waittime:
+
+  Character. Header for the wait-time exclusion box. Default
+  `"No appointment date\n(not offered or pending)"`.
 
 - title:
 

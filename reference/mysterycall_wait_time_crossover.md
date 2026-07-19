@@ -143,8 +143,8 @@ A named list of class `mysterycall_wait_time_crossover`:
 
 ## Details
 
-Beyond the crossover point, `group2` patients experience longer waits
-than `group1` patients (when \\0 \< m \< 1\\ and the crossover exists).
+Beyond the crossover point, `group1` patients experience longer waits
+than `group2` patients (when \\0 \< m \< 1\\ and the crossover exists).
 
 **Crossover formula.** The regression line is \\y = m x + b\\. Setting
 \\y = x\\ (the 45-degree line) and solving gives \\x = b / (1 - m)\\. A

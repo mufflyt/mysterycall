@@ -42,12 +42,12 @@ Other provider characteristics:
 ``` r
 # View all built-in government patterns
 mysterycall_government_patterns()
-#>  [1] "va "                   "va medical"            "veterans"             
-#>  [4] "veteran affairs"       "dod "                  "department of defense"
-#>  [7] "military"              "army"                  "navy"                 
-#> [10] "air force"             "walter reed"           "tricare"              
-#> [13] "indian health"         "ihs"                   "federal"              
-#> [16] "county health"         "public health"        
+#>  [1] "\\bvamc\\b"            "\\bva medical"         "\\bva hospital"       
+#>  [4] "veterans"              "veteran affairs"       "dod "                 
+#>  [7] "department of defense" "military"              "army"                 
+#> [10] "navy"                  "air force"             "walter reed"          
+#> [13] "tricare"               "indian health"         "ihs"                  
+#> [16] "federal"               "county health"         "public health"        
 
 # Extend with a custom term
 my_gov <- c(mysterycall_government_patterns(), "state health dept")

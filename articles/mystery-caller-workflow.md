@@ -19,7 +19,6 @@ each called twice — once under Medicaid and once under Blue Cross/Blue
 Shield.
 
 ``` r
-
 suppressMessages({
   library(mysterycall)
 
@@ -110,7 +109,6 @@ non-negative appointment wait time — a logical contradiction indicating
 a data-entry error.
 
 ``` r
-
 suppressMessages({
   repeat_flag <- mysterycall_flag_repeat_physicians(
     raw_df,
@@ -143,7 +141,6 @@ removes duplicate rows so each phone x insurance x physician combination
 appears exactly once.
 
 ``` r
-
 df <- suppressMessages(
   mysterycall_dedup_by_insurance(raw_df, output_dir = NA)
 )
@@ -158,7 +155,6 @@ recodes ambiguous or non-informative responses to `NA` and appends a
 binary 0/1 numeric indicator.
 
 ``` r
-
 df <- suppressMessages(
   mysterycall_clean_medicaid_col(df)
 )
@@ -175,12 +171,11 @@ computes total call counts, insurance-group physician counts, and
 geographic coverage, then returns a manuscript-ready sentence.
 
 ``` r
-
 demo <- suppressMessages(
   mysterycall_sample_demographics(df, output_dir = NA)
 )
 cat(demo$summary_sentence, "\n")
-#> Our sample included 200 calls to physician offices from 10 states, including the District of Columbia, excluding Alabama, Alaska, Arizona, Arkansas, Connecticut, Delaware, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Oklahoma, Oregon, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia.
+#> Our sample included 200 calls to physician offices from 10 states, excluding Alabama, Alaska, Arizona, Arkansas, Connecticut, Delaware, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Oklahoma, Oregon, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia.
 ```
 
 ## Scenario Counts
@@ -190,7 +185,6 @@ tabulates calls by scenario and produces a descriptive sentence ready
 for insertion into the Participants section.
 
 ``` r
-
 scen <- suppressMessages(
   mysterycall_scenario_summary(
     df,
@@ -222,7 +216,6 @@ distinct-physician numerators and denominators that exclude unreachable
 physician offices.
 
 ``` r
-
 rates <- suppressMessages(
   mysterycall_insurance_acceptance_rates(df, output_dir = NA)
 )
@@ -239,7 +232,6 @@ additionally fits a Poisson GLM to obtain p-values for each group versus
 the reference and assembles a full paragraph.
 
 ``` r
-
 wt_grp <- suppressMessages(
   mysterycall_wait_time_by_group(
     df,
@@ -258,7 +250,7 @@ wt_sent <- suppressMessages(
   mysterycall_wait_time_sentence(df, group_col = "insurance")
 )
 cat(wt_sent$sentence, "\n")
-#> The median wait time across all insurance was 14 business days (IQR: 11–17). Specifically, the median wait time was 14 days (IQR: 12–17) for Blue Cross/Blue Shield, 14 days (IQR: 11–17) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.9.
+#> The median wait time across all insurance was 14 business days (IQR: 11–17). Specifically, the median wait time was 14 days (IQR: 12–17) for Blue Cross/Blue Shield, 14 days (IQR: 11–17) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.900.
 ```
 
 ## Poisson Model
@@ -270,7 +262,6 @@ regression is preferred over rank tests because the outcome (days until
 appointment) is a count variable.
 
 ``` r
-
 poisson_res <- suppressMessages(
   mysterycall_simple_poisson(
     df,
@@ -295,7 +286,7 @@ knitr::kable(
 | Medicaid | 1.006 |        0.919 |        1.101 | 0.900   |
 
 Poisson regression incidence rate ratios (reference: Blue Cross/Blue
-Shield) {.table}
+Shield)
 
 ## Sensitivity Analysis
 
@@ -305,12 +296,11 @@ Shield and compares their wait times, providing a paired check of
 whether the observed acceptance-rate difference holds within physicians.
 
 ``` r
-
 sens <- suppressMessages(
   mysterycall_sensitivity_both_insurance(df, output_dir = NA)
 )
 cat(sens$sentence, "\n")
-#> Of 100 physicians called, 100 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 14.6 days (SD 3.8) for Medicaid vs 14.5 days (SD 3.5) for BCBS (t-test p = 0.895).
+#> Of 100 physicians called, 100 (100.0%) were called under both Medicaid and Blue Cross/Blue Shield. Among these physicians, mean wait times were 14.6 days (SD 3.8) for Medicaid vs 14.5 days (SD 3.5) for BCBS (t-test p = 0.450).
 ```
 
 ## Mapping to Manuscript Sections

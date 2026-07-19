@@ -18,6 +18,11 @@ mysterycall_flow_diagram(
   n_excluded_complete = NULL,
   n_analysed,
   exclusion_reasons = NULL,
+  label_identified = "Physicians identified",
+  label_contacted = "Physicians contacted",
+  label_completed = "Calls completed",
+  label_analysed = "Physicians analysed",
+  label_excluded = "Excluded",
   title = "Study Flow Diagram",
   output_path = NULL,
   width = 8,
@@ -64,6 +69,19 @@ mysterycall_flow_diagram(
   Named character vector. Names `"contact"` and/or `"complete"` map to
   reason strings appended below the exclusion count (e.g.
   `c(contact = "Retired or wrong specialty", complete = "No answer")`).
+
+- label_identified, label_contacted, label_completed, label_analysed:
+
+  Character. Box headers for the four stages (the count is appended
+  automatically). Override to repurpose the diagram for a
+  non-mystery-caller pipeline (e.g.
+  `label_completed = "Target subspecialists"`). Defaults are the
+  mystery-caller wording.
+
+- label_excluded:
+
+  Character. Header for the right-side exclusion boxes. Default
+  `"Excluded"`.
 
 - title:
 

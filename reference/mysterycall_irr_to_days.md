@@ -14,7 +14,9 @@ mysterycall_irr_to_days(
   exposure_col = NULL,
   ref_group = NULL,
   digits = 1L,
-  irr_digits = 2L
+  irr_digits = 2L,
+  subject = "callers",
+  exposure_descriptor = "insured"
 )
 ```
 
@@ -53,6 +55,21 @@ mysterycall_irr_to_days(
 - irr_digits:
 
   Integer. Decimal places for IRR in the sentences. Default `2L`.
+
+- subject:
+
+  Character scalar. The noun for the units being compared in the
+  narrative sentences. Default `"callers"`.
+
+- exposure_descriptor:
+
+  Character scalar or `NULL`. Optional infix that describes the
+  exposure, joined to the group label with a hyphen (e.g. `"insured"`
+  yields `"Medicaid-insured callers"`). Default `"insured"` for backward
+  compatibility with insurance studies; set to `NULL` (or `""`) for
+  non-insurance exposures (e.g. `exposure_col = "ent_type"`) so
+  sentences read `"Laryngology callers"` instead of the nonsensical
+  `"Laryngology-insured"`.
 
 ## Value
 
@@ -103,8 +120,8 @@ to visualise the same estimates.
 
 Other reporting:
 [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
+[`mysterycall_direction_words`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md),
 [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md),
-[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
 [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
 [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md),
 [`mysterycall_supplemental_tables()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_supplemental_tables.md),
@@ -138,5 +155,5 @@ result$table
 #> 1         11.76      more       0.014
 #> 2          1.47     fewer       0.134
 cat(result$paragraph)
-#> Medicaid-insured callers waited a mean of 5.9 more days compared with BCBS (95% CI 1.1 to 11.8 days; IRR 1.28; p = 0.014). Uninsured-insured callers waited a mean of 4.0 fewer days compared with BCBS (95% CI 8.2 to 1.5 days; IRR 0.81; p = 0.134).
+#> Medicaid-insured callers waited a mean of 5.9 more days compared with BCBS (95% CI +1.1 to +11.8 days; IRR 1.28; p = 0.014). Uninsured-insured callers waited a mean of 4.0 fewer days compared with BCBS (95% CI -8.2 to +1.5 days; IRR 0.81; p = 0.134) (difference not statistically significant).
 ```

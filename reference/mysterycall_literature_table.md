@@ -1,4 +1,4 @@
-# Literature comparison table for mystery-caller study Discussion sections
+# Build a literature comparison table of prior mystery-caller study ORs
 
 Accepts a user-supplied data frame of published mystery-caller
 audit-study odds ratios, optionally appends the current study's result,
@@ -20,6 +20,32 @@ mysterycall_literature_table(
 ```
 
 ## Arguments
+
+- prior_studies:
+
+  A data frame of published odds-ratio estimates with the following
+  **required** columns:
+
+  - `author`: Character. Citation label, e.g.
+    `"Bisgaier & Rhodes 2011"`.
+
+  - `year`: Integer. Publication year.
+
+  - `specialty`: Character. Clinical specialty studied.
+
+  - `insurance_comparison`: Character. Comparison label, e.g.
+    `"Medicaid vs. Private"`.
+
+  - `or`: Numeric. Odds ratio point estimate.
+
+  - `ci_lower`: Numeric. Lower bound of the 95 % CI.
+
+  - `ci_upper`: Numeric. Upper bound of the 95 % CI.
+
+  - `n`: Integer. Total calls made in that study.
+
+  Optional columns – included in the formatted table when present:
+  `setting`, `outcome_label`, `notes`.
 
 - current_study:
 

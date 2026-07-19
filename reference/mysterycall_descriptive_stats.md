@@ -4,7 +4,6 @@ Computes the median, 25th and 75th percentiles, non-missing count, and
 missing count for a named numeric column in a data frame, mirroring the
 source-Rmd pattern:
 
-
     median_val <- round(median(df[[column]], na.rm = TRUE), 2)
     q25 <- quantile(df[[column]], probs = 0.25, na.rm = TRUE)
     q75 <- quantile(df[[column]], probs = 0.75, na.rm = TRUE)
@@ -61,7 +60,7 @@ A named list with elements:
 
 - `sentence`:
 
-  Character string: `"Median [column]: [median] (IQR: [q25]–[q75])."`
+  Character string: `"Median [column]: [median] (IQR: [q25]--[q75])."`
 
 ## Details
 
@@ -102,6 +101,6 @@ mysterycall_descriptive_stats(df, "wait")
 #> [1] 1
 #> 
 #> $sentence
-#> [1] "Median wait: 4.00 (IQR: 2–6)."
+#> [1] "Median wait: 4.00 (IQR: 2--6)."
 #> 
 ```

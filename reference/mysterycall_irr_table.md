@@ -13,7 +13,7 @@ mysterycall_irr_table(
   irr_data,
   title = "Incidence Rate Ratios",
   subtitle = NULL,
-  outcome_label = "IRR (95 95% CI)",
+  outcome_label = "IRR (95% CI)",
   digits = 2L,
   add_significance_stars = TRUE,
   footnote = paste0("IRR = Incidence Rate Ratio. ", "* p<0.05; ** p<0.01; *** p<0.001.")
@@ -27,15 +27,15 @@ mysterycall_irr_table(
   A data frame or tibble with at least the following columns (exact
   names are detected flexibly):
 
-  - `term` **or** `level` — row label for each contrast.
+  - `term` **or** `level` – row label for each contrast.
 
-  - `irr` — point estimate (incidence rate ratio).
+  - `irr` – point estimate (incidence rate ratio).
 
-  - `ci_lower` — lower bound of the confidence interval.
+  - `ci_lower` – lower bound of the confidence interval.
 
-  - `ci_upper` — upper bound of the confidence interval.
+  - `ci_upper` – upper bound of the confidence interval.
 
-  - `p_value` **or** `p_value_fmt` — numeric p-value **or** a
+  - `p_value` **or** `p_value_fmt` – numeric p-value **or** a
     pre-formatted character string. When both are present `p_value` is
     used for star assignment and `p_value_fmt` for display.
 
@@ -77,7 +77,7 @@ A `gt_tbl` object ready for rendering or export.
 
 ## Details
 
-**Column detection** — the function looks for these column names in
+**Column detection** – the function looks for these column names in
 order:
 
 - Label: `"term"`, then `"level"`.
@@ -88,7 +88,7 @@ order:
 - P-value (display): `"p_value_fmt"` when present, otherwise the numeric
   `p_value` rounded to three decimal places.
 
-**Significance stars** — assigned from the numeric p-value:
+**Significance stars** – assigned from the numeric p-value:
 
 |          |       |
 |----------|-------|
@@ -98,7 +98,7 @@ order:
 | \< 0.05  | `*`   |
 | \>= 0.05 | `""`  |
 
-**Bold rows** — rows where `p_value < 0.05` are styled with bold text
+**Bold rows** – rows where `p_value < 0.05` are styled with bold text
 via
 [`gt::tab_style()`](https://gt.rstudio.com/reference/tab_style.html).
 
@@ -661,18 +661,18 @@ if (requireNamespace("gt", quietly = TRUE)) {
 #>     
 #>     <tr class="gt_col_headings">
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Label">Predictor</th>
-#>       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="IRR_CI">IRR (95 95% CI)</th>
+#>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="IRR_CI">IRR (95% CI)</th>
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="P">p-value</th>
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Stars">Stars</th>
 #>     </tr>
 #>   </thead>
 #>   <tbody class="gt_table_body">
 #>     <tr><td headers="Label" class="gt_row gt_left">insuranceMedicaid</td>
-#> <td headers="IRR_CI" class="gt_row gt_left">0.97 (0.83–1.14)</td>
+#> <td headers="IRR_CI" class="gt_row gt_right">0.97 (0.83--1.14)</td>
 #> <td headers="P" class="gt_row gt_right">0.722</td>
 #> <td headers="Stars" class="gt_row gt_right"></td></tr>
 #>     <tr><td headers="Label" class="gt_row gt_left">insuranceMedicare</td>
-#> <td headers="IRR_CI" class="gt_row gt_left">0.98 (0.84–1.15)</td>
+#> <td headers="IRR_CI" class="gt_row gt_right">0.98 (0.84--1.15)</td>
 #> <td headers="P" class="gt_row gt_right">0.813</td>
 #> <td headers="Stars" class="gt_row gt_right"></td></tr>
 #>   </tbody>

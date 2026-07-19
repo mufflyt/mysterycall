@@ -80,8 +80,8 @@ provides a single top-level call that collects them all in one place.
 
 Other reporting:
 [`mysterycall_abstract_numbers()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_abstract_numbers.md),
+[`mysterycall_direction_words`](https://mufflyt.github.io/mysterycall/reference/mysterycall_direction_words.md),
 [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md),
-[`mysterycall_geographic_map()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geographic_map.md),
 [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md),
 [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
 [`mysterycall_supplemental_tables()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_supplemental_tables.md),
@@ -106,13 +106,13 @@ mysterycall_session_snapshot(
 # Inspect what was written
 out <- mysterycall_session_snapshot(file = snap, append = TRUE, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/RtmpoDxQpl/file22e943a90754.txt
+#> Session snapshot: /var/folders/39/5l91m_5d02l3kl5z8_1s9pmr0000gn/T//RtmpgR4QpJ/file124c14401625d.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-06-28 21:32:59 UTC
-#> R Version: R version 4.6.1 (2026-06-24)
-#> Platform:  x86_64-pc-linux-gnu
+#> Date/Time: 2026-07-18 21:47:28 MDT
+#> R Version: R version 4.4.2 (2024-10-31)
+#> Platform:  x86_64-apple-darwin20
 #> 
 #> === SEEDS ===
 #> bootstrap                      42
@@ -120,12 +120,12 @@ print(out)
 #> 
 #> === LOADED PACKAGES ===
 #> ggplot2                        4.0.3
-#> mysterycall                    1.6.0
+#> mysterycall                    1.6.2
 #> 
 #> === FULL SESSION INFO ===
-#> R version 4.6.1 (2026-06-24)
-#> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.4 LTS
+#> R version 4.4.2 (2024-10-31)
+#> Platform: x86_64-apple-darwin20
+#> Running under: macOS Ventura 13.7.8
 #> 
-#> ... (181 more lines not shown)
+#> ... (185 more lines not shown)
 ```

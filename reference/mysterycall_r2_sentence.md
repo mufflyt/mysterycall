@@ -1,7 +1,7 @@
 # Compute R-squared values and generate an interpretive sentence for mixed models
 
 Extracts marginal (fixed-effects only) and conditional (fixed + random
-effects) R² values from a fitted mixed model using
+effects) R^2 values from a fitted mixed model using
 [`performance::r2()`](https://easystats.github.io/performance/reference/r2.html),
 then formats them into a manuscript-ready interpretive paragraph.
 
@@ -22,7 +22,7 @@ mysterycall_r2_sentence(model, digits = 3, digits_pct = 1)
 
 - digits:
 
-  Integer scalar. Number of decimal places for R² values in the
+  Integer scalar. Number of decimal places for R^2 values in the
   sentence. Default `3`.
 
 - digits_pct:
@@ -36,11 +36,11 @@ A named list with:
 
 - `marginal_r2`:
 
-  Numeric. Marginal R² (fixed effects only).
+  Numeric. Marginal R^2 (fixed effects only).
 
 - `conditional_r2`:
 
-  Numeric. Conditional R² (fixed + random effects).
+  Numeric. Conditional R^2 (fixed + random effects).
 
 - `fixed_effects`:
 

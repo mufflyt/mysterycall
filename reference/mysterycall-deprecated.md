@@ -106,20 +106,6 @@ validate_and_remove_invalid_npi(...)
 search_npi(input_data, ...)
 
 test_and_process_isochrones(input_file, ...)
-
-process_and_save_isochrones(input_file, chunk_size = 25, ...)
-
-progress_tracker(...)
-
-progress_tracker_start(...)
-
-progress_tracker_finish(...)
-
-progress_tracker_fail(...)
-
-progress_tracker_update(...)
-
-progress_tracker_summary(...)
 ```
 
 ## Arguments
@@ -127,7 +113,3 @@ progress_tracker_summary(...)
 - input_data:
 
   A data frame or CSV path containing `first` and `last` columns.
-
-- chunk_size:
-
-  Deprecated.
