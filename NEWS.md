@@ -2,6 +2,69 @@
 
 ## New functions
 
+A second batch generalized from the downstream ENT study (`grace-ent`) --
+clustering, single-contact time-to-appointment, and simulation-based power for
+the two-part / population-marginal designs these studies actually use:
+
+- `mysterycall_cluster_id()`: coalesce a random-intercept/grouping key from an
+  ordered list of columns (e.g. CBSA -> county FIPS), giving each still-missing
+  row its own singleton cluster. Closes a footgun -- the model fitters require a
+  `random_intercept` column but the package previously gave you nothing to build
+  one, and blank/`NA` keys silently collapse into one giant cluster and corrupt
+  the random-effect variance.
+- `mysterycall_cumulative_access_curve()`: the empirical cumulative proportion of
+  calls that had secured an appointment by business-day `t` -- the correct
+  primitive for a single-contact design, where `mysterycall_kaplan_meier()`'s
+  right-censoring of non-offered calls implies follow-up the design does not
+  have. Each curve plateaus at the share obtained within the horizon (the offer
+  rate when every wait falls inside it). Optional step-curve figure.
+- `mysterycall_twopart_power()`: Monte Carlo power for the two-part outcome
+  (offer as a Bernoulli on the full sample; wait as a negative binomial on the
+  offered subset) that access audits universally have -- reports the power for
+  each part separately, since a single-outcome calculator understates the wait
+  model's sample (it runs on the offered subset). Depends only on `MASS`.
+- `mysterycall_marginal_power()`: Monte Carlo power for a
+  post-stratification-weighted, population-marginal effect in a paired-call
+  design (each subject called under two conditions; a stratum oversampled in the
+  sample but reweighted to a target population mix). Reports power for the
+  conditional interaction, the unweighted marginal effect, and the
+  population-weighted marginal effect. Needs `glmmTMB` + `marginaleffects`.
+- `mysterycall_type_i_check()` and `mysterycall_find_mde()`: generic companions
+  to any simulation power function -- a null-calibration self-check (observed
+  type I rate + exact binomial CI + verdict) and a minimum-detectable-effect
+  binary search over a user-supplied power function.
+
+Generalized from analysis logic that the downstream ENT study (`grace-ent`) had
+been hand-rolling in its own scripts, so every mystery-caller study inherits it:
+
+- `mysterycall_access_cascade()` (+ `mysterycall_cascade_stage()`): summarizes a
+  sequence of access constructs across the call pathway (reached a live office ->
+  accepting new patients -> sees the presented complaint -> appointment offered ->
+  with whom) as a tidy count / denominator / percent table with Wilson
+  confidence intervals, plus an optional funnel figure. Denominators may be the
+  full analytic sample (`"total"`), a strictly nested previous stage
+  (`"previous"`), another named stage (for "share of offers"-style
+  sub-breakdowns), or a fixed number -- so one call mixes a nested funnel with
+  conditional sub-measures. Depends only on base R (+ `ggplot2` for the figure).
+- `mysterycall_reconcile_offer_outcome()`: finds and optionally fixes rows where
+  a coarse binary "appointment offered" flag contradicts a granular disposition
+  field, in both directions (flag understates vs. overstates the outcome),
+  treating the granular outcome as authoritative and clearing dependent fields
+  (wait time, appointment date) when a row flips to "not offered". Fills a gap
+  the `mysterycall_flag_*` family did not cover (they compare exclusion reason
+  vs. wait time, never a summary boolean vs. a disposition).
+- `mysterycall_check_consistency()` (+ `mysterycall_consistency_rule()` and
+  `mysterycall_default_consistency_rules()`): a declarative cross-field rule
+  engine -- the general form of the one-off `mysterycall_flag_*` checks. Runs a
+  list of rules over a call log and returns a single priority-sorted correction
+  worklist (flag / priority / description / action per flagged row). Ships a
+  study-agnostic starter rule set (appointment date with no answered office,
+  taking-new-patients with no appointment date, complete record with no call
+  date, missing caller, and `WAIT_NO_OFFER` -- a wait time recorded when no
+  appointment was offered, the detector companion to
+  `mysterycall_reconcile_offer_outcome()`) whose column names are configurable
+  and which no-op on logs missing those fields.
+
 - `mysterycall_export_gsheet_caller_list()`: writes a mystery-caller list in
   Google-Sheets import format (study-title row; name/phone/NPI/`<stage>` header;
   ordered by state with matched pairs kept adjacent; CRLF line endings and
