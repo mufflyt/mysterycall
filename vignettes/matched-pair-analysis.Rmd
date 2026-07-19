@@ -1,0 +1,357 @@
+---
+title: "A matched-pair mystery-caller analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A matched-pair mystery-caller analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  fig.width = 7, fig.height = 4, fig.align = "center",
+  warning = FALSE, message = FALSE
+)
+```
+
+This vignette walks a complete matched-pair mystery-caller analysis end to end,
+using the tools added for auditing healthcare access. The **matched-pair
+design** — the same practice called under two insurance scenarios — is the
+paradigm the package is built around: pairing removes each practice's baseline
+generosity, so a difference between scenarios is not confounded by *which*
+practices happened to be called.
+
+```{r}
+library(mysterycall)
+```
+
+## 1. A simulated study
+
+We simulate 140 practices, each called twice (Commercial and Medicaid), with a
+per-practice random effect so the two calls to one practice are correlated. The
+data are in **long** form: one row per practice × scenario.
+
+```{r simulate}
+set.seed(2026)
+np <- 140L
+
+subspecialty <- sample(c("General", "Pediatric", "Rhinology", "Laryngology"),
+                       np, TRUE, prob = c(.45, .25, .18, .12))
+region <- sample(c("Northeast", "South", "Midwest", "West"), np, TRUE)
+caller <- sample(paste0("RA", 1:5), np, TRUE)
+u      <- rnorm(np, 0, 0.7)                              # practice generosity
+cbsa   <- ifelse(runif(np) < 0.72,
+                 sprintf("C%05d", sample(10000:40000, np, TRUE)), NA_character_)
+cfips  <- sprintf("%05d", sample(1001:56045, np, TRUE))
+
+d <- data.frame(
+  practice = rep(seq_len(np), times = 2L),
+  scenario = rep(c("Commercial", "Medicaid"), each = np),
+  stringsAsFactors = FALSE
+)
+d$subspecialty <- subspecialty[d$practice]
+d$region       <- region[d$practice]
+d$caller       <- caller[d$practice]
+d$cbsa_code    <- cbsa[d$practice]
+d$county_fips  <- cfips[d$practice]
+
+medicaid <- d$scenario == "Medicaid"
+sub_off  <- c(General = 0, Pediatric = -0.3, Rhinology = 0.2, Laryngology = 0.1)
+eta      <- 1.1 - 1.0 * medicaid + u[d$practice] + sub_off[d$subspecialty]
+
+d$office_answered     <- runif(nrow(d)) < 0.94
+d$appointment_offered <- d$office_answered & (runif(nrow(d)) < plogis(eta))
+d$taking_new_patients <- ifelse(d$appointment_offered | runif(nrow(d)) < 0.6,
+                                "Yes", "No")
+
+sub_wait <- c(General = 0, Pediatric = 0.15, Rhinology = 0.1, Laryngology = 0.2)
+mu_wait  <- exp(2.4 + 0.45 * medicaid + sub_wait[d$subspecialty])
+d$wait_days_business <- ifelse(
+  d$appointment_offered, rnbinom(nrow(d), mu = mu_wait, size = 2), NA_real_)
+
+d$appointment_outcome <- ifelse(
+  d$appointment_offered,
+  sample(c("With sampled physician", "With different physician"),
+         nrow(d), TRUE, c(.8, .2)),
+  "No appointment offered")
+
+# a `complete` flag: a handful of calls never reached a determination
+d$complete <- d$office_answered | runif(nrow(d)) < 0.5
+
+head(d)
+```
+
+To make the data-integrity tools earn their keep, we deliberately introduce two
+kinds of contradiction that creep into real call logs:
+
+```{r seed-errors}
+# (a) a wait time recorded even though no appointment was offered
+d$appointment_offered[5]  <- FALSE
+d$appointment_outcome[5]  <- "No appointment offered"
+d$wait_days_business[5]   <- 14
+
+# (b) the offered flag disagrees with the authoritative outcome
+d$appointment_offered[8]  <- FALSE                       # says "not offered" ...
+d$appointment_outcome[8]  <- "With sampled physician"    # ... but an appt was made
+```
+
+## 2. A clustering key for mixed models
+
+The mixed-model fitters need a `random_intercept` column, but our geography is
+split across a metro code that only some practices have and a county code for
+the rest. `mysterycall_cluster_id()` coalesces them, giving any still-missing row
+its own singleton so it never silently collapses into one giant cluster.
+
+```{r cluster}
+d$cluster <- mysterycall_cluster_id(d, c("cbsa_code", "county_fips"))
+head(d$cluster)
+```
+
+## 3. Data integrity
+
+`mysterycall_check_consistency()` runs a battery of cross-field rules and returns
+a single priority-sorted worklist. The defaults include `WAIT_NO_OFFER`, which
+catches contradiction (a) above.
+
+```{r consistency}
+issues <- mysterycall_check_consistency(d, id_col = "practice")
+issues
+```
+
+`mysterycall_reconcile_offer_outcome()` finds — and here fixes — rows where the
+binary offer flag contradicts the granular outcome (contradiction (b)), treating
+the detailed outcome as authoritative and clearing any stray wait/date when a row
+flips to "not offered".
+
+```{r reconcile}
+rec <- mysterycall_reconcile_offer_outcome(
+  d,
+  flag_col           = "appointment_offered",
+  outcome_col        = "appointment_outcome",
+  offered_values     = c("With sampled physician", "With different physician"),
+  not_offered_values = "No appointment offered",
+  dependent_cols     = "wait_days_business",
+  action             = "fix",
+  id_col             = "practice"
+)
+rec
+d <- rec$data          # continue with the reconciled data
+```
+
+## 4. The access cascade
+
+Simulated-patient studies report a *cascade* of intermediate access measures.
+`mysterycall_access_cascade()` turns an ordered set of stage definitions into a
+count / denominator / percent table with Wilson intervals, and an optional funnel
+figure.
+
+```{r cascade}
+cascade <- mysterycall_access_cascade(d, list(
+  mysterycall_cascade_stage("Reached a live office", "office_answered", TRUE),
+  mysterycall_cascade_stage("Accepting new patients", "taking_new_patients", "Yes"),
+  mysterycall_cascade_stage("Appointment offered", "appointment_offered", TRUE),
+  mysterycall_cascade_stage("With the sampled physician", "appointment_outcome",
+                            "With sampled physician")
+), plot = TRUE)
+cascade
+```
+
+```{r cascade-plot, fig.height = 3.4}
+cascade$plot
+```
+
+## 5. Bounds under non-response
+
+Not every call completes. Rather than quietly condition the offer rate on the
+completed calls, `mysterycall_outcome_bounds()` reports the assumption-free
+Manski interval: assign every incomplete call first to failure, then to success.
+
+```{r bounds}
+mysterycall_outcome_bounds(d, "appointment_offered", observed = "complete")
+```
+
+## 6. Time to an appointment
+
+For a single-contact design the correct time-to-event primitive is the empirical
+cumulative proportion offered by business-day *t* — **not** a Kaplan–Meier curve,
+which would censor the never-offered calls and imply follow-up the design does
+not have. Each curve plateaus at that scenario's offer rate.
+
+```{r curve, fig.height = 3.6}
+curve <- mysterycall_cumulative_access_curve(
+  d, time_col = "wait_days_business", offered_col = "appointment_offered",
+  group_col = "scenario", horizon = 60, plot = TRUE)
+curve$plateau
+curve$plot
+```
+
+## 7. The matched comparison
+
+Now the heart of the design. Only practices called under **both** scenarios
+contribute, and for the binary acceptance outcome only the *discordant* practices
+(a different answer to the two callers) carry information — so the effective
+sample size is the discordant count. `mysterycall_paired_acceptance_mcnemar()`
+runs the exact McNemar test.
+
+```{r mcnemar}
+d$accepted <- d$appointment_offered
+mysterycall_paired_acceptance_mcnemar(
+  d, id_col = "practice", scenario_col = "scenario", outcome_col = "accepted")
+```
+
+The continuous analogue pairs the within-practice wait differences:
+
+```{r paired-wait}
+mysterycall_paired_wait_within_practice(
+  d, id_col = "practice", scenario_col = "scenario",
+  wait_col = "wait_days_business")
+```
+
+## 8. Small-sample categorical and rank tests
+
+For the unmatched views, the categorical toolkit auto-selects chi-square or an
+exact test by expected cell counts and reports Cramér's V:
+
+```{r categorical}
+mysterycall_test_categorical(d, row_var = "scenario", col_var = "appointment_offered")
+```
+
+Offer prevalence with Wilson intervals, by scenario:
+
+```{r prevalence}
+mysterycall_prevalence_ci(d, var = "appointment_offered", group_var = "scenario")
+```
+
+A Cochran–Mantel–Haenszel test holds region constant while comparing scenarios:
+
+```{r cmh}
+mysterycall_cmh_test(d, outcome_var = "appointment_offered",
+                     group_var = "scenario", strata_var = "region")
+```
+
+Wait times are skewed counts, so compare them with ranks — here across the four
+subspecialties, among offered calls:
+
+```{r ranks}
+offered <- d[d$appointment_offered & !is.na(d$wait_days_business), ]
+mysterycall_compare_ranks(offered, outcome_var = "wait_days_business",
+                          group_var = "subspecialty")
+```
+
+## 9. Call outcomes and guideline concordance
+
+Raw dispositions map to a standard taxonomy via an ordered keyword list
+(first match wins):
+
+```{r classify}
+raw <- ifelse(d$appointment_offered, "appointment scheduled",
+       sample(c("not accepting new medicaid patients", "no openings for months",
+                "does not treat this complaint", "left a voicemail"),
+              nrow(d), TRUE))
+table(mysterycall_classify_call_outcome(raw))
+```
+
+For a guideline-concordance study, build a rubric and score each call transcript
+against it. Here three binary items on counseling quality:
+
+```{r concordance}
+rubric <- mysterycall_concordance_rubric(
+  item  = c("explained_wait", "offered_alternative", "gave_callback"),
+  label = c("Explained the expected wait", "Offered an alternative site",
+            "Gave a call-back number"),
+  type  = "binary", correct = TRUE)
+
+set.seed(11)
+transcripts <- data.frame(
+  explained_wait      = rbinom(80, 1, 0.7) == 1,
+  offered_alternative = rbinom(80, 1, 0.4) == 1,
+  gave_callback       = rbinom(80, 1, 0.6) == 1
+)
+mysterycall_score_concordance(transcripts, rubric, output_dir = NA)
+```
+
+## 10. Adjusted model and robustness
+
+Fit an adjusted model for the offer, then interrogate it. (We use a base `glm`
+here for speed; `mysterycall_logistic_model()` gives the mixed-model version and
+the same robustness helpers accept its objects.)
+
+```{r model}
+fit <- glm(appointment_offered ~ scenario + subspecialty + region,
+           family = binomial, data = d)
+round(exp(cbind(OR = coef(fit), confint.default(fit)))["scenarioMedicaid", ], 2)
+```
+
+Is subspecialty jointly informative? `mysterycall_joint_test()` runs the joint
+likelihood-ratio test, computing the degrees of freedom from the log-likelihoods
+(which sidesteps a well-known `glmer`-vs-`glmmTMB` column-naming footgun):
+
+```{r joint}
+mysterycall_joint_test(fit, "subspecialty")
+```
+
+Does the Medicaid effect hinge on any single caller?
+`mysterycall_leave_one_out()` refits with each caller dropped in turn:
+
+```{r loo}
+mysterycall_leave_one_out(fit, d, group = "caller", term = "scenarioMedicaid",
+                          joint_predictor = "subspecialty")
+```
+
+## 11. Power, for the next study
+
+Access audits have a two-part outcome — a binary offer on the full sample and a
+wait time only among offered calls — so both parts must be powered.
+`mysterycall_twopart_power()` simulates both.
+
+```{r twopart, eval = requireNamespace("MASS", quietly = TRUE)}
+mysterycall_twopart_power(
+  n_total = c(200, 400), offer_ref = 0.75, offer_trt = 0.55,
+  wait_ref = 14, wait_trt = 21, phi = 1.7, n_sim = 60, seed = 1)
+```
+
+Any simulation-based power should be sanity-checked for calibration — the
+rejection rate under the null must sit near α. `mysterycall_type_i_check()` turns
+an observed null-rejection count into a verdict:
+
+```{r type-i}
+mysterycall_type_i_check(rejections = 4, n_sim = 100, alpha = 0.05)
+```
+
+And `mysterycall_find_mde()` bisects any power function to the smallest
+detectable effect at a target power — here the smallest Medicaid wait (in days)
+detectable at 80% power with 400 calls:
+
+```{r mde, eval = requireNamespace("MASS", quietly = TRUE)}
+pf <- function(wait_trt) {
+  mysterycall_twopart_power(
+    n_total = 400, offer_ref = 0.7, offer_trt = 0.7,
+    wait_ref = 14, wait_trt = wait_trt, phi = 1.7, n_sim = 30, seed = 1
+  )$table$pow_wait
+}
+mysterycall_find_mde(pf, lower = 14, upper = 26, target_power = 0.80,
+                     tol = 0.5, max_iter = 8)$mde
+```
+
+When a study oversamples a rare stratum but wants a population-generalizable
+effect, `mysterycall_marginal_power()` powers the post-stratification-weighted
+marginal estimand (it needs `glmmTMB` and `marginaleffects`):
+
+```{r marginal, eval = FALSE}
+mysterycall_marginal_power(
+  n_subject = c(150, 300),
+  cell_means = c(14, 18, 17, 24),      # Commercial/Medicaid x urban/rural waits
+  sigma_subject = 0.4, phi = 1.7,
+  stratum_sampling = 0.5, pop_stratum = 0.15,
+  n_sim = 200, seed = 1)
+```
+
+## Recap
+
+One long call log, start to finish: a clustering key, two integrity passes, the
+access cascade, non-response bounds, the cumulative-access curve, the matched
+McNemar and paired-wait comparisons, small-sample categorical and rank tests,
+outcome classification and guideline concordance, an adjusted model with a joint
+test and leave-one-out sensitivity, and simulation-based power for the follow-up
+study — each a single function call.

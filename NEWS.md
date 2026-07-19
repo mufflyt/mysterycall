@@ -1,3 +1,15 @@
+# mysterycall (development version)
+
+## Documentation
+
+- New vignette **"A matched-pair mystery-caller analysis"**: a worked, end-to-end
+  analysis on a simulated paired call log that exercises the tools added in
+  1.6.2 together -- a clustering key, two data-integrity passes, the access
+  cascade, non-response bounds, the cumulative-access curve, the matched McNemar
+  and paired-wait comparisons, small-sample categorical and rank tests, outcome
+  classification and guideline concordance, an adjusted model with a joint test
+  and leave-one-out sensitivity, and simulation-based power.
+
 # mysterycall 1.6.2
 
 ## New functions
