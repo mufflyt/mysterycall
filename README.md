@@ -2,7 +2,7 @@
 # mysterycall
 
 <!-- badges: start -->
-<img src="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right">
+<img src="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right" alt="mysterycall hex-sticker logo">
 
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -126,7 +126,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Provider roster** — subspecialist counts from the built-in `physicians` dataset
 (`mysterycall_search_taxonomy`)
 
-<img src="man/figures/fig-subspecialty-counts.png" width="100%">
+<img src="man/figures/fig-subspecialty-counts.png" width="100%" alt="Bar chart of subspecialist counts from the built-in physicians dataset">
 
 </td>
 <td width="50%">
@@ -134,7 +134,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Geographic distribution** — dot map of 4,659 OBGYN subspecialists across the US
 (`mysterycall_map_physicians`)
 
-<img src="man/figures/fig-physician-map.png" width="100%">
+<img src="man/figures/fig-physician-map.png" width="100%" alt="Dot map of 4,659 OBGYN subspecialists across the United States">
 
 </td>
 </tr>
@@ -144,7 +144,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Acceptance rates** — Medicaid vs. private insurance by subspecialty
 (`mysterycall_plot_stacked_bar`)
 
-<img src="man/figures/fig-acceptance-rates.png" width="100%">
+<img src="man/figures/fig-acceptance-rates.png" width="100%" alt="Grouped bar chart of Medicaid versus private-insurance acceptance rates by subspecialty">
 
 </td>
 <td width="50%">
@@ -152,7 +152,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Insurance disparity** — Wilson 95% CIs by insurance type
 (`mysterycall_disparities_table`)
 
-<img src="man/figures/fig-disparities.png" width="100%">
+<img src="man/figures/fig-disparities.png" width="100%" alt="Acceptance rates with Wilson 95% confidence intervals by insurance type">
 
 </td>
 </tr>
@@ -162,7 +162,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Choropleth map** — appointment acceptance rate by state
 (`mysterycall_map_acceptance_rate`)
 
-<img src="man/figures/fig-acceptance-map.png" width="100%">
+<img src="man/figures/fig-acceptance-map.png" width="100%" alt="US choropleth map of appointment acceptance rate by state">
 
 </td>
 <td width="50%">
@@ -170,7 +170,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Wait-time distribution** — overlapping densities with group medians
 (`mysterycall_plot_density`)
 
-<img src="man/figures/fig-wait-density.png" width="100%">
+<img src="man/figures/fig-wait-density.png" width="100%" alt="Overlapping wait-time density curves by group with medians marked">
 
 </td>
 </tr>
@@ -180,7 +180,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **IRR forest plot** — incidence rate ratios from a Poisson GLMM
 (`mysterycall_irr_plot`)
 
-<img src="man/figures/fig-irr-forest.png" width="100%">
+<img src="man/figures/fig-irr-forest.png" width="100%" alt="Forest plot of incidence rate ratios from a Poisson GLMM">
 
 </td>
 <td width="50%">
@@ -188,7 +188,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Power curve** — providers per arm needed to detect a given IRR
 (`mysterycall_equation_figure`)
 
-<img src="man/figures/fig-power-curve.png" width="100%">
+<img src="man/figures/fig-power-curve.png" width="100%" alt="Line chart of providers per arm needed to detect a given incidence rate ratio">
 
 </td>
 </tr>
@@ -198,7 +198,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **CONSORT flowchart** — sequential inclusion/exclusion for audit studies
 (`mysterycall_flowchart`)
 
-<img src="man/figures/fig-flowchart.png" width="100%">
+<img src="man/figures/fig-flowchart.png" width="100%" alt="CONSORT-style inclusion and exclusion flowchart for an audit study">
 
 </td>
 <td width="50%">
@@ -206,7 +206,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Residual diagnostics** — three-panel model check for Poisson GLMM fit
 (`mysterycall_plot_residuals`)
 
-<img src="man/figures/fig-residuals.png" width="100%">
+<img src="man/figures/fig-residuals.png" width="100%" alt="Three-panel residual diagnostic plots for a Poisson GLMM fit">
 
 </td>
 </tr>
@@ -216,7 +216,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **100% stacked bar** — acceptance vs. rejection proportions with call counts
 (`mysterycall_plot_stacked_bar`)
 
-<img src="man/figures/fig-stacked-bar.png" width="100%">
+<img src="man/figures/fig-stacked-bar.png" width="100%" alt="100 percent stacked bar chart of acceptance versus rejection proportions with call counts">
 
 </td>
 <td width="50%">
@@ -224,7 +224,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Estimated marginal means** — Medicaid vs. private wait days by subspecialty
 (`mysterycall_plot_emmeans_interaction`)
 
-<img src="man/figures/fig-emmeans-interaction.png" width="100%">
+<img src="man/figures/fig-emmeans-interaction.png" width="100%" alt="Estimated marginal means of Medicaid versus private wait days by subspecialty">
 
 </td>
 </tr>
@@ -234,7 +234,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Jittered scatter** — raw wait-day observations by subspecialty
 (`mysterycall_plot_scatter`)
 
-<img src="man/figures/fig-scatter.png" width="100%">
+<img src="man/figures/fig-scatter.png" width="100%" alt="Jittered scatter plot of raw wait-day observations by subspecialty">
 
 </td>
 <td width="50%">
@@ -242,7 +242,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 **Wait-time histogram** — sqrt-scaled count distribution
 (`mysterycall_plot_distribution`)
 
-<img src="man/figures/fig-distribution.png" width="100%">
+<img src="man/figures/fig-distribution.png" width="100%" alt="Square-root-scaled histogram of the wait-time distribution">
 
 </td>
 </tr>
