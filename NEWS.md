@@ -24,6 +24,11 @@ mystery-caller study:
 
 ## Documentation
 
+- New vignette **"Assembling supplementary digital content"**: generates a
+  journal manuscript's supplementary package from the fitted models -- the
+  crude-vs-adjusted model table, disparity table, absolute-scale effect,
+  literature comparison, forest / IRR / cumulative-access figures at journal
+  specification, the STROBE checklist, and export to workbook / Word / CSV.
 - New vignette **"Designing a matched-control mystery-caller audit"**: an
   end-to-end case-control workflow (geocode a roster, build a
   propensity-score-matched control cohort inside a geographic caliper, assemble

@@ -1,0 +1,205 @@
+---
+title: "Assembling supplementary digital content"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Assembling supplementary digital content}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE,
+  fig.width = 6.5, fig.height = 3.6, fig.align = "center"
+)
+sdc_dir <- file.path(tempdir(), "sdc")
+dir.create(sdc_dir, showWarnings = FALSE)
+```
+
+Journals rarely print a mystery-caller study's full model tables, sensitivity
+analyses, reporting checklist, and participant-flow diagram in the main text —
+those go in the **supplementary digital content (SDC)**, uploaded as separate
+files. This vignette assembles that package: the supplementary tables and
+figures, a STROBE checklist, and the export steps, each generated from the
+fitted models so the SDC stays consistent with the manuscript and is trivial to
+regenerate when the data change.
+
+```{r}
+library(mysterycall)
+```
+
+## 1. The analysis behind the SDC
+
+A mystery-caller study of insurance-based access has two outcomes: whether an
+appointment was offered, and the wait in business days among offers. We simulate
+a small paired call log and fit both models — a logistic GLMM for the offer and
+a Poisson GLMM for the wait.
+
+```{r fit}
+set.seed(2026)
+n <- 120
+d <- data.frame(
+  npi        = rep(sprintf("1%09d", seq_len(n)), each = 2),
+  insurance  = rep(c("Commercial", "Medicaid"), n),
+  region     = rep(sample(c("Northeast", "South", "West"), n, TRUE), each = 2)
+)
+med <- d$insurance == "Medicaid"
+d$appt_offered <- rbinom(nrow(d), 1, plogis(1.1 - 0.9 * med))
+d$wait_days    <- ifelse(d$appt_offered == 1,
+                         rpois(nrow(d), ifelse(med, 18, 12)), NA)
+
+offer_crude    <- mysterycall_logistic_model(d, "appt_offered", "insurance", "npi")
+offer_adjusted <- mysterycall_logistic_model(
+  d, "appt_offered", c("insurance", "region"), "npi")
+wait_model <- mysterycall_poisson_model(
+  d[d$appt_offered == 1, ], outcome = "wait_days",
+  predictors = "insurance", random_intercept = "npi")
+```
+
+## 2. Supplementary tables
+
+**Table S1 — model estimates (crude vs. adjusted).**
+`mysterycall_multi_model_table()` places nested models side by side, the usual
+"did adjustment move the estimate?" supplementary table.
+
+```{r tableS1}
+tS1 <- mysterycall_multi_model_table(
+  list(Crude = offer_crude, Adjusted = offer_adjusted))
+tS1
+```
+
+**Table S2 — the disparity, with confidence intervals.**
+
+```{r tableS2}
+tS2 <- mysterycall_disparities_table(d, "appt_offered", "insurance",
+                                     ref_group = "Commercial")
+tS2
+```
+
+**Table S3 — adjusted effect on the absolute scale.**
+`mysterycall_combined_results_table()` reports the wait model's rate ratio
+alongside the implied difference in days.
+
+```{r tableS3}
+tS3 <- mysterycall_combined_results_table(wait_model)
+tS3
+```
+
+**Table S4 — this study in the context of prior work.**
+`mysterycall_literature_table()` stacks your estimate against published ones.
+
+```{r tableS4}
+prior <- data.frame(
+  author = c("Pollack 2016", "Sharma 2025"),
+  year = c(2016, 2025),
+  insurance_comparison = "Medicaid vs Commercial",
+  n = c(1200, 480),
+  or = c(0.42, 0.55), ci_lower = c(0.35, 0.40), ci_upper = c(0.51, 0.75),
+  specialty = c("Urology", "OBGYN"))
+mysterycall_literature_table(prior)
+```
+
+**A one-file bundle.** `mysterycall_supplemental_tables()` writes every model
+table into a single formatted workbook for upload (needs the openxlsx package).
+
+```{r bundle, eval = requireNamespace("openxlsx", quietly = TRUE)}
+xlsx <- mysterycall_supplemental_tables(
+  logistic_fit = offer_adjusted, poisson_fit = wait_model,
+  file = file.path(sdc_dir, "supplemental_tables.xlsx"), overwrite = TRUE)
+basename(xlsx)
+```
+
+## 3. Supplementary figures, at journal specification
+
+**Figure S1 — forest plot of the offer model.**
+
+```{r figS1}
+figS1 <- mysterycall_forest_plot(offer_adjusted, x_label = "Odds ratio (95% CI)")
+figS1
+```
+
+**Figure S2 — incidence-rate-ratio plot of the wait model.**
+
+```{r figS2}
+mysterycall_irr_plot(wait_model)
+```
+
+**Figure S3 — cumulative time to an appointment**, the correct single-contact
+time-to-event display:
+
+```{r figS3, fig.height = 3.4}
+curve <- mysterycall_cumulative_access_curve(
+  d, time_col = "wait_days", offered_col = "appt_offered",
+  group_col = "insurance", horizon = 45, plot = TRUE)
+curve$plot
+```
+
+**Save at the journal's column width.** `mysterycall_save_green_journal_figure()`
+writes a figure at *Obstetrics & Gynecology* specifications (sized to a single or
+double column, at print DPI) and returns the path.
+
+```{r savefig}
+paths <- mysterycall_save_green_journal_figure(
+  figS1, file.path(sdc_dir, "figS1_forest"), layout = "single_column")
+basename(paths)
+```
+
+## 4. The reporting checklist
+
+Observational studies ship a STROBE checklist. `mysterycall_strobe_checklist()`
+builds one from the fitted model, pre-filling the items it can verify:
+
+```{r strobe}
+head(mysterycall_strobe_checklist(wait_model), 8)
+```
+
+The participant-flow diagram (a near-universal Figure S1) comes from
+`mysterycall_flowchart()` / `mysterycall_strobe_flow()`; it renders with the
+DiagrammeR package:
+
+```{r flow, eval = FALSE}
+mysterycall_flowchart(
+  counts = c("Sampled" = 240, "Reached" = 226, "Analyzed" = 218))
+```
+
+## 5. Export for upload
+
+Each table can be written in whatever format the journal wants. A CSV per table
+is the most portable:
+
+```{r csv}
+write.csv(as.data.frame(tS1), file.path(sdc_dir, "TableS1_models.csv"),
+          row.names = FALSE)
+write.csv(tS2, file.path(sdc_dir, "TableS2_disparities.csv"), row.names = FALSE)
+```
+
+For a formatted Word document (with a results paragraph on top), use
+`mysterycall_export_results_docx()` — it needs the officer/flextable packages:
+
+```{r docx, eval = FALSE}
+mysterycall_export_results_docx(
+  table = tS2, title = "Table S2. Insurance-based access disparities",
+  output_path = file.path(sdc_dir, "TableS2.docx"))
+```
+
+## 6. A manifest
+
+Finally, list what the SDC package contains — reviewers appreciate a manifest,
+and it doubles as a build check.
+
+```{r manifest}
+files <- list.files(sdc_dir)
+data.frame(
+  file = files,
+  kind = ifelse(grepl("\\.csv$", files), "table",
+         ifelse(grepl("\\.(png|pdf|tiff)$", files), "figure", "bundle")))
+```
+
+## Recap
+
+Every piece of a mystery-caller study's supplementary digital content — the
+crude-vs-adjusted model table, the disparity table, the absolute-scale effect,
+the literature comparison, the forest / IRR / cumulative-access figures at
+journal specification, the STROBE checklist, and the export to workbook / Word /
+CSV — comes from the same fitted models with one call apiece, so the SDC
+regenerates itself whenever the analysis is re-run.
