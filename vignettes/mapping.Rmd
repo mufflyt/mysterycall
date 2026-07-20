@@ -14,6 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+> **Moved to `mysterymaps`.** The Leaflet base maps, physician dot maps, and
+> block-group/HRR maps shown here have moved to the companion
+> [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package
+> (`mysterymaps::mysterymaps_map_base()`, etc.). They are no longer part of
+> `mysterycall`; only the bundled `acog_districts` data examples still run.
+> This article is kept for reference only.
+
 ## Overview
 
 The `mysterycall` package provides a family of mapping functions for visualizing

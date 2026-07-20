@@ -358,491 +358,491 @@ test_and_process_isochrones <- function(input_file, ...) {
 Use: mysterymaps::mysterymaps_isochrones_for_df(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_cache_hit <- function(...) {
   .Deprecated("mysterycall_log_cache_hit", package = "mysterycall",
               msg = paste0("tyler_log_cache_hit() is deprecated. Use mysterycall_log_cache_hit() instead."))
   mysterycall_log_cache_hit(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_error <- function(...) {
   .Deprecated("mysterycall_log_error", package = "mysterycall",
               msg = paste0("tyler_log_error() is deprecated. Use mysterycall_log_error() instead."))
   mysterycall_log_error(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_info <- function(...) {
   .Deprecated("mysterycall_log_info", package = "mysterycall",
               msg = paste0("tyler_log_info() is deprecated. Use mysterycall_log_info() instead."))
   mysterycall_log_info(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_progress <- function(...) {
   .Deprecated("mysterycall_log_progress", package = "mysterycall",
               msg = paste0("tyler_log_progress() is deprecated. Use mysterycall_log_progress() instead."))
   mysterycall_log_progress(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_save <- function(...) {
   .Deprecated("mysterycall_log_save", package = "mysterycall",
               msg = paste0("tyler_log_save() is deprecated. Use mysterycall_log_save() instead."))
   mysterycall_log_save(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_step <- function(...) {
   .Deprecated("mysterycall_log_step", package = "mysterycall",
               msg = paste0("tyler_log_step() is deprecated. Use mysterycall_log_step() instead."))
   mysterycall_log_step(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_step_complete <- function(...) {
   .Deprecated("mysterycall_log_step_complete", package = "mysterycall",
               msg = paste0("tyler_log_step_complete() is deprecated. Use mysterycall_log_step_complete() instead."))
   mysterycall_log_step_complete(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_success <- function(...) {
   .Deprecated("mysterycall_log_success", package = "mysterycall",
               msg = paste0("tyler_log_success() is deprecated. Use mysterycall_log_success() instead."))
   mysterycall_log_success(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_log_warning <- function(...) {
   .Deprecated("mysterycall_log_warning", package = "mysterycall",
               msg = paste0("tyler_log_warning() is deprecated. Use mysterycall_log_warning() instead."))
   mysterycall_log_warning(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_map_acog_districts <- function(...) {
   stop("map_acog_districts() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_map_acog_districts(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_map_base <- function(...) {
   stop("map_base() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_map_base(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_map_block_group <- function(...) {
   stop("map_block_group() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_map_block_group(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_map_leaflet <- function(...) {
   stop("map_leaflet() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_map_leaflet(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_map_physicians <- function(...) {
   stop("map_physicians() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_map_physicians(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_max_table <- function(...) {
   .Deprecated("mysterycall_max_table", package = "mysterycall",
               msg = paste0("tyler_max_table() is deprecated. Use mysterycall_max_table() instead."))
   mysterycall_max_table(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_min_table <- function(...) {
   .Deprecated("mysterycall_min_table", package = "mysterycall",
               msg = paste0("tyler_min_table() is deprecated. Use mysterycall_min_table() instead."))
   mysterycall_min_table(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_most_common_gender <- function(...) {
   .Deprecated("mysterycall_most_common_gender", package = "mysterycall",
               msg = paste0("tyler_most_common_gender() is deprecated. Use mysterycall_most_common_gender() instead."))
   mysterycall_most_common_gender(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_multi_complete <- function(...) {
   .Deprecated("mysterycall_multi_complete", package = "mysterycall",
               msg = paste0("tyler_multi_complete() is deprecated. Use mysterycall_multi_complete() instead."))
   mysterycall_multi_complete(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_multi_done <- function(...) {
   .Deprecated("mysterycall_multi_done", package = "mysterycall",
               msg = paste0("tyler_multi_done() is deprecated. Use mysterycall_multi_done() instead."))
   mysterycall_multi_done(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_multi_progress <- function(...) {
   .Deprecated("mysterycall_multi_progress", package = "mysterycall",
               msg = paste0("tyler_multi_progress() is deprecated. Use mysterycall_multi_progress() instead."))
   mysterycall_multi_progress(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_multi_step <- function(...) {
   .Deprecated("mysterycall_multi_step", package = "mysterycall",
               msg = paste0("tyler_multi_step() is deprecated. Use mysterycall_multi_step() instead."))
   mysterycall_multi_step(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_multi_update <- function(...) {
   .Deprecated("mysterycall_multi_update", package = "mysterycall",
               msg = paste0("tyler_multi_update() is deprecated. Use mysterycall_multi_update() instead."))
   mysterycall_multi_update(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_not_contacted_states <- function(...) {
   .Deprecated("mysterycall_not_contacted_states", package = "mysterycall",
               msg = paste0("tyler_not_contacted_states() is deprecated. Use mysterycall_not_contacted_states() instead."))
   mysterycall_not_contacted_states(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_physician_age <- function(...) {
   .Deprecated("mysterycall_physician_age", package = "mysterycall",
               msg = paste0("tyler_physician_age() is deprecated. Use mysterycall_physician_age() instead."))
   mysterycall_physician_age(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_census_age <- function(...) {
   .Deprecated("mysterycall_plot_census_age", package = "mysterycall",
               msg = paste0("tyler_plot_census_age() is deprecated. Use mysterycall_plot_census_age() instead."))
   mysterycall_plot_census_age(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_density <- function(...) {
   .Deprecated("mysterycall_plot_density", package = "mysterycall",
               msg = paste0("tyler_plot_density() is deprecated. Use mysterycall_plot_density() instead."))
   mysterycall_plot_density(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_emmeans <- function(...) {
   .Deprecated("mysterycall_plot_emmeans", package = "mysterycall",
               msg = paste0("tyler_plot_emmeans() is deprecated. Use mysterycall_plot_emmeans() instead."))
   mysterycall_plot_emmeans(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_interaction <- function(...) {
   .Deprecated("mysterycall_plot_interaction", package = "mysterycall",
               msg = paste0("tyler_plot_interaction() is deprecated. Use mysterycall_plot_interaction() instead."))
   mysterycall_plot_interaction(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_isochrones <- function(...) {
   stop("tyler_plot_isochrones() has moved to the mysterymaps package.
 Use: mysterymaps::mysterymaps_plot_isochrones(...)", call. = FALSE)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_line <- function(...) {
   .Deprecated("mysterycall_plot_line", package = "mysterycall",
               msg = paste0("tyler_plot_line() is deprecated. Use mysterycall_plot_line() instead."))
   mysterycall_plot_line(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_plot_scatter <- function(...) {
   .Deprecated("mysterycall_plot_scatter", package = "mysterycall",
               msg = paste0("tyler_plot_scatter() is deprecated. Use mysterycall_plot_scatter() instead."))
   mysterycall_plot_scatter(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_preflight_check <- function(...) {
   .Deprecated("mysterycall_preflight_check", package = "mysterycall",
               msg = paste0("tyler_preflight_check() is deprecated. Use mysterycall_preflight_check() instead."))
   mysterycall_preflight_check(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_print_dashboard <- function(...) {
   .Deprecated("mysterycall_print_dashboard", package = "mysterycall",
               msg = paste0("tyler_print_dashboard() is deprecated. Use mysterycall_print_dashboard() instead."))
   mysterycall_print_dashboard(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_bar <- function(...) {
   .Deprecated("mysterycall_progress_bar", package = "mysterycall",
               msg = paste0("tyler_progress_bar() is deprecated. Use mysterycall_progress_bar() instead."))
   mysterycall_progress_bar(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_callback <- function(...) {
   .Deprecated("mysterycall_progress_callback", package = "mysterycall",
               msg = paste0("tyler_progress_callback() is deprecated. Use mysterycall_progress_callback() instead."))
   mysterycall_progress_callback(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_done <- function(...) {
   .Deprecated("mysterycall_progress_done", package = "mysterycall",
               msg = paste0("tyler_progress_done() is deprecated. Use mysterycall_progress_done() instead."))
   mysterycall_progress_done(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_fail <- function(...) {
   .Deprecated("mysterycall_progress_fail", package = "mysterycall",
               msg = paste0("tyler_progress_fail() is deprecated. Use mysterycall_progress_fail() instead."))
   mysterycall_progress_fail(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_finish <- function(...) {
   .Deprecated("mysterycall_progress_finish", package = "mysterycall",
               msg = paste0("tyler_progress_finish() is deprecated. Use mysterycall_progress_finish() instead."))
   mysterycall_progress_finish(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_map <- function(...) {
   .Deprecated("mysterycall_progress_map", package = "mysterycall",
               msg = paste0("tyler_progress_map() is deprecated. Use mysterycall_progress_map() instead."))
   mysterycall_progress_map(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_start <- function(...) {
   .Deprecated("mysterycall_progress_start", package = "mysterycall",
               msg = paste0("tyler_progress_start() is deprecated. Use mysterycall_progress_start() instead."))
   mysterycall_progress_start(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_summary <- function(...) {
   .Deprecated("mysterycall_progress_summary", package = "mysterycall",
               msg = paste0("tyler_progress_summary() is deprecated. Use mysterycall_progress_summary() instead."))
   mysterycall_progress_summary(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_tracker <- function(...) {
   .Deprecated("mysterycall_progress_tracker", package = "mysterycall",
               msg = paste0("tyler_progress_tracker() is deprecated. Use mysterycall_progress_tracker() instead."))
   mysterycall_progress_tracker(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_progress_update <- function(...) {
   .Deprecated("mysterycall_progress_update", package = "mysterycall",
               msg = paste0("tyler_progress_update() is deprecated. Use mysterycall_progress_update() instead."))
   mysterycall_progress_update(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_quality_tier <- function(...) {
   .Deprecated("mysterycall_quality_tier", package = "mysterycall",
               msg = paste0("tyler_quality_tier() is deprecated. Use mysterycall_quality_tier() instead."))
   mysterycall_quality_tier(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_format_pct <- function(...) {
   .Deprecated("mysterycall_format_pct", package = "mysterycall",
               msg = paste0("tyler_format_pct() is deprecated. Use mysterycall_format_pct() instead."))
   mysterycall_format_pct(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_check_normality <- function(...) {
   .Deprecated("mysterycall_check_normality", package = "mysterycall",
               msg = paste0("tyler_check_normality() is deprecated. Use mysterycall_check_normality() instead."))
   mysterycall_check_normality(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_remove_constants <- function(...) {
   .Deprecated("mysterycall_remove_constants", package = "mysterycall",
               msg = paste0("tyler_remove_constants() is deprecated. Use mysterycall_remove_constants() instead."))
   mysterycall_remove_constants(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_remove_near_zero <- function(...) {
   .Deprecated("mysterycall_remove_near_zero", package = "mysterycall",
               msg = paste0("tyler_remove_near_zero() is deprecated. Use mysterycall_remove_near_zero() instead."))
   mysterycall_remove_near_zero(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_rename_columns <- function(...) {
   .Deprecated("mysterycall_rename_columns", package = "mysterycall",
               msg = paste0("tyler_rename_columns() is deprecated. Use mysterycall_rename_columns() instead."))
   mysterycall_rename_columns(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_resolve_path <- function(...) {
   .Deprecated("mysterycall_resolve_path", package = "mysterycall",
               msg = paste0("tyler_resolve_path() is deprecated. Use mysterycall_resolve_path() instead."))
   mysterycall_resolve_path(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_run_workflow <- function(...) {
   .Deprecated("mysterycall_run_workflow", package = "mysterycall",
               msg = paste0("tyler_run_workflow() is deprecated. Use mysterycall_run_workflow() instead."))
   mysterycall_run_workflow(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_run_workflow_logged <- function(...) {
   .Deprecated("mysterycall_run_workflow_logged", package = "mysterycall",
               msg = paste0("tyler_run_workflow_logged() is deprecated. Use mysterycall_run_workflow_logged() instead."))
   mysterycall_run_workflow_logged(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_save_quality_table <- function(...) {
   .Deprecated("mysterycall_save_quality_table", package = "mysterycall",
               msg = paste0("tyler_save_quality_table() is deprecated. Use mysterycall_save_quality_table() instead."))
   mysterycall_save_quality_table(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_scan_for_limits <- function(...) {
   .Deprecated("mysterycall_scan_for_limits", package = "mysterycall",
               msg = paste0("tyler_scan_for_limits() is deprecated. Use mysterycall_scan_for_limits() instead."))
   mysterycall_scan_for_limits(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_search_and_process_npi <- function(...) {
   .Deprecated("mysterycall_search_and_process_npi", package = "mysterycall",
               msg = paste0("tyler_search_and_process_npi() is deprecated. Use mysterycall_search_and_process_npi() instead."))
   mysterycall_search_and_process_npi(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_search_taxonomy <- function(...) {
   .Deprecated("mysterycall_search_taxonomy", package = "mysterycall",
               msg = paste0("tyler_search_taxonomy() is deprecated. Use mysterycall_search_taxonomy() instead."))
   mysterycall_search_taxonomy(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_spinner_start <- function(...) {
   .Deprecated("mysterycall_spinner_start", package = "mysterycall",
               msg = paste0("tyler_spinner_start() is deprecated. Use mysterycall_spinner_start() instead."))
   mysterycall_spinner_start(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_spinner_stop <- function(...) {
   .Deprecated("mysterycall_spinner_stop", package = "mysterycall",
               msg = paste0("tyler_spinner_stop() is deprecated. Use mysterycall_spinner_stop() instead."))
   mysterycall_spinner_stop(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_split_and_save <- function(...) {
   .Deprecated("mysterycall_split_and_save", package = "mysterycall",
               msg = paste0("tyler_split_and_save() is deprecated. Use mysterycall_split_and_save() instead."))
   mysterycall_split_and_save(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_standard_labels <- function(...) {
   .Deprecated("mysterycall_standard_labels", package = "mysterycall",
               msg = paste0("tyler_standard_labels() is deprecated. Use mysterycall_standard_labels() instead."))
   mysterycall_standard_labels(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_standard_palette <- function(...) {
   .Deprecated("mysterycall_standard_palette", package = "mysterycall",
               msg = paste0("tyler_standard_palette() is deprecated. Use mysterycall_standard_palette() instead."))
   mysterycall_standard_palette(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_summarize_census <- function(...) {
   .Deprecated("mysterycall_summarize_census", package = "mysterycall",
               msg = paste0("tyler_summarize_census() is deprecated. Use mysterycall_summarize_census() instead."))
   mysterycall_summarize_census(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_table_overall <- function(...) {
   .Deprecated("mysterycall_table_overall", package = "mysterycall",
               msg = paste0("tyler_table_overall() is deprecated. Use mysterycall_table_overall() instead."))
   mysterycall_table_overall(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_table_percentages <- function(...) {
   .Deprecated("mysterycall_table_percentages", package = "mysterycall",
               msg = paste0("tyler_table_percentages() is deprecated. Use mysterycall_table_percentages() instead."))
   mysterycall_table_percentages(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_table_proportion <- function(...) {
   .Deprecated("mysterycall_table_proportion", package = "mysterycall",
               msg = paste0("tyler_table_proportion() is deprecated. Use mysterycall_table_proportion() instead."))
   mysterycall_table_proportion(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_use_quiet_logging <- function(...) {
   .Deprecated("mysterycall_use_quiet_logging", package = "mysterycall",
               msg = paste0("tyler_use_quiet_logging() is deprecated. Use mysterycall_use_quiet_logging() instead."))
   mysterycall_use_quiet_logging(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_validate_npi <- function(...) {
   .Deprecated("mysterycall_validate_npi", package = "mysterycall",
               msg = paste0("tyler_validate_npi() is deprecated. Use mysterycall_validate_npi() instead."))
   mysterycall_validate_npi(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_workflow_end <- function(...) {
   .Deprecated("mysterycall_workflow_end", package = "mysterycall",
               msg = paste0("tyler_workflow_end() is deprecated. Use mysterycall_workflow_end() instead."))
   mysterycall_workflow_end(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_workflow_start <- function(...) {
   .Deprecated("mysterycall_workflow_start", package = "mysterycall",
               msg = paste0("tyler_workflow_start() is deprecated. Use mysterycall_workflow_start() instead."))
   mysterycall_workflow_start(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_write_arsenal_table <- function(...) {
   .Deprecated("mysterycall_write_arsenal_table", package = "mysterycall",
               msg = paste0("tyler_write_arsenal_table() is deprecated. Use mysterycall_write_arsenal_table() instead."))
   mysterycall_write_arsenal_table(...)
 }
 
-#' @rdname tyler-deprecated
+#' @rdname mysterycall-deprecated
 tyler_write_table_pdf <- function(...) {
   .Deprecated("mysterycall_write_table_pdf", package = "mysterycall",
               msg = paste0("tyler_write_table_pdf() is deprecated. Use mysterycall_write_table_pdf() instead."))

@@ -34,19 +34,19 @@ Poisson models that lack overdispersion diagnostics.
 pipeline. It provides taxonomy-based NPI search that bypasses the record cap,
 NANP phone validation with state-geography checks, physician name parsing with
 credential and surname disambiguation, safe join wrappers that enforce coverage
-and uniqueness guarantees, drive-time isochrone generation, Census demographic
-overlay, Poisson mixed-effects modelling with IRR reporting, and
-publication-ready table and map export. The target users are clinical
+and uniqueness guarantees, Poisson mixed-effects modelling with IRR reporting,
+and publication-ready table export (drive-time isochrones and mapping are
+available through the companion `mysterymaps` package). The target users are clinical
 researchers and health-services researchers who conduct mystery-caller or audit
 studies and need reproducible, auditable workflows rather than one-off scripts.
 
 ---
 
 **mysterycall** provides a toolkit for mystery caller and audit studies that evaluate
-patient access to healthcare. It handles the full workflow: finding providers
-in the NPI registry, validating and geocoding their addresses, generating
-drive-time isochrones, overlaying Census demographics, and producing publication-ready
-tables and maps.
+patient access to healthcare. It handles the study workflow: finding providers
+in the NPI registry, validating their records, analyzing acceptance and
+wait-time disparities, and producing publication-ready tables. Geocoding,
+drive-time isochrones, and mapping live in the companion `mysterymaps` package.
 
 ## Installation
 
@@ -55,21 +55,18 @@ tables and maps.
 pak::pkg_install("mufflyt/mysterycall")
 ```
 
-The package loads quickly. Geospatial and modelling packages are optional and
-loaded only when first needed:
+The package loads quickly. Heavier modelling and Census packages are optional
+and loaded only when first needed:
 
 ```r
-install.packages(c("hereR", "sf", "lwgeom"))  # drive-time isochrones
-install.packages("leaflet")                            # interactive maps
-install.packages("ggmap")                              # Google Maps geocoding
-install.packages(c("ggspatial", "rnaturalearth"))      # HRR hex maps
 install.packages("lme4")                               # mixed-effects models
 install.packages("censusapi")                          # Census block-group data
 ```
 
 ## Quick start
 
-A typical mystery caller study moves through four stages:
+A typical mystery caller study builds a provider roster, then analyzes the
+call outcomes:
 
 ```r
 library(mysterycall)
@@ -93,29 +90,31 @@ gyn_onc_valid <- mysterycall_validate_npi(gyn_onc)
 # Enrich with CMS Physician Compare demographics
 gyn_onc_enriched <- mysterycall_get_clinician_data(gyn_onc_valid)
 
-# ── 2. Geocode ────────────────────────────────────────────────────────────────
+# ── 2. Analyze acceptance and wait-time disparities ───────────────────────────
 
-# Requires a Google Maps API key in GOOGLE_API_KEY env var
-geocoded <- mysterycall_geocode(
-  gyn_onc_enriched,
-  google_maps_api_key = Sys.getenv("GOOGLE_API_KEY")
+# `calls` is your completed call log: one row per call to a provider in the
+# roster above, with an `insurance` arm and recorded outcomes/wait times.
+
+# Medicaid vs. private acceptance rate with Wilson CIs and a gap sentence
+rates <- mysterycall_acceptance_rate_calc(calls, insurance_col = "insurance")
+print(rates)
+
+# Wait-time model: incidence rate ratios by insurance, clustered by practice
+fit <- mysterycall_poisson_model(
+  calls,
+  outcome = "business_days_until_appointment",
+  predictors = "insurance",
+  random_intercept = "practice"
 )
-
-# ── 3. Drive-time isochrones ──────────────────────────────────────────────────
-
-# Requires a routing API key in HERE_API_KEY env var
-isochrones <- mysterycall_isochrones_for_df(
-  geocoded,
-  breaks = c(1800, 3600, 7200, 10800)   # 30 / 60 / 120 / 180 min
-)
-
-# Free the in-memory isochrone cache after a large batch
-mysterycall_clear_isochrone_cache()
-
-# ── 4. Map ────────────────────────────────────────────────────────────────────
-
-mysterycall_map_physicians(geocoded, popup_var = "name")
+mysterycall_irr_plot(fit)
 ```
+
+> **Geocoding, drive-time isochrones, and mapping now live in the companion
+> [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package**
+> (`mysterymaps::mysterymaps_geocode()`,
+> `mysterymaps::mysterymaps_isochrones_for_df()`,
+> `mysterymaps::mysterymaps_map_base()`). `mysterycall` focuses on the
+> mystery-caller study design, analysis, and manuscript outputs.
 
 ## Gallery
 
@@ -132,7 +131,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 <td width="50%">
 
 **Geographic distribution** — dot map of 4,659 OBGYN subspecialists across the US
-(`mysterycall_map_physicians`)
+(via the [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package)
 
 <img src="man/figures/fig-physician-map.png" width="100%" alt="Dot map of 4,659 OBGYN subspecialists across the United States">
 
@@ -160,7 +159,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 <td width="50%">
 
 **Choropleth map** — appointment acceptance rate by state
-(`mysterycall_map_acceptance_rate`)
+(via the [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package)
 
 <img src="man/figures/fig-acceptance-map.png" width="100%" alt="US choropleth map of appointment acceptance rate by state">
 
@@ -256,8 +255,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 | NANP phone validation + state-geography check | ✅ | ❌ | ❌ | ❌ |
 | Physician name parsing with DO/Vietnamese disambiguation | ✅ | ❌ | Partial | ❌ |
 | Safe joins with coverage enforcement | ✅ | ❌ | ❌ | ❌ |
-| Drive-time isochrone generation (HERE API) | ✅ | ❌ | ❌ | ❌ |
-| Census demographic overlay on isochrones | ✅ | ❌ | ❌ | ❌ |
+| Drive-time isochrones + Census overlay (via companion `mysterymaps`) | ✅ | ❌ | ❌ | ❌ |
 | Poisson GLMM with IRR reporting | ✅ | ❌ | ❌ | ❌ |
 | Disparities table with Wilson CIs | ✅ | ❌ | ❌ | ❌ |
 | Green Journal–compliant figure export | ✅ | ❌ | ❌ | ❌ |
@@ -275,15 +273,8 @@ with audit trails, coverage guards, and publication-ready output.
 | | `mysterycall_validate_npi()` | Remove invalid NPI numbers before enrichment |
 | | `mysterycall_get_clinician_data()` | Pull demographics from CMS Physician Compare |
 | | `mysterycall_genderize()` | Estimate physician gender via the Genderize.io API |
-| **Geocode** | `mysterycall_geocode()` | Convert addresses to lat/lon via Google Maps |
-| **Isochrones** | `mysterycall_isochrones_for_df()` | Drive-time polygons for every row using a drive-time routing service |
-| | `mysterycall_create_isochrones()` | Single-location drive-time polygon |
-| | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
 | **Census** | `mysterycall_get_census_data()` | ACS block-group demographics by state FIPS |
-| | `mysterycall_calculate_overlap()` | Overlap area between isochrones and block groups |
-| **Maps** | `mysterycall_map_physicians()` | Interactive Leaflet dot map colored by ACOG district |
-| | `mysterycall_map_block_group()` | Block-group overlap map exported to HTML + PNG |
-| | `mysterycall_hrr_maps()` | Hexagon density map by Hospital Referral Region |
+| **Geospatial** | *(moved to [`mysterymaps`](https://github.com/mufflyt/mysterymaps))* | Geocoding, drive-time isochrones, isochrone/block-group overlap, and Leaflet/HRR maps |
 | **Tables** | `mysterycall_table_overall()` | Table 1 summary (via `arsenal`) |
 | | `mysterycall_table_percentages()` | Column-percentage tables |
 
@@ -350,7 +341,7 @@ citation("mysterycall")
 ```
 
 > Muffly, T. (2026). *mysterycall: Mystery Caller Study Tools for Healthcare
-> Access Research* (R package version 1.3.0).
+> Access Research* (R package version 1.6.3.9000).
 > <https://github.com/mufflyt/mysterycall>
 
 ## Contributing

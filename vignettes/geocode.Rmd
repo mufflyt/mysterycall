@@ -12,8 +12,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
+
+> **Moved to `mysterymaps`.** Geocoding has moved to the companion
+> [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package
+> (`mysterymaps::mysterymaps_geocode()`). It is no longer part of
+> `mysterycall`; this article is kept for reference only and the code below
+> will not run against `mysterycall`.
+
 # Overview
-The `geocode` function is designed to help you geocode datasets containing addresses and change them to latitude and longitude.  
+The `geocode` function is designed to help you geocode datasets containing addresses and change them to latitude and longitude.
 
 ## Step 1
 ### Installation

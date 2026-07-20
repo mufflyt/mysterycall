@@ -56,7 +56,7 @@ When the data are \strong{not normally distributed} and \strong{consist of count
 is count data. t-test assumes that data is normally distributed, and
 comparing the means of count data is also not appropriate. We can check the
 incidence rate ratio (IRR) for comparison of outcome among the categories
-of \link{group}. Better to use Poisson regression."}
+of the grouping variable. Better to use Poisson regression."}
 }
 
 \examples{

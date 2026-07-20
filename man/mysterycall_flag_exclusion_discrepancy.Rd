@@ -54,7 +54,11 @@ non-negative — a logical discrepancy suggesting a data-entry error.
 }
 \section{What this detects}{
 
-If a call is logged as excluded (e.g. \code{reason_for_exclusions == "Physician not available"}) but also has `business_days_until_appointment= 0`, the record is contradictory — an excluded call should not have avalid appointment wait time. These rows must be resolved before analysis.
+If a call is logged as excluded (e.g.
+\code{reason_for_exclusions == "Physician not available"}) but also has a
+non-negative \code{business_days_until_appointment}, the record is contradictory
+— an excluded call should not have a valid appointment wait time. These
+rows must be resolved before analysis.
 }
 
 \examples{

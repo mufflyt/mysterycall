@@ -15,6 +15,13 @@ editor_options:
   chunk_output_type: console
 ---
 
+> **Moved to `mysterymaps`.** Drive-time isochrone generation and
+> isochrone/block-group overlap have moved to the companion
+> [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package
+> (`mysterymaps::mysterymaps_isochrones_for_df()`,
+> `mysterymaps::mysterymaps_calculate_overlap()`). They are no longer part of
+> `mysterycall`; this article is kept for reference only.
+
 ```{r setup, include=FALSE, purl=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(

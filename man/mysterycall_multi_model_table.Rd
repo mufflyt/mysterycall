@@ -2,7 +2,7 @@
 % Please edit documentation in R/multi_model_table.R
 \name{mysterycall_multi_model_table}
 \alias{mysterycall_multi_model_table}
-\title{Multi-model regression table for manuscript submission}
+\title{Build a three-column regression table for manuscript submission}
 \usage{
 mysterycall_multi_model_table(
   models,
@@ -18,7 +18,8 @@ mysterycall_multi_model_table(
 \arguments{
 \item{models}{Named list of fitted model objects. Each element must be one
 of \code{mysterycall_logistic_model}, \code{mysterycall_poisson_model},
-\code{mysterycall_nb_model}, or \code{mysterycall_lmm}. Length must be= 2. Names become column headers in the output table.}
+\code{mysterycall_nb_model}, or \code{mysterycall_lmm}. Must contain at least two
+models. Names become column headers in the output table.}
 
 \item{include_intercept}{Logical. When \code{FALSE} (default) the
 \code{(Intercept)} row is dropped from output.}

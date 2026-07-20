@@ -15,6 +15,12 @@ This document describes the operational guarantees provided by the `mysterycall`
 workflow pipeline. Each section covers a specific class of guarantee that callers
 and downstream consumers can rely on.
 
+> **Note.** The spatial-contract sections reference geocoding, isochrone, and
+> overlap functions that have moved to the companion
+> [`mysterymaps`](https://github.com/mufflyt/mysterymaps) package; those
+> guarantees now apply there. The design/analysis guarantees below remain part
+> of `mysterycall`.
+
 ---
 
 ## Workflow DAG

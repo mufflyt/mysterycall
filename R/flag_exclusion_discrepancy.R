@@ -27,10 +27,11 @@
 #'   discrepancies are found.
 #'
 #' @section What this detects:
-#' If a call is logged as excluded (e.g. `reason_for_exclusions ==
-#' "Physician not available"`) but also has `business_days_until_appointment
-#' >= 0`, the record is contradictory — an excluded call should not have a
-#' valid appointment wait time. These rows must be resolved before analysis.
+#' If a call is logged as excluded (e.g.
+#' `reason_for_exclusions == "Physician not available"`) but also has a
+#' non-negative `business_days_until_appointment`, the record is contradictory
+#' — an excluded call should not have a valid appointment wait time. These
+#' rows must be resolved before analysis.
 #'
 #' @family quality control
 #' @seealso [mysterycall_flag_repeat_physicians()] for duplicate-entry checks;

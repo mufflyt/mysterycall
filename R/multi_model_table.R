@@ -1,9 +1,3 @@
-#' Multi-model regression table for manuscript submission
-#'
-#' @name mysterycall_multi_model_table
-NULL
-
-
 #' Build a three-column regression table for manuscript submission
 #'
 #' Creates the "three-column regression table" that reviewers almost always
@@ -15,19 +9,19 @@ NULL
 #' header with its model type.
 #'
 #' @param models Named list of fitted model objects. Each element must be one
-#'   of \code{mysterycall_logistic_model}, \code{mysterycall_poisson_model},
-#'   \code{mysterycall_nb_model}, or \code{mysterycall_lmm}. Length must be
-#'   >= 2. Names become column headers in the output table.
+#'   of `mysterycall_logistic_model`, `mysterycall_poisson_model`,
+#'   `mysterycall_nb_model`, or `mysterycall_lmm`. Must contain at least two
+#'   models. Names become column headers in the output table.
 #' @param include_intercept Logical. When \code{FALSE} (default) the
 #'   \code{(Intercept)} row is dropped from output.
 #' @param digits Integer. Decimal places for point estimates and confidence
 #'   interval bounds. Default \code{2L}.
-#' @param estimate_col_label Character or \code{NULL}. A label describing the
+#' @param estimate_col_label Character or `NULL`. A label describing the
 #'   estimate type shown in each model column (printed as a subtitle). When
-#'   \code{NULL} (default) it is auto-detected from the model class:
-#'   \code{"OR (95\% CI)"} for logistic, \code{"IRR (95\% CI)"} for
-#'   Poisson/NB, and \code{"Beta (95\% CI)"} for LMM. When model types
-#'   differ the label falls back to \code{"Estimate (95\% CI)"}.
+#'   `NULL` (default) it is auto-detected from the model class:
+#'   `"OR (95% CI)"` for logistic, `"IRR (95% CI)"` for
+#'   Poisson/NB, and `"Beta (95% CI)"` for LMM. When model types
+#'   differ the label falls back to `"Estimate (95% CI)"`.
 #' @param include_n Logical. When \code{TRUE} (default) a footer row labelled
 #'   \code{"N"} is appended showing the complete-case sample size for each
 #'   model.

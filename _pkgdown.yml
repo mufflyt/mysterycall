@@ -36,7 +36,7 @@ navbar:
   components:
     get-started:
       text: Get Started
-      href: articles/my-vignette.html
+      href: articles/getting_started.html
     datasets:
       text: Datasets
       href: reference/index.html#data-and-datasets
@@ -115,14 +115,6 @@ reference:
       - mysterycall_classify_academic_affiliation
       - mysterycall_check_academic_name_patterns
       - mysterycall_get_academic_indicators_summary
-      - KNOWN_ACADEMIC_INSTITUTIONS
-      - ACADEMIC_HOSPITAL_PATTERNS
-      - ACGME_PROGRAM_INDICATORS
-      - COTH_TEACHING_INDICATORS
-      - MEDICAL_SCHOOL_INDICATORS
-      - NIH_CTSA_HUBS
-      - NCI_CANCER_CENTERS
-      - MEDICARE_GME_INDICATORS
 
   - title: "Regions"
     desc: >
@@ -655,7 +647,6 @@ reference:
       - mysterycall_get_direction
       - mysterycall_get_change_verb
       - mysterycall_no_longer_in_service
-      - mystercall_no_longer_in_service
 
   - title: "Package Constants"
     desc: >
