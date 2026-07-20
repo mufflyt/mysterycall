@@ -38,6 +38,7 @@
 #'   mode/anti-mode queries.
 #' @export
 mysterycall_table_proportion <- function(data, variable_name) {
+  checkmate::assert_data_frame(data, min.rows = 1L)
   tabyl_result <- data %>%
     dplyr::filter(!is.na({{ variable_name }})) %>%
     count({{ variable_name }}, name = "n") %>%

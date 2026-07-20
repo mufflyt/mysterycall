@@ -46,6 +46,9 @@
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
 #' mysterycall_not_contacted_states(filtered_data)
 mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
+  checkmate::assert_data_frame(filtered_data)
+  checkmate::assert_character(all_states, min.len = 1L, any.missing = FALSE,
+                              null.ok = TRUE)
 
   # Helper to coerce character responses such as "Yes"/"No" into logical
   as_positive_logical <- function(x) {

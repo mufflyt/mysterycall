@@ -32,7 +32,10 @@
 #'   [mysterycall_min_table()], [mysterycall_max_table()]
 #' @export
 mysterycall_table_percentages <- function(data_frame, variable) {
+  checkmate::assert_data_frame(data_frame, min.rows = 1L)
   variable <- as.character(variable)  # Ensure the variable name is a string
+  checkmate::assert_string(variable, min.chars = 1L)
+  checkmate::assert_choice(variable, names(data_frame))
 
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%

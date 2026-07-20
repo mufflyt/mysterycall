@@ -15,6 +15,7 @@
 #' @seealso [mysterycall_min_table()]
 #' @export
 mysterycall_max_table <- function(InVec, mult = FALSE) {
+  checkmate::assert_flag(mult)
   if (length(InVec) == 0) {
     return(character(0))
   }

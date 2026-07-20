@@ -20,6 +20,7 @@
 #' @family data quality
 #' @export
 mysterycall_remove_constants <- function(data_frame) {
+  checkmate::assert_data_frame(data_frame)
 
   # Log: Starting the function
   message("Starting the function to remove constant variables.")

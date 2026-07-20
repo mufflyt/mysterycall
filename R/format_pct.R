@@ -28,6 +28,8 @@
 #' @family table helpers
 #' @export
 mysterycall_format_pct <- function(x, digits = 1) {
+  checkmate::assert_numeric(x)
+  checkmate::assert_count(digits)
   result <- paste0(formatC(100 * x, format = "f", digits = digits), "%")
   result[is.na(x)] <- NA_character_
   result

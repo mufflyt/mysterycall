@@ -535,6 +535,8 @@ mysterycall_validate_here_api <- function(api_key) {
 #' df <- data.frame(first = c("Jane", NA), last = c("Doe", "Smith"))
 #' mysterycall_assess_data_quality(df)
 mysterycall_assess_data_quality <- function(data, required_columns = c("first", "last")) {
+  checkmate::assert_data_frame(data)
+  checkmate::assert_character(required_columns, min.len = 1L, any.missing = FALSE)
   issues <- list()
   penalties <- 0
   max_penalties <- 10
@@ -648,6 +650,7 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 #' @examples
 #' mysterycall_estimate_resources(500)
 mysterycall_estimate_resources <- function(n_rows) {
+  checkmate::assert_count(n_rows)
   # Rough estimates based on typical performance
   # These should be calibrated with real-world data
 

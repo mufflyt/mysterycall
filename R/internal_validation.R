@@ -221,8 +221,17 @@ mysterycall_provider_split_simulation <- function(data, outcome, predictors, clu
 #' @param family Character. Model family: `"poisson"`, `"nbinom"`, or `"binomial"`. Default is `"binomial"`.
 #' @return A data frame containing the retention frequency (percentage) for each predictor.
 #' @export
-mysterycall_bootstrap_predictor_stability <- function(data, outcome, predictors, n_boot = 100, 
+mysterycall_bootstrap_predictor_stability <- function(data, outcome, predictors, n_boot = 100,
                                                       p_threshold = 0.05, family = "binomial") {
+  checkmate::assert_data_frame(data, min.rows = 1L)
+  checkmate::assert_string(outcome, min.chars = 1L)
+  checkmate::assert_character(predictors, min.len = 1L, any.missing = FALSE,
+                              min.chars = 1L, unique = TRUE)
+  checkmate::assert_subset(c(outcome, predictors), choices = names(data))
+  checkmate::assert_count(n_boot, positive = TRUE)
+  checkmate::assert_number(p_threshold, lower = 0, upper = 1)
+  checkmate::assert_choice(family, c("binomial", "poisson"))
+
   # Clean complete cases first to avoid NA mismatch issues in bootstrap iterations
   data <- clean_complete_cases(data, outcome, predictors)
   

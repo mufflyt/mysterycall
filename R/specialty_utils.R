@@ -57,6 +57,8 @@ NULL
 #' mysterycall_parse_certification_subspecialty(cert)
 mysterycall_parse_certification_subspecialty <- function(cert_type,
                                                           default = NA_character_) {
+  checkmate::assert_atomic(cert_type)
+  checkmate::assert_string(default, na.ok = TRUE)
   if (!is.character(cert_type)) cert_type <- as.character(cert_type)
 
   .parse_one <- function(s) {
