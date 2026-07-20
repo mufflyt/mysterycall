@@ -140,6 +140,19 @@ test_that("Boundary: the poisson count family is honoured and still returns IRRs
   expect_s3_class(res$count_model, "glmmTMB")
 })
 
+test_that("Boundary: untruncated poisson count family fits (stats::poisson branch)", {
+  skip_if_not_installed("glmmTMB")
+  # exercises the count_family="poisson" + truncate_zero=FALSE switch arm, which
+  # must use stats::poisson() (glmmTMB does not export a `poisson` object).
+  res <- mysterycall_hurdle_wait(make_hw_data(), "obtained", "wait_days",
+                                 "insurance", count_family = "poisson",
+                                 truncate_zero = FALSE)
+  expect_equal(res$count_family, "poisson")
+  expect_false(res$truncated)
+  expect_true(hw_invariants_hold(res))
+  expect_s3_class(res$count_model, "glmmTMB")
+})
+
 test_that("Boundary: fixed-effects-only (random_intercept = NULL) fits both parts", {
   skip_if_not_installed("glmmTMB")
   res <- mysterycall_hurdle_wait(make_hw_data(), "obtained", "wait_days",

@@ -102,7 +102,7 @@ mysterycall_hurdle_wait <- function(data, obtained_col, wait_col, predictors,
     "nbinom2 TRUE"  = glmmTMB::truncated_nbinom2(),
     "nbinom2 FALSE" = glmmTMB::nbinom2(),
     "poisson TRUE"  = glmmTMB::truncated_poisson(),
-    "poisson FALSE" = glmmTMB::poisson())
+    "poisson FALSE" = stats::poisson())
   count_fit <- suppressWarnings(glmmTMB::glmmTMB(
     stats::as.formula(sprintf("%s ~ %s", wait_col, rhs)),
     family = fam, data = sub))
