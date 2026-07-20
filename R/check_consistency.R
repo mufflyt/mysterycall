@@ -240,6 +240,11 @@ mysterycall_default_consistency_rules <- function(cols = list(), values = list()
   )
 }
 
+#' Print a `mysterycall_consistency_report` object
+#'
+#' @param x A `mysterycall_consistency_report` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_consistency_report <- function(x, ...) {
   cat(sprintf("<mysterycall consistency report: %d rows flagged by %d of %d rules>\n",
@@ -255,6 +260,11 @@ print.mysterycall_consistency_report <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_consistency_report` object to a data frame
+#'
+#' @param x A `mysterycall_consistency_report` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_consistency_report <- function(x, ...) {
   as.data.frame(x$report, ...)

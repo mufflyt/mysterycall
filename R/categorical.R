@@ -470,6 +470,11 @@ mysterycall_compare_ranks <- function(data, outcome_var, group_var) {
   if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
 }
 
+#' Print a `mysterycall_categorical_test` object
+#'
+#' @param x A `mysterycall_categorical_test` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_categorical_test <- function(x, ...) {
   cat(sprintf("<mysterycall_categorical_test> %s x %s\n",
@@ -491,6 +496,11 @@ print.mysterycall_categorical_test <- function(x, ...) {
   invisible(x)
 }
 
+#' Print a `mysterycall_cmh_test` object
+#'
+#' @param x A `mysterycall_cmh_test` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_cmh_test <- function(x, ...) {
   cat(sprintf("<mysterycall_cmh_test> %d strata, n = %d\n", x$n_strata, x$n))
@@ -504,6 +514,11 @@ print.mysterycall_cmh_test <- function(x, ...) {
   invisible(x)
 }
 
+#' Print a `mysterycall_rank_comparison` object
+#'
+#' @param x A `mysterycall_rank_comparison` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_rank_comparison <- function(x, ...) {
   cat(sprintf("<mysterycall_rank_comparison> %s by %s\n",
@@ -517,6 +532,11 @@ print.mysterycall_rank_comparison <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_rank_comparison` object to a data frame
+#'
+#' @param x A `mysterycall_rank_comparison` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_rank_comparison <- function(x, ...) {
   as.data.frame(x$group_summary, ...)

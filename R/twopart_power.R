@@ -129,6 +129,11 @@ mysterycall_twopart_power <- function(n_total, offer_ref, offer_trt,
   )
 }
 
+#' Print a `mysterycall_twopart_power` object
+#'
+#' @param x A `mysterycall_twopart_power` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_twopart_power <- function(x, ...) {
   cat(sprintf("<mysterycall two-part power: %d sample size(s), %d sims, alpha %.3f>\n",
@@ -137,6 +142,11 @@ print.mysterycall_twopart_power <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_twopart_power` object to a data frame
+#'
+#' @param x A `mysterycall_twopart_power` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_twopart_power <- function(x, ...) {
   as.data.frame(x$table, ...)

@@ -222,6 +222,11 @@ mysterycall_paired_wait_within_practice <- function(
   }
 }
 
+#' Print a `mysterycall_paired_mcnemar` object
+#'
+#' @param x A `mysterycall_paired_mcnemar` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_paired_mcnemar <- function(x, ...) {
   cat(sprintf("<mysterycall paired McNemar: %d contrast(s), MDE at %.0f%% power>\n",
@@ -230,11 +235,21 @@ print.mysterycall_paired_mcnemar <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_paired_mcnemar` object to a data frame
+#'
+#' @param x A `mysterycall_paired_mcnemar` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_paired_mcnemar <- function(x, ...) {
   as.data.frame(x$table, ...)
 }
 
+#' Print a `mysterycall_paired_wait` object
+#'
+#' @param x A `mysterycall_paired_wait` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_paired_wait <- function(x, ...) {
   cat(sprintf("<mysterycall paired wait: %d contrast(s), MDE at %.0f%% power>\n",
@@ -243,6 +258,11 @@ print.mysterycall_paired_wait <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_paired_wait` object to a data frame
+#'
+#' @param x A `mysterycall_paired_wait` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_paired_wait <- function(x, ...) {
   as.data.frame(x$table, ...)

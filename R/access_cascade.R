@@ -243,6 +243,11 @@ mysterycall_access_cascade <- function(data, stages, conf_level = 0.95,
       plot.subtitle = ggplot2::element_text(colour = "grey40", size = 10))
 }
 
+#' Print a `mysterycall_access_cascade` object
+#'
+#' @param x A `mysterycall_access_cascade` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_access_cascade <- function(x, ...) {
   cat(sprintf("<mysterycall access cascade: %d stages, %d analytic calls>\n",
@@ -256,6 +261,11 @@ print.mysterycall_access_cascade <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_access_cascade` object to a data frame
+#'
+#' @param x A `mysterycall_access_cascade` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_access_cascade <- function(x, ...) {
   as.data.frame(x$table, ...)

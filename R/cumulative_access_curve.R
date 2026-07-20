@@ -145,6 +145,11 @@ mysterycall_cumulative_access_curve <- function(
   p
 }
 
+#' Print a `mysterycall_cumulative_access_curve` object
+#'
+#' @param x A `mysterycall_cumulative_access_curve` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_cumulative_access_curve <- function(x, ...) {
   cat(sprintf("<mysterycall cumulative access curve: %d group(s), horizon %g days>\n",
@@ -156,6 +161,11 @@ print.mysterycall_cumulative_access_curve <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_cumulative_access_curve` object to a data frame
+#'
+#' @param x A `mysterycall_cumulative_access_curve` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_cumulative_access_curve <- function(x, ...) {
   as.data.frame(x$table, ...)

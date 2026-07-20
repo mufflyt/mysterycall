@@ -94,6 +94,11 @@ mysterycall_joint_test <- function(model, predictor) {
   )
 }
 
+#' Print a `mysterycall_joint_test` object
+#'
+#' @param x A `mysterycall_joint_test` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_joint_test <- function(x, ...) {
   cat(sprintf("<mysterycall joint LRT: %s>\n", x$predictor))
@@ -103,6 +108,11 @@ print.mysterycall_joint_test <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_joint_test` object to a data frame
+#'
+#' @param x A `mysterycall_joint_test` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_joint_test <- function(x, ...) {
   as.data.frame(tibble::tibble(

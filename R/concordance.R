@@ -600,6 +600,11 @@ mysterycall_concordance_sentence <- function(x, item = NULL, subject = "clinics"
 
 # ---- S3 methods -------------------------------------------------------------
 
+#' Print a `mysterycall_rubric` object
+#'
+#' @param x A `mysterycall_rubric` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_rubric <- function(x, ...) {
   cat(sprintf("<mysterycall_rubric: %d item(s)>\n", nrow(x$items)))
@@ -608,6 +613,11 @@ print.mysterycall_rubric <- function(x, ...) {
   invisible(x)
 }
 
+#' Print a `mysterycall_concordance` object
+#'
+#' @param x A `mysterycall_concordance` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_concordance <- function(x, ...) {
   o <- x$overall
@@ -634,6 +644,11 @@ print.mysterycall_concordance <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_concordance` object to a data frame
+#'
+#' @param x A `mysterycall_concordance` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_concordance <- function(x, ...) {
   as.data.frame(x$item_rates, ...)

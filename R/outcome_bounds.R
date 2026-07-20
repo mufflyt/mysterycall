@@ -87,6 +87,11 @@ mysterycall_outcome_bounds <- function(data, outcome_col, positive_values = TRUE
                                           "observed", "offered")
 }
 
+#' Print a `mysterycall_outcome_bounds` object
+#'
+#' @param x A `mysterycall_outcome_bounds` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_outcome_bounds <- function(x, ...) {
   pc <- function(p) if (is.na(p)) "NA" else sprintf("%.1f%%", 100 * p)
@@ -101,6 +106,11 @@ print.mysterycall_outcome_bounds <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_outcome_bounds` object to a data frame
+#'
+#' @param x A `mysterycall_outcome_bounds` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_outcome_bounds <- function(x, ...) {
   as.data.frame(tibble::tibble(

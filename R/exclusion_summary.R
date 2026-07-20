@@ -356,6 +356,11 @@ mysterycall_exclusion_summary <- function(
 }
 
 
+#' Print a `mysterycall_exclusion_summary` object
+#'
+#' @param x A `mysterycall_exclusion_summary` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_exclusion_summary <- function(x, ...) {
   cat(x$paragraph, "\n")

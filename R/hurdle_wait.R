@@ -132,6 +132,11 @@ mysterycall_hurdle_wait <- function(data, obtained_col, wait_col, predictors,
   )
 }
 
+#' Print a `mysterycall_hurdle_wait` object
+#'
+#' @param x A `mysterycall_hurdle_wait` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_hurdle_wait <- function(x, ...) {
   cat(sprintf("<mysterycall hurdle wait model: hurdle n=%d, count n=%d (%s%s)>\n",
@@ -144,6 +149,11 @@ print.mysterycall_hurdle_wait <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_hurdle_wait` object to a data frame
+#'
+#' @param x A `mysterycall_hurdle_wait` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_hurdle_wait <- function(x, ...) {
   as.data.frame(rbind(

@@ -227,6 +227,11 @@ mysterycall_marginal_power <- function(n_subject, cell_means, sigma_subject, phi
   )
 }
 
+#' Print a `mysterycall_marginal_power` object
+#'
+#' @param x A `mysterycall_marginal_power` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_marginal_power <- function(x, ...) {
   cat(sprintf(paste0("<mysterycall marginal power: %d sample size(s), %d sims, ",
@@ -236,6 +241,11 @@ print.mysterycall_marginal_power <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_marginal_power` object to a data frame
+#'
+#' @param x A `mysterycall_marginal_power` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_marginal_power <- function(x, ...) {
   as.data.frame(x$table, ...)

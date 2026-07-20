@@ -130,6 +130,11 @@ mysterycall_reconcile_offer_outcome <- function(
   value
 }
 
+#' Print a `mysterycall_offer_reconciliation` object
+#'
+#' @param x A `mysterycall_offer_reconciliation` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_offer_reconciliation <- function(x, ...) {
   cat(sprintf("<mysterycall offer/outcome reconciliation [%s]>\n", x$action))
@@ -149,6 +154,11 @@ print.mysterycall_offer_reconciliation <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_offer_reconciliation` object to a data frame
+#'
+#' @param x A `mysterycall_offer_reconciliation` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_offer_reconciliation <- function(x, ...) {
   as.data.frame(x$discordant, ...)

@@ -108,6 +108,11 @@ mysterycall_leave_one_out <- function(model, data, group, term,
   base
 }
 
+#' Print a `mysterycall_leave_one_out` object
+#'
+#' @param x A `mysterycall_leave_one_out` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_leave_one_out <- function(x, ...) {
   cat(sprintf("<mysterycall leave-one-group-out: term '%s', %d refits>\n",
@@ -123,6 +128,11 @@ print.mysterycall_leave_one_out <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_leave_one_out` object to a data frame
+#'
+#' @param x A `mysterycall_leave_one_out` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_leave_one_out <- function(x, ...) {
   as.data.frame(x$table, ...)

@@ -201,6 +201,11 @@ mysterycall_build_matched_controls <- function(
   }))
 }
 
+#' Print a `mysterycall_matched_controls` object
+#'
+#' @param x A `mysterycall_matched_controls` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_matched_controls <- function(x, ...) {
   cat(sprintf("<mysterycall matched controls: %d of %d treated matched (%d unmatched)>\n",
@@ -217,6 +222,11 @@ print.mysterycall_matched_controls <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_matched_controls` object to a data frame
+#'
+#' @param x A `mysterycall_matched_controls` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_matched_controls <- function(x, ...) {
   as.data.frame(x$pairs, ...)

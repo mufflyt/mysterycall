@@ -86,6 +86,11 @@ mysterycall_crisp_checklist <- function(reported = NA) {
   structure(out, class = c("mysterycall_crisp_checklist", "data.frame"))
 }
 
+#' Print a `mysterycall_crisp_checklist` object
+#'
+#' @param x A `mysterycall_crisp_checklist` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_crisp_checklist <- function(x, ...) {
   cat(sprintf("<CRiSP-style simulated-patient reporting checklist: %d items, %d sections>\n",

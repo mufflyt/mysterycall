@@ -245,6 +245,12 @@ mysterycall_simple_poisson <- function(data,
 }
 
 
+#' Print a `mysterycall_simple_poisson` object
+#'
+#' @param x A `mysterycall_simple_poisson` object.
+#' @param digits Number of decimal places for printed estimates. Default `3`.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_simple_poisson <- function(x, digits = 3, ...) {
   cat(sprintf("Simple Poisson GLM  n = %d  Pearson phi = %.2f\n",

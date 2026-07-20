@@ -396,6 +396,11 @@ mysterycall_ordinal_model <- function(
 
 # ---- S3 methods -------------------------------------------------------------
 
+#' Print a `mysterycall_multiresponse` object
+#'
+#' @param x A `mysterycall_multiresponse` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return `x`, invisibly.
 #' @export
 print.mysterycall_multiresponse <- function(x, ...) {
   s <- x$summary
@@ -416,6 +421,11 @@ print.mysterycall_multiresponse <- function(x, ...) {
   invisible(x)
 }
 
+#' Coerce a `mysterycall_multiresponse` object to a data frame
+#'
+#' @param x A `mysterycall_multiresponse` object.
+#' @param ... Ignored; present for S3 method consistency.
+#' @return A `data.frame` representation of `x`.
 #' @export
 as.data.frame.mysterycall_multiresponse <- function(x, ...) {
   as.data.frame(x$prevalence, ...)
