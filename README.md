@@ -324,10 +324,6 @@ Full documentation, function reference, and worked vignettes:
 **Data quality**
 - [Phone Validation, Name Parsing, and Safe Joins](https://mufflyt.github.io/mysterycall/articles/data-quality.html)
 
-**Geospatial**
-- [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.html)
-- [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html)
-
 **Analysis and reporting**
 - [Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html)
 - [Provider Classification (RUCA, practice setting, census region)](https://mufflyt.github.io/mysterycall/articles/provider-classification.html)

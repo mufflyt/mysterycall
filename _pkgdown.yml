@@ -752,13 +752,6 @@ articles:
       - data-quality
       - data-cleaning
 
-  - title: "Geospatial"
-    navbar: Geospatial
-    contents:
-      - geocode
-      - create_isochrones
-      - mapping
-
   - title: "Demographics"
     navbar: Demographics
     contents:
@@ -779,7 +772,3 @@ articles:
       - writing-results-section
       - supplementary-digital-content
 
-  - title: "News"
-    navbar: ~
-    contents:
-      - imotive-news
