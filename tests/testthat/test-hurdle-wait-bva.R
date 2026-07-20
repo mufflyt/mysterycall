@@ -110,3 +110,50 @@ test_that("wait == 0 is the truncation pivot: excluded when TRUE, kept when FALS
   expect_true(trunc$truncated)
   expect_false(keep$truncated)
 })
+
+# ---- checkmate input guards (all reject before any model is fit) -------------
+
+test_that("obtained_col / wait_col must be single non-empty strings", {
+  d <- make_bva_data()
+  expect_error(  # not a scalar
+    mysterycall_hurdle_wait(d, c("obtained", "wait_days"), "wait_days", "insurance"))
+  expect_error(  # empty string
+    mysterycall_hurdle_wait(d, "", "wait_days", "insurance"))
+  expect_error(  # not a string at all
+    mysterycall_hurdle_wait(d, "obtained", 3, "insurance"))
+})
+
+test_that("predictors must be unique and disjoint from the outcome columns", {
+  d <- make_bva_data()
+  expect_error(  # duplicated predictor
+    mysterycall_hurdle_wait(d, "obtained", "wait_days", c("insurance", "insurance")))
+  expect_error(  # the hurdle outcome used as its own predictor
+    mysterycall_hurdle_wait(d, "obtained", "wait_days", c("insurance", "obtained")))
+  expect_error(  # the wait outcome used as a predictor
+    mysterycall_hurdle_wait(d, "obtained", "wait_days", c("insurance", "wait_days")))
+})
+
+test_that("random_intercept, when supplied, must be a single string naming a column", {
+  d <- make_bva_data()
+  expect_error(  # not a string
+    mysterycall_hurdle_wait(d, "obtained", "wait_days", "insurance",
+                            random_intercept = 1))
+  expect_error(  # names a non-existent column
+    mysterycall_hurdle_wait(d, "obtained", "wait_days", "insurance",
+                            random_intercept = "no_such_col"))
+})
+
+test_that("the wait column must be a finite, non-negative, not-all-missing numeric", {
+  d <- make_bva_data()
+  bad_type <- d; bad_type$wait_days <- as.character(bad_type$wait_days)
+  expect_error(  # character wait column
+    mysterycall_hurdle_wait(bad_type, "obtained", "wait_days", "insurance"))
+
+  neg <- d; neg$wait_days[which(!is.na(neg$wait_days))[1]] <- -1
+  expect_error(  # a negative wait (impossible number of days)
+    mysterycall_hurdle_wait(neg, "obtained", "wait_days", "insurance"))
+
+  all_na <- d; all_na$wait_days <- NA_real_
+  expect_error(  # no obtained waits at all to model
+    mysterycall_hurdle_wait(all_na, "obtained", "wait_days", "insurance"))
+})

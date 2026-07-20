@@ -21,10 +21,11 @@ mysterycall_hurdle_wait(
 \item{obtained_col}{Name of the binary "appointment obtained" column (the
 hurdle outcome). Coerced with \verb{\%in\% TRUE}/\code{1}/\code{"TRUE"}/\code{"Yes"}.}
 
-\item{wait_col}{Name of the wait-time count column (defined among obtained
-appointments; \code{NA}/missing otherwise).}
+\item{wait_col}{Name of the wait-time count column: a non-negative numeric
+(defined among obtained appointments; \code{NA}/missing otherwise).}
 
-\item{predictors}{Character vector of predictor columns, used in both parts.}
+\item{predictors}{Character vector of unique predictor columns, used in both
+parts. Must not include \code{obtained_col} or \code{wait_col}.}
 
 \item{random_intercept}{Optional name of a clustering column (e.g. practice)
 for a random intercept in both parts. \code{NULL} fits fixed-effects-only.}

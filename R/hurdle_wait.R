@@ -20,9 +20,10 @@
 #' @param data A data frame, one row per call.
 #' @param obtained_col Name of the binary "appointment obtained" column (the
 #'   hurdle outcome). Coerced with `%in% TRUE`/`1`/`"TRUE"`/`"Yes"`.
-#' @param wait_col Name of the wait-time count column (defined among obtained
-#'   appointments; `NA`/missing otherwise).
-#' @param predictors Character vector of predictor columns, used in both parts.
+#' @param wait_col Name of the wait-time count column: a non-negative numeric
+#'   (defined among obtained appointments; `NA`/missing otherwise).
+#' @param predictors Character vector of unique predictor columns, used in both
+#'   parts. Must not include `obtained_col` or `wait_col`.
 #' @param random_intercept Optional name of a clustering column (e.g. practice)
 #'   for a random intercept in both parts. `NULL` fits fixed-effects-only.
 #' @param count_family Working family for the count part: `"nbinom2"` (default)
@@ -58,13 +59,23 @@ mysterycall_hurdle_wait <- function(data, obtained_col, wait_col, predictors,
                                     truncate_zero = TRUE, conf_level = 0.95) {
   count_family <- match.arg(count_family)
   checkmate::assert_data_frame(data, min.rows = 1L)
+  checkmate::assert_string(obtained_col, min.chars = 1L)
+  checkmate::assert_string(wait_col, min.chars = 1L)
   checkmate::assert_choice(obtained_col, names(data))
   checkmate::assert_choice(wait_col, names(data))
-  checkmate::assert_character(predictors, min.len = 1L, any.missing = FALSE)
+  checkmate::assert_character(predictors, min.len = 1L, any.missing = FALSE,
+                              min.chars = 1L, unique = TRUE)
   checkmate::assert_subset(predictors, names(data))
+  # the two outcome columns cannot double as predictors
+  checkmate::assert_disjunct(predictors, c(obtained_col, wait_col))
+  checkmate::assert_string(random_intercept, min.chars = 1L, null.ok = TRUE)
   if (!is.null(random_intercept)) {
     checkmate::assert_choice(random_intercept, names(data))
   }
+  # the wait is a non-negative count (NA where no appointment was obtained)
+  checkmate::assert_numeric(data[[wait_col]], lower = 0, finite = TRUE,
+                            all.missing = FALSE,
+                            .var.name = sprintf("data[[\"%s\"]]", wait_col))
   checkmate::assert_flag(truncate_zero)
   checkmate::assert_number(conf_level, lower = 0.5, upper = 0.999)
   if (!requireNamespace("glmmTMB", quietly = TRUE)) {
