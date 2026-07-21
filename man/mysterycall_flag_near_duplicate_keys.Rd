@@ -63,5 +63,11 @@ mysterycall_flag_near_duplicate_keys(keys)
 \seealso{
 \code{\link[=mysterycall_check_duplicates]{mysterycall_check_duplicates()}}, \code{\link[=mysterycall_normalize_org_name]{mysterycall_normalize_org_name()}},
 \code{\link[=mysterycall_scenario_coverage]{mysterycall_scenario_coverage()}}
+
+Other data integrity: 
+\code{\link{mysterycall_categorize_wait}()},
+\code{\link{mysterycall_clean_zip}()},
+\code{\link{mysterycall_link_physicians}()},
+\code{\link{mysterycall_parse_duration}()}
 }
 \concept{data integrity}

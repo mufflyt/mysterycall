@@ -2,6 +2,40 @@
 
 ## New functions
 
+Generalized from the `isochrones` ENT access study (power/GLM) and the original
+urogyn `mystery_shopper_data` study (data prep), which hand-rolled them --
+filling the package's missing power quadrants and reusable field-cleaning
+helpers:
+
+- `mysterycall_adjusted_power()`: Monte Carlo power for a covariate-adjusted
+  negative-binomial GLMM with a **cluster ICC** -- a rural (exposure) fixed
+  effect, a subspecialty fixed effect, nuisance adjustment covariates, and a
+  state-level random intercept whose SD is derived from a target ICC
+  (`sigma = sqrt(ICC/(1-ICC) * 1/phi)`). Fills the gap left by the existing
+  physician-clustered power tools, which cannot express a higher-level cluster
+  as an ICC or adjust for confounders (`glmmTMB`).
+- `mysterycall_ttest_power()`: analytic two-group **continuous-outcome** power
+  (Cohen's d) with an unequal-allocation solver, for a study with a fixed
+  natural exposure fraction (e.g. 15% rural). The package's other analytic power
+  tools are all count/binary (`pwr`).
+- `mysterycall_lm_interaction_power()`: analytic Cohen's f-squared power for each
+  main effect and interaction of a saturated factorial model, at small/medium
+  effect sizes (`pwr`).
+- `mysterycall_parse_duration()`: parse messy free-text call durations
+  (`"1min 45 sec"`, `"1.5min"`, `"30sec"`, a bare number, `"O"`) to seconds or
+  minutes -- replaces the brittle per-study lookup table for hold-time and
+  call-length fields.
+- `mysterycall_clean_zip()`: take the first ZIP when several are present, strip a
+  ZIP+4 suffix, and left-pad to five digits (restoring leading zeros lost to
+  numeric parsing).
+- `mysterycall_categorize_wait()`: bin a days-to-appointment vector into weekly
+  categories plus a binary ">N-week wait" threshold flag, standardizing the
+  headline-outcome convention.
+- `mysterycall_link_physicians()`: probabilistic record linkage of two physician
+  lists that share no key, via `fastLink` Jaro-Winkler name matching with
+  optional blocking -- for reconciling a called cohort against an external
+  roster when there is no NPI (`fastLink`).
+
 Generalized from the `labubu` mystery-caller study, which hand-rolled them --
 design-integrity checks, a population-average sensitivity model, and two matched
 figures that were previously inline in the study's analysis scripts:
