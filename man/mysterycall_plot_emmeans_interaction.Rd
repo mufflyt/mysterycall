@@ -38,6 +38,10 @@ mysterycall_plot_emmeans_interaction(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}}, which extends this with extra
+options and an optional file save, and \code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}}, which
+computes, plots, and saves a single-variable EMM figure.
+
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
 \code{\link{.disp_rate_ci}()},

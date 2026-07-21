@@ -1,4 +1,14 @@
-#' Calculate Medicaid and BCBS Acceptance Rates
+#' Calculate Medicaid and BCBS Acceptance Rates (deprecated)
+#'
+#' @description
+#' **Deprecated.** This is the hardcoded two-group
+#' (Medicaid + Blue Cross/Blue Shield) special case of the generalized
+#' [mysterycall_acceptance_rate_calc()], which handles any number of insurance
+#' groups and adds Wilson confidence intervals. Prefer
+#' `mysterycall_acceptance_rate_calc()`; pass
+#' `medicaid_screen_group = "Medicaid"` there to reproduce this function's
+#' asymmetric Medicaid-only NA-screen. Retained for its exact manuscript
+#' paragraph wording.
 #'
 #' Replicates the multi-step acceptance-rate calculation from the mystery-caller
 #' Rmd analysis: distinct-phone numerator (accepted + appointment), distinct-phone
@@ -87,6 +97,12 @@ mysterycall_insurance_acceptance_rates <- function(
     digits              = 1L,
     output_dir          = NULL,
     filename            = "insurance_acceptance_rates.csv") {
+
+  .Deprecated("mysterycall_acceptance_rate_calc", package = "mysterycall",
+              msg = paste0(
+                "mysterycall_insurance_acceptance_rates() is deprecated. Use ",
+                "mysterycall_acceptance_rate_calc(medicaid_screen_group = ",
+                "\"Medicaid\") instead."))
 
   # -- Validate inputs ----------------------------------------------------------
   checkmate::assert_data_frame(data, min.rows = 0)

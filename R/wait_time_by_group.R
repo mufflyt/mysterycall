@@ -31,6 +31,10 @@
 #' }
 #'
 #' @family outcomes
+#' @seealso [mysterycall_wait_time_summary()], which reports the same
+#'   median/Q1/Q3 columns plus mean/SD/range and a group-comparison test with an
+#'   interpretation sentence. Use this leaner helper when you only need the
+#'   quantile table (with optional CSV export).
 #' @importFrom dplyr group_by summarise n arrange desc
 #' @importFrom stats median quantile na.omit
 #' @importFrom utils write.csv

@@ -26,7 +26,10 @@ mysterycall_clean_zip(c("03110, 03756", 3110, "12345-6789", "", NA))
 # -> c("03110", "03110", "12345", NA, NA)
 }
 \seealso{
-\code{\link[=mysterycall_add_hhi]{mysterycall_add_hhi()}}
+\code{\link[=mysterycall_add_hhi]{mysterycall_add_hhi()}}. Related ZIP helpers:
+\code{\link[=mysterycall_extract_zip5]{mysterycall_extract_zip5()}} (strip ZIP+4 / pad, single-ZIP cells) and
+\code{\link[=mysterycall_normalize_zip5]{mysterycall_normalize_zip5()}} (address-pipeline variant). \code{clean_zip()}
+additionally splits multi-ZIP cells (\code{"03110, 03756"} -> first).
 
 Other data integrity: 
 \code{\link{mysterycall_categorize_wait}()},

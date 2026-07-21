@@ -87,6 +87,11 @@ result <- mysterycall_plot_emmeans(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}} (lean interaction EMM plot)
+and \code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}} (interaction plot with more options
+and optional file save). This function computes, plots, and saves a
+single-variable EMM figure.
+
 Other plotting: 
 \code{\link{mysterycall_plot_disparities}()},
 \code{\link{mysterycall_plot_source_venn}()}

@@ -88,6 +88,10 @@ res$plot
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}}, the lean interaction plot
+this extends, and \code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}} for a single-variable EMM
+figure.
+
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
 \code{\link{.disp_rate_ci}()},

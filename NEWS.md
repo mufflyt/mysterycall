@@ -1,5 +1,23 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Consolidation and deprecation
+
+- `mysterycall_acceptance_rate_calc()` gains a `medicaid_screen_group` argument
+  that restricts the `medicaid_accept_col` NA-screen to named insurance group(s)
+  instead of applying it to all groups. This lets the general calculator
+  reproduce the one behavior only the hardcoded two-group helper could -- an
+  asymmetric Medicaid-only screen, so a Medicaid-accept field that is `NA` on
+  non-Medicaid rows no longer zeroes those groups' rates.
+- `mysterycall_insurance_acceptance_rates()` is **deprecated** in favor of
+  `mysterycall_acceptance_rate_calc(medicaid_screen_group = "Medicaid")`, of
+  which it is the two-group (Medicaid/BCBS) special case. It still works and
+  keeps its exact manuscript paragraph.
+- Added mutual `@seealso` links across the overlapping ZIP cleaners
+  (`clean_zip` / `extract_zip5` / `normalize_zip5`), the wait-time summaries
+  (`wait_time_by_group` / `wait_time_summary`), and the emmeans plotters
+  (`plot_emmeans` / `plot_emmeans_interaction` / `plot_emmeans_full`) to clarify
+  which to use.
+
 ## New functions
 
 Generalized from the `isochrones` ENT access study (power/GLM) and the original

@@ -52,6 +52,9 @@ NULL
 #'   `res$data` and `res$plot`.
 #'
 #' @family outcomes
+#' @seealso [mysterycall_plot_emmeans_interaction()], the lean interaction plot
+#'   this extends, and [mysterycall_plot_emmeans()] for a single-variable EMM
+#'   figure.
 #' @export
 #'
 #' @examplesIf interactive()

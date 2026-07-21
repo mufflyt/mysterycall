@@ -22,6 +22,9 @@ NULL
 #' @return A `ggplot` object.
 #'
 #' @family outcomes
+#' @seealso [mysterycall_plot_emmeans_full()], which extends this with extra
+#'   options and an optional file save, and [mysterycall_plot_emmeans()], which
+#'   computes, plots, and saves a single-variable EMM figure.
 #' @export
 #'
 #' @examplesIf interactive()

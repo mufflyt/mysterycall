@@ -53,6 +53,13 @@
 #' @param medicaid_accept_col Character scalar or `NULL`.  When non-`NULL`,
 #'   rows with `NA` in this column are excluded from the numerator.  Useful
 #'   when a "Did you accept Medicaid?" field is present.  Default `NULL`.
+#' @param medicaid_screen_group Character vector or `NULL`.  Restricts the
+#'   `medicaid_accept_col` NA-screen to only these insurance group(s).  This
+#'   matters when the "Did you accept Medicaid?" field is, by design, `NA` on
+#'   non-Medicaid rows: applying the screen to every group would then force
+#'   those groups' rates to zero.  When `NULL` (default) the screen applies to
+#'   all groups (the original behaviour); set e.g. `"Medicaid"` to screen only
+#'   the Medicaid arm.  Ignored when `medicaid_accept_col` is `NULL`.
 #' @param conf_level Numeric scalar in (0, 1).  Confidence level for Wilson
 #'   score intervals.  Default `0.95`.
 #'
@@ -115,7 +122,11 @@
 #'
 #' @importFrom stats prop.test
 #' @family outcomes
-#' @seealso [mysterycall_acceptance_rate()], [mysterycall_disparities_table()]
+#' @seealso [mysterycall_acceptance_rate()], [mysterycall_disparities_table()].
+#'   This function generalizes the two-group (Medicaid/BCBS)
+#'   [mysterycall_insurance_acceptance_rates()], which is now deprecated in its
+#'   favor -- use `medicaid_screen_group = "Medicaid"` to reproduce the legacy
+#'   asymmetric Medicaid-only NA-screen.
 #' @export
 mysterycall_acceptance_rate_calc <- function(
     data,
@@ -126,6 +137,7 @@ mysterycall_acceptance_rate_calc <- function(
     wait_col            = "business_days_until_appointment",
     id_col              = "phone",
     medicaid_accept_col = NULL,
+    medicaid_screen_group = NULL,
     conf_level          = 0.95
 ) {
 
@@ -198,6 +210,10 @@ mysterycall_acceptance_rate_calc <- function(
       ), call. = FALSE)
     }
   }
+  if (!is.null(medicaid_screen_group) && !is.character(medicaid_screen_group)) {
+    stop("`medicaid_screen_group` must be a character vector or NULL.",
+         call. = FALSE)
+  }
   if (!is.numeric(conf_level) || length(conf_level) != 1L ||
       conf_level <= 0 || conf_level >= 1) {
     stop("`conf_level` must be a single number strictly between 0 and 1.", call. = FALSE)
@@ -241,6 +257,18 @@ mysterycall_acceptance_rate_calc <- function(
   wait_vec <- if (!is.null(wait_col)) data[[wait_col]] else NULL
   med_vec  <- if (!is.null(medicaid_accept_col)) data[[medicaid_accept_col]] else NULL
 
+  # Per-row pass for the medicaid NA-screen. When medicaid_screen_group is set,
+  # only rows in those group(s) are screened; rows in other groups always pass,
+  # so a Medicaid-only field that is NA elsewhere does not zero out their rates.
+  med_pass_vec <- if (is.null(med_vec)) {
+    rep(TRUE, nrow(data))
+  } else if (is.null(medicaid_screen_group)) {
+    !is.na(med_vec)
+  } else {
+    in_screen <- !is.na(ins_chr) & ins_chr %in% medicaid_screen_group
+    (!in_screen) | !is.na(med_vec)
+  }
+
   # ---- Wilson CI helper ------------------------------------------------------
   .wci <- function(k, n) {
     if (n == 0L || is.na(n) || is.na(k)) return(c(NA_real_, NA_real_))
@@ -273,9 +301,7 @@ mysterycall_acceptance_rate_calc <- function(
     if (!is.null(wait_vec)) {
       num_mask <- num_mask & !is.na(wait_vec) & wait_vec > 0
     }
-    if (!is.null(med_vec)) {
-      num_mask <- num_mask & !is.na(med_vec)
-    }
+    num_mask <- num_mask & med_pass_vec
 
     ids_num <- unique(id_vec[num_mask & !is.na(id_vec)])
     n_num   <- length(ids_num)

@@ -13,7 +13,10 @@
 #'   for entries with no digits.
 #'
 #' @family data integrity
-#' @seealso [mysterycall_add_hhi()]
+#' @seealso [mysterycall_add_hhi()]. Related ZIP helpers:
+#'   [mysterycall_extract_zip5()] (strip ZIP+4 / pad, single-ZIP cells) and
+#'   [mysterycall_normalize_zip5()] (address-pipeline variant). `clean_zip()`
+#'   additionally splits multi-ZIP cells (`"03110, 03756"` -> first).
 #' @examples
 #' mysterycall_clean_zip(c("03110, 03756", 3110, "12345-6789", "", NA))
 #' # -> c("03110", "03110", "12345", NA, NA)

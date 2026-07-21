@@ -364,6 +364,8 @@ normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); m
 #'
 #' @importFrom stringr str_extract
 #' @family address-normalization
+#' @seealso [mysterycall_clean_zip()] and [mysterycall_extract_zip5()] for the
+#'   general-purpose ZIP cleaners outside the address-normalization pipeline.
 #' @keywords internal
 mysterycall_normalize_zip5 <- function(zip) {
   if (is.null(zip)) return(NA_character_)

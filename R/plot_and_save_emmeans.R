@@ -65,6 +65,10 @@
 #' )
 #'
 #' @family plotting
+#' @seealso [mysterycall_plot_emmeans_interaction()] (lean interaction EMM plot)
+#'   and [mysterycall_plot_emmeans_full()] (interaction plot with more options
+#'   and optional file save). This function computes, plots, and saves a
+#'   single-variable EMM figure.
 #' @export
 mysterycall_plot_emmeans <- function(model_object, specs, variable_of_interest, color_by = NULL, output_dir = NULL) {
   # Load necessary packages
