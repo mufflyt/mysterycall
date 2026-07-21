@@ -2,6 +2,35 @@
 
 ## New functions
 
+Generalized from the `labubu` mystery-caller study, which hand-rolled them --
+design-integrity checks, a population-average sensitivity model, and two matched
+figures that were previously inline in the study's analysis scripts:
+
+- `mysterycall_scenario_coverage()`: per-cluster scenario-coverage table for a
+  matched multi-scenario audit -- how many practices were reached under the full
+  set of scenarios (complete) versus a partial set or a single scenario, plus a
+  missing-count per scenario. A design-integrity guard, since an unmatched
+  cluster key silently becomes a one-scenario singleton and deflates the paired
+  denominator of `mysterycall_paired_acceptance_mcnemar()` /
+  `mysterycall_paired_wait_within_practice()`. `print()` and `as.data.frame()`
+  methods.
+- `mysterycall_flag_near_duplicate_keys()`: edit-distance (`adist`) near-duplicate
+  detector over cluster keys -- catches the mistyped grouping value
+  (`"Womens"` vs. `"Women's"`) that `mysterycall_check_duplicates()` cannot,
+  because the strings differ. Flags a pair when its raw or length-normalized edit
+  distance is within threshold; the safety net that keeps a typo from splitting
+  one practice into two clusters.
+- `mysterycall_gee()`: population-average GEE (`geepack`, exchangeable working
+  correlation, robust SEs) as a marginal companion to the subject-specific
+  `mysterycall_logistic_model()` GLMM -- uses every record including the
+  singletons and dyads a matched analysis drops. Returns an odds-ratio table
+  with a complete-separation flag; `print()` and `as.data.frame()` methods.
+- `mysterycall_plot_raincloud()`: violin + boxplot + jittered-points figure of a
+  numeric outcome by group (the canonical skewed-wait-time-by-scenario plot).
+- `mysterycall_plot_paired_slope()`: within-cluster slope plot -- one line per
+  practice across the scenarios it was called under -- the visual companion to
+  the matched paired analyses.
+
 - `mysterycall_hurdle_wait()`: a two-part hurdle model for a mystery-caller wait
   time, generalized from the private-equity urogynecology audit. Fits a binary
   hurdle (appointment obtained yes/no) and a zero-truncated negative-binomial

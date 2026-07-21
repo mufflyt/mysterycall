@@ -64,6 +64,7 @@ Suggests:
     easyr,
     effects,
     emmeans,
+    geepack,
     ggforce,
     glmmTMB,
     gtsummary,
