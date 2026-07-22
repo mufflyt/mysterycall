@@ -19,6 +19,9 @@ Print method for mysterycall_prepared objects
 }
 \seealso{
 Other data-preparation: 
-\code{\link{mysterycall_prepare_calls}()}
+\code{\link{mysterycall_exclusion_crosswalk}()},
+\code{\link{mysterycall_prepare_calls}()},
+\code{\link{mysterycall_reconcile_inclusion}()},
+\code{\link{print.mysterycall_reconciliation}()}
 }
 \concept{data-preparation}
