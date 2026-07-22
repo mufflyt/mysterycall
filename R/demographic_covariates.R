@@ -213,7 +213,12 @@ mysterycall_get_acs_female_insurance <- function(api_key, state_fips,
     Census_Tract         = acs$NAME,
     GEOID                = acs$GEOID,
     State_FIPS           = substr(acs$GEOID, 1, 2),
-    County_FIPS          = substr(acs$GEOID, 3, 5),
+    # County FIPS is the 5-digit state+county code (SSCCC), matching the
+    # package's `fips_county` join key (see mysterycall_get_county_provider_counts).
+    # Previously this held the 3-digit county-only subcode, which silently matched
+    # nothing when joined to the 5-digit county covariates. Join via
+    # `by = c("County_FIPS" = "fips_county")`.
+    County_FIPS          = substr(acs$GEOID, 1, 5),
     Tract_FIPS           = substr(acs$GEOID, 6, 11),
     Total_Females        = total_f,
     N_Female_Private     = priv$est, N_Female_Private_moe   = priv$moe,
