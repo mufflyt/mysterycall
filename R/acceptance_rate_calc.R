@@ -315,7 +315,10 @@ mysterycall_acceptance_rate_calc <- function(
     num_mask <- mask & !is.na(incl_vec) & incl_vec == inclusion_value
 
     if (!is.null(wait_vec)) {
-      num_mask <- num_mask & !is.na(wait_vec) & wait_vec > 0
+      # An appointment exists when the wait is non-NA and non-negative. Same-day
+      # appointments are wait == 0 (see mysterycall_count_business_days) and count
+      # as accepted; a not-obtained appointment is NA, not 0. Hence `>= 0`.
+      num_mask <- num_mask & !is.na(wait_vec) & wait_vec >= 0
     }
     num_mask <- num_mask & med_pass_vec
 

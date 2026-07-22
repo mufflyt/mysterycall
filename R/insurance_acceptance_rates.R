@@ -142,7 +142,7 @@ mysterycall_insurance_acceptance_rates <- function(
   count_accepts_medicaid <- med_base |>
     dplyr::filter(.data[[insurance_col]] == medicaid_label) |>
     dplyr::filter(.data[[exclusion_col]] == contact_value) |>
-    dplyr::filter(.data[[days_col]] > 0) |>
+    dplyr::filter(.data[[days_col]] >= 0) |>
     dplyr::distinct(.data[[phone_col]]) |>
     nrow()
 
@@ -173,7 +173,7 @@ mysterycall_insurance_acceptance_rates <- function(
   count_accepts_bcbs <- bcbs_base |>
     dplyr::filter(.data[[insurance_col]] == bcbs_label) |>
     dplyr::filter(.data[[exclusion_col]] == contact_value) |>
-    dplyr::filter(.data[[days_col]] > 0) |>
+    dplyr::filter(.data[[days_col]] >= 0) |>
     dplyr::distinct(.data[[phone_col]]) |>
     nrow()
 

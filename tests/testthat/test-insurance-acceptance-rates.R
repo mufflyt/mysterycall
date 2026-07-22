@@ -1,17 +1,17 @@
 # Controlled dataset with known expected values
 # Medicaid: phones 1-4; BCBS: phones 5-8
 # accepted_col non-NA for all
-# Medicaid numerator: phone 1,2 (able + days>0)    => 2
+# Medicaid numerator: phone 1,2,3 (able + days>=0)  => 3  (phone 3 same-day, days=0)
 # Medicaid excluded:  phone 4 (not able)            => 1
 # Medicaid total:     phones 1-4                    => 4
 # Medicaid denom:     4 - 1                         => 3
-# Medicaid rate:      round(2/3*100, 1)             => 66.7
+# Medicaid rate:      round(3/3*100, 1)             => 100.0
 
-# BCBS numerator: phone 5,6 (able + days>0)         => 2
+# BCBS numerator: phone 5,6,7 (able + days>=0)      => 3  (phone 7 same-day, days=0)
 # BCBS excluded:  phone 8 (not able)                => 1
 # BCBS total:     phones 5-8                        => 4
 # BCBS denom:     4 - 1                             => 3
-# BCBS rate:      round(2/3*100, 1)                 => 66.7
+# BCBS rate:      round(3/3*100, 1)                 => 100.0
 
 df <- data.frame(
   phone                              = paste0("p", 1:8),
@@ -31,8 +31,8 @@ test_that("Medicaid numerator is correct", {
   res <- suppressMessages(
     mysterycall_insurance_acceptance_rates(df, output_dir = NA)
   )
-  # phones 1 (days=5) and 2 (days=3) — phone 3 has days=0 so excluded from numerator
-  expect_equal(res$count_accepts_medicaid, 2L)
+  # phones 1 (days=5), 2 (days=3) and 3 (days=0, same-day appointment) all accepted
+  expect_equal(res$count_accepts_medicaid, 3L)
 })
 
 test_that("Medicaid denominator is correct", {
@@ -48,7 +48,7 @@ test_that("Medicaid acceptance rate is correct", {
   res <- suppressMessages(
     mysterycall_insurance_acceptance_rates(df, output_dir = NA)
   )
-  expected <- round(2 / 3 * 100, 1)
+  expected <- round(3 / 3 * 100, 1)   # same-day appt now accepted -> 3/3
   expect_equal(res$medicaid_acceptance_rate, expected)
 })
 
@@ -56,7 +56,7 @@ test_that("BCBS counts are correct", {
   res <- suppressMessages(
     mysterycall_insurance_acceptance_rates(df, output_dir = NA)
   )
-  expect_equal(res$count_accepts_bcbs, 2L)
+  expect_equal(res$count_accepts_bcbs, 3L)   # incl. same-day (days=0) appointment
   expect_equal(res$total_count_bcbs, 4L)
   expect_equal(res$count_bcbs_denom, 3L)
 })
@@ -75,7 +75,7 @@ test_that("paragraph contains correct rates", {
   res <- suppressMessages(
     mysterycall_insurance_acceptance_rates(df, output_dir = NA)
   )
-  expected_rate <- format(round(2 / 3 * 100, 1), nsmall = 1)
+  expected_rate <- format(round(3 / 3 * 100, 1), nsmall = 1)   # 3/3 same-day accepted
   expect_true(grepl(expected_rate, res$paragraph, fixed = TRUE))
 })
 

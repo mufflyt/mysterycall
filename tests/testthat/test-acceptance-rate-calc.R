@@ -119,8 +119,10 @@ test_that("deduplication by id_col reduces count when same physician appears twi
   expect_equal(res$table$n_numerator, 3L)
 })
 
-test_that("rows with wait_col == 0 are excluded from numerator but kept in denominator", {
-  # P1 has wait=0: reachable (denominator) but no appointment (not numerator)
+test_that("a same-day appointment (wait_col == 0) counts as accepted", {
+  # P1 has wait=0: a same-day appointment -> reached AND accepted (numerator).
+  # A not-obtained appointment is NA, not 0 (see mysterycall_appointment_obtained),
+  # so wait == 0 is the strongest possible acceptance, not a non-appointment.
   df <- data.frame(
     phone     = c("P1", "P2", "P3"),
     insurance = rep("Medicaid", 3L),
@@ -130,8 +132,8 @@ test_that("rows with wait_col == 0 are excluded from numerator but kept in denom
   )
   res <- mysterycall_acceptance_rate_calc(df, insurance_groups = "Medicaid")
   expect_equal(res$table$n_denominator, 3L)
-  expect_equal(res$table$n_numerator, 2L)
-  expect_equal(res$table$rate_pct, 2 / 3 * 100)
+  expect_equal(res$table$n_numerator, 3L)
+  expect_equal(res$table$rate_pct, 100)
 })
 
 test_that("rows with inclusion_col != inclusion_value are excluded from denominator", {
