@@ -59,7 +59,13 @@ NULL
 #' @param appt_offered_col Character scalar. Name of the binary outcome
 #'   column added to `$logistic_data`. Default `"appt_offered"`.
 #' @param calendar_days_col Character scalar. Name of the calendar-days
-#'   column added to `$waittime_data`. Default `"calendar_days"`.
+#'   column added to `$waittime_data` (kept for calendar-vs-business
+#'   sensitivity). Default `"calendar_days"`.
+#' @param business_days_col Character scalar. Name of the **canonical**
+#'   business-days outcome column added to `$waittime_data`, computed with
+#'   [mysterycall_count_business_days()] (same-day = 0, US federal holidays
+#'   excluded). This is the primary wait outcome the modelling functions
+#'   default to. Default `"business_days_until_appointment"`.
 #'
 #' @return A list of class `mysterycall_prepared` with elements:
 #' \describe{
@@ -67,7 +73,9 @@ NULL
 #'     Adds columns: `caller` (title-cased), `appt_offered` (0/1),
 #'     `reached` (logical), `exclusion_na` (logical flag).}
 #'   \item{`waittime_data`}{Subset of `logistic_data` with `appdate`
-#'     present. Adds `calendar_days` (numeric, days from call to appt).}
+#'     present. Adds `business_days_until_appointment` (canonical outcome,
+#'     business days, same-day = 0) and `calendar_days` (secondary, raw
+#'     days from call to appt).}
 #'   \item{`waterfall`}{Data frame: one row per filter step showing
 #'     `step`, `n_remaining`, `n_dropped`, and `reason`.}
 #'   \item{`exclusion_summary`}{Data frame: counts by exclusion code with
@@ -107,7 +115,8 @@ mysterycall_prepare_calls <- function(
     na_exclusions          = c("warn", "drop", "include"),
     caller_col_out         = "caller",
     appt_offered_col       = "appt_offered",
-    calendar_days_col      = "calendar_days"
+    calendar_days_col      = "calendar_days",
+    business_days_col      = "business_days_until_appointment"
 ) {
 
   if (!is.data.frame(data))
@@ -217,6 +226,13 @@ mysterycall_prepare_calls <- function(
     call_d  <- as.Date(substr(trimws(wt_data[[col_calldate]]),  1, 10))
     appt_d  <- as.Date(substr(trimws(wt_data[[col_appdate]]), 1, 10))
     wt_data[[calendar_days_col]] <- as.numeric(appt_d - call_d)
+
+    # Canonical outcome is BUSINESS days (mysterycall's stated primary outcome);
+    # keep calendar_days alongside for calendar-vs-business sensitivity. The
+    # negative-date warning is already surfaced below on calendar_days, so
+    # suppress the duplicate from the counter here.
+    wt_data[[business_days_col]] <-
+      suppressWarnings(mysterycall_count_business_days(call_d, appt_d))
 
     neg <- !is.na(wt_data[[calendar_days_col]]) & wt_data[[calendar_days_col]] < 0
     if (any(neg)) {

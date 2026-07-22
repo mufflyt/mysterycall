@@ -16,7 +16,8 @@ mysterycall_prepare_calls(
   na_exclusions = c("warn", "drop", "include"),
   caller_col_out = "caller",
   appt_offered_col = "appt_offered",
-  calendar_days_col = "calendar_days"
+  calendar_days_col = "calendar_days",
+  business_days_col = "business_days_until_appointment"
 )
 }
 \arguments{
@@ -57,7 +58,14 @@ column in the output. Default \code{"caller"}.}
 column added to \verb{$logistic_data}. Default \code{"appt_offered"}.}
 
 \item{calendar_days_col}{Character scalar. Name of the calendar-days
-column added to \verb{$waittime_data}. Default \code{"calendar_days"}.}
+column added to \verb{$waittime_data} (kept for calendar-vs-business
+sensitivity). Default \code{"calendar_days"}.}
+
+\item{business_days_col}{Character scalar. Name of the \strong{canonical}
+business-days outcome column added to \verb{$waittime_data}, computed with
+\code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}} (same-day = 0, US federal holidays
+excluded). This is the primary wait outcome the modelling functions
+default to. Default \code{"business_days_until_appointment"}.}
 }
 \value{
 A list of class \code{mysterycall_prepared} with elements:
@@ -66,7 +74,9 @@ A list of class \code{mysterycall_prepared} with elements:
 Adds columns: \code{caller} (title-cased), \code{appt_offered} (0/1),
 \code{reached} (logical), \code{exclusion_na} (logical flag).}
 \item{\code{waittime_data}}{Subset of \code{logistic_data} with \code{appdate}
-present. Adds \code{calendar_days} (numeric, days from call to appt).}
+present. Adds \code{business_days_until_appointment} (canonical outcome,
+business days, same-day = 0) and \code{calendar_days} (secondary, raw
+days from call to appt).}
 \item{\code{waterfall}}{Data frame: one row per filter step showing
 \code{step}, \code{n_remaining}, \code{n_dropped}, and \code{reason}.}
 \item{\code{exclusion_summary}}{Data frame: counts by exclusion code with
