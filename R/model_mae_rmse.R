@@ -379,7 +379,7 @@ mysterycall_model_mae_rmse <- function(fit,
       mysterycall_nb_model      = "Negative Binomial GLMM",
       "Model"
     )
-    bt_suffix <- if (back_transform) " (back-transformed via exp())" else ""
+    bt_suffix <- if (back_transform) " (back-transformed via expm1())" else ""
     plot_title <- sprintf("Actual vs. Predicted: %s%s", model_label, bt_suffix)
   }
 
@@ -429,7 +429,7 @@ mysterycall_model_mae_rmse <- function(fit,
           subtitle = sprintf(
             "N = %d%s",
             n_obs,
-            if (back_transform) "; predictions back-transformed via exp()" else ""
+            if (back_transform) "; predictions back-transformed via expm1()" else ""
           ),
           x = "Predicted",
           y = "Actual"

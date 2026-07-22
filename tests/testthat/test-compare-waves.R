@@ -26,7 +26,7 @@ test_that("proportion type has correct columns", {
 
 test_that("continuous type has correct columns", {
   res <- mysterycall:::mysterycall_compare_waves(make_wave_cont_df(), "wave", "outcome", type = "continuous")
-  expect_true(all(c("wave","n","mean","median","sd","iqr","p_vs_ref") %in% names(res)))
+  expect_true(all(c("wave","n","mean","median","sd","q1","q3","p_vs_ref") %in% names(res)))
 })
 
 test_that("ref_wave attribute is set", {

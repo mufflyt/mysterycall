@@ -209,11 +209,11 @@ mysterycall_simple_poisson <- function(data,
     lines <- c(lines, sprintf(
       paste0(
         "For %s compared to %s, the %s rate is approximately %.2f times %s ",
-        "(%d%% %s; 95%% CI: %.2f-%.2f, p %s)."
+        "(%.1f%% %s; 95%% CI: %.2f-%.2f, p %s)."
       ),
       row$level, reference, outcome_label,
       row$irr, row$direction,
-      round(pct_diff), row$direction,
+      round(pct_diff, 1), row$direction,
       row$ci_lower, row$ci_upper, row$p_value_fmt
     ))
   }

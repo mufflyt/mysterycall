@@ -36,7 +36,7 @@ alphabetically/numerically) is used.}
 A data frame. For proportion outcomes: columns \code{wave},
 (\code{group},) \code{n}, \code{n_accepted}, \code{rate}, \code{lower_ci}, \code{upper_ci},
 \code{p_vs_ref}. For continuous outcomes: columns \code{wave}, (\code{group},)
-\code{n}, \code{mean}, \code{median}, \code{sd}, \code{iqr}, \code{p_vs_ref}. The \code{group}
+\code{n}, \code{mean}, \code{median}, \code{sd}, \code{q1}, \code{q3}, \code{p_vs_ref}. The \code{group}
 column is only present when \code{group_col} is non-\code{NULL}. The
 attribute \code{ref_wave} is set on the returned data frame.
 }

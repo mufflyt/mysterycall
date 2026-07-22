@@ -99,7 +99,12 @@ mysterycall_assign_scenarios <- function(data,
   for (g_idx in seq_len(nrow(groups))) {
     grp_filter <- rep(TRUE, nrow(data))
     for (col in location_cols) {
-      grp_filter <- grp_filter & (data[[col]] == groups[[col]][[g_idx]])
+      # Case/whitespace-fold the location key so "Denver" and "denver " group
+      # together, matching mysterycall_check_generalist_presence(); otherwise the
+      # two functions disagree about which offices share a city.
+      grp_filter <- grp_filter &
+        (tolower(trimws(as.character(data[[col]]))) ==
+           tolower(trimws(as.character(groups[[col]][[g_idx]]))))
     }
     grp_rows <- which(grp_filter)
 
