@@ -181,7 +181,10 @@ mysterycall_methods_paragraph <- function(n_physicians,
     ),
     auto = paste0(
       "Multilevel Poisson regression was used as the primary model; ",
-      "if overdispersion was detected (Pearson phi > 2), a negative binomial model was ",
+      sprintf(
+        "if overdispersion was detected (Pearson phi > %s), a negative binomial model was ",
+        format(mysterycall_overdispersion_threshold())
+      ),
       "substituted and reported instead."
     )
   )
@@ -264,37 +267,8 @@ mysterycall_format_results_table <- function(x,
   out$sig <- NULL
   out
 }
-
-
-mysterycall_write_results_paragraph <- function(model_result,
-                                                ref_group,
-                                                exposure_col,
-                                                outcome_label = "appointment acceptance") {
-  if (!inherits(model_result, c("mysterycall_poisson_model", "mysterycall_nb_model"))) {
-    stop("`model_result` must be a `mysterycall_poisson_model` or `mysterycall_nb_model` object.", call. = FALSE)
-  }
-  if (!is.character(ref_group)     || length(ref_group) != 1L)     stop("`ref_group` must be a single string.",     call. = FALSE)
-  if (!is.character(exposure_col)  || length(exposure_col) != 1L)  stop("`exposure_col` must be a single string.",  call. = FALSE)
-  if (!is.character(outcome_label) || length(outcome_label) != 1L) stop("`outcome_label` must be a single string.", call. = FALSE)
-
-  tbl      <- model_result$irr_table
-  exp_rows <- tbl[grepl(exposure_col, tbl$term, fixed = TRUE), ]
-
-  if (nrow(exp_rows) == 0L) {
-    stop("No coefficient found for exposure_col = '", exposure_col, "'.", call. = FALSE)
-  }
-
-  lines <- vapply(seq_len(nrow(exp_rows)), function(i) {
-    r   <- exp_rows[i, ]
-    lvl <- trimws(gsub(exposure_col, "", r$term, fixed = TRUE))
-    sig <- if (!is.na(r$p_value) && r$p_value < 0.05) "significantly" else "not significantly"
-    p_str <- if (!is.na(r$p_value) && r$p_value < 0.001) "< 0.001" else sprintf("= %.3f", r$p_value)
-    sprintf(
-      "Compared with %s, %s was %s associated with %s (IRR %.2f, 95%% CI %.2f-%.2f, p %s).",
-      ref_group, lvl, sig, outcome_label,
-      r$irr, r$ci_lower, r$ci_upper, p_str
-    )
-  }, character(1L))
-
-  paste(lines, collapse = " ")
-}
+# NOTE: the canonical mysterycall_write_results_paragraph() lives in
+# R/write_results_paragraph.R (documented, exported, accepts a data frame and
+# alpha/digits controls). A second, undocumented copy formerly defined here was
+# dead code -- it was shadowed by collation order -- and has been removed to
+# avoid the two definitions drifting apart.
