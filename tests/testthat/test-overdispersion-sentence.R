@@ -83,13 +83,15 @@ test_that("overdispersion_sentence p_formatted is '< 0.001' for very small p", {
   }
 })
 
-test_that("overdispersion_sentence interpretation one of four tiers", {
+test_that("overdispersion_sentence interpretation is one of the phi-driven tiers", {
   m <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
   res <- mysterycall_overdispersion_sentence(m)
   expect_true(nchar(res$interpretation) > 0)
-  # Confirm it matches one of the four patterns
-  patterns <- c("Significant overdispersion", "Mild overdispersion",
-                 "Slight overdispersion", "No significant overdispersion")
+  # The NB recommendation follows phi > threshold (not the chi-square p-value):
+  # "Overdispersion detected" (phi > threshold), "Mild overdispersion" (1.2 <
+  # phi <= threshold), or "Little overdispersion" (phi <= 1.2).
+  patterns <- c("Overdispersion detected", "Mild overdispersion",
+                "Little overdispersion")
   expect_true(any(vapply(patterns, function(p) grepl(p, res$interpretation), logical(1))))
 })
 

@@ -31,7 +31,8 @@
 #' @param random_intercept Character scalar. Grouping column for the
 #'   physician random intercept.
 #' @param phi_threshold Numeric. Pearson phi above which the NB model
-#'   replaces Poisson. Default `2.0`.
+#'   replaces Poisson. Default `mysterycall_overdispersion_threshold()`
+#'   (1.5), the package-wide overdispersion threshold.
 #' @param conf_level Numeric. Confidence level for Wald CIs. Default `0.95`.
 #' @param include_lmm Logical. Fit an LMM and evaluate its suitability?
 #'   Default `TRUE`. The LMM is *never* the primary model; it is always

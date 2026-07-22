@@ -28,7 +28,8 @@ column.}
 physician random intercept.}
 
 \item{phi_threshold}{Numeric. Pearson phi above which the NB model
-replaces Poisson. Default \code{2.0}.}
+replaces Poisson. Default \code{mysterycall_overdispersion_threshold()}
+(1.5), the package-wide overdispersion threshold.}
 
 \item{conf_level}{Numeric. Confidence level for Wald CIs. Default \code{0.95}.}
 

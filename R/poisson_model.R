@@ -382,7 +382,8 @@ print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
   flags <- character(0L)
   if (!x$convergence$converged) flags <- c(flags, "convergence warnings")
   if (x$convergence$singular)   flags <- c(flags, "singular fit")
-  if (x$overdispersion > 2)     flags <- c(flags, sprintf("overdispersion phi=%.2f", x$overdispersion))
+  if (x$overdispersion > mysterycall_overdispersion_threshold())
+    flags <- c(flags, sprintf("overdispersion phi=%.2f", x$overdispersion))
   if (length(flags)) cat(sprintf("  Warning: %s\n", paste(flags, collapse = "; ")))
 
   if (length(x$factor_refs)) {

@@ -85,26 +85,24 @@ mysterycall_overdispersion_sentence <- function(model,
     format(round(p_value, digits_p), nsmall = digits_p)
   }
 
-  interpretation <- if (p_value < 0.05) {
-    if (ratio > mysterycall_overdispersion_threshold()) {
-      paste0(
-        "Significant overdispersion detected (ratio = ", round(ratio, digits_ratio),
-        "). Consider using a Negative Binomial model to account for overdispersion."
-      )
-    } else if (ratio > 1.2) {
-      paste0(
-        "Mild overdispersion detected (ratio = ", round(ratio, digits_ratio),
-        "), below the negative-binomial switch threshold; the Poisson model may still be adequate."
-      )
-    } else {
-      paste0(
-        "Slight overdispersion detected (ratio = ", round(ratio, digits_ratio),
-        "). The Poisson model may still be adequate; monitor model diagnostics."
-      )
-    }
+  # The Poisson-vs-NB decision follows the package-wide rule: switch to NB when
+  # the Pearson dispersion ratio exceeds mysterycall_overdispersion_threshold(),
+  # regardless of the chi-square p-value (which stays descriptive in the
+  # sentence). This keeps the recommendation consistent with mysterycall_auto_model().
+  interpretation <- if (ratio > mysterycall_overdispersion_threshold()) {
+    paste0(
+      "Overdispersion detected (ratio = ", round(ratio, digits_ratio),
+      " > ", format(mysterycall_overdispersion_threshold()),
+      "). Consider using a Negative Binomial model to account for overdispersion."
+    )
+  } else if (ratio > 1.2) {
+    paste0(
+      "Mild overdispersion detected (ratio = ", round(ratio, digits_ratio),
+      "), below the negative-binomial switch threshold; the Poisson model may still be adequate."
+    )
   } else {
     paste0(
-      "No significant overdispersion detected (ratio = ", round(ratio, digits_ratio),
+      "Little overdispersion detected (ratio = ", round(ratio, digits_ratio),
       "). The Poisson model appears adequate."
     )
   }
@@ -117,7 +115,7 @@ mysterycall_overdispersion_sentence <- function(model,
     interpretation
   )
 
-  overdispersed <- (p_value < 0.05) && (ratio > mysterycall_overdispersion_threshold())
+  overdispersed <- ratio > mysterycall_overdispersion_threshold()
 
   list(
     chisq          = Pearson_chisq,
