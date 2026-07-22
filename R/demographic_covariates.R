@@ -20,7 +20,10 @@ mysterycall_track_clinician_churn <- function(db_path, street_address, zip_code,
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
   
   addr_clean <- toupper(trimws(street_address))
-  zip_clean <- substr(trimws(zip_code), 1, 5)
+  # Zero-pad to a canonical 5-digit ZIP (e.g. "7001" -> "07001") so the join key
+  # matches the stored 5-digit values; a bare substr(...,1,5) left "7001" unpadded
+  # and matched nothing. Uses the shared cleaner for one ZIP convention.
+  zip_clean <- mysterycall_clean_zip(zip_code)
   
   if (table_name == "temporal_obgyn_only_all_years") {
     query <- sprintf("

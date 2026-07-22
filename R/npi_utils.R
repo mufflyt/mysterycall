@@ -33,8 +33,12 @@ NULL
 #' # df[mysterycall_luhn_check(df$npi), ]
 mysterycall_luhn_check <- function(npi) {
   .check_one <- function(n) {
-    s <- as.character(n)
-    if (is.na(s) || !grepl("^[0-9]{10}$", s)) return(FALSE)
+    if (is.na(n)) return(FALSE)
+    # Strip punctuation/whitespace before validating, matching
+    # mysterycall_validate_npi() -- otherwise "123-456-7893" or a trailing space
+    # would be dropped here but kept there (same NPI, opposite verdicts).
+    s <- gsub("[^0-9]", "", as.character(n))
+    if (!grepl("^[0-9]{10}$", s)) return(FALSE)
     full   <- paste0("80840", s)
     digits <- as.integer(strsplit(full, "")[[1L]])
     len    <- length(digits)

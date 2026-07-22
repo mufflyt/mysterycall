@@ -38,8 +38,9 @@ test_that("flag_excluded_with_appointments returns flagged records", {
   )
 
   expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 1L)
-  expect_equal(result$physician_information, "Dr A")
+  # >= 0: Dr A (days=5) and Dr C (days=0, same-day) are both excluded with a wait
+  expect_equal(nrow(result), 2L)
+  expect_equal(result$physician_information, c("Dr A", "Dr C"))  # sorted desc by id
 })
 
 # Test 2: Happy path - no records flagged (all contact_value)
@@ -99,8 +100,9 @@ test_that("flag_excluded_with_appointments works with custom parameters", {
   )
 
   expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 1L)
-  expect_equal(result$notes, "Dr A")
+  # >= 0: Dr A (wait=5) and Dr C (wait=0, same-day) excluded from "Success"
+  expect_equal(nrow(result), 2L)
+  expect_equal(result$notes, c("Dr A", "Dr C"))
 })
 
 # Test 5: select_cols parameter - returns only specified columns
@@ -143,8 +145,8 @@ test_that("flag_excluded_with_appointments flags NA in exclusion_col", {
   expect_equal(nrow(result), 1L)
 })
 
-# Test 7: Edge case - zero days (boundary: days == 0 not flagged)
-test_that("flag_excluded_with_appointments excludes records with days == 0", {
+# Test 7: Edge case - zero days (boundary: days == 0 is a same-day appt, flagged)
+test_that("flag_excluded_with_appointments flags records with days == 0", {
   df <- data.frame(
     physician_information           = c("Dr A", "Dr B"),
     reason_for_exclusions           = c("Not available", "Not available"),
@@ -156,8 +158,9 @@ test_that("flag_excluded_with_appointments excludes records with days == 0", {
     mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
   )
 
-  expect_equal(nrow(result), 1L)
-  expect_equal(result$physician_information, "Dr B")
+  # >= 0: both are excluded with a recorded wait (Dr A same-day at 0, Dr B at 1)
+  expect_equal(nrow(result), 2L)
+  expect_equal(result$physician_information, c("Dr A", "Dr B"))
 })
 
 # Test 8: Bad input - data is not a data frame

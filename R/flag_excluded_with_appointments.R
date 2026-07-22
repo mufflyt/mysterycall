@@ -1,9 +1,10 @@
-#' Flag Excluded Records That Still Have a Positive Wait Time
+#' Flag Excluded Records That Still Have a Recorded Wait Time
 #'
-#' Finds records where `business_days_until_appointment > 0` but
-#' `reason_for_exclusions` is not `contact_value`. These are logical
-#' contradictions: a call that failed contact should not have a valid positive
-#' wait time.
+#' Finds records where `business_days_until_appointment >= 0` (a recorded wait,
+#' including a same-day appointment at 0) but `reason_for_exclusions` is not
+#' `contact_value`. These are logical contradictions: a call that failed contact
+#' should not have a recorded appointment wait. A not-obtained appointment is
+#' `NA`, so `0` is a real same-day appointment and is flagged.
 #'
 #' @param data A data frame of mystery-caller records.
 #' @param days_col Character scalar. Name of the wait-time column.
@@ -24,8 +25,9 @@
 #'   no records are flagged.
 #'
 #' @family quality control
-#' @seealso [mysterycall_flag_exclusion_discrepancy()] for the `>= 0` variant;
-#'   [mysterycall_flag_included_na_appointments()] for the complementary check.
+#' @seealso [mysterycall_flag_exclusion_discrepancy()], which shares this
+#'   `>= 0` boundary; [mysterycall_flag_included_na_appointments()] for the
+#'   complementary check.
 #' @importFrom dplyr filter arrange desc select all_of
 #' @importFrom utils write.csv
 #' @export
@@ -39,7 +41,7 @@
 #'   business_days_until_appointment = c(5L, 3L, 0L),
 #'   stringsAsFactors = FALSE
 #' )
-#' # Only Dr A is flagged (days > 0 AND excluded)
+#' # Dr A (days=5) and Dr C (days=0, same-day) are flagged: excluded AND days >= 0
 #' mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
 mysterycall_flag_excluded_with_appointments <- function(
     data,
@@ -65,7 +67,7 @@ mysterycall_flag_excluded_with_appointments <- function(
 
   result <- data |>
     dplyr::filter(
-      .data[[days_col]]      >  0,
+      .data[[days_col]]      >= 0,
       .data[[exclusion_col]] != contact_value
     )
 
@@ -81,12 +83,12 @@ mysterycall_flag_excluded_with_appointments <- function(
   n_flagged <- nrow(result)
 
   if (n_flagged == 0L) {
-    message("Quality check passed: no excluded records have a positive wait time.")
+    message("Quality check passed: no excluded records have a recorded wait time.")
     return(invisible(result))
   }
 
   message(sprintf(
-    "Quality check: %d record(s) have a positive wait time but are marked as excluded.",
+    "Quality check: %d record(s) have a recorded wait time but are marked as excluded.",
     n_flagged
   ))
 

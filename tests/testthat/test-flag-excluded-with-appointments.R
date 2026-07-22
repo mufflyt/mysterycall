@@ -8,20 +8,22 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-test_that("flags records with days > 0 AND excluded", {
+test_that("flags excluded records with a recorded wait (days >= 0, incl. same-day)", {
   res <- suppressMessages(
     mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
   )
-  # Only Dr A: days=5, excluded
-  expect_equal(nrow(res), 1L)
-  expect_equal(res$physician_information, "Dr A")
+  # Dr A (days=5) and Dr C (days=0, same-day) are excluded with a recorded wait
+  expect_equal(nrow(res), 2L)
+  expect_setequal(res$physician_information, c("Dr A", "Dr C"))
 })
 
-test_that("does not flag days == 0 even when excluded", {
+test_that("flags a same-day (days == 0) excluded record", {
+  # A same-day appointment logged against an excluded reason is a discrepancy,
+  # consistent with the same-day=0 convention and flag_exclusion_discrepancy (>=0).
   res <- suppressMessages(
     mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
   )
-  expect_false("Dr C" %in% res$physician_information)
+  expect_true("Dr C" %in% res$physician_information)
 })
 
 test_that("does not flag included records even with days > 0", {

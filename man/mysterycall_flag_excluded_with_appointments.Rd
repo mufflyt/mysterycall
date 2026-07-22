@@ -2,7 +2,7 @@
 % Please edit documentation in R/flag_excluded_with_appointments.R
 \name{mysterycall_flag_excluded_with_appointments}
 \alias{mysterycall_flag_excluded_with_appointments}
-\title{Flag Excluded Records That Still Have a Positive Wait Time}
+\title{Flag Excluded Records That Still Have a Recorded Wait Time}
 \usage{
 mysterycall_flag_excluded_with_appointments(
   data,
@@ -42,10 +42,11 @@ A \code{\link[tibble:tibble]{tibble::tibble()}} of flagged rows, sorted descendi
 no records are flagged.
 }
 \description{
-Finds records where \code{business_days_until_appointment > 0} but
-\code{reason_for_exclusions} is not \code{contact_value}. These are logical
-contradictions: a call that failed contact should not have a valid positive
-wait time.
+Finds records where \code{business_days_until_appointment >= 0} (a recorded wait,
+including a same-day appointment at 0) but \code{reason_for_exclusions} is not
+\code{contact_value}. These are logical contradictions: a call that failed contact
+should not have a recorded appointment wait. A not-obtained appointment is
+\code{NA}, so \code{0} is a real same-day appointment and is flagged.
 }
 \examples{
 df <- data.frame(
@@ -56,12 +57,13 @@ df <- data.frame(
   business_days_until_appointment = c(5L, 3L, 0L),
   stringsAsFactors = FALSE
 )
-# Only Dr A is flagged (days > 0 AND excluded)
+# Dr A (days=5) and Dr C (days=0, same-day) are flagged: excluded AND days >= 0
 mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
 }
 \seealso{
-\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}} for the \verb{>= 0} variant;
-\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}} for the complementary check.
+\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}}, which shares this
+\verb{>= 0} boundary; \code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}} for the
+complementary check.
 
 Other quality control: 
 \code{\link{mysterycall_clean_medicaid_col}()},

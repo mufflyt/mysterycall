@@ -378,8 +378,17 @@ mysterycall_normalize_zip5 <- function(zip) {
   } else {
     raw <- as.character(zip)
   }
-  z <- stringr::str_extract(raw, "\\d{5}")
-  ifelse(is.na(z), NA_character_, z)
+  # Take the first run of digits, then left-pad (or truncate) to 5. This recovers
+  # a dropped leading zero for CHARACTER input too (e.g. "7001" -> "07001"), not
+  # just numeric input -- a bare "\\d{5}" match blanks "7001" to NA. Matches
+  # mysterycall_clean_zip()'s canonical 5-digit form.
+  vapply(raw, function(r) {
+    if (is.na(r)) return(NA_character_)
+    d <- stringr::str_extract(r, "\\d+")
+    if (is.na(d)) return(NA_character_)
+    if (nchar(d) >= 5L) substr(d, 1L, 5L)
+    else paste0(strrep("0", 5L - nchar(d)), d)
+  }, character(1L), USE.NAMES = FALSE)
 }
 
 #' Deprecated version of mysterycall_normalize_zip5
