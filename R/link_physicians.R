@@ -24,7 +24,8 @@
 #'   Default `0.85`.
 #' @param jw_weight Jaro-Winkler prefix weight passed to
 #'   `fastLink::fastLink()`. Default `0.25`.
-#' @param partial_match Logical; allow partial string agreement. Default `TRUE`.
+#' @param partial_match Logical; when `TRUE` (default), allow partial string
+#'   agreement on the `name_cols` (passed to `fastLink`'s `partial.match`).
 #'
 #' @return A [tibble::tibble()] of matched pairs -- the `name_cols` from each
 #'   frame (suffixed `_a` / `_b`), the source row indices `index_a` / `index_b`,
@@ -62,13 +63,18 @@ mysterycall_link_physicians <- function(df_a, df_b, name_cols,
   }
 
   run_pair <- function(a, b, off_a = 0L, off_b = 0L) {
-    fl <- fastLink::fastLink(
+    # fastLink's `partial.match` takes a vector of variable NAMES to allow
+    # partial agreement on, not a logical; only pass it when requested.
+    # linprog.dedupe (fastLink's linear-programming dedupe) errors when there
+    # are no competing matches to resolve, so use the default greedy dedupe.
+    fl_args <- list(
       dfA = a, dfB = b, varnames = name_cols,
       stringdist.match = name_cols, stringdist.method = "jw",
-      jw.weight = jw_weight, partial.match = partial_match,
-      dedupe.matches = TRUE, linprog.dedupe = TRUE,
+      jw.weight = jw_weight, dedupe.matches = TRUE,
       threshold.match = threshold, verbose = FALSE
     )
+    if (isTRUE(partial_match)) fl_args$partial.match <- name_cols
+    fl <- do.call(fastLink::fastLink, fl_args)
     if (is.null(fl$matches) || nrow(fl$matches) == 0L) return(NULL)
     ia <- fl$matches$inds.a
     ib <- fl$matches$inds.b

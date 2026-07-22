@@ -30,7 +30,8 @@ Default \code{0.85}.}
 \item{jw_weight}{Jaro-Winkler prefix weight passed to
 \code{fastLink::fastLink()}. Default \code{0.25}.}
 
-\item{partial_match}{Logical; allow partial string agreement. Default \code{TRUE}.}
+\item{partial_match}{Logical; when \code{TRUE} (default), allow partial string
+agreement on the \code{name_cols} (passed to \code{fastLink}'s \code{partial.match}).}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} of matched pairs -- the \code{name_cols} from each
