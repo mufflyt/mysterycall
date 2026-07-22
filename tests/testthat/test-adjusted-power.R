@@ -21,7 +21,13 @@ test_that("ICC -> sigma mapping is correct", {
     wait_urban = 20, wait_rural = 20, phi = 1.7,
     state_icc = 0.10, n_sim = 3, seed = 2
   )
-  expect_equal(res$sigma_state, sqrt(0.10 / 0.90 * (1 / 1.7)), tolerance = 1e-9)
+  # Inverts the same latent-scale decomposition as mysterycall_icc(): for the NB
+  # model the level-1 variance is trigamma(1/phi) + pi^2/3, not 1/phi.
+  expect_equal(
+    res$sigma_state,
+    sqrt(0.10 / 0.90 * (psigamma(1 / 1.7, deriv = 1L) + pi^2 / 3)),
+    tolerance = 1e-9
+  )
 })
 
 test_that("seed makes the simulation reproducible", {

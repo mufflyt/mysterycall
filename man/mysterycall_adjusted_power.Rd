@@ -65,7 +65,9 @@ thumb. This instead simulates power for the \emph{actual adjusted analysis}: a
 negative-binomial GLMM for the wait outcome with a rural (exposure) fixed
 effect, a subspecialty fixed effect, a configurable number of nuisance
 adjustment covariates, and a \strong{state-level random intercept whose SD is
-derived from a target ICC} via \code{sigma = sqrt(ICC/(1 - ICC) * (1/phi))}. It
+derived from a target ICC} via
+\code{sigma = sqrt(ICC/(1 - ICC) * (trigamma(1/phi) + pi^2/3))} -- the same
+latent-scale decomposition \code{\link[=mysterycall_icc]{mysterycall_icc()}} uses. It
 reports the power to detect the rural effect along with the mean estimated
 effect, its standard error, and the model convergence rate.
 }

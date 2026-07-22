@@ -77,7 +77,7 @@ test_that("random_effect_variance interpretation is one of the four levels", {
   expect_true(res$interpretation %in% c("high", "moderate", "low to moderate", "low"))
 })
 
-test_that("random_effect_variance Poisson glmer: icc=NA, sentence informative", {
+test_that("random_effect_variance Poisson glmer: latent-scale ICC matches mysterycall_icc", {
   skip_if_not_installed("lme4")
   library(lme4)
   set.seed(42)
@@ -87,15 +87,14 @@ test_that("random_effect_variance Poisson glmer: icc=NA, sentence informative", 
     grp   = rep(letters[1:10], 10)
   )
   m_pois <- glmer(count ~ x + (1 | grp), data = df, family = poisson)
-  res <- mysterycall_random_effect_variance(m_pois)
-  # For Poisson, sc is NA → icc should be NA
-  if (is.na(res$icc)) {
-    expect_true(is.na(res$icc))
-    expect_match(res$sentence, "ICC cannot be computed", fixed = TRUE)
-  } else {
-    # Some lme4 versions return a non-NA sc for Poisson; just check it's in [0,1]
-    expect_true(res$icc >= 0 && res$icc <= 1)
-  }
+  res <- suppressMessages(mysterycall_random_effect_variance(m_pois))
+  # Canonical Nakagawa latent-scale residual variance for Poisson is pi^2/3,
+  # so ICC = sigma_u^2 / (sigma_u^2 + pi^2/3) -- a real number in [0, 1],
+  # NOT NA and NOT the old sc^2 = 1 convention.
+  expect_equal(res$residual_variance, pi^2 / 3)
+  expect_equal(res$icc,
+               res$random_variance / (res$random_variance + pi^2 / 3))
+  expect_true(res$icc >= 0 && res$icc <= 1)
 })
 
 test_that("random_effect_variance Significant flag respects threshold", {

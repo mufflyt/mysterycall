@@ -151,17 +151,30 @@ mysterycall_icc <- function(model_result,
   })
 }
 
-.compute_icc <- function(sigma2_u, is_nb, theta) {
+# Latent-scale (link-scale) distribution variance for a GLMM, following the
+# Nakagawa & Schielzeth (2010) latent-variable method. This is the canonical
+# level-1 variance used throughout mysterycall for ICC-type quantities:
+#   * Poisson / binomial : pi^2 / 3  (logistic-distribution variance)
+#   * negative binomial  : trigamma(1 / theta) + pi^2 / 3
+# `is_nb = FALSE` (or an NB model with an unusable theta) returns pi^2 / 3.
+# Keeping this in one place ensures mysterycall_icc(),
+# mysterycall_random_effect_variance(), and mysterycall_adjusted_power() all
+# decompose ICC on the same scale rather than contradicting each other.
+.mysterycall_latent_dist_var <- function(is_nb, theta = NULL) {
   pi2_3 <- pi^2 / 3
-  if (is_nb && !is.null(theta) && !is.na(theta) && theta > 0) {
-    denom <- sigma2_u + psigamma(1 / theta, deriv = 1L) + pi2_3
+  if (isTRUE(is_nb) && !is.null(theta) && !is.na(theta) && theta > 0) {
+    psigamma(1 / theta, deriv = 1L) + pi2_3
   } else {
-    if (is_nb) {
-      message("theta is NA/NULL; falling back to Poisson latent-variable ICC formula.")
-    }
-    denom <- sigma2_u + pi2_3
+    pi2_3
   }
-  sigma2_u / denom
+}
+
+.compute_icc <- function(sigma2_u, is_nb, theta) {
+  usable_theta <- !is.null(theta) && !is.na(theta) && theta > 0
+  if (is_nb && !usable_theta) {
+    message("theta is NA/NULL; falling back to Poisson latent-variable ICC formula.")
+  }
+  sigma2_u / (sigma2_u + .mysterycall_latent_dist_var(is_nb, theta))
 }
 
 .bootstrap_icc <- function(model_result, is_nb, n_boot, conf_level) {
@@ -421,7 +434,10 @@ mysterycall_icc_report <- function(data,
   }
   df[[outcome_col]] <- y
 
-  caller <- factor(df[[caller_col]])
+  # Case/whitespace-fold caller identity so "Alice" and "alice " are one caller,
+  # matching mysterycall_caller_reliability(); otherwise they inflate the caller
+  # count and distort the ICC.
+  caller <- factor(tools::toTitleCase(tolower(trimws(as.character(df[[caller_col]])))))
   k      <- nlevels(caller)
   N      <- nrow(df)
 

@@ -9,7 +9,9 @@
 #' negative-binomial GLMM for the wait outcome with a rural (exposure) fixed
 #' effect, a subspecialty fixed effect, a configurable number of nuisance
 #' adjustment covariates, and a **state-level random intercept whose SD is
-#' derived from a target ICC** via `sigma = sqrt(ICC/(1 - ICC) * (1/phi))`. It
+#' derived from a target ICC** via
+#' `sigma = sqrt(ICC/(1 - ICC) * (trigamma(1/phi) + pi^2/3))` -- the same
+#' latent-scale decomposition [mysterycall_icc()] uses. It
 #' reports the power to detect the rural effect along with the mean estimated
 #' effect, its standard error, and the model convergence rate.
 #'
@@ -76,9 +78,12 @@ mysterycall_adjusted_power <- function(n_total, rural_frac,
   }
   if (!is.null(seed)) set.seed(seed)
 
-  # ICC -> state random-intercept SD on the log scale, with residual variance
-  # approximated by the NB 1/phi term: ICC = sigma^2 / (sigma^2 + 1/phi).
-  sigma_state <- sqrt(state_icc / (1 - state_icc) * (1 / phi))
+  # ICC -> state random-intercept SD on the log scale. Invert the *same*
+  # latent-scale decomposition mysterycall_icc() uses, so a run requested at
+  # state_icc simulates data whose measured ICC matches: for the NB model the
+  # level-1 (residual) variance is trigamma(1 / phi) + pi^2 / 3, not 1 / phi.
+  resid_var   <- .mysterycall_latent_dist_var(is_nb = TRUE, theta = phi)
+  sigma_state <- sqrt(state_icc / (1 - state_icc) * resid_var)
 
   # Fixed design across replicates: power reflects outcome variability, not
   # design variability.

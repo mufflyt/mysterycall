@@ -7,9 +7,13 @@ NULL
 #'
 #' Extracts variance components from a fitted mixed model via [lme4::VarCorr()],
 #' computes the intraclass correlation coefficient (ICC), and generates a
-#' manuscript-ready interpretive sentence. Handles Poisson GLMER models where
-#' the residual scale parameter (\code{sc}) is unavailable by returning
-#' \code{icc = NA} with an informative message.
+#' manuscript-ready interpretive sentence. For Gaussian LMMs the residual
+#' variance is the estimated \code{sc^2}. For non-Gaussian GLMMs (Poisson,
+#' binomial, negative binomial) it uses the canonical latent-scale distribution
+#' variance (Nakagawa & Schielzeth: \eqn{\pi^2/3} for Poisson/binomial,
+#' \eqn{\psi_1(1/\theta) + \pi^2/3} for negative binomial), matching
+#' \code{\link{mysterycall_icc}()}. \code{icc} is \code{NA} only when the family
+#' is unknown and no residual scale is available.
 #'
 #' @param model A fitted mixed model (\code{glmerMod}, \code{lmerMod}, etc.)
 #'   from lme4.
@@ -25,8 +29,10 @@ NULL
 #'       coefficient.}
 #'     \item{\code{random_variance}}{Numeric. Variance of the first random-effect
 #'       group.}
-#'     \item{\code{residual_variance}}{Numeric or \code{NA}. Residual variance
-#'       (\code{sc^2}). \code{NA} for Poisson GLMER.}
+#'     \item{\code{residual_variance}}{Numeric or \code{NA}. Level-1 variance on
+#'       the ICC scale: \code{sc^2} for Gaussian LMMs, the latent-scale
+#'       distribution variance for GLMMs. \code{NA} only for unknown families
+#'       with no residual scale.}
 #'     \item{\code{random_effect_group}}{Character. Name of the first random-effect
 #'       grouping factor.}
 #'     \item{\code{var_table}}{Data frame. Output of
@@ -85,9 +91,29 @@ mysterycall_random_effect_variance <- function(model,
   random_variance      <- vc_df$vcov[1L]
   random_effect_group  <- as.character(vc_df$grp[1L])
 
-  # sc may be NA for Poisson family (no residual scale)
-  sc               <- attr(vc, "sc")
-  residual_variance <- if (!is.null(sc) && !is.na(sc) && sc != 0) sc^2 else NA_real_
+  # Residual (level-1) variance on the ICC scale. For a Gaussian LMM this is the
+  # estimated residual variance (sc^2). For a non-Gaussian GLMM sc is a fixed 1
+  # (or NA) and using it would give sigma_u^2 / (sigma_u^2 + 1), contradicting
+  # mysterycall_icc(). Instead use the canonical latent-scale distribution
+  # variance (Nakagawa & Schielzeth): pi^2/3 for Poisson/binomial,
+  # trigamma(1/theta) + pi^2/3 for negative binomial.
+  sc  <- attr(vc, "sc")
+  fam <- tryCatch(tolower(stats::family(model)$family), error = function(e) NA_character_)
+
+  sc2_or_na <- if (!is.null(sc) && !is.na(sc) && sc != 0) sc^2 else NA_real_
+
+  if (!is.na(fam) && fam == "gaussian") {
+    residual_variance <- sc2_or_na
+  } else if (!is.na(fam) && grepl("nbinom|negbin|negative", fam)) {
+    theta <- tryCatch(glmmTMB::sigma(model), error = function(e) NA_real_)
+    residual_variance <- .mysterycall_latent_dist_var(is_nb = TRUE, theta = theta)
+  } else if (!is.na(fam) &&
+             grepl("poisson|binomial|genpois|truncated", fam)) {
+    residual_variance <- .mysterycall_latent_dist_var(is_nb = FALSE)
+  } else {
+    # Unknown family: fall back to the residual scale if lme4 provides one.
+    residual_variance <- sc2_or_na
+  }
 
   # ICC
   icc <- if (!is.na(residual_variance) && (random_variance + residual_variance) > 0) {

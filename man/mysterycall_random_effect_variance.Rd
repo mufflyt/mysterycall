@@ -28,8 +28,10 @@ A named list with:
 coefficient.}
 \item{\code{random_variance}}{Numeric. Variance of the first random-effect
 group.}
-\item{\code{residual_variance}}{Numeric or \code{NA}. Residual variance
-(\code{sc^2}). \code{NA} for Poisson GLMER.}
+\item{\code{residual_variance}}{Numeric or \code{NA}. Level-1 variance on
+the ICC scale: \code{sc^2} for Gaussian LMMs, the latent-scale
+distribution variance for GLMMs. \code{NA} only for unknown families
+with no residual scale.}
 \item{\code{random_effect_group}}{Character. Name of the first random-effect
 grouping factor.}
 \item{\code{var_table}}{Data frame. Output of
@@ -44,9 +46,13 @@ interpretation paragraph.}
 \description{
 Extracts variance components from a fitted mixed model via \code{\link[lme4:VarCorr]{lme4::VarCorr()}},
 computes the intraclass correlation coefficient (ICC), and generates a
-manuscript-ready interpretive sentence. Handles Poisson GLMER models where
-the residual scale parameter (\code{sc}) is unavailable by returning
-\code{icc = NA} with an informative message.
+manuscript-ready interpretive sentence. For Gaussian LMMs the residual
+variance is the estimated \code{sc^2}. For non-Gaussian GLMMs (Poisson,
+binomial, negative binomial) it uses the canonical latent-scale distribution
+variance (Nakagawa & Schielzeth: \eqn{\pi^2/3} for Poisson/binomial,
+\eqn{\psi_1(1/\theta) + \pi^2/3} for negative binomial), matching
+\code{\link{mysterycall_icc}()}. \code{icc} is \code{NA} only when the family
+is unknown and no residual scale is available.
 }
 \examples{
 \dontrun{
