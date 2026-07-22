@@ -86,7 +86,7 @@ mysterycall_overdispersion_sentence <- function(model,
   }
 
   interpretation <- if (p_value < 0.05) {
-    if (ratio > 1.5) {
+    if (ratio > mysterycall_overdispersion_threshold()) {
       paste0(
         "Significant overdispersion detected (ratio = ", round(ratio, digits_ratio),
         "). Consider using a Negative Binomial model to account for overdispersion."
@@ -94,7 +94,7 @@ mysterycall_overdispersion_sentence <- function(model,
     } else if (ratio > 1.2) {
       paste0(
         "Mild overdispersion detected (ratio = ", round(ratio, digits_ratio),
-        "). Consider a quasi-Poisson or Negative Binomial model."
+        "), below the negative-binomial switch threshold; the Poisson model may still be adequate."
       )
     } else {
       paste0(
@@ -117,7 +117,7 @@ mysterycall_overdispersion_sentence <- function(model,
     interpretation
   )
 
-  overdispersed <- (p_value < 0.05) && (ratio > 1.2)
+  overdispersed <- (p_value < 0.05) && (ratio > mysterycall_overdispersion_threshold())
 
   list(
     chisq          = Pearson_chisq,

@@ -14,7 +14,7 @@ mysterycall_marginal_power(
   pop_stratum,
   condition_levels = c("A", "B"),
   family = c("negbin", "poisson", "auto"),
-  disp_threshold = 1.5,
+  disp_threshold = mysterycall_overdispersion_threshold(),
   alpha = 0.05,
   n_sim = 200,
   seed = NULL

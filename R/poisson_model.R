@@ -297,10 +297,10 @@ mysterycall_poisson_model <- function(data,
   df_resid       <- nrow(data_cc) - length(lme4::fixef(model))
   overdispersion <- sum(pearson_resid^2, na.rm = TRUE) / max(df_resid, 1L)
 
-  if (overdispersion > 2) {
+  if (overdispersion > mysterycall_overdispersion_threshold()) {
     warning(sprintf(
-      "Overdispersion detected (phi = %.2f). Standard errors may be underestimated. Consider a negative binomial model.",
-      overdispersion
+      "Overdispersion detected (phi = %.2f > %.2f). Standard errors may be underestimated. Consider a negative binomial model.",
+      overdispersion, mysterycall_overdispersion_threshold()
     ), call. = FALSE)
   }
 

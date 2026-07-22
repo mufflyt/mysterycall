@@ -218,14 +218,14 @@ mysterycall_simple_poisson <- function(data,
     ))
   }
 
-  if (phi > 1.5) {
+  if (phi > mysterycall_overdispersion_threshold()) {
     lines <- c(lines, sprintf(
       paste0(
-        "Note: the Pearson dispersion statistic is %.2f (> 1.5), suggesting ",
+        "Note: the Pearson dispersion statistic is %.2f (> %.2f), suggesting ",
         "overdispersion. Consider negative-binomial regression via ",
         "mysterycall_nb_model()."
       ),
-      phi
+      phi, mysterycall_overdispersion_threshold()
     ))
   }
 

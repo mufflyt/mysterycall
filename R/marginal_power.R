@@ -60,7 +60,7 @@ mysterycall_marginal_power <- function(n_subject, cell_means, sigma_subject, phi
                                        stratum_sampling, pop_stratum,
                                        condition_levels = c("A", "B"),
                                        family = c("negbin", "poisson", "auto"),
-                                       disp_threshold = 1.5, alpha = 0.05,
+                                       disp_threshold = mysterycall_overdispersion_threshold(), alpha = 0.05,
                                        n_sim = 200, seed = NULL) {
   family <- match.arg(family)
   checkmate::assert_integerish(n_subject, lower = 2, any.missing = FALSE,

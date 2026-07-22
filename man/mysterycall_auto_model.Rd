@@ -9,7 +9,7 @@ mysterycall_auto_model(
   outcome,
   predictors,
   random_intercept,
-  phi_threshold = 2,
+  phi_threshold = mysterycall_overdispersion_threshold(),
   conf_level = 0.95,
   include_lmm = TRUE,
   lmm_normality_threshold = 0.05,

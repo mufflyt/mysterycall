@@ -205,12 +205,12 @@ mysterycall_overdispersion_test <- function(
 
   } else if (phi < moderate_t) {
     interpretation <- sprintf(
-      "Mild overdispersion (phi=%s). Negative binomial model may improve fit.",
+      "Mild overdispersion (phi=%s), below the negative-binomial switch threshold.",
       phi_fmt
     )
     recommendation <- paste(
-      "Consider fitting a negative binomial model with",
-      "mysterycall_nb_model() to improve standard-error estimates."
+      "The Poisson model is likely adequate; monitor diagnostics.",
+      "Switch to mysterycall_nb_model() only if phi reaches the moderate band."
     )
     category <- "mild"
 
