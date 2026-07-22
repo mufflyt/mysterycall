@@ -62,6 +62,12 @@ mysterycall_link_physicians <- function(df_a, df_b, name_cols,
          "Install it with: install.packages(\"fastLink\")", call. = FALSE)
   }
 
+  # fastLink mutates global options (e.g. sets `digits` to 16) and does not
+  # restore them; snapshot the option set and put it back so this function does
+  # not leak state into the caller's session.
+  old_opts <- options()
+  on.exit(options(old_opts), add = TRUE)
+
   run_pair <- function(a, b, off_a = 0L, off_b = 0L) {
     # fastLink's `partial.match` takes a vector of variable NAMES to allow
     # partial agreement on, not a logical; only pass it when requested.
