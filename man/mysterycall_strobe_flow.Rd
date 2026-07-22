@@ -19,7 +19,7 @@ mysterycall_strobe_flow(
   excl_detail = NULL,
   label_total = "Call attempts logged",
   label_calldate = "Call date recorded\\n(call was placed)",
-  label_included = "Scheduling discussion possible\\n(exclusion code = 0)",
+  label_included = "Analytic sample: reached offices\\n(exclusion codes 0, 7, 9, 10)",
   label_logistic = "Logistic analysis\\nOutcome: appointment offered (yes/no)",
   label_waittime = "Wait-time analysis\\nOutcome: days to appointment",
   label_excl_calldate = "No call date recorded",
@@ -57,8 +57,10 @@ nor \code{prepared} is supplied.}
 
 \item{n_calldate}{Integer. Records with a call date present.}
 
-\item{n_included}{Integer. Records with exclusion code 0 (scheduling
-discussion took place).}
+\item{n_included}{Integer. The logistic analytic sample: reached offices with
+exclusion codes in {0, 7, 9, 10} (reached-but-declined kept as
+appointment-not-offered). When derived from \code{data}/\code{prepared}, this is
+\code{nrow(prepared$logistic_data)}, matching \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}.}
 
 \item{n_logistic}{Integer. Records entering the logistic model.
 Defaults to \code{n_included}.}

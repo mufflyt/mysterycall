@@ -54,8 +54,10 @@ NULL
 #' @param n_total Integer. Total call records.  Required when neither `data`
 #'   nor `prepared` is supplied.
 #' @param n_calldate Integer. Records with a call date present.
-#' @param n_included Integer. Records with exclusion code 0 (scheduling
-#'   discussion took place).
+#' @param n_included Integer. The logistic analytic sample: reached offices with
+#'   exclusion codes in {0, 7, 9, 10} (reached-but-declined kept as
+#'   appointment-not-offered). When derived from `data`/`prepared`, this is
+#'   `nrow(prepared$logistic_data)`, matching [mysterycall_prepare_calls()].
 #' @param n_logistic Integer. Records entering the logistic model.
 #'   Defaults to `n_included`.
 #' @param n_waittime Integer. Records entering the wait-time model
@@ -130,7 +132,7 @@ mysterycall_strobe_flow <- function(
     excl_detail      = NULL,
     label_total      = "Call attempts logged",
     label_calldate   = "Call date recorded\n(call was placed)",
-    label_included   = "Scheduling discussion possible\n(exclusion code = 0)",
+    label_included   = "Analytic sample: reached offices\n(exclusion codes 0, 7, 9, 10)",
     label_logistic   = "Logistic analysis\nOutcome: appointment offered (yes/no)",
     label_waittime   = "Wait-time analysis\nOutcome: days to appointment",
     label_excl_calldate = "No call date recorded",
@@ -175,25 +177,24 @@ mysterycall_strobe_flow <- function(
     n_total    <- n_total    %||% wf$n_remaining[1L]
     n_calldate <- n_calldate %||% wf$n_remaining[2L]
 
-    # n_included = records with exclusion code 0 specifically
-    if (is.null(n_included) && !is.null(prepared$exclusion_summary)) {
-      es     <- prepared$exclusion_summary
-      codes  <- as.character(es$Code)
-      codes[is.na(es$Code)] <- "NA"
-      n_included <- as.integer(es$Freq[codes == "0"])
-      if (length(n_included) != 1L) n_included <- NULL
-    }
+    # n_included / n_logistic = the logistic analysis set: reached offices with
+    # exclusion codes in {0,7,9,10} (reached-but-declined kept as appointment-not-
+    # offered), i.e. nrow(prepared$logistic_data). Previously this box counted
+    # exclusion-code-0 only, contradicting the mysterycall_prepare_calls()
+    # pipeline it is built from (it undercounted by the reached-but-declined rows
+    # and made the wait-time exclusion box arithmetic wrong).
+    logistic_codes <- c("0", "7", "9", "10")
     n_included <- n_included %||% nrow(prepared$logistic_data)
-    n_logistic <- n_logistic %||% n_included
+    n_logistic <- n_logistic %||% nrow(prepared$logistic_data)
     n_waittime <- n_waittime %||% nrow(prepared$waittime_data)
 
-    # excl_detail: per-code counts, excluding code 0
+    # excl_detail: per-code SCREENING exclusions = codes NOT in the logistic set.
     if (is.null(excl_detail) && !is.null(prepared$exclusion_summary)) {
       es     <- prepared$exclusion_summary
       codes  <- as.character(es$Code)
       codes[is.na(es$Code)] <- "NA"
       excl_detail <- stats::setNames(as.integer(es$Freq), codes)
-      excl_detail <- excl_detail[codes != "0"]
+      excl_detail <- excl_detail[!codes %in% logistic_codes]
     }
   }
 
@@ -280,7 +281,7 @@ mysterycall_strobe_flow <- function(
   # Screening exclusion box height: fill 80% of the available gap between
   # box2-bottom and box3-top so the box never overlaps the main-column boxes.
   n_det_lines <- if (!is.null(excl_detail))
-    sum(excl_detail[names(excl_detail) != "0"] > 0, na.rm = TRUE) else 0L
+    sum(excl_detail > 0, na.rm = TRUE) else 0L
   available   <- ((y2 - bh) - (y3 + bh)) / 2   # half of gap between boxes
   ebh_screen  <- available * 0.90                # use 90% of that half-gap
 
