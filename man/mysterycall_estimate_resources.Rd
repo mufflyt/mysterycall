@@ -73,6 +73,7 @@ Other utilities:
 \code{\link{mysterycall_parse_redcap_labels}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
+\code{\link{mysterycall_reached_declined_reasons}()},
 \code{\link{mysterycall_read_latest}()},
 \code{\link{mysterycall_read_table}()},
 \code{\link{mysterycall_require_arrow}()},
