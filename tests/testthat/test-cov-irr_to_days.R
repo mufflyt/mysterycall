@@ -472,6 +472,7 @@ test_that("mysterycall_irr_to_days table includes all expected columns", {
   )
 
   expected_cols <- c("term", "level", "irr", "days_mean", "days_diff",
-                     "days_ci_lower", "days_ci_upper", "direction", "p_value_fmt")
+                     "days_ci_lower", "days_ci_upper", "direction", "p_value_fmt",
+                     "p_value")
   expect_named(result$table, expected_cols)
 })

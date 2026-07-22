@@ -180,6 +180,15 @@ mysterycall_irr_to_days <- function(model_result,
     rep(NA_character_, nrow(irr_tbl))
   }
 
+  # Numeric p-value for the significance decision (kept separate from the
+  # formatted string). Significance is decided by p < 0.05; the day-difference
+  # CI stays descriptive in the sentence.
+  p_num <- if ("p_value" %in% names(irr_tbl)) {
+    suppressWarnings(as.numeric(irr_tbl$p_value))
+  } else {
+    suppressWarnings(as.numeric(sub("^<", "", as.character(p_fmt))))
+  }
+
   tbl <- data.frame(
     term          = as.character(irr_tbl$term),
     level         = level_label,
@@ -190,6 +199,7 @@ mysterycall_irr_to_days <- function(model_result,
     days_ci_upper = days_ci_upper,
     direction     = direction,
     p_value_fmt   = p_fmt,
+    p_value       = p_num,
     stringsAsFactors = FALSE
   )
 
@@ -223,9 +233,17 @@ mysterycall_irr_to_days <- function(model_result,
 
     p_part <- if (!is.na(r$p_value_fmt)) sprintf("; p = %s", r$p_value_fmt) else ""
 
-    crosses_zero <- !is.na(r$days_ci_lower) && !is.na(r$days_ci_upper) &&
-      r$days_ci_lower < 0 && r$days_ci_upper > 0
-    ns_part <- if (crosses_zero) " (difference not statistically significant)" else ""
+    # Significance by p < 0.05 when a p-value is available; otherwise fall back
+    # to whether the day-difference CI crosses zero (the CI is the only signal
+    # when p is absent). This removes the p-vs-CI contradiction: when both exist,
+    # the p-value decides.
+    not_sig <- if (!is.na(r$p_value)) {
+      r$p_value >= 0.05
+    } else {
+      !is.na(r$days_ci_lower) && !is.na(r$days_ci_upper) &&
+        r$days_ci_lower < 0 && r$days_ci_upper > 0
+    }
+    ns_part <- if (isTRUE(not_sig)) " (difference not statistically significant)" else ""
 
     sentences[i] <- sprintf(
       "%s waited a mean of %s %s days %s (95%% CI %s to %s days; IRR %s%s)%s.",
