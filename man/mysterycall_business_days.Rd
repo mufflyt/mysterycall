@@ -59,6 +59,7 @@ if (requireNamespace("bizdays", quietly = TRUE)) {
 \code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}}, \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
 
 Other business days: 
+\code{\link{mysterycall_appointment_obtained}()},
 \code{\link{mysterycall_count_business_days}()},
 \code{\link{mysterycall_us_federal_calendar}()}
 }
