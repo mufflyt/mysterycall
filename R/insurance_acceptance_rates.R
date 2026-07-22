@@ -37,6 +37,10 @@
 #' @param phone_col Character scalar. Distinct unit for counting.
 #'   Default `"phone"`.
 #' @param contact_value Character scalar. Default `"Able to contact"`.
+#' @param reached_declined_values Character vector of `exclusion_col` strings for
+#'   offices reached but declined; these are kept in the denominator (every
+#'   other non-contact reason is excluded as unreachable). Default
+#'   [mysterycall_reached_declined_reasons()].
 #' @param medicaid_label Character scalar. Default `"Medicaid"`.
 #' @param bcbs_label Character scalar. Default `"Blue Cross/Blue Shield"`.
 #' @param digits Integer. Decimal places for rates. Default `1`.
@@ -92,6 +96,7 @@ mysterycall_insurance_acceptance_rates <- function(
     medicaid_accept_col = "does_the_physician_accept_medicaid",
     phone_col           = "phone",
     contact_value       = "Able to contact",
+    reached_declined_values = mysterycall_reached_declined_reasons(),
     medicaid_label      = "Medicaid",
     bcbs_label          = "Blue Cross/Blue Shield",
     digits              = 1L,
@@ -144,7 +149,8 @@ mysterycall_insurance_acceptance_rates <- function(
   count_medicaid_excluded <- data |>
     dplyr::filter(!is.na(.data[[insurance_col]])) |>
     dplyr::filter(.data[[insurance_col]] == medicaid_label) |>
-    dplyr::filter(.data[[exclusion_col]] != contact_value) |>
+    dplyr::filter(.data[[exclusion_col]] != contact_value,
+                  !(.data[[exclusion_col]] %in% reached_declined_values)) |>
     dplyr::distinct(.data[[phone_col]]) |>
     nrow()
 
@@ -174,7 +180,8 @@ mysterycall_insurance_acceptance_rates <- function(
   count_bcbs_excluded <- data |>
     dplyr::filter(!is.na(.data[[insurance_col]])) |>
     dplyr::filter(.data[[insurance_col]] == bcbs_label) |>
-    dplyr::filter(.data[[exclusion_col]] != contact_value) |>
+    dplyr::filter(.data[[exclusion_col]] != contact_value,
+                  !(.data[[exclusion_col]] %in% reached_declined_values)) |>
     dplyr::distinct(.data[[phone_col]]) |>
     nrow()
 

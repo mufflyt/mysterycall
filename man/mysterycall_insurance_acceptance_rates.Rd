@@ -12,6 +12,7 @@ mysterycall_insurance_acceptance_rates(
   medicaid_accept_col = "does_the_physician_accept_medicaid",
   phone_col = "phone",
   contact_value = "Able to contact",
+  reached_declined_values = mysterycall_reached_declined_reasons(),
   medicaid_label = "Medicaid",
   bcbs_label = "Blue Cross/Blue Shield",
   digits = 1L,
@@ -35,6 +36,11 @@ before counting acceptances. Default \code{"does_the_physician_accept_medicaid"}
 Default \code{"phone"}.}
 
 \item{contact_value}{Character scalar. Default \code{"Able to contact"}.}
+
+\item{reached_declined_values}{Character vector of \code{exclusion_col} strings for
+offices reached but declined; these are kept in the denominator (every
+other non-contact reason is excluded as unreachable). Default
+\code{\link[=mysterycall_reached_declined_reasons]{mysterycall_reached_declined_reasons()}}.}
 
 \item{medicaid_label}{Character scalar. Default \code{"Medicaid"}.}
 

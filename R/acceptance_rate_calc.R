@@ -43,6 +43,15 @@
 #' @param inclusion_value Character scalar.  The exact string in
 #'   `inclusion_col` that means "successfully contacted".
 #'   Default `"Able to contact"`.
+#' @param reached_declined_values Character vector of `inclusion_col` strings for
+#'   offices that were **reached but declined** ("Not accepting new patients",
+#'   "Referral required", ">5 min on hold"). These are kept in the denominator
+#'   (the office was reached and said no) even though they are not in the
+#'   numerator; every other non-`inclusion_value` reason is treated as
+#'   unreachable and excluded. This keeps the denominator consistent with
+#'   [mysterycall_exclusion_summary()]'s `n_reached`. Default
+#'   [mysterycall_reached_declined_reasons()]. Must match your data's reason
+#'   vocabulary; override consistently across acceptance-rate functions.
 #' @param wait_col Character scalar or `NULL`.  Name of a numeric column
 #'   holding days to appointment.  When non-`NULL`, only rows with
 #'   `wait_col > 0` contribute to the numerator (rows with `wait_col == 0`
@@ -134,6 +143,7 @@ mysterycall_acceptance_rate_calc <- function(
     insurance_groups    = NULL,
     inclusion_col       = "reason_for_exclusions",
     inclusion_value     = "Able to contact",
+    reached_declined_values = mysterycall_reached_declined_reasons(),
     wait_col            = "business_days_until_appointment",
     id_col              = "phone",
     medicaid_accept_col = NULL,
@@ -287,8 +297,14 @@ mysterycall_acceptance_rate_calc <- function(
     ids_pool  <- unique(id_vec[mask & !is.na(id_vec)])
     n_total   <- length(ids_pool)
 
-    # excluded: reachability not confirmed
-    excl_mask <- mask & !is.na(incl_vec) & incl_vec != inclusion_value
+    # excluded: office was never reached. A reached office that declined
+    # ("Not accepting new patients", "Referral required", ">5 min on hold")
+    # stays in the denominator; only non-contact reasons that are NOT one of
+    # those reached-but-declined outcomes are excluded. This keeps the reached
+    # set consistent with mysterycall_exclusion_summary()'s n_reached.
+    excl_mask <- mask & !is.na(incl_vec) &
+      incl_vec != inclusion_value &
+      !(incl_vec %in% reached_declined_values)
     ids_excl  <- unique(id_vec[excl_mask & !is.na(id_vec)])
     n_excluded <- length(ids_excl)
 

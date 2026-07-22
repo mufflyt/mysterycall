@@ -10,6 +10,7 @@ mysterycall_acceptance_rate_calc(
   insurance_groups = NULL,
   inclusion_col = "reason_for_exclusions",
   inclusion_value = "Able to contact",
+  reached_declined_values = mysterycall_reached_declined_reasons(),
   wait_col = "business_days_until_appointment",
   id_col = "phone",
   medicaid_accept_col = NULL,
@@ -36,6 +37,16 @@ considered successfully contacted.  Default \code{"reason_for_exclusions"}.}
 \item{inclusion_value}{Character scalar.  The exact string in
 \code{inclusion_col} that means "successfully contacted".
 Default \code{"Able to contact"}.}
+
+\item{reached_declined_values}{Character vector of \code{inclusion_col} strings for
+offices that were \strong{reached but declined} ("Not accepting new patients",
+"Referral required", ">5 min on hold"). These are kept in the denominator
+(the office was reached and said no) even though they are not in the
+numerator; every other non-\code{inclusion_value} reason is treated as
+unreachable and excluded. This keeps the denominator consistent with
+\code{\link[=mysterycall_exclusion_summary]{mysterycall_exclusion_summary()}}'s \code{n_reached}. Default
+\code{\link[=mysterycall_reached_declined_reasons]{mysterycall_reached_declined_reasons()}}. Must match your data's reason
+vocabulary; override consistently across acceptance-rate functions.}
 
 \item{wait_col}{Character scalar or \code{NULL}.  Name of a numeric column
 holding days to appointment.  When non-\code{NULL}, only rows with
