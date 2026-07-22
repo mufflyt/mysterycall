@@ -35,12 +35,12 @@ test_that("mysterycall_table_percentages - single-level vector is 100%", {
   expect_equal(result$percent[1], 100)
 })
 
-test_that("mysterycall_table_percentages - NAs are counted as their own level by dplyr::count", {
+test_that("mysterycall_table_percentages - NAs excluded from count and denominator", {
   df <- data.frame(cat = c("A", NA, "A", "C", "A", "B", "B", NA))
-  # Without na.rm: A=3, B=2, NA=2, C=1, total=8; A wins
+  # NA excluded: A=3, B=2, C=1, non-missing total=6; A wins at 3/6 = 50%
   result <- mysterycall_table_percentages(df, "cat")
   expect_equal(result$n[1], 3L)
-  expect_equal(result$percent[1], 37.5)
+  expect_equal(result$percent[1], 50)
 })
 
 test_that("mysterycall_table_percentages - variable passed as string is accepted", {

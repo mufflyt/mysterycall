@@ -49,7 +49,7 @@ test_that("Happy path: three-way tie returns all tied levels", {
 })
 
 
-test_that("Edge case: NA values are counted as their own level", {
+test_that("Edge case: NA excluded from count and denominator", {
   df <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
   result <- mysterycall_table_percentages(df, "category")
 
@@ -57,19 +57,17 @@ test_that("Edge case: NA values are counted as their own level", {
   expect_equal(nrow(result), 1L)
   expect_equal(result$category, "A")
   expect_equal(result$n, 3L)
-  expect_equal(result$percent, 100 * 3 / 8)  # 8 total rows including NAs
+  expect_equal(result$percent, 100 * 3 / 6)  # 6 non-missing rows -> 50%
 })
 
 
-test_that("Edge case: all NA values", {
+test_that("Edge case: all NA values yields no non-missing level", {
   df <- data.frame(category = c(NA, NA, NA))
   result <- mysterycall_table_percentages(df, "category")
 
   expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 1L)
-  expect_true(is.na(result$category))
-  expect_equal(result$n, 3L)
-  expect_equal(result$percent, 100.0)
+  expect_equal(nrow(result), 0L)
+  expect_true("percent" %in% names(result))
 })
 
 
