@@ -72,9 +72,14 @@ mysterycall_most_common_gender <- function(data) {
     list(value = most_common[[1]], proportion = proportion)
   }
 
-  # Most common gender
-  gender_info <- calculate_proportion(data, "gender")
-  most_gender <- tolower(gender_info$value)
+  # Most common gender. Fold case/whitespace first so "Male" and "male" are one
+  # level, not two — otherwise the mode and its proportion split across casings
+  # (e.g. "Male"/"male"/"female" reads as a 3-way tie instead of 2/3 male).
+  # Matches mysterycall_prepare_table1_vars() and the lowercase output below.
+  data_gender <- data
+  data_gender[["gender"]] <- tolower(trimws(as.character(data_gender[["gender"]])))
+  gender_info <- calculate_proportion(data_gender, "gender")
+  most_gender <- gender_info$value          # already lowercase
   proportion_gender <- gender_info$proportion
 
   # Most common specialty

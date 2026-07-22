@@ -59,3 +59,17 @@ test_that("mysterycall_most_common_gender handles large datasets correctly", {
   expect_equal(result, expected)
 })
 
+
+test_that("most_common_gender folds case: 'Male' and 'male' are one level", {
+  # Regression: mixed casing must not split the gender mode into two levels.
+  df <- data.frame(
+    gender                   = c("Male", "male", "female"),
+    specialty                = c("OB/GYN", "OB/GYN", "OB/GYN"),
+    Provider.Credential.Text = c("MD", "MD", "MD"),
+    academic_affiliation     = c("Yes", "Yes", "No"),
+    stringsAsFactors = FALSE
+  )
+  result <- mysterycall_most_common_gender(df)
+  # 2 of 3 are male once case is folded -> "male (66.7%)", not "male (33.3%)"
+  expect_match(result, "most common gender in the dataset was male \\(66\\.7%\\)")
+})
