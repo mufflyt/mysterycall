@@ -282,18 +282,46 @@ mysterycall_check_academic_name_patterns <- function(org_name, confidence_thresh
     }
   }
 
-  if (confidence_threshold <= 0.80) {
-    for (pattern in ACADEMIC_HOSPITAL_PATTERNS$moderate) {
-      matches <- grepl(pattern, org_upper, fixed = TRUE)
+  # ---- Additional academic evidence + shared vocabulary ----------------------
+  # Raise the confidence to `conf` wherever a pattern matches and the current
+  # score is lower. Patterns are matched as (perl) regex so the ".*" indicators
+  # work; NA names never match.
+  .apply_patterns <- function(results, patterns, conf, tag,
+                              subject = org_upper, ignore_case = FALSE) {
+    for (pattern in patterns) {
+      matches <- grepl(pattern, subject, perl = TRUE, ignore.case = ignore_case)
+      matches[is.na(matches)] <- FALSE
       if (any(matches)) {
-        update_idx <- matches & (results$confidence_score < 0.80)
-        results$academic_indicator[update_idx] <- TRUE
-        results$confidence_score[update_idx] <- 0.80
+        results$academic_indicator[matches] <- TRUE
+        idx <- matches & (results$confidence_score < conf)
+        results$confidence_score[idx] <- conf
         results$matched_pattern[matches & is.na(results$matched_pattern)] <-
-          sprintf("MODERATE: %s", pattern)
+          sprintf("%s: %s", tag, pattern)
       }
     }
+    results
   }
+
+  # Previously-unused evidence constants, at their documented confidences.
+  results <- .apply_patterns(results, NIH_CTSA_HUBS,             0.99, "NIH_CTSA")
+  results <- .apply_patterns(results, ACGME_PROGRAM_INDICATORS,  0.98, "ACGME")
+  results <- .apply_patterns(results, NCI_CANCER_CENTERS,        0.98, "NCI")
+  results <- .apply_patterns(results, MEDICAL_SCHOOL_INDICATORS, 0.97, "MED_SCHOOL")
+  results <- .apply_patterns(results, COTH_TEACHING_INDICATORS,  0.95, "COTH")
+  results <- .apply_patterns(results, MEDICARE_GME_INDICATORS,   0.95, "GME")
+
+  # Moderate tier, now reachable at the default 0.85 threshold (previously gated
+  # at <= 0.80 and never executed). "MEDICAL CENTER" etc. now classify academic,
+  # matching mysterycall_classify_practice_setting().
+  results <- .apply_patterns(results, ACADEMIC_HOSPITAL_PATTERNS$moderate,
+                             0.85, "MODERATE")
+
+  # Shared broad vocabulary: the SAME academic keyword list used by
+  # mysterycall_classify_practice_setting(), so the two classifiers agree on
+  # names like Duke / Emory / Cancer Center / Health System. Matched
+  # case-insensitively on the raw name.
+  results <- .apply_patterns(results, mysterycall_academic_patterns(),
+                             0.85, "SHARED", subject = org_name, ignore_case = TRUE)
 
   below_threshold <- results$confidence_score < confidence_threshold
   results$academic_indicator[below_threshold] <- FALSE

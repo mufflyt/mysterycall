@@ -53,18 +53,18 @@ test_that("mysterycall_check_academic_name_patterns correctly identifies known i
 })
 
 test_that("mysterycall_check_academic_name_patterns respects confidence threshold parameter", {
-  # "Medical Center" pattern has confidence 0.80 (moderate)
+  # "Medical Center" now scores 0.85 (moderate tier is reachable + shared vocab)
   org_names <- "Medical Center"
 
-  # With default threshold 0.85, score < 0.85 should be zeroed out
-  result_high_threshold <- suppressMessages(mysterycall_check_academic_name_patterns(org_names, confidence_threshold = 0.85))
-  expect_false(result_high_threshold$academic_indicator[1])
-  expect_equal(result_high_threshold$confidence_score[1], 0.0)
+  # At the default 0.85 threshold, 0.85 >= 0.85 -> included
+  result_default <- suppressMessages(mysterycall_check_academic_name_patterns(org_names, confidence_threshold = 0.85))
+  expect_true(result_default$academic_indicator[1])
+  expect_equal(result_default$confidence_score[1], 0.85)
 
-  # With lower threshold 0.75, score 0.80 >= 0.75 should be included
-  result_low_threshold <- suppressMessages(mysterycall_check_academic_name_patterns(org_names, confidence_threshold = 0.75))
-  expect_true(result_low_threshold$academic_indicator[1])
-  expect_equal(result_low_threshold$confidence_score[1], 0.80)
+  # At a stricter threshold 0.90, the 0.85 score is below it -> zeroed out
+  result_strict <- suppressMessages(mysterycall_check_academic_name_patterns(org_names, confidence_threshold = 0.90))
+  expect_false(result_strict$academic_indicator[1])
+  expect_equal(result_strict$confidence_score[1], 0.0)
 })
 
 test_that("mysterycall_check_academic_name_patterns handles edge cases correctly", {
@@ -93,10 +93,11 @@ test_that("mysterycall_check_academic_name_patterns is case-insensitive", {
 })
 
 test_that("mysterycall_check_academic_name_patterns matches pattern tiers correctly", {
-  # very_high tier patterns (0.95 confidence)
+  # "School of Medicine" is now recognized by the wired-in medical-school
+  # indicators (0.97), which outrank the very_high tier (0.95).
   very_high <- suppressMessages(mysterycall_check_academic_name_patterns("School of Medicine", confidence_threshold = 0.85))
   expect_true(very_high$academic_indicator[1])
-  expect_equal(very_high$confidence_score[1], 0.95)
+  expect_equal(very_high$confidence_score[1], 0.97)
 
   # high tier patterns (0.90+ confidence; "University Hospital" is also in KNOWN_ACADEMIC_INSTITUTIONS)
   high <- suppressMessages(mysterycall_check_academic_name_patterns("University Hospital", confidence_threshold = 0.85))
