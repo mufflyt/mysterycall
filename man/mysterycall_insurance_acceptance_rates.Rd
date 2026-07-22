@@ -2,7 +2,7 @@
 % Please edit documentation in R/insurance_acceptance_rates.R
 \name{mysterycall_insurance_acceptance_rates}
 \alias{mysterycall_insurance_acceptance_rates}
-\title{Calculate Medicaid and BCBS Acceptance Rates}
+\title{Calculate Medicaid and BCBS Acceptance Rates (deprecated)}
 \usage{
 mysterycall_insurance_acceptance_rates(
   data,
@@ -67,6 +67,15 @@ excluded).}
 }
 }
 \description{
+\strong{Deprecated.} This is the hardcoded two-group
+(Medicaid + Blue Cross/Blue Shield) special case of the generalized
+\code{\link[=mysterycall_acceptance_rate_calc]{mysterycall_acceptance_rate_calc()}}, which handles any number of insurance
+groups and adds Wilson confidence intervals. Prefer
+\code{mysterycall_acceptance_rate_calc()}; pass
+\code{medicaid_screen_group = "Medicaid"} there to reproduce this function's
+asymmetric Medicaid-only NA-screen. Retained for its exact manuscript
+paragraph wording.
+
 Replicates the multi-step acceptance-rate calculation from the mystery-caller
 Rmd analysis: distinct-phone numerator (accepted + appointment), distinct-phone
 denominator (total minus excluded), and a manuscript-ready paragraph.
@@ -121,6 +130,7 @@ Other outcomes:
 \code{\link{mysterycall_caller_drift}()},
 \code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_forest_plot}()},
+\code{\link{mysterycall_gee}()},
 \code{\link{mysterycall_icc}()},
 \code{\link{mysterycall_icc_report}()},
 \code{\link{mysterycall_icc_sentence}()},

@@ -65,7 +65,9 @@ df <- data.frame(
 mysterycall_wait_time_summary(df, group_by = "insurance")
 }
 \seealso{
-\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}, and
+\code{\link[=mysterycall_wait_time_by_group]{mysterycall_wait_time_by_group()}} for the lean quantile-table-only variant
+(median/Q1/Q3/n with CSV export, no hypothesis test).
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
@@ -84,6 +86,7 @@ Other outcomes:
 \code{\link{mysterycall_caller_drift}()},
 \code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_forest_plot}()},
+\code{\link{mysterycall_gee}()},
 \code{\link{mysterycall_icc}()},
 \code{\link{mysterycall_icc_report}()},
 \code{\link{mysterycall_icc_sentence}()},

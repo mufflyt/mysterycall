@@ -75,6 +75,7 @@ Other descriptive helpers:
 \code{\link{mysterycall_distribution_summary}()},
 \code{\link{mysterycall_facet_histogram}()},
 \code{\link{mysterycall_log_histogram}()},
+\code{\link{mysterycall_scenario_coverage}()},
 \code{\link{mysterycall_scenario_summary}()},
 \code{\link{mysterycall_sensitivity_both_insurance}()}
 }

@@ -13,6 +13,7 @@ mysterycall_acceptance_rate_calc(
   wait_col = "business_days_until_appointment",
   id_col = "phone",
   medicaid_accept_col = NULL,
+  medicaid_screen_group = NULL,
   conf_level = 0.95
 )
 }
@@ -48,6 +49,14 @@ Default \code{"business_days_until_appointment"}.}
 \item{medicaid_accept_col}{Character scalar or \code{NULL}.  When non-\code{NULL},
 rows with \code{NA} in this column are excluded from the numerator.  Useful
 when a "Did you accept Medicaid?" field is present.  Default \code{NULL}.}
+
+\item{medicaid_screen_group}{Character vector or \code{NULL}.  Restricts the
+\code{medicaid_accept_col} NA-screen to only these insurance group(s).  This
+matters when the "Did you accept Medicaid?" field is, by design, \code{NA} on
+non-Medicaid rows: applying the screen to every group would then force
+those groups' rates to zero.  When \code{NULL} (default) the screen applies to
+all groups (the original behaviour); set e.g. \code{"Medicaid"} to screen only
+the Medicaid arm.  Ignored when \code{medicaid_accept_col} is \code{NULL}.}
 
 \item{conf_level}{Numeric scalar in (0, 1).  Confidence level for Wilson
 score intervals.  Default \code{0.95}.}
@@ -143,7 +152,11 @@ res2$sentences
 
 }
 \seealso{
-\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}.
+This function generalizes the two-group (Medicaid/BCBS)
+\code{\link[=mysterycall_insurance_acceptance_rates]{mysterycall_insurance_acceptance_rates()}}, which is now deprecated in its
+favor -- use \code{medicaid_screen_group = "Medicaid"} to reproduce the legacy
+asymmetric Medicaid-only NA-screen.
 
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
@@ -161,6 +174,7 @@ Other outcomes:
 \code{\link{mysterycall_caller_drift}()},
 \code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_forest_plot}()},
+\code{\link{mysterycall_gee}()},
 \code{\link{mysterycall_icc}()},
 \code{\link{mysterycall_icc_report}()},
 \code{\link{mysterycall_icc_sentence}()},

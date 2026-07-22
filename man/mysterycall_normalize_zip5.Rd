@@ -24,6 +24,9 @@ mysterycall:::mysterycall_normalize_zip5(90210)
 
 }
 \seealso{
+\code{\link[=mysterycall_clean_zip]{mysterycall_clean_zip()}} and \code{\link[=mysterycall_extract_zip5]{mysterycall_extract_zip5()}} for the
+general-purpose ZIP cleaners outside the address-normalization pipeline.
+
 Other address-normalization: 
 \code{\link{map_token}()},
 \code{\link{mysterycall_ascii_norm}()},

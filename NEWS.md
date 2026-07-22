@@ -1,6 +1,87 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Consolidation and deprecation
+
+- `mysterycall_acceptance_rate_calc()` gains a `medicaid_screen_group` argument
+  that restricts the `medicaid_accept_col` NA-screen to named insurance group(s)
+  instead of applying it to all groups. This lets the general calculator
+  reproduce the one behavior only the hardcoded two-group helper could -- an
+  asymmetric Medicaid-only screen, so a Medicaid-accept field that is `NA` on
+  non-Medicaid rows no longer zeroes those groups' rates.
+- `mysterycall_insurance_acceptance_rates()` is **deprecated** in favor of
+  `mysterycall_acceptance_rate_calc(medicaid_screen_group = "Medicaid")`, of
+  which it is the two-group (Medicaid/BCBS) special case. It still works and
+  keeps its exact manuscript paragraph.
+- Added mutual `@seealso` links across the overlapping ZIP cleaners
+  (`clean_zip` / `extract_zip5` / `normalize_zip5`), the wait-time summaries
+  (`wait_time_by_group` / `wait_time_summary`), and the emmeans plotters
+  (`plot_emmeans` / `plot_emmeans_interaction` / `plot_emmeans_full`) to clarify
+  which to use.
+
 ## New functions
+
+Generalized from the `isochrones` ENT access study (power/GLM) and the original
+urogyn `mystery_shopper_data` study (data prep), which hand-rolled them --
+filling the package's missing power quadrants and reusable field-cleaning
+helpers:
+
+- `mysterycall_adjusted_power()`: Monte Carlo power for a covariate-adjusted
+  negative-binomial GLMM with a **cluster ICC** -- a rural (exposure) fixed
+  effect, a subspecialty fixed effect, nuisance adjustment covariates, and a
+  state-level random intercept whose SD is derived from a target ICC
+  (`sigma = sqrt(ICC/(1-ICC) * 1/phi)`). Fills the gap left by the existing
+  physician-clustered power tools, which cannot express a higher-level cluster
+  as an ICC or adjust for confounders (`glmmTMB`).
+- `mysterycall_ttest_power()`: analytic two-group **continuous-outcome** power
+  (Cohen's d) with an unequal-allocation solver, for a study with a fixed
+  natural exposure fraction (e.g. 15% rural). The package's other analytic power
+  tools are all count/binary (`pwr`).
+- `mysterycall_lm_interaction_power()`: analytic Cohen's f-squared power for each
+  main effect and interaction of a saturated factorial model, at small/medium
+  effect sizes (`pwr`).
+- `mysterycall_parse_duration()`: parse messy free-text call durations
+  (`"1min 45 sec"`, `"1.5min"`, `"30sec"`, a bare number, `"O"`) to seconds or
+  minutes -- replaces the brittle per-study lookup table for hold-time and
+  call-length fields.
+- `mysterycall_clean_zip()`: take the first ZIP when several are present, strip a
+  ZIP+4 suffix, and left-pad to five digits (restoring leading zeros lost to
+  numeric parsing).
+- `mysterycall_categorize_wait()`: bin a days-to-appointment vector into weekly
+  categories plus a binary ">N-week wait" threshold flag, standardizing the
+  headline-outcome convention.
+- `mysterycall_link_physicians()`: probabilistic record linkage of two physician
+  lists that share no key, via `fastLink` Jaro-Winkler name matching with
+  optional blocking -- for reconciling a called cohort against an external
+  roster when there is no NPI (`fastLink`).
+
+Generalized from the `labubu` mystery-caller study, which hand-rolled them --
+design-integrity checks, a population-average sensitivity model, and two matched
+figures that were previously inline in the study's analysis scripts:
+
+- `mysterycall_scenario_coverage()`: per-cluster scenario-coverage table for a
+  matched multi-scenario audit -- how many practices were reached under the full
+  set of scenarios (complete) versus a partial set or a single scenario, plus a
+  missing-count per scenario. A design-integrity guard, since an unmatched
+  cluster key silently becomes a one-scenario singleton and deflates the paired
+  denominator of `mysterycall_paired_acceptance_mcnemar()` /
+  `mysterycall_paired_wait_within_practice()`. `print()` and `as.data.frame()`
+  methods.
+- `mysterycall_flag_near_duplicate_keys()`: edit-distance (`adist`) near-duplicate
+  detector over cluster keys -- catches the mistyped grouping value
+  (`"Womens"` vs. `"Women's"`) that `mysterycall_check_duplicates()` cannot,
+  because the strings differ. Flags a pair when its raw or length-normalized edit
+  distance is within threshold; the safety net that keeps a typo from splitting
+  one practice into two clusters.
+- `mysterycall_gee()`: population-average GEE (`geepack`, exchangeable working
+  correlation, robust SEs) as a marginal companion to the subject-specific
+  `mysterycall_logistic_model()` GLMM -- uses every record including the
+  singletons and dyads a matched analysis drops. Returns an odds-ratio table
+  with a complete-separation flag; `print()` and `as.data.frame()` methods.
+- `mysterycall_plot_raincloud()`: violin + boxplot + jittered-points figure of a
+  numeric outcome by group (the canonical skewed-wait-time-by-scenario plot).
+- `mysterycall_plot_paired_slope()`: within-cluster slope plot -- one line per
+  practice across the scenarios it was called under -- the visual companion to
+  the matched paired analyses.
 
 - `mysterycall_hurdle_wait()`: a two-part hurdle model for a mystery-caller wait
   time, generalized from the private-equity urogynecology audit. Fits a binary

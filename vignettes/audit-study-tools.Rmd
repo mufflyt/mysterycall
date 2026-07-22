@@ -1,0 +1,243 @@
+---
+title: "Design, power, and cleaning tools from three audit studies"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Design, power, and cleaning tools from three audit studies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  fig.width = 7, fig.height = 4.2, fig.align = "center",
+  warning = FALSE, message = FALSE
+)
+has_geepack  <- requireNamespace("geepack",  quietly = TRUE)
+has_glmmTMB  <- requireNamespace("glmmTMB",  quietly = TRUE)
+has_pwr      <- requireNamespace("pwr",      quietly = TRUE)
+has_fastLink <- requireNamespace("fastLink", quietly = TRUE)
+```
+
+Three real mystery-caller studies each hand-rolled analysis code that belonged
+in the package. This vignette walks the tools generalized from them, grouped by
+where they came from:
+
+- a **matched-pair** audit (the same practice called under several caller
+  personas) — design-integrity checks, a population-average sensitivity model,
+  and two paired figures;
+- an **ENT geographic-access power** study — power calculators the package's
+  count/paired tools did not cover;
+- the original **urogynecology** study — raw-field cleaning for messy call logs.
+
+```{r}
+library(mysterycall)
+```
+
+# 1. Design integrity for a matched multi-scenario audit
+
+A matched design only draws information from practices reached under *both* arms
+of a contrast, so before analysing anything it is worth knowing how complete the
+design actually is — and whether a mistyped practice name has quietly split one
+practice into two.
+
+```{r coverage-data}
+set.seed(1)
+practices <- sprintf("Practice %02d", 1:12)
+calls <- do.call(rbind, lapply(seq_along(practices), function(i) {
+  scen <- switch(as.character(i %% 3 + 1),
+    "1" = c("Straight couple", "Lesbian couple", "Single mother"),
+    "2" = c("Straight couple", "Lesbian couple"),
+    "3" = "Straight couple")
+  data.frame(practice = practices[i], scenario = scen)
+}))
+head(calls)
+```
+
+`mysterycall_scenario_coverage()` reports, per practice, which scenarios were
+observed, and rolls that up into complete / partial / singleton counts plus a
+missing-per-scenario tally.
+
+```{r coverage}
+cov <- mysterycall_scenario_coverage(calls, "practice", "scenario")
+cov
+head(as.data.frame(cov))
+```
+
+A one-character typo in a practice name deflates that count by turning one
+practice into two singletons. `mysterycall_flag_near_duplicate_keys()` scans the
+keys with an edit distance and surfaces the suspicious pairs for review.
+
+```{r neardup}
+keys <- c(practices, "Practice 01 ", "practice 02")  # a trailing space + a case slip
+mysterycall_flag_near_duplicate_keys(keys)
+```
+
+# 2. A population-average sensitivity model
+
+The subject-specific GLMM (`mysterycall_logistic_model()`) estimates a
+*within-practice* effect and needs each practice's random intercept to be
+estimable. `mysterycall_gee()` fits the *population-average* companion with a
+generalized estimating equation: it uses every call — including the singleton
+and dyad practices a matched analysis drops — and reports robust,
+correlation-insensitive odds ratios. Agreement between the two is a standard
+sensitivity check.
+
+```{r gee, eval = has_geepack}
+set.seed(2)
+np <- 60L
+gee_dat <- data.frame(
+  practice = rep(seq_len(np), each = 2),
+  scenario = rep(c("Straight couple", "Lesbian couple"), np),
+  accepted = rbinom(2 * np, 1, rep(c(0.82, 0.55), np))
+)
+mysterycall_gee(gee_dat, "accepted", "scenario", "practice",
+                reference = c(scenario = "Straight couple"))
+```
+
+```{r gee-skip, echo = FALSE, eval = !has_geepack}
+cat("geepack not installed; skipping the GEE example.")
+```
+
+# 3. Two matched-pair figures
+
+`mysterycall_plot_raincloud()` shows the full outcome distribution by group —
+violin, box, and every raw point — the canonical way to present a skewed wait
+time without hiding the sample size.
+
+```{r raincloud}
+set.seed(3)
+wait_dat <- data.frame(
+  wait     = c(rpois(60, 10), rpois(60, 24)),
+  scenario = rep(c("Commercial", "Medicaid"), each = 60)
+)
+mysterycall_plot_raincloud(wait_dat, "wait", "scenario",
+                           y_lab = "Business days to appointment")
+```
+
+`mysterycall_plot_paired_slope()` is the within-practice companion: one line per
+practice connecting its calls across scenarios, showing the differencing the
+matched design rests on.
+
+```{r slope}
+set.seed(4)
+pair_dat <- data.frame(
+  practice = rep(1:25, each = 2),
+  scenario = rep(c("Commercial", "Medicaid"), 25),
+  wait     = c(rbind(rpois(25, 9), rpois(25, 20)))
+)
+mysterycall_plot_paired_slope(pair_dat, "wait", "scenario", "practice",
+                              y_lab = "Business days to appointment")
+```
+
+# 4. Planning a study: power the count tools do not cover
+
+The package already has power tools for paired, physician-clustered count
+outcomes (`mysterycall_marginal_power()`, `mysterycall_twopart_power()`,
+`mysterycall_nb_power()`). The ENT access study needed three that fall outside
+that: a continuous-outcome calculator, factorial-term power, and covariate-
+adjusted power with a higher-level cluster.
+
+## 4a. Continuous outcome under a fixed natural allocation
+
+When only a fraction of practices are rural, equal-allocation formulas
+understate the sample size. `mysterycall_ttest_power()` reports both the
+equal-allocation N and the total N under the study's real split.
+
+```{r ttest, eval = has_pwr}
+mysterycall_ttest_power(mde = c(3, 5, 7), sd = 12, group_frac = 0.15)
+```
+
+## 4b. Factorial main effects and interactions
+
+For a saturated `rural × subspecialty × insurance` model,
+`mysterycall_lm_interaction_power()` gives the N each term needs at small and
+medium effect sizes.
+
+```{r f2, eval = has_pwr}
+mysterycall_lm_interaction_power(
+  terms = c("rural"                 = 1,
+            "subspecialty"          = 6,
+            "insurance"             = 1,
+            "rural x subspecialty"  = 6,
+            "rural x insurance"     = 1),
+  n_params = 2 * 7 * 2
+)
+```
+
+```{r pwr-skip, echo = FALSE, eval = !has_pwr}
+cat("pwr not installed; skipping the analytic-power examples.")
+```
+
+## 4c. Covariate-adjusted power with a cluster ICC
+
+`mysterycall_adjusted_power()` simulates the *actual adjusted model* — a
+negative-binomial GLMM with a rural fixed effect, a subspecialty effect,
+adjustment covariates, and a state random intercept whose SD is derived from a
+target ICC — instead of guessing a "+20% for clustering" inflation. (A small
+`n_sim` is used here so the vignette builds quickly; use several hundred in
+practice.)
+
+```{r adjpow, eval = has_glmmTMB}
+mysterycall_adjusted_power(
+  n_total = 400, rural_frac = 0.15,
+  wait_urban = 20, wait_rural = 28, phi = 1.7,
+  state_icc = 0.05, n_sim = 20, seed = 1
+)
+```
+
+```{r adjpow-skip, echo = FALSE, eval = !has_glmmTMB}
+cat("glmmTMB not installed; skipping the adjusted-power example.")
+```
+
+# 5. Cleaning raw call-log fields
+
+The urogynecology study's raw export had the messy free-text fields every audit
+accumulates. These helpers replace the per-study lookup tables that used to
+handle them.
+
+`mysterycall_parse_duration()` turns hold-time / call-length free text into a
+numeric unit:
+
+```{r duration}
+mysterycall_parse_duration(
+  c("1.5min", "1min 45 sec", "30sec", "2.75min, 30sec", "O", "3"),
+  output_unit = "seconds"
+)
+```
+
+`mysterycall_clean_zip()` takes the first ZIP when several are present, strips a
+ZIP+4 suffix, and restores the leading zero numeric parsing drops:
+
+```{r zip}
+mysterycall_clean_zip(c("03110, 03756", 3110, "12345-6789", "no zip", NA))
+```
+
+`mysterycall_categorize_wait()` bins a days-to-appointment vector into weekly
+categories and the headline ">2-week wait" binary outcome:
+
+```{r catwait}
+mysterycall_categorize_wait(c(3, 10, 15, 30, NA), threshold_days = 14)
+```
+
+Finally, `mysterycall_link_physicians()` reconciles two physician lists that
+share no NPI or other key, via `fastLink` Jaro-Winkler name matching (with
+optional blocking on state), returning matched pairs and their posterior match
+probability. The example is shown but not run here.
+
+```{r link, eval = FALSE}
+roster_a <- data.frame(first_name = c("Katherine", "Robert"),
+                       last_name  = c("Smith", "Jones"))
+roster_b <- data.frame(first_name = c("Kathryn", "Bob"),
+                       last_name  = c("Smith", "Jones"))
+mysterycall_link_physicians(roster_a, roster_b,
+                            c("first_name", "last_name"), threshold = 0.5)
+```
+
+# Summary
+
+| Source study | Functions |
+|---|---|
+| Matched-pair audit | `mysterycall_scenario_coverage()`, `mysterycall_flag_near_duplicate_keys()`, `mysterycall_gee()`, `mysterycall_plot_raincloud()`, `mysterycall_plot_paired_slope()` |
+| ENT access power | `mysterycall_ttest_power()`, `mysterycall_lm_interaction_power()`, `mysterycall_adjusted_power()` |
+| Urogynecology data prep | `mysterycall_parse_duration()`, `mysterycall_clean_zip()`, `mysterycall_categorize_wait()`, `mysterycall_link_physicians()` |

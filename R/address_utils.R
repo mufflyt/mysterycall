@@ -22,6 +22,9 @@ NULL
 #'   5-character string of digits or `NA_character_`.
 #'
 #' @family data management
+#' @seealso [mysterycall_clean_zip()] for the exported ZIP cleaner (also splits
+#'   multi-ZIP cells); [mysterycall_normalize_zip5()] for the address-pipeline
+#'   variant.
 #' @keywords internal
 #'
 #' @examples

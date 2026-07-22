@@ -87,6 +87,7 @@ Other descriptive helpers:
 \code{\link{mysterycall_facet_histogram}()},
 \code{\link{mysterycall_log_histogram}()},
 \code{\link{mysterycall_physicians_with_detail}()},
+\code{\link{mysterycall_scenario_coverage}()},
 \code{\link{mysterycall_scenario_summary}()}
 }
 \concept{descriptive helpers}

@@ -24,6 +24,10 @@ ZIP code.
 mysterycall:::mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
 }
 \seealso{
+\code{\link[=mysterycall_clean_zip]{mysterycall_clean_zip()}} for the exported ZIP cleaner (also splits
+multi-ZIP cells); \code{\link[=mysterycall_normalize_zip5]{mysterycall_normalize_zip5()}} for the address-pipeline
+variant.
+
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
 \code{\link{mysterycall_check_generalist_presence}()},

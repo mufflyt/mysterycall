@@ -66,6 +66,11 @@ df <- data.frame(
 mysterycall_wait_time_by_group(df, group_col = "scenario", output_dir = NA)
 }
 \seealso{
+\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, which reports the same
+median/Q1/Q3 columns plus mean/SD/range and a group-comparison test with an
+interpretation sentence. Use this leaner helper when you only need the
+quantile table (with optional CSV export).
+
 Other outcomes: 
 \code{\link{.as_positive_logical}()},
 \code{\link{.disp_rate_ci}()},
@@ -83,6 +88,7 @@ Other outcomes:
 \code{\link{mysterycall_caller_drift}()},
 \code{\link{mysterycall_check_zero_inflation}()},
 \code{\link{mysterycall_forest_plot}()},
+\code{\link{mysterycall_gee}()},
 \code{\link{mysterycall_icc}()},
 \code{\link{mysterycall_icc_report}()},
 \code{\link{mysterycall_icc_sentence}()},

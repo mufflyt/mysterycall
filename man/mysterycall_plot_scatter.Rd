@@ -91,6 +91,8 @@ Other visualization:
 \code{\link{mysterycall_bw_theme}()},
 \code{\link{mysterycall_flowchart}()},
 \code{\link{mysterycall_plot_density}()},
-\code{\link{mysterycall_plot_line}()}
+\code{\link{mysterycall_plot_line}()},
+\code{\link{mysterycall_plot_paired_slope}()},
+\code{\link{mysterycall_plot_raincloud}()}
 }
 \concept{visualization}

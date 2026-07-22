@@ -120,7 +120,9 @@ NULL
 #' @importFrom stats wilcox.test kruskal.test sd median quantile
 #' @importFrom tibble tibble as_tibble
 #' @family outcomes
-#' @seealso [mysterycall_acceptance_rate()], [mysterycall_clean_phase2()]
+#' @seealso [mysterycall_acceptance_rate()], [mysterycall_clean_phase2()], and
+#'   [mysterycall_wait_time_by_group()] for the lean quantile-table-only variant
+#'   (median/Q1/Q3/n with CSV export, no hypothesis test).
 #' @export
 #'
 #' @examples

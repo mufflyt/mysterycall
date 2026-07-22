@@ -194,3 +194,52 @@ test_that("print method returns x invisibly and writes sentences to console", {
   expect_true(length(out) > 0L)
   expect_true(any(grepl("acceptance rate", out, fixed = TRUE)))
 })
+
+test_that("medicaid_screen_group restricts the NA-screen to the named group", {
+  # Medicaid-only accept field is NA on BCBS rows, as in real data (BUG 28).
+  df <- data.frame(
+    phone = c("p1", "p2", "p3", "p4"),
+    insurance = c("Blue Cross/Blue Shield", "Blue Cross/Blue Shield",
+                  "Medicaid", "Medicaid"),
+    reason_for_exclusions = rep("Able to contact", 4L),
+    business_days_until_appointment = c(5L, 8L, 6L, 4L),
+    does_the_physician_accept_medicaid = c(NA, NA, "Yes", "Yes"),
+    stringsAsFactors = FALSE
+  )
+  grp <- c("Medicaid", "Blue Cross/Blue Shield")
+
+  # Default: screen every group -> BCBS numerator wrongly zeroed by the NA field.
+  all_screen <- mysterycall_acceptance_rate_calc(
+    df, insurance_groups = grp,
+    medicaid_accept_col = "does_the_physician_accept_medicaid"
+  )
+  bcbs_all <- all_screen$table[all_screen$table$insurance ==
+                                 "Blue Cross/Blue Shield", ]
+  expect_equal(bcbs_all$n_numerator, 0L)
+
+  # Restricted: only Medicaid is screened -> BCBS counts both, matching the
+  # legacy mysterycall_insurance_acceptance_rates() behavior.
+  med_only <- mysterycall_acceptance_rate_calc(
+    df, insurance_groups = grp,
+    medicaid_accept_col = "does_the_physician_accept_medicaid",
+    medicaid_screen_group = "Medicaid"
+  )
+  bcbs <- med_only$table[med_only$table$insurance == "Blue Cross/Blue Shield", ]
+  med  <- med_only$table[med_only$table$insurance == "Medicaid", ]
+  expect_equal(bcbs$n_numerator, 2L)
+  expect_equal(bcbs$rate_pct, 100)
+  expect_equal(med$n_numerator, 2L)
+})
+
+test_that("medicaid_screen_group validates its type", {
+  df <- data.frame(
+    phone = "p1", insurance = "Medicaid",
+    reason_for_exclusions = "Able to contact",
+    business_days_until_appointment = 5L,
+    stringsAsFactors = FALSE
+  )
+  expect_error(
+    mysterycall_acceptance_rate_calc(df, medicaid_screen_group = 1L),
+    "character"
+  )
+})
