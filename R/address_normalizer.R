@@ -417,8 +417,20 @@ normalize_zip5 <- function(...) { .Deprecated("mysterycall_normalize_zip5"); mys
 #' @keywords internal
 mysterycall_strip_suite <- function(addr) {
   a <- mysterycall_caps(addr)
-  a <- stringr::str_replace_all(a, "\\b(STE|SUITE|APT|UNIT|FL|RM|#)\\s*\\w+\\b", "")
-  stringr::str_squish(a)
+  # Designator (full word or USPS abbreviation) plus its unit token. Longer
+  # alternatives come first (FLOOR before FL, APARTMENT before APT) so the full
+  # word matches and its number is consumed rather than left orphaned.
+  a <- stringr::str_replace_all(
+    a,
+    "\\b(SUITE|STE|APARTMENT|APT|UNIT|FLOOR|FL|ROOM|RM)\\.?\\s*#?\\s*\\w+\\b",
+    ""
+  )
+  # Bare hash-prefixed units (e.g. "#200"): "#" is not a word character, so a
+  # leading \\b never holds after a space; strip these separately.
+  a <- stringr::str_replace_all(a, "#\\s*\\w+\\b", "")
+  # Clean up separators orphaned by the removals (e.g. a trailing comma).
+  a <- stringr::str_squish(a)
+  stringr::str_replace(a, "[\\s,]+$", "")
 }
 
 #' Deprecated version of mysterycall_strip_suite

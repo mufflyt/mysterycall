@@ -200,6 +200,27 @@ test_that("strip_suite: removes APT", {
   expect_false(grepl("APT", out))
 })
 
+test_that("strip_suite: removes bare hash-prefixed units", {
+  expect_equal(mysterycall:::mysterycall_strip_suite("100 Broadway #200"),
+               "100 BROADWAY")
+  expect_equal(mysterycall:::mysterycall_strip_suite("456 Oak Ave APT 4B #200"),
+               "456 OAK AVE")
+})
+
+test_that("strip_suite: full-word FLOOR/ROOM consume their number (no orphan)", {
+  expect_equal(mysterycall:::mysterycall_strip_suite("55 First St, Floor 12"),
+               "55 FIRST ST")
+  expect_equal(mysterycall:::mysterycall_strip_suite("10 Center St Room 5"),
+               "10 CENTER ST")
+  expect_equal(mysterycall:::mysterycall_strip_suite("1 Plaza Apartment 7C"),
+               "1 PLAZA")
+})
+
+test_that("strip_suite: leaves a plain street address untouched", {
+  expect_equal(mysterycall:::mysterycall_strip_suite("200 Park Ave"),
+               "200 PARK AVE")
+})
+
 # ── mysterycall_normalize_address_df ──────────────────────────────────────────
 
 test_that("normalize_address_df: adds derived columns", {
