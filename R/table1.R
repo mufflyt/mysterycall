@@ -144,7 +144,14 @@ NULL
   use_fisher <- ncol(ct) == 2L && any(ct < min_cell)
   res <- tryCatch(
     if (use_fisher) {
-      stats::fisher.test(ct)
+      # fisher.test() can overflow its FEXACT workspace on large, sparse
+      # tables and error out. Fall back to chi-square rather than letting the
+      # p-value silently become NA.
+      tryCatch(
+        stats::fisher.test(ct),
+        error = function(e)
+          suppressWarnings(stats::chisq.test(ct, correct = FALSE))
+      )
     } else {
       suppressWarnings(stats::chisq.test(ct, correct = FALSE))
     },

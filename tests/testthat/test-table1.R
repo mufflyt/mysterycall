@@ -61,6 +61,22 @@ test_that("table1: p_value appears on first level row only", {
   expect_true(all(is.na(gender_rows$p_value[-1L])))
 })
 
+test_that("table1: categorical p_value survives Fisher workspace overflow", {
+  # A many-level categorical with rare cells stratified by 2 groups drives
+  # fisher.test() past its FEXACT workspace and used to yield a silent NA.
+  set.seed(2)
+  n  <- 4000
+  df2 <- data.frame(
+    grp  = sample(c("A", "B"), n, TRUE),
+    many = sample(letters[1:15], n, TRUE),
+    stringsAsFactors = FALSE
+  )
+  df2$many[1] <- "z"  # rare level forces the Fisher path
+  res  <- mysterycall_table1(df2, covariates = "many", stratify_by = "grp")
+  pval <- res$table$p_value[res$table$variable == "many"][[1L]]
+  expect_false(is.na(pval))
+})
+
 # ── Continuous variables ───────────────────────────────────────────────────────
 
 test_that("table1: continuous variable produces one row per cont_stats entry", {
