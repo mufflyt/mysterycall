@@ -39,6 +39,7 @@ Other datasets:
 \code{\link{medicaid_expansion}},
 \code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
-\code{\link{svi_zcta}}
+\code{\link{svi_zcta}},
+\code{\link{zcta_tract_xwalk}}
 }
 \concept{datasets}

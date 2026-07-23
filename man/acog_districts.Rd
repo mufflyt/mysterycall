@@ -50,7 +50,8 @@ Other datasets:
 \code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
 \code{\link{svi_zcta}},
-\code{\link{taxonomy}}
+\code{\link{taxonomy}},
+\code{\link{zcta_tract_xwalk}}
 }
 \concept{datasets}
 \keyword{dataset}
