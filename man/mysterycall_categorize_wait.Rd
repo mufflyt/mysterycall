@@ -44,9 +44,13 @@ mysterycall_categorize_wait(c(3, 10, 15, 30, NA))
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_business_days]{mysterycall_business_days()}}
 
 Other data integrity: 
+\code{\link{.mc_age_key}()},
+\code{\link{.mc_healthgrades_ages}()},
+\code{\link{.mc_state_to_abbr}()},
 \code{\link{mysterycall_clean_zip}()},
 \code{\link{mysterycall_flag_near_duplicate_keys}()},
 \code{\link{mysterycall_link_physicians}()},
+\code{\link{mysterycall_lookup_age}()},
 \code{\link{mysterycall_parse_duration}()}
 }
 \concept{data integrity}

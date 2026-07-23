@@ -71,9 +71,13 @@ if (requireNamespace("fastLink", quietly = TRUE)) {
 \code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}}
 
 Other data integrity: 
+\code{\link{.mc_age_key}()},
+\code{\link{.mc_healthgrades_ages}()},
+\code{\link{.mc_state_to_abbr}()},
 \code{\link{mysterycall_categorize_wait}()},
 \code{\link{mysterycall_clean_zip}()},
 \code{\link{mysterycall_flag_near_duplicate_keys}()},
+\code{\link{mysterycall_lookup_age}()},
 \code{\link{mysterycall_parse_duration}()}
 }
 \concept{data integrity}
