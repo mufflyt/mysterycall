@@ -150,9 +150,9 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'   `table(data[[gender_col]], useNA = "always")` to check for unexpected
 #'   values that will be bucketed into `"Unknown"`.
 #'
-#' @seealso [mysterycall_genderize()] for the upstream API call that produces
-#'   the raw `gender` column; [mysterycall_preflight_check()] to validate
-#'   data quality before processing.
+#' @seealso [mysterycall_nppes_gender()] and [mysterycall_get_clinician_data()]
+#'   for the registry-reported gender that produces the raw `gender` column;
+#'   [mysterycall_preflight_check()] to validate data quality before processing.
 #'
 #' @family data management
 #' @export

@@ -76,26 +76,32 @@ mysterycall_enrich_npi <- function(
     }
   )
 
-  # Step 2: genderize — mysterycall_genderize() always looks for a "first_name"
-  # column; temporarily rename if needed, then restore the original name.
-  if (!is.null(first_name_col) && first_name_col %in% names(data)) {
-    .msg("Step 2/4: inferring gender from first name...")
+  # Step 2: registry gender. Step 1 already attaches DAC/NPPES `gender` via
+  # get_clinician_data(); here we fill any remaining gaps straight from the
+  # NPPES `basic_sex` field. Genderize.io (first-name inference) is no longer
+  # used: it burns a monthly quota and only guesses.
+  needs_gender <- !"gender" %in% names(data) || any(is.na(data[["gender"]]))
+  if ("npi" %in% names(data) && needs_gender &&
+      requireNamespace("npi", quietly = TRUE)) {
+    .msg("Step 2/4: filling gender from NPPES (basic_sex)...")
     data <- tryCatch(
       {
-        renamed <- first_name_col != "first_name"
-        if (renamed) names(data)[names(data) == first_name_col] <- "first_name"
-        out <- mysterycall_genderize(data)
-        if (renamed) names(out)[names(out) == "first_name"] <- first_name_col
-        out
+        if (!"gender" %in% names(data)) data[["gender"]] <- NA_character_
+        miss  <- is.na(data[["gender"]])
+        nppes <- mysterycall_nppes_gender(unique(data[["npi"]][miss]))
+        hit   <- nppes$gender[match(data[["npi"]], nppes$npi)]
+        fill  <- miss & !is.na(hit)
+        data[["gender"]][fill] <- hit[fill]
+        data
       },
       error = function(e) {
-        warning("mysterycall_genderize() failed: ", conditionMessage(e),
+        warning("NPPES gender fill failed: ", conditionMessage(e),
                 "\nSkipping step 2.", call. = FALSE)
         data
       }
     )
   } else {
-    .msg("Step 2/4: skipping gender inference (first_name_col not found or NULL).")
+    .msg("Step 2/4: gender already present or NPPES unavailable; skipping fill.")
   }
 
   # Step 3: classify practice setting — takes a character vector, returns a

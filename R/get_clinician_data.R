@@ -5,14 +5,24 @@
 #' CSV file.  Invalid NPIs are filtered out via [mysterycall_validate_npi()]
 #' before any API calls are made.
 #'
+#' Gender is taken from the **registry**, never inferred from first names: the
+#' DAC `gender` field is normalised to `"Male"`/`"Female"`, and when it is blank
+#' (or absent from DAC) it is filled from NPPES `basic_sex` via
+#' [mysterycall_nppes_gender()]. This replaces Genderize.io as the gender source
+#' -- see `nppes_gender_fallback`.
+#'
 #' @param input_data A data frame with an `npi` column, or a character scalar
 #'   path to a CSV file that contains an `npi` column.
+#' @param nppes_gender_fallback Logical. When `TRUE` (default), any DAC-matched
+#'   physician whose DAC `gender` is missing has it filled from NPPES
+#'   `basic_sex`. Set `FALSE` to use DAC gender only (no extra NPPES calls).
 #'
 #' @return A tibble with one row per valid NPI and columns from
 #'   `provider::clinicians()` (name, specialty, address, etc.), plus an
-#'   `npi_is_valid` column. Returns a zero-row tibble when no valid NPIs are
-#'   found. Returns `NULL` silently per NPI when the `provider` package is not
-#'   installed.
+#'   `npi_is_valid` column and a normalised `gender` (`"Male"`/`"Female"`/`NA`)
+#'   with its `gender_source` (`"DAC"`, `"NPPES"`, or `NA`). Returns a zero-row
+#'   tibble when no valid NPIs are found. Returns `NULL` silently per NPI when
+#'   the `provider` package is not installed.
 #'
 #' @section Subspecialty source warning:
 #'   The `taxonomies_desc` column in the returned tibble reflects NPPES
@@ -31,7 +41,9 @@
 #' @export
 #' @examplesIf interactive()
 #' clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
-mysterycall_get_clinician_data <- function(input_data) {
+mysterycall_get_clinician_data <- function(input_data,
+                                           nppes_gender_fallback = TRUE) {
+  checkmate::assert_flag(nppes_gender_fallback)
   if (is.data.frame(input_data)) {
     clinician_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
@@ -123,6 +135,23 @@ mysterycall_get_clinician_data <- function(input_data) {
   })
 
   result <- dplyr::bind_rows(expanded)
+
+  # Registry-sourced gender: normalise the DAC `gender` field to Male/Female,
+  # then optionally fill blanks from NPPES `basic_sex`. Never Genderize.io.
+  dac_gender <- if ("gender" %in% names(result)) result[["gender"]] else NA_character_
+  result[["gender"]] <- .mc_normalize_sex(dac_gender)
+  result[["gender_source"]] <- ifelse(is.na(result[["gender"]]), NA_character_, "DAC")
+
+  if (nppes_gender_fallback && "npi" %in% names(result)) {
+    miss <- is.na(result[["gender"]])
+    if (any(miss) && requireNamespace("npi", quietly = TRUE)) {
+      nppes <- mysterycall_nppes_gender(unique(result[["npi"]][miss]))
+      hit   <- nppes$gender[match(result[["npi"]], nppes$npi)]
+      fill  <- miss & !is.na(hit)
+      result[["gender"]][fill]        <- hit[fill]
+      result[["gender_source"]][fill] <- "NPPES"
+    }
+  }
 
   if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)

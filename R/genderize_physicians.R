@@ -78,6 +78,13 @@
 #' @family provider characteristics
 #' @export
 mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format = c("csv", "parquet")) {
+  .Deprecated("mysterycall_nppes_gender", package = "mysterycall",
+              msg = paste0(
+                "mysterycall_genderize() is deprecated: it infers gender from ",
+                "first names via the Genderize.io API, which has a monthly free ",
+                "quota that is easily exhausted. Use registry-reported gender ",
+                "instead: mysterycall_nppes_gender() (NPPES basic_sex) or ",
+                "mysterycall_get_clinician_data() (DAC gender)."))
   if (!requireNamespace("httr", quietly = TRUE)) {
     stop("Package 'httr' is required for mysterycall_genderize() (Genderize.io API).", call. = FALSE)
   }

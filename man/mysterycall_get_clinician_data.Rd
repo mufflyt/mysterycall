@@ -4,24 +4,36 @@
 \alias{mysterycall_get_clinician_data}
 \title{Retrieve Clinician Data}
 \usage{
-mysterycall_get_clinician_data(input_data)
+mysterycall_get_clinician_data(input_data, nppes_gender_fallback = TRUE)
 }
 \arguments{
 \item{input_data}{A data frame with an \code{npi} column, or a character scalar
 path to a CSV file that contains an \code{npi} column.}
+
+\item{nppes_gender_fallback}{Logical. When \code{TRUE} (default), any DAC-matched
+physician whose DAC \code{gender} is missing has it filled from NPPES
+\code{basic_sex}. Set \code{FALSE} to use DAC gender only (no extra NPPES calls).}
 }
 \value{
 A tibble with one row per valid NPI and columns from
 \code{provider::clinicians()} (name, specialty, address, etc.), plus an
-\code{npi_is_valid} column. Returns a zero-row tibble when no valid NPIs are
-found. Returns \code{NULL} silently per NPI when the \code{provider} package is not
-installed.
+\code{npi_is_valid} column and a normalised \code{gender} (\code{"Male"}/\code{"Female"}/\code{NA})
+with its \code{gender_source} (\code{"DAC"}, \code{"NPPES"}, or \code{NA}). Returns a zero-row
+tibble when no valid NPIs are found. Returns \code{NULL} silently per NPI when
+the \code{provider} package is not installed.
 }
 \description{
 Retrieves clinician data from the \code{provider} package for each valid NPI in
 the input.  Accepts either a data frame with an \code{npi} column or a path to a
 CSV file.  Invalid NPIs are filtered out via \code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}}
 before any API calls are made.
+}
+\details{
+Gender is taken from the \strong{registry}, never inferred from first names: the
+DAC \code{gender} field is normalised to \code{"Male"}/\code{"Female"}, and when it is blank
+(or absent from DAC) it is filled from NPPES \code{basic_sex} via
+\code{\link[=mysterycall_nppes_gender]{mysterycall_nppes_gender()}}. This replaces Genderize.io as the gender source
+-- see \code{nppes_gender_fallback}.
 }
 \section{Subspecialty source warning}{
 
@@ -45,7 +57,18 @@ clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach clinician data to a roster.
 
 Other npi: 
+\code{\link{.mc_build_census_batch_request}()},
+\code{\link{.mc_census_batch}()},
+\code{\link{.mc_geocode_http_get}()},
+\code{\link{.mc_geocode_http_post}()},
+\code{\link{.mc_geocode_http_with_retry}()},
+\code{\link{.mc_geocode_one_fallback}()},
+\code{\link{.mc_normalize_sex}()},
+\code{\link{.mc_nppes_sex_one}()},
+\code{\link{.mc_parse_census_batch_response}()},
 \code{\link{mysterycall_enrich_npi}()},
+\code{\link{mysterycall_geocode_address}()},
+\code{\link{mysterycall_nppes_gender}()},
 \code{\link{mysterycall_search_and_process_npi}()},
 \code{\link{mysterycall_search_taxonomy}()}
 }

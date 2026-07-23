@@ -89,9 +89,9 @@ mysterycall_prepare_table1_vars(df, grad_year_col = "grad_year",
                                  gender_col = "gender", ref_year = 2026L)
 }
 \seealso{
-\code{\link[=mysterycall_genderize]{mysterycall_genderize()}} for the upstream API call that produces
-the raw \code{gender} column; \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate
-data quality before processing.
+\code{\link[=mysterycall_nppes_gender]{mysterycall_nppes_gender()}} and \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}}
+for the registry-reported gender that produces the raw \code{gender} column;
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate data quality before processing.
 
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
