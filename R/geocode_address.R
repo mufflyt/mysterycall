@@ -299,32 +299,27 @@ mysterycall_geocode_address <- function(data,
                                         max_delay_ms = 30000,
                                         jitter_factor = 0.25) {
   retry_codes <- c(429, 500, 502, 503, 504)
-  attempt <- 1L; delay_ms <- initial_delay_ms; last_error <- NULL
+  attempt <- 1L; delay_ms <- initial_delay_ms
+  backoff <- function() {
+    jitter <- stats::runif(1, 1 - jitter_factor, 1 + jitter_factor)
+    Sys.sleep(min(delay_ms * jitter, max_delay_ms) / 1000)
+    delay_ms <<- delay_ms * 2; attempt <<- attempt + 1L
+  }
   while (attempt <= max_attempts) {
-    result <- tryCatch({
-      response <- request_fn()
-      status <- httr::status_code(response)
-      if (status %in% retry_codes && attempt < max_attempts) {
-        jitter <- stats::runif(1, 1 - jitter_factor, 1 + jitter_factor)
-        Sys.sleep(min(delay_ms * jitter, max_delay_ms) / 1000)
-        delay_ms <- delay_ms * 2; attempt <- attempt + 1L
-        return(NULL)
-      }
-      response
-    }, error = function(e) {
-      last_error <<- e
+    # tryCatch only wraps the request: on a transient error return a retry
+    # sentinel; loop control (next/return) stays in the while body so it can
+    # never short-circuit the whole function.
+    response <- tryCatch(request_fn(), error = function(e) {
       transient <- grepl("(timeout|timed out|connection|reset|refused|temporarily)",
                          conditionMessage(e), ignore.case = TRUE)
-      if (transient && attempt < max_attempts) {
-        jitter <- stats::runif(1, 1 - jitter_factor, 1 + jitter_factor)
-        Sys.sleep(min(delay_ms * jitter, max_delay_ms) / 1000)
-        delay_ms <<- delay_ms * 2; attempt <<- attempt + 1L
-        return(NULL)
-      }
-      stop(e)
+      if (transient && attempt < max_attempts) structure(list(), class = "mc_retry")
+      else stop(e)
     })
-    if (!is.null(result)) return(result)
+    if (inherits(response, "mc_retry")) { backoff(); next }
+
+    status <- httr::status_code(response)
+    if (status %in% retry_codes && attempt < max_attempts) { backoff(); next }
+    return(response)
   }
-  if (!is.null(last_error)) stop(last_error)
   stop("Max retry attempts exceeded")
 }

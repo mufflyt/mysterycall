@@ -41,6 +41,90 @@ test_that("geocode_address validates inputs", {
   )
 })
 
+test_that("http_with_retry retries a transient error then succeeds", {
+  calls <- 0L
+  fn <- function() {
+    calls <<- calls + 1L
+    if (calls < 2L) stop("connection timeout")
+    "OK"
+  }
+  testthat::local_mocked_bindings(status_code = function(...) 200L, .package = "httr")
+  res <- mysterycall:::.mc_geocode_http_with_retry(fn, max_attempts = 3L,
+                                                   initial_delay_ms = 1L)
+  expect_equal(res, "OK")
+  expect_equal(calls, 2L)
+})
+
+test_that("http_with_retry backs off on a 429 then returns the 200", {
+  seq_status <- c(429L, 200L); i <- 0L
+  testthat::local_mocked_bindings(
+    status_code = function(...) { i <<- i + 1L; seq_status[i] }, .package = "httr")
+  calls <- 0L
+  fn <- function() { calls <<- calls + 1L; "resp" }
+  res <- mysterycall:::.mc_geocode_http_with_retry(fn, max_attempts = 3L,
+                                                   initial_delay_ms = 1L)
+  expect_equal(res, "resp")
+  expect_equal(calls, 2L)          # retried once, succeeded on the 2nd
+})
+
+test_that("http_with_retry gives up after max_attempts on persistent failure", {
+  testthat::local_mocked_bindings(status_code = function(...) 503L, .package = "httr")
+  calls <- 0L
+  fn <- function() { calls <<- calls + 1L; "resp" }
+  res <- mysterycall:::.mc_geocode_http_with_retry(fn, max_attempts = 2L,
+                                                   initial_delay_ms = 1L)
+  expect_equal(calls, 2L)          # tried twice, returns the last response
+})
+
+test_that("geocode_address maps batch results onto rows (offline, mocked)", {
+  addr <- data.frame(
+    street = c("1 A St", "2 B St", "9 Bad St"),
+    city   = c("Denver", "Aurora", "Nowhere"),
+    state  = c("CO", "CO", "ZZ"),
+    zip    = c("80202", "80045", "00000")
+  )
+  testthat::local_mocked_bindings(
+    .mc_census_batch = function(addresses, benchmark, vintage) {
+      data.frame(
+        id = 1:3,
+        input_address = addr$street,
+        match = c("Match", "Match", "No_Match"),
+        match_type = c("Exact", "Exact", NA),
+        matched_address = c("1 A ST", "2 B ST", NA),
+        lon = c(-104.99, -104.84, NA), lat = c(39.74, 39.74, NA),
+        census_tract = c("08031002000", "08001008100", NA),
+        stringsAsFactors = FALSE
+      )
+    }
+  )
+  out <- mysterycall_geocode_address(addr, fallback = FALSE, verbose = FALSE)
+  expect_equal(out$geo_lat, c(39.74, 39.74, NA))
+  expect_equal(out$geo_source, c("census", "census", NA))
+  expect_equal(out$geo_tract[2], "08001008100")
+  expect_equal(out$geo_match[3], "No_Match")
+})
+
+test_that("geocode_address uses the fallback for Census misses (offline, mocked)", {
+  addr <- data.frame(street = "9 Bad St", city = "Nowhere",
+                     state = "CO", zip = "80999")
+  testthat::local_mocked_bindings(
+    .mc_census_batch = function(addresses, benchmark, vintage) {
+      data.frame(id = 1L, input_address = "9 Bad St", match = "No_Match",
+                 match_type = NA, matched_address = NA, lon = NA_real_,
+                 lat = NA_real_, census_tract = NA_character_,
+                 stringsAsFactors = FALSE)
+    },
+    .mc_geocode_one_fallback = function(addr, city, state, zip) {
+      list(lon = -105.0, lat = 40.0, matched_address = "9 BAD ST",
+           source = "nominatim")
+    }
+  )
+  out <- mysterycall_geocode_address(addr, fallback = TRUE, verbose = FALSE)
+  expect_equal(out$geo_lat, 40.0)
+  expect_equal(out$geo_source, "nominatim")
+  expect_equal(out$geo_match, "Match")
+})
+
 test_that("geocode_address end-to-end against Census (live)", {
   testthat::skip_on_cran()
   testthat::skip_if_offline("geocoding.geo.census.gov")
