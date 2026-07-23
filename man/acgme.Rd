@@ -169,6 +169,7 @@ print(acgme[1:3, 1:5])
 Other datasets: 
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},
+\code{\link{adi_zcta}},
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
 \code{\link{healthgrades_ages}},
@@ -176,11 +177,13 @@ Other datasets:
 \code{\link{medicaid_expansion}},
 \code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
+\code{\link{svi_zcta}},
 \code{\link{taxonomy}}
 
 Other datasets: 
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},
+\code{\link{adi_zcta}},
 \code{\link{city_state_to_lat_long}},
 \code{\link{fips}},
 \code{\link{healthgrades_ages}},
@@ -188,6 +191,7 @@ Other datasets:
 \code{\link{medicaid_expansion}},
 \code{\link{medicaid_fee_index}},
 \code{\link{physicians}},
+\code{\link{svi_zcta}},
 \code{\link{taxonomy}}
 }
 \concept{datasets}
