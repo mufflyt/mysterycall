@@ -114,8 +114,19 @@ results <- mysterycall_search_and_process_npi(df)
 \code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}} for taxonomy-based registry searches.
 
 Other npi: 
+\code{\link{.mc_build_census_batch_request}()},
+\code{\link{.mc_census_batch}()},
+\code{\link{.mc_geocode_http_get}()},
+\code{\link{.mc_geocode_http_post}()},
+\code{\link{.mc_geocode_http_with_retry}()},
+\code{\link{.mc_geocode_one_fallback}()},
+\code{\link{.mc_normalize_sex}()},
+\code{\link{.mc_nppes_sex_one}()},
+\code{\link{.mc_parse_census_batch_response}()},
 \code{\link{mysterycall_enrich_npi}()},
+\code{\link{mysterycall_geocode_address}()},
 \code{\link{mysterycall_get_clinician_data}()},
+\code{\link{mysterycall_nppes_gender}()},
 \code{\link{mysterycall_search_taxonomy}()}
 }
 \concept{npi}
