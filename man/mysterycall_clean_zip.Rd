@@ -33,8 +33,11 @@ additionally splits multi-ZIP cells (\code{"03110, 03756"} -> first).
 
 Other data integrity: 
 \code{\link{.mc_age_key}()},
+\code{\link{.mc_data}()},
+\code{\link{.mc_geocode_point}()},
 \code{\link{.mc_healthgrades_ages}()},
 \code{\link{.mc_state_to_abbr}()},
+\code{\link{mysterycall_assign_area_covariates}()},
 \code{\link{mysterycall_categorize_wait}()},
 \code{\link{mysterycall_flag_near_duplicate_keys}()},
 \code{\link{mysterycall_link_physicians}()},
