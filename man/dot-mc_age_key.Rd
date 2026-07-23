@@ -20,6 +20,7 @@ blank-state queries never match.
 }
 \seealso{
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},
 \code{\link{.mc_healthgrades_ages}()},

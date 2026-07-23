@@ -4,7 +4,13 @@
 \alias{mysterycall_lookup_age}
 \title{Look up physician age by name and state}
 \usage{
-mysterycall_lookup_age(first_name, last_name, state, reference = NULL)
+mysterycall_lookup_age(
+  first_name,
+  last_name,
+  state,
+  reference = NULL,
+  impute = TRUE
+)
 }
 \arguments{
 \item{first_name, last_name}{Character vectors of given and family names.
@@ -18,6 +24,14 @@ empty states never match.}
 package's \link{healthgrades_ages}. Must contain \code{first_name}, \code{last_name},
 \code{state}, and \code{age_current}; supply your own only for testing or to use an
 updated roster.}
+
+\item{impute}{Logical. When \code{TRUE} (default), unmatched physicians receive a
+fallback age so the column has full coverage: the median \code{age_current} of
+the reference within the query's state, or the national median when the
+state is unknown or unseen. Imputed rows are always flagged (\code{age_imputed},
+and \code{age_source} set to \code{"imputed_state_median"} /
+\code{"imputed_national_median"}) so they can be excluded or modelled
+separately. When \code{FALSE}, unmatched ages stay \code{NA}.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} with one row per query, in input order,
@@ -25,10 +39,15 @@ containing the echoed query columns and the matched fields:
 \describe{
 \item{first_name, last_name, state}{The query values (state upper-cased
 to its two-letter form).}
-\item{matched}{Logical; \code{TRUE} when a reference physician was found.}
-\item{age_current}{Estimated current-year age, or \code{NA} when unmatched.}
+\item{matched}{Logical; \code{TRUE} when a reference physician was found by
+name and state (never \code{TRUE} for an imputed row).}
+\item{age_current}{Estimated current-year age. Observed when \code{matched},
+imputed when \code{age_imputed}, or \code{NA} when unmatched and \code{impute = FALSE}.}
+\item{age_imputed}{Logical; \code{TRUE} when \code{age_current} is a fallback
+estimate rather than a matched value.}
 \item{honorific, npi, city, age_at_scrape, scrape_year, age_source,
-n_obs}{The matched reference fields, or \code{NA} when unmatched.}
+n_obs}{The matched reference fields, or \code{NA} when unmatched. For imputed
+rows \code{age_source} records which fallback was used.}
 }
 }
 \description{
@@ -50,11 +69,15 @@ but the underlying scrapes disagreed, the returned age is that of the most
 recent dated scrape (see \link{healthgrades_ages}).
 }
 \examples{
+# Unmatched "Nobody Xyzzy" gets an imputed CO age, flagged age_imputed = TRUE
 mysterycall_lookup_age(
   first_name = c("Gioi", "Debra", "Nobody"),
   last_name  = c("Smith-Nguyen", "Acerenza", "Xyzzy"),
   state      = c("California", "MD", "CO")
 )
+
+# Leave unmatched ages as NA instead
+mysterycall_lookup_age("Nobody", "Xyzzy", "CO", impute = FALSE)
 }
 \seealso{
 \link{healthgrades_ages} for the reference dataset and its caveats;
@@ -62,6 +85,7 @@ mysterycall_lookup_age(
 state-blocked exact match is too strict.
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

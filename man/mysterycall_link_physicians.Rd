@@ -71,6 +71,7 @@ if (requireNamespace("fastLink", quietly = TRUE)) {
 \code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}}
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

@@ -19,6 +19,7 @@ upper-cased so an exact-code match can still succeed.
 }
 \seealso{
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

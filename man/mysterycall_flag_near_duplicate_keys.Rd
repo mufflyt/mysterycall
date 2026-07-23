@@ -65,6 +65,7 @@ mysterycall_flag_near_duplicate_keys(keys)
 \code{\link[=mysterycall_scenario_coverage]{mysterycall_scenario_coverage()}}
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

@@ -44,6 +44,7 @@ mysterycall_categorize_wait(c(3, 10, 15, 30, NA))
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_business_days]{mysterycall_business_days()}}
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

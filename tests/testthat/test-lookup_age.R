@@ -33,10 +33,36 @@ test_that("lookup_age: matching is case / punctuation / whitespace insensitive",
   expect_equal(r$age_current, 69L)
 })
 
-test_that("lookup_age: no match yields NA age and matched = FALSE", {
-  r <- mysterycall_lookup_age("Nobody", "Xyzzy", "CO", reference = ref)
+test_that("lookup_age: no match, impute = FALSE yields NA age and matched = FALSE", {
+  r <- mysterycall_lookup_age("Nobody", "Xyzzy", "CO",
+                              reference = ref, impute = FALSE)
   expect_false(r$matched)
   expect_true(is.na(r$age_current))
+  expect_false(r$age_imputed)
+})
+
+test_that("lookup_age: unmatched gets flagged imputed age by default", {
+  r <- mysterycall_lookup_age("Nobody", "Xyzzy", "CO", reference = ref)
+  expect_false(r$matched)
+  expect_true(r$age_imputed)
+  expect_false(is.na(r$age_current))
+  # CO absent from ref -> national median of c(69,58,91) = 69
+  expect_equal(r$age_current, 69)
+  expect_equal(r$age_source, "imputed_national_median")
+})
+
+test_that("lookup_age: imputation uses state median when the state is present", {
+  # Two CA reference ages (69, 91) -> median 80 for an unmatched CA query
+  r <- mysterycall_lookup_age("Ghost", "Nomatch", "CA", reference = ref)
+  expect_true(r$age_imputed)
+  expect_equal(r$age_current, 80)
+  expect_equal(r$age_source, "imputed_state_median")
+})
+
+test_that("lookup_age: matched rows are never flagged as imputed", {
+  r <- mysterycall_lookup_age("Gioi", "Smith-Nguyen", "CA", reference = ref)
+  expect_true(r$matched)
+  expect_false(r$age_imputed)
 })
 
 test_that("lookup_age: right state required (wrong state does not match)", {
@@ -56,7 +82,8 @@ test_that("lookup_age: vectorised, preserves input order and length", {
     first_name = c("Debra", "Gioi", "Nobody"),
     last_name  = c("Acerenza", "Smith-Nguyen", "Xyzzy"),
     state      = c("MD", "CA", "CO"),
-    reference  = ref
+    reference  = ref,
+    impute     = FALSE
   )
   expect_equal(nrow(r), 3L)
   expect_equal(r$matched, c(TRUE, TRUE, FALSE))

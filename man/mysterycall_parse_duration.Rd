@@ -51,6 +51,7 @@ mysterycall_parse_duration(
 \code{\link[=mysterycall_categorize_wait]{mysterycall_categorize_wait()}}
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},

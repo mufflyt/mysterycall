@@ -17,6 +17,7 @@ Load a bundled package dataset by name
 }
 \seealso{
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_geocode_point}()},
 \code{\link{.mc_healthgrades_ages}()},

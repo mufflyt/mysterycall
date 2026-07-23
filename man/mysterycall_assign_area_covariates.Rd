@@ -66,6 +66,7 @@ mysterycall_assign_area_covariates(df)
 \code{\link{adi_zcta}}, \code{\link{svi_zcta}}, \code{\link{kff_hhi}}.
 
 Other data integrity: 
+\code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
 \code{\link{.mc_data}()},
 \code{\link{.mc_geocode_point}()},
