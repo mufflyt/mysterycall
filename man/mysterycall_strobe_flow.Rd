@@ -26,6 +26,7 @@ mysterycall_strobe_flow(
   label_excl_screen = "Excluded",
   label_excl_waittime = "No appointment date\\n(not offered or pending)",
   title = "STROBE Flow Diagram - Mystery-Caller Study",
+  engine = c("ggplot2", "gmisc"),
   output_path = NULL,
   width = 9,
   height = 11,
@@ -98,6 +99,16 @@ Default \code{"No appointment date\\n(not offered or pending)"}.}
 
 \item{title}{Character. Plot title.}
 
+\item{engine}{Character. Rendering back-end. \code{"ggplot2"} (default) draws the
+diagram with hand-placed \code{\link[ggplot2:annotate]{ggplot2::annotate()}} rectangles and arrows and
+returns a \code{ggplot} object (zero new dependencies). \code{"gmisc"} renders the
+\emph{same pipeline-derived counts} with the \pkg{Gmisc} grid engine
+(\code{\link[Gmisc:boxGrob]{Gmisc::boxGrob()}} / \code{\link[Gmisc:connectGrob]{Gmisc::connectGrob()}}), whose boxes auto-size to
+their text and whose connectors re-route automatically -- useful when long
+exclusion lists would overflow the fixed-coordinate ggplot2 layout.
+\code{"gmisc"} requires the suggested \pkg{Gmisc} and \pkg{grid} packages and
+returns a grid grob (a \code{gTree}) instead of a \code{ggplot} object.}
+
 \item{output_path}{Character or \code{NULL}. File path to save the diagram
 (\code{.png}, \code{.tiff}, \code{.pdf}, \code{.svg}).  When \code{NULL} (default), no file is
 written.  Raster formats also save a paired copy in the other format.}
@@ -109,7 +120,9 @@ written.  Raster formats also save a paired copy in the other format.}
 \item{dpi}{Integer. Resolution for raster formats. Default \code{300}.}
 }
 \value{
-A \code{ggplot2} object (invisibly).
+Invisibly, a \code{ggplot} object when \code{engine = "ggplot2"} (the default)
+or a grid \code{gTree} when \code{engine = "gmisc"}. Either can be redrawn with its
+usual method (\code{print()} / \code{\link[grid:grid.draw]{grid::grid.draw()}}) or saved via \code{output_path}.
 }
 \description{
 Produces a publication-quality STROBE/CONSORT-style participant flow diagram

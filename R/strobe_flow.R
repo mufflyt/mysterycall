@@ -81,6 +81,15 @@ NULL
 #' @param label_excl_waittime Character. Header for the wait-time exclusion box.
 #'   Default `"No appointment date\n(not offered or pending)"`.
 #' @param title Character. Plot title.
+#' @param engine Character. Rendering back-end. `"ggplot2"` (default) draws the
+#'   diagram with hand-placed [ggplot2::annotate()] rectangles and arrows and
+#'   returns a `ggplot` object (zero new dependencies). `"gmisc"` renders the
+#'   *same pipeline-derived counts* with the \pkg{Gmisc} grid engine
+#'   ([Gmisc::boxGrob()] / [Gmisc::connectGrob()]), whose boxes auto-size to
+#'   their text and whose connectors re-route automatically -- useful when long
+#'   exclusion lists would overflow the fixed-coordinate ggplot2 layout.
+#'   `"gmisc"` requires the suggested \pkg{Gmisc} and \pkg{grid} packages and
+#'   returns a grid grob (a `gTree`) instead of a `ggplot` object.
 #' @param output_path Character or `NULL`. File path to save the diagram
 #'   (`.png`, `.tiff`, `.pdf`, `.svg`).  When `NULL` (default), no file is
 #'   written.  Raster formats also save a paired copy in the other format.
@@ -88,7 +97,9 @@ NULL
 #' @param height Numeric. Height in inches. Default `11`.
 #' @param dpi Integer. Resolution for raster formats. Default `300`.
 #'
-#' @return A `ggplot2` object (invisibly).
+#' @return Invisibly, a `ggplot` object when `engine = "ggplot2"` (the default)
+#'   or a grid `gTree` when `engine = "gmisc"`. Either can be redrawn with its
+#'   usual method (`print()` / [grid::grid.draw()]) or saved via `output_path`.
 #'
 #' @family manuscript
 #' @seealso [mysterycall_prepare_calls()], [mysterycall_flow_diagram()],
@@ -139,12 +150,14 @@ mysterycall_strobe_flow <- function(
     label_excl_screen   = "Excluded",
     label_excl_waittime = "No appointment date\n(not offered or pending)",
     title            = "STROBE Flow Diagram - Mystery-Caller Study",
+    engine           = c("ggplot2", "gmisc"),
     output_path      = NULL,
     width            = 9,
     height           = 11,
     dpi              = 300
 ) {
-  if (!requireNamespace("ggplot2", quietly = TRUE))
+  engine <- match.arg(engine)
+  if (engine == "ggplot2" && !requireNamespace("ggplot2", quietly = TRUE))
     stop("Package 'ggplot2' is required. Install with: install.packages('ggplot2')",
          call. = FALSE)
 
@@ -257,6 +270,31 @@ mysterycall_strobe_flow <- function(
   excl_ncd_lbl  <- sprintf("%s\n(n = %s)", label_excl_calldate, .fmt_n(excl_no_calldate))
   excl_wt_lbl   <- sprintf("%s\n(n = %s)", label_excl_waittime, .fmt_n(excl_waittime))
 
+  # Main-column box labels (single source of truth shared by both engines).
+  box_labels <- list(
+    total    = paste0(label_total,    "\n(N = ", .fmt_n(n_total),    ")"),
+    calldate = paste0(label_calldate, "\n(n = ", .fmt_n(n_calldate), ")"),
+    included = paste0(label_included, "\n(n = ", .fmt_n(n_included), ")"),
+    logistic = paste0(label_logistic, "\n(n = ", .fmt_n(n_logistic), ")"),
+    waittime = paste0(label_waittime, "\n(n = ", .fmt_n(n_waittime), ")")
+  )
+
+  # ---- Alternate engine: Gmisc grid grobs ------------------------------------
+  # Same pipeline-derived counts, robust auto-routed layout.
+  if (engine == "gmisc") {
+    return(invisible(.strobe_flow_gmisc(
+      box_labels      = box_labels,
+      excl_ncd_lbl    = excl_ncd_lbl,
+      excl_screen_lbl = excl_screen_lbl,
+      excl_wt_lbl     = excl_wt_lbl,
+      title           = title,
+      output_path     = output_path,
+      width           = width,
+      height          = height,
+      dpi             = dpi
+    )))
+  }
+
   # ---- Layout -----------------------------------------------------------------
   # Layout - all coordinates in [0,1] (y=1 top, y=0 bottom).
   cx    <- 0.30   # main column centre x
@@ -330,16 +368,14 @@ mysterycall_strobe_flow <- function(
     )
 
   # Box 1 - total
-  p <- .mbox(p, cx, y1, bw, bh,
-             paste0(label_total, "\n(N = ", .fmt_n(n_total), ")"), bold = TRUE)
+  p <- .mbox(p, cx, y1, bw, bh, box_labels$total, bold = TRUE)
   p <- .vseg(p, y1 - bh, tap_ncd)
   p <- .harrow(p, tap_ncd, cx + bw, ex - ebw)
   p <- .mbox(p, ex, tap_ncd, ebw, ebh_s, excl_ncd_lbl, size = 2.7)
   p <- .varrow(p, tap_ncd, y2 + bh)
 
   # Box 2 - calldate
-  p <- .mbox(p, cx, y2, bw, bh,
-             paste0(label_calldate, "\n(n = ", .fmt_n(n_calldate), ")"))
+  p <- .mbox(p, cx, y2, bw, bh, box_labels$calldate)
   p <- .vseg(p, y2 - bh, tap_excl)
   p <- .harrow(p, tap_excl, cx + bw, ex - ebw)
   p <- .mbox(p, ex, tap_excl, ebw, ebh_screen, excl_screen_lbl,
@@ -347,21 +383,18 @@ mysterycall_strobe_flow <- function(
   p <- .varrow(p, tap_excl, y3 + bh)
 
   # Box 3 - included
-  p <- .mbox(p, cx, y3, bw, bh,
-             paste0(label_included, "\n(n = ", .fmt_n(n_included), ")"))
+  p <- .mbox(p, cx, y3, bw, bh, box_labels$included)
   p <- .varrow(p, y3 - bh, y4 + bh)
 
   # Box 4 - logistic
-  p <- .mbox(p, cx, y4, bw, bh,
-             paste0(label_logistic, "\n(n = ", .fmt_n(n_logistic), ")"), bold = TRUE)
+  p <- .mbox(p, cx, y4, bw, bh, box_labels$logistic, bold = TRUE)
   p <- .vseg(p, y4 - bh, tap_wt)
   p <- .harrow(p, tap_wt, cx + bw, ex - ebw)
   p <- .mbox(p, ex, tap_wt, ebw, ebh_s + 0.010, excl_wt_lbl, size = 2.7)
   p <- .varrow(p, tap_wt, y5 + bh)
 
   # Box 5 - waittime
-  p <- .mbox(p, cx, y5, bw, bh,
-             paste0(label_waittime, "\n(n = ", .fmt_n(n_waittime), ")"), bold = TRUE)
+  p <- .mbox(p, cx, y5, bw, bh, box_labels$waittime, bold = TRUE)
 
   # ---- Save ------------------------------------------------------------------
   if (!is.null(output_path)) {
@@ -387,3 +420,133 @@ mysterycall_strobe_flow <- function(
 `%||%` <- function(a, b) if (!is.null(a)) a else b
 
 .fmt_n <- function(n) format(as.integer(n), big.mark = ",")
+
+# Gmisc grid-grob renderer for mysterycall_strobe_flow().
+#
+# Draws the identical, pipeline-derived counts using Gmisc::boxGrob() /
+# connectGrob() instead of hand-placed ggplot2 annotations. Grid grobs auto-size
+# each box to its text and auto-route the connectors, so long exclusion lists no
+# longer overflow the fixed [0,1] coordinate layout the ggplot2 engine uses.
+# Returns a grid gTree (invisibly, via the caller).
+.strobe_flow_gmisc <- function(box_labels,
+                               excl_ncd_lbl,
+                               excl_screen_lbl,
+                               excl_wt_lbl,
+                               title,
+                               output_path,
+                               width,
+                               height,
+                               dpi) {
+  if (!requireNamespace("Gmisc", quietly = TRUE) ||
+      !requireNamespace("grid", quietly = TRUE))
+    stop("engine = \"gmisc\" requires the 'Gmisc' and 'grid' packages. ",
+         "Install with: install.packages(\"Gmisc\")", call. = FALSE)
+
+  gp_box <- grid::gpar(fill = "white", col = "black")
+  gp_txt <- grid::gpar(cex = 0.8)
+
+  cx <- 0.30   # main column centre
+  ex <- 0.78   # exclusion column centre
+  mw <- 0.44   # main box width  (fraction of npc)
+  ew <- 0.36   # exclusion box width
+
+  # y-centres for the five main-column boxes (top -> bottom). Gmisc sizes box
+  # heights to their text, so these only set vertical spacing, not extents.
+  y1 <- 0.92; y2 <- 0.74; y3 <- 0.52; y4 <- 0.28; y5 <- 0.08
+
+  b_total    <- Gmisc::boxGrob(box_labels$total,    x = cx, y = y1,
+                               width = mw, box_gp = gp_box, txt_gp = gp_txt)
+  b_calldate <- Gmisc::boxGrob(box_labels$calldate, x = cx, y = y2,
+                               width = mw, box_gp = gp_box, txt_gp = gp_txt)
+  b_included <- Gmisc::boxGrob(box_labels$included, x = cx, y = y3,
+                               width = mw, box_gp = gp_box, txt_gp = gp_txt)
+  b_logistic <- Gmisc::boxGrob(box_labels$logistic, x = cx, y = y4,
+                               width = mw, box_gp = gp_box, txt_gp = gp_txt)
+  b_waittime <- Gmisc::boxGrob(box_labels$waittime, x = cx, y = y5,
+                               width = mw, box_gp = gp_box, txt_gp = gp_txt)
+
+  # Right-side exclusion boxes at the midpoint of the branch they tee off.
+  # The screening box is left-justified so its per-code bullet list lines up.
+  e_ncd    <- Gmisc::boxGrob(excl_ncd_lbl,    x = ex, y = (y1 + y2) / 2,
+                             width = ew, box_gp = gp_box, txt_gp = gp_txt)
+  e_screen <- Gmisc::boxGrob(excl_screen_lbl, x = ex, y = (y2 + y3) / 2,
+                             width = ew, box_gp = gp_box, txt_gp = gp_txt,
+                             just = "left")
+  e_wt     <- Gmisc::boxGrob(excl_wt_lbl,     x = ex, y = (y4 + y5) / 2,
+                             width = ew, box_gp = gp_box, txt_gp = gp_txt)
+
+  # Vertical spine + horizontal side branches (auto-routed by Gmisc).
+  spine <- list(
+    Gmisc::connectGrob(b_total,    b_calldate, "vertical"),
+    Gmisc::connectGrob(b_calldate, b_included, "vertical"),
+    Gmisc::connectGrob(b_included, b_logistic, "vertical"),
+    Gmisc::connectGrob(b_logistic, b_waittime, "vertical"),
+    Gmisc::connectGrob(b_total,    e_ncd,    "-"),
+    Gmisc::connectGrob(b_calldate, e_screen, "-"),
+    Gmisc::connectGrob(b_logistic, e_wt,     "-")
+  )
+
+  grobs <- c(
+    spine,
+    list(b_total, b_calldate, b_included, b_logistic, b_waittime,
+         e_ncd, e_screen, e_wt)
+  )
+  if (!is.null(title) && nzchar(title)) {
+    grobs <- c(grobs, list(grid::textGrob(
+      title, y = grid::unit(0.98, "npc"),
+      gp = grid::gpar(fontface = "bold", cex = 1.05)
+    )))
+  }
+
+  chart <- grid::gTree(children = do.call(grid::gList, grobs),
+                       cl = "mysterycall_strobe_flow_gmisc")
+
+  if (!is.null(output_path)) {
+    .save_grob(chart, output_path, width, height, dpi)
+  } else if (interactive()) {
+    grid::grid.newpage()
+    grid::grid.draw(chart)
+  }
+
+  chart
+}
+
+# Save a grid grob to png/tiff/jpeg/pdf/svg, mirroring the raster-pairing
+# behaviour of the ggplot2 engine (a .png request also writes .tiff and vice
+# versa) so downstream manuscript tooling finds both formats.
+.save_grob <- function(grob, path, width, height, dpi) {
+  open_dev <- function(p) {
+    fmt <- tolower(tools::file_ext(p))
+    switch(
+      fmt,
+      png  = grDevices::png(p, width = width, height = height, units = "in", res = dpi),
+      tiff = grDevices::tiff(p, width = width, height = height, units = "in",
+                             res = dpi, compression = "lzw"),
+      jpg  = ,
+      jpeg = grDevices::jpeg(p, width = width, height = height, units = "in", res = dpi),
+      pdf  = grDevices::pdf(p, width = width, height = height),
+      svg  = grDevices::svg(p, width = width, height = height),
+      stop("Unsupported output format for engine = \"gmisc\": .", fmt, call. = FALSE)
+    )
+    invisible(fmt)
+  }
+
+  draw_to <- function(p) {
+    open_dev(p)
+    on.exit(grDevices::dev.off(), add = TRUE)
+    grid::grid.newpage()
+    grid::grid.draw(grob)
+  }
+
+  draw_to(path)
+  message("Saved: ", path)
+
+  fmt <- tolower(tools::file_ext(path))
+  if (fmt %in% c("png", "tiff", "jpg", "jpeg")) {
+    base  <- tools::file_path_sans_ext(path)
+    other <- if (fmt == "png") paste0(base, ".tiff") else paste0(base, ".png")
+    draw_to(other)
+    message("Also saved: ", other)
+  }
+  invisible(path)
+}
