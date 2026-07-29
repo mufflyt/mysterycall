@@ -2,6 +2,14 @@
 
 ## New features
 
+- `mysterycall_subspecialist_infographic()`: a workforce-density infographic
+  (titled header bar over one accent-coloured panel per subspecialty), styled
+  after the "clinicians per unit" figures, repurposed to show **subspecialists
+  per 100,000 women** at two time points. Defaults to the four ABOG OB-GYN
+  subspecialties; takes the density values as `start`/`end` vectors or a `data`
+  frame and derives the percent change from them (so the figure can never
+  disagree with its own numbers). Returns a `ggplot` object and can save via
+  `output_path`.
 - `mysterycall_strobe_flow()` gains an `engine` argument. The default
   `engine = "ggplot2"` is unchanged. New `engine = "gmisc"` renders the *same*
   pipeline-derived counts with the Gmisc grid engine
