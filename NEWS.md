@@ -1,5 +1,20 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## New features
+
+- `mysterycall_strobe_flow()` gains an `engine` argument. The default
+  `engine = "ggplot2"` is unchanged. New `engine = "gmisc"` renders the *same*
+  pipeline-derived counts with the Gmisc grid engine
+  (`Gmisc::boxGrob()` / `Gmisc::connectGrob()`), whose boxes auto-size to their
+  text and whose connectors re-route automatically -- so long per-code
+  exclusion lists no longer overflow the fixed-coordinate ggplot2 layout. The
+  count derivation (`mysterycall_prepare_calls()` waterfall, exclusion summary,
+  and the logistic/wait-time analytic samples) is shared by both engines, so
+  the diagram cannot disagree with the models regardless of renderer. Gmisc
+  is a `Suggests`-only dependency; the ggplot2 default needs nothing new. The
+  gmisc engine returns a grid `gTree` and supports the same `output_path`
+  saving (png/tiff/jpeg/pdf/svg, with raster format pairing).
+
 ## Consolidation and deprecation
 
 - `mysterycall_acceptance_rate_calc()` gains a `medicaid_screen_group` argument

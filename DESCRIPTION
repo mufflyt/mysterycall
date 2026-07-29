@@ -68,6 +68,7 @@ Suggests:
     geepack,
     ggforce,
     glmmTMB,
+    Gmisc,
     gtsummary,
     grid,
     gridExtra,
