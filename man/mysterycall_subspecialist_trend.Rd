@@ -21,6 +21,14 @@ mysterycall_subspecialist_trend(
   label_ends = TRUE,
   point_size = 1.9,
   line_width = 1,
+  numerator_source = NULL,
+  denominator_source = paste0("U.S. Census Bureau, American Community Survey ",
+    "1-year estimates, table B01001 (B01001_026E, ", "total female population)"),
+  denominator_vintage = NULL,
+  accessed = NULL,
+  notes = NULL,
+  caption = NULL,
+  write_provenance = TRUE,
   output_path = NULL,
   width = 9,
   height = 5.5,
@@ -68,6 +76,30 @@ legend (\code{TRUE}, default) instead of showing a legend.}
 
 \item{point_size, line_width}{Numeric point size and line width.}
 
+\item{numerator_source}{Character or \code{NULL}. Citation for the subspecialist
+counts (e.g. \code{"ABOG certified-diplomate counts, 2013-2023"}). Recorded in
+the provenance and, if set, shown in the figure caption.}
+
+\item{denominator_source}{Character. Citation for the female-population
+denominator. Defaults to the U.S. Census ACS 1-year table B01001
+(\code{B01001_026E}). Set to \code{NULL} to omit.}
+
+\item{denominator_vintage}{Character or \code{NULL}. Extra denominator detail
+recorded in the provenance (e.g. \code{"ACS 1-year 2013-2023; 2020 from ACS 5-year"}).}
+
+\item{accessed}{Date or character or \code{NULL}. When the source data were
+pulled (recorded in the provenance and caption).}
+
+\item{notes}{Character or \code{NULL}. Free-text note recorded in the provenance.}
+
+\item{caption}{Character, \code{NULL}, or \code{NA}. Figure caption. \code{NULL} (default)
+auto-builds a source line from the numerator/denominator provenance; \code{NA}
+(or \code{""}) draws no caption; a string is used verbatim.}
+
+\item{write_provenance}{Logical. When \code{output_path} is set, also write a
+\verb{<output>.provenance.txt} sidecar with the full provenance record and the
+per-point density table. Default \code{TRUE}.}
+
 \item{output_path}{Character or \code{NULL}. File path to save via
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}. \code{NULL} (default) writes nothing.}
 
@@ -77,7 +109,11 @@ legend (\code{TRUE}, default) instead of showing a legend.}
 }
 \value{
 A ggplot2 object (invisibly). Its \code{$data} holds the computed density
-table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}).
+table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}), and
+\code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record (metric,
+computation, numerator/denominator sources, package version, access date,
+and creation timestamp). When saved, a \verb{<output>.provenance.txt} sidecar is
+written alongside the image (unless \code{write_provenance = FALSE}).
 }
 \description{
 Computes subspecialists per 100,000 women for each subspecialty and year from

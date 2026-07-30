@@ -78,6 +78,45 @@ test_that("both counts and population are required", {
   expect_error(mysterycall_subspecialist_trend(COUNTS_LONG), "Supply both")
 })
 
+test_that("provenance is attached and written as a sidecar", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP,
+    numerator_source = "ABOG diplomate counts",
+    accessed = "2026-07-30"
+  ))
+  prov <- attr(p, "provenance")
+  expect_s3_class(prov, "mysterycall_provenance")
+  expect_equal(prov$numerator$source, "ABOG diplomate counts")
+  expect_equal(prov$per, 1e5)
+  expect_equal(prov$years, c(2013, 2023))
+  expect_match(prov$generated_by, "subspecialist_trend")
+  # caption auto-built onto the figure
+  expect_true(!is.null(p$labels$caption) && nzchar(p$labels$caption))
+
+  out <- tempfile(fileext = ".png")
+  side <- paste0(tools::file_path_sans_ext(out), ".provenance.txt")
+  on.exit(unlink(c(out, side)), add = TRUE)
+  suppressMessages(suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP,
+    numerator_source = "ABOG diplomate counts", accessed = "2026-07-30",
+    output_path = out
+  )))
+  expect_true(file.exists(side))
+  txt <- paste(readLines(side), collapse = "\n")
+  expect_match(txt, "ABOG diplomate counts")
+  expect_match(txt, "B01001_026E")
+  expect_match(txt, "Per-point values")
+})
+
+test_that("caption = NA suppresses the caption", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP, caption = NA
+  ))
+  expect_null(p$labels$caption)
+})
+
 test_that("negative counts and non-positive population are rejected", {
   skip_if_not_installed("ggplot2")
   bad <- COUNTS_LONG; bad$count[1] <- -5

@@ -24,6 +24,14 @@ mysterycall_subspecialist_infographic(
   decrease_color = "#B22222",
   color_pct_by = c("direction", "panel"),
   digits = 2L,
+  numerator_source = NULL,
+  denominator_source = paste0("U.S. Census Bureau, American Community Survey ",
+    "1-year estimates, table B01001 (B01001_026E, ", "total female population)"),
+  denominator_vintage = NULL,
+  accessed = NULL,
+  notes = NULL,
+  caption = NULL,
+  write_provenance = TRUE,
   output_path = NULL,
   width = 10,
   height = 4.8,
@@ -71,6 +79,30 @@ source figure).}
 
 \item{digits}{Integer. Decimal places for the density values. Default \code{2}.}
 
+\item{numerator_source}{Character or \code{NULL}. Citation for the subspecialist
+densities/counts. Recorded in the provenance and, if set, shown in the
+caption.}
+
+\item{denominator_source}{Character. Citation for the female-population
+denominator. Defaults to the U.S. Census ACS 1-year table B01001
+(\code{B01001_026E}). Set to \code{NULL} to omit.}
+
+\item{denominator_vintage}{Character or \code{NULL}. Extra denominator detail
+recorded in the provenance.}
+
+\item{accessed}{Date or character or \code{NULL}. When the source data were
+pulled (recorded in the provenance and caption).}
+
+\item{notes}{Character or \code{NULL}. Free-text note recorded in the provenance.}
+
+\item{caption}{Character, \code{NULL}, or \code{NA}. Bottom source caption. \code{NULL}
+(default) auto-builds a source line from provenance; \code{NA} (or \code{""}) draws
+none; a string is used verbatim.}
+
+\item{write_provenance}{Logical. When \code{output_path} is set, also write a
+\verb{<output>.provenance.txt} sidecar with the provenance record and the
+per-panel values. Default \code{TRUE}.}
+
 \item{output_path}{Character or \code{NULL}. File path to save via
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{.png}, \code{.pdf}, \code{.tiff}, \code{.svg}). \code{NULL} (default)
 writes nothing.}
@@ -80,8 +112,10 @@ writes nothing.}
 \item{dpi}{Integer. Resolution for raster output. Default \code{300}.}
 }
 \value{
-A ggplot2 object (invisibly). When \code{output_path} is set the file is
-written and the path messaged.
+A ggplot2 object (invisibly); \code{attr(p, "provenance")} holds a
+\code{mysterycall_provenance} record. When \code{output_path} is set the image is
+written (plus a \verb{<output>.provenance.txt} sidecar unless
+\code{write_provenance = FALSE}) and the path messaged.
 }
 \description{
 Reproduces the "clinicians per unit" infographic style (a titled header bar

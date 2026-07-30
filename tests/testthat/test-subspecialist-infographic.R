@@ -86,6 +86,32 @@ test_that(".abbrev_subspecialty maps known names and falls back to initials", {
   expect_equal(mysterycall:::.abbrev_subspecialty("Alpha Beta Gamma"), "ABG")
 })
 
+test_that("provenance is attached, captioned, and written as a sidecar", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(mysterycall_subspecialist_infographic(
+    start = c(1.20, 0.95, 0.80, 0.40),
+    end   = c(1.35, 1.02, 0.88, 0.61),
+    numerator_source = "ABOG diplomate counts",
+    accessed = "2026-07-30"
+  ))
+  prov <- attr(p, "provenance")
+  expect_s3_class(prov, "mysterycall_provenance")
+  expect_match(prov$generated_by, "subspecialist_infographic")
+  # caption drawn as an annotation
+  expect_true(any(grepl("Source —", .infographic_labels(p), fixed = TRUE)))
+
+  out  <- tempfile(fileext = ".png")
+  side <- paste0(tools::file_path_sans_ext(out), ".provenance.txt")
+  on.exit(unlink(c(out, side)), add = TRUE)
+  suppressMessages(suppressWarnings(mysterycall_subspecialist_infographic(
+    start = c(1.20, 0.95, 0.80, 0.40),
+    end   = c(1.35, 1.02, 0.88, 0.61),
+    accessed = "2026-07-30", output_path = out
+  )))
+  expect_true(file.exists(side))
+  expect_match(paste(readLines(side), collapse = "\n"), "B01001_026E")
+})
+
 test_that("writes a file when output_path is supplied", {
   skip_if_not_installed("ggplot2")
   out <- tempfile(fileext = ".png")

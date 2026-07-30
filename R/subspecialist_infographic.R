@@ -44,14 +44,33 @@ NULL
 #'   `"panel"` (colour the percent change with the panel accent, like the
 #'   source figure).
 #' @param digits Integer. Decimal places for the density values. Default `2`.
+#' @param numerator_source Character or `NULL`. Citation for the subspecialist
+#'   densities/counts. Recorded in the provenance and, if set, shown in the
+#'   caption.
+#' @param denominator_source Character. Citation for the female-population
+#'   denominator. Defaults to the U.S. Census ACS 1-year table B01001
+#'   (`B01001_026E`). Set to `NULL` to omit.
+#' @param denominator_vintage Character or `NULL`. Extra denominator detail
+#'   recorded in the provenance.
+#' @param accessed Date or character or `NULL`. When the source data were
+#'   pulled (recorded in the provenance and caption).
+#' @param notes Character or `NULL`. Free-text note recorded in the provenance.
+#' @param caption Character, `NULL`, or `NA`. Bottom source caption. `NULL`
+#'   (default) auto-builds a source line from provenance; `NA` (or `""`) draws
+#'   none; a string is used verbatim.
+#' @param write_provenance Logical. When `output_path` is set, also write a
+#'   `<output>.provenance.txt` sidecar with the provenance record and the
+#'   per-panel values. Default `TRUE`.
 #' @param output_path Character or `NULL`. File path to save via
 #'   [ggplot2::ggsave()] (`.png`, `.pdf`, `.tiff`, `.svg`). `NULL` (default)
 #'   writes nothing.
 #' @param width,height Numeric. Saved size in inches. Defaults `10` x `4.8`.
 #' @param dpi Integer. Resolution for raster output. Default `300`.
 #'
-#' @return A ggplot2 object (invisibly). When `output_path` is set the file is
-#'   written and the path messaged.
+#' @return A ggplot2 object (invisibly); `attr(p, "provenance")` holds a
+#'   `mysterycall_provenance` record. When `output_path` is set the image is
+#'   written (plus a `<output>.provenance.txt` sidecar unless
+#'   `write_provenance = FALSE`) and the path messaged.
 #'
 #' @family manuscript
 #' @seealso [mysterycall_flow_diagram()], [mysterycall_strobe_flow()]
@@ -96,6 +115,15 @@ mysterycall_subspecialist_infographic <- function(
     decrease_color   = "#B22222",
     color_pct_by     = c("direction", "panel"),
     digits           = 2L,
+    numerator_source    = NULL,
+    denominator_source  = paste0("U.S. Census Bureau, American Community Survey ",
+                                 "1-year estimates, table B01001 (B01001_026E, ",
+                                 "total female population)"),
+    denominator_vintage = NULL,
+    accessed            = NULL,
+    notes               = NULL,
+    caption             = NULL,
+    write_provenance    = TRUE,
     output_path      = NULL,
     width            = 10,
     height           = 4.8,
@@ -157,6 +185,34 @@ mysterycall_subspecialist_infographic <- function(
                       ifelse(dir == "down", decrease_color, "#999999"))
 
   fmt_val <- function(x) formatC(round(x, digits), format = "f", digits = digits)
+
+  # ---- provenance ------------------------------------------------------------
+  prov <- .build_provenance(
+    metric              = "Subspecialists per 100,000 women",
+    computation         = "percent change = (end - start) / start * 100; density values supplied",
+    numerator_desc      = "Subspecialist density at two time points (user-supplied)",
+    denominator_desc    = "Total female population",
+    generated_by        = "mysterycall::mysterycall_subspecialist_infographic()",
+    years               = c(as.integer(year_start), as.integer(year_end)),
+    n_series            = n,
+    numerator_source    = numerator_source,
+    denominator_source  = denominator_source,
+    denominator_vintage = denominator_vintage,
+    accessed            = accessed,
+    notes               = notes
+  )
+  prov_table <- data.frame(
+    subspecialty = subspecialty,
+    start        = start,
+    end          = end,
+    pct_change   = round(pct, 1),
+    stringsAsFactors = FALSE
+  )
+  names(prov_table)[2:3] <- c(paste0("y", year_start), paste0("y", year_end))
+
+  cap <- if (is.null(caption)) .provenance_caption(prov)
+         else if (length(caption) == 1L && is.na(caption)) ""
+         else caption
 
   # ---- layout (points/text sized in absolute units; badges stay circular) ----
   cx    <- seq_len(n) - 0.5          # panel centres on x in [0, n]
@@ -225,9 +281,21 @@ mysterycall_subspecialist_infographic <- function(
                       label = as.integer(year_end),
                       colour = "#8A8A8A", size = 2.6, hjust = 0)
 
+  # source caption (wrapped) along the bottom
+  if (nzchar(cap)) {
+    p <- p +
+      ggplot2::annotate("text", x = xmax / 2, y = 0.03,
+                        label = stringr::str_wrap(cap, width = 120),
+                        colour = "#777777", size = 2.2, hjust = 0.5,
+                        lineheight = 0.95)
+  }
+
+  attr(p, "provenance") <- prov
+
   if (!is.null(output_path)) {
     ggplot2::ggsave(output_path, plot = p, width = width, height = height, dpi = dpi)
     message("Saved: ", output_path)
+    if (isTRUE(write_provenance)) .write_provenance(prov, output_path, prov_table)
   }
 
   invisible(p)

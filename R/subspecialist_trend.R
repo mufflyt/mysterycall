@@ -59,13 +59,35 @@ NULL
 #' @param label_ends Logical. Label each line at its final year and hide the
 #'   legend (`TRUE`, default) instead of showing a legend.
 #' @param point_size,line_width Numeric point size and line width.
+#' @param numerator_source Character or `NULL`. Citation for the subspecialist
+#'   counts (e.g. `"ABOG certified-diplomate counts, 2013-2023"`). Recorded in
+#'   the provenance and, if set, shown in the figure caption.
+#' @param denominator_source Character. Citation for the female-population
+#'   denominator. Defaults to the U.S. Census ACS 1-year table B01001
+#'   (`B01001_026E`). Set to `NULL` to omit.
+#' @param denominator_vintage Character or `NULL`. Extra denominator detail
+#'   recorded in the provenance (e.g. `"ACS 1-year 2013-2023; 2020 from ACS
+#'   5-year"`).
+#' @param accessed Date or character or `NULL`. When the source data were
+#'   pulled (recorded in the provenance and caption).
+#' @param notes Character or `NULL`. Free-text note recorded in the provenance.
+#' @param caption Character, `NULL`, or `NA`. Figure caption. `NULL` (default)
+#'   auto-builds a source line from the numerator/denominator provenance; `NA`
+#'   (or `""`) draws no caption; a string is used verbatim.
+#' @param write_provenance Logical. When `output_path` is set, also write a
+#'   `<output>.provenance.txt` sidecar with the full provenance record and the
+#'   per-point density table. Default `TRUE`.
 #' @param output_path Character or `NULL`. File path to save via
 #'   [ggplot2::ggsave()]. `NULL` (default) writes nothing.
 #' @param width,height Numeric. Saved size in inches. Defaults `9` x `5.5`.
 #' @param dpi Integer. Resolution for raster output. Default `300`.
 #'
 #' @return A ggplot2 object (invisibly). Its `$data` holds the computed density
-#'   table (`subspecialty`, `year`, `count`, `population`, `density`).
+#'   table (`subspecialty`, `year`, `count`, `population`, `density`), and
+#'   `attr(p, "provenance")` holds a `mysterycall_provenance` record (metric,
+#'   computation, numerator/denominator sources, package version, access date,
+#'   and creation timestamp). When saved, a `<output>.provenance.txt` sidecar is
+#'   written alongside the image (unless `write_provenance = FALSE`).
 #'
 #' @family manuscript
 #' @seealso [mysterycall_subspecialist_infographic()] for the two-point
@@ -98,6 +120,15 @@ mysterycall_subspecialist_trend <- function(
     label_ends       = TRUE,
     point_size       = 1.9,
     line_width       = 1.0,
+    numerator_source    = NULL,
+    denominator_source  = paste0("U.S. Census Bureau, American Community Survey ",
+                                 "1-year estimates, table B01001 (B01001_026E, ",
+                                 "total female population)"),
+    denominator_vintage = NULL,
+    accessed            = NULL,
+    notes               = NULL,
+    caption             = NULL,
+    write_provenance    = TRUE,
     output_path      = NULL,
     width            = 9,
     height           = 5.5,
@@ -125,6 +156,31 @@ mysterycall_subspecialist_trend <- function(
   if (isTRUE(show_year_range))
     title <- sprintf("%s, %d–%d", title, min(years), max(years))
 
+  # ---- provenance ------------------------------------------------------------
+  prov <- .build_provenance(
+    metric              = sprintf("Subspecialists per %s women",
+                                  format(per, big.mark = ",", scientific = FALSE)),
+    computation         = sprintf("density = count / population * %s",
+                                  format(per, scientific = FALSE)),
+    numerator_desc      = "Subspecialist counts by subspecialty and year (user-supplied)",
+    denominator_desc    = "Total female population by year",
+    generated_by        = "mysterycall::mysterycall_subspecialist_trend()",
+    per                 = per,
+    years               = years,
+    n_series            = length(unique(d$subspecialty)),
+    numerator_source    = numerator_source,
+    denominator_source  = denominator_source,
+    denominator_vintage = denominator_vintage,
+    accessed            = accessed,
+    notes               = notes
+  )
+
+  # caption: NULL -> auto from provenance; NA / "" -> none; string -> literal
+  cap <- if (is.null(caption)) .provenance_caption(prov)
+         else if (length(caption) == 1L && is.na(caption)) ""
+         else caption
+  if (!nzchar(cap)) cap <- NULL
+
   p <- ggplot2::ggplot(
     d,
     ggplot2::aes(x = .data$year, y = .data$density,
@@ -140,11 +196,14 @@ mysterycall_subspecialist_trend <- function(
       limits = c(0, NA),
       expand = ggplot2::expansion(mult = c(0, 0.08))
     ) +
-    ggplot2::labs(title = title, x = x_lab, y = y_lab, colour = NULL) +
+    ggplot2::labs(title = title, x = x_lab, y = y_lab, colour = NULL,
+                  caption = cap) +
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.grid.minor = ggplot2::element_blank(),
       plot.title       = ggplot2::element_text(face = "bold"),
+      plot.caption     = ggplot2::element_text(size = 7, colour = "#666666",
+                                               hjust = 0),
       legend.position  = if (label_ends) "none" else "right"
     )
 
@@ -162,9 +221,12 @@ mysterycall_subspecialist_trend <- function(
       ggplot2::coord_cartesian(clip = "off")
   }
 
+  attr(p, "provenance") <- prov
+
   if (!is.null(output_path)) {
     ggplot2::ggsave(output_path, plot = p, width = width, height = height, dpi = dpi)
     message("Saved: ", output_path)
+    if (isTRUE(write_provenance)) .write_provenance(prov, output_path, d)
   }
 
   invisible(p)

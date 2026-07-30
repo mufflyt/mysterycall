@@ -2,6 +2,17 @@
 
 ## New features
 
+- Both subspecialist-density figures now carry **detailed provenance**. Each
+  records a structured `mysterycall_provenance` object — metric, computation,
+  numerator/denominator descriptions and citations, denominator vintage, scale,
+  year range, generating call, package version, data-access date, and creation
+  timestamp — attached as `attr(figure, "provenance")` and printed by a
+  `print.mysterycall_provenance` method. A source caption is drawn on the figure
+  (auto-built from the citations, overridable or suppressible), and saving the
+  image also writes a `<output>.provenance.txt` sidecar containing the full
+  record plus the per-point value table. New arguments: `numerator_source`,
+  `denominator_source` (defaulting to the Census ACS `B01001_026E` citation),
+  `denominator_vintage`, `accessed`, `notes`, `caption`, `write_provenance`.
 - `mysterycall_subspecialist_trend()`: a multi-year density trend (one line per
   subspecialty) of **subspecialists per 100,000 women**, computed from **raw
   counts** (numerator) divided by the **total female population** (denominator).
