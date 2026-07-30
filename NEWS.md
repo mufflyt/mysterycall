@@ -2,6 +2,16 @@
 
 ## New features
 
+- `mysterycall_subspecialist_trend()`: a multi-year density trend (one line per
+  subspecialty) of **subspecialists per 100,000 women**, computed from **raw
+  counts** (numerator) divided by the **total female population** (denominator).
+  The density is derived from the inputs (`count / population * per`), never
+  typed. Accepts counts as a long/wide data frame or a matrix, and the female-
+  population denominator as a year-named vector, an ordered vector, or a data
+  frame; the docs include the exact Census ACS `B01001_026E` call to fetch the
+  denominators. Population figures are intentionally **not** bundled (they need
+  to be a cited vintage). Returns a `ggplot` whose `$data` carries the computed
+  density table.
 - `mysterycall_subspecialist_infographic()`: a workforce-density infographic
   (titled header bar over one accent-coloured panel per subspecialty), styled
   after the "clinicians per unit" figures, repurposed to show **subspecialists
