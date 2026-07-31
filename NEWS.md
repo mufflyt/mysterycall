@@ -9,8 +9,11 @@
   timestamp — attached as `attr(figure, "provenance")` and printed by a
   `print.mysterycall_provenance` method. A source caption is drawn on the figure
   (auto-built from the citations, overridable or suppressible), and saving the
-  image also writes a `<output>.provenance.txt` sidecar containing the full
-  record plus the per-point value table. New arguments: `numerator_source`,
+  image also writes provenance sidecars containing the full record plus the
+  per-point value table: a human-readable `<output>.provenance.txt` and, when
+  `jsonlite` is installed, a machine-readable `<output>.provenance.json`
+  (schema `mysterycall/provenance`) for downstream pipelines. New arguments:
+  `numerator_source`,
   `denominator_source` (defaulting to the Census ACS `B01001_026E` citation),
   `denominator_vintage`, `accessed`, `notes`, `caption`, `write_provenance`.
 - `mysterycall_subspecialist_trend()`: a multi-year density trend (one line per

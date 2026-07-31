@@ -96,9 +96,11 @@ pulled (recorded in the provenance and caption).}
 auto-builds a source line from the numerator/denominator provenance; \code{NA}
 (or \code{""}) draws no caption; a string is used verbatim.}
 
-\item{write_provenance}{Logical. When \code{output_path} is set, also write a
-\verb{<output>.provenance.txt} sidecar with the full provenance record and the
-per-point density table. Default \code{TRUE}.}
+\item{write_provenance}{Logical. When \code{output_path} is set, also write
+provenance sidecars next to the image: a human-readable
+\verb{<output>.provenance.txt} and, when \pkg{jsonlite} is installed, a
+machine-readable \verb{<output>.provenance.json} (schema \code{mysterycall/provenance})
+carrying the record and the per-point density table. Default \code{TRUE}.}
 
 \item{output_path}{Character or \code{NULL}. File path to save via
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}. \code{NULL} (default) writes nothing.}
@@ -112,8 +114,9 @@ A ggplot2 object (invisibly). Its \code{$data} holds the computed density
 table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}), and
 \code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record (metric,
 computation, numerator/denominator sources, package version, access date,
-and creation timestamp). When saved, a \verb{<output>.provenance.txt} sidecar is
-written alongside the image (unless \code{write_provenance = FALSE}).
+and creation timestamp). When saved, \verb{<output>.provenance.txt} and (if
+\pkg{jsonlite} is installed) \verb{<output>.provenance.json} sidecars are written
+alongside the image (unless \code{write_provenance = FALSE}).
 }
 \description{
 Computes subspecialists per 100,000 women for each subspecialty and year from

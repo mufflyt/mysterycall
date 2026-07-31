@@ -99,9 +99,11 @@ pulled (recorded in the provenance and caption).}
 (default) auto-builds a source line from provenance; \code{NA} (or \code{""}) draws
 none; a string is used verbatim.}
 
-\item{write_provenance}{Logical. When \code{output_path} is set, also write a
-\verb{<output>.provenance.txt} sidecar with the provenance record and the
-per-panel values. Default \code{TRUE}.}
+\item{write_provenance}{Logical. When \code{output_path} is set, also write
+provenance sidecars next to the image: a human-readable
+\verb{<output>.provenance.txt} and, when \pkg{jsonlite} is installed, a
+machine-readable \verb{<output>.provenance.json} (schema \code{mysterycall/provenance})
+carrying the record and the per-panel values. Default \code{TRUE}.}
 
 \item{output_path}{Character or \code{NULL}. File path to save via
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{.png}, \code{.pdf}, \code{.tiff}, \code{.svg}). \code{NULL} (default)
@@ -114,8 +116,9 @@ writes nothing.}
 \value{
 A ggplot2 object (invisibly); \code{attr(p, "provenance")} holds a
 \code{mysterycall_provenance} record. When \code{output_path} is set the image is
-written (plus a \verb{<output>.provenance.txt} sidecar unless
-\code{write_provenance = FALSE}) and the path messaged.
+written (plus \verb{<output>.provenance.txt} and, if \pkg{jsonlite} is installed,
+\verb{<output>.provenance.json} sidecars unless \code{write_provenance = FALSE}) and
+the path messaged.
 }
 \description{
 Reproduces the "clinicians per unit" infographic style (a titled header bar

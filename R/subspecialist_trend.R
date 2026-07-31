@@ -74,9 +74,11 @@ NULL
 #' @param caption Character, `NULL`, or `NA`. Figure caption. `NULL` (default)
 #'   auto-builds a source line from the numerator/denominator provenance; `NA`
 #'   (or `""`) draws no caption; a string is used verbatim.
-#' @param write_provenance Logical. When `output_path` is set, also write a
-#'   `<output>.provenance.txt` sidecar with the full provenance record and the
-#'   per-point density table. Default `TRUE`.
+#' @param write_provenance Logical. When `output_path` is set, also write
+#'   provenance sidecars next to the image: a human-readable
+#'   `<output>.provenance.txt` and, when \pkg{jsonlite} is installed, a
+#'   machine-readable `<output>.provenance.json` (schema `mysterycall/provenance`)
+#'   carrying the record and the per-point density table. Default `TRUE`.
 #' @param output_path Character or `NULL`. File path to save via
 #'   [ggplot2::ggsave()]. `NULL` (default) writes nothing.
 #' @param width,height Numeric. Saved size in inches. Defaults `9` x `5.5`.
@@ -86,8 +88,9 @@ NULL
 #'   table (`subspecialty`, `year`, `count`, `population`, `density`), and
 #'   `attr(p, "provenance")` holds a `mysterycall_provenance` record (metric,
 #'   computation, numerator/denominator sources, package version, access date,
-#'   and creation timestamp). When saved, a `<output>.provenance.txt` sidecar is
-#'   written alongside the image (unless `write_provenance = FALSE`).
+#'   and creation timestamp). When saved, `<output>.provenance.txt` and (if
+#'   \pkg{jsonlite} is installed) `<output>.provenance.json` sidecars are written
+#'   alongside the image (unless `write_provenance = FALSE`).
 #'
 #' @family manuscript
 #' @seealso [mysterycall_subspecialist_infographic()] for the two-point

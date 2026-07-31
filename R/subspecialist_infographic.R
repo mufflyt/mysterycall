@@ -58,9 +58,11 @@ NULL
 #' @param caption Character, `NULL`, or `NA`. Bottom source caption. `NULL`
 #'   (default) auto-builds a source line from provenance; `NA` (or `""`) draws
 #'   none; a string is used verbatim.
-#' @param write_provenance Logical. When `output_path` is set, also write a
-#'   `<output>.provenance.txt` sidecar with the provenance record and the
-#'   per-panel values. Default `TRUE`.
+#' @param write_provenance Logical. When `output_path` is set, also write
+#'   provenance sidecars next to the image: a human-readable
+#'   `<output>.provenance.txt` and, when \pkg{jsonlite} is installed, a
+#'   machine-readable `<output>.provenance.json` (schema `mysterycall/provenance`)
+#'   carrying the record and the per-panel values. Default `TRUE`.
 #' @param output_path Character or `NULL`. File path to save via
 #'   [ggplot2::ggsave()] (`.png`, `.pdf`, `.tiff`, `.svg`). `NULL` (default)
 #'   writes nothing.
@@ -69,8 +71,9 @@ NULL
 #'
 #' @return A ggplot2 object (invisibly); `attr(p, "provenance")` holds a
 #'   `mysterycall_provenance` record. When `output_path` is set the image is
-#'   written (plus a `<output>.provenance.txt` sidecar unless
-#'   `write_provenance = FALSE`) and the path messaged.
+#'   written (plus `<output>.provenance.txt` and, if \pkg{jsonlite} is installed,
+#'   `<output>.provenance.json` sidecars unless `write_provenance = FALSE`) and
+#'   the path messaged.
 #'
 #' @family manuscript
 #' @seealso [mysterycall_flow_diagram()], [mysterycall_strobe_flow()]

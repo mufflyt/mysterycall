@@ -106,14 +106,43 @@ NULL
   block
 }
 
-# Write the provenance block to a sidecar text file next to `output_path`
-# (same basename, ".provenance.txt"). Returns the sidecar path invisibly.
+# Machine-readable payload for the JSON sidecar: the provenance record plus the
+# per-point data table, wrapped with a schema tag.
+.provenance_payload <- function(prov, data = NULL) {
+  payload <- list(
+    schema         = "mysterycall/provenance",
+    schema_version = "1",
+    provenance     = unclass(prov)
+  )
+  if (!is.null(data) && is.data.frame(data) && nrow(data))
+    payload$data <- data
+  payload
+}
+
+# Write the provenance next to `output_path` (same basename): always a
+# human-readable ".provenance.txt", and — when jsonlite is available — a
+# machine-readable ".provenance.json". Returns the written paths invisibly.
 .write_provenance <- function(prov, output_path, data = NULL) {
-  base <- tools::file_path_sans_ext(output_path)
-  side <- paste0(base, ".provenance.txt")
-  writeLines(.format_provenance(prov, data), side)
-  message("Provenance: ", side)
-  invisible(side)
+  base  <- tools::file_path_sans_ext(output_path)
+  txt   <- paste0(base, ".provenance.txt")
+  writeLines(.format_provenance(prov, data), txt)
+  message("Provenance: ", txt)
+  written <- txt
+
+  if (requireNamespace("jsonlite", quietly = TRUE)) {
+    json <- paste0(base, ".provenance.json")
+    writeLines(
+      jsonlite::toJSON(.provenance_payload(prov, data),
+                       auto_unbox = TRUE, pretty = TRUE, na = "null",
+                       digits = NA),
+      json
+    )
+    message("Provenance: ", json)
+    written <- c(written, json)
+  } else {
+    message("Install 'jsonlite' to also emit a .provenance.json sidecar.")
+  }
+  invisible(written)
 }
 
 #' @export
