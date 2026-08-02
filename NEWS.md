@@ -2,6 +2,18 @@
 
 ## New features
 
+- `mysterycall_census_female_population()`: fetch the **total female population**
+  denominator by year (ACS table B01001, `B01001_026E`) via `tidycensus`,
+  returning a year-named vector or `data.frame(year, population)` that plugs
+  straight into the `population` argument of the density figures. Handles the
+  missing ACS 1-year 2020 table via `fill_2020` (substitute 5-year, skip, or
+  error).
+- New **"Subspecialist density per 100,000 women"** vignette walks the full
+  path (counts + denominator → density → trend/infographic) with confidence
+  intervals and provenance, and the three new functions are added to the
+  pkgdown reference index.
+- Added **vdiffr** visual-regression snapshot tests for both density figures
+  (skipped on CRAN and when vdiffr is unavailable).
 - Both subspecialist-density figures now carry **detailed provenance**. Each
   records a structured `mysterycall_provenance` object — metric, computation,
   numerator/denominator descriptions and citations, denominator vintage, scale,

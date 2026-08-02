@@ -130,6 +130,7 @@ reference:
       - mysterycall_plot_census_age
       - mysterycall_get_acs_adults_18_90
       - mysterycall_get_acs_women_18_90
+      - mysterycall_census_female_population
       - mysterycall_get_payer_mix
       - mysterycall_get_county_provider_counts
       - mysterycall_summarize_county_enrollment
@@ -495,6 +496,8 @@ reference:
       - mysterycall_flow_diagram
       - mysterycall_acceptance_waffle
       - mysterycall_bw_theme
+      - mysterycall_subspecialist_infographic
+      - mysterycall_subspecialist_trend
 
   - title: "Reporting and Manuscript Tables"
     desc: >
@@ -772,4 +775,5 @@ articles:
       - table-generation
       - writing-results-section
       - supplementary-digital-content
+      - subspecialist-density
 
