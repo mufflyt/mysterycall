@@ -21,6 +21,7 @@ mysterycall_subspecialist_trend(
   label_ends = TRUE,
   point_size = 1.9,
   line_width = 1,
+  conf_level = NULL,
   numerator_source = NULL,
   denominator_source = paste0("U.S. Census Bureau, American Community Survey ",
     "1-year estimates, table B01001 (B01001_026E, ", "total female population)"),
@@ -76,6 +77,12 @@ legend (\code{TRUE}, default) instead of showing a legend.}
 
 \item{point_size, line_width}{Numeric point size and line width.}
 
+\item{conf_level}{Numeric in \code{(0, 1)} or \code{NULL}. When set (e.g. \code{0.95}), an
+exact Poisson confidence interval is computed for each rate and drawn as a
+shaded band per subspecialty; the limits are added to \code{$data} as
+\code{density_low} / \code{density_high}. \code{NULL} (default) draws no interval. Treats
+each count as Poisson given its year's population denominator.}
+
 \item{numerator_source}{Character or \code{NULL}. Citation for the subspecialist
 counts (e.g. \code{"ABOG certified-diplomate counts, 2013-2023"}). Recorded in
 the provenance and, if set, shown in the figure caption.}
@@ -111,7 +118,8 @@ carrying the record and the per-point density table. Default \code{TRUE}.}
 }
 \value{
 A ggplot2 object (invisibly). Its \code{$data} holds the computed density
-table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}), and
+table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}, plus
+\code{density_low} / \code{density_high} when \code{conf_level} is set), and
 \code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record (metric,
 computation, numerator/denominator sources, package version, access date,
 and creation timestamp). When saved, \verb{<output>.provenance.txt} and (if

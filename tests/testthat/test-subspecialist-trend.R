@@ -78,6 +78,40 @@ test_that("both counts and population are required", {
   expect_error(mysterycall_subspecialist_trend(COUNTS_LONG), "Supply both")
 })
 
+test_that("conf_level adds an exact Poisson CI bracketing each rate", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP,
+                                    conf_level = 0.95)
+  )
+  d <- p$data
+  expect_true(all(c("density_low", "density_high") %in% names(d)))
+  expect_true(all(d$density_low <= d$density & d$density <= d$density_high))
+  expect_true(all(d$density_low >= 0))
+  # provenance notes the CI method
+  expect_match(attr(p, "provenance")$computation, "Poisson CI")
+})
+
+test_that("conf_level is validated", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP,
+                                    conf_level = 1.2),
+    "conf_level"
+  )
+})
+
+test_that(".poisson_rate_ci matches a known exact Poisson interval", {
+  # count = 10 -> exact 95% CI on the mean is ~ [4.795, 18.390]
+  ci <- mysterycall:::.poisson_rate_ci(10, population = 1e5, per = 1e5, conf_level = 0.95)
+  # per = population, so rate limits equal the count limits
+  expect_equal(ci$lower, 4.795, tolerance = 1e-2)
+  expect_equal(ci$upper, 18.390, tolerance = 1e-2)
+  # count = 0 -> lower limit is exactly 0
+  ci0 <- mysterycall:::.poisson_rate_ci(0, population = 1e5, per = 1e5, conf_level = 0.95)
+  expect_equal(ci0$lower, 0)
+})
+
 test_that("provenance is attached and written as a sidecar", {
   skip_if_not_installed("ggplot2")
   p <- suppressWarnings(mysterycall_subspecialist_trend(

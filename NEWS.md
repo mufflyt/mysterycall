@@ -16,6 +16,11 @@
   `numerator_source`,
   `denominator_source` (defaulting to the Census ACS `B01001_026E` citation),
   `denominator_vintage`, `accessed`, `notes`, `caption`, `write_provenance`.
+- `mysterycall_subspecialist_trend()` gains a `conf_level` argument: when set
+  (e.g. `0.95`) it computes an **exact Poisson confidence interval** for each
+  rate (base R, no new dependency), draws it as a shaded band per subspecialty,
+  and adds `density_low` / `density_high` to the returned `$data`. The interval
+  method is recorded in the provenance.
 - `mysterycall_subspecialist_trend()`: a multi-year density trend (one line per
   subspecialty) of **subspecialists per 100,000 women**, computed from **raw
   counts** (numerator) divided by the **total female population** (denominator).

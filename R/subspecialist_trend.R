@@ -59,6 +59,11 @@ NULL
 #' @param label_ends Logical. Label each line at its final year and hide the
 #'   legend (`TRUE`, default) instead of showing a legend.
 #' @param point_size,line_width Numeric point size and line width.
+#' @param conf_level Numeric in `(0, 1)` or `NULL`. When set (e.g. `0.95`), an
+#'   exact Poisson confidence interval is computed for each rate and drawn as a
+#'   shaded band per subspecialty; the limits are added to `$data` as
+#'   `density_low` / `density_high`. `NULL` (default) draws no interval. Treats
+#'   each count as Poisson given its year's population denominator.
 #' @param numerator_source Character or `NULL`. Citation for the subspecialist
 #'   counts (e.g. `"ABOG certified-diplomate counts, 2013-2023"`). Recorded in
 #'   the provenance and, if set, shown in the figure caption.
@@ -85,7 +90,8 @@ NULL
 #' @param dpi Integer. Resolution for raster output. Default `300`.
 #'
 #' @return A ggplot2 object (invisibly). Its `$data` holds the computed density
-#'   table (`subspecialty`, `year`, `count`, `population`, `density`), and
+#'   table (`subspecialty`, `year`, `count`, `population`, `density`, plus
+#'   `density_low` / `density_high` when `conf_level` is set), and
 #'   `attr(p, "provenance")` holds a `mysterycall_provenance` record (metric,
 #'   computation, numerator/denominator sources, package version, access date,
 #'   and creation timestamp). When saved, `<output>.provenance.txt` and (if
@@ -123,6 +129,7 @@ mysterycall_subspecialist_trend <- function(
     label_ends       = TRUE,
     point_size       = 1.9,
     line_width       = 1.0,
+    conf_level       = NULL,
     numerator_source    = NULL,
     denominator_source  = paste0("U.S. Census Bureau, American Community Survey ",
                                  "1-year estimates, table B01001 (B01001_026E, ",
@@ -155,6 +162,18 @@ mysterycall_subspecialist_trend <- function(
   d$density    <- d$count / d$population * per
   d <- d[order(d$subspecialty, d$year), , drop = FALSE]
 
+  # optional exact Poisson confidence interval on each rate
+  show_ci <- !is.null(conf_level)
+  if (show_ci) {
+    if (!is.numeric(conf_level) || length(conf_level) != 1L ||
+        conf_level <= 0 || conf_level >= 1)
+      stop("`conf_level` must be a single number in (0, 1), e.g. 0.95.",
+           call. = FALSE)
+    ci <- .poisson_rate_ci(d$count, d$population, per, conf_level)
+    d$density_low  <- ci$lower
+    d$density_high <- ci$upper
+  }
+
   years <- sort(unique(d$year))
   if (isTRUE(show_year_range))
     title <- sprintf("%s, %d–%d", title, min(years), max(years))
@@ -163,8 +182,11 @@ mysterycall_subspecialist_trend <- function(
   prov <- .build_provenance(
     metric              = sprintf("Subspecialists per %s women",
                                   format(per, big.mark = ",", scientific = FALSE)),
-    computation         = sprintf("density = count / population * %s",
-                                  format(per, scientific = FALSE)),
+    computation         = sprintf(
+      "density = count / population * %s%s",
+      format(per, scientific = FALSE),
+      if (show_ci) sprintf("; %g%% exact Poisson CI on each rate",
+                           conf_level * 100) else ""),
     numerator_desc      = "Subspecialist counts by subspecialty and year (user-supplied)",
     denominator_desc    = "Total female population by year",
     generated_by        = "mysterycall::mysterycall_subspecialist_trend()",
@@ -188,7 +210,17 @@ mysterycall_subspecialist_trend <- function(
     d,
     ggplot2::aes(x = .data$year, y = .data$density,
                  colour = .data$subspecialty, group = .data$subspecialty)
-  ) +
+  )
+  if (show_ci) {
+    p <- p + ggplot2::geom_ribbon(
+      ggplot2::aes(ymin = .data$density_low, ymax = .data$density_high,
+                   fill = .data$subspecialty),
+      alpha = 0.15, colour = NA, show.legend = FALSE
+    )
+    if (!is.null(palette))
+      p <- p + ggplot2::scale_fill_manual(values = palette)
+  }
+  p <- p +
     ggplot2::geom_line(linewidth = line_width) +
     ggplot2::geom_point(size = point_size) +
     ggplot2::scale_x_continuous(
@@ -288,6 +320,18 @@ mysterycall_subspecialist_trend <- function(
       stringsAsFactors = FALSE
     )
   }))
+}
+
+# Exact (Poisson) confidence interval for a rate = count / population * per.
+# Uses the gamma/chi-square relationship (Garwood exact limits on the Poisson
+# mean): lower = qgamma(a/2, count), upper = qgamma(1 - a/2, count + 1), with the
+# lower limit defined as 0 when count == 0. Base R only; vectorised.
+.poisson_rate_ci <- function(count, population, per, conf_level) {
+  alpha <- 1 - conf_level
+  lo_ct <- ifelse(count <= 0, 0, stats::qgamma(alpha / 2, shape = count))
+  hi_ct <- stats::qgamma(1 - alpha / 2, shape = count + 1)
+  list(lower = lo_ct / population * per,
+       upper = hi_ct / population * per)
 }
 
 # Resolve `population` (year-named vector / ordered vector / data frame) to a
