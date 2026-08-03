@@ -68,6 +68,10 @@ reference:
       - medicaid_fee_index
       - physicians
       - taxonomy
+      - adi_zcta
+      - svi_zcta
+      - zcta_tract_xwalk
+      - healthgrades_ages
 
   - title: "Provider Search and NPI"
     desc: >
@@ -727,6 +731,80 @@ reference:
       - prepare_calls
       - results_report
       - strobe_flow
+
+  - title: "Additional Functions"
+    desc: >
+      Further analysis, power, workflow, and utility functions.
+    contents:
+      - mysterycall_adjusted_power
+      - mysterycall_appointment_obtained
+      - mysterycall_assign_area_covariates
+      - mysterycall_categorize_wait
+      - mysterycall_clean_zip
+      - mysterycall_exclusion_crosswalk
+      - mysterycall_flag_near_duplicate_keys
+      - mysterycall_gee
+      - mysterycall_geocode_address
+      - mysterycall_link_physicians
+      - mysterycall_lm_interaction_power
+      - mysterycall_lookup_age
+      - mysterycall_nppes_gender
+      - mysterycall_overdispersion_threshold
+      - mysterycall_parse_duration
+      - mysterycall_plot_paired_slope
+      - mysterycall_plot_raincloud
+      - mysterycall_reached_declined_reasons
+      - mysterycall_read_latest
+      - mysterycall_reconcile_inclusion
+      - mysterycall_scenario_coverage
+      - mysterycall_ttest_power
+      - logging-utils
+      - preflight-checks
+      - progress-bars
+
+  - title: "S3 Methods"
+    desc: >
+      print() and as.data.frame() methods for mysterycall result objects.
+    contents:
+      - as.data.frame.mysterycall_access_cascade
+      - as.data.frame.mysterycall_concordance
+      - as.data.frame.mysterycall_consistency_report
+      - as.data.frame.mysterycall_cumulative_access_curve
+      - as.data.frame.mysterycall_hurdle_wait
+      - as.data.frame.mysterycall_joint_test
+      - as.data.frame.mysterycall_leave_one_out
+      - as.data.frame.mysterycall_marginal_power
+      - as.data.frame.mysterycall_matched_controls
+      - as.data.frame.mysterycall_multiresponse
+      - as.data.frame.mysterycall_offer_reconciliation
+      - as.data.frame.mysterycall_outcome_bounds
+      - as.data.frame.mysterycall_paired_mcnemar
+      - as.data.frame.mysterycall_paired_wait
+      - as.data.frame.mysterycall_rank_comparison
+      - as.data.frame.mysterycall_twopart_power
+      - print.mysterycall_access_cascade
+      - print.mysterycall_categorical_test
+      - print.mysterycall_cmh_test
+      - print.mysterycall_concordance
+      - print.mysterycall_consistency_report
+      - print.mysterycall_crisp_checklist
+      - print.mysterycall_cumulative_access_curve
+      - print.mysterycall_exclusion_summary
+      - print.mysterycall_hurdle_wait
+      - print.mysterycall_joint_test
+      - print.mysterycall_leave_one_out
+      - print.mysterycall_marginal_power
+      - print.mysterycall_matched_controls
+      - print.mysterycall_multiresponse
+      - print.mysterycall_offer_reconciliation
+      - print.mysterycall_outcome_bounds
+      - print.mysterycall_paired_mcnemar
+      - print.mysterycall_paired_wait
+      - print.mysterycall_rank_comparison
+      - print.mysterycall_reconciliation
+      - print.mysterycall_rubric
+      - print.mysterycall_simple_poisson
+      - print.mysterycall_twopart_power
 
   - title: "Deprecated"
     contents:

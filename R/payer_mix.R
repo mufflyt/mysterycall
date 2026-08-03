@@ -90,6 +90,7 @@ mysterycall_get_payer_mix <- function(year = NULL,
   if (!is.character(geography) || length(geography) != 1L) {
     stop("`geography` must be a single character string.", call. = FALSE)
   }
+  .mc_check_acs_vintage(year, geography, "mysterycall_get_payer_mix()")
 
   if (verbose) {
     message("")

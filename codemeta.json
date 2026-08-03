@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/mufflyt/mysterycall",
   "issueTracker": "https://github.com/mufflyt/mysterycall/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.4.0",
+  "version": "1.6.3.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",

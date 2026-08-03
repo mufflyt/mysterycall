@@ -53,10 +53,13 @@ mysterycall_parse_duration(
 Other data integrity: 
 \code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
+\code{\link{.mc_check_acs_vintage}()},
 \code{\link{.mc_data}()},
+\code{\link{.mc_geo_layer}()},
 \code{\link{.mc_geocode_point}()},
 \code{\link{.mc_healthgrades_ages}()},
 \code{\link{.mc_state_to_abbr}()},
+\code{\link{mc-census-vintage}},
 \code{\link{mysterycall_assign_area_covariates}()},
 \code{\link{mysterycall_categorize_wait}()},
 \code{\link{mysterycall_clean_zip}()},

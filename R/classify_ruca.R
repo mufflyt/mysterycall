@@ -18,14 +18,23 @@ NULL
 #' | 7-10 | Rural    |
 #'
 #' The 2010-vintage RUCA codes are the standard crosswalk applied through 2023
-#' in CMS and HRSA analyses.  Although newer ACS-based updates exist, the
-#' 2010 vintage remains the most widely cited in peer-reviewed healthcare
-#' access research and is the version bundled in this package.
+#' in CMS and HRSA analyses. Although newer ACS-based updates exist, the 2010
+#' vintage remains the most widely cited in peer-reviewed healthcare access
+#' research.
 #'
-#' ZIP-to-RUCA crosswalk files are available from USDA ERS
+#' **No RUCA crosswalk is bundled with this package.** This function only recodes
+#' a numeric `ruca_code` you supply; obtaining the crosswalk is up to you. ZIP-
+#' and tract-level files are available from USDA ERS
 #' (<https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes>).
 #' Join your data to the crosswalk first, then pass the resulting `ruca_code`
 #' column to this function.
+#'
+#' Mind the vintage when you do. The 2010 RUCA files are keyed to 2010 ZIP codes
+#' and 2010 census tracts, whereas geographies produced by
+#' [mysterycall_geocode_address()] and [mysterycall_assign_area_covariates()] are
+#' 2020-vintage. Joining 2020 tract GEOIDs to a 2010 RUCA tract file silently
+#' mismatches wherever tracts were split or merged between censuses. Either use a
+#' 2020-vintage RUCA file, or join on ZIP rather than tract.
 #'
 #' @param ruca_code Numeric vector of RUCA codes (typically integer or decimal,
 #'   e.g. 1, 2, 3.1, 10.6). `NA` values are returned as `na_label`.
