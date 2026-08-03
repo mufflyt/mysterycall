@@ -758,9 +758,6 @@ reference:
       - mysterycall_reconcile_inclusion
       - mysterycall_scenario_coverage
       - mysterycall_ttest_power
-      - logging-utils
-      - preflight-checks
-      - progress-bars
 
   - title: "S3 Methods"
     desc: >
