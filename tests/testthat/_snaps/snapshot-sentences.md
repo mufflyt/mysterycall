@@ -87,7 +87,7 @@
     Code
       result$sentence
     Output
-      [1] "The Pearson dispersion ratio is 1.25 (chi-square = 72.68, df = 58, p = 0.093). No significant overdispersion detected (ratio = 1.25). The Poisson model appears adequate."
+      [1] "The Pearson dispersion ratio is 1.25 (chi-square = 72.68, df = 58, p = 0.093). Mild overdispersion detected (ratio = 1.25), below the negative-binomial switch threshold; the Poisson model may still be adequate."
 
 # mysterycall_r2_sentence sentence snapshot
 

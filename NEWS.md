@@ -1,5 +1,16 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Bug fixes
+
+- `mysterycall_compare_waves()` now returns an `iqr` (interquartile range)
+  column for continuous outcomes, alongside the existing `q1` / `q3`, matching
+  its documented headline statistics and the test expectations.
+- Refreshed the `mysterycall_overdispersion_sentence()` test snapshot to match
+  the graduated "Mild overdispersion" wording the function now emits.
+- Added the 68 documented-but-unindexed topics (datasets, `print()` /
+  `as.data.frame()` methods, and additional exported functions) to the pkgdown
+  reference index so `pkgdown::build_site()` no longer errors on missing topics.
+
 ## Census geography vintage
 
 The 2020 Census redrew tracts, block groups, and ZCTAs. Several paths could

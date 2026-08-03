@@ -19,7 +19,7 @@
 #' @return A data frame. For proportion outcomes: columns `wave`,
 #'   (`group`,) `n`, `n_accepted`, `rate`, `lower_ci`, `upper_ci`,
 #'   `p_vs_ref`. For continuous outcomes: columns `wave`, (`group`,)
-#'   `n`, `mean`, `median`, `sd`, `q1`, `q3`, `p_vs_ref`. The `group`
+#'   `n`, `mean`, `median`, `sd`, `iqr`, `q1`, `q3`, `p_vs_ref`. The `group`
 #'   column is only present when `group_col` is non-`NULL`. The
 #'   attribute `ref_wave` is set on the returned data frame.
 #'
@@ -136,6 +136,7 @@ mysterycall_compare_waves <- function(
       mean     = if (n > 0) mean(y)   else NA_real_,
       median   = if (n > 0) stats::median(y) else NA_real_,
       sd       = if (n > 0) stats::sd(y)     else NA_real_,
+      iqr      = if (n > 0) stats::IQR(y, na.rm = TRUE) else NA_real_,
       q1       = if (n > 0) stats::quantile(y, 0.25, names = FALSE) else NA_real_,
       q3       = if (n > 0) stats::quantile(y, 0.75, names = FALSE) else NA_real_,
       p_vs_ref = NA_real_,
