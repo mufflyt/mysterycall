@@ -1,10 +1,13 @@
 library(testthat)
 
 # Visual regression tests. These render each figure and compare it against a
-# committed SVG baseline under _snaps/. They are skipped on CRAN and when vdiffr
-# (or its rendering stack) is unavailable, so they act as local/CI regression
-# protection without becoming a portability liability. Baselines are created on
-# the first run with `testthat::snapshot_accept()` / vdiffr's manager.
+# committed SVG baseline under _snaps/. They are skipped on CRAN and on CI, and
+# when vdiffr (or its rendering stack) is unavailable -- so they act as a
+# LOCAL-ONLY regression aid without becoming a portability liability. vdiffr
+# baselines are font-render-sensitive, so they must be generated and committed
+# from a developer machine (`testthat::snapshot_accept()`); a missing baseline
+# fails as "Adding new file snapshot", which is why CI is skipped here.
+skip_on_ci()
 skip_if_not_installed("vdiffr")
 skip_if_not_installed("ggplot2")
 

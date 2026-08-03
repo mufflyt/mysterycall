@@ -1,9 +1,12 @@
 library(testthat)
 
-# annotate() stores its label as a column in the layer's data frame.
+# annotate() stores non-positional aesthetics (like `label`) in the layer's
+# aes_params, not its data frame; collect from both to be robust.
 .infographic_labels <- function(p) {
   out <- character(0)
   for (l in p$layers) {
+    lab <- l$aes_params$label
+    if (!is.null(lab)) out <- c(out, as.character(lab))
     d <- l$data
     if (is.data.frame(d) && "label" %in% names(d))
       out <- c(out, as.character(d$label))
