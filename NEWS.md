@@ -61,6 +61,62 @@ now closed.
 
 ## New features
 
+- `mysterycall_census_female_population()`: fetch the **total female population**
+  denominator by year (ACS table B01001, `B01001_026E`) via `tidycensus`,
+  returning a year-named vector or `data.frame(year, population)` that plugs
+  straight into the `population` argument of the density figures. Handles the
+  missing ACS 1-year 2020 table via `fill_2020` (substitute 5-year, skip, or
+  error).
+- New **"Subspecialist density per 100,000 women"** vignette walks the full
+  path (counts + denominator → density → trend/infographic) with confidence
+  intervals and provenance, and the three new functions are added to the
+  pkgdown reference index.
+- Added **vdiffr** visual-regression snapshot tests for both density figures
+  (skipped on CRAN and when vdiffr is unavailable).
+- Both subspecialist-density figures now carry **detailed provenance**. Each
+  records a structured `mysterycall_provenance` object — metric, computation,
+  numerator/denominator descriptions and citations, denominator vintage, scale,
+  year range, generating call, package version, data-access date, and creation
+  timestamp — attached as `attr(figure, "provenance")` and printed by a
+  `print.mysterycall_provenance` method. A source caption is drawn on the figure
+  (auto-built from the citations, overridable or suppressible), and saving the
+  image also writes provenance sidecars containing the full record plus the
+  per-point value table: a human-readable `<output>.provenance.txt` and, when
+  `jsonlite` is installed, a machine-readable `<output>.provenance.json`
+  (schema `mysterycall/provenance`) for downstream pipelines. New arguments:
+  `numerator_source`,
+  `denominator_source` (defaulting to the Census ACS `B01001_026E` citation),
+  `denominator_vintage`, `accessed`, `notes`, `caption`, `write_provenance`.
+- `mysterycall_subspecialist_trend()` gains a `trend_test` argument: fits a
+  per-subspecialty log-linear regression of count on year with an offset of
+  `log(population)` (Poisson or `"quasipoisson"`) and attaches the tidy result
+  as `attr(p, "trend_test")` — annual rate ratio, confidence interval, percent
+  change per year and over the span, and the year-term p-value. The statistics
+  fold into the `.txt`/`.json` provenance sidecars, and (with `label_ends`) each
+  line label shows the rate ratio per year and a significance star.
+- `mysterycall_subspecialist_trend()` gains a `conf_level` argument: when set
+  (e.g. `0.95`) it computes an **exact Poisson confidence interval** for each
+  rate (base R, no new dependency), draws it as a shaded band per subspecialty,
+  and adds `density_low` / `density_high` to the returned `$data`. The interval
+  method is recorded in the provenance.
+- `mysterycall_subspecialist_trend()`: a multi-year density trend (one line per
+  subspecialty) of **subspecialists per 100,000 women**, computed from **raw
+  counts** (numerator) divided by the **total female population** (denominator).
+  The density is derived from the inputs (`count / population * per`), never
+  typed. Accepts counts as a long/wide data frame or a matrix, and the female-
+  population denominator as a year-named vector, an ordered vector, or a data
+  frame; the docs include the exact Census ACS `B01001_026E` call to fetch the
+  denominators. Population figures are intentionally **not** bundled (they need
+  to be a cited vintage). Returns a `ggplot` whose `$data` carries the computed
+  density table.
+- `mysterycall_subspecialist_infographic()`: a workforce-density infographic
+  (titled header bar over one accent-coloured panel per subspecialty), styled
+  after the "clinicians per unit" figures, repurposed to show **subspecialists
+  per 100,000 women** at two time points. Defaults to the four ABOG OB-GYN
+  subspecialties; takes the density values as `start`/`end` vectors or a `data`
+  frame and derives the percent change from them (so the figure can never
+  disagree with its own numbers). Returns a `ggplot` object and can save via
+  `output_path`.
 - `mysterycall_strobe_flow()` gains an `engine` argument. The default
   `engine = "ggplot2"` is unchanged. New `engine = "gmisc"` renders the *same*
   pipeline-derived counts with the Gmisc grid engine

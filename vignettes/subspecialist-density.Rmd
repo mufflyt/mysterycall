@@ -1,0 +1,178 @@
+---
+title: "Subspecialist density per 100,000 women"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Subspecialist density per 100,000 women}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 4.2, fig.align = "center"
+)
+library(mysterycall)
+```
+
+Workforce-density figures — *subspecialists per 100,000 women* — turn raw
+provider counts into an access metric a reader can compare across
+subspecialties and over time. This vignette walks the full path: **counts +
+denominator → density → figure**, with the provenance that keeps the picture
+honest.
+
+Two figures share the same computation:
+
+- `mysterycall_subspecialist_trend()` — a multi-year line trend (one line per
+  subspecialty), optionally with confidence bands.
+- `mysterycall_subspecialist_infographic()` — a two-point (start → end) badge
+  infographic.
+
+The density is always derived from the inputs (`count / population * 100000`),
+never typed, so a figure cannot disagree with its own numbers.
+
+## 1. The numerator: subspecialist counts
+
+You supply the counts. A long data frame is the most flexible form — one row
+per subspecialty per year:
+
+```{r counts}
+counts <- data.frame(
+  subspecialty = rep(c("Gynecologic Oncology", "Maternal-Fetal Medicine",
+                       "Reproductive Endocrinology & Infertility",
+                       "Urogynecology"), each = 3),
+  year  = rep(c(2013, 2018, 2023), times = 4),
+  count = c(1900, 2200, 2600,   # Gyn Onc
+            1500, 1900, 2400,   # MFM
+            1100, 1300, 1600,   # REI
+             900, 1400, 2100)   # Urogyn
+)
+head(counts)
+```
+
+Wide data frames (a `subspecialty` column plus one column per year) and
+matrices (subspecialty rows, year columns) are accepted too.
+
+## 2. The denominator: total female population
+
+The denominator is the **total female population** for each year. If you have a
+Census API key you can fetch it directly (ACS table `B01001`, variable
+`B01001_026E`):
+
+```{r census, eval = FALSE}
+# Requires CENSUS_API_KEY and an internet connection.
+fem_pop <- mysterycall_census_female_population(
+  years  = c(2013, 2018, 2023),
+  survey = "acs5"            # 5-year: available for every year, incl. 2020
+)
+fem_pop
+```
+
+The ACS **1-year** table was not released for 2020; when you request
+`survey = "acs1"`, `fill_2020` chooses whether to substitute the 5-year value
+(default), return `NA`, or error.
+
+For a reproducible vignette we just supply the values directly — a year-named
+vector, an ordered vector, or a `data.frame(year, population)` all work:
+
+```{r denominator}
+fem_pop <- c(`2013` = 160477237, `2018` = 165553033, `2023` = 168731234)
+```
+
+> These illustrative denominators are placeholders — swap in your own cited
+> Census figures.
+
+## 3. The trend figure
+
+```{r trend}
+p <- mysterycall_subspecialist_trend(
+  counts,
+  population       = fem_pop,
+  numerator_source = "Illustrative counts (vignette)",
+  accessed         = "2026-08-02"
+)
+p
+```
+
+The returned object's `$data` carries every computed value, so nothing is
+hidden behind the plot:
+
+```{r trend-data}
+head(p$data)
+```
+
+### Confidence intervals
+
+A per-100,000 rate is a count over a population, so it has an exact Poisson
+confidence interval. Set `conf_level` to draw it as a band and add
+`density_low` / `density_high` to `$data`:
+
+```{r trend-ci}
+p_ci <- mysterycall_subspecialist_trend(counts, population = fem_pop,
+                                        conf_level = 0.95)
+head(p_ci$data[, c("subspecialty", "year", "density",
+                   "density_low", "density_high")])
+```
+
+### A statistic, not just a line
+
+`trend_test` fits a per-subspecialty log-linear regression of count on year
+(offset `log(population)`) — a model of the rate's annual change — and attaches
+the tidy result. Each line's end label also gains the rate ratio per year and a
+significance star.
+
+```{r trend-test}
+p_stat <- mysterycall_subspecialist_trend(counts, population = fem_pop,
+                                          trend_test = "quasipoisson")
+attr(p_stat, "trend_test")[, c("subspecialty", "rr_per_year",
+                               "conf_low", "conf_high", "p_value")]
+```
+
+Use `"quasipoisson"` when the counts are overdispersed; the p-value then comes
+from a t-test on the overdispersion-scaled standard error.
+
+## 4. The two-point infographic
+
+When you only need the endpoints, the infographic renders a badge per
+subspecialty with the percent change derived from the two densities:
+
+```{r infographic, fig.height = 3.4}
+ends <- subset(counts, year %in% c(2013, 2023))
+d13 <- ends$count[ends$year == 2013] / fem_pop["2013"] * 1e5
+d23 <- ends$count[ends$year == 2023] / fem_pop["2023"] * 1e5
+
+mysterycall_subspecialist_infographic(
+  subspecialty = unique(ends$subspecialty),
+  start = as.numeric(d13),
+  end   = as.numeric(d23)
+)
+```
+
+## 5. Provenance travels with the figure
+
+Every figure records where its numbers came from. The record is attached to
+the object and printed on the figure as a source caption:
+
+```{r provenance}
+attr(p, "provenance")
+```
+
+Saving a figure also writes provenance sidecars next to the image — a
+human-readable `.provenance.txt` and, when **jsonlite** is installed, a
+machine-readable `.provenance.json` (schema `mysterycall/provenance`) carrying
+the record and the per-point table:
+
+```{r save, eval = FALSE}
+mysterycall_subspecialist_trend(
+  counts, population = fem_pop,
+  numerator_source = "ABOG certified-diplomate counts, 2013-2023",
+  accessed = "2026-08-02",
+  output_path = "subspecialists_per_100k.png"
+)
+#> Saved: subspecialists_per_100k.png
+#> Provenance: subspecialists_per_100k.provenance.txt
+#> Provenance: subspecialists_per_100k.provenance.json
+```
+
+That trio — image, human-readable provenance, machine-readable provenance —
+is what makes the figure reproducible in an analysis pipeline.

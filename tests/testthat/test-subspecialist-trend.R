@@ -1,0 +1,224 @@
+library(testthat)
+
+COUNTS_LONG <- data.frame(
+  subspecialty = rep(c("Gynecologic Oncology", "Urogynecology"), each = 3),
+  year         = rep(c(2013L, 2018L, 2023L), times = 2),
+  count        = c(1900, 2200, 2600, 900, 1400, 2100),
+  stringsAsFactors = FALSE
+)
+FEM_POP <- c(`2013` = 160000000, `2018` = 165000000, `2023` = 168000000)
+
+test_that("computes density = count / population * per and returns a ggplot", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP)
+  )
+  expect_s3_class(p, "ggplot")
+  d <- p$data
+  # Gyn Onc 2013: 1900 / 160,000,000 * 1e5 = 1.1875
+  got <- d$density[d$subspecialty == "Gynecologic Oncology" & d$year == 2013]
+  expect_equal(got, 1900 / 160000000 * 1e5)
+  expect_true(all(c("subspecialty", "year", "count", "population", "density") %in% names(d)))
+})
+
+test_that("wide-format counts pivot to the same densities as long", {
+  skip_if_not_installed("ggplot2")
+  wide <- data.frame(
+    subspecialty = c("Gynecologic Oncology", "Urogynecology"),
+    `2013`       = c(1900, 900),
+    `2018`       = c(2200, 1400),
+    `2023`       = c(2600, 2100),
+    check.names  = FALSE,
+    stringsAsFactors = FALSE
+  )
+  p_wide <- suppressWarnings(
+    mysterycall_subspecialist_trend(wide, population = FEM_POP)
+  )
+  p_long <- suppressWarnings(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP)
+  )
+  key <- function(d) d[order(d$subspecialty, d$year), "density"]
+  expect_equal(key(p_wide$data), key(p_long$data))
+})
+
+test_that("matrix counts are accepted", {
+  skip_if_not_installed("ggplot2")
+  m <- matrix(c(1900, 900, 2200, 1400, 2600, 2100), nrow = 2,
+              dimnames = list(c("Gynecologic Oncology", "Urogynecology"),
+                              c("2013", "2018", "2023")))
+  p <- suppressWarnings(mysterycall_subspecialist_trend(m, population = FEM_POP))
+  expect_s3_class(p, "ggplot")
+  expect_equal(nrow(p$data), 6L)
+})
+
+test_that("population accepted as a data frame and as an ordered vector", {
+  skip_if_not_installed("ggplot2")
+  pop_df <- data.frame(year = c(2013, 2018, 2023),
+                       population = c(160000000, 165000000, 168000000))
+  p_df <- suppressWarnings(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = pop_df)
+  )
+  p_vec <- suppressWarnings(  # unnamed, ordered by sorted year
+    mysterycall_subspecialist_trend(
+      COUNTS_LONG, population = c(160000000, 165000000, 168000000))
+  )
+  expect_equal(p_df$data$density, p_vec$data$density)
+})
+
+test_that("missing a denominator year is an informative error", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    mysterycall_subspecialist_trend(
+      COUNTS_LONG, population = c(`2013` = 160000000, `2018` = 165000000)),
+    "missing denominators for year"
+  )
+})
+
+test_that("both counts and population are required", {
+  expect_error(mysterycall_subspecialist_trend(COUNTS_LONG), "Supply both")
+})
+
+test_that("trend_test attaches a per-subspecialty rate-ratio table", {
+  skip_if_not_installed("ggplot2")
+  # rising Gyn Onc, flat Urogyn, over a full decade
+  cts <- data.frame(
+    subspecialty = rep(c("Gyn Onc", "Urogyn"), each = 6),
+    year  = rep(seq(2013, 2023, by = 2), times = 2),
+    count = c(1000, 1100, 1210, 1331, 1464, 1610,   # ~+10%/yr compounded
+              1000, 1000, 1000, 1000, 1000, 1000)   # flat
+  )
+  pop <- stats::setNames(rep(1.6e8, 6), seq(2013, 2023, by = 2))
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(cts, population = pop, trend_test = TRUE)
+  )
+  tt <- attr(p, "trend_test")
+  expect_s3_class(tt, "data.frame")
+  expect_setequal(tt$subspecialty, c("Gyn Onc", "Urogyn"))
+  expect_true(all(c("rr_per_year", "conf_low", "conf_high",
+                    "pct_per_year", "p_value") %in% names(tt)))
+  # rising series: rate ratio per year clearly > 1 and significant
+  go <- tt[tt$subspecialty == "Gyn Onc", ]
+  expect_gt(go$rr_per_year, 1)
+  expect_lt(go$p_value, 0.05)
+  # flat series: rate ratio ~ 1
+  ug <- tt[tt$subspecialty == "Urogyn", ]
+  expect_equal(ug$rr_per_year, 1, tolerance = 1e-6)
+  # provenance notes the method
+  expect_match(attr(p, "provenance")$computation, "trend of count on year")
+})
+
+test_that("quasipoisson trend_test is accepted and CI folds into JSON sidecar", {
+  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("jsonlite")
+  out  <- tempfile(fileext = ".png")
+  base <- tools::file_path_sans_ext(out)
+  json <- paste0(base, ".provenance.json")
+  txt  <- paste0(base, ".provenance.txt")
+  on.exit(unlink(c(out, json, txt)), add = TRUE)
+  suppressMessages(suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP, trend_test = "quasipoisson",
+    output_path = out
+  )))
+  parsed <- jsonlite::fromJSON(json)
+  expect_true("trend_test" %in% names(parsed))
+  expect_true(all(parsed$trend_test$family == "quasipoisson"))
+})
+
+test_that("a single-year subspecialty yields an NA trend row, not an error", {
+  skip_if_not_installed("ggplot2")
+  one <- data.frame(subspecialty = "Solo", year = 2013L, count = 100)
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(one, population = c(`2013` = 1.6e8),
+                                    trend_test = TRUE)
+  )
+  tt <- attr(p, "trend_test")
+  expect_true(is.na(tt$rr_per_year))
+  expect_equal(tt$n_years, 1L)
+})
+
+test_that("conf_level adds an exact Poisson CI bracketing each rate", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP,
+                                    conf_level = 0.95)
+  )
+  d <- p$data
+  expect_true(all(c("density_low", "density_high") %in% names(d)))
+  expect_true(all(d$density_low <= d$density & d$density <= d$density_high))
+  expect_true(all(d$density_low >= 0))
+  # provenance notes the CI method
+  expect_match(attr(p, "provenance")$computation, "Poisson CI")
+})
+
+test_that("conf_level is validated", {
+  skip_if_not_installed("ggplot2")
+  expect_error(
+    mysterycall_subspecialist_trend(COUNTS_LONG, population = FEM_POP,
+                                    conf_level = 1.2),
+    "conf_level"
+  )
+})
+
+test_that(".poisson_rate_ci matches a known exact Poisson interval", {
+  # count = 10 -> exact 95% CI on the mean is ~ [4.795, 18.390]
+  ci <- mysterycall:::.poisson_rate_ci(10, population = 1e5, per = 1e5, conf_level = 0.95)
+  # per = population, so rate limits equal the count limits
+  expect_equal(ci$lower, 4.795, tolerance = 1e-2)
+  expect_equal(ci$upper, 18.390, tolerance = 1e-2)
+  # count = 0 -> lower limit is exactly 0
+  ci0 <- mysterycall:::.poisson_rate_ci(0, population = 1e5, per = 1e5, conf_level = 0.95)
+  expect_equal(ci0$lower, 0)
+})
+
+test_that("provenance is attached and written as a sidecar", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP,
+    numerator_source = "ABOG diplomate counts",
+    accessed = "2026-07-30"
+  ))
+  prov <- attr(p, "provenance")
+  expect_s3_class(prov, "mysterycall_provenance")
+  expect_equal(prov$numerator$source, "ABOG diplomate counts")
+  expect_equal(prov$per, 1e5)
+  expect_equal(prov$years, c(2013, 2023))
+  expect_match(prov$generated_by, "subspecialist_trend")
+  # caption auto-built onto the figure
+  expect_true(!is.null(p$labels$caption) && nzchar(p$labels$caption))
+
+  out <- tempfile(fileext = ".png")
+  side <- paste0(tools::file_path_sans_ext(out), ".provenance.txt")
+  on.exit(unlink(c(out, side)), add = TRUE)
+  suppressMessages(suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP,
+    numerator_source = "ABOG diplomate counts", accessed = "2026-07-30",
+    output_path = out
+  )))
+  expect_true(file.exists(side))
+  txt <- paste(readLines(side), collapse = "\n")
+  expect_match(txt, "ABOG diplomate counts")
+  expect_match(txt, "B01001_026E")
+  expect_match(txt, "Per-point values")
+})
+
+test_that("caption = NA suppresses the caption", {
+  skip_if_not_installed("ggplot2")
+  p <- suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP, caption = NA
+  ))
+  expect_null(p$labels$caption)
+})
+
+test_that("negative counts and non-positive population are rejected", {
+  skip_if_not_installed("ggplot2")
+  bad <- COUNTS_LONG; bad$count[1] <- -5
+  expect_error(
+    mysterycall_subspecialist_trend(bad, population = FEM_POP),
+    "non-negative"
+  )
+  expect_error(
+    mysterycall_subspecialist_trend(
+      COUNTS_LONG, population = c(`2013` = 0, `2018` = 1, `2023` = 1)),
+    "positive"
+  )
+})

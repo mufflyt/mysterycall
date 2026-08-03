@@ -109,6 +109,7 @@ Suggests:
     zoo,
     MASS,
     broom,
+    vdiffr,
     withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
