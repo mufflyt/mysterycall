@@ -92,6 +92,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -168,5 +169,5 @@ df <- data.frame(
 )
 res <- mysterycall_wait_time_sentence(df, group_col = "scenario")
 cat(res$sentence)
-#> The median wait time across all scenario was 16 business days (IQR: 10–17). Specifically, the median wait time was 8 days (IQR: 7–10) for BCBS, 16 days (IQR: 15–17) for Medicaid, 20 days (IQR: 16–21) for Self-Pay. The p-value for Medicaid vs BCBS was < 0.001. The p-value for Self-Pay vs BCBS was < 0.001.
+#> The median wait time across all scenario was 16 business days (IQR: 8–19). Specifically, the median wait time was 7 days (IQR: 6–8) for BCBS, 16 days (IQR: 15–17) for Medicaid, 20 days (IQR: 18–22) for Self-Pay. The p-value for Medicaid vs BCBS was < 0.001. The p-value for Self-Pay vs BCBS was < 0.001.
 ```

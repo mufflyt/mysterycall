@@ -151,9 +151,9 @@ result$table
 #>                 term     level  irr days_mean days_diff days_ci_lower
 #> 1  insuranceMedicaid  Medicaid 1.28     26.88      5.88          1.05
 #> 2 insuranceUninsured Uninsured 0.81     17.01     -3.99         -8.19
-#>   days_ci_upper direction p_value_fmt
-#> 1         11.76      more       0.014
-#> 2          1.47     fewer       0.134
+#>   days_ci_upper direction p_value_fmt p_value
+#> 1         11.76      more       0.014   0.014
+#> 2          1.47     fewer       0.134   0.134
 cat(result$paragraph)
 #> Medicaid-insured callers waited a mean of 5.9 more days compared with BCBS (95% CI +1.1 to +11.8 days; IRR 1.28; p = 0.014). Uninsured-insured callers waited a mean of 4.0 fewer days compared with BCBS (95% CI -8.2 to +1.5 days; IRR 0.81; p = 0.134) (difference not statistically significant).
 ```

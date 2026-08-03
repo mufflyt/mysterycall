@@ -75,10 +75,10 @@ Returns a zero-row tibble (invisibly) when no discrepancies are found.
 ## What this detects
 
 If a call is logged as excluded (e.g.
-`reason_for_exclusions == "Physician not available"`) but also has
-\`business_days_until_appointment= 0\`, the record is contradictory — an
-excluded call should not have avalid appointment wait time. These rows
-must be resolved before analysis.
+`reason_for_exclusions == "Physician not available"`) but also has a
+non-negative `business_days_until_appointment`, the record is
+contradictory — an excluded call should not have a valid appointment
+wait time. These rows must be resolved before analysis.
 
 ## See also
 

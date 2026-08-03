@@ -62,6 +62,7 @@ both check the EPV ratio **before fitting** and emit actionable
 warnings:
 
 ``` r
+
 # 40 observations, 5 predictors with many levels → low EPV
 small_df <- data.frame(
   wait_days = rpois(40, 18),
@@ -121,6 +122,7 @@ computes and stores `$overdispersion` and emits a warning when
 $`\phi > 2`$:
 
 ``` r
+
 result <- mysterycall_poisson_model(
   mc_data,
   outcome          = "wait_days",
@@ -170,6 +172,7 @@ licensed US clinicians.
 ### Practice setting (academic vs. private)
 
 ``` r
+
 # After pulling clinician data with mysterycall_get_clinician_data()
 mc_data$practice_setting <- mysterycall_classify_practice_setting(
   facility_name = mc_data$facility_name
@@ -186,6 +189,7 @@ residual variance in wait-time studies.
 ### Physician gender (from first name)
 
 ``` r
+
 # Requires genderize.io API key stored in GENDERIZE_API_KEY env var
 mc_data <- mysterycall_genderize(
   data        = mc_data,
@@ -202,6 +206,7 @@ hypothesis variable — include it as a *confounder control*.
 ### Physician age
 
 ``` r
+
 # If graduation year is available (from NPI record)
 mc_data$physician_age <- as.integer(format(Sys.Date(), "%Y")) -
   mc_data$graduation_year
@@ -221,6 +226,7 @@ new-patient availability.
 ### Geographic location
 
 ``` r
+
 # Urban / Suburban / Rural from RUCA codes
 mc_data$urbanicity <- mysterycall_classify_ruca(mc_data$ruca_code)
 
@@ -244,6 +250,7 @@ The fastest path is to use
 to retrieve all available registry fields for your physician list:
 
 ``` r
+
 # mc_npis: character vector of NPI numbers
 clinician_info <- mysterycall_get_clinician_data(npi_list = mc_npis)
 
@@ -302,6 +309,7 @@ This is safe for $`n \geq 180`$ observations (EPV = 10).
 ### In R
 
 ``` r
+
 nb_full <- mysterycall_nb_model(
   data             = mc_data,
   outcome          = "wait_days",
@@ -323,6 +331,7 @@ Use
 to compare the base and full specifications:
 
 ``` r
+
 nb_base <- mysterycall_nb_model(
   mc_data, "wait_days",
   predictors       = c("insurance", "scenario"),
@@ -364,7 +373,7 @@ $`\approx 28\%`$ ($`1 - 0.85^2`$).
 | Full model (all above) | 30% | -16% | 34 |
 
 Approximate power analysis: detecting a 25% IRR difference (80% power, α
-= 0.05), assuming baseline SD ≈ 30 days.
+= 0.05), assuming baseline SD ≈ 30 days. {.table}
 
 **Important caveats:**
 
@@ -394,6 +403,7 @@ Approximate power analysis: detecting a 25% IRR difference (80% power, α
 ## Complete workflow
 
 ``` r
+
 library(mysterycall)
 
 # 1. Pull NPI registry data

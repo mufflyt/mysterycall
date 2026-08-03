@@ -4,6 +4,11 @@ This document describes the operational guarantees provided by the
 `mysterycall` workflow pipeline. Each section covers a specific class of
 guarantee that callers and downstream consumers can rely on.
 
+> **Note.** Geocoding, isochrone, and overlay guarantees now live in the
+> companion [`mysterymaps`](https://github.com/mufflyt/mysterymaps)
+> package. The design and analysis guarantees below are part of
+> `mysterycall`.
+
 ------------------------------------------------------------------------
 
 ## Workflow DAG
@@ -244,20 +249,6 @@ does not prevent the Phase 1 output from being written and returned.
 
 ------------------------------------------------------------------------
 
-## Spatial Contract Guarantees
-
-**CRS consistency:** All spatial outputs from `mysterycall_geocode()`,
-`mysterycall_create_isochrones()`, and `mysterycall_calculate_overlap()`
-use EPSG:4326 (WGS 84) unless explicitly transformed by the caller.
-
-**Bounding-box validity:** Latitude values are constrained to \[18°,
-72°\] and longitude values to \[−180°, −65°\] for US providers. Rows
-outside these bounds in
-[`mysterycall::physicians`](https://mufflyt.github.io/mysterycall/reference/physicians.md)
-are NA (geocode failures) and are flagged accordingly.
-
-------------------------------------------------------------------------
-
 ## API Contract Guarantees
 
 **NPI registry pagination:**
@@ -265,10 +256,6 @@ are NA (geocode failures) and are flagged accordingly.
 paginates in 200-record pages up to `max_records` (default 1,200). The
 returned data frame is deduplicated on NPI to prevent double-counting
 providers that appear in multiple pages.
-
-**Geocoding idempotency:** `mysterycall_geocode()` returns cached
-coordinates for addresses already geocoded in the current session,
-preventing redundant API charges.
 
 ------------------------------------------------------------------------
 

@@ -1,4 +1,14 @@
-# Calculate Medicaid and BCBS Acceptance Rates
+# Calculate Medicaid and BCBS Acceptance Rates (deprecated)
+
+**Deprecated.** This is the hardcoded two-group (Medicaid + Blue
+Cross/Blue Shield) special case of the generalized
+[`mysterycall_acceptance_rate_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate_calc.md),
+which handles any number of insurance groups and adds Wilson confidence
+intervals. Prefer
+[`mysterycall_acceptance_rate_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate_calc.md);
+pass `medicaid_screen_group = "Medicaid"` there to reproduce this
+function's asymmetric Medicaid-only NA-screen. Retained for its exact
+manuscript paragraph wording.
 
 Replicates the multi-step acceptance-rate calculation from the
 mystery-caller Rmd analysis: distinct-phone numerator (accepted +
@@ -16,6 +26,7 @@ mysterycall_insurance_acceptance_rates(
   medicaid_accept_col = "does_the_physician_accept_medicaid",
   phone_col = "phone",
   contact_value = "Able to contact",
+  reached_declined_values = mysterycall_reached_declined_reasons(),
   medicaid_label = "Medicaid",
   bcbs_label = "Blue Cross/Blue Shield",
   digits = 1L,
@@ -54,6 +65,13 @@ mysterycall_insurance_acceptance_rates(
 - contact_value:
 
   Character scalar. Default `"Able to contact"`.
+
+- reached_declined_values:
+
+  Character vector of `exclusion_col` strings for offices reached but
+  declined; these are kept in the denominator (every other non-contact
+  reason is excluded as unreachable). Default
+  [`mysterycall_reached_declined_reasons()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reached_declined_reasons.md).
 
 - medicaid_label:
 
@@ -167,6 +185,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -247,6 +266,7 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 rates <- mysterycall_insurance_acceptance_rates(df, output_dir = NA)
+#> Warning: mysterycall_insurance_acceptance_rates() is deprecated. Use mysterycall_acceptance_rate_calc(medicaid_screen_group = "Medicaid") instead.
 #> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 35 accepted this insurance and provided an appointment, yielding an acceptance rate of 97.2%.
 cat(rates$paragraph)
 #> Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (50), 24 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 75.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (50), 35 accepted this insurance and provided an appointment, yielding an acceptance rate of 97.2%.

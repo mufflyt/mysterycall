@@ -11,6 +11,7 @@ the SDC stays consistent with the manuscript and regenerates itself when
 the data change.
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -23,6 +24,7 @@ practice location. We simulate it, then fit a logistic GLMM for the
 offer and a Poisson GLMM for the wait.
 
 ``` r
+
 set.seed(2026)
 n <- 150
 cities <- list(CO = "Denver", TX = "Dallas", NY = "New York",
@@ -35,7 +37,8 @@ d <- data.frame(
   call_date  = rep(as.Date("2026-01-05") + sample(0:40, n, TRUE), each = 2),
   state      = rep(st, each = 2),
   city       = rep(unlist(cities)[st], each = 2),
-  area       = rep(sample(c("Metro", "Nonmetro"), n, TRUE), each = 2)
+  area       = rep(sample(c("Metro", "Nonmetro"), n, TRUE), each = 2),
+  degree     = rep(sample(c("MD", "DO"), n, TRUE, c(.8, .2)), each = 2)
 )
 med <- d$insurance == "Medicaid"
 d$reached <- rbinom(nrow(d), 1, 0.92) == 1   # some calls never reached a live office
@@ -60,6 +63,7 @@ renders a fitted GLM(M) as LaTeX — no `equatiomatic` dependency —
 reading the link, terms, and random intercept off the fit.
 
 ``` r
+
 cat(mysterycall_model_equation(offer_adjusted), "\n\n")
 ```
 
@@ -68,6 +72,7 @@ cat(mysterycall_model_equation(offer_adjusted), "\n\n")
 ```
 
 ``` r
+
 cat(mysterycall_model_equation(wait_model))
 ```
 
@@ -84,45 +89,49 @@ each coefficient to its term.
 **Table S1 — model estimates (crude vs. adjusted).**
 
 ``` r
+
 tS1 <- mysterycall_multi_model_table(
   list(Crude = offer_crude, Adjusted = offer_adjusted))
 tS1
 #> Multi-model regression table  [OR (95% CI)]
 #> ------------------------------------------------------------ 
-#>  Term                Crude                        Adjusted                    
-#>  insuranceCommercial Ref.                         Ref.                        
-#>  insuranceMedicaid   0.38 (0.23-0.64) | p=< 0.001 0.38 (0.22-0.64) | p=< 0.001
-#>  areaMetro                                        Ref.                        
-#>  areaNonmetro                                     0.67 (0.39-1.12) | p=0.126  
-#>  N                   300                          300                         
-#>  AIC                 353.5                        353.1                       
+#>  Term                Crude                      Adjusted                  
+#>  insuranceCommercial Ref.                       Ref.                      
+#>  insuranceMedicaid   0.49 (0.30-0.80) | p=0.005 0.49 (0.30-0.80) | p=0.005
+#>  areaMetro                                      Ref.                      
+#>  areaNonmetro                                   0.86 (0.52-1.41) | p=0.538
+#>  N                   300                        300                       
+#>  AIC                 372.4                      374.0                     
 #> ------------------------------------------------------------
 ```
 
 **Table S2 — the disparity, with confidence intervals.**
 
 ``` r
+
 tS2 <- mysterycall_disparities_table(d, "appt_offered", "insurance",
                                      ref_group = "Commercial")
 tS2
 #> Disparity table -- 2 groups | ref: 'Commercial' | wilson 95% CI
 #> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
 #> ---------------------------------------------------------------------------------------------------- 
-#> Commercial                150    121    80.7%  73.6%-86.2%          (ref)  1.00 (ref)              (ref)
-#> Medicaid                  150     92    61.3%  53.3%-68.8%       -19.3 pp  0.76 (0.65-0.88)        p < 0.001
+#> Commercial                150    114    76.0%  68.6%-82.1%          (ref)  1.00 (ref)              (ref)
+#> Medicaid                  150     91    60.7%  52.7%-68.1%       -15.3 pp  0.80 (0.68-0.93)        p = 0.004
 ```
 
 **Table S3 — adjusted effect on the absolute scale.**
 
 ``` r
+
 mysterycall_combined_results_table(wait_model)
 #>                Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance
-#> 1 insuranceMedicaid 1.56  1.44-1.68 < 0.001      <NA>        <NA>            *
+#> 1 insuranceMedicaid 1.52  1.41-1.64 < 0.001      <NA>        <NA>            *
 ```
 
 **Table S4 — this study against prior work.**
 
 ``` r
+
 prior <- data.frame(
   author = c("Pollack 2016", "Sharma 2025"), year = c(2016, 2025),
   insurance_comparison = "Medicaid vs Commercial", n = c(1200, 480),
@@ -154,13 +163,14 @@ difference between “missing completely at random” and a threat to
 validity.
 
 ``` r
+
 miss <- mysterycall_missing_data_analysis(
   d, outcome_col = "wait_days", group_col = "insurance")
 miss$summary
 #>    variable n_observed n_missing pct_missing       test statistic df    p_value
-#> 1 insurance        300         0        38.3 Chi-square  4.075206  1 0.04351697
+#> 1 insurance        300         0        40.7 Chi-square  2.707681  1 0.09986607
 #>   significant
-#> 1        TRUE
+#> 1       FALSE
 ```
 
 ## 5. Per-caller evaluation
@@ -172,14 +182,15 @@ summarizes volume and outcomes by caller; large between-caller swings in
 the acceptance rate would flag a standardization problem.
 
 ``` r
+
 mysterycall_call_productivity(
   d, caller_col = "caller", date_col = "call_date", outcome_col = "appt_offered")
 #>   caller n_calls n_days calls_per_day n_accepted acceptance_rate mean_hold_sec
-#> 1    RA2      74     23      3.217391         52           70.3%            NA
-#> 2    RA4      58     18      3.222222         44           75.9%            NA
-#> 3    RA5      58     21      2.761905         41           70.7%            NA
-#> 4    RA1      56     18      3.111111         39           69.6%            NA
-#> 5    RA3      54     19      2.842105         37           68.5%            NA
+#> 1    RA2      74     23      3.217391         45           60.8%            NA
+#> 2    RA4      58     18      3.222222         41           70.7%            NA
+#> 3    RA5      58     21      2.761905         43           74.1%            NA
+#> 4    RA1      56     18      3.111111         40           71.4%            NA
+#> 5    RA3      54     19      2.842105         36           66.7%            NA
 #>   mean_call_sec
 #> 1            NA
 #> 2            NA
@@ -193,12 +204,14 @@ mysterycall_call_productivity(
 **Figure S1 — forest plot of the offer model.**
 
 ``` r
+
 figS1 <- mysterycall_forest_plot(offer_adjusted, x_label = "Odds ratio (95% CI)")
 ```
 
 ![](supplementary-digital-content_files/figure-html/figS1-1.png)
 
 ``` r
+
 figS1
 ```
 
@@ -208,6 +221,7 @@ figS1
 single-contact time-to-event display:
 
 ``` r
+
 mysterycall_cumulative_access_curve(
   d, time_col = "wait_days", offered_col = "appt_offered",
   group_col = "insurance", horizon = 45, plot = TRUE)$plot
@@ -220,6 +234,7 @@ writes any figure at *Obstetrics & Gynecology* column width and print
 DPI:
 
 ``` r
+
 basename(mysterycall_save_green_journal_figure(
   figS1, file.path(sdc_dir, "figS1_forest"), layout = "single_column"))
 #> [1] "figS1_forest.tiff"     "figS1_forest.pdf"      "figS1_forest.png"     
@@ -233,6 +248,7 @@ practices onto a Leaflet map — an interactive supplement that print
 cannot show.
 
 ``` r
+
 practices <- unique(d[, c("npi", "city", "state", "insurance")])
 g <- mysterycall_geocode_city_state(practices$city, practices$state)
 practices$lat <- g$lat; practices$lon <- g$lon
@@ -248,6 +264,7 @@ district with
 and shade a US map:
 
 ``` r
+
 library(ggplot2)
 us <- map_data("state")
 districts <- data.frame(region = tolower(state.name),
@@ -272,6 +289,7 @@ Observational studies ship a **STROBE** checklist, built from the fitted
 model:
 
 ``` r
+
 head(mysterycall_strobe_checklist(wait_model), 6)
 #> STROBE Checklist for Mystery-Caller Study
 #> ================================================== 
@@ -299,6 +317,7 @@ handled, how the deception was ethically managed.
 supplies that companion:
 
 ``` r
+
 crisp <- mysterycall_crisp_checklist()
 crisp[crisp$section %in% c("Callers", "Detection", "Ethics"),
       c("section", "item")]
@@ -317,6 +336,7 @@ The participant-flow diagram (Figure S-flow) comes from
 which renders with the DiagrammeR package:
 
 ``` r
+
 mysterycall_flowchart(
   counts = c("Sampled" = 240, "Reached" = 226, "Analyzed" = 218))
 ```
@@ -334,11 +354,12 @@ reports the assumption-free interval — assign every unreached call first
 to failure, then to success:
 
 ``` r
+
 mysterycall_outcome_bounds(d, "appt_offered", observed = "reached")
 #> <mysterycall outcome bounds under non-response>
-#>   universe 300 = observed 270 + missing 30; positives 191
-#>   complete-case rate: 70.7%  (95% CI 65.1%-75.8%)
-#>   bounds over universe: [63.7% (all missing fail), 73.7% (all succeed)]  width 10.0%
+#>   universe 300 = observed 280 + missing 20; positives 191
+#>   complete-case rate: 68.2%  (95% CI 62.5%-73.4%)
+#>   bounds over universe: [63.7% (all missing fail), 70.3% (all succeed)]  width 6.7%
 ```
 
 **Leave-one-caller-out.** Confirm the exposure effect does not hinge on
@@ -346,18 +367,19 @@ a single research assistant by refitting with each caller dropped in
 turn:
 
 ``` r
+
 fit_glm <- glm(appt_offered ~ insurance + area, binomial, d)
 mysterycall_leave_one_out(fit_glm, d, group = "caller", term = "insuranceMedicaid")
 #> <mysterycall leave-one-group-out: term 'insuranceMedicaid', 5 refits>
-#>   full-data ratio: 0.38 (p = 0.000266)
+#>   full-data ratio: 0.49 (p = 0.00459)
 #> # A tibble: 5 × 7
-#>   group_excluded     n estimate ratio std_error  p_value converged
-#>   <chr>          <int>    <dbl> <dbl>     <dbl>    <dbl> <lgl>    
-#> 1 RA1              244   -0.998 0.369     0.298 0.000807 TRUE     
-#> 2 RA2              226   -1.06  0.345     0.316 0.000743 TRUE     
-#> 3 RA3              246   -0.824 0.439     0.294 0.00499  TRUE     
-#> 4 RA4              242   -1.01  0.363     0.294 0.000570 TRUE     
-#> 5 RA5              242   -1.00  0.368     0.298 0.000796 TRUE
+#>   group_excluded     n estimate ratio std_error p_value converged
+#>   <chr>          <int>    <dbl> <dbl>     <dbl>   <dbl> <lgl>    
+#> 1 RA1              244   -0.570 0.566     0.278 0.0405  TRUE     
+#> 2 RA2              226   -0.786 0.455     0.301 0.00910 TRUE     
+#> 3 RA3              246   -0.730 0.482     0.282 0.00956 TRUE     
+#> 4 RA4              242   -0.614 0.541     0.280 0.0284  TRUE     
+#> 5 RA5              242   -0.918 0.399     0.283 0.00119 TRUE
 ```
 
 Other analyses worth including, each a single call: the wait model under
@@ -369,7 +391,140 @@ a stricter outcome definition (re-fit on “offer with the sampled
 physician”), and Benjamini–Hochberg-adjusted p-values
 ([`mysterycall_multiple_comparison_adjust()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiple_comparison_adjust.md)).
 
-## 10. Export and manifest
+## 10. Baseline characteristics (Table 1)
+
+Reviewers want to know who was sampled.
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md)
+builds a publication-ready baseline table at the practice level:
+
+``` r
+
+practices <- unique(d[, c("npi", "state", "area", "degree")])
+mysterycall_table1(practices, covariates = c("state", "degree"),
+                   stratify_by = "area", include_overall = TRUE)
+#> Table 1 (Overall N=150, Metro N=67, Nonmetro N=83)
+#> Stratified by: area
+#> 
+#> # A tibble: 8 × 6
+#>   variable level Overall     `Metro (N=67)` `Nonmetro (N=83)` p_value
+#>   <chr>    <chr> <chr>       <chr>          <chr>             <chr>  
+#> 1 state    CA    29 (19.3%)  16 (23.9%)     13 (15.7%)        0.046  
+#> 2 state    CO    27 (18.0%)  12 (17.9%)     15 (18.1%)        NA     
+#> 3 state    FL    36 (24.0%)  11 (16.4%)     25 (30.1%)        NA     
+#> 4 state    IL    15 (10.0%)  4 (6.0%)       11 (13.3%)        NA     
+#> 5 state    NY    20 (13.3%)  14 (20.9%)     6 (7.2%)          NA     
+#> 6 state    TX    23 (15.3%)  10 (14.9%)     13 (15.7%)        NA     
+#> 7 degree   DO    42 (28.0%)  16 (23.9%)     26 (31.3%)        0.313  
+#> 8 degree   MD    108 (72.0%) 51 (76.1%)     57 (68.7%)        NA
+```
+
+## 11. Full model output: ICC and variance components
+
+The SDC should report more than the exposure coefficient — the
+clustering matters.
+[`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md)
+gives the intraclass correlation (how much of the variation sits between
+practices), and
+[`mysterycall_random_effect_variance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_random_effect_variance.md)
+the variance components:
+
+``` r
+
+mysterycall_icc(wait_model)
+#> Intraclass Correlation Coefficient (latent_variable_poisson)
+#>   ICC       = 0.0000
+#>   sigma2_u  = 0.0000  (physician random-intercept variance)
+#> 
+#> ICC = 0.000: 0.0% of outcome variance is attributable to between-physician clustering.
+mysterycall_random_effect_variance(wait_model$model)
+#> $icc
+#> [1] 0
+#> 
+#> $random_variance
+#> [1] 0
+#> 
+#> $residual_variance
+#> [1] 3.289868
+#> 
+#> $random_effect_group
+#> [1] "npi"
+#> 
+#> $var_table
+#>   grp        var1 var2 vcov sdcor Significant
+#> 1 npi (Intercept) <NA>    0     0          No
+#> 
+#> $interpretation
+#> [1] "low"
+#> 
+#> $sentence
+#> [1] "The intraclass correlation (ICC) of the model for the random effect group 'npi' is 0. An ICC of 0 is considered low, suggesting that most variance is at the individual level rather than between groups of 'npi'."
+```
+
+## 12. A priori power
+
+Journals require the pre-specified power calculation.
+[`mysterycall_poisson_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_power.md)
+sizes the wait-time comparison for a target incidence-rate ratio:
+
+``` r
+
+mysterycall_poisson_power(irr = 1.40, lambda_ref = 14, power = 0.80,
+                          both_arms = TRUE)
+#> $n_per_arm
+#> [1] 9
+#> 
+#> $n_total
+#> [1] 9
+#> 
+#> $n_total_calls
+#> [1] 18
+#> 
+#> $irr
+#> [1] 1.4
+#> 
+#> $lambda_ref
+#> [1] 14
+#> 
+#> $lambda_trt
+#> [1] 19.6
+#> 
+#> $alpha
+#> [1] 0.05
+#> 
+#> $power
+#> [1] 0.8
+#> 
+#> $design_effect
+#> [1] 1
+```
+
+## 13. Model diagnostics
+
+A residual figure justifies the model.
+[`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md)
+draws the diagnostic panel, and the fitted object already carries the
+overdispersion check:
+
+``` r
+
+mysterycall_plot_residuals(wait_model)
+```
+
+![](supplementary-digital-content_files/figure-html/diagnostics-1.png)
+
+## 14. Reproducibility
+
+Finally, a reproducibility appendix — the R and package versions the
+analysis ran under, so the SDC is a complete, re-runnable record:
+
+``` r
+
+mysterycall_session_snapshot(
+  file = file.path(sdc_dir, "session_snapshot.txt"), quiet = TRUE,
+  notes = "Supplementary digital content build")
+```
+
+## 15. Export and manifest
 
 Write each artifact in the format the journal wants — a CSV per table is
 the most portable,
@@ -379,6 +534,7 @@ gives formatted Word (needs officer/flextable), and
 bundles every model table into one workbook (needs openxlsx):
 
 ``` r
+
 write.csv(as.data.frame(tS1), file.path(sdc_dir, "TableS1_models.csv"),
           row.names = FALSE)
 write.csv(tS2, file.path(sdc_dir, "TableS2_disparities.csv"), row.names = FALSE)
@@ -387,6 +543,7 @@ write.csv(as.data.frame(crisp), file.path(sdc_dir, "ChecklistS1_CRiSP.csv"),
 ```
 
 ``` r
+
 mysterycall_supplemental_tables(
   logistic_fit = offer_adjusted, poisson_fit = wait_model,
   file = file.path(sdc_dir, "supplemental_tables.xlsx"), overwrite = TRUE)
@@ -396,6 +553,7 @@ Finally, a manifest — reviewers appreciate it, and it doubles as a build
 check:
 
 ``` r
+
 files <- list.files(sdc_dir)
 data.frame(
   file = files,
@@ -408,17 +566,21 @@ data.frame(
 #> 3         figS1_forest.pdf figure
 #> 4         figS1_forest.png figure
 #> 5        figS1_forest.tiff figure
-#> 6 supplemental_tables.xlsx bundle
-#> 7       TableS1_models.csv  table
-#> 8  TableS2_disparities.csv  table
+#> 6     session_snapshot.txt  other
+#> 7 supplemental_tables.xlsx bundle
+#> 8       TableS1_models.csv  table
+#> 9  TableS2_disparities.csv  table
 ```
 
 ## Recap
 
 Every piece of a mystery-caller study’s supplementary digital content —
-the model equations, the crude-vs-adjusted and disparity tables, the
-missingness analysis, the per-caller evaluation, the forest and
-cumulative-access figures at journal specification, the practice and
-district maps, and the STROBE **and** CRiSP reporting checklists — comes
-from the same fitted models and call log with one call apiece, so the
-SDC regenerates itself whenever the analysis is re-run.
+the model equations, a baseline Table 1, the crude-vs-adjusted and
+disparity tables, the ICC and variance components, the missingness
+analysis, the per-caller evaluation, the a-priori power calculation, the
+forest, cumulative-access, and residual figures at journal
+specification, the practice and district maps, the STROBE **and** CRiSP
+reporting checklists, non-response and leave-one-caller-out sensitivity
+analyses, and a reproducibility appendix — comes from the same fitted
+models and call log with one call apiece, so the SDC regenerates itself
+whenever the analysis is re-run.

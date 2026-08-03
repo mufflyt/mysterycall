@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Mystery Caller Study Tools for Healthcare Access Research">
@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.3.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="articles/my-vignette.html">Get Started</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/getting_started.html">Get Started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -63,11 +63,6 @@
     <li><a class="dropdown-item" href="articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
-    <li><a class="dropdown-item" href="articles/geocode.html">Geocoding</a></li>
-    <li><a class="dropdown-item" href="articles/create_isochrones.html">Create Drive-Time Isochrones</a></li>
-    <li><a class="dropdown-item" href="articles/mapping.html">Visualizing Provider Geographic Data</a></li>
-    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
     <li><a class="dropdown-item" href="articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
@@ -75,6 +70,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
     <li><a class="dropdown-item" href="articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
+    <li><a class="dropdown-item" href="articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
@@ -83,7 +79,6 @@
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
-    <li><a class="dropdown-item" href="articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html#data-and-datasets">Datasets</a></li>
@@ -110,9 +105,9 @@
 <h2 id="statement-of-need">Statement of Need<a class="anchor" aria-label="anchor" href="#statement-of-need"></a>
 </h2>
 <p>Measuring patient access to healthcare requires assembling a provider roster, placing calls under a standardized script, recording wait times and refusal rates, and then modelling disparities by insurance type, race, or geography. Each step involves bespoke data-engineering work that research teams currently solve ad hoc: custom scripts to loop around the NPI API’s 1,200-record cap, manual regular expressions to parse name fields, silent <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> calls that multiply rows when a lookup table has duplicates, and hand-crafted Poisson models that lack overdispersion diagnostics.</p>
-<p><strong>mysterycall</strong> consolidates this work into a single, tested, documented pipeline. It provides taxonomy-based NPI search that bypasses the record cap, NANP phone validation with state-geography checks, physician name parsing with credential and surname disambiguation, safe join wrappers that enforce coverage and uniqueness guarantees, drive-time isochrone generation, Census demographic overlay, Poisson mixed-effects modelling with IRR reporting, and publication-ready table and map export. The target users are clinical researchers and health-services researchers who conduct mystery-caller or audit studies and need reproducible, auditable workflows rather than one-off scripts.</p>
+<p><strong>mysterycall</strong> consolidates this work into a single, tested, documented pipeline. It provides taxonomy-based NPI search that bypasses the record cap, NANP phone validation with state-geography checks, physician name parsing with credential and surname disambiguation, safe join wrappers that enforce coverage and uniqueness guarantees, Poisson mixed-effects modelling with IRR reporting, and publication-ready table export (drive-time isochrones and mapping are available through the companion <code>mysterymaps</code> package). The target users are clinical researchers and health-services researchers who conduct mystery-caller or audit studies and need reproducible, auditable workflows rather than one-off scripts.</p>
 <hr>
-<p><strong>mysterycall</strong> provides a toolkit for mystery caller and audit studies that evaluate patient access to healthcare. It handles the full workflow: finding providers in the NPI registry, validating and geocoding their addresses, generating drive-time isochrones, overlaying Census demographics, and producing publication-ready tables and maps.</p>
+<p><strong>mysterycall</strong> provides a toolkit for mystery caller and audit studies that evaluate patient access to healthcare. It handles the study workflow: finding providers in the NPI registry, validating their records, analyzing acceptance and wait-time disparities, and producing publication-ready tables. Geocoding, drive-time isochrones, and mapping live in the companion <code>mysterymaps</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -120,19 +115,15 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"mufflyt/mysterycall"</span><span class="op">)</span></span></code></pre></div>
-<p>The package loads quickly. Geospatial and modelling packages are optional and loaded only when first needed:</p>
+<p>The package loads quickly. Heavier modelling and Census packages are optional and loaded only when first needed:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hereR"</span>, <span class="st">"sf"</span>, <span class="st">"lwgeom"</span><span class="op">)</span><span class="op">)</span>  <span class="co"># drive-time isochrones</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"leaflet"</span><span class="op">)</span>                            <span class="co"># interactive maps</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggmap"</span><span class="op">)</span>                              <span class="co"># Google Maps geocoding</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggspatial"</span>, <span class="st">"rnaturalearth"</span><span class="op">)</span><span class="op">)</span>      <span class="co"># HRR hex maps</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lme4"</span><span class="op">)</span>                               <span class="co"># mixed-effects models</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lme4"</span><span class="op">)</span>                               <span class="co"># mixed-effects models</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"censusapi"</span><span class="op">)</span>                          <span class="co"># Census block-group data</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
-<p>A typical mystery caller study moves through four stages:</p>
+<p>A typical mystery caller study builds a provider roster, then analyzes the call outcomes:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -155,28 +146,26 @@
 <span><span class="co"># Enrich with CMS Physician Compare demographics</span></span>
 <span><span class="va">gyn_onc_enriched</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data</a></span><span class="op">(</span><span class="va">gyn_onc_valid</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ── 2. Geocode ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co"># ── 2. Analyze acceptance and wait-time disparities ───────────────────────────</span></span>
 <span></span>
-<span><span class="co"># Requires a Google Maps API key in GOOGLE_API_KEY env var</span></span>
-<span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_geocode</span><span class="op">(</span></span>
-<span>  <span class="va">gyn_onc_enriched</span>,</span>
-<span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span></span>
+<span><span class="co"># `calls` is your completed call log: one row per call to a provider in the</span></span>
+<span><span class="co"># roster above, with an `insurance` arm and recorded outcomes/wait times.</span></span>
+<span></span>
+<span><span class="co"># Medicaid vs. private acceptance rate with Wilson CIs and a gap sentence</span></span>
+<span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_acceptance_rate_calc.html">mysterycall_acceptance_rate_calc</a></span><span class="op">(</span><span class="va">calls</span>, insurance_col <span class="op">=</span> <span class="st">"insurance"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Wait-time model: incidence rate ratios by insurance, clustered by practice</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">calls</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"business_days_until_appointment"</span>,</span>
+<span>  predictors <span class="op">=</span> <span class="st">"insurance"</span>,</span>
+<span>  random_intercept <span class="op">=</span> <span class="st">"practice"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># ── 3. Drive-time isochrones ──────────────────────────────────────────────────</span></span>
-<span></span>
-<span><span class="co"># Requires a routing API key in HERE_API_KEY env var</span></span>
-<span><span class="va">isochrones</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_isochrones_for_df</span><span class="op">(</span></span>
-<span>  <span class="va">geocoded</span>,</span>
-<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="fl">3600</span>, <span class="fl">7200</span>, <span class="fl">10800</span><span class="op">)</span>   <span class="co"># 30 / 60 / 120 / 180 min</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Free the in-memory isochrone cache after a large batch</span></span>
-<span><span class="fu">mysterycall_clear_isochrone_cache</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># ── 4. Map ────────────────────────────────────────────────────────────────────</span></span>
-<span></span>
-<span><span class="fu">mysterycall_map_physicians</span><span class="op">(</span><span class="va">geocoded</span>, popup_var <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/mysterycall_irr_plot.html">mysterycall_irr_plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p><strong>Geocoding, drive-time isochrones, and mapping now live in the companion <a href="https://github.com/mufflyt/mysterymaps" class="external-link"><code>mysterymaps</code></a> package</strong> (<code>mysterymaps::mysterymaps_geocode()</code>, <code>mysterymaps::mysterymaps_isochrones_for_df()</code>, <code>mysterymaps::mysterymaps_map_base()</code>). <code>mysterycall</code> focuses on the mystery-caller study design, analysis, and manuscript outputs.</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="gallery">Gallery<a class="anchor" aria-label="anchor" href="#gallery"></a>
@@ -188,7 +177,7 @@
 <p><img src="reference/figures/fig-subspecialty-counts.png" width="100%" alt="Bar chart of subspecialist counts from the built-in physicians dataset"></p>
 </td>
 <td width="50%">
-<p><strong>Geographic distribution</strong> — dot map of 4,659 OBGYN subspecialists across the US (<code>mysterycall_map_physicians</code>)</p>
+<p><strong>Geographic distribution</strong> — dot map of 4,659 OBGYN subspecialists across the US (via the <a href="https://github.com/mufflyt/mysterymaps" class="external-link"><code>mysterymaps</code></a> package)</p>
 <p><img src="reference/figures/fig-physician-map.png" width="100%" alt="Dot map of 4,659 OBGYN subspecialists across the United States"></p>
 </td>
 </tr>
@@ -204,7 +193,7 @@
 </tr>
 <tr>
 <td width="50%">
-<p><strong>Choropleth map</strong> — appointment acceptance rate by state (<code>mysterycall_map_acceptance_rate</code>)</p>
+<p><strong>Choropleth map</strong> — appointment acceptance rate by state (via the <a href="https://github.com/mufflyt/mysterymaps" class="external-link"><code>mysterymaps</code></a> package)</p>
 <p><img src="reference/figures/fig-acceptance-map.png" width="100%" alt="US choropleth map of appointment acceptance rate by state"></p>
 </td>
 <td width="50%">
@@ -304,14 +293,7 @@
 <td>❌</td>
 </tr>
 <tr>
-<td>Drive-time isochrone generation (HERE API)</td>
-<td>✅</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>Census demographic overlay on isochrones</td>
+<td>Drive-time isochrones + Census overlay (via companion <code>mysterymaps</code>)</td>
 <td>✅</td>
 <td>❌</td>
 <td>❌</td>
@@ -383,49 +365,14 @@
 <td>Estimate physician gender via the Genderize.io API</td>
 </tr>
 <tr>
-<td><strong>Geocode</strong></td>
-<td><code>mysterycall_geocode()</code></td>
-<td>Convert addresses to lat/lon via Google Maps</td>
-</tr>
-<tr>
-<td><strong>Isochrones</strong></td>
-<td><code>mysterycall_isochrones_for_df()</code></td>
-<td>Drive-time polygons for every row using a drive-time routing service</td>
-</tr>
-<tr>
-<td></td>
-<td><code>mysterycall_create_isochrones()</code></td>
-<td>Single-location drive-time polygon</td>
-</tr>
-<tr>
-<td></td>
-<td><code>mysterycall_clear_isochrone_cache()</code></td>
-<td>Release the in-session memoization cache</td>
-</tr>
-<tr>
 <td><strong>Census</strong></td>
 <td><code><a href="reference/mysterycall_get_census_data.html">mysterycall_get_census_data()</a></code></td>
 <td>ACS block-group demographics by state FIPS</td>
 </tr>
 <tr>
-<td></td>
-<td><code>mysterycall_calculate_overlap()</code></td>
-<td>Overlap area between isochrones and block groups</td>
-</tr>
-<tr>
-<td><strong>Maps</strong></td>
-<td><code>mysterycall_map_physicians()</code></td>
-<td>Interactive Leaflet dot map colored by ACOG district</td>
-</tr>
-<tr>
-<td></td>
-<td><code>mysterycall_map_block_group()</code></td>
-<td>Block-group overlap map exported to HTML + PNG</td>
-</tr>
-<tr>
-<td></td>
-<td><code>mysterycall_hrr_maps()</code></td>
-<td>Hexagon density map by Hospital Referral Region</td>
+<td><strong>Geospatial</strong></td>
+<td><em>(moved to <a href="https://github.com/mufflyt/mysterymaps" class="external-link"><code>mysterymaps</code></a>)</em></td>
+<td>Geocoding, drive-time isochrones, isochrone/block-group overlap, and Leaflet/HRR maps</td>
 </tr>
 <tr>
 <td><strong>Tables</strong></td>
@@ -512,7 +459,6 @@
 <p>Full documentation, function reference, and worked vignettes: <strong><a href="https://mufflyt.github.io/mysterycall/" class="uri">https://mufflyt.github.io/mysterycall/</a></strong></p>
 <p><strong>Getting started</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/my-vignette.html">Searching the NPI Database by Taxonomy</a> - <a href="https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html">Search &amp; Process NPI</a> - <a href="https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html">Workflow Orchestration</a></p>
 <p><strong>Data quality</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/data-quality.html">Phone Validation, Name Parsing, and Safe Joins</a></p>
-<p><strong>Geospatial</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/geocode.html">Geocoding</a> - <a href="https://mufflyt.github.io/mysterycall/articles/create_isochrones.html">Create Isochrones</a></p>
 <p><strong>Analysis and reporting</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html">Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/provider-classification.html">Provider Classification (RUCA, practice setting, census region)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/table-generation.html">Table Generation</a> - <a href="https://mufflyt.github.io/mysterycall/articles/get_census_data.html">Get Census Data</a></p>
 </div>
 <div class="section level2">
@@ -521,7 +467,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"mysterycall"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
-<p>Muffly, T. (2026). <em>mysterycall: Mystery Caller Study Tools for Healthcare Access Research</em> (R package version 1.3.0). <a href="https://github.com/mufflyt/mysterycall" class="external-link uri">https://github.com/mufflyt/mysterycall</a></p>
+<p>Muffly, T. (2026). <em>mysterycall: Mystery Caller Study Tools for Healthcare Access Research</em> (R package version 1.6.3.9000). <a href="https://github.com/mufflyt/mysterycall" class="external-link uri">https://github.com/mufflyt/mysterycall</a></p>
 </blockquote>
 </div>
 <div class="section level2">
@@ -591,7 +537,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

@@ -21,7 +21,8 @@ mysterycall_prepare_calls(
   na_exclusions = c("warn", "drop", "include"),
   caller_col_out = "caller",
   appt_offered_col = "appt_offered",
-  calendar_days_col = "calendar_days"
+  calendar_days_col = "calendar_days",
+  business_days_col = "business_days_until_appointment"
 )
 ```
 
@@ -85,7 +86,17 @@ mysterycall_prepare_calls(
 - calendar_days_col:
 
   Character scalar. Name of the calendar-days column added to
-  `$waittime_data`. Default `"calendar_days"`.
+  `$waittime_data` (kept for calendar-vs-business sensitivity). Default
+  `"calendar_days"`.
+
+- business_days_col:
+
+  Character scalar. Name of the **canonical** business-days outcome
+  column added to `$waittime_data`, computed with
+  [`mysterycall_count_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.md)
+  (same-day = 0, US federal holidays excluded). This is the primary wait
+  outcome the modelling functions default to. Default
+  `"business_days_until_appointment"`.
 
 ## Value
 
@@ -100,8 +111,10 @@ A list of class `mysterycall_prepared` with elements:
 
 - `waittime_data`:
 
-  Subset of `logistic_data` with `appdate` present. Adds `calendar_days`
-  (numeric, days from call to appt).
+  Subset of `logistic_data` with `appdate` present. Adds
+  `business_days_until_appointment` (canonical outcome, business days,
+  same-day = 0) and `calendar_days` (secondary, raw days from call to
+  appt).
 
 - `waterfall`:
 
@@ -166,7 +179,10 @@ arguments):
 [`mysterycall_auto_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_auto_model.md)
 
 Other data-preparation:
-[`print.mysterycall_prepared()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_prepared.md)
+[`mysterycall_exclusion_crosswalk()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_crosswalk.md),
+[`mysterycall_reconcile_inclusion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_inclusion.md),
+[`print.mysterycall_prepared()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_prepared.md),
+[`print.mysterycall_reconciliation()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_reconciliation.md)
 
 ## Examples
 

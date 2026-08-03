@@ -85,9 +85,7 @@ When the data are **not normally distributed** and **consist of counts**
 it is count data. t-test assumes that data is normally distributed, and
 comparing the means of count data is also not appropriate. We can check
 the incidence rate ratio (IRR) for comparison of outcome among the
-categories of
-[group](https://ggplot2.tidyverse.org/reference/aes_group_order.html).
-Better to use Poisson regression."*
+categories of the grouping variable. Better to use Poisson regression."*
 
 ## See also
 

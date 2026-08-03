@@ -41,5 +41,5 @@ Other address-normalization:
 mysterycall:::mysterycall_strip_suite("123 Main St Suite 100")
 #> [1] "123 MAIN ST"
 mysterycall:::mysterycall_strip_suite("456 Oak Ave APT 4B #200")
-#> [1] "456 OAK AVE #200"
+#> [1] "456 OAK AVE"
 ```

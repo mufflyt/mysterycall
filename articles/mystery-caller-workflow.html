@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Mystery Caller Workflow: From Raw Data to Manuscript">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mysterycall</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.3.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/my-vignette.html">Get Started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/getting_started.html">Get Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -56,11 +56,6 @@
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
-    <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
-    <li><a class="dropdown-item" href="../articles/create_isochrones.html">Create Drive-Time Isochrones</a></li>
-    <li><a class="dropdown-item" href="../articles/mapping.html">Visualizing Provider Geographic Data</a></li>
-    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
     <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
@@ -68,6 +63,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/matched-pair-analysis.html">A matched-pair mystery-caller analysis</a></li>
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
+    <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
@@ -76,7 +72,6 @@
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
-    <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html#data-and-datasets">Datasets</a></li>
@@ -102,7 +97,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Mystery Caller Workflow: From Raw Data to Manuscript</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/HEAD/vignettes/mystery-caller-workflow.Rmd" class="external-link"><code>vignettes/mystery-caller-workflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/vignettes/mystery-caller-workflow.Rmd" class="external-link"><code>vignettes/mystery-caller-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>mystery-caller-workflow.Rmd</code></div>
     </div>
 
@@ -319,6 +314,9 @@ physician offices.</p>
 <code class="sourceCode R"><span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/mysterycall_insurance_acceptance_rates.html">mysterycall_insurance_acceptance_rates</a></span><span class="op">(</span><span class="va">df</span>, output_dir <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in mysterycall_insurance_acceptance_rates(df, output_dir = NA):</span></span>
+<span><span class="co">#&gt; mysterycall_insurance_acceptance_rates() is deprecated. Use</span></span>
+<span><span class="co">#&gt; mysterycall_acceptance_rate_calc(medicaid_screen_group = "Medicaid") instead.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">rates</span><span class="op">$</span><span class="va">paragraph</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Medicaid Acceptance Rate: Out of the total number of physicians assigned Medicaid insurance (100), 65 physicians accepted Medicaid and provided an appointment, resulting in an acceptance rate of 100.0%. Blue Cross/Blue Shield Acceptance Rate: Among the physicians assigned Blue Cross/Blue Shield insurance (100), 64 accepted this insurance and provided an appointment, yielding an acceptance rate of 100.0%.</span></span></code></pre></div>
 </div>
@@ -439,7 +437,7 @@ behavior.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. <a href="https://github.com/mufflyt/mysterycall/issues" class="external-link">Report a bug</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md" class="external-link">Changelog</a>  ·  <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE" class="external-link">MIT License</a>  ·  <a href="https://orcid.org/0000-0002-2044-1693" class="external-link">ORCID: 0000-0002-2044-1693</a></p>
 </div>
 
     </footer>

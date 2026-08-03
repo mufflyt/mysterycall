@@ -24,6 +24,7 @@ The functions shown here are in the `power analysis` family:
 | [`mysterycall_equation_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_equation_figure.md) | Power curve plot across a range of IRR values |
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -52,7 +53,6 @@ estimated **proportion** (e.g. acceptance rate) is within $`e`$
 percentage points with 95 % confidence:
 
 ``` math
-
 n_0 = \frac{Z^2_{\alpha/2} \cdot p(1-p)}{e^2}
 \qquad\longrightarrow\qquad
 n = \frac{n_0}{1 + \frac{n_0 - 1}{N}}
@@ -62,7 +62,6 @@ Setting $`p = 0.5`$ (maximum variance) and $`Z_{0.025} = 1.96`$ this
 simplifies to:
 
 ``` math
-
 n = \frac{N}{1 + N e^2}
 ```
 
@@ -73,6 +72,7 @@ sample represents a meaningful fraction of the directory.
 ### Using `mysterycall_cochran_n()`
 
 ``` r
+
 # 800 OB-GYNs in target region — need acceptance rate within ±5 percentage points
 res_800 <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
 cat(sprintf(
@@ -84,6 +84,7 @@ cat(sprintf(
 ```
 
 ``` r
+
 # Show how n changes across directory sizes and margin-of-error targets
 grid <- expand.grid(
   N  = c(100, 200, 400, 800, 1600),
@@ -116,6 +117,7 @@ knitr::kable(
 |               1600 |      656 |      320 |        95 |
 
 Required sample sizes across directory sizes and precision targets.
+{.table}
 
 **Key insight:** For moderate-to-large directories (N ≥ 400), the ±5%
 target requires roughly 200 providers regardless of how large the
@@ -138,7 +140,6 @@ $`\lambda_0`$ (reference arm) and
 $`\lambda_1 = \text{IRR} \times \lambda_0`$ (comparison arm) is:
 
 ``` math
-
 n = \frac{(z_{\alpha/2} + z_\beta)^2
           \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\ln \text{IRR})^2}
 ```
@@ -154,6 +155,7 @@ wait of about 1.40 times the BCBS wait. The BCBS mean is 14 business
 days. How many providers are needed for 80 % power?
 
 ``` r
+
 pw <- mysterycall_poisson_power(
   irr       = 1.40,   # Medicaid wait is 40% longer
   lambda_ref = 14,    # BCBS mean = 14 business days
@@ -178,6 +180,7 @@ cat(sprintf(
 ### Comparing power and effect sizes
 
 ``` r
+
 scenarios <- list(
   list(irr = 1.20, power = 0.80, label = "Small effect (IRR 1.20), 80% power"),
   list(irr = 1.40, power = 0.80, label = "Moderate effect (IRR 1.40), 80% power"),
@@ -229,7 +232,7 @@ knitr::kable(
 | Very large effect (IRR 2.00), 80% power | 2.0 | 80% | 2 | 2 | 4 |
 
 Poisson power analysis: providers per arm for a paired design,
-lambda_ref = 14 days, alpha = 0.05.
+lambda_ref = 14 days, alpha = 0.05. {.table style="width:100%;"}
 
 **Interpretation:**
 
@@ -249,7 +252,6 @@ calls to the same office may be correlated. The design effect inflates
 the sample size by:
 
 ``` math
-
 \text{DEFF} = 1 + (m - 1) \times \rho
 ```
 
@@ -257,6 +259,7 @@ where $`m`$ is the average calls per cluster (office) and $`\rho`$ is
 the intra-class correlation (ICC).
 
 ``` r
+
 # No clustering vs. ICC = 0.10 (moderate) with 3 calls per office on average
 pw_no_icc  <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14)
 #> Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=9, n_total=9, calls=18
@@ -298,7 +301,7 @@ knitr::kable(
 | 0.20 (high)     |  1.4 |        12 |          24 |
 
 Effect of within-office correlation (ICC) on required sample size. IRR =
-1.40, lambda_ref = 14 d, 80% power, m = 3 calls/office.
+1.40, lambda_ref = 14 d, 80% power, m = 3 calls/office. {.table}
 
 > **Rule of thumb:** An ICC of 0.10 with 3 calls per office inflates the
 > required sample by ~20 %. When the ICC is unknown, a sensitivity
@@ -313,6 +316,7 @@ function of the minimum detectable effect (IRR). Plotting the curve
 helps justify the study’s sample size to reviewers and IRBs.
 
 ``` r
+
 mysterycall_equation_figure(
   lambda0   = 14,
   irr_seq   = seq(1.10, 2.0, by = 0.05),
@@ -349,8 +353,8 @@ Required providers per arm (paired design, 80% power, lambda_ref = 14 d)
 as a function of the minimum detectable IRR.
 
 ``` r
+
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.4.3
 
 irr_seq <- seq(1.10, 2.0, by = 0.05)
 
@@ -435,6 +439,7 @@ required sample size. Studies in different specialties or regions should
 adapt this parameter.
 
 ``` r
+
 lambda_vals <- c(5, 7, 10, 14, 21, 30)
 
 n_by_lambda <- vapply(lambda_vals, function(lam)
@@ -488,6 +493,7 @@ constraints:
 Take the **larger** of the two as the study’s minimum sample size:
 
 ``` r
+
 n_cochran <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)$n
 n_poisson <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                         power = 0.80, both_arms = TRUE)$n_total
@@ -509,6 +515,7 @@ When writing the Methods section of a manuscript, the relevant numbers
 can be generated programmatically:
 
 ``` r
+
 cochran_res <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
 poisson_res <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                           power = 0.80, both_arms = TRUE)

@@ -14,7 +14,7 @@ mysterycall_auto_model(
   outcome,
   predictors,
   random_intercept,
-  phi_threshold = 2,
+  phi_threshold = mysterycall_overdispersion_threshold(),
   conf_level = 0.95,
   include_lmm = TRUE,
   lmm_normality_threshold = 0.05,
@@ -43,7 +43,9 @@ mysterycall_auto_model(
 - phi_threshold:
 
   Numeric. Pearson phi above which the NB model replaces Poisson.
-  Default `2.0`.
+  Default
+  [`mysterycall_overdispersion_threshold()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_threshold.md)
+  (1.5), the package-wide overdispersion threshold.
 
 - conf_level:
 
@@ -152,6 +154,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -237,7 +240,7 @@ result <- mysterycall_auto_model(df, "wait", "ins", "phys")
 #> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=60, physicians=10, AIC=340.4, overdispersion=0.86
-#> Poisson GLMM selected: phi = 0.86 <= 2.0 (no overdispersion detected). 
+#> Poisson GLMM selected: phi = 0.86 <= 1.5 (no overdispersion detected). 
 #> Step 3/3: Fitting LMM to evaluate day-scale coefficients...
 #> Fitting LMM: wait ~ ins + (1 | phys)
 #> boundary (singular) fit: see help('isSingular')
@@ -259,7 +262,7 @@ print(result)
 #> LMM: Shapiro-Wilk p = 0.830  |  Defensible: NO
 #> 
 #> --- Recommendation ---
-#> PRIMARY MODEL: Poisson GLMM (phi = 0.86 <= 2.0; no overdispersion). Report
+#> PRIMARY MODEL: Poisson GLMM (phi = 0.86 <= 1.5; no overdispersion). Report
 #>   incidence rate ratios (IRRs) with 95% Wald CIs. SENSITIVITY /
 #>   COMMUNICATION: LMM is not recommended: outcome range = 17 days (< 30). A
 #>   floor effect near zero violates the normality assumption. Stick with the

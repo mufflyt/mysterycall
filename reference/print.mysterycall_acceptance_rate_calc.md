@@ -46,6 +46,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -127,7 +128,7 @@ df <- data.frame(
 )
 res <- mysterycall_acceptance_rate_calc(df)
 print(res)
-#> Medicaid acceptance rate: 10/12 = 83.3% (95% CI: 55.2%-95.3%)
-#> Private acceptance rate: 10/12 = 83.3% (95% CI: 55.2%-95.3%) 
-#> Physicians accepted Medicaid at 83.3% vs Private at 83.3%, a gap of 0.0 percentage points. 
+#> Medicaid acceptance rate: 12/12 = 100.0% (95% CI: 75.8%-100.0%)
+#> Private acceptance rate: 12/12 = 100.0% (95% CI: 75.8%-100.0%) 
+#> Physicians accepted Medicaid at 100.0% vs Private at 100.0%, a gap of 0.0 percentage points. 
 ```

@@ -22,6 +22,12 @@ that contain no 5-digit sequence. Length-0 input returns `character(0)`.
 
 ## See also
 
+[`mysterycall_clean_zip()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_zip.md)
+and
+[`mysterycall_extract_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_extract_zip5.md)
+for the general-purpose ZIP cleaners outside the address-normalization
+pipeline.
+
 Other address-normalization:
 [`map_token()`](https://mufflyt.github.io/mysterycall/reference/map_token.md),
 [`mysterycall_ascii_norm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ascii_norm.md),

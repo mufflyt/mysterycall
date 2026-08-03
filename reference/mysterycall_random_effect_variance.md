@@ -3,9 +3,15 @@
 Extracts variance components from a fitted mixed model via
 [`lme4::VarCorr()`](https://rdrr.io/pkg/nlme/man/VarCorr.html), computes
 the intraclass correlation coefficient (ICC), and generates a
-manuscript-ready interpretive sentence. Handles Poisson GLMER models
-where the residual scale parameter (`sc`) is unavailable by returning
-`icc = NA` with an informative message.
+manuscript-ready interpretive sentence. For Gaussian LMMs the residual
+variance is the estimated `sc^2`. For non-Gaussian GLMMs (Poisson,
+binomial, negative binomial) it uses the canonical latent-scale
+distribution variance (Nakagawa & Schielzeth: \\\pi^2/3\\ for
+Poisson/binomial, \\\psi_1(1/\theta) + \pi^2/3\\ for negative binomial),
+matching
+[`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md).
+`icc` is `NA` only when the family is unknown and no residual scale is
+available.
 
 ## Usage
 
@@ -48,7 +54,9 @@ A named list with:
 
 - `residual_variance`:
 
-  Numeric or `NA`. Residual variance (`sc^2`). `NA` for Poisson GLMER.
+  Numeric or `NA`. Level-1 variance on the ICC scale: `sc^2` for
+  Gaussian LMMs, the latent-scale distribution variance for GLMMs. `NA`
+  only for unknown families with no residual scale.
 
 - `random_effect_group`:
 

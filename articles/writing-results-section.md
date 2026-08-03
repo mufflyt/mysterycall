@@ -38,6 +38,7 @@ was. We build the estimate tables directly; in practice they come from
 your fitted models’ `$or_table` / `$irr_table` elements.
 
 ``` r
+
 # Odds ratios for "appointment offered" (logistic regression output)
 or_tbl <- data.frame(
   term     = c("(Intercept)", "insuranceMedicaid", "insuranceMedicare"),
@@ -65,6 +66,7 @@ irr_tbl <- data.frame(
 ### Appointment acceptance (odds ratios)
 
 ``` r
+
 acceptance <- mysterycall_results_paragraph(
   or_tbl,
   ref_group     = "commercial insurance",
@@ -82,6 +84,7 @@ odds”) is chosen from whether each OR sits below, above, or at 1.
 ### Wait-time incidence rate ratios
 
 ``` r
+
 wait_irr <- mysterycall_write_results_paragraph(
   irr_tbl,
   ref_group     = "commercial insurance",
@@ -102,6 +105,7 @@ flagging any interval that crosses zero as not statistically
 significant.
 
 ``` r
+
 days <- mysterycall_irr_to_days(
   irr_tbl,
   baseline_mean = 21,          # mean wait (days) in the reference group
@@ -119,6 +123,7 @@ For a non-insurance exposure (e.g. subspecialty), drop the
 insurance-specific wording with `exposure_descriptor = NULL`:
 
 ``` r
+
 ent_tbl <- data.frame(
   term        = c("(Intercept)", "ent_typeLaryngology"),
   irr         = c(1.00, 1.20),
@@ -140,6 +145,7 @@ cat(ent_days$sentences[1])
 Straight from the raw data, no model required:
 
 ``` r
+
 set.seed(1)
 raw <- data.frame(
   wait_days = c(rpois(60, 12), rpois(60, 16)),
@@ -161,6 +167,7 @@ cannot contradict the number. This is exactly the tool for
 subspecialty/workforce framing.
 
 ``` r
+
 # A projected annual change in provider supply
 slope <- -0.8
 sprintf(
@@ -191,6 +198,7 @@ generated from the estimates, editing a number in the model re-flows the
 prose correctly.
 
 ``` r
+
 results_section <- paste(
   acceptance,
   wait_irr,
@@ -211,6 +219,7 @@ Two more builders describe the model itself. They take a *fitted* model
 object, so they are shown here without evaluation:
 
 ``` r
+
 # Variance explained (marginal / conditional R-squared) for a mixed model
 cat(mysterycall_r2_sentence(fit))
 
@@ -234,43 +243,46 @@ cat(mysterycall_overdispersion_sentence(fit))
 
 &nbsp;
 
-    #> R version 4.4.2 (2024-10-31)
-    #> Platform: x86_64-apple-darwin20
-    #> Running under: macOS Ventura 13.7.8
+    #> R version 4.6.1 (2026-06-24)
+    #> Platform: x86_64-pc-linux-gnu
+    #> Running under: Ubuntu 24.04.4 LTS
     #> 
     #> Matrix products: default
-    #> BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-    #> LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+    #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+    #> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
     #> 
     #> locale:
-    #> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    #>  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+    #>  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+    #>  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+    #> [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
     #> 
-    #> time zone: America/Denver
-    #> tzcode source: internal
+    #> time zone: UTC
+    #> tzcode source: system (glibc)
     #> 
     #> attached base packages:
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] mysterycall_1.6.2.9004
+    #> [1] mysterycall_1.6.3.9000
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] gtable_0.3.6       xfun_0.56          bslib_0.10.0       ggplot2_4.0.3     
-    #>  [5] htmlwidgets_1.6.4  insight_1.4.6      lattice_0.22-6     tzdb_0.5.0        
-    #>  [9] vctrs_0.7.3        tools_4.4.2        Rdpack_2.6.6       generics_0.1.4    
-    #> [13] tibble_3.3.1       pkgconfig_2.0.3    Matrix_1.7-1       checkmate_2.3.4   
+    #>  [1] gtable_0.3.6       xfun_0.60          bslib_0.11.0       ggplot2_4.0.3     
+    #>  [5] htmlwidgets_1.6.4  insight_1.5.2      lattice_0.22-9     tzdb_0.5.0        
+    #>  [9] vctrs_0.7.3        tools_4.6.1        Rdpack_2.6.6       generics_0.1.4    
+    #> [13] tibble_3.3.1       pkgconfig_2.0.3    Matrix_1.7-5       checkmate_2.3.4   
     #> [17] RColorBrewer_1.1-3 S7_0.2.2           desc_1.4.3         gt_1.3.0          
-    #> [21] lifecycle_1.0.5    compiler_4.4.2     farver_2.1.2       stringr_1.6.0     
-    #> [25] textshaping_1.0.4  janitor_2.2.1      snakecase_0.11.1   htmltools_0.5.9   
-    #> [29] sass_0.4.10        yaml_2.3.12        pillar_1.11.1      pkgdown_2.2.0     
-    #> [33] nloptr_2.2.1       jquerylib_0.1.4    MASS_7.3-61        cachem_1.1.0      
-    #> [37] reformulas_0.4.4   boot_1.3-31        nlme_3.1-166       npi_0.2.0         
-    #> [41] tidyselect_1.2.1   digest_0.6.39      performance_0.16.0 stringi_1.8.7     
-    #> [45] dplyr_1.2.1        splines_4.4.2      fastmap_1.2.0      grid_4.4.2        
-    #> [49] cli_3.6.6          magrittr_2.0.5     dichromat_2.0-0.1  readr_2.2.0       
-    #> [53] scales_1.4.0       backports_1.5.1    lubridate_1.9.5    timechange_0.4.0  
-    #> [57] rmarkdown_2.30     httr_1.4.8         otel_0.2.0         lme4_1.1-38       
-    #> [61] ragg_1.5.0         hms_1.1.4          evaluate_1.0.5     knitr_1.51        
-    #> [65] rbibutils_2.4.1    rlang_1.2.0        Rcpp_1.1.1-1.1     glue_1.8.1        
-    #> [69] xml2_1.5.2         minqa_1.2.8        jsonlite_2.0.0     R6_2.6.1          
-    #> [73] systemfonts_1.3.1  fs_1.6.6
+    #> [21] lifecycle_1.0.5    compiler_4.6.1     farver_2.1.2       stringr_1.6.0     
+    #> [25] textshaping_1.0.5  janitor_2.2.1      snakecase_0.11.1   htmltools_0.5.9   
+    #> [29] sass_0.4.10        yaml_2.3.12        pillar_1.11.1      pkgdown_2.2.1     
+    #> [33] nloptr_2.2.1       jquerylib_0.1.4    MASS_7.3-65        cachem_1.1.0      
+    #> [37] reformulas_0.4.4   boot_1.3-32        nlme_3.1-169       npi_0.3.0         
+    #> [41] tidyselect_1.2.1   digest_0.6.39      performance_0.17.1 stringi_1.8.7     
+    #> [45] dplyr_1.2.1        splines_4.6.1      fastmap_1.2.0      grid_4.6.1        
+    #> [49] cli_3.6.6          magrittr_2.0.5     readr_2.2.0        scales_1.4.0      
+    #> [53] backports_1.5.1    lubridate_1.9.5    timechange_0.4.0   rmarkdown_2.31    
+    #> [57] httr_1.4.8         otel_0.2.0         lme4_2.0-6         ragg_1.5.2        
+    #> [61] hms_1.1.4          evaluate_1.0.5     knitr_1.51         rbibutils_2.4.1   
+    #> [65] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         xml2_1.6.0        
+    #> [69] minqa_1.2.8        jsonlite_2.0.0     R6_2.6.1           systemfonts_1.3.2 
+    #> [73] fs_2.1.0

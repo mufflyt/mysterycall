@@ -155,6 +155,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -234,8 +235,8 @@ dat <- data.frame(
 fit <- glm(y ~ x1 + grp, data = dat, family = poisson())
 result <- mysterycall_overdispersion_test(fit)
 print(result)
-#> Pearson dispersion phi=1.240 (chi-sq=244, df=197, p=0.012): Mild overdispersion (phi=1.240). Negative binomial model may improve fit. 
-#> Consider fitting a negative binomial model with mysterycall_nb_model() to improve standard-error estimates. 
+#> Pearson dispersion phi=1.240 (chi-sq=244, df=197, p=0.012): Mild overdispersion (phi=1.240), below the negative-binomial switch threshold. 
+#> The Poisson model is likely adequate; monitor diagnostics. Switch to mysterycall_nb_model() only if phi reaches the moderate band. 
 
 ## Gaussian GLM (non-count, shows underdispersion path) ---------------------
 fit2 <- glm(mpg ~ wt + cyl, data = mtcars, family = gaussian())

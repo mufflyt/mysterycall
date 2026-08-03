@@ -54,6 +54,7 @@ inspect the holiday list.
 [`mysterycall_count_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.md)
 
 Other business days:
+[`mysterycall_appointment_obtained()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_appointment_obtained.md),
 [`mysterycall_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_business_days.md),
 [`mysterycall_count_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.md)
 

@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/mufflyt/mysterycall/blob/HEAD/inst/CITATION)
+[`inst/CITATION`](https://github.com/mufflyt/mysterycall/blob/main/inst/CITATION)
 
 Muffly T (2026). *mysterycall: Mystery Caller Study Tools for Healthcare
 Access Research*. R package version 1.3.0,

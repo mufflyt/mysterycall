@@ -8,6 +8,7 @@ each practice’s baseline generosity, so a difference between scenarios
 is not confounded by *which* practices happened to be called.
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -19,6 +20,7 @@ correlated. The data are in **long** form: one row per practice ×
 scenario.
 
 ``` r
+
 set.seed(2026)
 np <- 140L
 
@@ -93,6 +95,7 @@ To make the data-integrity tools earn their keep, we deliberately
 introduce two kinds of contradiction that creep into real call logs:
 
 ``` r
+
 # (a) a wait time recorded even though no appointment was offered
 d$appointment_offered[5]  <- FALSE
 d$appointment_outcome[5]  <- "No appointment offered"
@@ -113,6 +116,7 @@ coalesces them, giving any still-missing row its own singleton so it
 never silently collapses into one giant cluster.
 
 ``` r
+
 d$cluster <- mysterycall_cluster_id(d, c("cbsa_code", "county_fips"))
 head(d$cluster)
 #> [1] "C18767" "C14100" "C30688" "C18966" "C31877" "53447"
@@ -126,6 +130,7 @@ worklist. The defaults include `WAIT_NO_OFFER`, which catches
 contradiction (a) above.
 
 ``` r
+
 issues <- mysterycall_check_consistency(d, id_col = "practice")
 issues
 #> <mysterycall consistency report: 1 rows flagged by 1 of 5 rules>
@@ -149,6 +154,7 @@ as authoritative and clearing any stray wait/date when a row flips to
 “not offered”.
 
 ``` r
+
 rec <- mysterycall_reconcile_offer_outcome(
   d,
   flag_col           = "appointment_offered",
@@ -181,6 +187,7 @@ turns an ordered set of stage definitions into a count / denominator /
 percent table with Wilson intervals, and an optional funnel figure.
 
 ``` r
+
 cascade <- mysterycall_access_cascade(d, list(
   mysterycall_cascade_stage("Reached a live office", "office_answered", TRUE),
   mysterycall_cascade_stage("Accepting new patients", "taking_new_patients", "Yes"),
@@ -202,6 +209,7 @@ cascade
 ```
 
 ``` r
+
 cascade$plot
 ```
 
@@ -216,6 +224,7 @@ reports the assumption-free Manski interval: assign every incomplete
 call first to failure, then to success.
 
 ``` r
+
 mysterycall_outcome_bounds(d, "appointment_offered", observed = "complete")
 #> <mysterycall outcome bounds under non-response>
 #>   universe 280 = observed 266 + missing 14; positives 158
@@ -232,6 +241,7 @@ follow-up the design does not have. Each curve plateaus at that
 scenario’s offer rate.
 
 ``` r
+
 curve <- mysterycall_cumulative_access_curve(
   d, time_col = "wait_days_business", offered_col = "appointment_offered",
   group_col = "scenario", horizon = 60, plot = TRUE)
@@ -256,6 +266,7 @@ information — so the effective sample size is the discordant count.
 runs the exact McNemar test.
 
 ``` r
+
 d$accepted <- d$appointment_offered
 mysterycall_paired_acceptance_mcnemar(
   d, id_col = "practice", scenario_col = "scenario", outcome_col = "accepted")
@@ -270,6 +281,7 @@ mysterycall_paired_acceptance_mcnemar(
 The continuous analogue pairs the within-practice wait differences:
 
 ``` r
+
 mysterycall_paired_wait_within_practice(
   d, id_col = "practice", scenario_col = "scenario",
   wait_col = "wait_days_business")
@@ -287,6 +299,7 @@ For the unmatched views, the categorical toolkit auto-selects chi-square
 or an exact test by expected cell counts and reports Cramér’s V:
 
 ``` r
+
 mysterycall_test_categorical(d, row_var = "scenario", col_var = "appointment_offered")
 #> <mysterycall_categorical_test> scenario x appointment_offered
 #>   Pearson's chi-squared (Yates' correction)
@@ -297,6 +310,7 @@ mysterycall_test_categorical(d, row_var = "scenario", col_var = "appointment_off
 Offer prevalence with Wilson intervals, by scenario:
 
 ``` r
+
 mysterycall_prevalence_ci(d, var = "appointment_offered", group_var = "scenario")
 #> # A tibble: 4 × 8
 #>   group      category     n total proportion ci_lower ci_upper method
@@ -311,6 +325,7 @@ A Cochran–Mantel–Haenszel test holds region constant while comparing
 scenarios:
 
 ``` r
+
 mysterycall_cmh_test(d, outcome_var = "appointment_offered",
                      group_var = "scenario", strata_var = "region")
 #> <mysterycall_cmh_test> 4 strata, n = 280
@@ -323,6 +338,7 @@ Wait times are skewed counts, so compare them with ranks — here across
 the four subspecialties, among offered calls:
 
 ``` r
+
 offered <- d[d$appointment_offered & !is.na(d$wait_days_business), ]
 mysterycall_compare_ranks(offered, outcome_var = "wait_days_business",
                           group_var = "subspecialty")
@@ -343,6 +359,7 @@ Raw dispositions map to a standard taxonomy via an ordered keyword list
 (first match wins):
 
 ``` r
+
 raw <- ifelse(d$appointment_offered, "appointment scheduled",
        sample(c("not accepting new medicaid patients", "no openings for months",
                 "does not treat this complaint", "left a voicemail"),
@@ -365,6 +382,7 @@ For a guideline-concordance study, build a rubric and score each call
 transcript against it. Here three binary items on counseling quality:
 
 ``` r
+
 rubric <- mysterycall_concordance_rubric(
   item  = c("explained_wait", "offered_alternative", "gave_callback"),
   label = c("Explained the expected wait", "Offered an alternative site",
@@ -395,6 +413,7 @@ gives the mixed-model version and the same robustness helpers accept its
 objects.)
 
 ``` r
+
 fit <- glm(appointment_offered ~ scenario + subspecialty + region,
            family = binomial, data = d)
 round(exp(cbind(OR = coef(fit), confint.default(fit)))["scenarioMedicaid", ], 2)
@@ -409,6 +428,7 @@ from the log-likelihoods (which sidesteps a well-known
 `glmer`-vs-`glmmTMB` column-naming footgun):
 
 ``` r
+
 mysterycall_joint_test(fit, "subspecialty")
 #> <mysterycall joint LRT: subspecialty>
 #>   chi-square(3) = 8.97, p = 0.0296
@@ -420,6 +440,7 @@ Does the Medicaid effect hinge on any single caller?
 refits with each caller dropped in turn:
 
 ``` r
+
 mysterycall_leave_one_out(fit, d, group = "caller", term = "scenarioMedicaid",
                           joint_predictor = "subspecialty")
 #> <mysterycall leave-one-group-out: term 'scenarioMedicaid', 5 refits>
@@ -443,6 +464,7 @@ powered.
 simulates both.
 
 ``` r
+
 mysterycall_twopart_power(
   n_total = c(200, 400), offer_ref = 0.75, offer_trt = 0.55,
   wait_ref = 14, wait_trt = 21, phi = 1.7, n_sim = 60, seed = 1)
@@ -460,6 +482,7 @@ the rejection rate under the null must sit near α.
 turns an observed null-rejection count into a verdict:
 
 ``` r
+
 mysterycall_type_i_check(rejections = 4, n_sim = 100, alpha = 0.05)
 #> # A tibble: 1 × 6
 #>   rejection_rate ci_low ci_high n_sim alpha_in_ci verdict                      
@@ -474,6 +497,7 @@ power — here the smallest Medicaid wait (in days) detectable at 80%
 power with 400 calls:
 
 ``` r
+
 pf <- function(wait_trt) {
   mysterycall_twopart_power(
     n_total = 400, offer_ref = 0.7, offer_trt = 0.7,
@@ -492,6 +516,7 @@ powers the post-stratification-weighted marginal estimand (it needs
 `glmmTMB` and `marginaleffects`):
 
 ``` r
+
 mysterycall_marginal_power(
   n_subject = c(150, 300),
   cell_means = c(14, 18, 17, 24),      # Commercial/Medicaid x urban/rural waits

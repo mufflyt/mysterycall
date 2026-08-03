@@ -1,6 +1,7 @@
 # Generating Publication Tables
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -67,6 +68,7 @@ Throughout this vignette we use a 200-row synthetic data frame that
 mirrors the structure of a real mystery-caller study analysis file.
 
 ``` r
+
 set.seed(2024)
 n <- 200
 
@@ -109,6 +111,7 @@ analysis_data <- data.frame(
 ### 2.2 Full parameter documentation
 
 ``` r
+
 tbl1 <- mysterycall_table1(
   data             = analysis_data,
   covariates       = c("age_category", "gender_std", "subspecialty",
@@ -197,6 +200,7 @@ classifies variables automatically, but you can override this by
 converting columns to the appropriate type before calling the function:
 
 ``` r
+
 # Force wait_days to be treated as continuous (it has many unique values
 # but is stored as integer, so auto-detection is correct here)
 # Force age_category to be treated as categorical even though it looks ordinal
@@ -231,6 +235,7 @@ back to Fisher’s exact test automatically.
 ### 3.1 Parameters
 
 ``` r
+
 tbl1_gt <- mysterycall_table1_gtsummary(
   data         = analysis_data,
   vars         = c("age_category", "gender_std", "subspecialty",
@@ -275,6 +280,7 @@ The returned object is a standard
 object and accepts all gtsummary modifiers:
 
 ``` r
+
 tbl1_gt |>
   gtsummary::bold_labels() |>           # bold the variable name rows
   gtsummary::add_n() |>                 # add total N per stratum
@@ -287,6 +293,7 @@ tbl1_gt |>
 ### 3.3 Exporting to Word
 
 ``` r
+
 tbl1_gt |>
   gtsummary::bold_labels() |>
   gtsummary::add_n() |>
@@ -327,6 +334,7 @@ at the weekly coordinator check-in meeting.
 ### 4.2 Parameters and example
 
 ``` r
+
 mysterycall_table_overall(
   input_file_path   = "/study/phase2_output/analysis_ready.rds",
   output_directory  = "/study/tables/qa",
@@ -376,6 +384,7 @@ In a mystery-caller disparity study:
 ### 5.2 Example: appointment offered by insurance type
 
 ``` r
+
 pct_tbl <- mysterycall_table_percentages(
   data        = analysis_data[!is.na(analysis_data$appt_offered), ],
   row_var     = "subspecialty",
@@ -437,6 +446,7 @@ meta-analysis function without parsing formatted strings.
 ### 6.2 Example: wait-time category by subspecialty
 
 ``` r
+
 # Create a wait-time category
 analysis_data$wait_category <- cut(
   analysis_data$wait_days,
@@ -482,6 +492,7 @@ support conditional bold formatting natively, but the `kableExtra`
 package does:
 
 ``` r
+
 library(kableExtra)
 
 # Assume 'disparity_result' is the output of mysterycall_disparities_table()
@@ -514,6 +525,7 @@ adjusted p-values. Add them as a separate column after extracting
 numeric p-values:
 
 ``` r
+
 # Extract numeric p-values (assumes a 'p_numeric' column in the result)
 disp_tbl$stars <- dplyr::case_when(
   disp_tbl$p_numeric < 0.001 ~ "***",
@@ -539,6 +551,7 @@ The online supplement of a disparity manuscript typically requires a
 machine-readable version of the full adjusted model results:
 
 ``` r
+
 # Export the full disparity table to CSV for the supplement
 write.csv(
   disp_tbl,
@@ -573,6 +586,7 @@ and writes a formatted PDF via R Markdown and a LaTeX engine.
 ### 8.1 Basic usage
 
 ``` r
+
 mysterycall_write_table_pdf(
   object   = tbl1,        # arsenal tableby object from mysterycall_table1()
   filename = "/study/tables/table1_baseline.pdf"
@@ -591,6 +605,7 @@ The solution is to install TinyTeX, a minimal LaTeX distribution that is
 sufficient for the PDF tables produced by this function:
 
 ``` r
+
 # Install TinyTeX (one-time setup, ~200 MB download)
 install.packages("tinytex")
 tinytex::install_tinytex()
@@ -609,6 +624,7 @@ alternative.
 ### 8.3 Alternative: export to HTML with `knitr::kable()`
 
 ``` r
+
 # knitr::kable() does not require LaTeX
 html_table <- knitr::kable(
   as.data.frame(summary(tbl1, text = "html")),
@@ -645,6 +661,7 @@ statistics, three for p-values, confidence intervals in brackets).
 ### 9.1 Generating the paragraph
 
 ``` r
+
 paragraph <- mysterycall_write_results_paragraph(
   model_result    = poisson_model_result,   # output of mysterycall_poisson_model()
   disparity_table = disp_tbl,              # output of mysterycall_disparities_table()
@@ -698,6 +715,7 @@ in Section 2.1.
 ### 10.1 Step 0 — Prepare variables
 
 ``` r
+
 # These preparations mirror what mysterycall_prepare_table1_vars() does
 # (run that function on your real data instead)
 analysis_data$age_category <- factor(
@@ -712,6 +730,7 @@ analysis_data$appt_offered_binary <- as.integer(
 ### 10.2 Step 1 — Table 1: Baseline characteristics stratified by subspecialty
 
 ``` r
+
 table1_final <- mysterycall_table1(
   data            = analysis_data,
   covariates      = c("age_category", "gender_std", "practice_setting",
@@ -749,6 +768,7 @@ the number of columns exceeds 6.
 ### 10.3 Step 2 — Table 2: Appointment acceptance rates by insurance type
 
 ``` r
+
 # First compute the disparity estimates
 # (assumes mysterycall_poisson_model() has already been run — see stats vignette)
 disparity_result <- mysterycall_disparities_table(
@@ -793,6 +813,7 @@ write.csv(
 ### 10.4 Step 3 — Table 3: Median wait days by insurance type
 
 ``` r
+
 # Summarize wait times by insurance type using the Poisson model summary
 # (assumes mysterycall_poisson_model() has been run — see stats vignette)
 wait_summary <- analysis_data |>
@@ -823,6 +844,7 @@ knitr::kable(
 ### 10.5 Step 4 — Export all three tables to PDF
 
 ``` r
+
 # Table 1 was already exported in Step 1.
 # Export Table 2 (disparity) to PDF:
 mysterycall_write_table_pdf(
@@ -856,6 +878,7 @@ vector — useful for sanity-checking free-text columns or building
 footnotes.
 
 ``` r
+
 set.seed(3)
 subspecialties <- sample(
   c("General OB/GYN", "MFM", "GYN Oncology", "REI", "FPMRS", "General OB/GYN",
@@ -884,6 +907,7 @@ converts a numeric proportion to a character string with a configurable
 number of decimal places — useful for inline reporting and table cells.
 
 ``` r
+
 rates <- c(0.91, 0.638, 0.54, 0.00, 1.00, 0.085)
 knitr::kable(
   data.frame(
@@ -906,7 +930,7 @@ knitr::kable(
 |          0.085 | 8.5%            | 8%               |
 
 [`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md)
-output for typical acceptance rates.
+output for typical acceptance rates. {.table}
 
 ------------------------------------------------------------------------
 

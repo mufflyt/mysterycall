@@ -24,13 +24,14 @@ mysterycall_strobe_flow(
   excl_detail = NULL,
   label_total = "Call attempts logged",
   label_calldate = "Call date recorded\n(call was placed)",
-  label_included = "Scheduling discussion possible\n(exclusion code = 0)",
+  label_included = "Analytic sample: reached offices\n(exclusion codes 0, 7, 9, 10)",
   label_logistic = "Logistic analysis\nOutcome: appointment offered (yes/no)",
   label_waittime = "Wait-time analysis\nOutcome: days to appointment",
   label_excl_calldate = "No call date recorded",
   label_excl_screen = "Excluded",
   label_excl_waittime = "No appointment date\n(not offered or pending)",
   title = "STROBE Flow Diagram - Mystery-Caller Study",
+  engine = c("ggplot2", "gmisc"),
   output_path = NULL,
   width = 9,
   height = 11,
@@ -81,8 +82,11 @@ mysterycall_strobe_flow(
 
 - n_included:
 
-  Integer. Records with exclusion code 0 (scheduling discussion took
-  place).
+  Integer. The logistic analytic sample: reached offices with exclusion
+  codes in 0, 7, 9, 10 (reached-but-declined kept as
+  appointment-not-offered). When derived from `data`/`prepared`, this is
+  `nrow(prepared$logistic_data)`, matching
+  [`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md).
 
 - n_logistic:
 
@@ -145,6 +149,22 @@ mysterycall_strobe_flow(
 
   Character. Plot title.
 
+- engine:
+
+  Character. Rendering back-end. `"ggplot2"` (default) draws the diagram
+  with hand-placed
+  [`ggplot2::annotate()`](https://ggplot2.tidyverse.org/reference/annotate.html)
+  rectangles and arrows and returns a `ggplot` object (zero new
+  dependencies). `"gmisc"` renders the *same pipeline-derived counts*
+  with the Gmisc grid engine
+  ([`Gmisc::boxGrob()`](https://rdrr.io/pkg/Gmisc/man/box.html) /
+  [`Gmisc::connectGrob()`](https://rdrr.io/pkg/Gmisc/man/connect.html)),
+  whose boxes auto-size to their text and whose connectors re-route
+  automatically – useful when long exclusion lists would overflow the
+  fixed-coordinate ggplot2 layout. `"gmisc"` requires the suggested
+  Gmisc and grid packages and returns a grid grob (a `gTree`) instead of
+  a `ggplot` object.
+
 - output_path:
 
   Character or `NULL`. File path to save the diagram (`.png`, `.tiff`,
@@ -165,7 +185,11 @@ mysterycall_strobe_flow(
 
 ## Value
 
-A `ggplot2` object (invisibly).
+Invisibly, a `ggplot` object when `engine = "ggplot2"` (the default) or
+a grid `gTree` when `engine = "gmisc"`. Either can be redrawn with its
+usual method ([`print()`](https://rdrr.io/r/base/print.html) /
+[`grid::grid.draw()`](https://rdrr.io/r/grid/grid.draw.html)) or saved
+via `output_path`.
 
 ## Details
 

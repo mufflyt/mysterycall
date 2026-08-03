@@ -26,8 +26,7 @@ cross-function-contract audit) are in the “Wave 4” section.
 > `asymp.LCL`/`lower.CL` contract class is resolved (all 8 consumers now
 > use `intersect(...)` + `type="response"`). **Treat the test suite as
 > the arbiter of what is still live** — do not assume an item here is
-> unfixed without re-checking current source. A full
-> [`devtools::test()`](https://devtools.r-lib.org/reference/test.html)
+> unfixed without re-checking current source. A full `devtools::test()`
 > run was in progress at commit time.
 
 > ### RECONCILIATION against current source (2026-07-14, verified by source inspection)
@@ -65,6 +64,7 @@ on installed `1.6.0` get stale behavior.
 **Every fix must also bump `Version:` in `DESCRIPTION` and rebuild:**
 
 ``` r
+
 devtools::document("~/mysterycall"); devtools::install("~/mysterycall")
 ```
 
@@ -143,6 +143,7 @@ when the CI spans 0.
 ### 5 — `clean_phase_1_results.R:226` — missing NPI becomes the string `"NA"`, defeating the missing-NPI fallback
 
 ``` r
+
 phase1_data[[npi_col_before_clean]] <- trimws(format(phase1_data[[npi_col_before_clean]],
                                                      scientific = FALSE, trim = TRUE))
 ```
@@ -757,6 +758,7 @@ paragraph), `results_paragraph`, `plot_emmeans_full`/
 ## Verification snippets
 
 ``` r
+
 # Bug 1 — signed table vs abs()'d sentence
 m <- readRDS("<grace-ent>/model_output/models.rds")$wait
 res <- mysterycall::mysterycall_irr_to_days(m, baseline_mean=23.05,

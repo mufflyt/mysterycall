@@ -137,6 +137,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -215,7 +216,7 @@ result <- mysterycall_simple_poisson(df, "days", "insurance",
                                      outcome_label = "business days until appointment")
 #> Fitting simple Poisson GLM: days ~ insurance
 cat(result$summary_statement)
-#> Simple Poisson regression was used in place of Kruskal-Wallis because business days until appointment is a count outcome (non-negative integers). Poisson regression models the incidence rate ratio (IRR) directly, which is more interpretable than a rank-based test statistic for count data. The baseline rate (BCBS) is estimated at 11.93 events. For Medicaid compared to BCBS, the business days until appointment rate is approximately 1.03 times higher (3% higher; 95% CI: 0.91-1.17, p 0.676). For Medicare compared to BCBS, the business days until appointment rate is approximately 1.03 times higher (3% higher; 95% CI: 0.91-1.17, p 0.653).
+#> Simple Poisson regression was used in place of Kruskal-Wallis because business days until appointment is a count outcome (non-negative integers). Poisson regression models the incidence rate ratio (IRR) directly, which is more interpretable than a rank-based test statistic for count data. The baseline rate (BCBS) is estimated at 11.93 events. For Medicaid compared to BCBS, the business days until appointment rate is approximately 1.03 times higher (2.7% higher; 95% CI: 0.91-1.17, p 0.676). For Medicare compared to BCBS, the business days until appointment rate is approximately 1.03 times higher (2.9% higher; 95% CI: 0.91-1.17, p 0.653).
 print(result$irr_table)
 #>                term    level      irr  ci_lower ci_upper   p_value p_value_fmt
 #> 1 insuranceMedicaid Medicaid 1.027254 0.9055750 1.165365 0.6759184       0.676

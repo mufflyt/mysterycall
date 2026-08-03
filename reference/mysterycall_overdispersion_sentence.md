@@ -89,5 +89,5 @@ Other modeling helpers:
 m <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 res <- mysterycall_overdispersion_sentence(m)
 cat(res$sentence)
-#> The Pearson dispersion ratio is 4.26 (chi-square = 213.08, df = 50, p = < 0.001). Significant overdispersion detected (ratio = 4.26). Consider using a Negative Binomial model to account for overdispersion.
+#> The Pearson dispersion ratio is 4.26 (chi-square = 213.08, df = 50, p = < 0.001). Overdispersion detected (ratio = 4.26 > 1.5). Consider using a Negative Binomial model to account for overdispersion.
 ```

@@ -1,6 +1,7 @@
 # Provider Classification and Demographic Enrichment
 
 ``` r
+
 library(mysterycall)
 library(dplyr)
 ```
@@ -120,6 +121,7 @@ and extend — the built-in keyword lists without having to look at the
 source code.
 
 ``` r
+
 # View all built-in academic patterns (40+ keywords)
 mysterycall_academic_patterns()
 ```
@@ -134,6 +136,7 @@ in their name: `"mayo clinic"`, `"cleveland clinic"`, `"johns hopkins"`,
 more.
 
 ``` r
+
 # View all built-in government/military patterns
 mysterycall_government_patterns()
 ```
@@ -159,6 +162,7 @@ population:
 is the recommended approach for most researchers.
 
 ``` r
+
 # Add "regional medical center" to the academic list without losing any built-ins
 my_academic <- c(mysterycall_academic_patterns(), "regional medical center", "academic health")
 
@@ -181,6 +185,7 @@ this only if your study uses a highly specialized provider population
 are likely to produce false positives.
 
 ``` r
+
 # Replace academic patterns entirely with a minimal set for a corrections study
 corrections_academic <- c("prison hospital", "correctional medical center")
 
@@ -199,6 +204,7 @@ The following examples illustrate how the hierarchy resolves ambiguous
 cases:
 
 ``` r
+
 test_names <- c(
   "University of Colorado Medical Center",  # Academic: "university" and "medical center" match
   "VA Medical Center Denver",               # Government: "va " matches before "medical center" is tested
@@ -221,6 +227,7 @@ inputs. The default is `"Unknown"`, but you may prefer `NA_character_`
 for downstream [`is.na()`](https://rdrr.io/r/base/NA.html) checks:
 
 ``` r
+
 mysterycall_classify_practice_setting(NA_character_, na_label = NA_character_)
 #> [1] NA
 ```
@@ -228,6 +235,7 @@ mysterycall_classify_practice_setting(NA_character_, na_label = NA_character_)
 ### Applying to a full roster
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     practice_setting = mysterycall_classify_practice_setting(org_name)
@@ -312,6 +320,7 @@ CSV. The two columns you need are the ZIP code column (typically
 ### Step 1: Load and clean the crosswalk
 
 ``` r
+
 library(readr)
 
 ruca_crosswalk <- read_csv(
@@ -336,6 +345,7 @@ column often contains 9-digit ZIP+4 codes (e.g., `80204-2127`). You need
 the 5-digit base ZIP only.
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     zip5 = stringr::str_sub(addresses_postal_code, 1L, 5L)
@@ -345,6 +355,7 @@ roster <- roster |>
 ### Step 3: Join the crosswalk using `mysterycall_safe_left_join()`
 
 ``` r
+
 roster_with_ruca <- mysterycall_safe_left_join(
   left         = roster,
   right        = ruca_crosswalk,
@@ -371,6 +382,7 @@ performs several safety checks automatically:
 If coverage is below 90%, inspect the unmatched ZIPs:
 
 ``` r
+
 unmatched <- dplyr::anti_join(roster, ruca_crosswalk, by = "zip5")
 table(unmatched$addresses_state)
 ```
@@ -383,6 +395,7 @@ excluded from the RUCA analysis or assigned a manual code.
 ### Step 4: Classify RUCA codes
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     geography = mysterycall_classify_ruca(ruca_code)
@@ -399,6 +412,7 @@ geographic order (Urban \< Suburban \< Rural), not alphabetical order.
 Use `as_factor = TRUE`:
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     geography_f = mysterycall_classify_ruca(ruca_code, as_factor = TRUE)
@@ -418,6 +432,7 @@ ERS convention, but some journals and federal agencies use a two-tier
 the thresholds with `urban_max` and `suburban_max`:
 
 ``` r
+
 # Two-tier: Metro (RUCA 1-3) vs Non-Metro (RUCA 4-10)
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
@@ -434,6 +449,7 @@ roster_with_ruca <- roster_with_ruca |>
 Actually, for a strict two-tier system the cleanest approach is:
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     geography_metro = dplyr::case_when(
@@ -450,6 +466,7 @@ Always report the fraction of providers with missing RUCA codes in your
 methods section:
 
 ``` r
+
 n_total    <- nrow(roster_with_ruca)
 n_missing  <- sum(is.na(roster_with_ruca$ruca_code))
 pct_missing <- round(n_missing / n_total * 100, 1)
@@ -487,6 +504,7 @@ study in *Otolaryngology-Head and Neck Surgery* or *Laryngoscope*, use
 ### All three systems with examples
 
 ``` r
+
 states <- c("CO", "Texas", "New York", "california", "Massachusetts", NA)
 
 # US Census Bureau regions
@@ -516,6 +534,7 @@ key). - **Mixed formats in the same vector** —
 ### Applying to a roster
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     census_region = mysterycall_assign_region(addresses_state, system = "census"),
@@ -535,6 +554,7 @@ region). They will return `"Unknown"` with `system = "census"`. This is
 intentional and correct.
 
 ``` r
+
 mysterycall_assign_region(c("PR", "GU", "VI"), system = "acog")
 #> [1] "District IV" "Unknown"     "District IV"   # GU is AAO-HNS only
 
@@ -585,6 +605,7 @@ download. It may be labelled `medical_school_name`,
 `training_institution`, or similar.
 
 ``` r
+
 schools <- c(
   "University of Colorado School of Medicine",   # US_MD
   "Philadelphia College of Osteopathic Medicine",# US_DO: "osteopathic" matches DO list
@@ -619,6 +640,7 @@ credentialed as `"MD"` and still be an IMG if they obtained their degree
 from a foreign school.
 
 ``` r
+
 # Correct: classify by school name; use credential only as a secondary check
 roster <- roster |>
   dplyr::mutate(
@@ -661,6 +683,7 @@ analysis correspond to the physicians’ ages at the time they were
 called, not at the time you are writing the paper.
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     age_imputed = mysterycall_impute_age(
@@ -688,6 +711,7 @@ issues a warning in two situations:
     manually.
 
 ``` r
+
 # Example showing how warnings fire
 mysterycall_impute_age(
   c(1980, 2010, 2028, 1920),  # 2028 is future; 1920 gives age > 90
@@ -707,6 +731,7 @@ regression models. For Table 1, decade brackets are conventional.
 bins ages into standard brackets:
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     age_category = mysterycall_age_category(
@@ -727,6 +752,7 @@ youngest and oldest bins for a specialty where physicians under 35 are
 rare — supply custom breaks and labels:
 
 ``` r
+
 roster <- roster |>
   dplyr::mutate(
     age_4cat = mysterycall_age_category(
@@ -786,6 +812,7 @@ Your input **must have a column named `first_name`**. If NPPES data uses
 `basic_first_name`, rename it first:
 
 ``` r
+
 roster_for_genderize <- roster |>
   dplyr::rename(first_name = basic_first_name)
 ```
@@ -797,6 +824,7 @@ the output cached. Do not run it on every `Rmd` knit. Use `eval = FALSE`
 in the vignette chunk and point to the cached output file.
 
 ``` r
+
 # Run this interactively ONCE, then save the output
 genderized <- mysterycall_genderize(
   data_or_path  = roster_for_genderize,
@@ -821,6 +849,7 @@ confidence. A probability of 0.51 for a name means the API is
 essentially guessing. A common threshold for research use is 0.90:
 
 ``` r
+
 # Load the cached genderized output
 genderized <- readr::read_csv("data-processed/genderized/genderized_20231015120000_roster.csv")
 
@@ -843,6 +872,7 @@ self-reported their gender to the registry, which is more authoritative
 than a name-based prediction.
 
 ``` r
+
 genderized <- genderized |>
   dplyr::mutate(
     # Keep NPPES gender when available; fall back to Genderize.io when missing
@@ -912,6 +942,7 @@ message. **Before calling this function**, inspect your gender column
 for unexpected values:
 
 ``` r
+
 # Always inspect before standardizing
 table(roster$gender_combined, useNA = "always")
 #>    F    M    NA
@@ -930,6 +961,7 @@ standardization manually.
 ### Complete example
 
 ``` r
+
 analysis_ready <- genderized |>
   mysterycall_prepare_table1_vars(
     grad_year_col = "graduation_year",   # will compute age_imputed and age_category
@@ -975,6 +1007,7 @@ denominator. If you have only 15 pediatric otolaryngologists in your
 roster and request `n_per_group = 30`, all 15 will be returned.
 
 ``` r
+
 set.seed(42L)  # for documentation; pass seed= instead in production
 
 pilot_roster <- mysterycall_stratified_sample(
@@ -1034,6 +1067,7 @@ many times each physician appears. - Is sorted descending by `n_calls`
 of unique flagged physicians.
 
 ``` r
+
 flagged <- mysterycall_check_duplicates(
   call_log,
   id_col    = "npi",
@@ -1057,6 +1091,7 @@ appropriate when the extra calls were genuine scheduling errors and you
 want to retain the valid calls.
 
 ``` r
+
 # Keep only the first 2 calls per NPI (chronological order)
 call_log_clean <- call_log |>
   dplyr::arrange(npi, call_date) |>
@@ -1071,6 +1106,7 @@ appropriate when the extra calls may have introduced contamination
 call) and you cannot determine which calls are valid.
 
 ``` r
+
 flagged_npis <- unique(flagged$npi)
 call_log_clean <- dplyr::filter(call_log, !npi %in% flagged_npis)
 
@@ -1096,6 +1132,7 @@ final analysis-ready data frame.
 ### Step 0: Build a synthetic roster
 
 ``` r
+
 set.seed(2023L)
 n <- 300L
 
@@ -1167,6 +1204,7 @@ roster_raw <- data.frame(
 ### Step 1: Classify practice setting
 
 ``` r
+
 roster_raw <- roster_raw |>
   dplyr::mutate(
     practice_setting = mysterycall_classify_practice_setting(org_name)
@@ -1181,6 +1219,7 @@ For this synthetic example we create a minimal crosswalk. In real usage,
 replace this with the downloaded USDA ERS file.
 
 ``` r
+
 # Extract 5-digit ZIP from NPPES 9-digit format
 roster_raw <- roster_raw |>
   dplyr::mutate(zip5 = substr(addresses_postal_code, 1L, 5L))
@@ -1211,6 +1250,7 @@ roster_with_ruca <- mysterycall_safe_left_join(
 ### Step 3: Classify RUCA into geographic tier
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     geography    = mysterycall_classify_ruca(ruca_code),
@@ -1221,6 +1261,7 @@ roster_with_ruca <- roster_with_ruca |>
 ### Step 4: Assign Census region
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     census_region = mysterycall_assign_region(addresses_state, system = "census"),
@@ -1231,6 +1272,7 @@ roster_with_ruca <- roster_with_ruca |>
 ### Step 5: Classify medical school
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     med_school_type = mysterycall_classify_medical_school(medical_school_name)
@@ -1242,6 +1284,7 @@ table(roster_with_ruca$med_school_type)
 ### Step 6: Impute age and categorize
 
 ``` r
+
 roster_with_ruca <- roster_with_ruca |>
   dplyr::mutate(
     age_imputed  = mysterycall_impute_age(graduation_year, ref_year = 2023L),
@@ -1256,6 +1299,7 @@ result. The `eval=FALSE` chunk below will not execute during
 [`knitr::knit()`](https://rdrr.io/pkg/knitr/man/knit.html).
 
 ``` r
+
 # Step 7a: Prepare first_name column required by mysterycall_genderize()
 roster_for_gender <- roster_with_ruca |>
   dplyr::rename(first_name = basic_first_name)
@@ -1290,6 +1334,7 @@ genderized <- genderized |>
 ### Step 8: Prepare Table 1 variables
 
 ``` r
+
 # If you skipped step 7, substitute genderized with roster_with_ruca
 # and set gender_col = "basic_gender"
 
@@ -1306,6 +1351,7 @@ analysis_ready <- genderized |>
 ### Step 9: Select analysis-ready columns
 
 ``` r
+
 final_roster <- analysis_ready |>
   dplyr::select(
     # Identifiers
@@ -1330,6 +1376,7 @@ final_roster <- analysis_ready |>
 ### Step 10: Inspect the result
 
 ``` r
+
 dplyr::glimpse(final_roster)
 ```
 
@@ -1357,6 +1404,7 @@ With the final roster prepared, pass it directly to
 [`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md):
 
 ``` r
+
 t1 <- mysterycall_table1(
   final_roster,
   covariates = c(
@@ -1390,5 +1438,6 @@ knitr::kable(t1$table, caption = "Table 1. Provider characteristics by subspecia
 ## Session information
 
 ``` r
+
 sessionInfo()
 ```

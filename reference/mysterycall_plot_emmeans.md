@@ -75,6 +75,12 @@ filename that includes a timestamp.
 
 ## See also
 
+[`mysterycall_plot_emmeans_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_interaction.md)
+(lean interaction EMM plot) and
+[`mysterycall_plot_emmeans_full()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_full.md)
+(interaction plot with more options and optional file save). This
+function computes, plots, and saves a single-variable EMM figure.
+
 Other plotting:
 [`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md),
 [`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)

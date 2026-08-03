@@ -100,14 +100,10 @@ A data frame containing the original rows plus:
 
   Logical flag for failed dialing outcomes.
 
-## See also
-
-Other phone_validation:
-[`mysterycall_validate_phone()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_phone.md)
-
 ## Examples
 
 ``` r
+# Requires active Twilio credentials in environment variables.
 if (FALSE) { # \dontrun{
 checked <- mysterycall_no_longer_in_service(
   csv_path = "providers.csv",

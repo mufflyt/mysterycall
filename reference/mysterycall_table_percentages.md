@@ -1,10 +1,14 @@
 # Most frequent level(s) of a categorical variable with percentage
 
-Counts each level of a categorical variable, computes its share of all
-rows (including `NA`), and returns **only the level(s) with the highest
+Counts each level of a categorical variable, computes its share of the
+**non-missing** rows, and returns **only the level(s) with the highest
 count**. When multiple levels tie for the top count, all tied levels are
-returned. `NA` values are counted as their own level and included in the
-denominator.
+returned. `NA` values are excluded from both the counts and the
+denominator, matching
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
+[`mysterycall_distribution_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_distribution_summary.md),
+and
+[`mysterycall_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_most_common_gender.md).
 
 ## Usage
 
@@ -62,9 +66,9 @@ mysterycall_table_percentages(df_tie, "category")
 #> 2        B 3 33.33333
 #> 3        C 3 33.33333
 
-# NAs are counted as their own level; denominator includes all rows
+# NAs are excluded; "A" is 3 of 6 non-missing rows = 50%
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 mysterycall_table_percentages(df_na, "category")
 #>   category n percent
-#> 1        A 3    37.5
+#> 1        A 3      50
 ```

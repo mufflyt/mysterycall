@@ -44,6 +44,7 @@ can use this code to facilitate your search in the
 `mysterycall_search_taxonomy` function.
 
 ``` r
+
 obgyn_taxonomy <- mysterycall::taxonomy %>%
   dplyr::filter(stringr::str_detect(`Classification`, stringr::fixed("GYN", ignore_case = TRUE))) %>%
   dplyr::select(Code, Specialization)
@@ -86,6 +87,7 @@ them joinable to CMS Care Compare data and other federal datasets.
 Search for providers in one or more taxonomy descriptions:
 
 ``` r
+
 taxonomy_descriptions <- c(
   "Hospice and Palliative Medicine",
   "Gynecologic Oncology"
@@ -97,6 +99,7 @@ data <- mysterycall_search_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 Inspect the distribution of results:
 
 ``` r
+
 # Providers by gender and state
 dplyr::count(data, basic_gender, addresses_state, sort = TRUE)
 
@@ -117,6 +120,7 @@ renames the key columns to match the names expected by
 and other downstream functions, then derives a short subspecialty code.
 
 ``` r
+
 # OBGYN subspecialty taxonomy descriptions and their short codes
 obgyn_subspecialties <- c(
   "Obstetrics & Gynecology, Female Pelvic Medicine and Reconstructive Surgery" = "FPM",
@@ -178,6 +182,7 @@ Once the roster is clean, validate the phone numbers against the
 provider’s reported state using the NANP helper:
 
 ``` r
+
 phone_checks <- do.call(rbind, Map(
   mysterycall_validate_phone,
   phone_str      = roster_clean$phone,

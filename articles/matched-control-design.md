@@ -25,6 +25,7 @@ back to an ownership reference — is an upstream step outside the
 package.)
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -38,6 +39,7 @@ city/state. The treated practices are drawn slightly younger and more
 often DO-led, so the arms are *not* balanced to begin with.
 
 ``` r
+
 set.seed(2026)
 metros <- list(
   CO = c("Denver", "Aurora", "Lakewood"),
@@ -78,6 +80,7 @@ fail on `LLC` vs `PC`, `&` vs `and`, and stray punctuation.
 collapses those variants to a single canonical key:
 
 ``` r
+
 messy <- c("Women's Health Specialists, LLC", "Womens Health Specialists PC",
            "Rocky Mountain OB & GYN, P.A.")
 mysterycall_normalize_org_name(messy)
@@ -88,6 +91,7 @@ mysterycall_normalize_org_name(messy)
 In practice you would add the key to both frames and merge on it:
 
 ``` r
+
 cohort <- data.frame(name = messy)
 roster <- data.frame(name = c("WOMENS HEALTH SPECIALISTS", "ROCKY MOUNTAIN OB AND GYN"),
                      owner = c("PE-backed", "Independent"))
@@ -110,6 +114,7 @@ matched practices sit. For rooftop-accurate coordinates from full street
 addresses, use a dedicated geocoding service instead.
 
 ``` r
+
 tg <- mysterycall_geocode_city_state(treated$city, treated$state)
 treated$lat <- tg$lat; treated$lon <- tg$lon
 cg <- mysterycall_geocode_city_state(candidates$city, candidates$state)
@@ -132,6 +137,7 @@ fits it internally, but it is worth inspecting. Here is the same model,
 fit directly:
 
 ``` r
+
 ps_df <- rbind(cbind(treatment = 1, treated[, c("years", "female", "md")]),
                cbind(treatment = 0, candidates[, c("years", "female", "md")]))
 ps_fit <- glm(treatment ~ years + female + md, binomial, ps_df)
@@ -148,6 +154,7 @@ common-support assumption). A treated practice with a score no control
 comes close to has no honest match. Compare the two score distributions:
 
 ``` r
+
 treated$ps    <- predict(ps_fit, treated, type = "response")
 candidates$ps <- predict(ps_fit, candidates, type = "response")
 library(ggplot2)
@@ -177,6 +184,7 @@ is used at most once). The greedy scheme, with a hard state + distance
 constraint, is what makes every control genuinely callable.
 
 ``` r
+
 m <- mysterycall_build_matched_controls(
   treated, candidates,
   ps_formula    = treatment ~ years + female + md,
@@ -199,6 +207,7 @@ m
 ```
 
 ``` r
+
 head(m$pairs)
 #> # A tibble: 6 × 7
 #>   pair_id treated_id control_id ps_treated ps_control   ps_diff distance_miles
@@ -220,6 +229,7 @@ Compare the standardized mean difference (SMD) of each covariate
 “well-balanced” rule of thumb.
 
 ``` r
+
 smd <- function(a, b) {
   (mean(a) - mean(b)) / sqrt((var(a) + var(b)) / 2)
 }
@@ -242,6 +252,7 @@ practices find a match. Tighten it and controls are nearer but more
 treated practices go unmatched. Sweep a few values:
 
 ``` r
+
 sweep <- sapply(c(5, 10, 25, 50, 100), function(cm) {
   mm <- mysterycall_build_matched_controls(
     treated, candidates, treatment ~ years + female + md,
@@ -270,6 +281,7 @@ what the callers work from.
 writes this out in a Google-Sheets-ready format.)
 
 ``` r
+
 pe   <- m$matched_treated;  pe$arm   <- "PE";      pe$pair_id   <- m$pairs$pair_id
 ctl  <- m$matched_controls; ctl$arm  <- "Control"; ctl$pair_id  <- m$pairs$pair_id
 cols <- c("npi", "state", "arm", "pair_id")
@@ -287,6 +299,7 @@ each practice, with PE practices a little less likely to accept and a
 little slower:
 
 ``` r
+
 is_pe <- call_list$arm == "PE"
 call_list$accepted  <- rbinom(nrow(call_list), 1, ifelse(is_pe, 0.62, 0.78))
 call_list$wait_days <- ifelse(
@@ -301,6 +314,7 @@ insurance-scenario studies apply, with the matched pair as the unit and
 the arm as the “scenario”. Acceptance, via the exact McNemar test:
 
 ``` r
+
 mysterycall_paired_acceptance_mcnemar(
   call_list, id_col = "pair_id", scenario_col = "arm", outcome_col = "accepted")
 #> <mysterycall paired McNemar: 1 contrast(s), MDE at 80% power>
@@ -319,6 +333,7 @@ pairs could detect. Wait time, via the within-pair paired comparison
 p-value):
 
 ``` r
+
 mysterycall_paired_wait_within_practice(
   call_list, id_col = "pair_id", scenario_col = "arm", wait_col = "wait_days")
 #> <mysterycall paired wait: 1 contrast(s), MDE at 80% power>
@@ -336,6 +351,7 @@ the exposure — a binary offer on every call plus a wait time only among
 offers:
 
 ``` r
+
 mysterycall_twopart_power(
   n_total = c(120, 200), offer_ref = 0.78, offer_trt = 0.62,
   wait_ref = 18, wait_trt = 24, phi = 3, n_sim = 50, seed = 1)

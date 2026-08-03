@@ -51,8 +51,9 @@ mysterycall_compare_waves(
 A data frame. For proportion outcomes: columns `wave`, (`group`,) `n`,
 `n_accepted`, `rate`, `lower_ci`, `upper_ci`, `p_vs_ref`. For continuous
 outcomes: columns `wave`, (`group`,) `n`, `mean`, `median`, `sd`, `iqr`,
-`p_vs_ref`. The `group` column is only present when `group_col` is
-non-`NULL`. The attribute `ref_wave` is set on the returned data frame.
+`q1`, `q3`, `p_vs_ref`. The `group` column is only present when
+`group_col` is non-`NULL`. The attribute `ref_wave` is set on the
+returned data frame.
 
 ## See also
 

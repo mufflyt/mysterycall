@@ -1,6 +1,230 @@
 # Changelog
 
-## mysterycall (development version)
+## mysterycall 1.6.3.9000 (development version)
+
+### Bug fixes
+
+- [`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
+  now returns an `iqr` (interquartile range) column for continuous
+  outcomes, alongside the existing `q1` / `q3`, matching its documented
+  headline statistics and the test expectations.
+- Refreshed the
+  [`mysterycall_overdispersion_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_sentence.md)
+  test snapshot to match the graduated “Mild overdispersion” wording the
+  function now emits.
+- Added the 68 documented-but-unindexed topics (datasets,
+  [`print()`](https://rdrr.io/r/base/print.html) /
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
+  methods, and additional exported functions) to the pkgdown reference
+  index so
+  [`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html)
+  no longer errors on missing topics.
+
+### Census geography vintage
+
+The 2020 Census redrew tracts, block groups, and ZCTAs. Several paths
+could cross that boundary and fail silently as `NA` rather than
+erroring. All four are now closed.
+
+- **Census benchmark and vintage are pinned package-wide** via the new
+  internal constants `.MC_CENSUS_BENCHMARK` and `.MC_CENSUS_VINTAGE`
+  (`Public_AR_Current` / `Census2020_Current`).
+  [`mysterycall_geocode_address()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode_address.md)
+  previously defaulted to `vintage = "Current_Current"`, which tracks
+  whatever the Bureau currently serves, while its documentation promised
+  2020 GEOIDs. Both vintages return identical geography today, so
+  results do not change; the pin makes the documented behavior a
+  guarantee instead of a coincidence, and keeps the geocoder in step
+  with the 2020-vintage bundled datasets.
+
+- **Geography layers are now matched by substring, not exact name.** The
+  geocoder renames layers between vintages – the ZCTA layer is
+  `"Zip Code Tabulation Areas"` under `Census2020_Current` but
+  `"2020 Census ZIP Code Tabulation Areas"` under `Current_Current`. The
+  old exact-string lookup would have returned `NA` for every row after a
+  rename, silently zeroing ADI and SVI. New internal helper
+  [`.mc_geo_layer()`](https://mufflyt.github.io/mysterycall/reference/dot-mc_geo_layer.md).
+
+- **[`mysterycall_assign_area_covariates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_area_covariates.md)
+  now warns** when the geocoder answers successfully but returns no ZCTA
+  layer, which distinguishes a vintage or layer-name break from ordinary
+  geocoding loss. Previously both looked like uniformly missing
+  covariates.
+
+- **ACS pulls warn when the requested year predates the bundled boundary
+  vintage.**
+  [`mysterycall_get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md),
+  [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md),
+  and
+  [`mysterycall_get_payer_mix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_payer_mix.md)
+  accept years back to 2009/2012, but the bundled `adi_zcta`,
+  `svi_zcta`, and `zcta_tract_xwalk` are 2020-vintage (2018–2022 ACS).
+  Joining a pre-2022 pull at a boundary-sensitive geography to those
+  datasets silently drops split, merged, or renumbered areas. Silence
+  with `options(mysterycall.quiet_vintage = TRUE)` when the mismatch is
+  intended. New internal helper
+  [`.mc_check_acs_vintage()`](https://mufflyt.github.io/mysterycall/reference/dot-mc_check_acs_vintage.md).
+
+### Documentation
+
+- [`mysterycall_classify_ruca()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_ruca.md)
+  no longer claims a RUCA crosswalk is “bundled in this package” – none
+  is, and the same help page already directed users to USDA ERS. Adds a
+  vintage warning: 2010 RUCA files are keyed to 2010 tracts, which will
+  not join cleanly to the 2020-vintage tract GEOIDs this package
+  produces.
+
+- `CITATION.cff` and `codemeta.json` reported version 1.4.0 while
+  `DESCRIPTION` and `NEWS.md` were at 1.6.3.9000. Synced.
+
+### New features
+
+- [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+  gains an `engine` argument. The default `engine = "ggplot2"` is
+  unchanged. New `engine = "gmisc"` renders the *same* pipeline-derived
+  counts with the Gmisc grid engine
+  ([`Gmisc::boxGrob()`](https://rdrr.io/pkg/Gmisc/man/box.html) /
+  [`Gmisc::connectGrob()`](https://rdrr.io/pkg/Gmisc/man/connect.html)),
+  whose boxes auto-size to their text and whose connectors re-route
+  automatically – so long per-code exclusion lists no longer overflow
+  the fixed-coordinate ggplot2 layout. The count derivation
+  ([`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md)
+  waterfall, exclusion summary, and the logistic/wait-time analytic
+  samples) is shared by both engines, so the diagram cannot disagree
+  with the models regardless of renderer. Gmisc is a `Suggests`-only
+  dependency; the ggplot2 default needs nothing new. The gmisc engine
+  returns a grid `gTree` and supports the same `output_path` saving
+  (png/tiff/jpeg/pdf/svg, with raster format pairing).
+
+### Consolidation and deprecation
+
+- [`mysterycall_acceptance_rate_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate_calc.md)
+  gains a `medicaid_screen_group` argument that restricts the
+  `medicaid_accept_col` NA-screen to named insurance group(s) instead of
+  applying it to all groups. This lets the general calculator reproduce
+  the one behavior only the hardcoded two-group helper could – an
+  asymmetric Medicaid-only screen, so a Medicaid-accept field that is
+  `NA` on non-Medicaid rows no longer zeroes those groups’ rates.
+- [`mysterycall_insurance_acceptance_rates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_acceptance_rates.md)
+  is **deprecated** in favor of
+  `mysterycall_acceptance_rate_calc(medicaid_screen_group = "Medicaid")`,
+  of which it is the two-group (Medicaid/BCBS) special case. It still
+  works and keeps its exact manuscript paragraph.
+- Added mutual `@seealso` links across the overlapping ZIP cleaners
+  (`clean_zip` / `extract_zip5` / `normalize_zip5`), the wait-time
+  summaries (`wait_time_by_group` / `wait_time_summary`), and the
+  emmeans plotters (`plot_emmeans` / `plot_emmeans_interaction` /
+  `plot_emmeans_full`) to clarify which to use.
+
+### New functions
+
+Generalized from the `isochrones` ENT access study (power/GLM) and the
+original urogyn `mystery_shopper_data` study (data prep), which
+hand-rolled them – filling the package’s missing power quadrants and
+reusable field-cleaning helpers:
+
+- [`mysterycall_adjusted_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_adjusted_power.md):
+  Monte Carlo power for a covariate-adjusted negative-binomial GLMM with
+  a **cluster ICC** – a rural (exposure) fixed effect, a subspecialty
+  fixed effect, nuisance adjustment covariates, and a state-level random
+  intercept whose SD is derived from a target ICC
+  (`sigma = sqrt(ICC/(1-ICC) * 1/phi)`). Fills the gap left by the
+  existing physician-clustered power tools, which cannot express a
+  higher-level cluster as an ICC or adjust for confounders (`glmmTMB`).
+- [`mysterycall_ttest_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ttest_power.md):
+  analytic two-group **continuous-outcome** power (Cohen’s d) with an
+  unequal-allocation solver, for a study with a fixed natural exposure
+  fraction (e.g. 15% rural). The package’s other analytic power tools
+  are all count/binary (`pwr`).
+- [`mysterycall_lm_interaction_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lm_interaction_power.md):
+  analytic Cohen’s f-squared power for each main effect and interaction
+  of a saturated factorial model, at small/medium effect sizes (`pwr`).
+- [`mysterycall_parse_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_duration.md):
+  parse messy free-text call durations (`"1min 45 sec"`, `"1.5min"`,
+  `"30sec"`, a bare number, `"O"`) to seconds or minutes – replaces the
+  brittle per-study lookup table for hold-time and call-length fields.
+- [`mysterycall_clean_zip()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_zip.md):
+  take the first ZIP when several are present, strip a ZIP+4 suffix, and
+  left-pad to five digits (restoring leading zeros lost to numeric
+  parsing).
+- [`mysterycall_categorize_wait()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_categorize_wait.md):
+  bin a days-to-appointment vector into weekly categories plus a binary
+  “\>N-week wait” threshold flag, standardizing the headline-outcome
+  convention.
+- [`mysterycall_link_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_link_physicians.md):
+  probabilistic record linkage of two physician lists that share no key,
+  via `fastLink` Jaro-Winkler name matching with optional blocking – for
+  reconciling a called cohort against an external roster when there is
+  no NPI (`fastLink`).
+
+Generalized from the `labubu` mystery-caller study, which hand-rolled
+them – design-integrity checks, a population-average sensitivity model,
+and two matched figures that were previously inline in the study’s
+analysis scripts:
+
+- [`mysterycall_scenario_coverage()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_coverage.md):
+  per-cluster scenario-coverage table for a matched multi-scenario audit
+  – how many practices were reached under the full set of scenarios
+  (complete) versus a partial set or a single scenario, plus a
+  missing-count per scenario. A design-integrity guard, since an
+  unmatched cluster key silently becomes a one-scenario singleton and
+  deflates the paired denominator of
+  [`mysterycall_paired_acceptance_mcnemar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_acceptance_mcnemar.md)
+  /
+  [`mysterycall_paired_wait_within_practice()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_paired_wait_within_practice.md).
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
+  methods.
+
+- [`mysterycall_flag_near_duplicate_keys()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_near_duplicate_keys.md):
+  edit-distance (`adist`) near-duplicate detector over cluster keys –
+  catches the mistyped grouping value (`"Womens"` vs. `"Women's"`) that
+  [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md)
+  cannot, because the strings differ. Flags a pair when its raw or
+  length-normalized edit distance is within threshold; the safety net
+  that keeps a typo from splitting one practice into two clusters.
+
+- [`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md):
+  population-average GEE (`geepack`, exchangeable working correlation,
+  robust SEs) as a marginal companion to the subject-specific
+  [`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+  GLMM – uses every record including the singletons and dyads a matched
+  analysis drops. Returns an odds-ratio table with a complete-separation
+  flag; [`print()`](https://rdrr.io/r/base/print.html) and
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
+  methods.
+
+- [`mysterycall_plot_raincloud()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_raincloud.md):
+  violin + boxplot + jittered-points figure of a numeric outcome by
+  group (the canonical skewed-wait-time-by-scenario plot).
+
+- [`mysterycall_plot_paired_slope()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_paired_slope.md):
+  within-cluster slope plot – one line per practice across the scenarios
+  it was called under – the visual companion to the matched paired
+  analyses.
+
+- [`mysterycall_hurdle_wait()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hurdle_wait.md):
+  a two-part hurdle model for a mystery-caller wait time, generalized
+  from the private-equity urogynecology audit. Fits a binary hurdle
+  (appointment obtained yes/no) and a zero-truncated negative-binomial
+  count model for the wait among obtained appointments, each with an
+  optional practice random intercept so the clustered structure of an
+  audit is respected – an advantage over `pscl::hurdle()`, which cannot
+  cluster. The negative-binomial count part absorbs the skew and
+  overdispersion that a normal-outcome selection (Heckman) model cannot;
+  it assumes selection on observables, and any residual
+  selection-on-unobservables concern is addressed with a sensitivity
+  analysis
+  ([`mysterycall_outcome_bounds()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_bounds.md)
+  Manski bounds or
+  [`mysterycall_leave_one_out()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_leave_one_out.md))
+  rather than a Heckman correction. Returns odds-ratio and
+  incidence-rate-ratio tables plus both fitted models, with
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
+  methods.
+
+## mysterycall 1.6.3
 
 ### New functions
 
@@ -749,10 +973,9 @@ Released 2026-06-25.
 - Fixed a namespace-locking bug in the test suite: 37 test files were
   calling
   [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/)
-  inside
-  [`devtools::test()`](https://devtools.r-lib.org/reference/test.html),
-  which locked the package namespace and silently broke all subsequent
-  `with_mocked_bindings()` calls. All such calls have been removed.
+  inside `devtools::test()`, which locked the package namespace and
+  silently broke all subsequent `with_mocked_bindings()` calls. All such
+  calls have been removed.
 
 - Fixed 11-digit NPI generation in regression-match-rate mocks when *n*
   \> 10 (changed from `paste0("123456789", 0:(n-1))` to
@@ -869,13 +1092,11 @@ Released 2026-06-02.
   (`imager`, `leaflet.extras`, `tmap`, `tigris`) plus `ggforce`.
   Suggests count: 48 → 43.
 
-- **Documentation hygiene.**
-  [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-  now runs cleanly; data documentation converted from the
-  trailing-string-literal pattern to the universal `@name + NULL`
-  pattern. New tests added for `R/academic_indicators.R` and
-  `R/audit-verify.R`. ORCID and R-version badges added to README and
-  pkgdown index.
+- **Documentation hygiene.** `devtools::document()` now runs cleanly;
+  data documentation converted from the trailing-string-literal pattern
+  to the universal `@name + NULL` pattern. New tests added for
+  `R/academic_indicators.R` and `R/audit-verify.R`. ORCID and R-version
+  badges added to README and pkgdown index.
 
 ## mysterycall 1.3.0
 

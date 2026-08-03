@@ -1,4 +1,4 @@
-# Multi-model regression table for manuscript submission
+# Build a three-column regression table for manuscript submission
 
 Creates the "three-column regression table" that reviewers almost always
 request: Model 1 (unadjusted) \| Model 2 (adjusted) \| Model 3 (+
@@ -28,8 +28,8 @@ mysterycall_multi_model_table(
 
   Named list of fitted model objects. Each element must be one of
   `mysterycall_logistic_model`, `mysterycall_poisson_model`,
-  `mysterycall_nb_model`, or `mysterycall_lmm`. Length must be= 2. Names
-  become column headers in the output table.
+  `mysterycall_nb_model`, or `mysterycall_lmm`. Must contain at least
+  two models. Names become column headers in the output table.
 
 - include_intercept:
 

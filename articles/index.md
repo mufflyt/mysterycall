@@ -55,20 +55,6 @@
   phone validation, address normalization, Phase 1 and Phase 2 log
   cleaning, duplicate detection, and clinician data retrieval.
 
-### Geospatial
-
-- [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.md):
-
-  A function to geocode addresses.
-
-- [Create Drive-Time
-  Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md):
-
-  Generate drive-time isochrones from geocoded practice coordinates.
-
-- [Visualizing Provider Geographic
-  Data](https://mufflyt.github.io/mysterycall/articles/mapping.md):
-
 ### Demographics
 
 - [Getting Data from the US Census Bureau for
@@ -92,6 +78,9 @@
 
 - [Designing a matched-control mystery-caller
   audit](https://mufflyt.github.io/mysterycall/articles/matched-control-design.md):
+
+- [Design, power, and cleaning tools from three audit
+  studies](https://mufflyt.github.io/mysterycall/articles/audit-study-tools.md):
 
 - [Statistical Analysis of Mystery-Caller
   Data](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md):
@@ -132,8 +121,3 @@
 
 - [Assembling supplementary digital
   content](https://mufflyt.github.io/mysterycall/articles/supplementary-digital-content.md):
-
-### News
-
-- [Imotive News &
-  Changelog](https://mufflyt.github.io/mysterycall/articles/imotive-news.md):

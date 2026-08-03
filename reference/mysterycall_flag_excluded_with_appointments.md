@@ -1,9 +1,11 @@
-# Flag Excluded Records That Still Have a Positive Wait Time
+# Flag Excluded Records That Still Have a Recorded Wait Time
 
-Finds records where `business_days_until_appointment > 0` but
-`reason_for_exclusions` is not `contact_value`. These are logical
-contradictions: a call that failed contact should not have a valid
-positive wait time.
+Finds records where `business_days_until_appointment >= 0` (a recorded
+wait, including a same-day appointment at 0) but `reason_for_exclusions`
+is not `contact_value`. These are logical contradictions: a call that
+failed contact should not have a recorded appointment wait. A
+not-obtained appointment is `NA`, so `0` is a real same-day appointment
+and is flagged.
 
 ## Usage
 
@@ -66,8 +68,8 @@ Returns a zero-row tibble (invisibly) when no records are flagged.
 
 ## See also
 
-[`mysterycall_flag_exclusion_discrepancy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_exclusion_discrepancy.md)
-for the `>= 0` variant;
+[`mysterycall_flag_exclusion_discrepancy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_exclusion_discrepancy.md),
+which shares this `>= 0` boundary;
 [`mysterycall_flag_included_na_appointments()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_included_na_appointments.md)
 for the complementary check.
 
@@ -89,11 +91,13 @@ df <- data.frame(
   business_days_until_appointment = c(5L, 3L, 0L),
   stringsAsFactors = FALSE
 )
-# Only Dr A is flagged (days > 0 AND excluded)
+# Dr A (days=5) and Dr C (days=0, same-day) are flagged: excluded AND days >= 0
 mysterycall_flag_excluded_with_appointments(df, output_dir = NA)
-#> Quality check: 1 record(s) have a positive wait time but are marked as excluded.
+#> Quality check: 2 record(s) have a recorded wait time but are marked as excluded.
 #>   physician_information id_number notes reason_for_exclusions
-#> 1                  Dr A       001    NA         Not available
+#> 1                  Dr C       003    NA         Not available
+#> 2                  Dr A       001    NA         Not available
 #>   business_days_until_appointment
-#> 1                               5
+#> 1                               0
+#> 2                               5
 ```

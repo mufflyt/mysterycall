@@ -111,8 +111,10 @@ values that will be bucketed into `"Unknown"`.
 
 ## See also
 
-[`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
-for the upstream API call that produces the raw `gender` column;
+[`mysterycall_nppes_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nppes_gender.md)
+and
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
+for the registry-reported gender that produces the raw `gender` column;
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
 to validate data quality before processing.
 

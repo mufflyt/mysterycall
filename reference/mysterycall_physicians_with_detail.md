@@ -4,6 +4,7 @@ Filters the full mystery-caller data frame to the rows whose `id_col`
 value appears in `flagged_ids`, then returns the requested `select_cols`
 arranged by `id_col`. Mirrors the source-Rmd pattern:
 
+
     df %>%
       filter(id_number %in% unique(temp$id_number)) %>%
       dplyr::select(id_number, physician_information,
@@ -78,6 +79,7 @@ Other descriptive helpers:
 [`mysterycall_distribution_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_distribution_summary.md),
 [`mysterycall_facet_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_facet_histogram.md),
 [`mysterycall_log_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_histogram.md),
+[`mysterycall_scenario_coverage()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_coverage.md),
 [`mysterycall_scenario_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_summary.md),
 [`mysterycall_sensitivity_both_insurance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_both_insurance.md)
 

@@ -9,9 +9,9 @@ entire workflow: from generating a provider roster, to preparing the
 data for callers, to analyzing the results.
 
 ``` r
+
 library(mysterycall)
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.4.3
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -32,6 +32,7 @@ to query the NPPES registry. For this example, we will use a small
 subset of the bundled `physicians` dataset.
 
 ``` r
+
 # Load bundled physician data
 data(physicians)
 
@@ -64,6 +65,7 @@ Before handing off the data, we need to ensure it is clean and properly
 formatted. We can use the package’s normalization utilities.
 
 ``` r
+
 # Normalize names and practice locations
 clean_roster <- roster %>%
   mutate(
@@ -94,6 +96,7 @@ You can use
 to divide the roster among your research assistants.
 
 ``` r
+
 # Example of splitting the roster (not evaluated here to prevent file creation)
 # mysterycall_split_and_save(
 #   clean_roster, 
@@ -113,6 +116,7 @@ and
 Let’s simulate the results of the calls:
 
 ``` r
+
 # Simulate caller responses
 results <- clean_roster %>%
   mutate(
@@ -135,6 +139,7 @@ results <- clean_roster %>%
 Generate a quick Table 1 of your provider sample.
 
 ``` r
+
 # Prepare variables for Table 1
 t1_data <- mysterycall_prepare_table1_vars(results)
 
@@ -163,6 +168,7 @@ Finally, run a Poisson regression with robust standard errors to analyze
 the primary outcome (appointment acceptance rate).
 
 ``` r
+
 # Fit a Poisson mixed model: subspecialty as random intercept allows
 # the demo model to converge with this small simulated sample.
 model <- mysterycall_poisson_model(

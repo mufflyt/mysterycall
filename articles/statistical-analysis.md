@@ -1,6 +1,7 @@
 # Statistical Analysis of Mystery-Caller Data
 
 ``` r
+
 library(mysterycall)
 ```
 
@@ -123,6 +124,7 @@ The following synthetic data frame deliberately contains four problems
 that the preflight check will detect:
 
 ``` r
+
 # Build a small data frame with intentional problems
 bad_data <- data.frame(
   npi              = c("1234567890", "1234567890",   # duplicate NPI × insurance
@@ -175,6 +177,7 @@ print(report)
 #### Fixing the Problems
 
 ``` r
+
 # Step 1: Remove the duplicate NPI x insurance row
 clean_data <- bad_data[!duplicated(bad_data[, c("npi", "insurance")]), ]
 
@@ -257,6 +260,7 @@ waited 40 % longer than privately insured patients, on average, after
 adjusting for all other covariates in the model.
 
 ``` r
+
 set.seed(42)
 medicaid_waits <- rpois(200L, lambda = 18)
 
@@ -294,7 +298,6 @@ scheduling behavior that is *not* explained by the covariates. Formally,
 the model is:
 
 ``` math
-
 \log\!\bigl(E[\text{wait\_days}_{ij} \mid \gamma_j]\bigr)
   = \beta_0
   + \beta_1\,\text{Medicaid}_{ij}
@@ -313,6 +316,7 @@ insurance contrast—exactly the quantity of interest in an audit study.
 ### 3.3 Basic Model Fit
 
 ``` r
+
 # Fit the Poisson GLMM
 # data:       your cleaned mystery-caller data frame
 # outcome:    name of the count column (wait_days)
@@ -340,6 +344,7 @@ frame containing the fixed-effect estimates on the incidence-rate-ratio
 scale:
 
 ``` r
+
 # Print the IRR table
 poisson_fit$irr_table
 #>   insurance       IRR  CI_lower  CI_upper  p_value
@@ -371,6 +376,7 @@ significant (p = 0.441). - Uninsured patients waited **29 % longer** (95
 ### 3.5 The `print()` Method
 
 ``` r
+
 print(poisson_fit)
 #> == mysterycall: Poisson GLMM Results ==============================
 #>
@@ -420,6 +426,7 @@ distribution), giving:
 ```
 
 ``` r
+
 # mysterycall_irr_plot() accepts a data frame with term/irr/ci_lower/ci_upper/p_value
 irr_df <- data.frame(
   term     = c("Medicaid", "Medicare", "Uninsured"),
@@ -464,6 +471,7 @@ specified Poisson model, this ratio should be approximately 1.0:
 | \> 3.0 | Severe overdispersion | Negative binomial model; investigate outliers |
 
 ``` r
+
 # The overdispersion statistic is stored in the fitted object
 poisson_fit$overdispersion
 #> $pearson_chisq
@@ -506,6 +514,7 @@ studies:
   identically—which would mean the random intercept is unnecessary).
 
 ``` r
+
 # Check convergence diagnostics
 poisson_fit$convergence
 #> $converged
@@ -552,6 +561,7 @@ linear predictor with a fixed coefficient of 1, so the model effectively
 estimates wait days *per unit panel size*.
 
 ``` r
+
 # Assume mc_data has a column 'panel_size' (e.g., number of active patients)
 mc_data$log_panel <- log(mc_data$panel_size)
 
@@ -590,6 +600,7 @@ of raw wait times by insurance group. This serves two purposes:
     of median wait times in the summary table).
 
 ``` r
+
 # Summarize wait times by insurance type
 wait_summary <- mysterycall_wait_time_summary(
   data          = mc_data,
@@ -637,6 +648,7 @@ median*—these are different statistics.
 ### Combining the Summary Table With IRR Results
 
 ``` r
+
 # Summarize at the insurance-type level (no subspecialty stratification)
 wait_summ_top <- mysterycall_wait_time_summary(
   data         = mc_data,
@@ -716,6 +728,7 @@ Appropriate only when n ≥ 50 per group *and* the proportion is between
 rarely recommended.
 
 ``` r
+
 # Build a representative disparities table from synthetic data
 set.seed(99)
 n_per   <- 200L
@@ -746,6 +759,7 @@ deficits.
 supports three metrics — switch with `metric`:
 
 ``` r
+
 mysterycall_plot_disparities(disp_tbl, metric = "abs_diff",
                               title = "Absolute disparity (pp vs. Private)")
 #> `height` was translated to `width`.
@@ -760,6 +774,7 @@ Private insurance. Negative values indicate lower appointment-offered
 rates.
 
 ``` r
+
 mysterycall_plot_disparities(disp_tbl, metric = "rel_risk",
                               title = "Relative risk vs. Private")
 #> `height` was translated to `width`.
@@ -777,6 +792,7 @@ Values below 1 indicate lower rates for that group.
 ### 5.3 Basic Disparity Analysis
 
 ``` r
+
 # Compute disparity metrics for appointment_offered across insurance types
 disparities <- mysterycall_disparities_table(
   data       = mc_data,
@@ -819,6 +835,7 @@ print(disparities)
 ### 5.4 Setting a Custom Reference Group
 
 ``` r
+
 # Use Medicaid as the reference group to compare others against it
 disparities_med_ref <- mysterycall_disparities_table(
   data      = mc_data,
@@ -847,6 +864,7 @@ A frequent data-entry error is coding the outcome as 1/2 (e.g., 1 =
 an informative error:
 
 ``` r
+
 # Wrong: appointment_offered coded as 1 or 2
 bad_mc <- mc_data
 bad_mc$appointment_offered <- bad_mc$appointment_offered + 1  # now 1 or 2
@@ -911,14 +929,16 @@ from smallest to largest:
 $`p_{(1)} \le p_{(2)} \le \cdots \le p_{(m)}`$. The adjusted p-value for
 the $`k`$-th ordered test is:
 
-\$\$p\_{(k)}^{\text{Holm}} = \min\\\Bigl(\max\_{j \le k}\\\bigl\[(m -
-j + 1)\\p\_{(j)}\bigr\],\\ 1\Bigr)\$\$
+``` math
+p_{(k)}^{\text{Holm}} = \min\!\Bigl(\max_{j \le k}\!\bigl[(m - j + 1)\,p_{(j)}\bigr],\; 1\Bigr)
+```
 
 Holm-Bonferroni is uniformly more powerful than Bonferroni while still
 controlling the family-wise error rate. **Prefer Holm-Bonferroni in
 almost all situations.**
 
 ``` r
+
 # Extract the raw p-values from the disparities table
 raw_p <- disparities$p_value
 names(raw_p) <- disparities$insurance[disparities$insurance != "Private"]
@@ -959,6 +979,7 @@ conservative: it ignores the ordering of evidence across tests.
 ### 6.3 Passing the Full Disparities Table Directly
 
 ``` r
+
 # Convenience wrapper: pass the entire disparities table
 adj_full <- mysterycall_multiple_comparison_adjust(
   disparities_table = disparities,  # output of mysterycall_disparities_table()
@@ -1031,6 +1052,7 @@ with $`\hat{z}_0`$ the bias-correction constant and $`\hat{a}`$ the
 acceleration constant estimated from jackknife leave-one-out statistics.
 
 ``` r
+
 set.seed(20240101)
 n_phys  <- 50L
 boot_b  <- 2000L
@@ -1077,6 +1099,7 @@ the BCa 95 % CI endpoints are dashed.
 ### 7.3 Bootstrapping the Difference in Appointment Rates
 
 ``` r
+
 # Set seed for reproducibility — always report this in your methods section
 set.seed(20240101)
 
@@ -1120,6 +1143,7 @@ your CIs will be anti-conservative (too narrow).
 ### 7.4 Bootstrapping a Custom Statistic
 
 ``` r
+
 # Example: bootstrap the ratio of median wait times (Medicaid / Private)
 # This has no closed-form CI, making bootstrap ideal.
 
@@ -1165,6 +1189,7 @@ following APA 7th edition style conventions and the reporting guidelines
 of JAMA and NEJM for observational health disparities research.
 
 ``` r
+
 results_text <- mysterycall_write_results_paragraph(
   poisson_model      = poisson_fit,
   disparities_table  = adj_full,           # version with adjusted p-values
@@ -1220,6 +1245,7 @@ access, but you can run it interactively by copying the chunks.
 ### 9.1 Build the Synthetic Dataset
 
 ``` r
+
 set.seed(42)
 
 # Study design parameters
@@ -1329,6 +1355,7 @@ head(mc_data)
 ### 9.2 Run the Preflight Check
 
 ``` r
+
 preflight <- mysterycall_preflight_check(mc_data)
 print(preflight)
 #> -- mysterycall preflight check ------------------------------------
@@ -1350,6 +1377,7 @@ print(preflight)
 ### 9.3 Disparity Analysis for Appointment-Offered Rate
 
 ``` r
+
 # --- Step 1: Compute raw disparity metrics ---
 disparities_raw <- mysterycall_disparities_table(
   data      = mc_data,
@@ -1383,6 +1411,7 @@ print(disparities_adj)
 ### 9.4 Poisson GLMM for Wait-Time Disparities
 
 ``` r
+
 # Fit the Poisson GLMM (wait times among callers offered appointments)
 poisson_fit <- mysterycall_poisson_model(
   data         = mc_data,
@@ -1423,6 +1452,7 @@ print(poisson_fit)
 ### 9.5 Wait-Time Summary Table
 
 ``` r
+
 wait_summ <- mysterycall_wait_time_summary(
   data     = mc_data,
   wait_col = "wait_days",
@@ -1442,6 +1472,7 @@ print(wait_summ)
 ### 9.6 Bootstrap CI for the Medicaid–Private Appointment Gap
 
 ``` r
+
 set.seed(20240101)
 
 boot_medicaid <- mysterycall_bootstrap_ci(
@@ -1473,6 +1504,7 @@ The following code assembles all the results into the structure of a
 “Table 2” suitable for direct inclusion in a manuscript.
 
 ``` r
+
 # Merge disparity metrics and Poisson IRRs into a single wide table
 pub_table <- merge(
   disparities_adj[, c("insurance", "n", "rate", "CI_lower", "CI_upper",
@@ -1532,6 +1564,7 @@ knitr::kable(
 ### 9.8 Write the Results Paragraph
 
 ``` r
+
 results_para <- mysterycall_write_results_paragraph(
   poisson_model     = poisson_fit,
   disparities_table = disparities_adj,
@@ -1590,6 +1623,7 @@ where $`N`$ is the finite population size, $`p = 0.5`$ (maximum
 variance, conservative), and $`e`$ is the desired margin of error.
 
 ``` r
+
 # How many providers needed from a state with N = 800 OB-GYNs,
 # margin of error ±5 %?
 result_cochran <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
@@ -1610,6 +1644,7 @@ knitr::kable(
 |            800 |        267 | 5%            | 5.0%            |
 
 Cochran sample-size calculation for N = 800 providers, ±5 % margin.
+{.table}
 
 ### 10.2 Poisson Power for Wait-Time Disparities
 
@@ -1623,6 +1658,7 @@ n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lam
 ```
 
 ``` r
+
 # Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days
 pw_40 <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
                                     power = 0.80, both_arms = TRUE)
@@ -1656,11 +1692,12 @@ knitr::kable(
 |                 1.2 | 80 %  |            31 |              31 |          62 |
 
 Poisson power analysis: providers per arm for paired design, lambda_ref
-= 14 days.
+= 14 days. {.table}
 
 ### 10.3 Power Curve Across a Range of IRRs
 
 ``` r
+
 irr_seq  <- seq(1.10, 2.00, by = 0.05)
 n_seq    <- vapply(irr_seq, function(irr) {
   tryCatch(
@@ -1722,6 +1759,7 @@ requires substantially more providers.
 ## Session Information
 
 ``` r
+
 sessionInfo()
 #> R version 4.4.1 (2024-06-14)
 #> Platform: aarch64-apple-darwin20 (64-bit)

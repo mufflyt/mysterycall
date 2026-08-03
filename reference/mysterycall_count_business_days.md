@@ -45,6 +45,7 @@ Pairs where `end_date == start_date` return `0`.
 [`mysterycall_us_federal_calendar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_us_federal_calendar.md)
 
 Other business days:
+[`mysterycall_appointment_obtained()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_appointment_obtained.md),
 [`mysterycall_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_business_days.md),
 [`mysterycall_us_federal_calendar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_us_federal_calendar.md)
 

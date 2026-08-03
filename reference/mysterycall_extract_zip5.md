@@ -25,6 +25,11 @@ string of digits or `NA_character_`.
 
 ## See also
 
+[`mysterycall_clean_zip()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_zip.md)
+for the exported ZIP cleaner (also splits multi-ZIP cells);
+[`mysterycall_normalize_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_zip5.md)
+for the address-pipeline variant.
+
 Other data management:
 [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md),
 [`mysterycall_check_generalist_presence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_generalist_presence.md),

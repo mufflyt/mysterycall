@@ -4,6 +4,7 @@ Computes the median, 25th and 75th percentiles, non-missing count, and
 missing count for a named numeric column in a data frame, mirroring the
 source-Rmd pattern:
 
+
     median_val <- round(median(df[[column]], na.rm = TRUE), 2)
     q25 <- quantile(df[[column]], probs = 0.25, na.rm = TRUE)
     q75 <- quantile(df[[column]], probs = 0.75, na.rm = TRUE)
@@ -77,6 +78,7 @@ Other descriptive helpers:
 [`mysterycall_facet_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_facet_histogram.md),
 [`mysterycall_log_histogram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_histogram.md),
 [`mysterycall_physicians_with_detail()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physicians_with_detail.md),
+[`mysterycall_scenario_coverage()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_coverage.md),
 [`mysterycall_scenario_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scenario_summary.md),
 [`mysterycall_sensitivity_both_insurance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_both_insurance.md)
 

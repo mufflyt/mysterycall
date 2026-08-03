@@ -192,6 +192,7 @@ function, you need to install and load the required packages. You can do
 this by running the following code:
 
 ``` r
+
 # Install and load the necessary packages
 install.packages("censusapi")
 library(censusapi)
@@ -365,6 +366,7 @@ coverage — every block group in the demographic table should find a
 matching geometry.
 
 ``` r
+
 # Load the block group shapefile (replace path with your actual file)
 bg_shape <- sf::st_read("data/shp/block_group/") |>
   dplyr::select(GEOID, geometry)
@@ -400,6 +402,7 @@ at the block group level. Fetch them with the same
 pattern and join to the block group table on GEOID.
 
 ``` r
+
 # Fetch race table for a single state (repeat across all FIPS codes)
 race_raw <- censusapi::getCensus(
   name    = "acs/acs5",
@@ -473,7 +476,7 @@ bg_sf_enriched <- bg_sf |>
 
 This enriched block group layer is ready for the isochrone intersection
 step described in
-[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md).
+[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html).
 
 ## Usage Tips
 

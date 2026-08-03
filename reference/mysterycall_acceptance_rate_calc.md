@@ -12,9 +12,11 @@ mysterycall_acceptance_rate_calc(
   insurance_groups = NULL,
   inclusion_col = "reason_for_exclusions",
   inclusion_value = "Able to contact",
+  reached_declined_values = mysterycall_reached_declined_reasons(),
   wait_col = "business_days_until_appointment",
   id_col = "phone",
   medicaid_accept_col = NULL,
+  medicaid_screen_group = NULL,
   conf_level = 0.95
 )
 ```
@@ -49,6 +51,20 @@ mysterycall_acceptance_rate_calc(
   Character scalar. The exact string in `inclusion_col` that means
   "successfully contacted". Default `"Able to contact"`.
 
+- reached_declined_values:
+
+  Character vector of `inclusion_col` strings for offices that were
+  **reached but declined** ("Not accepting new patients", "Referral
+  required", "\>5 min on hold"). These are kept in the denominator (the
+  office was reached and said no) even though they are not in the
+  numerator; every other non-`inclusion_value` reason is treated as
+  unreachable and excluded. This keeps the denominator consistent with
+  [`mysterycall_exclusion_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_exclusion_summary.md)'s
+  `n_reached`. Default
+  [`mysterycall_reached_declined_reasons()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reached_declined_reasons.md).
+  Must match your data's reason vocabulary; override consistently across
+  acceptance-rate functions.
+
 - wait_col:
 
   Character scalar or `NULL`. Name of a numeric column holding days to
@@ -67,6 +83,16 @@ mysterycall_acceptance_rate_calc(
   Character scalar or `NULL`. When non-`NULL`, rows with `NA` in this
   column are excluded from the numerator. Useful when a "Did you accept
   Medicaid?" field is present. Default `NULL`.
+
+- medicaid_screen_group:
+
+  Character vector or `NULL`. Restricts the `medicaid_accept_col`
+  NA-screen to only these insurance group(s). This matters when the "Did
+  you accept Medicaid?" field is, by design, `NA` on non-Medicaid rows:
+  applying the screen to every group would then force those groups'
+  rates to zero. When `NULL` (default) the screen applies to all groups
+  (the original behaviour); set e.g. `"Medicaid"` to screen only the
+  Medicaid arm. Ignored when `medicaid_accept_col` is `NULL`.
 
 - conf_level:
 
@@ -140,7 +166,12 @@ insurance group will not be affected.
 ## See also
 
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md)
+[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md).
+This function generalizes the two-group (Medicaid/BCBS)
+[`mysterycall_insurance_acceptance_rates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_acceptance_rates.md),
+which is now deprecated in its favor – use
+`medicaid_screen_group = "Medicaid"` to reproduce the legacy asymmetric
+Medicaid-only NA-screen.
 
 Other outcomes:
 [`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),
@@ -158,6 +189,7 @@ Other outcomes:
 [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
 [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md),
 [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md),
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md),
 [`mysterycall_icc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc.md),
 [`mysterycall_icc_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_report.md),
 [`mysterycall_icc_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_icc_sentence.md),
@@ -250,19 +282,19 @@ res <- mysterycall_acceptance_rate_calc(
   insurance_groups = c("Medicaid", "Blue Cross/Blue Shield")
 )
 print(res)
-#> Medicaid acceptance rate: 20/26 = 76.9% (95% CI: 57.9%-89.0%)
-#> Blue Cross/Blue Shield acceptance rate: 23/31 = 74.2% (95% CI: 56.8%-86.3%) 
-#> Physicians accepted Medicaid at 76.9% vs Blue Cross/Blue Shield at 74.2%, a gap of 2.7 percentage points. 
+#> Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)
+#> Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%) 
+#> Physicians accepted Medicaid at 100.0% vs Blue Cross/Blue Shield at 100.0%, a gap of 0.0 percentage points. 
 res$table
 #>                insurance n_total n_excluded n_numerator n_denominator rate_pct
-#> 1               Medicaid      40         14          20            26 76.92308
-#> 2 Blue Cross/Blue Shield      40          9          23            31 74.19355
+#> 1               Medicaid      40         14          26            26      100
+#> 2 Blue Cross/Blue Shield      40          9          31            31      100
 #>   ci_lower_pct ci_upper_pct
-#> 1     57.94845     88.96615
-#> 2     56.75386     86.29829
-#>                                                                      sentence
-#> 1               Medicaid acceptance rate: 20/26 = 76.9% (95% CI: 57.9%-89.0%)
-#> 2 Blue Cross/Blue Shield acceptance rate: 23/31 = 74.2% (95% CI: 56.8%-86.3%)
+#> 1     87.12711          100
+#> 2     88.97446          100
+#>                                                                        sentence
+#> 1               Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)
+#> 2 Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%)
 
 ## Without wait-time filter
 res2 <- mysterycall_acceptance_rate_calc(
