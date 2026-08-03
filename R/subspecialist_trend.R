@@ -64,6 +64,15 @@ NULL
 #'   shaded band per subspecialty; the limits are added to `$data` as
 #'   `density_low` / `density_high`. `NULL` (default) draws no interval. Treats
 #'   each count as Poisson given its year's population denominator.
+#' @param trend_test `FALSE` (default), `TRUE`, `"poisson"`, or
+#'   `"quasipoisson"`. When enabled, fits a per-subspecialty log-linear
+#'   regression of count on year with an offset of `log(population)` — i.e. a
+#'   model of the rate's annual change — and attaches the tidy result as
+#'   `attr(p, "trend_test")` (annual rate ratio, CI, percent change per year and
+#'   over the span, and the year-term p-value). `TRUE` uses Poisson (Wald);
+#'   `"quasipoisson"` uses a t-test on the overdispersion-scaled SE. The CI uses
+#'   `conf_level` when set, else 95%. When `label_ends` is on, each line's label
+#'   also shows the rate ratio per year and a significance star.
 #' @param numerator_source Character or `NULL`. Citation for the subspecialist
 #'   counts (e.g. `"ABOG certified-diplomate counts, 2013-2023"`). Recorded in
 #'   the provenance and, if set, shown in the figure caption.
@@ -91,8 +100,11 @@ NULL
 #'
 #' @return A ggplot2 object (invisibly). Its `$data` holds the computed density
 #'   table (`subspecialty`, `year`, `count`, `population`, `density`, plus
-#'   `density_low` / `density_high` when `conf_level` is set), and
-#'   `attr(p, "provenance")` holds a `mysterycall_provenance` record (metric,
+#'   `density_low` / `density_high` when `conf_level` is set). When
+#'   `trend_test` is enabled, `attr(p, "trend_test")` holds the per-subspecialty
+#'   trend statistics (and they are folded into the JSON/txt provenance
+#'   sidecars). `attr(p, "provenance")` holds a `mysterycall_provenance` record
+#'   (metric,
 #'   computation, numerator/denominator sources, package version, access date,
 #'   and creation timestamp). When saved, `<output>.provenance.txt` and (if
 #'   \pkg{jsonlite} is installed) `<output>.provenance.json` sidecars are written
@@ -130,6 +142,7 @@ mysterycall_subspecialist_trend <- function(
     point_size       = 1.9,
     line_width       = 1.0,
     conf_level       = NULL,
+    trend_test       = FALSE,
     numerator_source    = NULL,
     denominator_source  = paste0("U.S. Census Bureau, American Community Survey ",
                                  "1-year estimates, table B01001 (B01001_026E, ",
@@ -178,6 +191,16 @@ mysterycall_subspecialist_trend <- function(
   if (isTRUE(show_year_range))
     title <- sprintf("%s, %d–%d", title, min(years), max(years))
 
+  # ---- optional per-subspecialty trend statistic -----------------------------
+  do_test   <- !is.null(trend_test) && !isFALSE(trend_test)
+  trend_tbl <- NULL
+  if (do_test) {
+    fam <- if (isTRUE(trend_test)) "poisson"
+           else match.arg(as.character(trend_test), c("poisson", "quasipoisson"))
+    test_conf <- if (is.null(conf_level)) 0.95 else conf_level
+    trend_tbl <- .subspecialty_trend_test(d, fam, test_conf)
+  }
+
   # ---- provenance ------------------------------------------------------------
   prov <- .build_provenance(
     metric              = sprintf("Subspecialists per %s women",
@@ -185,8 +208,11 @@ mysterycall_subspecialist_trend <- function(
     computation         = sprintf(
       "density = count / population * %s%s",
       format(per, scientific = FALSE),
-      if (show_ci) sprintf("; %g%% exact Poisson CI on each rate",
-                           conf_level * 100) else ""),
+      paste0(
+        if (show_ci) sprintf("; %g%% exact Poisson CI on each rate",
+                             conf_level * 100) else "",
+        if (do_test) sprintf("; per-subspecialty %s trend of count on year (offset log population)",
+                             fam) else "")),
     numerator_desc      = "Subspecialist counts by subspecialty and year (user-supplied)",
     denominator_desc    = "Total female population by year",
     generated_by        = "mysterycall::mysterycall_subspecialist_trend()",
@@ -247,21 +273,37 @@ mysterycall_subspecialist_trend <- function(
 
   if (isTRUE(label_ends)) {
     ends <- d[d$year == max(years), , drop = FALSE]
+    ends$.lab <- ends$subspecialty
+    if (do_test) {
+      m    <- trend_tbl[match(ends$subspecialty, trend_tbl$subspecialty), ]
+      star <- ifelse(is.na(m$p_value), "",
+                ifelse(m$p_value < 0.001, "***",
+                  ifelse(m$p_value < 0.01, "**",
+                    ifelse(m$p_value < 0.05, "*", ""))))
+      ends$.lab <- ifelse(
+        is.na(m$rr_per_year), ends$subspecialty,
+        sprintf("%s\n(×%.3f/yr%s)", ends$subspecialty, m$rr_per_year, star)
+      )
+    }
     p <- p +
       ggplot2::geom_text(
         data    = ends,
-        mapping = ggplot2::aes(label = .data$subspecialty),
-        hjust = 0, nudge_x = 0.15, size = 3, show.legend = FALSE
+        mapping = ggplot2::aes(label = .data[[".lab"]]),
+        hjust = 0, nudge_x = 0.15, size = 3, lineheight = 0.9,
+        show.legend = FALSE
       ) +
       ggplot2::coord_cartesian(clip = "off")
   }
 
   attr(p, "provenance") <- prov
+  if (do_test) attr(p, "trend_test") <- trend_tbl
 
   if (!is.null(output_path)) {
     ggplot2::ggsave(output_path, plot = p, width = width, height = height, dpi = dpi)
     message("Saved: ", output_path)
-    if (isTRUE(write_provenance)) .write_provenance(prov, output_path, d)
+    if (isTRUE(write_provenance))
+      .write_provenance(prov, output_path, d,
+                        extra = if (do_test) list(trend_test = trend_tbl) else NULL)
   }
 
   invisible(p)
@@ -320,6 +362,51 @@ mysterycall_subspecialist_trend <- function(
       stringsAsFactors = FALSE
     )
   }))
+}
+
+# Per-subspecialty trend test: a log-linear regression of count on year with an
+# offset of log(population), i.e. a model of the rate's annual change. Returns a
+# tidy data frame — one row per subspecialty — with the annual rate ratio
+# (exp(beta_year)), its CI, the implied percent change per year and over the
+# observed span, and the year-term p-value. `family` is "poisson" (Wald z) or
+# "quasipoisson" (t with residual df, robust to overdispersion). Subspecialties
+# with fewer than two distinct years return an all-NA row (a slope is undefined).
+.subspecialty_trend_test <- function(d, family, conf) {
+  crit_z <- stats::qnorm(1 - (1 - conf) / 2)
+  subs   <- unique(d$subspecialty)
+  rows   <- lapply(subs, function(s) {
+    di      <- d[d$subspecialty == s, , drop = FALSE]
+    n_years <- length(unique(di$year))
+    base <- data.frame(
+      subspecialty = s, n_years = n_years, family = family,
+      rr_per_year = NA_real_, conf_low = NA_real_, conf_high = NA_real_,
+      pct_per_year = NA_real_, pct_total = NA_real_, p_value = NA_real_,
+      stringsAsFactors = FALSE
+    )
+    if (n_years < 2L) return(base)
+    fit <- tryCatch(
+      stats::glm(count ~ year, family = family,
+                 offset = log(di$population), data = di),
+      error = function(e) NULL
+    )
+    if (is.null(fit)) return(base)
+    co <- stats::coef(summary(fit))
+    if (!"year" %in% rownames(co)) return(base)
+    est  <- co["year", "Estimate"]
+    se   <- co["year", 2L]
+    pval <- co["year", ncol(co)]          # Pr(>|z|) or Pr(>|t|), last column
+    crit <- if (family == "quasipoisson")
+      stats::qt(1 - (1 - conf) / 2, df = stats::df.residual(fit)) else crit_z
+    span <- diff(range(di$year))
+    base$rr_per_year  <- exp(est)
+    base$conf_low     <- exp(est - crit * se)
+    base$conf_high    <- exp(est + crit * se)
+    base$pct_per_year <- (exp(est) - 1) * 100
+    base$pct_total    <- (exp(est * span) - 1) * 100
+    base$p_value      <- pval
+    base
+  })
+  do.call(rbind, rows)
 }
 
 # Exact (Poisson) confidence interval for a rate = count / population * per.

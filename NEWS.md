@@ -28,6 +28,13 @@
   `numerator_source`,
   `denominator_source` (defaulting to the Census ACS `B01001_026E` citation),
   `denominator_vintage`, `accessed`, `notes`, `caption`, `write_provenance`.
+- `mysterycall_subspecialist_trend()` gains a `trend_test` argument: fits a
+  per-subspecialty log-linear regression of count on year with an offset of
+  `log(population)` (Poisson or `"quasipoisson"`) and attaches the tidy result
+  as `attr(p, "trend_test")` — annual rate ratio, confidence interval, percent
+  change per year and over the span, and the year-term p-value. The statistics
+  fold into the `.txt`/`.json` provenance sidecars, and (with `label_ends`) each
+  line label shows the rate ratio per year and a significance star.
 - `mysterycall_subspecialist_trend()` gains a `conf_level` argument: when set
   (e.g. `0.95`) it computes an **exact Poisson confidence interval** for each
   rate (base R, no new dependency), draws it as a shaded band per subspecialty,

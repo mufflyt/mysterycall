@@ -78,6 +78,64 @@ test_that("both counts and population are required", {
   expect_error(mysterycall_subspecialist_trend(COUNTS_LONG), "Supply both")
 })
 
+test_that("trend_test attaches a per-subspecialty rate-ratio table", {
+  skip_if_not_installed("ggplot2")
+  # rising Gyn Onc, flat Urogyn, over a full decade
+  cts <- data.frame(
+    subspecialty = rep(c("Gyn Onc", "Urogyn"), each = 6),
+    year  = rep(seq(2013, 2023, by = 2), times = 2),
+    count = c(1000, 1100, 1210, 1331, 1464, 1610,   # ~+10%/yr compounded
+              1000, 1000, 1000, 1000, 1000, 1000)   # flat
+  )
+  pop <- stats::setNames(rep(1.6e8, 6), seq(2013, 2023, by = 2))
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(cts, population = pop, trend_test = TRUE)
+  )
+  tt <- attr(p, "trend_test")
+  expect_s3_class(tt, "data.frame")
+  expect_setequal(tt$subspecialty, c("Gyn Onc", "Urogyn"))
+  expect_true(all(c("rr_per_year", "conf_low", "conf_high",
+                    "pct_per_year", "p_value") %in% names(tt)))
+  # rising series: rate ratio per year clearly > 1 and significant
+  go <- tt[tt$subspecialty == "Gyn Onc", ]
+  expect_gt(go$rr_per_year, 1)
+  expect_lt(go$p_value, 0.05)
+  # flat series: rate ratio ~ 1
+  ug <- tt[tt$subspecialty == "Urogyn", ]
+  expect_equal(ug$rr_per_year, 1, tolerance = 1e-6)
+  # provenance notes the method
+  expect_match(attr(p, "provenance")$computation, "trend of count on year")
+})
+
+test_that("quasipoisson trend_test is accepted and CI folds into JSON sidecar", {
+  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("jsonlite")
+  out  <- tempfile(fileext = ".png")
+  base <- tools::file_path_sans_ext(out)
+  json <- paste0(base, ".provenance.json")
+  txt  <- paste0(base, ".provenance.txt")
+  on.exit(unlink(c(out, json, txt)), add = TRUE)
+  suppressMessages(suppressWarnings(mysterycall_subspecialist_trend(
+    COUNTS_LONG, population = FEM_POP, trend_test = "quasipoisson",
+    output_path = out
+  )))
+  parsed <- jsonlite::fromJSON(json)
+  expect_true("trend_test" %in% names(parsed))
+  expect_true(all(parsed$trend_test$family == "quasipoisson"))
+})
+
+test_that("a single-year subspecialty yields an NA trend row, not an error", {
+  skip_if_not_installed("ggplot2")
+  one <- data.frame(subspecialty = "Solo", year = 2013L, count = 100)
+  p <- suppressWarnings(
+    mysterycall_subspecialist_trend(one, population = c(`2013` = 1.6e8),
+                                    trend_test = TRUE)
+  )
+  tt <- attr(p, "trend_test")
+  expect_true(is.na(tt$rr_per_year))
+  expect_equal(tt$n_years, 1L)
+})
+
 test_that("conf_level adds an exact Poisson CI bracketing each rate", {
   skip_if_not_installed("ggplot2")
   p <- suppressWarnings(

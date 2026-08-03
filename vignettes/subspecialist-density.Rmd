@@ -114,6 +114,23 @@ head(p_ci$data[, c("subspecialty", "year", "density",
                    "density_low", "density_high")])
 ```
 
+### A statistic, not just a line
+
+`trend_test` fits a per-subspecialty log-linear regression of count on year
+(offset `log(population)`) — a model of the rate's annual change — and attaches
+the tidy result. Each line's end label also gains the rate ratio per year and a
+significance star.
+
+```{r trend-test}
+p_stat <- mysterycall_subspecialist_trend(counts, population = fem_pop,
+                                          trend_test = "quasipoisson")
+attr(p_stat, "trend_test")[, c("subspecialty", "rr_per_year",
+                               "conf_low", "conf_high", "p_value")]
+```
+
+Use `"quasipoisson"` when the counts are overdispersed; the p-value then comes
+from a t-test on the overdispersion-scaled standard error.
+
 ## 4. The two-point infographic
 
 When you only need the endpoints, the infographic renders a badge per

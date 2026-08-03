@@ -22,6 +22,7 @@ mysterycall_subspecialist_trend(
   point_size = 1.9,
   line_width = 1,
   conf_level = NULL,
+  trend_test = FALSE,
   numerator_source = NULL,
   denominator_source = paste0("U.S. Census Bureau, American Community Survey ",
     "1-year estimates, table B01001 (B01001_026E, ", "total female population)"),
@@ -83,6 +84,16 @@ shaded band per subspecialty; the limits are added to \code{$data} as
 \code{density_low} / \code{density_high}. \code{NULL} (default) draws no interval. Treats
 each count as Poisson given its year's population denominator.}
 
+\item{trend_test}{\code{FALSE} (default), \code{TRUE}, \code{"poisson"}, or
+\code{"quasipoisson"}. When enabled, fits a per-subspecialty log-linear
+regression of count on year with an offset of \code{log(population)} -- i.e. a
+model of the rate's annual change -- and attaches the tidy result as
+\code{attr(p, "trend_test")} (annual rate ratio, CI, percent change per year and
+over the span, and the year-term p-value). \code{TRUE} uses Poisson (Wald);
+\code{"quasipoisson"} uses a t-test on the overdispersion-scaled SE. The CI uses
+\code{conf_level} when set, else 95\%. When \code{label_ends} is on, each line's label
+also shows the rate ratio per year and a significance star.}
+
 \item{numerator_source}{Character or \code{NULL}. Citation for the subspecialist
 counts (e.g. \code{"ABOG certified-diplomate counts, 2013-2023"}). Recorded in
 the provenance and, if set, shown in the figure caption.}
@@ -119,7 +130,9 @@ carrying the record and the per-point density table. Default \code{TRUE}.}
 \value{
 A ggplot2 object (invisibly). Its \code{$data} holds the computed density
 table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}, plus
-\code{density_low} / \code{density_high} when \code{conf_level} is set), and
+\code{density_low} / \code{density_high} when \code{conf_level} is set). When
+\code{trend_test} is enabled, \code{attr(p, "trend_test")} holds the per-subspecialty
+trend statistics (and they are folded into the JSON/txt provenance sidecars).
 \code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record (metric,
 computation, numerator/denominator sources, package version, access date,
 and creation timestamp). When saved, \verb{<output>.provenance.txt} and (if

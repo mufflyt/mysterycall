@@ -66,8 +66,9 @@ NULL
   paste0("Source — ", cap, ".")
 }
 
-# Human-readable multi-line provenance block, optionally with a per-point table.
-.format_provenance <- function(prov, data = NULL) {
+# Human-readable multi-line provenance block, optionally with a per-point table
+# and any number of named `extra` tables (each rendered as its own section).
+.format_provenance <- function(prov, data = NULL, extra = NULL) {
   ln  <- function(label, value) {
     if (is.null(value) || (length(value) == 1L && is.na(value))) return(NULL)
     sprintf("%-15s %s", paste0(label, ":"), paste(value, collapse = ", "))
@@ -103,12 +104,25 @@ NULL
                     strrep("-", 16), "\n",
                     paste(tbl_txt, collapse = "\n"))
   }
+
+  for (nm in names(extra)) {
+    ex <- extra[[nm]]
+    if (is.data.frame(ex) && nrow(ex)) {
+      num <- vapply(ex, is.numeric, logical(1))
+      ex[num] <- lapply(ex[num], function(v) ifelse(v == round(v), v, round(v, 4)))
+      ex_txt <- utils::capture.output(print(ex, row.names = FALSE))
+      title  <- gsub("_", " ", nm)
+      block  <- paste0(block, "\n\n", title, "\n",
+                       strrep("-", nchar(title)), "\n",
+                       paste(ex_txt, collapse = "\n"))
+    }
+  }
   block
 }
 
 # Machine-readable payload for the JSON sidecar: the provenance record plus the
-# per-point data table, wrapped with a schema tag.
-.provenance_payload <- function(prov, data = NULL) {
+# per-point data table (and any named `extra` tables), wrapped with a schema tag.
+.provenance_payload <- function(prov, data = NULL, extra = NULL) {
   payload <- list(
     schema         = "mysterycall/provenance",
     schema_version = "1",
@@ -116,23 +130,25 @@ NULL
   )
   if (!is.null(data) && is.data.frame(data) && nrow(data))
     payload$data <- data
+  if (length(extra))
+    payload[names(extra)] <- extra
   payload
 }
 
 # Write the provenance next to `output_path` (same basename): always a
 # human-readable ".provenance.txt", and — when jsonlite is available — a
 # machine-readable ".provenance.json". Returns the written paths invisibly.
-.write_provenance <- function(prov, output_path, data = NULL) {
+.write_provenance <- function(prov, output_path, data = NULL, extra = NULL) {
   base  <- tools::file_path_sans_ext(output_path)
   txt   <- paste0(base, ".provenance.txt")
-  writeLines(.format_provenance(prov, data), txt)
+  writeLines(.format_provenance(prov, data, extra), txt)
   message("Provenance: ", txt)
   written <- txt
 
   if (requireNamespace("jsonlite", quietly = TRUE)) {
     json <- paste0(base, ".provenance.json")
     writeLines(
-      jsonlite::toJSON(.provenance_payload(prov, data),
+      jsonlite::toJSON(.provenance_payload(prov, data, extra),
                        auto_unbox = TRUE, pretty = TRUE, na = "null",
                        digits = NA),
       json
