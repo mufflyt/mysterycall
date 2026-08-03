@@ -476,7 +476,7 @@ bg_sf_enriched <- bg_sf |>
 
 This enriched block group layer is ready for the isochrone intersection
 step described in
-[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html).
+`vignette("create_isochrones", package = "mysterycall")`.
 
 ## Usage Tips
 

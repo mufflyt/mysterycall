@@ -128,6 +128,9 @@ publication maps now live in the mysterymaps package.
   : Get ACS Adult Population (Ages 18-90, Both Sexes) by Census Tract
 - [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
   : Get ACS Female Population (Ages 18-90) by Census Tract
+- [`mysterycall_census_female_population()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_census_female_population.md)
+  : Fetch total female population by year (denominator for density
+  figures)
 - [`mysterycall_get_payer_mix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_payer_mix.md)
   : Build a county payer mix from ACS health-insurance coverage tables
 - [`mysterycall_get_county_provider_counts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_county_provider_counts.md)
@@ -808,6 +811,10 @@ flow diagrams.
   : Waffle chart of insurance acceptance rates
 - [`mysterycall_bw_theme()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bw_theme.md)
   : Greene-journal-ready monochrome ggplot2 theme
+- [`mysterycall_subspecialist_infographic()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_infographic.md)
+  : Workforce-density infographic for OB-GYN subspecialists
+- [`mysterycall_subspecialist_trend()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_trend.md)
+  : Trend of OB-GYN subspecialist density per 100,000 women over time
 
 ## Reporting and Manuscript Tables
 
@@ -1243,12 +1250,6 @@ Further analysis, power, workflow, and utility functions.
 - [`mysterycall_ttest_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ttest_power.md)
   : Analytic power for a two-group continuous outcome under unequal
   allocation
-- [`logging-utils`](https://mufflyt.github.io/mysterycall/reference/logging-utils.md)
-  : Comprehensive Logging Utilities for mysterycall
-- [`preflight-checks`](https://mufflyt.github.io/mysterycall/reference/preflight-checks.md)
-  : Preflight Checks for Mysterycall Workflows
-- [`progress-bars`](https://mufflyt.github.io/mysterycall/reference/progress-bars.md)
-  : Beautiful Progress Bars for mysterycall
 
 ## S3 Methods
 

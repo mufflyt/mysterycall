@@ -121,3 +121,6 @@
 
 - [Assembling supplementary digital
   content](https://mufflyt.github.io/mysterycall/articles/supplementary-digital-content.md):
+
+- [Subspecialist density per 100,000
+  women](https://mufflyt.github.io/mysterycall/articles/subspecialist-density.md):

@@ -25,6 +25,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/articles/provider-classification.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/articles/subspecialist-density.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/supplementary-digital-content.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/table-generation.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html</loc></url>
@@ -217,6 +218,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_caps.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_cascade_stage.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_categorize_wait.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_census_female_population.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_check_consistency.html</loc></url>
@@ -495,6 +497,8 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_infographic.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_trend.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_census.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_county_enrollment.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_demographics.html</loc></url>
