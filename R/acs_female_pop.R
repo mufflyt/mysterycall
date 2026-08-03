@@ -40,6 +40,8 @@ mysterycall_get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose 
   if (year < 2009 || year > 2023) {
     stop(sprintf("Invalid year: %d. ACS 5-year data available for 2009-2023.", year))
   }
+  # This function always pulls tract-level data, which the 2020 Census redrew.
+  .mc_check_acs_vintage(year, "tract", "mysterycall_get_acs_women_18_90()")
 
   if (verbose) {
     message("")

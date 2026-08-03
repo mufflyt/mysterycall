@@ -22,7 +22,13 @@
 #' @param fallback Logical. When `TRUE` (default) unmatched addresses are retried
 #'   one at a time via Nominatim then ArcGIS. Nominatim asks callers to stay
 #'   under ~1 request/second, so this is slow for large unmatched sets.
-#' @param benchmark,vintage Census geocoder benchmark and vintage.
+#' @param benchmark,vintage Census geocoder benchmark and vintage. Default to the
+#'   package-wide pinned pair (`.MC_CENSUS_BENCHMARK` / `.MC_CENSUS_VINTAGE`,
+#'   currently `Public_AR_Current` / `Census2020_Current`), which is what makes
+#'   the documented 2020 GEOIDs a guarantee rather than a coincidence. Passing
+#'   `"Current_Current"` tracks whatever the Bureau serves as current and will
+#'   silently change vintage under you; it also renames geography layers, which
+#'   [mysterycall_assign_area_covariates()] would then fail to join.
 #' @param verbose Logical; print per-batch progress. Default `TRUE`.
 #'
 #' @return `data` with six columns appended: `geo_lat`, `geo_long`,
@@ -46,8 +52,8 @@ mysterycall_geocode_address <- function(data,
                                         zip_col    = "zip",
                                         batch_size = 1000L,
                                         fallback   = TRUE,
-                                        benchmark  = "Public_AR_Current",
-                                        vintage    = "Current_Current",
+                                        benchmark  = .MC_CENSUS_BENCHMARK,
+                                        vintage    = .MC_CENSUS_VINTAGE,
                                         verbose    = TRUE) {
   checkmate::assert_data_frame(data, min.rows = 1L)
   checkmate::assert_subset(c(street_col, city_col, state_col, zip_col), names(data))
@@ -153,8 +159,8 @@ mysterycall_geocode_address <- function(data,
 #' @family npi
 #' @keywords internal
 .mc_build_census_batch_request <- function(addresses,
-                                           benchmark = "Public_AR_Current",
-                                           vintage = "Current_Current",
+                                           benchmark = .MC_CENSUS_BENCHMARK,
+                                           vintage = .MC_CENSUS_VINTAGE,
                                            request_geographies = TRUE) {
   stopifnot(is.data.frame(addresses), nrow(addresses) > 0)
   batch_data <- data.frame(

@@ -75,6 +75,22 @@ mysterycall_assign_area_covariates <- function(data,
   data[["tract"]] <- pull("tract")
   data[["msa"]]   <- pull("msa")
 
+  # A vintage roll or layer rename produces geocoder responses that parse fine
+  # but carry no ZCTA, which would otherwise surface as uniformly NA covariates
+  # and read as ordinary geocoding loss. Distinguish the two: if every point the
+  # geocoder answered for lacks a ZCTA, the layer is missing, not the data.
+  n_ok <- sum(vapply(geo_u, function(g) isTRUE(g$ok), logical(1L)))
+  if (n_ok > 0L && all(is.na(data[["zcta"]]))) {
+    warning(
+      sprintf(paste0(
+        "Census geocoder returned %d response(s) at vintage '%s' but no ZIP Code ",
+        "Tabulation Area layer, so ADI/SVI will be entirely NA. The layer was ",
+        "most likely renamed by a vintage change; see .mc_geo_layer()."),
+        n_ok, .MC_CENSUS_VINTAGE),
+      call. = FALSE
+    )
+  }
+
   cov <- integer(0L)
 
   if ("adi" %in% which) {
@@ -107,24 +123,69 @@ mysterycall_assign_area_covariates <- function(data,
   data
 }
 
+#' Census geocoder benchmark and vintage used package-wide
+#'
+#' Pinned deliberately. \code{"Current_Current"} would track whatever the Census
+#' Bureau currently serves, so a Bureau-side vintage roll would silently change
+#' the geography behind every result while the bundled ZCTA-keyed datasets
+#' (\code{\link{adi_zcta}}, \code{\link{svi_zcta}}, \code{\link{zcta_tract_xwalk}})
+#' stayed on 2020 boundaries. Pinning keeps geocoded keys and bundled data on the
+#' same vintage. Change these two constants together, and only alongside
+#' regenerated 2030-vintage datasets.
+#'
+#' @format Character scalars.
+#' @family data integrity
+#' @keywords internal
+#' @name mc-census-vintage
+.MC_CENSUS_BENCHMARK <- "Public_AR_Current"
+
+#' @rdname mc-census-vintage
+.MC_CENSUS_VINTAGE <- "Census2020_Current"
+
+#' Resolve a Census geography layer whose name varies by vintage
+#'
+#' The geocoder renames layers between vintages -- the ZCTA layer is
+#' \code{"Zip Code Tabulation Areas"} under \code{Census2020_Current} but
+#' \code{"2020 Census ZIP Code Tabulation Areas"} under \code{Current_Current}.
+#' Matching an exact string therefore couples the parser to one vintage, and the
+#' failure mode is a silent \code{NA} rather than an error. Match on a substring
+#' instead so a rename degrades to nothing.
+#'
+#' @param g Parsed \code{result$geographies} list from the geocoder.
+#' @param pattern Case-insensitive fixed substring identifying the layer.
+#' @return The matching layer (a list), or \code{NULL} when absent.
+#' @family data integrity
+#' @keywords internal
+.mc_geo_layer <- function(g, pattern) {
+  hit <- grep(pattern, names(g), ignore.case = TRUE, fixed = FALSE)
+  if (!length(hit)) return(NULL)
+  g[[hit[1L]]]
+}
+
 #' Reverse-geocode one coordinate to ZCTA / tract / MSA
 #'
-#' Calls the US Census Bureau coordinate geocoder and extracts the 2020 ZCTA,
-#' census tract, and Metropolitan Statistical Area. Returns \code{NA} keys on
-#' any network error, non-US point, or missing input.
+#' Calls the US Census Bureau coordinate geocoder at the pinned vintage
+#' (\code{.MC_CENSUS_VINTAGE}) and extracts the ZCTA, census tract, and
+#' Metropolitan Statistical Area. Returns \code{NA} keys on any network error,
+#' non-US point, or missing input.
 #'
 #' @param long,lat Longitude and latitude in decimal degrees.
-#' @return A list with character scalars \code{zcta}, \code{tract}, \code{msa}.
+#' @return A list with character scalars \code{zcta}, \code{tract}, \code{msa},
+#'   plus logical \code{ok} recording whether the geocoder returned a parseable
+#'   geography set. \code{ok = TRUE} with an \code{NA} key means the layer was
+#'   missing or the point fell outside it -- distinguishable from a network
+#'   failure, which yields \code{ok = FALSE}.
 #' @family data integrity
 #' @keywords internal
 .mc_geocode_point <- function(long, lat) {
-  na <- list(zcta = NA_character_, tract = NA_character_, msa = NA_character_)
+  na <- list(zcta = NA_character_, tract = NA_character_, msa = NA_character_,
+             ok = FALSE)
   if (is.na(long) || is.na(lat)) return(na)
   resp <- tryCatch(
     httr::GET(
       "https://geocoding.geo.census.gov/geocoder/geographies/coordinates",
-      query = list(x = long, y = lat, benchmark = "Public_AR_Current",
-                   vintage = "Census2020_Current", format = "json",
+      query = list(x = long, y = lat, benchmark = .MC_CENSUS_BENCHMARK,
+                   vintage = .MC_CENSUS_VINTAGE, format = "json",
                    layers = "all"),
       httr::timeout(30)
     ),
@@ -136,16 +197,62 @@ mysterycall_assign_area_covariates <- function(data,
     error = function(e) NULL
   )
   if (is.null(g)) return(na)
-  pick <- function(layer, field) {
-    r <- g[[layer]]
+  pick <- function(pattern, field) {
+    r <- .mc_geo_layer(g, pattern)
     if (length(r) >= 1L && !is.null(r[[1L]][[field]])) as.character(r[[1L]][[field]])
     else NA_character_
   }
   list(
-    zcta  = pick("Zip Code Tabulation Areas", "GEOID"),
-    tract = pick("Census Tracts", "GEOID"),
-    msa   = pick("Metropolitan Statistical Areas", "BASENAME")
+    zcta  = pick("zip code tabulation area", "GEOID"),
+    tract = pick("census tract",             "GEOID"),
+    msa   = pick("metropolitan statistical area", "BASENAME"),
+    ok    = TRUE
   )
+}
+
+#' Warn when an ACS year predates the boundary vintage of the bundled datasets
+#'
+#' The 2020 Census redrew tracts, block groups, and ZCTAs. ACS releases moved
+#' onto those boundaries over the 2021--2022 vintages, and the exact switch
+#' differs by geography. The datasets bundled here (\code{\link{adi_zcta}},
+#' \code{\link{svi_zcta}}, \code{\link{zcta_tract_xwalk}}) are built on the
+#' 2018--2022 ACS and are therefore 2020-vintage throughout.
+#'
+#' Pulling an earlier ACS year at a boundary-sensitive geography and joining the
+#' result to those datasets -- or to geocoded keys, which are also 2020-vintage
+#' -- mismatches wherever a tract or ZCTA was split, merged, or renumbered. The
+#' join does not error; it silently drops to \code{NA}. This warns instead.
+#'
+#' Silence with \code{options(mysterycall.quiet_vintage = TRUE)} when the
+#' mismatch is intended (for example, a deliberately historical series).
+#'
+#' @param year Integer ACS end-year requested.
+#' @param geography Character scalar geography passed to tidycensus.
+#' @param fn Character scalar naming the calling function, for the message.
+#' @return Invisibly \code{NULL}; called for the side effect.
+#' @family data integrity
+#' @keywords internal
+.mc_check_acs_vintage <- function(year, geography, fn) {
+  if (isTRUE(getOption("mysterycall.quiet_vintage", FALSE))) return(invisible(NULL))
+  if (!is.numeric(year) || length(year) != 1L || is.na(year)) return(invisible(NULL))
+  # Geographies the 2020 Census redrew. State/county/CBSA codes are stable and
+  # need no warning.
+  sensitive <- c("tract", "block group", "zcta",
+                 "zip code tabulation area", "county subdivision")
+  if (!tolower(geography) %in% sensitive) return(invisible(NULL))
+  if (year >= 2022L) return(invisible(NULL))
+  warning(
+    sprintf(paste0(
+      "%s: ACS year %d at geography '%s' may be on 2010-vintage boundaries, ",
+      "while this package's bundled ZCTA datasets and geocoded keys are ",
+      "2020-vintage (2018-2022 ACS). Joining across that boundary silently ",
+      "yields NA for split, merged, or renumbered areas. Use year >= 2022, ",
+      "join on a stable geography, or set ",
+      "options(mysterycall.quiet_vintage = TRUE) if this is intended."),
+      fn, as.integer(year), geography),
+    call. = FALSE
+  )
+  invisible(NULL)
 }
 
 #' Load a bundled package dataset by name

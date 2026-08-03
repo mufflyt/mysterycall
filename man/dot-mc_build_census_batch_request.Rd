@@ -6,8 +6,8 @@
 \usage{
 .mc_build_census_batch_request(
   addresses,
-  benchmark = "Public_AR_Current",
-  vintage = "Current_Current",
+  benchmark = .MC_CENSUS_BENCHMARK,
+  vintage = .MC_CENSUS_VINTAGE,
   request_geographies = TRUE
 )
 }

@@ -12,8 +12,8 @@ mysterycall_geocode_address(
   zip_col = "zip",
   batch_size = 1000L,
   fallback = TRUE,
-  benchmark = "Public_AR_Current",
-  vintage = "Current_Current",
+  benchmark = .MC_CENSUS_BENCHMARK,
+  vintage = .MC_CENSUS_VINTAGE,
   verbose = TRUE
 )
 }
@@ -30,7 +30,13 @@ line, city, state, and ZIP. Defaults \code{"street"}, \code{"city"}, \code{"stat
 one at a time via Nominatim then ArcGIS. Nominatim asks callers to stay
 under ~1 request/second, so this is slow for large unmatched sets.}
 
-\item{benchmark, vintage}{Census geocoder benchmark and vintage.}
+\item{benchmark, vintage}{Census geocoder benchmark and vintage. Default to the
+package-wide pinned pair (\code{.MC_CENSUS_BENCHMARK} / \code{.MC_CENSUS_VINTAGE},
+currently \code{Public_AR_Current} / \code{Census2020_Current}), which is what makes
+the documented 2020 GEOIDs a guarantee rather than a coincidence. Passing
+\code{"Current_Current"} tracks whatever the Bureau serves as current and will
+silently change vintage under you; it also renames geography layers, which
+\code{\link[=mysterycall_assign_area_covariates]{mysterycall_assign_area_covariates()}} would then fail to join.}
 
 \item{verbose}{Logical; print per-batch progress. Default \code{TRUE}.}
 }

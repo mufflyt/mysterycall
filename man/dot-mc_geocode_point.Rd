@@ -10,20 +10,28 @@
 \item{long, lat}{Longitude and latitude in decimal degrees.}
 }
 \value{
-A list with character scalars \code{zcta}, \code{tract}, \code{msa}.
+A list with character scalars \code{zcta}, \code{tract}, \code{msa},
+plus logical \code{ok} recording whether the geocoder returned a parseable
+geography set. \code{ok = TRUE} with an \code{NA} key means the layer was
+missing or the point fell outside it -- distinguishable from a network
+failure, which yields \code{ok = FALSE}.
 }
 \description{
-Calls the US Census Bureau coordinate geocoder and extracts the 2020 ZCTA,
-census tract, and Metropolitan Statistical Area. Returns \code{NA} keys on
-any network error, non-US point, or missing input.
+Calls the US Census Bureau coordinate geocoder at the pinned vintage
+(\code{.MC_CENSUS_VINTAGE}) and extracts the ZCTA, census tract, and
+Metropolitan Statistical Area. Returns \code{NA} keys on any network error,
+non-US point, or missing input.
 }
 \seealso{
 Other data integrity: 
 \code{\link{.mc_age_impute}()},
 \code{\link{.mc_age_key}()},
+\code{\link{.mc_check_acs_vintage}()},
 \code{\link{.mc_data}()},
+\code{\link{.mc_geo_layer}()},
 \code{\link{.mc_healthgrades_ages}()},
 \code{\link{.mc_state_to_abbr}()},
+\code{\link{mc-census-vintage}},
 \code{\link{mysterycall_assign_area_covariates}()},
 \code{\link{mysterycall_categorize_wait}()},
 \code{\link{mysterycall_clean_zip}()},

@@ -1,5 +1,53 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Census geography vintage
+
+The 2020 Census redrew tracts, block groups, and ZCTAs. Several paths could
+cross that boundary and fail silently as `NA` rather than erroring. All four are
+now closed.
+
+- **Census benchmark and vintage are pinned package-wide** via the new internal
+  constants `.MC_CENSUS_BENCHMARK` and `.MC_CENSUS_VINTAGE`
+  (`Public_AR_Current` / `Census2020_Current`). `mysterycall_geocode_address()`
+  previously defaulted to `vintage = "Current_Current"`, which tracks whatever
+  the Bureau currently serves, while its documentation promised 2020 GEOIDs.
+  Both vintages return identical geography today, so results do not change; the
+  pin makes the documented behavior a guarantee instead of a coincidence, and
+  keeps the geocoder in step with the 2020-vintage bundled datasets.
+
+- **Geography layers are now matched by substring, not exact name.** The
+  geocoder renames layers between vintages -- the ZCTA layer is
+  `"Zip Code Tabulation Areas"` under `Census2020_Current` but
+  `"2020 Census ZIP Code Tabulation Areas"` under `Current_Current`. The old
+  exact-string lookup would have returned `NA` for every row after a rename,
+  silently zeroing ADI and SVI. New internal helper `.mc_geo_layer()`.
+
+- **`mysterycall_assign_area_covariates()` now warns** when the geocoder answers
+  successfully but returns no ZCTA layer, which distinguishes a vintage or
+  layer-name break from ordinary geocoding loss. Previously both looked like
+  uniformly missing covariates.
+
+- **ACS pulls warn when the requested year predates the bundled boundary
+  vintage.** `mysterycall_get_acs_adults_18_90()`,
+  `mysterycall_get_acs_women_18_90()`, and `mysterycall_get_payer_mix()` accept
+  years back to 2009/2012, but the bundled `adi_zcta`, `svi_zcta`, and
+  `zcta_tract_xwalk` are 2020-vintage (2018--2022 ACS). Joining a pre-2022 pull
+  at a boundary-sensitive geography to those datasets silently drops split,
+  merged, or renumbered areas. Silence with
+  `options(mysterycall.quiet_vintage = TRUE)` when the mismatch is intended.
+  New internal helper `.mc_check_acs_vintage()`.
+
+## Documentation
+
+- `mysterycall_classify_ruca()` no longer claims a RUCA crosswalk is "bundled in
+  this package" -- none is, and the same help page already directed users to
+  USDA ERS. Adds a vintage warning: 2010 RUCA files are keyed to 2010 tracts,
+  which will not join cleanly to the 2020-vintage tract GEOIDs this package
+  produces.
+
+- `CITATION.cff` and `codemeta.json` reported version 1.4.0 while `DESCRIPTION`
+  and `NEWS.md` were at 1.6.3.9000. Synced.
+
 ## New features
 
 - `mysterycall_strobe_flow()` gains an `engine` argument. The default

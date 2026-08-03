@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this package, please cite it as below."
 title: "mysterycall: Mystery Caller Study Tools for Healthcare Access Research"
-version: "1.4.0"
-date-released: 2026-06-02
+version: "1.6.3.9000"
+date-released: 2026-08-02
 abstract: >
   mysterycall provides a complete workflow toolkit for mystery caller and audit
   studies evaluating patient access to healthcare. It supports provider roster
