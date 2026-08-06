@@ -517,10 +517,17 @@ mysterycall_lmm <- function(data,
 #' @param ... Ignored.
 #' @return `invisible(x)`.
 #' @family outcomes
+# Unit label for wait-time quantities: on the log1p scale when the model was
+# log-transformed, otherwise raw days. Shared by print() and plot() so their
+# axis/summary units cannot drift apart.
+.lmm_time_unit <- function(log_transformed) {
+  if (isTRUE(log_transformed)) "log1p(days)" else "days"
+}
+
 #' @export
 print.mysterycall_lmm <- function(x, digits = 2, ...) {
   reml_label <- if (x$REML) "REML" else "ML"
-  log_label  <- if (isTRUE(x$log_transformed)) "log1p(days)" else "days"
+  log_label  <- .lmm_time_unit(x$log_transformed)
   cat(sprintf(
     "Linear Mixed Model (%s)  n = %d  physicians = %d\n",
     reml_label, x$n, x$n_clusters
@@ -668,7 +675,10 @@ plot.mysterycall_lmm <- function(x, ...) {
     ) +
     ggplot2::theme_bw()
 
-  # Residuals vs fitted
+  # Residuals vs fitted. Units follow the fitted scale: under a log1p transform
+  # the residuals/fitted are on the log1p(days) scale, not raw days (mirrors the
+  # print() method so the two never disagree).
+  unit <- .lmm_time_unit(x$log_transformed)
   rv <- ggplot2::ggplot(df_rf, ggplot2::aes(x = .data$fitted, y = .data$residuals)) +
     ggplot2::geom_point(size = 1.5, alpha = 0.6) +
     ggplot2::geom_hline(yintercept = 0, colour = "steelblue", linewidth = 0.8, linetype = "dashed") +
@@ -676,9 +686,9 @@ plot.mysterycall_lmm <- function(x, ...) {
                          colour = "firebrick", linewidth = 0.7) +
     ggplot2::labs(
       title    = "Residuals vs Fitted",
-      subtitle = sprintf("Residual SD = %.2f days", x$sigma),
-      x = "Fitted values (days)",
-      y = "Residuals (days)"
+      subtitle = sprintf("Residual SD = %.2f %s", x$sigma, unit),
+      x = sprintf("Fitted values (%s)", unit),
+      y = sprintf("Residuals (%s)", unit)
     ) +
     ggplot2::theme_bw()
 
