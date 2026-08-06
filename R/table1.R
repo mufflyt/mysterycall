@@ -90,12 +90,11 @@ NULL
 #'
 #' @param p Numeric p-value.
 #'
-#' @return Formatted character string (e.g., "<0.001").
+#' @return Formatted character string (e.g., "< 0.001").
 #' @family table
 #' @keywords internal
 .t1_fmt_pval <- function(p) {
-  if (is.na(p)) return(NA_character_)
-  if (p < 0.001) "<0.001" else sprintf("%.3f", p)
+  .mc_format_p(p)
 }
 
 # -- Internal tests ------------------------------------------------------------
