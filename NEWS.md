@@ -21,6 +21,16 @@
 
 ## Bug fixes
 
+- `mysterycall_run_analysis()` now reconciles the phase-2 column-name contract
+  with `mysterycall_run_workflow()`. The workflow renames incoming columns to
+  short "standard" names (e.g. `reason_for_exclusions` → `exclusion_reasons`),
+  while `run_analysis()` documents the long names as defaults — so piping the
+  workflow's output straight in used to *silently skip* the exclusion-dependent
+  steps (the column simply "wasn't found"). `run_analysis()` now resolves a
+  documented column to its workflow alias when the documented name is absent
+  (via a new internal `.mc_resolve_col()` helper), and applies the same
+  tolerance to the QC physician-name column (`physician_information` /
+  `physician_info`). An explicitly-set column still wins whenever it is present.
 - `mysterycall_run_analysis()` no longer emits a deprecation warning on every
   run. Its `acceptance_rates` step now calls an internal worker
   (`.mc_insurance_acceptance_rates()`) instead of the deprecated
@@ -35,6 +45,37 @@
 - Added the 68 documented-but-unindexed topics (datasets, `print()` /
   `as.data.frame()` methods, and additional exported functions) to the pkgdown
   reference index so `pkgdown::build_site()` no longer errors on missing topics.
+
+## Error messages
+
+- Bare `stopifnot()` input checks across ~11 files now carry informative,
+  named messages (e.g. `` "`data` must be a data frame" = is.data.frame(data) ``)
+  so an invalid argument reports *what* was wrong instead of echoing the raw
+  predicate. Covers `mysterycall_caller_drift()`,
+  `mysterycall_wait_time_crossover()`, `mysterycall_call_productivity()`,
+  `mysterycall_caller_reliability()`, `mysterycall_compare_waves()`,
+  `mysterycall_missingness_mcar()`, `mysterycall_results_paragraph()`,
+  `mysterycall_write_results_paragraph()`, `mysterycall_nb_power()`,
+  `mysterycall_geocode_address()`, and the `green_journal` helpers.
+
+## Tests and internals
+
+- Replaced 10 always-skipped "placeholder to register coverage" tests with real
+  offline assertions. The relocated map/isochrone/HRR helpers (`create_isochrones()`,
+  `hrr()`, `map_create_base()`, …) actually error with a pointer to the
+  `mysterymaps` package — no network needed — and are now tested as such; the
+  ACS fetchers are tested for their offline year/argument guards; and
+  `mysterycall_geocode_city_state()` is tested against its bundled lookup table.
+  Removed one placeholder for a `scrape_physicians` function that does not exist.
+- Cleaned up a stale "KNOWN DEFECT (documented with FIXME)" header in
+  `test-call-outcomes-robustness.R`: duplicate options within a call (`"a;a"`)
+  already collapse to one everywhere (`mean_options_per_call` counts distinct
+  options), and a test already pins that — the comment was describing a bug that
+  no longer exists. Verified `calendar_days` is a documented *secondary* wait-time
+  column (canonical is `business_days_until_appointment`), i.e. working as
+  designed, not a defect.
+- Enabled `Config/testthat/parallel: true` so the test suite runs across
+  multiple cores in CI and locally.
 
 ## Census geography vintage
 

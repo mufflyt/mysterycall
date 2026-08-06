@@ -100,11 +100,11 @@ mysterycall_results_paragraph <- function(model_result,
     )
   }
 
-  stopifnot(is.character(ref_group),    length(ref_group)    == 1L, nchar(ref_group) > 0L)
-  stopifnot(is.character(exposure_col), length(exposure_col) == 1L, nchar(exposure_col) > 0L)
-  stopifnot(is.character(outcome_label),length(outcome_label)== 1L)
-  stopifnot(is.character(subject), length(subject) == 1L, !is.na(subject))
-  stopifnot(is.numeric(alpha), length(alpha) == 1L, alpha > 0, alpha < 1)
+  stopifnot("`ref_group` must be a non-empty string" = is.character(ref_group) && length(ref_group) == 1L && nchar(ref_group) > 0L)
+  stopifnot("`exposure_col` must be a non-empty string" = is.character(exposure_col) && length(exposure_col) == 1L && nchar(exposure_col) > 0L)
+  stopifnot("`outcome_label` must be a single string" = is.character(outcome_label) && length(outcome_label) == 1L)
+  stopifnot("`subject` must be a single non-NA string" = is.character(subject) && length(subject) == 1L && !is.na(subject))
+  stopifnot("`alpha` must be a number in (0, 1)" = is.numeric(alpha) && length(alpha) == 1L && alpha > 0 && alpha < 1)
 
   or_digits <- as.integer(or_digits)
   ci_digits <- as.integer(ci_digits)

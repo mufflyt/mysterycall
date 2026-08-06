@@ -69,13 +69,13 @@ mysterycall_nb_power <- function(n_physicians,
   }
 
   stopifnot(
-    is.numeric(n_physicians), n_physicians >= 2,
-    is.numeric(irr), irr > 0,
-    is.numeric(theta), theta > 0,
-    is.numeric(baseline_mean), baseline_mean > 0,
-    is.numeric(sigma_u), sigma_u >= 0,
-    is.numeric(alpha), alpha > 0, alpha < 1,
-    is.numeric(n_sim), n_sim >= 10
+    "`n_physicians` must be numeric and >= 2" = is.numeric(n_physicians) && n_physicians >= 2,
+    "`irr` must be a positive number" = is.numeric(irr) && irr > 0,
+    "`theta` must be a positive number" = is.numeric(theta) && theta > 0,
+    "`baseline_mean` must be a positive number" = is.numeric(baseline_mean) && baseline_mean > 0,
+    "`sigma_u` must be numeric and >= 0" = is.numeric(sigma_u) && sigma_u >= 0,
+    "`alpha` must be a number in (0, 1)" = is.numeric(alpha) && alpha > 0 && alpha < 1,
+    "`n_sim` must be numeric and >= 10" = is.numeric(n_sim) && n_sim >= 10
   )
 
   n_physicians        <- as.integer(n_physicians)

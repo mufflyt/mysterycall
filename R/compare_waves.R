@@ -44,9 +44,9 @@ mysterycall_compare_waves <- function(
     ref_wave  = NULL
 ) {
   # ---- input validation -------------------------------------------------------
-  stopifnot(is.data.frame(data))
-  stopifnot(is.character(wave_col),    length(wave_col)    == 1)
-  stopifnot(is.character(outcome_col), length(outcome_col) == 1)
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
+  stopifnot("`wave_col` must be a single column name" = is.character(wave_col) && length(wave_col) == 1)
+  stopifnot("`outcome_col` must be a single column name" = is.character(outcome_col) && length(outcome_col) == 1)
   if (!wave_col %in% names(data))
     stop(sprintf(
       "wave_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -58,7 +58,7 @@ mysterycall_compare_waves <- function(
       outcome_col, paste(names(data), collapse = ", ")
     ), call. = FALSE)
   if (!is.null(group_col)) {
-    stopifnot(is.character(group_col), length(group_col) == 1)
+    stopifnot("`group_col` must be a single column name" = is.character(group_col) && length(group_col) == 1)
     if (!group_col %in% names(data))
       stop(sprintf(
         "group_col '%s' not found in `data`.\nAvailable columns: %s",

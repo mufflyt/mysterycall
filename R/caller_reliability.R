@@ -54,9 +54,9 @@ mysterycall_caller_reliability <- function(
     alpha     = 0.05
 ) {
   # ---- input validation -------------------------------------------------------
-  stopifnot(is.data.frame(data))
-  stopifnot(is.character(caller_col),  length(caller_col)  == 1)
-  stopifnot(is.character(outcome_col), length(outcome_col) == 1)
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
+  stopifnot("`caller_col` must be a single column name" = is.character(caller_col) && length(caller_col) == 1)
+  stopifnot("`outcome_col` must be a single column name" = is.character(outcome_col) && length(outcome_col) == 1)
   if (!caller_col  %in% names(data)) stop(sprintf(
     "caller_col '%s' not found in `data`.\nAvailable columns: %s",
     caller_col, paste(names(data), collapse = ", ")
@@ -66,20 +66,20 @@ mysterycall_caller_reliability <- function(
     outcome_col, paste(names(data), collapse = ", ")
   ), call. = FALSE)
   if (!is.null(gold_col)) {
-    stopifnot(is.character(gold_col), length(gold_col) == 1)
+    stopifnot("`gold_col` must be a single column name" = is.character(gold_col) && length(gold_col) == 1)
     if (!gold_col %in% names(data)) stop(sprintf(
       "gold_col '%s' not found in `data`.\nAvailable columns: %s",
       gold_col, paste(names(data), collapse = ", ")
     ), call. = FALSE)
   }
   if (!is.null(pair_col)) {
-    stopifnot(is.character(pair_col), length(pair_col) == 1)
+    stopifnot("`pair_col` must be a single column name" = is.character(pair_col) && length(pair_col) == 1)
     if (!pair_col %in% names(data)) stop(sprintf(
       "pair_col '%s' not found in `data`.\nAvailable columns: %s",
       pair_col, paste(names(data), collapse = ", ")
     ), call. = FALSE)
   }
-  stopifnot(is.numeric(alpha), alpha > 0, alpha < 1)
+  stopifnot("`alpha` must be a number in (0, 1)" = is.numeric(alpha) && alpha > 0 && alpha < 1)
 
   type <- match.arg(type)
 

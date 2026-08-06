@@ -73,9 +73,9 @@ mysterycall_write_results_paragraph <- function(
   }
 
   # ---- validate other inputs --------------------------------------------------
-  stopifnot(is.character(ref_group),    length(ref_group)    == 1, nchar(ref_group) > 0)
-  stopifnot(is.character(exposure_col), length(exposure_col) == 1, nchar(exposure_col) > 0)
-  stopifnot(is.numeric(alpha), alpha > 0, alpha < 1)
+  stopifnot("`ref_group` must be a non-empty string" = is.character(ref_group) && length(ref_group) == 1 && nchar(ref_group) > 0)
+  stopifnot("`exposure_col` must be a non-empty string" = is.character(exposure_col) && length(exposure_col) == 1 && nchar(exposure_col) > 0)
+  stopifnot("`alpha` must be a number in (0, 1)" = is.numeric(alpha) && alpha > 0 && alpha < 1)
 
   irr_digits <- as.integer(irr_digits)
   ci_digits  <- as.integer(ci_digits)
