@@ -4,7 +4,26 @@ _Found while using the package to model ENT appointment access/timeliness (grace
 
 **Items 22–47 are documented in the "Wave 2–3 audit" section below** (the priority table and detailed entries 1–21 that follow cover the first-wave findings). **Items 48–50** (dataset-build + cross-function-contract audit) are in the "Wave 4" section.
 
-> ### ⚠️ STATUS: source is under concurrent fixing (as of 2026-07-14 ~22:31)
+> ### ✅ STATUS (2026-08-06 source re-audit): items 1–47 are all FIXED and test-covered
+> A fresh line-by-line re-audit of **every item 1–47** against the current `main`
+> source tree confirms all 47 are resolved, and each has at least one
+> regression/coverage test. The 2026-07-14 "STILL LIVE" list further down is
+> therefore **superseded** — #2, #16, #18, #25, #26, #29, #30, #34, #42 and the
+> rest were fixed after that note was written.
+>
+> **Sole residual found in this pass — now fixed:** item **#46** (`lmm.R`) had its
+> `print()` method corrected to show `log1p(days)` under a log transform, but the
+> `plot()` method still hardcoded `days`. Both now share a `.lmm_time_unit()`
+> helper (with a regression test), so the residuals-vs-fitted panel and the printed
+> summary can no longer disagree.
+>
+> **Not covered by this pass (Wave 4 — still to verify):** #48
+> (`city_state_to_lat_long` dataset rebuild), #49 (benchmark dead code), #50
+> (`acceptance_waffle.R` BCBS label).
+>
+> The 2026-07-14 blocks below are retained for history.
+
+> ### ⚠️ STATUS (SUPERSEDED — see 2026-08-06 note above): source is under concurrent fixing (as of 2026-07-14 ~22:31)
 > A separate effort is actively editing `~/mysterycall/R/` — ~20 files modified, uncommitted. Several catalogued bugs are **already fixed in source**, verified: **#22** (`exclusion_summary` now `n_included <- sum(col_vec == inclusion_value)`), **#41** (`plot_effects` now `as.data.frame(eff, type = type)`), plus reported-fixed **#9, #12, #13, #38, #39**. The whole emmeans `asymp.LCL`/`lower.CL` contract class is resolved (all 8 consumers now use `intersect(...)` + `type="response"`).
 > **Treat the test suite as the arbiter of what is still live** — do not assume an item here is unfixed without re-checking current source. A full `devtools::test()` run was in progress at commit time.
 
