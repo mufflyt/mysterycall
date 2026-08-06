@@ -72,6 +72,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.3.9000" id="mysterycall-1639000-development-version">mysterycall 1.6.3.9000 (development version)<a class="anchor" aria-label="anchor" href="#mysterycall-1639000-development-version"></a></h2>
 <div class="section level3">
+<h3 id="dependencies-1-6-3-9000">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-1-6-3-9000"></a></h3>
+<ul><li>Trimmed unused <code>Suggests</code>: removed <code>easyr</code>, <code>htmltools</code>, and <code>memoise</code> (no code in the package references them). Moved the dev-tools <code>covr</code> and <code>pkgdown</code> out of <code>Suggests</code> into <code>Config/Needs/coverage</code> and <code>Config/Needs/website</code> (they are installed explicitly by CI, not needed as runtime suggestions). Net: <code>Suggests</code> drops from 62 to 57 packages, lightening <code>install.packages(dependencies = TRUE)</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-1-6-3-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-3-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/mysterycall_run_analysis.html">mysterycall_run_analysis()</a></code> no longer emits a deprecation warning on every run. Its <code>acceptance_rates</code> step now calls an internal worker (<code>.mc_insurance_acceptance_rates()</code>) instead of the deprecated <code><a href="../reference/mysterycall_insurance_acceptance_rates.html">mysterycall_insurance_acceptance_rates()</a></code>, with identical output. The public deprecated function is unchanged (still works and still warns for external callers).</li>
