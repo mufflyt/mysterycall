@@ -167,7 +167,7 @@ test_that("mysterycall_save_green_journal_figure requires ggplot object", {
   skip_if_not_installed("ggplot2")
   expect_error(
     suppressMessages(mysterycall_save_green_journal_figure("not_a_plot", "/tmp/fig")),
-    "inherits.*ggplot"
+    "must be a ggplot"
   )
 })
 
@@ -176,7 +176,7 @@ test_that("mysterycall_save_green_journal_figure requires path_stem character", 
   p <- suppressMessages(ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg)) + ggplot2::geom_point())
   expect_error(
     suppressMessages(mysterycall_save_green_journal_figure(p, 123)),
-    "is.character"
+    "non-empty string"
   )
 })
 
@@ -241,11 +241,11 @@ test_that("mysterycall_compose_map_density requires ggplot objects", {
 
   expect_error(
     suppressMessages(mysterycall_compose_map_density("not_a_plot", p1)),
-    "inherits.*ggplot"
+    "must be a ggplot"
   )
   expect_error(
     suppressMessages(mysterycall_compose_map_density(p1, "not_a_plot")),
-    "inherits.*ggplot"
+    "must be a ggplot"
   )
 })
 

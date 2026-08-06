@@ -152,7 +152,7 @@ test_that("mysterycall_compare_waves errors when ref_wave not in data", {
 test_that("mysterycall_compare_waves errors on non-data.frame input", {
   expect_error(
     mysterycall_compare_waves(list(a = 1), "wave", "offered"),
-    "is.data.frame"
+    "must be a data frame"
   )
 })
 

@@ -31,6 +31,14 @@
   (via a new internal `.mc_resolve_col()` helper), and applies the same
   tolerance to the QC physician-name column (`physician_information` /
   `physician_info`). An explicitly-set column still wins whenever it is present.
+- Resolved a name collision between two internal `.fmt_pvalue()` helpers: the
+  Kaplan-Meier one (`"p = 0.043"` / `"p < 0.001"`, for plot annotation) sorted
+  after and silently shadowed the disparities-table one, so
+  `mysterycall_disparities_table()` was formatting its p-values with the KM
+  helper's `"p = "` prefix instead of the intended spaced canonical. The KM
+  helper is now `.km_fmt_pvalue()`, leaving the disparities helper (which routes
+  through `.mc_format_p()`) as the sole `.fmt_pvalue()`. Disparities-table
+  p-values now read `"< 0.001"` / `"0.043"` as documented.
 - `mysterycall_run_analysis()` no longer emits a deprecation warning on every
   run. Its `acceptance_rates` step now calls an internal worker
   (`.mc_insurance_acceptance_rates()`) instead of the deprecated
