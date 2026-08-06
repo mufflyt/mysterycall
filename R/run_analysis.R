@@ -315,7 +315,10 @@ mysterycall_run_analysis <- function(
     required_ar <- c(insurance_col, exclusion_col, outcome_col, phone_col)
     if (all(required_ar %in% names(current_data))) {
       results[["acceptance_rates"]] <- .try("acceptance_rates", {
-        mysterycall_insurance_acceptance_rates(
+        # Internal worker (not the deprecated public wrapper) so the workflow
+        # reuses the exact same computation without emitting a deprecation
+        # warning on every run. See R/insurance_acceptance_rates.R.
+        .mc_insurance_acceptance_rates(
           data           = current_data,
           insurance_col  = insurance_col,
           exclusion_col  = exclusion_col,

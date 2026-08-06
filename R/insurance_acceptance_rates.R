@@ -109,6 +109,41 @@ mysterycall_insurance_acceptance_rates <- function(
                 "mysterycall_acceptance_rate_calc(medicaid_screen_group = ",
                 "\"Medicaid\") instead."))
 
+  .mc_insurance_acceptance_rates(
+    data                    = data,
+    insurance_col           = insurance_col,
+    exclusion_col           = exclusion_col,
+    days_col                = days_col,
+    medicaid_accept_col     = medicaid_accept_col,
+    phone_col               = phone_col,
+    contact_value           = contact_value,
+    reached_declined_values = reached_declined_values,
+    medicaid_label          = medicaid_label,
+    bcbs_label              = bcbs_label,
+    digits                  = digits,
+    output_dir              = output_dir,
+    filename                = filename)
+}
+
+# Internal worker: the identical acceptance-rate computation and manuscript
+# paragraph, WITHOUT the deprecation warning, so in-package callers (e.g.
+# mysterycall_run_analysis) reuse it without tripping .Deprecated(). Keep the
+# signature and defaults in lock-step with the exported wrapper above.
+.mc_insurance_acceptance_rates <- function(
+    data,
+    insurance_col       = "insurance",
+    exclusion_col       = "reason_for_exclusions",
+    days_col            = "business_days_until_appointment",
+    medicaid_accept_col = "does_the_physician_accept_medicaid",
+    phone_col           = "phone",
+    contact_value       = "Able to contact",
+    reached_declined_values = mysterycall_reached_declined_reasons(),
+    medicaid_label      = "Medicaid",
+    bcbs_label          = "Blue Cross/Blue Shield",
+    digits              = 1L,
+    output_dir          = NULL,
+    filename            = "insurance_acceptance_rates.csv") {
+
   # -- Validate inputs ----------------------------------------------------------
   checkmate::assert_data_frame(data, min.rows = 0)
   checkmate::assert_string(insurance_col)
