@@ -1,5 +1,14 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Dependencies
+
+- Trimmed unused `Suggests`: removed `easyr`, `htmltools`, and `memoise`
+  (no code in the package references them). Moved the dev-tools `covr` and
+  `pkgdown` out of `Suggests` into `Config/Needs/coverage` and
+  `Config/Needs/website` (they are installed explicitly by CI, not needed as
+  runtime suggestions). Net: `Suggests` drops from 62 to 57 packages, lightening
+  `install.packages(dependencies = TRUE)`.
+
 ## Bug fixes
 
 - `mysterycall_run_analysis()` no longer emits a deprecation warning on every

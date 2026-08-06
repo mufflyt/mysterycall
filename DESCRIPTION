@@ -61,7 +61,6 @@ Suggests:
     DHARMa,
     duckdb,
     digest,
-    easyr,
     effects,
     fastLink,
     emmeans,
@@ -72,7 +71,6 @@ Suggests:
     gtsummary,
     grid,
     gridExtra,
-    htmltools,
     humaniformat,
     jsonlite,
     knitr,
@@ -80,7 +78,6 @@ Suggests:
     maps,
     lmerTest,
     marginaleffects,
-    memoise,
     mice,
     mockery,
     naniar,
@@ -88,7 +85,6 @@ Suggests:
     officer,
     openxlsx,
     patchwork,
-    pkgdown,
     pwr,
     progress,
     purrr,
@@ -100,7 +96,6 @@ Suggests:
     tidycensus,
     tigris,
     tidyr,
-    covr,
     forcats,
     ggmap (>= 3.0.0),
     reformulas,
@@ -113,4 +108,6 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
+Config/Needs/website: pkgdown
+Config/Needs/coverage: covr
 RoxygenNote: 7.3.3
