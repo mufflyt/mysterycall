@@ -309,7 +309,7 @@ overfitting. For a formal simulation-based check on a GLMM, prefer
 <span class="r-in"><span><span class="co">## Gaussian GLM (non-count, shows underdispersion path) ---------------------</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">gaussian</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_overdispersion_test</span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson dispersion phi=6.592 (chi-sq=191, df=29, p=&lt;0.001): Severe overdispersion (phi=6.592). Negative binomial or zero-inflated model strongly recommended. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson dispersion phi=6.592 (chi-sq=191, df=29, p=&lt; 0.001): Severe overdispersion (phi=6.592). Negative binomial or zero-inflated model strongly recommended. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Switch to a negative binomial or zero-inflated negative binomial model immediately; Poisson standard errors are severely underestimated. </span>
 </code></pre></div>
     </div>

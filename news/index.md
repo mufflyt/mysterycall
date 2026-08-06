@@ -2,6 +2,21 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Consistency
+
+- P-value formatting is now consistent across the package: a single
+  internal formatter (`.mc_format_p()`) emits the spaced canonical
+  `"< 0.001"` below threshold. Six functions that previously emitted the
+  unspaced `"<0.001"` —
+  [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md),
+  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+  [`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+  [`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md),
+  [`mysterycall_overdispersion_test()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_overdispersion_test.md),
+  and
+  [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md)
+  — now match the majority `"< 0.001"` form used everywhere else.
+
 ### Dependencies
 
 - Trimmed unused `Suggests`: removed `easyr`, `htmltools`, and `memoise`

@@ -225,8 +225,8 @@ if (!is.null(fit_sens$sensitivity)) {
 #> # A tibble: 3 × 9
 #>   term     estimate     se z_value  p_value p_value_fmt    irr ci_lower ci_upper
 #>   <chr>       <dbl>  <dbl>   <dbl>    <dbl> <chr>        <dbl>    <dbl>    <dbl>
-#> 1 (Interc…   3.06   0.0572  53.6   0        <0.001      21.4     19.1      23.9 
-#> 2 insuran…   0.315  0.0450   7.01  2.41e-12 <0.001       1.37     1.25      1.50
+#> 1 (Interc…   3.06   0.0572  53.6   0        < 0.001     21.4     19.1      23.9 
+#> 2 insuran…   0.315  0.0450   7.01  2.41e-12 < 0.001      1.37     1.25      1.50
 #> 3 waveWav…  -0.0207 0.0444  -0.466 6.41e- 1 0.641        0.980    0.898     1.07
 ```
 

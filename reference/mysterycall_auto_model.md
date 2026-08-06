@@ -252,7 +252,7 @@ print(result)
 #> 
 #> Fixed effects (IRR with Wald CI):
 #>          term    irr ci_lower ci_upper p_value_fmt
-#> 1 (Intercept) 17.000   15.587   18.541      <0.001
+#> 1 (Intercept) 17.000   15.587   18.541     < 0.001
 #> 2 insMedicaid  1.149    1.020    1.294       0.022
 #> 
 #> Random intercept (phys):  variance = 0.0000  SD = 0.0000

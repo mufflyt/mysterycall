@@ -158,7 +158,7 @@ print(t1)
 #> # A tibble: 2 × 6
 #>   variable           level    Overall    `0 (N=24)` `1 (N=26)` p_value
 #>   <chr>              <chr>    <chr>      <chr>      <chr>      <chr>  
-#> 1 insurance_scenario Medicaid 27 (54.0%) 20 (83.3%) 7 (26.9%)  <0.001 
+#> 1 insurance_scenario Medicaid 27 (54.0%) 20 (83.3%) 7 (26.9%)  < 0.001
 #> 2 insurance_scenario Private  23 (46.0%) 4 (16.7%)  19 (73.1%) NA
 ```
 
@@ -194,7 +194,7 @@ print(model)
 #> 
 #> Fixed effects (IRR with Wald CI):
 #>                        term   irr ci_lower ci_upper p_value_fmt
-#> 1               (Intercept) 0.259    0.124    0.544      <0.001
+#> 1               (Intercept) 0.259    0.124    0.544     < 0.001
 #> 2 insurance_scenarioPrivate 3.186    1.340    7.579       0.009
 #> 
 #> Random intercept (subspecialty):  variance = 0.0000  SD = 0.0000

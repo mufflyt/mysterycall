@@ -263,7 +263,7 @@ result$irr_table
 #> # A tibble: 3 × 9
 #>   term      estimate    se z_value  p_value p_value_fmt    irr ci_lower ci_upper
 #>   <chr>        <dbl> <dbl>   <dbl>    <dbl> <chr>        <dbl>    <dbl>    <dbl>
-#> 1 (Interce…   2.60   0.218  12.0   6.32e-33 <0.001      13.5      8.80     20.7 
+#> 1 (Interce…   2.60   0.218  12.0   6.32e-33 < 0.001     13.5      8.80     20.7 
 #> 2 insuranc…   0.143  0.239   0.596 5.51e- 1 0.551        1.15     0.722     1.84
 #> 3 genderMa…  -0.0243 0.240  -0.101 9.20e- 1 0.920        0.976    0.609     1.56
 ```

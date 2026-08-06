@@ -241,6 +241,6 @@ print(result)
 ## Gaussian GLM (non-count, shows underdispersion path) ---------------------
 fit2 <- glm(mpg ~ wt + cyl, data = mtcars, family = gaussian())
 mysterycall_overdispersion_test(fit2)
-#> Pearson dispersion phi=6.592 (chi-sq=191, df=29, p=<0.001): Severe overdispersion (phi=6.592). Negative binomial or zero-inflated model strongly recommended. 
+#> Pearson dispersion phi=6.592 (chi-sq=191, df=29, p=< 0.001): Severe overdispersion (phi=6.592). Negative binomial or zero-inflated model strongly recommended. 
 #> Switch to a negative binomial or zero-inflated negative binomial model immediately; Poisson standard errors are severely underestimated. 
 ```
