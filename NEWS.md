@@ -71,8 +71,6 @@ now closed.
   path (counts + denominator → density → trend/infographic) with confidence
   intervals and provenance, and the three new functions are added to the
   pkgdown reference index.
-- Added **vdiffr** visual-regression snapshot tests for both density figures
-  (skipped on CRAN and when vdiffr is unavailable).
 - Both subspecialist-density figures now carry **detailed provenance**. Each
   records a structured `mysterycall_provenance` object — metric, computation,
   numerator/denominator descriptions and citations, denominator vintage, scale,
