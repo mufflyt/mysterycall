@@ -269,7 +269,7 @@ test_that("mysterycall_model_table formatting is correct", {
   irr_col <- output[[2]][1]
   expect_match(irr_col, "^[0-9.]+\\s\\([0-9.]+-[0-9.]+\\)$")
 
-  # Check p-value column format: should be numeric-like or "<0.001"
+  # Check p-value column format: should be numeric-like or "< 0.001"
   p_col <- output[[3]][1]
   expect_true(
     grepl("^<0\\.001$|^0\\.[0-9]{3}$", p_col)

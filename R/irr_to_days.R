@@ -171,11 +171,7 @@ mysterycall_irr_to_days <- function(model_result,
   p_fmt <- if ("p_value_fmt" %in% names(irr_tbl)) {
     as.character(irr_tbl$p_value_fmt)
   } else if ("p_value" %in% names(irr_tbl)) {
-    ifelse(
-      is.na(irr_tbl$p_value), NA_character_,
-      ifelse(irr_tbl$p_value < 0.001, "<0.001",
-             sprintf("%.3f", as.numeric(irr_tbl$p_value)))
-    )
+    .mc_format_p(as.numeric(irr_tbl$p_value))
   } else {
     rep(NA_character_, nrow(irr_tbl))
   }

@@ -1,5 +1,15 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Consistency
+
+- P-value formatting is now consistent across the package: a single internal
+  formatter (`.mc_format_p()`) emits the spaced canonical `"< 0.001"` below
+  threshold. Six functions that previously emitted the unspaced `"<0.001"` —
+  `mysterycall_nb_model()`, `mysterycall_poisson_model()`,
+  `mysterycall_table1()`, `mysterycall_disparities_table()`,
+  `mysterycall_overdispersion_test()`, and `mysterycall_irr_to_days()` — now
+  match the majority `"< 0.001"` form used everywhere else.
+
 ## Dependencies
 
 - Trimmed unused `Suggests`: removed `easyr`, `htmltools`, and `memoise`

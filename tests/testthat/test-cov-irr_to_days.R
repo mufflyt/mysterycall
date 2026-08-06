@@ -387,7 +387,7 @@ test_that("mysterycall_irr_to_days handles p_value column and formats it", {
 })
 
 # ============================================================================
-# Test 17: p_value < 0.001 formats as "<0.001"
+# Test 17: p_value < 0.001 formats as "< 0.001"
 # ============================================================================
 test_that("mysterycall_irr_to_days formats p_value < 0.001 as '<0.001'", {
   irr_tbl <- data.frame(
@@ -405,7 +405,7 @@ test_that("mysterycall_irr_to_days formats p_value < 0.001 as '<0.001'", {
     exposure_col  = "group"
   )
 
-  expect_equal(result$table$p_value_fmt[1], "<0.001")
+  expect_equal(result$table$p_value_fmt[1], "< 0.001")
 })
 
 # ============================================================================

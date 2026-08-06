@@ -36,7 +36,7 @@
 #'   \item{`df`}{Integer. Residual degrees of freedom.}
 #'   \item{`p_value`}{Numeric. P-value from
 #'     `pchisq(pearson_chisq, df, lower.tail = FALSE)`.}
-#'   \item{`p_fmt`}{Character. Formatted p-value (e.g. `"<0.001"`).}
+#'   \item{`p_fmt`}{Character. Formatted p-value (e.g. `"< 0.001"`).}
 #'   \item{`interpretation`}{Character. One-sentence verbal category.}
 #'   \item{`recommendation`}{Character. One-sentence action sentence.}
 #'   \item{`sentence`}{Character. Combined summary sentence suitable for
@@ -153,13 +153,7 @@ mysterycall_overdispersion_test <- function(
   p_value       <- pchisq(pearson_chisq, df = rdf, lower.tail = FALSE)
 
   # ---- formatted p-value -----------------------------------------------------
-  p_fmt <- if (is.na(p_value)) {
-    NA_character_
-  } else if (p_value < 0.001) {
-    "<0.001"
-  } else {
-    sprintf(paste0("%.", digits, "f"), p_value)
-  }
+  p_fmt <- .mc_format_p(p_value, digits = digits)
 
   phi_fmt <- sprintf(paste0("%.", digits, "f"), phi)
 

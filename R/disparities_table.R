@@ -262,14 +262,11 @@ mysterycall_disparities_table <- function(
 #'
 #' @param p Numeric p-value.
 #'
-#' @return Formatted character string (e.g., "<0.001").
+#' @return Formatted character string (e.g., "< 0.001").
 #' @family outcomes
 #' @keywords internal
 .fmt_pvalue <- function(p) {
-  if (is.na(p))      return(NA_character_)
-  if (p < 0.001)     return("<0.001")
-  if (p < 0.01)      return(sprintf("%.3f", p))
-  sprintf("%.3f", p)
+  .mc_format_p(p)
 }
 
 # ---- S3 print ---------------------------------------------------------------

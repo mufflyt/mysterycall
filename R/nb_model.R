@@ -329,8 +329,7 @@ mysterycall_nb_model <- function(data,
 }
 
 .fmt_nb_pval <- function(p) {
-  ifelse(is.na(p), NA_character_,
-         ifelse(p < 0.001, "<0.001", sprintf("%.3f", p)))
+  .mc_format_p(p)
 }
 
 #' Print method for mysterycall_nb_model objects
