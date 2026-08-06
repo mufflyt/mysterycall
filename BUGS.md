@@ -17,9 +17,19 @@ _Found while using the package to model ENT appointment access/timeliness (grace
 > helper (with a regression test), so the residuals-vs-fitted panel and the printed
 > summary can no longer disagree.
 >
-> **Not covered by this pass (Wave 4 — still to verify):** #48
-> (`city_state_to_lat_long` dataset rebuild), #49 (benchmark dead code), #50
-> (`acceptance_waffle.R` BCBS label).
+> **Wave 4 (#48–50) also verified resolved (2026-08-06):**
+> - **#48** (`city_state_to_lat_long` dataset) — the build script renames
+>   `latitude/longitude → lat/long` and abbreviates state names to 2-letter USPS,
+>   and the shipped `.rda` matches: `test-dataset-structure-contracts.R` asserts
+>   `c("city","state","lat","long")` are present, that `CA/TX/NY/FL/DC/PR` appear,
+>   and that every `state` value is 2 characters — all passing on green CI.
+> - **#49** (`benchmark_name_parser.R`) — the contradictory `is.na(x) & x == ""`
+>   predicate is removed (now a comment noting it was a bug).
+> - **#50** (`acceptance_waffle.R:57`) — `bcbs_label` now defaults to the canonical
+>   `"Blue Cross/Blue Shield"` (no spaces), matching the 23 other consumers.
+>
+> **Net: every catalogued item (1–50) is resolved.** The only live defect this
+> audit surfaced was #46's `lmm` `plot()` label, fixed alongside this note.
 >
 > The 2026-07-14 blocks below are retained for history.
 
