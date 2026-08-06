@@ -4,6 +4,13 @@
 
 ### Bug fixes
 
+- [`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
+  no longer emits a deprecation warning on every run. Its
+  `acceptance_rates` step now calls an internal worker
+  (`.mc_insurance_acceptance_rates()`) instead of the deprecated
+  [`mysterycall_insurance_acceptance_rates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_acceptance_rates.md),
+  with identical output. The public deprecated function is unchanged
+  (still works and still warns for external callers).
 - [`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
   now returns an `iqr` (interquartile range) column for continuous
   outcomes, alongside the existing `q1` / `q3`, matching its documented

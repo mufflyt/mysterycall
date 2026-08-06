@@ -74,6 +74,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-1-6-3-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-3-9000"></a></h3>
 <ul><li>
+<code><a href="../reference/mysterycall_run_analysis.html">mysterycall_run_analysis()</a></code> no longer emits a deprecation warning on every run. Its <code>acceptance_rates</code> step now calls an internal worker (<code>.mc_insurance_acceptance_rates()</code>) instead of the deprecated <code><a href="../reference/mysterycall_insurance_acceptance_rates.html">mysterycall_insurance_acceptance_rates()</a></code>, with identical output. The public deprecated function is unchanged (still works and still warns for external callers).</li>
+<li>
 <code><a href="../reference/mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code> now returns an <code>iqr</code> (interquartile range) column for continuous outcomes, alongside the existing <code>q1</code> / <code>q3</code>, matching its documented headline statistics and the test expectations.</li>
 <li>Refreshed the <code><a href="../reference/mysterycall_overdispersion_sentence.html">mysterycall_overdispersion_sentence()</a></code> test snapshot to match the graduated “Mild overdispersion” wording the function now emits.</li>
 <li>Added the 68 documented-but-unindexed topics (datasets, <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> / <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> methods, and additional exported functions) to the pkgdown reference index so <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> no longer errors on missing topics.</li>
