@@ -9,6 +9,12 @@
   `mysterycall_table1()`, `mysterycall_disparities_table()`,
   `mysterycall_overdispersion_test()`, and `mysterycall_irr_to_days()` — now
   match the majority `"< 0.001"` form used everywhere else.
+- P-value *prose* rendering is now consistent too. The package convention for
+  in-sentence p-values is `"p < 0.001"` / `"p = 0.043"` (spaced, three decimals),
+  as used by `mysterycall_results_paragraph()`, `mysterycall_kaplan_meier()`, and
+  others. Two outliers were brought in line: `mysterycall_caller_drift()` emitted
+  the unspaced `"p<0.001"` / `"p=0.03"`, and the abstract-sentence builder emitted
+  a spaced `"p < 0.001"` but an unspaced `"p=0.043"`.
 
 ## Dependencies
 
@@ -84,6 +90,17 @@
   designed, not a defect.
 - Enabled `Config/testthat/parallel: true` so the test suite runs across
   multiple cores in CI and locally.
+
+## Packaging / CRAN-readiness
+
+- Set `LazyDataCompression: xz` so the bundled datasets (notably the ~32k-row
+  `city_state_to_lat_long` lookup) compress harder, trimming installed size.
+- Marked seven internal p-value/estimate formatting helpers (`.fmt_abstract_pval`,
+  `.fmt_slot_pval`, `.fmt_est_ci`, `.build_abstract_sentence`, `.fmt_impute_pval`,
+  `.fmt_logistic_pval`, `.fmt_st_pval`) as `@noRd` and removed their stub man
+  pages: they are unexported internals, so they no longer generate documentation
+  objects with undocumented arguments. A full audit confirmed **no** `\usage`
+  vs. formals (codoc) drift remains across the 597 help topics.
 
 ## Census geography vintage
 

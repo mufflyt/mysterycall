@@ -179,11 +179,12 @@ mysterycall_caller_drift <- function(
 
   # ---- helpers ----------------------------------------------------------------
 
-  # Format p-value: p<0.001 or p=X.XX
+  # Format p-value for prose: "p < 0.001" or "p = 0.043" (package convention,
+  # matching results_paragraph()/write_results_paragraph()/kaplan_meier()).
   .fmt_p <- function(p) {
     if (is.na(p))    return("NA")
-    if (p < 0.001)   return("p<0.001")
-    sprintf("p=%.2f", p)
+    if (p < 0.001)   return("p < 0.001")
+    sprintf("p = %.3f", p)
   }
 
   # Fit lm(y ~ x) and return slope, SE, p-value as a list

@@ -4,7 +4,7 @@
 NULL
 
 #' Format logistic model p-value for display
-#' @keywords internal
+#' @noRd
 .fmt_logistic_pval <- function(p) {
   ifelse(is.na(p), NA_character_,
          ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))

@@ -7,15 +7,15 @@ NULL
 # -- Internal helpers ----------------------------------------------------------
 
 #' Format a p-value for use inside an abstract sentence
-#' @keywords internal
+#' @noRd
 .fmt_abstract_pval <- function(p, digits) {
   if (is.na(p)) return("")
   if (p < 0.001) return("p < 0.001")
-  sprintf(paste0("p=%.", digits, "f"), p)
+  sprintf(paste0("p = %.", digits, "f"), p)
 }
 
 #' Format a p-value for a named slot (numbers_list / or_p etc.)
-#' @keywords internal
+#' @noRd
 .fmt_slot_pval <- function(p, digits) {
   if (is.na(p)) return(NA_character_)
   if (p < 0.001) return("< 0.001")
@@ -23,14 +23,14 @@ NULL
 }
 
 #' Format estimate + CI as "est (lo-hi)"
-#' @keywords internal
+#' @noRd
 .fmt_est_ci <- function(est, lo, hi, digits) {
   fmt <- paste0("%.", digits, "f")
   sprintf(paste0(fmt, " (", fmt, "-", fmt, ")"), est, lo, hi)
 }
 
 #' Build the full abstract sentence from extracted model numbers
-#' @keywords internal
+#' @noRd
 .build_abstract_sentence <- function(n_total,
                                      comparison_label,
                                      ref_label,
