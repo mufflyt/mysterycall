@@ -179,7 +179,7 @@ test_that("mysterycall_call_productivity errors when caller_col is not character
   )
   expect_error(
     suppressMessages(mysterycall_call_productivity(df, 123)),
-    "is.character"
+    "single column name"
   )
 })
 

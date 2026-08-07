@@ -97,7 +97,7 @@ build_missingness_mcar_table <- function(data,
                                          make_gt         = FALSE,
                                          gt_title        = "Variable Missingness and Little's MCAR Test") {
 
-  stopifnot(is.data.frame(data))
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
   item_vars       <- unique(as.character(item_vars))
   structural_vars <- unique(as.character(structural_vars))
 

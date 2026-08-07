@@ -244,7 +244,7 @@ mysterycall_kaplan_meier <- function(
   # ---- Log-rank test ---------------------------------------------------------
   sd_obj     <- survival::survdiff(survival::Surv(time, event) ~ group, data = df)
   logrank_p  <- 1 - stats::pchisq(sd_obj$chisq, df = length(sd_obj$n) - 1L)
-  logrank_p_fmt <- .fmt_pvalue(logrank_p)
+  logrank_p_fmt <- .km_fmt_pvalue(logrank_p)
 
   # ---- Median by group -------------------------------------------------------
   sf_tbl  <- summary(sf)$table   # matrix: rows = strata, cols = stats
@@ -335,7 +335,7 @@ mysterycall_kaplan_meier <- function(
 
 #' Format a p-value as a character string
 #' @noRd
-.fmt_pvalue <- function(p) {
+.km_fmt_pvalue <- function(p) {
   if (is.na(p)) return("p = NA")
   if (p < 0.001) return("p < 0.001")
   paste0("p = ", formatC(p, digits = 3, format = "f"))

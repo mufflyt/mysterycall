@@ -118,8 +118,8 @@ mysterycall_caller_drift <- function(
 ) {
 
   # ---- input validation -------------------------------------------------------
-  stopifnot(is.data.frame(data))
-  stopifnot(is.character(outcome_col), length(outcome_col) == 1L)
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
+  stopifnot("`outcome_col` must be a single column name" = is.character(outcome_col) && length(outcome_col) == 1L)
   if (!outcome_col %in% names(data)) {
     stop(sprintf(
       "outcome_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -137,7 +137,7 @@ mysterycall_caller_drift <- function(
   }
 
   if (!is.null(date_col)) {
-    stopifnot(is.character(date_col), length(date_col) == 1L)
+    stopifnot("`date_col` must be a single column name" = is.character(date_col) && length(date_col) == 1L)
     if (!date_col %in% names(data)) {
       stop(sprintf(
         "date_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -147,7 +147,7 @@ mysterycall_caller_drift <- function(
   }
 
   if (!is.null(call_seq_col)) {
-    stopifnot(is.character(call_seq_col), length(call_seq_col) == 1L)
+    stopifnot("`call_seq_col` must be a single column name" = is.character(call_seq_col) && length(call_seq_col) == 1L)
     if (!call_seq_col %in% names(data)) {
       stop(sprintf(
         "call_seq_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -157,7 +157,7 @@ mysterycall_caller_drift <- function(
   }
 
   if (!is.null(caller_col)) {
-    stopifnot(is.character(caller_col), length(caller_col) == 1L)
+    stopifnot("`caller_col` must be a single column name" = is.character(caller_col) && length(caller_col) == 1L)
     if (!caller_col %in% names(data)) {
       stop(sprintf(
         "caller_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -168,7 +168,7 @@ mysterycall_caller_drift <- function(
 
   week_or_day <- match.arg(week_or_day)
   test        <- match.arg(test)
-  stopifnot(is.logical(plot), length(plot) == 1L)
+  stopifnot("`plot` must be a single logical (TRUE/FALSE)" = is.logical(plot) && length(plot) == 1L)
 
   if (is.null(date_col) && is.null(call_seq_col)) {
     stop(
@@ -179,11 +179,12 @@ mysterycall_caller_drift <- function(
 
   # ---- helpers ----------------------------------------------------------------
 
-  # Format p-value: p<0.001 or p=X.XX
+  # Format p-value for prose: "p < 0.001" or "p = 0.043" (package convention,
+  # matching results_paragraph()/write_results_paragraph()/kaplan_meier()).
   .fmt_p <- function(p) {
     if (is.na(p))    return("NA")
-    if (p < 0.001)   return("p<0.001")
-    sprintf("p=%.2f", p)
+    if (p < 0.001)   return("p < 0.001")
+    sprintf("p = %.3f", p)
   }
 
   # Fit lm(y ~ x) and return slope, SE, p-value as a list

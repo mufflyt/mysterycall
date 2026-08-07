@@ -146,7 +146,7 @@ test_that("results_paragraph: p < 0.001 renders as 'p < 0.001'", {
 test_that("results_paragraph: errors when ref_group is not character", {
   expect_error(
     mysterycall_results_paragraph(or_tbl_basic, ref_group = 42L, exposure_col = "insurance"),
-    regexp = "character"
+    regexp = "non-empty string"
   )
 })
 

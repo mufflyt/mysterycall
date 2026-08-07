@@ -129,14 +129,19 @@ mysterycall_wait_time_crossover <- function(
     min_pairs     = 10L
 ) {
   # ---- input validation -------------------------------------------------------
-  stopifnot(is.data.frame(data))
-  stopifnot(is.character(time_col),  length(time_col)  == 1L)
-  stopifnot(is.character(group_col), length(group_col) == 1L)
-  stopifnot(is.character(id_col),    length(id_col)    == 1L)
-  stopifnot(is.logical(log_transform), length(log_transform) == 1L,
-            !is.na(log_transform))
-  stopifnot(is.numeric(conf_level), length(conf_level) == 1L,
-            conf_level > 0, conf_level < 1)
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
+  stopifnot("`time_col` must be a single column name" = is.character(time_col) && length(time_col) == 1L)
+  stopifnot("`group_col` must be a single column name" = is.character(group_col) && length(group_col) == 1L)
+  stopifnot("`id_col` must be a single column name" = is.character(id_col) && length(id_col) == 1L)
+  stopifnot(
+    "`log_transform` must be a single non-NA logical (TRUE/FALSE)" =
+      is.logical(log_transform) && length(log_transform) == 1L && !is.na(log_transform)
+  )
+  stopifnot(
+    "`conf_level` must be a single number in (0, 1)" =
+      is.numeric(conf_level) && length(conf_level) == 1L &&
+        conf_level > 0 && conf_level < 1
+  )
 
   min_pairs <- as.integer(min_pairs)
   if (is.na(min_pairs) || min_pairs < 1L) {

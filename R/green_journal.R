@@ -311,8 +311,8 @@ mysterycall_save_green_journal_figure <- function(plot,
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package 'ggplot2' is required for save_green_journal_figure(). Install with: install.packages('ggplot2')", call. = FALSE)
   }
-  stopifnot(inherits(plot, "ggplot"))
-  stopifnot(is.character(path_stem), nzchar(path_stem))
+  stopifnot("`plot` must be a ggplot object" = inherits(plot, "ggplot"))
+  stopifnot("`path_stem` must be a non-empty string" = is.character(path_stem) && nzchar(path_stem))
   layout <- match.arg(layout)
 
   fig_width  <- if (layout == "single_column") .GJ$single_width else .GJ$double_width
@@ -434,7 +434,7 @@ crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus");
 #' x <- c(0, 5, 10, 50, 90, 95, 100)
 #' mysterycall:::mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
 mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE) {
-  stopifnot(is.numeric(x), lower >= 0, upper <= 1, lower < upper)
+  stopifnot("`x` must be numeric" = is.numeric(x), "bounds must satisfy 0 <= lower < upper <= 1" = lower >= 0 && upper <= 1 && lower < upper)
   bounds      <- stats::quantile(x, probs = c(lower, upper), na.rm = na.rm)
   x[x < bounds[1L]] <- bounds[1L]
   x[x > bounds[2L]] <- bounds[2L]
@@ -504,7 +504,7 @@ truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz");
 #' mysterycall_save_green_journal_figure(composite, "figures/fig3")
 mysterycall_compose_map_density <- function(map_plot, density_plot,
                                 map_weight = 7L, density_weight = 2L) {
-  stopifnot(inherits(map_plot, "ggplot"), inherits(density_plot, "ggplot"))
+  stopifnot("`map_plot` must be a ggplot object" = inherits(map_plot, "ggplot"), "`density_plot` must be a ggplot object" = inherits(density_plot, "ggplot"))
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("Package 'gridExtra' is required for compose_map_density(). ",
          "", call. = FALSE)

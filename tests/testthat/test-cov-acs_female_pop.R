@@ -1,32 +1,17 @@
-
 library(testthat)
 library(mysterycall)
 
-AUDIT <- data.frame(
-  npi                              = c("1234567893","1234567893","9876543210","9876543210"),
-  insurance                        = c("Medicaid","BCBS","Medicaid","BCBS"),
-  offered                          = c(TRUE, TRUE, FALSE, TRUE),
-  contact_office                   = c(TRUE, TRUE, FALSE, TRUE),
-  wait_days                        = c(5L, 12L, 3L, 7L),
-  business_days_until_appointment  = c(5L, 12L, 3L, 7L),
-  caller_id                        = c("A","A","B","B"),
-  wave                             = c(1L, 1L, 2L, 2L),
-  specialty                        = c("OB/GYN","OB/GYN","OB/GYN","OB/GYN"),
-  phone                            = c("3035550100","3035550100","7205550200","7205550200"),
-  physician_information            = c("Smith, John","Smith, John","Doe, Jane","Doe, Jane"),
-  reason_for_exclusions            = rep("Able to contact", 4L),
-  stringsAsFactors = FALSE
-)
+# mysterycall_get_acs_women_18_90() pulls ACS 5-year female-population counts.
+# The live fetch needs tidycensus + a Census API key, but its input guards run
+# offline: an out-of-range year is rejected before any network call.
 
-set.seed(1)
-COUNT_DF <- data.frame(
-  days      = c(rpois(40, 5), rpois(40, 10)),
-  insurance = rep(c("Medicaid","BCBS"), each = 40L),
-  stringsAsFactors = FALSE
-)
+test_that("mysterycall_get_acs_women_18_90 is available", {
+  expect_true(is.function(mysterycall_get_acs_women_18_90))
+})
 
-
-# API/geo function — requires external service; placeholder to register coverage
-test_that("mysterycall_acs_female_pop requires API access", {
-  skip("requires external API or geospatial service — covered by integration tests")
+test_that("mysterycall_get_acs_women_18_90 rejects an out-of-range year", {
+  # Errors whether or not tidycensus is installed (dependency guard or the
+  # "ACS 5-year data available for 2009-2023" year guard fires first).
+  expect_error(mysterycall_get_acs_women_18_90(year = 1800))
+  expect_error(mysterycall_get_acs_women_18_90(year = 2100))
 })

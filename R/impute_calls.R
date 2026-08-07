@@ -4,7 +4,7 @@
 NULL
 
 #' Format a p-value for imputed results display
-#' @keywords internal
+#' @noRd
 .fmt_impute_pval <- function(p) {
   ifelse(is.na(p), NA_character_,
          ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))

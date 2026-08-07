@@ -2,11 +2,12 @@
 # module (R/call_outcomes.R). Three groups: ADVERSARIAL, SEMANTIC, BVA.
 # All expected values were confirmed by running the code, not assumed.
 #
-# KNOWN DEFECT (documented with FIXME below): duplicate options within a single
-# call (e.g. "a;a") inflate `mean_options_per_call` because set-size counts the
-# raw parsed vector length, which keeps duplicates. Per-option prevalence counts
-# and the co-occurrence diagonal are NOT affected (they dedupe via `%in%` /
-# `intersect`), so a call "a;a" reports 1 option in prevalence but 2 in the mean.
+# DUPLICATE-OPTION HANDLING: duplicate options within a single call (e.g. "a;a")
+# collapse to one. `mean_options_per_call` counts DISTINCT options per call
+# (R/call_outcomes.R via `length(unique(...))`), matching how per-option
+# prevalence (`%in%`) and the co-occurrence diagonal (`intersect`) already
+# dedupe -- so a call "a;a" reports 1 option everywhere. See the "[adversarial]
+# duplicate options 'a;a'" test below, which pins this behaviour.
 
 # ===================================================================
 # ===== ADVERSARIAL =====

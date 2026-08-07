@@ -158,6 +158,26 @@ mysterycall_run_analysis <- function(
   results        <- vector("list", length(all_step_names))
   names(results) <- all_step_names
 
+  # -- Reconcile the phase-2 column-name contract -------------------------------
+  # mysterycall_run_workflow() renames incoming columns to short "standard"
+  # names (e.g. reason_for_exclusions -> exclusion_reasons). run_analysis()
+  # defaults to the documented long names, so piping the workflow's output in
+  # with the defaults used to silently skip the exclusion-dependent steps. Where
+  # a documented column is absent but its workflow alias is present, resolve to
+  # the alias so the two functions chain cleanly. A column the caller set
+  # explicitly still wins whenever that column is actually in the data.
+  .resolve <- function(primary, aliases) {
+    resolved <- .mc_resolve_col(current_data, primary, aliases)
+    if (!identical(resolved, primary)) {
+      .msg(sprintf(
+        "[run_analysis] column '%s' not found; using workflow alias '%s'.",
+        primary, resolved
+      ))
+    }
+    resolved
+  }
+  exclusion_col <- .resolve(exclusion_col, "exclusion_reasons")
+
   # ---------------------------------------------------------------------------
   # Step: qc
   # ---------------------------------------------------------------------------
@@ -166,8 +186,10 @@ mysterycall_run_analysis <- function(
 
     repeat_physicians <- NULL
     if (id_col %in% names(current_data)) {
-      name_col_qc <- if ("physician_information" %in% names(current_data))
-        "physician_information" else NULL
+      name_col_qc <- .mc_resolve_col(
+        current_data, "physician_information", "physician_info"
+      )
+      if (!name_col_qc %in% names(current_data)) name_col_qc <- NULL
       repeat_physicians <- .try("qc", {
         mysterycall_flag_repeat_physicians(
           data       = current_data,

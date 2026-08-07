@@ -162,7 +162,7 @@ mysterycall_geocode_address <- function(data,
                                            benchmark = .MC_CENSUS_BENCHMARK,
                                            vintage = .MC_CENSUS_VINTAGE,
                                            request_geographies = TRUE) {
-  stopifnot(is.data.frame(addresses), nrow(addresses) > 0)
+  stopifnot("`addresses` must be a data frame" = is.data.frame(addresses), "`addresses` must have at least one row" = nrow(addresses) > 0)
   batch_data <- data.frame(
     id     = seq_len(nrow(addresses)),
     street = addresses[["address"]],

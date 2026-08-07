@@ -139,7 +139,7 @@ test_that("poisson_model: p_value_fmt is '<0.001' or '0.xxx'", {
     mock, "wait_days", "insurance", "physician"
   ))
   fmt <- res$irr_table$p_value_fmt
-  expect_true(all(grepl("^<0\\.001$|^\\d\\.\\d{3}$", fmt)))
+  expect_true(all(grepl("^< 0\\.001$|^\\d\\.\\d{3}$", fmt)))
 })
 
 test_that("poisson_model: n equals complete cases used", {

@@ -8,7 +8,7 @@ NULL
 # ---------------------------------------------------------------------------
 
 #' Format a raw p-value for a sensitivity-table cell
-#' @keywords internal
+#' @noRd
 .fmt_st_pval <- function(p) {
   if (is.null(p) || length(p) == 0L || is.na(p)) return(NA_character_)
   if (p < 0.001) "< 0.001" else sprintf("%.3f", p)

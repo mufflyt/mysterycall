@@ -56,8 +56,8 @@ mysterycall_call_productivity <- function(
     call_time_col = NULL
 ) {
   # ---- input validation -------------------------------------------------------
-  stopifnot(is.data.frame(data))
-  stopifnot(is.character(caller_col), length(caller_col) == 1)
+  stopifnot("`data` must be a data frame" = is.data.frame(data))
+  stopifnot("`caller_col` must be a single column name" = is.character(caller_col) && length(caller_col) == 1)
   if (!caller_col %in% names(data)) {
     stop(sprintf(
       "caller_col '%s' not found in `data`.\nAvailable columns: %s",
@@ -70,7 +70,7 @@ mysterycall_call_productivity <- function(
   }
   .check_col <- function(col, label) {
     if (!is.null(col)) {
-      stopifnot(is.character(col), length(col) == 1)
+      stopifnot("`col` must be a single column name" = is.character(col) && length(col) == 1)
       if (!col %in% names(data)) stop(sprintf(
         "%s '%s' not found in `data`.\nAvailable columns: %s",
         label, col, paste(names(data), collapse = ", ")
