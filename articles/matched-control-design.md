@@ -321,7 +321,7 @@ mysterycall_paired_acceptance_mcnemar(
 #> # A tibble: 1 × 9
 #>   contrast   n_paired concordant discordant disc_favor_a disc_favor_b odds_ratio
 #>   <chr>         <int>      <int>      <int>        <int>        <int>      <dbl>
-#> 1 PE vs Con…       60         30         30            5           25        0.2
+#> 1 PE vs Con…       60         30         30            8           22      0.364
 #> # ℹ 2 more variables: mcnemar_p <dbl>, mde_or_power <dbl>
 ```
 
@@ -340,7 +340,7 @@ mysterycall_paired_wait_within_practice(
 #> # A tibble: 1 × 9
 #>   contrast      n_paired mean_diff_days ci_lower ci_upper sd_diff paired_t_p
 #>   <chr>            <int>          <dbl>    <dbl>    <dbl>   <dbl>      <dbl>
-#> 1 PE vs Control       26         -0.731    -6.80     5.34    15.0      0.806
+#> 1 PE vs Control       24           7.25   -0.585     15.1    18.6     0.0681
 #> # ℹ 2 more variables: wilcoxon_p <dbl>, mde_days_power <dbl>
 ```
 
