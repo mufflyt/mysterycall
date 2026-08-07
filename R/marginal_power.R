@@ -80,7 +80,7 @@ mysterycall_marginal_power <- function(n_subject, cell_means, sigma_subject, phi
                    pkg), call. = FALSE)
     }
   }
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
 
   cond2 <- condition_levels[2]
   int_term <- sprintf("condition%s:stratum", cond2)

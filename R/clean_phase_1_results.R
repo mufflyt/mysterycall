@@ -153,7 +153,9 @@ mysterycall_clean_phase1 <- function(phase1_data,
       !requireNamespace("janitor", quietly = TRUE) ||
       !requireNamespace("readr", quietly = TRUE) ||
       !requireNamespace("stringr", quietly = TRUE) ||
-      !requireNamespace("humaniformat", quietly = TRUE)) {
+      !requireNamespace("humaniformat", quietly = TRUE) ||
+      !requireNamespace("digest", quietly = TRUE) ||
+      !requireNamespace("jsonlite", quietly = TRUE)) {
     stop("Required packages are not installed", call. = FALSE)
   }
 
@@ -501,7 +503,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
   # serialisation to guarantee order-independent stability.
   # .audit_volatile_fields is defined in R/audit-verify.R and shared with
   # mysterycall_verify_artifact() to guarantee identical canonicalization.
-  stable_keys     <- sort(setdiff(names(audit_trail), .audit_volatile_fields))
+  stable_keys     <- sort(setdiff(names(audit_trail), .audit_volatile_fields), method = "radix")
   stable_json     <- jsonlite::toJSON(audit_trail[stable_keys], auto_unbox = TRUE, digits = NA)
   audit_trail$artifact_id <- digest::digest(as.character(stable_json),
                                             algo = "sha256", serialize = FALSE)

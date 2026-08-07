@@ -94,6 +94,11 @@ mysterycall_export_results_docx <- function(table,
   }
 
   doc <- flextable::body_add_flextable(doc, ft)
+
+  out_dir <- dirname(output_path)
+  if (nzchar(out_dir) && !dir.exists(out_dir)) {
+    dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+  }
   print(doc, target = output_path)
 
   message("Results written to: ", output_path)

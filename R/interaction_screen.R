@@ -119,7 +119,7 @@ mysterycall_interaction_screen <- function(
 
   # Cap at max_pairs
   if (length(pairs) > max_pairs) {
-    set.seed(42L)
+    withr::local_seed(42L)
     pairs <- pairs[sample(length(pairs), max_pairs)]
   }
 

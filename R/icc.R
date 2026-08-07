@@ -97,7 +97,7 @@ mysterycall_icc <- function(model_result,
 
   ci <- c(NA_real_, NA_real_)
   if (n_boot > 0L) {
-    if (!is.null(seed)) set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     ci <- .bootstrap_icc(model_result, is_nb, n_boot, conf_level)
   }
 

@@ -83,12 +83,20 @@ mysterycall_summarize_demographics <- function(data,
       mean(tolower(as.character(vals)) %in% c("female", "f"), na.rm = TRUE) * 100
     }
   } else {
+    if (!is.null(female_col)) {
+      warning(sprintf("Column '%s' not found in `data`; %% female set to NA.",
+                      female_col), call. = FALSE)
+    }
     NA_real_
   }
 
   pct_academic <- if (!is.null(setting_col) && setting_col %in% names(data)) {
     mean(data[[setting_col]] == academic_label, na.rm = TRUE) * 100
   } else {
+    if (!is.null(setting_col)) {
+      warning(sprintf("Column '%s' not found in `data`; %% academic set to NA.",
+                      setting_col), call. = FALSE)
+    }
     NA_real_
   }
 

@@ -160,7 +160,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
   # Shuffle rows within each insurance group (seed-controlled), then assign
   # lab assistants via round-robin so every assistant receives at most one row
   # more than any other  --  guaranteed regardless of group size or roster length.
-  set.seed(seed)
+  withr::local_seed(seed)
   if (nrow(data) == 0) {
     message("Input contains zero rows; workbooks will be created without assignments.")
     data <- data %>%

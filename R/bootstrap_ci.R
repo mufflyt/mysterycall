@@ -94,7 +94,7 @@ mysterycall_bootstrap_ci <- function(
 
   # ---- set seed --------------------------------------------------------
   if (!is.null(seed)) {
-    set.seed(seed)
+    withr::local_seed(seed)
   }
 
   # ---- choose statistic function --------------------------------------

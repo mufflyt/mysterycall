@@ -114,7 +114,7 @@ mysterycall_build_matched_controls <- function(
     units <- as.list(seq_len(nrow(treated)))
   }
 
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
   used <- character(0)
   rows <- list()
 

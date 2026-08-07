@@ -82,7 +82,7 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
     stop("`n_per_group` must be a single positive integer.", call. = FALSE)
   }
 
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
 
   groups <- split(seq_len(nrow(data)), data[[group_col]])
   idx <- unlist(lapply(groups, function(rows) {
