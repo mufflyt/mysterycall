@@ -120,12 +120,12 @@ df <- data.frame(
 res <- mysterycall_caller_drift(df, date_col = "call_date", plot = FALSE)
 print(res)
 #> -- mysterycall_caller_drift --
-#> Calendar drift : slope = -0.0019, SE = 0.0223, p=0.93
+#> Calendar drift : slope = -0.0019, SE = 0.0223, p = 0.934
 #>   Periods analysed : 9
 #> Sequence drift : not analysed (call_seq_col = NULL, or insufficient info)
 #> 
 #> Summary sentence:
 #> Acceptance rates did not change significantly over the study period
-#>   (slope=-0.002 per week, p=0.93), supporting design validity.
+#>   (slope=-0.002 per week, p = 0.934), supporting design validity.
 # }
 ```

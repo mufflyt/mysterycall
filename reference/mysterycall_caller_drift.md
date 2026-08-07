@@ -218,7 +218,7 @@ res <- mysterycall_caller_drift(
   plot        = FALSE
 )
 cat(res$sentence, "\n")
-#> Acceptance rates did not change significantly over the study period (slope=+0.001 per week, p=0.91) or over call sequence (slope=+0.002 per call, p=0.41), supporting design validity. 
+#> Acceptance rates did not change significantly over the study period (slope=+0.001 per week, p = 0.905) or over call sequence (slope=+0.002 per call, p = 0.408), supporting design validity. 
 res$calendar$p_value
 #> [1] 0.905223
 head(res$calendar$rate_by_period)

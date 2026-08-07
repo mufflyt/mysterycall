@@ -77,7 +77,7 @@ print(result)
 #>   abstract_sentence        
 #>     Among 412 total calls, Medicaid callers were 38% less likely to be
 #>     offered appointment acceptance than commercial insurance callers
-#>     (OR 0.62, 95% CI 0.41-0.94, p=0.024), with an absolute appointment
-#>     acceptance gap of 21 percentage points (82% vs. 61%).
+#>     (OR 0.62, 95% CI 0.41-0.94, p = 0.024), with an absolute
+#>     appointment acceptance gap of 21 percentage points (82% vs. 61%).
 #> 
 ```

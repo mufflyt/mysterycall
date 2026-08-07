@@ -16,6 +16,16 @@
   and
   [`mysterycall_irr_to_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_to_days.md)
   — now match the majority `"< 0.001"` form used everywhere else.
+- P-value *prose* rendering is now consistent too. The package
+  convention for in-sentence p-values is `"p < 0.001"` / `"p = 0.043"`
+  (spaced, three decimals), as used by
+  [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
+  [`mysterycall_kaplan_meier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_kaplan_meier.md),
+  and others. Two outliers were brought in line:
+  [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md)
+  emitted the unspaced `"p<0.001"` / `"p=0.03"`, and the
+  abstract-sentence builder emitted a spaced `"p < 0.001"` but an
+  unspaced `"p=0.043"`.
 
 ### Dependencies
 
@@ -28,6 +38,32 @@
 
 ### Bug fixes
 
+- [`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
+  now reconciles the phase-2 column-name contract with
+  [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md).
+  The workflow renames incoming columns to short “standard” names
+  (e.g. `reason_for_exclusions` → `exclusion_reasons`), while
+  `run_analysis()` documents the long names as defaults — so piping the
+  workflow’s output straight in used to *silently skip* the
+  exclusion-dependent steps (the column simply “wasn’t found”).
+  `run_analysis()` now resolves a documented column to its workflow
+  alias when the documented name is absent (via a new internal
+  `.mc_resolve_col()` helper), and applies the same tolerance to the QC
+  physician-name column (`physician_information` / `physician_info`). An
+  explicitly-set column still wins whenever it is present.
+- Resolved a name collision between two internal
+  [`.fmt_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_pvalue.md)
+  helpers: the Kaplan-Meier one (`"p = 0.043"` / `"p < 0.001"`, for plot
+  annotation) sorted after and silently shadowed the disparities-table
+  one, so
+  [`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md)
+  was formatting its p-values with the KM helper’s `"p = "` prefix
+  instead of the intended spaced canonical. The KM helper is now
+  `.km_fmt_pvalue()`, leaving the disparities helper (which routes
+  through `.mc_format_p()`) as the sole
+  [`.fmt_pvalue()`](https://mufflyt.github.io/mysterycall/reference/dot-fmt_pvalue.md).
+  Disparities-table p-values now read `"< 0.001"` / `"0.043"` as
+  documented.
 - [`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
   no longer emits a deprecation warning on every run. Its
   `acceptance_rates` step now calls an internal worker
@@ -50,6 +86,62 @@
   index so
   [`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html)
   no longer errors on missing topics.
+
+### Error messages
+
+- Bare [`stopifnot()`](https://rdrr.io/r/base/stopifnot.html) input
+  checks across ~11 files now carry informative, named messages
+  (e.g. `` "`data` must be a data frame" = is.data.frame(data) ``) so an
+  invalid argument reports *what* was wrong instead of echoing the raw
+  predicate. Covers
+  [`mysterycall_caller_drift()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_drift.md),
+  [`mysterycall_wait_time_crossover()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_crossover.md),
+  [`mysterycall_call_productivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_call_productivity.md),
+  [`mysterycall_caller_reliability()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_reliability.md),
+  [`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
+  `mysterycall_missingness_mcar()`,
+  [`mysterycall_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_paragraph.md),
+  [`mysterycall_write_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_results_paragraph.md),
+  [`mysterycall_nb_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_power.md),
+  [`mysterycall_geocode_address()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode_address.md),
+  and the `green_journal` helpers.
+
+### Tests and internals
+
+- Replaced 10 always-skipped “placeholder to register coverage” tests
+  with real offline assertions. The relocated map/isochrone/HRR helpers
+  ([`create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+  [`hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+  [`map_create_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+  …) actually error with a pointer to the `mysterymaps` package — no
+  network needed — and are now tested as such; the ACS fetchers are
+  tested for their offline year/argument guards; and
+  [`mysterycall_geocode_city_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode_city_state.md)
+  is tested against its bundled lookup table. Removed one placeholder
+  for a `scrape_physicians` function that does not exist.
+- Cleaned up a stale “KNOWN DEFECT (documented with FIXME)” header in
+  `test-call-outcomes-robustness.R`: duplicate options within a call
+  (`"a;a"`) already collapse to one everywhere (`mean_options_per_call`
+  counts distinct options), and a test already pins that — the comment
+  was describing a bug that no longer exists. Verified `calendar_days`
+  is a documented *secondary* wait-time column (canonical is
+  `business_days_until_appointment`), i.e. working as designed, not a
+  defect.
+- Enabled `Config/testthat/parallel: true` so the test suite runs across
+  multiple cores in CI and locally.
+
+### Packaging / CRAN-readiness
+
+- Set `LazyDataCompression: xz` so the bundled datasets (notably the
+  ~32k-row `city_state_to_lat_long` lookup) compress harder, trimming
+  installed size.
+- Marked seven internal p-value/estimate formatting helpers
+  (`.fmt_abstract_pval`, `.fmt_slot_pval`, `.fmt_est_ci`,
+  `.build_abstract_sentence`, `.fmt_impute_pval`, `.fmt_logistic_pval`,
+  `.fmt_st_pval`) as `@noRd` and removed their stub man pages: they are
+  unexported internals, so they no longer generate documentation objects
+  with undocumented arguments. A full audit confirmed **no** `\usage`
+  vs. formals (codoc) drift remains across the 597 help topics.
 
 ### Census geography vintage
 

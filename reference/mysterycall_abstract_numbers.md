@@ -233,11 +233,11 @@ print(result)
 #>   abstract_sentence        
 #>     Among 412 total calls, Medicaid callers were 38% less likely to be
 #>     offered appointment acceptance than commercial insurance callers
-#>     (OR 0.62, 95% CI 0.41-0.94, p=0.024), with an absolute appointment
-#>     acceptance gap of 21 percentage points (82% vs. 61%).
+#>     (OR 0.62, 95% CI 0.41-0.94, p = 0.024), with an absolute
+#>     appointment acceptance gap of 21 percentage points (82% vs. 61%).
 #> 
 result$abstract_sentence
-#> [1] "Among 412 total calls, Medicaid callers were 38% less likely to be offered appointment acceptance than commercial insurance callers (OR 0.62, 95% CI 0.41-0.94, p=0.024), with an absolute appointment acceptance gap of 21 percentage points (82% vs. 61%)."
+#> [1] "Among 412 total calls, Medicaid callers were 38% less likely to be offered appointment acceptance than commercial insurance callers (OR 0.62, 95% CI 0.41-0.94, p = 0.024), with an absolute appointment acceptance gap of 21 percentage points (82% vs. 61%)."
 
 # --- Extended example: logistic + Poisson fit -------------------------------
 fake_poisson <- structure(
@@ -263,5 +263,5 @@ result2 <- mysterycall_abstract_numbers(
   acceptance_rate = c(ref = 0.82, comparison = 0.61)
 )
 result2$abstract_sentence
-#> [1] "Among 412 total calls, Medicaid callers were 38% less likely to be offered appointment acceptance than commercial insurance callers (OR 0.62, 95% CI 0.41-0.94, p=0.024); wait times were 40% longer (IRR 1.40, 95% CI 1.12-1.75, p=0.003), with an absolute appointment acceptance gap of 21 percentage points (82% vs. 61%)."
+#> [1] "Among 412 total calls, Medicaid callers were 38% less likely to be offered appointment acceptance than commercial insurance callers (OR 0.62, 95% CI 0.41-0.94, p = 0.024); wait times were 40% longer (IRR 1.40, 95% CI 1.12-1.75, p = 0.003), with an absolute appointment acceptance gap of 21 percentage points (82% vs. 61%)."
 ```
