@@ -2,6 +2,11 @@
 
 ## Robustness / hardening
 
+- `mysterycall_insurance_wait_sentence()` now derives the direction word from the
+  *displayed* rounded percentage: a difference that rounds to `0%` reads
+  "similar" instead of "0% longer/shorter" (previously the word came from the
+  unrounded IRR).
+
 - **RNG side-effects removed.** Eleven functions that set a random seed
   internally (`mysterycall_nb_power()`, `mysterycall_marginal_power()`,
   `mysterycall_adjusted_power()`, `mysterycall_twopart_power()`,

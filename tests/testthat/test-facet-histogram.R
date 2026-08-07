@@ -1,7 +1,3 @@
-test_that("facet_histogram tests require ggplot2", {
-  skip_if_not_installed("ggplot2")
-})
-
 # Helper
 make_hist_df <- function(n = 120, seed = 42) {
   set.seed(seed)

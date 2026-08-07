@@ -1,7 +1,3 @@
-test_that("log_histogram tests require ggplot2", {
-  skip_if_not_installed("ggplot2")
-})
-
 # Helper
 make_log_df <- function(n = 100, seed = 99) {
   set.seed(seed)
