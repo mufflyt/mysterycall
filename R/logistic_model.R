@@ -174,7 +174,7 @@ mysterycall_logistic_model <- function(data,
     function(pred) {
       x <- data_cc[[pred]]
       if (is.factor(x))    return(levels(x)[[1L]])
-      if (is.character(x)) return(sort(unique(x[!is.na(x)]))[[1L]])
+      if (is.character(x)) return(sort(unique(x[!is.na(x)]), method = "radix")[[1L]])
       NULL
     }
   ))

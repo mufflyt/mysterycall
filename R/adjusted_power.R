@@ -76,7 +76,7 @@ mysterycall_adjusted_power <- function(n_total, rural_frac,
     stop("mysterycall_adjusted_power() requires the glmmTMB package.\n",
          "Install it with: install.packages(\"glmmTMB\")", call. = FALSE)
   }
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
 
   # ICC -> state random-intercept SD on the log scale. Invert the *same*
   # latent-scale decomposition mysterycall_icc() uses, so a run requested at

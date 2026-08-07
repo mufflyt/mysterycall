@@ -82,7 +82,7 @@ mysterycall_nb_power <- function(n_physicians,
   calls_per_physician <- as.integer(calls_per_physician)
   n_sim               <- as.integer(n_sim)
 
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
 
   log_baseline  <- log(baseline_mean)
   log_irr       <- log(irr)

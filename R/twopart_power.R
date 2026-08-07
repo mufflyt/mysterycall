@@ -59,7 +59,7 @@ mysterycall_twopart_power <- function(n_total, offer_ref, offer_trt,
     stop("mysterycall_twopart_power() needs the MASS package (in Suggests).",
          call. = FALSE)
   }
-  if (!is.null(seed)) set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
 
   rows <- lapply(n_total, function(nt) {
     .mc_twopart_at_n(nt, offer_ref, offer_trt, wait_ref, wait_trt, phi,

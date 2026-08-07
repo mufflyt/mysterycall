@@ -255,7 +255,7 @@ mysterycall_lmm <- function(data,
     function(pred) {
       x <- data_cc[[pred]]
       if (is.factor(x))    return(levels(x)[[1L]])
-      if (is.character(x)) return(sort(unique(x[!is.na(x)]))[[1L]])
+      if (is.character(x)) return(sort(unique(x[!is.na(x)]), method = "radix")[[1L]])
       NULL
     }
   ))
@@ -312,16 +312,19 @@ mysterycall_lmm <- function(data,
   # Column names differ between lmer and lmerTest::lmer
   est_col  <- "Estimate"
   se_col   <- "Std. Error"
-  t_col    <- if ("t value" %in% names(fe)) "t value" else "t value"
+  t_col    <- if ("t value" %in% names(fe)) "t value" else NULL
   df_col   <- if ("df" %in% names(fe)) "df" else NULL
   pval_col <- if ("Pr(>|t|)" %in% names(fe)) "Pr(>|t|)" else NULL
 
   p_values <- if (!is.null(pval_col)) {
     fe[[pval_col]]
-  } else {
+  } else if (!is.null(t_col)) {
     # Conservative fallback: t with residual df (est_df already counts intercept)
     df_resid <- nrow(data_cc) - est_df
     2 * stats::pt(abs(fe[[t_col]]), df = df_resid, lower.tail = FALSE)
+  } else {
+    # No t-statistic column either -> cannot derive p-values.
+    rep(NA_real_, nrow(fe))
   }
 
   df_values <- if (!is.null(df_col)) fe[[df_col]] else {

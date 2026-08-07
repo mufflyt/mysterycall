@@ -54,8 +54,9 @@
 #' # Verify an audit file written by clean_phase1
 #' mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
 mysterycall_verify_artifact <- function(audit_path) {
-  if (!requireNamespace("jsonlite", quietly = TRUE)) {
-    stop("Package 'jsonlite' is required",
+  if (!requireNamespace("jsonlite", quietly = TRUE) ||
+      !requireNamespace("digest", quietly = TRUE)) {
+    stop("Packages 'jsonlite' and 'digest' are required",
          call. = FALSE)
   }
   if (!is.character(audit_path) || length(audit_path) != 1L || !nzchar(audit_path)) {
@@ -80,7 +81,7 @@ mysterycall_verify_artifact <- function(audit_path) {
   }
 
   stored_id   <- audit$artifact_id
-  stable_keys <- sort(setdiff(names(audit), c(.audit_volatile_fields, "artifact_id")))
+  stable_keys <- sort(setdiff(names(audit), c(.audit_volatile_fields, "artifact_id")), method = "radix")
   stable_json <- jsonlite::toJSON(audit[stable_keys], auto_unbox = TRUE, digits = NA)
   recomputed  <- digest::digest(as.character(stable_json), algo = "sha256", serialize = FALSE)
 

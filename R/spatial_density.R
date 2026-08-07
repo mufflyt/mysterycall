@@ -115,7 +115,7 @@ mysterycall_calculate_hq_distance <- function(lats, lons, platforms, matched_pai
     }
   }
   
-  for (i in 1:n) {
+  for (i in seq_len(n)) {
     lat <- lats[i]
     lon <- lons[i]
     plat <- platforms[i]

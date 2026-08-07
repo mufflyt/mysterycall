@@ -63,6 +63,7 @@ mysterycall_wait_time_by_group <- function(
   checkmate::assert_string(outcome_col)
   checkmate::assert_string(group_col)
   checkmate::assert_names(names(data), must.include = c(outcome_col, group_col))
+  checkmate::assert_numeric(data[[outcome_col]], .var.name = outcome_col)
   checkmate::assert_integerish(digits_median, lower = 0, len = 1)
   checkmate::assert_integerish(digits_q,      lower = 0, len = 1)
   checkmate::assert_flag(filter_positive)

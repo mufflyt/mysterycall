@@ -1,5 +1,45 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Robustness / hardening
+
+- **RNG side-effects removed.** Eleven functions that set a random seed
+  internally (`mysterycall_nb_power()`, `mysterycall_marginal_power()`,
+  `mysterycall_adjusted_power()`, `mysterycall_twopart_power()`,
+  `mysterycall_icc()`, `mysterycall_bootstrap_ci()`,
+  `mysterycall_build_matched_controls()`, `mysterycall_split_and_save()`,
+  `mysterycall_stratified_sample()`, and the internal validation /
+  interaction-screen helpers)
+  now use `withr::local_seed()` instead of `set.seed()`. They remain fully
+  reproducible for a given seed, but no longer clobber the caller's global
+  random-number stream as a side effect.
+- **Locale-independent reproducibility.** The reference-category pick in
+  `mysterycall_nb_model()`, `mysterycall_poisson_model()`,
+  `mysterycall_logistic_model()`, and `mysterycall_lmm()` — and the
+  audit-artifact key ordering shared by `mysterycall_clean_phase1()` and
+  `mysterycall_verify_artifact()` — now sort with `method = "radix"`, so the
+  chosen baseline level and the provenance hash no longer depend on the
+  machine's `LC_COLLATE` locale.
+- **Empty-sequence safety.** Replaced `for (i in 1:n)` with `seq_len(n)` in the
+  internal validation and spatial-density loops so a zero count iterates zero
+  times instead of running backwards.
+- **Silent-skip → warning.** `mysterycall_summarize_demographics()` now warns
+  when a *supplied* `female_col` / `setting_col` is not found in the data
+  (previously it silently returned `NA`, indistinguishable from "not
+  requested").
+- **Input validation.** `mysterycall_wait_time_by_group()` now asserts the
+  outcome column is numeric before computing medians/quantiles.
+- **Optional-dependency guards.** `mysterycall_clean_phase1()` and
+  `mysterycall_verify_artifact()` now include `digest` (and, for the former,
+  `jsonlite`) in their up-front `requireNamespace()` checks — those packages are
+  used unconditionally to build the provenance hash, so a missing one now yields
+  the friendly install message instead of a cryptic error mid-run.
+- **Defensive p-value fallback.** `mysterycall_lmm()` had a dead
+  `if … else "t value"` branch; it now falls back to `NULL` with a downstream
+  guard, returning `NA` p-values rather than erroring if a model summary lacks
+  the t-statistic column.
+- **File output.** `mysterycall_export_results_docx()` now creates the target
+  directory if it does not exist, matching the other writers in the package.
+
 ## Consistency
 
 - P-value formatting is now consistent across the package: a single internal

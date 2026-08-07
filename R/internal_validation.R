@@ -161,7 +161,7 @@ mysterycall_provider_split_simulation <- function(data, outcome, predictors, clu
   n_clusters <- length(clusters)
   
   # Assign clusters to folds
-  set.seed(42)
+  withr::local_seed(42)
   folds <- split(sample(clusters), rep(1:k, length.out = n_clusters))
   
   results <- data.frame()
@@ -176,7 +176,7 @@ mysterycall_provider_split_simulation <- function(data, outcome, predictors, clu
     glmmTMB::nbinom2()
   }
   
-  for (i in 1:k) {
+  for (i in seq_len(k)) {
     test_clusters <- folds[[i]]
     train_data <- data[!data[[cluster_col]] %in% test_clusters, ]
     test_data  <- data[data[[cluster_col]] %in% test_clusters, ]
@@ -244,7 +244,7 @@ mysterycall_bootstrap_predictor_stability <- function(data, outcome, predictors,
   cat("Running bootstrap predictor-retention stability loops...\n")
   pb <- utils::txtProgressBar(min = 0, max = n_boot, style = 3)
   
-  for (i in 1:n_boot) {
+  for (i in seq_len(n_boot)) {
     # Bootstrap resample
     boot_idx <- sample(1:n_obs, replace = TRUE)
     boot_data <- data[boot_idx, ]
