@@ -93,6 +93,8 @@
 #'   [mysterycall_clean_phase2()].
 #'   Run [mysterycall_preflight_check()] before starting to catch missing
 #'   API keys and malformed inputs early.
+#'   Feed the cleaned result into [mysterycall_run_analysis()] for the
+#'   analysis phase.
 #' @family workflow
 #' @examplesIf interactive()
 #' results <- mysterycall_run_workflow(

@@ -1,5 +1,18 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Documentation
+
+- Added `ARCHITECTURE.md`, a codebase-orientation guide for contributors: the
+  two-phase collection → analysis pipeline, the subsystem `@family` map, the
+  documentation model (hand-checked-in `.Rd` + `devtools::document()`), the
+  project-specific conventions (validation, optional-dependency guards, RNG
+  hygiene, the phase-2 column contract), and where to start reading. Linked from
+  the README and `CONTRIBUTING.md`.
+- `mysterycall_run_analysis()` and `mysterycall_run_workflow()` now cross-link
+  each other via `@seealso`, so the collection and analysis halves of the
+  pipeline are discoverable from either help page.
+- Documented the return value of `print.mysterycall_screen_predictors()`.
+
 ## Robustness / hardening
 
 - `mysterycall_insurance_wait_sentence()` now derives the direction word from the

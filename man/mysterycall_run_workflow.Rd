@@ -171,8 +171,9 @@ Stage functions called by this workflow:
 \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}.
 Run \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} before starting to catch missing
 API keys and malformed inputs early.
+Feed the cleaned result into \code{\link[=mysterycall_run_analysis]{mysterycall_run_analysis()}} for the analysis phase.
 
-Other workflow: 
+Other workflow:
 \code{\link{mysterycall_call_productivity}()},
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},

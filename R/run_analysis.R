@@ -78,6 +78,8 @@
 #'     encountered an error or had missing required columns.}
 #' }
 #'
+#' @seealso [mysterycall_run_workflow()] builds and cleans the call log this
+#'   analyzes; together they form the collection -> analysis pipeline.
 #' @family workflow helpers
 #' @importFrom checkmate assert_data_frame assert_flag assert_character
 #' @export
