@@ -148,8 +148,9 @@ mysterycall_insurance_wait_sentence <- function(
 
   # 4. Percentage difference
   pct_diff  <- round((irr - 1) * 100, digits = digits_pct)
-  # Handle the exact-tie case: irr == 1 is "similar", not "shorter".
-  direction <- if (irr > 1) "longer" else if (irr < 1) "shorter" else "similar"
+  # Base the direction word on the *displayed* percentage so a difference that
+  # rounds to 0% reads "similar", never "0% longer/shorter".
+  direction <- if (pct_diff > 0) "longer" else if (pct_diff < 0) "shorter" else "similar"
 
   # 5. Build sentence
   p_fmt <- if (p_value < 0.001) "< 0.001" else sprintf("%.*f", 3L, p_value)

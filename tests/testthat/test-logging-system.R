@@ -339,16 +339,18 @@ test_that("Logging handles errors gracefully", {
 })
 
 test_that("Nested logging works correctly", {
-  mysterycall:::mysterycall_workflow_start("Outer Workflow", total_steps = 2)
+  expect_no_error(suppressMessages({
+    mysterycall:::mysterycall_workflow_start("Outer Workflow", total_steps = 2)
 
-  mysterycall:::mysterycall_log_step("Outer Step 1")
-  mysterycall:::mysterycall_log_info("Starting inner operations")
-  mysterycall:::mysterycall_log_info("Inner operation 1")
-  mysterycall:::mysterycall_log_info("Inner operation 2")
-  mysterycall:::mysterycall_log_success("Inner operations complete")
-  mysterycall:::mysterycall_log_step_complete()
+    mysterycall:::mysterycall_log_step("Outer Step 1")
+    mysterycall:::mysterycall_log_info("Starting inner operations")
+    mysterycall:::mysterycall_log_info("Inner operation 1")
+    mysterycall:::mysterycall_log_info("Inner operation 2")
+    mysterycall:::mysterycall_log_success("Inner operations complete")
+    mysterycall:::mysterycall_log_step_complete()
 
-  mysterycall:::mysterycall_workflow_end()
+    mysterycall:::mysterycall_workflow_end()
+  }))
 })
 
 # ==============================================================================

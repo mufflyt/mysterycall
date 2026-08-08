@@ -95,6 +95,10 @@ mysterycall_compare_waves <- function(
   }
 
   # ---- Wilson CI for a proportion ---------------------------------------------
+  # NOTE: intentionally a LOCAL helper, distinct from the package-level
+  # .wilson_ci() in outcome_analysis.R (signature (k, n, conf_level), returns an
+  # unnamed pair). This one is (x, n, alpha) and returns a named c(lower, upper).
+  # Do not "DRY-merge" the two -- the signatures and return shapes differ.
   .wilson_ci <- function(x, n, alpha = 0.05) {
     if (n == 0) return(c(lower = NA_real_, upper = NA_real_))
     z    <- stats::qnorm(1 - alpha / 2)
