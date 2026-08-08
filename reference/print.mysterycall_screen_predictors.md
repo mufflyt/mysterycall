@@ -22,3 +22,7 @@ print(x, n = 10L, ...)
 - ...:
 
   Ignored.
+
+## Value
+
+The input `x`, invisibly.

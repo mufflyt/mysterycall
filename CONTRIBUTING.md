@@ -3,6 +3,14 @@
 Thank you for considering contributing to **mysterycall**! This guide
 explains how to report bugs, propose features, and submit pull requests.
 
+> **New to the codebase?** Read
+> [ARCHITECTURE.md](https://mufflyt.github.io/mysterycall/ARCHITECTURE.md)
+> first — it maps the two-phase collection → analysis pipeline, the
+> subsystem families, the documentation model (`.Rd` files are checked
+> in — run `devtools::document()`), and the project-specific
+> conventions. This guide covers the *process*; `ARCHITECTURE.md` covers
+> the *mental model*.
+
 ## Code of Conduct
 
 All interactions are governed by our [Code of

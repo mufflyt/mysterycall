@@ -237,7 +237,11 @@ citation("mysterycall")
 
 ## Contributing
 
-Contributions are welcome. Please read
+Contributions are welcome. New to the codebase? Start with
+[ARCHITECTURE.md](https://mufflyt.github.io/mysterycall/ARCHITECTURE.md)
+— a map of how the package is organized (the two-phase collection →
+analysis pipeline, the subsystem families, and the project-specific
+conventions). Then read
 [CONTRIBUTING.md](https://mufflyt.github.io/mysterycall/CONTRIBUTING.md)
 for the development workflow, coding style, and pull-request process.
 Bug reports and feature requests are best filed as [GitHub

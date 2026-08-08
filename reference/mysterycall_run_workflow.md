@@ -217,6 +217,9 @@ Stage functions called by this workflow:
 Run
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
 before starting to catch missing API keys and malformed inputs early.
+Feed the cleaned result into
+[`mysterycall_run_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_analysis.md)
+for the analysis phase.
 
 Other workflow:
 [`mysterycall_call_productivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_call_productivity.md),

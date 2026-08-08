@@ -177,6 +177,12 @@ three bookkeeping elements:
   Character vector of step names that encountered an error or had
   missing required columns.
 
+## See also
+
+[`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
+builds and cleans the call log this analyzes; together they form the
+collection -\> analysis pipeline.
+
 ## Examples
 
 ``` r
