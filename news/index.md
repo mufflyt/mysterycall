@@ -4,6 +4,12 @@
 
 ### Robustness / hardening
 
+- [`mysterycall_insurance_wait_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_insurance_wait_sentence.md)
+  now derives the direction word from the *displayed* rounded
+  percentage: a difference that rounds to `0%` reads “similar” instead
+  of “0% longer/shorter” (previously the word came from the unrounded
+  IRR).
+
 - **RNG side-effects removed.** Eleven functions that set a random seed
   internally
   ([`mysterycall_nb_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_power.md),
@@ -20,6 +26,7 @@
   instead of [`set.seed()`](https://rdrr.io/r/base/Random.html). They
   remain fully reproducible for a given seed, but no longer clobber the
   caller’s global random-number stream as a side effect.
+
 - **Locale-independent reproducibility.** The reference-category pick in
   [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md),
   [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
@@ -33,18 +40,22 @@
   — now sort with `method = "radix"`, so the chosen baseline level and
   the provenance hash no longer depend on the machine’s `LC_COLLATE`
   locale.
+
 - **Empty-sequence safety.** Replaced `for (i in 1:n)` with `seq_len(n)`
   in the internal validation and spatial-density loops so a zero count
   iterates zero times instead of running backwards.
+
 - **Silent-skip → warning.**
   [`mysterycall_summarize_demographics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_demographics.md)
   now warns when a *supplied* `female_col` / `setting_col` is not found
   in the data (previously it silently returned `NA`, indistinguishable
   from “not requested”).
+
 - **Input validation.**
   [`mysterycall_wait_time_by_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_by_group.md)
   now asserts the outcome column is numeric before computing
   medians/quantiles.
+
 - **Optional-dependency guards.**
   [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
   and
@@ -54,11 +65,13 @@
   checks — those packages are used unconditionally to build the
   provenance hash, so a missing one now yields the friendly install
   message instead of a cryptic error mid-run.
+
 - **Defensive p-value fallback.**
   [`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
   had a dead `if … else "t value"` branch; it now falls back to `NULL`
   with a downstream guard, returning `NA` p-values rather than erroring
   if a model summary lacks the t-statistic column.
+
 - **File output.**
   [`mysterycall_export_results_docx()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_results_docx.md)
   now creates the target directory if it does not exist, matching the

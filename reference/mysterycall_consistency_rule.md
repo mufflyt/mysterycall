@@ -76,7 +76,7 @@ mysterycall_consistency_rule(
 #> $predicate
 #> function (d) 
 #> !is.na(d$wait_days) & d$offered == FALSE
-#> <environment: 0x564b8b41d0a0>
+#> <environment: 0x5633c8e824e0>
 #> 
 #> $priority
 #> [1] "HIGH"
