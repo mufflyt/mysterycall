@@ -13,6 +13,9 @@
 
 \item{...}{Ignored.}
 }
+\value{
+The input \code{x}, invisibly.
+}
 \description{
 Print a mysterycall_screen_predictors result
 }

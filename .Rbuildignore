@@ -64,3 +64,4 @@
 ^check_docs\.R$
 ^check_internal\.R$
 ^roxygen_tags_summary\.txt$
+^ARCHITECTURE\.md$

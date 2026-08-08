@@ -508,6 +508,7 @@ mysterycall_screen_predictors <- function(data,
 #' @param x A `mysterycall_screen_predictors` object.
 #' @param n Integer. Number of rows to print. Default `10L`.
 #' @param ... Ignored.
+#' @return The input `x`, invisibly.
 #' @export
 #' @keywords internal
 print.mysterycall_screen_predictors <- function(x, n = 10L, ...) {

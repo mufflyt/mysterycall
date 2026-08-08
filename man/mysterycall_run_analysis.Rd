@@ -116,6 +116,11 @@ and a sensitivity analysis into a single reproducible call.  Each step is
 wrapped in error handling so that a failure in one step does not abort the
 rest of the pipeline.
 }
+\seealso{
+\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} builds and
+cleans the call log this analyzes; together they form the
+collection -> analysis pipeline.
+}
 \examples{
 \dontrun{
 set.seed(1)
