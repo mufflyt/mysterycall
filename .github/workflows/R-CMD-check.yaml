@@ -1,11 +1,21 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 name: R-CMD-check
 
 permissions: read-all
+
+concurrency:
+  # A new push to the same branch/PR cancels the in-progress matrix, so the
+  # heavy 5-platform check doesn't pile up.
+  group: R-CMD-check-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
