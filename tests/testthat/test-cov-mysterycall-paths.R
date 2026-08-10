@@ -42,11 +42,15 @@ test_that("mysterycall_resolve_path errors on unknown type alias", {
 
 test_that("mysterycall_resolve_path with create = TRUE creates the parent directory", {
   base <- tempdir()
-  new_subdir <- file.path(base, paste0("test_create_", as.integer(Sys.time())))
-  on.exit(unlink(new_subdir, recursive = TRUE), add = TRUE)
+  # Pass a RELATIVE subdir name: resolve_path() prepends base_dir. Passing an
+  # absolute path here double-prepends base_dir, which yields an invalid
+  # two-drive-letter path on Windows (it happened to collapse to a valid nested
+  # path on Linux).
+  subdir <- paste0("test_create_", as.integer(Sys.time()))
+  on.exit(unlink(file.path(base, subdir), recursive = TRUE), add = TRUE)
 
   result <- suppressMessages(suppressWarnings(
-    mysterycall:::mysterycall_resolve_path(new_subdir, "output.csv", base_dir = base, create = TRUE)
+    mysterycall:::mysterycall_resolve_path(subdir, "output.csv", base_dir = base, create = TRUE)
   ))
   expect_type(result, "character")
   # The resolved parent directory should now exist
