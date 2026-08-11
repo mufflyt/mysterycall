@@ -6,9 +6,11 @@ coverage:
       default:
         target: auto
         threshold: 1%
-        informational: true
+        # Gate: overall coverage may not drop by more than the threshold.
+        informational: false
     patch:
       default:
         target: auto
         threshold: 1%
+        # Report-only: don't hard-block a PR on per-line patch coverage.
         informational: true

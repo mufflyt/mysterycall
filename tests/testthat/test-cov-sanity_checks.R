@@ -224,7 +224,7 @@ test_that("mysterycall_scan_for_limits errors on nonexistent directory", {
 
 test_that("mysterycall_scan_for_limits returns dataframe with correct structure", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_clean_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_clean_", as.integer(Sys.time()), ".R"))
   writeLines("# Just comments\nx <- 1", test_file)
 
   result <- suppressMessages(
@@ -247,7 +247,7 @@ test_that("mysterycall_scan_for_limits returns dataframe with correct structure"
 
 test_that("mysterycall_scan_for_limits detects head() anti-pattern", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_head_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_head_", as.integer(Sys.time()), ".R"))
   writeLines("result <- head(data, 100)", test_file)
 
   result <- suppressWarnings(
@@ -264,7 +264,7 @@ test_that("mysterycall_scan_for_limits detects head() anti-pattern", {
 
 test_that("mysterycall_scan_for_limits detects slice_head() anti-pattern", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_slice_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_slice_", as.integer(Sys.time()), ".R"))
   writeLines("df <- slice_head(n = 50)", test_file)
 
   result <- suppressWarnings(
@@ -281,7 +281,7 @@ test_that("mysterycall_scan_for_limits detects slice_head() anti-pattern", {
 
 test_that("mysterycall_scan_for_limits respects exclude_pattern", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_exclude_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_exclude_", as.integer(Sys.time()), ".R"))
   writeLines("x <- head(data, 100)", test_file)
 
   result <- suppressMessages(
@@ -295,7 +295,7 @@ test_that("mysterycall_scan_for_limits respects exclude_pattern", {
 
 test_that("mysterycall_scan_for_limits detects n_max anti-pattern", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_nmax_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_nmax_", as.integer(Sys.time()), ".R"))
   writeLines("data <- read.csv('file.csv', n_max = 1000)", test_file)
 
   result <- suppressWarnings(
@@ -312,7 +312,7 @@ test_that("mysterycall_scan_for_limits detects n_max anti-pattern", {
 
 test_that("mysterycall_scan_for_limits assigns correct severity levels", {
   tmpdir <- tempdir()
-  test_file <- file.path(tmpdir, paste0("test_severity_", Sys.time(), ".R"))
+  test_file <- file.path(tmpdir, paste0("test_severity_", as.integer(Sys.time()), ".R"))
   writeLines("x <- head(data, 100)", test_file)
 
   result <- suppressWarnings(

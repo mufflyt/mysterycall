@@ -301,7 +301,7 @@ test_that("print.mysterycall_snapshot: happy path with existing file", {
   printed <- capture_output(print(out))
 
   expect_true(grepl("Session snapshot:", printed))
-  expect_true(grepl(snap, printed))
+  expect_true(grepl(snap, printed, fixed = TRUE))
   expect_true(grepl("REPRODUCIBILITY SNAPSHOT", printed))
 })
 
@@ -380,5 +380,5 @@ test_that("print.mysterycall_snapshot: handles file with few lines", {
 
   # Should print without error and show file path
   expect_true(grepl("Session snapshot:", printed))
-  expect_true(grepl(snap, printed))
+  expect_true(grepl(snap, printed, fixed = TRUE))
 })

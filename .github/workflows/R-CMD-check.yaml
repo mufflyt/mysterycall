@@ -1,11 +1,21 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 name: R-CMD-check
 
 permissions: read-all
+
+concurrency:
+  # A new push to the same branch/PR cancels the in-progress matrix, so the
+  # heavy 5-platform check doesn't pile up.
+  group: R-CMD-check-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
@@ -63,5 +73,9 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
           args: 'c("--no-manual", "--as-cran", "--run-donttest")'
-          error-on: '"warning"'
+          # Automatic gate (push / PR) fails only on ERRORs -- real breakage
+          # across all 5 platforms -- so a benign --as-cran WARNING doesn't
+          # permanently block merges. A manual `workflow_dispatch` run keeps the
+          # strict warning-level check for on-demand CRAN-readiness auditing.
+          error-on: ${{ github.event_name == 'workflow_dispatch' && '"warning"' || '"error"' }}
 
