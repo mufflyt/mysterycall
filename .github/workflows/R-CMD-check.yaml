@@ -12,13 +12,31 @@ name: R-CMD-check
 permissions: read-all
 
 concurrency:
-  # A new push to the same branch/PR cancels the in-progress matrix, so the
-  # heavy 5-platform check doesn't pile up.
+  # A new push to the same branch/PR cancels the in-progress run so checks
+  # don't pile up (matters most for the full matrix on main).
   group: R-CMD-check-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Pick the matrix by event: a pull request gets a fast single-platform gate
+  # (ubuntu-release); push(main) and manual workflow_dispatch runs get the full
+  # cross-platform matrix (macOS, Windows, Linux devel/release/oldrel-1).
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.set.outputs.config }}
+    steps:
+      - id: set
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo 'config=[{"os":"ubuntu-latest","r":"release"}]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'config=[{"os":"macos-latest","r":"release"},{"os":"windows-latest","r":"release"},{"os":"ubuntu-latest","r":"devel","http-user-agent":"release"},{"os":"ubuntu-latest","r":"release"},{"os":"ubuntu-latest","r":"oldrel-1"}]' >> "$GITHUB_OUTPUT"
+          fi
+
   R-CMD-check:
+    needs: matrix
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -26,12 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+        config: ${{ fromJSON(needs.matrix.outputs.config) }}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -73,9 +86,9 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
           args: 'c("--no-manual", "--as-cran", "--run-donttest")'
-          # Automatic gate (push / PR) fails only on ERRORs -- real breakage
-          # across all 5 platforms -- so a benign --as-cran WARNING doesn't
-          # permanently block merges. A manual `workflow_dispatch` run keeps the
-          # strict warning-level check for on-demand CRAN-readiness auditing.
+          # Automatic gate (push / PR) fails only on ERRORs -- real breakage --
+          # so a benign --as-cran WARNING doesn't permanently block merges.
+          # A manual `workflow_dispatch` run keeps the strict warning-level
+          # check for on-demand CRAN-readiness auditing.
           error-on: ${{ github.event_name == 'workflow_dispatch' && '"warning"' || '"error"' }}
 
