@@ -38,12 +38,12 @@ test_that("STRESS: Handles 10k row dataset efficiently", {
   start_time <- Sys.time()
   start_mem <- as.numeric(object.size(ls()))
 
-  results <- mysterycall_clean_phase1(
+  results <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = large_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   end_time <- Sys.time()
   elapsed_sec <- as.numeric(end_time - start_time, units = "secs")
@@ -86,12 +86,12 @@ test_that("STRESS: Memory efficient with repeated operations", {
   mem_sizes <- numeric(5)
 
   for (i in 1:5) {
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
 
     # Force garbage collection and measure
     gc()
@@ -126,12 +126,12 @@ test_that("STRESS: Handles datasets with 90% missing data", {
 
   # Should handle gracefully without crashing
   expect_no_error({
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = sparse_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   })
 
   # Should produce some output even with sparse data
@@ -165,12 +165,12 @@ test_that("STRESS: Handles wide datasets with 50+ columns", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = wide_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   })
 
   # Core columns should still work
@@ -209,13 +209,13 @@ test_that("STRESS: Efficiently detects duplicates in large datasets", {
 
   start_time <- Sys.time()
 
-  results <- mysterycall_clean_phase1(
+  results <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data      = large_data,
     output_directory = temp_dir,
     verbose          = FALSE,
     notify           = FALSE,
     duplicate_rows   = FALSE  # do not duplicate rows for insurance scenarios
-  )
+  ))
 
   elapsed_sec <- as.numeric(Sys.time() - start_time, units = "secs")
 
@@ -253,12 +253,12 @@ test_that("STRESS: Handles very long text fields", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = long_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   })
 
   expect_gte(nrow(results), 90)
@@ -289,12 +289,12 @@ test_that("STRESS: Handles multiple file writes efficiently", {
 
   # Write to multiple locations sequentially
   for (temp_dir in temp_dirs) {
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   }
 
   elapsed_sec <- as.numeric(Sys.time() - start_time, units = "secs")
@@ -334,12 +334,12 @@ test_that("STRESS: Gracefully handles memory constraints", {
 
     start_time <- Sys.time()
 
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
 
     processing_times[i] <- as.numeric(Sys.time() - start_time, units = "secs")
   }
@@ -377,12 +377,12 @@ test_that("STRESS: Handles rapid repeated function calls", {
   start_time <- Sys.time()
 
   for (i in 1:50) {
-    results <- mysterycall_clean_phase1(
+    results <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
   }
 
   elapsed_sec <- as.numeric(Sys.time() - start_time, units = "secs")
