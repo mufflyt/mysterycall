@@ -91,3 +91,23 @@ jobs:
           # been surfacing were silenced.
           error-on: '"warning"'
 
+      # TEMPORARY DIAGNOSTIC: the check-r-package "Show testthat output" step
+      # floods the job-log tail with the passing test transcript, hiding the
+      # check-level Status/WARNING lines from a remote reader. Print just the
+      # check structure (case-sensitive WARNING/NOTE are R-CMD-check level, not
+      # the lowercase test "Warning" lines) so the specific --as-cran WARNING is
+      # readable. Remove once the WARNING is identified and fixed.
+      - name: Surface R-CMD-check WARNINGs
+        if: always()
+        shell: bash
+        run: |
+          logf=$(find . -name 00check.log 2>/dev/null | head -1)
+          echo "=== 00check.log: $logf ==="
+          if [ -n "$logf" ]; then
+            grep -n -E '^\* checking|WARNING|NOTE|^Status:' "$logf" || echo '(no check-structure lines matched)'
+            echo '=== last 30 lines ==='
+            tail -30 "$logf"
+          else
+            echo '(00check.log not found)'
+          fi
+
