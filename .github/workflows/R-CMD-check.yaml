@@ -86,9 +86,8 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
           args: 'c("--no-manual", "--as-cran", "--run-donttest")'
-          # Automatic gate (push / PR) fails only on ERRORs -- real breakage --
-          # so a benign --as-cran WARNING doesn't permanently block merges.
-          # A manual `workflow_dispatch` run keeps the strict warning-level
-          # check for on-demand CRAN-readiness auditing.
-          error-on: ${{ github.event_name == 'workflow_dispatch' && '"warning"' || '"error"' }}
+          # Strict gate: any --as-cran WARNING (or ERROR) fails the check, on
+          # every event. Re-tightened after the noisy test warnings that had
+          # been surfacing were silenced.
+          error-on: '"warning"'
 
