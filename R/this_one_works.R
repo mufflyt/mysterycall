@@ -273,7 +273,7 @@ scrape_physicians_data_with_tor <- function(
     UnknownTimestamps <- as.POSIXct(character(0))
     FailedIDs         <- integer(0)
     FailedTimestamps  <- as.POSIXct(character(0))
-    n_ckpt            <- 0L
+    n_ckpt            <- 0L   # counts IDs since last checkpoint (all outcomes)
     n_req             <- 0L
     n_chunk           <- length(chunk)
 
@@ -354,13 +354,10 @@ scrape_physicians_data_with_tor <- function(
           Sys.sleep((2^attempt) * runif(1, sleep_min, sleep_max))
       }
 
+      # Checkpoint fires on every N IDs processed (regardless of outcome)
+      n_ckpt <- n_ckpt + 1L
       if (status == "ok") {
         Physicians <- dplyr::bind_rows(Physicians, row)
-        n_ckpt     <- n_ckpt + 1L
-        if (is.finite(checkpoint_every) && n_ckpt >= as.integer(checkpoint_every)) {
-          save_worker_results("_checkpoint")
-          n_ckpt <- 0L
-        }
         Sys.sleep(runif(1, sleep_min, sleep_max))
       } else if (status == "not_found") {
         UnknownIDs        <- c(UnknownIDs, id)
@@ -370,6 +367,10 @@ scrape_physicians_data_with_tor <- function(
         FailedIDs        <- c(FailedIDs, id)
         FailedTimestamps <- c(FailedTimestamps, Sys.time())
         Sys.sleep(runif(1, sleep_min_notfound, sleep_max_notfound))
+      }
+      if (is.finite(checkpoint_every) && n_ckpt >= as.integer(checkpoint_every)) {
+        save_worker_results("_checkpoint")
+        n_ckpt <- 0L
       }
     }
 
@@ -410,6 +411,13 @@ scrape_physicians_data_with_tor <- function(
   }
 
   # ── Merge worker results ───────────────────────────────────────────────────
+  ok <- vapply(results, is.list, logical(1))
+  if (any(!ok)) {
+    failed_workers <- which(!ok)
+    .log(sprintf("[abog] WARNING: %d worker(s) failed (W%s) — excluded from merged output; per-worker checkpoint CSVs are intact",
+                 sum(!ok), paste(failed_workers, collapse = ", W")))
+  }
+  results <- results[ok]
   Physicians        <- dplyr::bind_rows(lapply(results, `[[`, "Physicians"))
   UnknownIDs        <- unlist(lapply(results, `[[`, "UnknownIDs"))
   UnknownTimestamps <- do.call(c, lapply(results, `[[`, "UnknownTimestamps"))

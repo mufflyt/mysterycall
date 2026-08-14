@@ -148,6 +148,12 @@ mysterycall_isochrones_for_df <- function(
 
   # Loop over the rows in the dataframe
   for (i in seq_len(total_rows)) {
+    # Initialize per-row temporaries so cleanup is safe on minimal inputs.
+    point_isochrones <- NULL
+    flattened <- NULL
+    point_sf <- NULL
+    attributes_df <- NULL
+    repeated_attrs <- NULL
 
     # Get the point for the current row
     point_temp <- dataframe[i, ]
