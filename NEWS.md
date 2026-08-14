@@ -1,5 +1,14 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Internal / CI
+
+- `mysterycall_forest_plot()` now builds its horizontal error-bar layer inside an
+  isolated `suppressWarnings()`, matching `mysterycall_irr_plot()` and
+  `mysterycall_plot_disparities()`. `ggplot2::geom_errorbarh()` is soft-deprecated
+  in ggplot2 >= 4.0.0; suppressing the lifecycle warning at construction keeps the
+  runnable example clean under `R CMD check --run-donttest`, letting the
+  `R-CMD-check` gate run with `error-on: "warning"`.
+
 ## Documentation
 
 - Added `ARCHITECTURE.md`, a codebase-orientation guide for contributors: the
