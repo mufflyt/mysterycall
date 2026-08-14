@@ -2,12 +2,17 @@
 
 ## Internal / CI
 
+- Replaced literal non-ASCII characters (en dash, em dash, multiplication sign)
+  in output string literals with `\uXXXX` escapes in `R/provenance.R`,
+  `R/subspecialist_infographic.R`, and `R/subspecialist_trend.R`. This clears the
+  `R CMD check --as-cran` "checking code files for non-ASCII characters ...
+  WARNING", allowing the `R-CMD-check` gate to run with `error-on: "warning"`.
+  User-facing output is byte-for-byte unchanged.
 - `mysterycall_forest_plot()` now builds its horizontal error-bar layer inside an
   isolated `suppressWarnings()`, matching `mysterycall_irr_plot()` and
   `mysterycall_plot_disparities()`. `ggplot2::geom_errorbarh()` is soft-deprecated
   in ggplot2 >= 4.0.0; suppressing the lifecycle warning at construction keeps the
-  runnable example clean under `R CMD check --run-donttest`, letting the
-  `R-CMD-check` gate run with `error-on: "warning"`.
+  runnable example and the test transcript free of the deprecation notice.
 
 ## Documentation
 

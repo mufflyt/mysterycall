@@ -241,7 +241,7 @@ mysterycall_subspecialist_infographic <- function(
     ggplot2::annotate("rect", xmin = 0.03, xmax = xmax - 0.03,
                       ymin = 0.905, ymax = 1.0, fill = header_fill, colour = NA) +
     ggplot2::annotate("text", x = xmax / 2, y = 0.9525,
-                      label = sprintf("%s: %d–%d", toupper(title),
+                      label = sprintf("%s: %d\u2013%d", toupper(title),
                                       as.integer(year_start), as.integer(year_end)),
                       colour = "white", fontface = "bold", size = 5)
 

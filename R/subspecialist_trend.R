@@ -189,7 +189,7 @@ mysterycall_subspecialist_trend <- function(
 
   years <- sort(unique(d$year))
   if (isTRUE(show_year_range))
-    title <- sprintf("%s, %d–%d", title, min(years), max(years))
+    title <- sprintf("%s, %d\u2013%d", title, min(years), max(years))
 
   # ---- optional per-subspecialty trend statistic -----------------------------
   do_test   <- !is.null(trend_test) && !isFALSE(trend_test)
@@ -282,7 +282,7 @@ mysterycall_subspecialist_trend <- function(
                     ifelse(m$p_value < 0.05, "*", ""))))
       ends$.lab <- ifelse(
         is.na(m$rr_per_year), ends$subspecialty,
-        sprintf("%s\n(×%.3f/yr%s)", ends$subspecialty, m$rr_per_year, star)
+        sprintf("%s\n(\u00d7%.3f/yr%s)", ends$subspecialty, m$rr_per_year, star)
       )
     }
     p <- p +
