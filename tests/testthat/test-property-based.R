@@ -85,12 +85,12 @@ test_that("Property: Data frame input always produces data frame output", {
     temp_dir <- tempdir()
 
     tryCatch({
-      result <- mysterycall_clean_phase1(
+      result <- suppressWarnings(mysterycall_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
         notify = FALSE
-      )
+      ))
 
       # Property: Output is always a data frame
       expect_s3_class(result, "data.frame")
@@ -140,12 +140,12 @@ test_that("Property: Column contains valid categorical values for case_when", {
     test_data <- generate_test_dataframe(sample(20:100, 1))
     temp_dir <- tempdir()
 
-    result <- mysterycall_clean_phase1(
+    result <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
 
     if (nrow(result) > 0) {
       # Property: State values should work in case_when operations
@@ -204,13 +204,13 @@ test_that("Property: Data transformations preserve referential integrity", {
 
     temp_dir <- tempdir()
 
-    result <- mysterycall_clean_phase1(
+    result <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE,
       duplicate_rows = FALSE  # For easier integrity checking
-    )
+    ))
 
     if ("id" %in% names(result)) {
       # Property: All original IDs should be preserved
@@ -297,13 +297,13 @@ test_that("Property: Data aggregations are mathematically consistent", {
     test_data <- generate_test_dataframe(sample(50:200, 1), valid_only = TRUE)
     temp_dir <- tempdir()
 
-    result <- mysterycall_clean_phase1(
+    result <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE,
       duplicate_rows = FALSE
-    )
+    ))
 
     if (nrow(result) > 0 && "state_name" %in% names(result)) {
       # Count by state
@@ -352,12 +352,12 @@ test_that("Property: String operations preserve UTF-8 encoding", {
 
   temp_dir <- tempdir()
 
-  result <- mysterycall_clean_phase1(
+  result <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
-  )
+  ))
 
   # Property: International characters should be preserved
   if ("names" %in% names(result) && nrow(result) > 0) {
@@ -375,23 +375,23 @@ test_that("Property: Function calls are deterministic with same input", {
   temp_dir2 <- tempdir()
 
   # Run same operation twice
-  result1 <- mysterycall_clean_phase1(
+  result1 <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir1,
     verbose = FALSE,
     notify = FALSE,
     id_seed = 123,  # Fixed seed for determinism
     duplicate_rows = FALSE
-  )
+  ))
 
-  result2 <- mysterycall_clean_phase1(
+  result2 <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir2,
     verbose = FALSE,
     notify = FALSE,
     id_seed = 123,  # Same seed
     duplicate_rows = FALSE
-  )
+  ))
 
   # Property: Same input should produce same output
   expect_equal(nrow(result1), nrow(result2))
@@ -418,12 +418,12 @@ test_that("Property: Memory usage is bounded for given input size", {
     gc()
     mem_before <- sum(gc()[, 2])
 
-    result <- mysterycall_clean_phase1(
+    result <- suppressWarnings(mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
       notify = FALSE
-    )
+    ))
 
     gc()
     mem_after <- sum(gc()[, 2])
@@ -488,13 +488,13 @@ test_that("Property: Data validation rules are internally consistent", {
   temp_dir <- tempdir()
 
   # Process through full pipeline
-  cleaned_data <- mysterycall_clean_phase1(
+  cleaned_data <- suppressWarnings(mysterycall_clean_phase1(
     phase1_data = perfect_data,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE,
     duplicate_rows = FALSE
-  )
+  ))
 
   validated_data <- mysterycall_validate_npi(cleaned_data)
 
