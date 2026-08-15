@@ -50,14 +50,14 @@ discrepancies are found.
 A quality-control check that finds records where \code{reason_for_exclusions}
 indicates the call was NOT successfully completed (i.e. not
 \code{"Able to contact"}) but \code{business_days_until_appointment} is nonetheless
-non-negative — a logical discrepancy suggesting a data-entry error.
+non-negative -- a logical discrepancy suggesting a data-entry error.
 }
 \section{What this detects}{
 
 If a call is logged as excluded (e.g.
 \code{reason_for_exclusions == "Physician not available"}) but also has a
 non-negative \code{business_days_until_appointment}, the record is contradictory
-— an excluded call should not have a valid appointment wait time. These
+-- an excluded call should not have a valid appointment wait time. These
 rows must be resolved before analysis.
 }
 

@@ -46,7 +46,7 @@ A list with:
 \item{missingness}{tibble: variable, label, missingness_type, n_total,
 n_missing, pct_missing, n_unknown, n_informative, pct_informative.}
 \item{mcar}{list: statistic, df, p.value, n_missing_patterns, vars_tested,
-n_rows_tested, note — or \code{NULL} if not run/possible.}
+n_rows_tested, note -- or \code{NULL} if not run/possible.}
 \item{interpretation}{character: calibrated narrative (structural vs
 item-level; large-N caveat).}
 \item{gt}{a \code{gt_tbl} if \code{make_gt=TRUE} and gt is installed, else

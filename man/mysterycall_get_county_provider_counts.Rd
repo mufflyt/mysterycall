@@ -41,7 +41,7 @@ Default \code{100000}.}
 
 \item{denominator_label}{Character or \code{NULL}. When supplied (e.g. \code{"women"}),
 it is appended to the density column name so it self-documents the
-denominator you passed via \code{pop_col} — for example
+denominator you passed via \code{pop_col} -- for example
 \code{providers_per_100k_women} when \code{population} holds a female count. \code{NULL}
 (default) keeps the generic \code{providers_per_100k}. This changes only the
 column name, not the arithmetic.}

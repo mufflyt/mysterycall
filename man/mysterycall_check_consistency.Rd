@@ -36,7 +36,7 @@ counts), and \code{n_rules}. \code{\link[=as.data.frame]{as.data.frame()}} retur
 }
 \description{
 Runs a list of cross-field rules over a call log and returns a single,
-priority-sorted worklist of every row that violates a rule — the general
+priority-sorted worklist of every row that violates a rule -- the general
 form of the one-off \verb{mysterycall_flag_*} checks. Each flagged row appears
 once per rule it trips, tagged with the rule's flag, priority, description,
 and recommended action, so the output can drive a data-cleaning pass or a

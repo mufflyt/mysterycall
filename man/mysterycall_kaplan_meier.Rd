@@ -92,7 +92,7 @@ studies. In this framing the "event" is receiving an appointment and
 "time" is the wait in days. Callers who never receive an appointment are
 right-censored at \code{max_days}. A log-rank test compares the groups.
 The optional plot is built manually with \pkg{ggplot2} (step functions +
-ribbon CI bands) — \pkg{survminer} is not required.
+ribbon CI bands) -- \pkg{survminer} is not required.
 }
 \details{
 \strong{Required package:} \pkg{survival} must be installed

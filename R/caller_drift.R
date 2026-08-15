@@ -448,7 +448,7 @@ mysterycall_caller_drift <- function(
     ))
   }
 
-  # At least one is significant — use the individual sub-sentences.
+  # At least one is significant -- use the individual sub-sentences.
   parts <- character(0L)
   if (has_cal) {
     parts <- c(parts, cal_result$sentence)

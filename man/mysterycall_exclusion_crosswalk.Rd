@@ -65,7 +65,7 @@ The integer logistic set (\code{logistic_include_codes}, default
 \code{c(0, 7, 9, 10)}) keeps codes 7 (referral required), 9 (not accepting new
 patients), and 10 (must see midlevel first) as \emph{included} calls with an
 appointment-not-offered outcome. The label path classifies those same calls
-as \strong{exclusions} — they are never \code{"Able to contact"}. Rows where
+as \strong{exclusions} -- they are never \code{"Able to contact"}. Rows where
 \code{in_logistic} is \code{TRUE} but \code{label_included} is \code{FALSE} are exactly that gap.
 }
 

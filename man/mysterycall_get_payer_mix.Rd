@@ -12,7 +12,7 @@ mysterycall_get_payer_mix(
 )
 }
 \arguments{
-\item{year}{Integer. ACS 5-year survey end-year (2012-2023). Required — no
+\item{year}{Integer. ACS 5-year survey end-year (2012-2023). Required -- no
 default, to keep results reproducible.}
 
 \item{states}{Character vector of two-letter state abbreviations, or \code{NULL}
@@ -49,12 +49,12 @@ and \strong{Medicare} shares:
 }
 \details{
 \describe{
-\item{Private}{Table \strong{B27002} — "With private health insurance".}
-\item{Public}{Table \strong{B27003} — "With public coverage".}
-\item{Medicare}{Table \strong{C27006} — "With Medicare coverage".}
-\item{Medicaid}{Table \strong{C27007} — "With Medicaid/means-tested public
+\item{Private}{Table \strong{B27002} -- "With private health insurance".}
+\item{Public}{Table \strong{B27003} -- "With public coverage".}
+\item{Medicare}{Table \strong{C27006} -- "With Medicare coverage".}
+\item{Medicaid}{Table \strong{C27007} -- "With Medicaid/means-tested public
 coverage".}
-\item{Uninsured}{Table \strong{B27001} — "No health insurance coverage", plus the
+\item{Uninsured}{Table \strong{B27001} -- "No health insurance coverage", plus the
 S2701 percent-uninsured estimate.}
 }
 

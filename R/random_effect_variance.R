@@ -44,7 +44,7 @@ NULL
 #'       interpretation paragraph.}
 #'   }
 #'
-#' @seealso [mysterycall_r2_sentence()] for marginal and conditional R²;
+#' @seealso [mysterycall_r2_sentence()] for marginal and conditional R^2;
 #'   [lme4::VarCorr()] for the underlying computation.
 #' @family modeling helpers
 #' @export

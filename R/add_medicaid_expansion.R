@@ -16,8 +16,8 @@
 #' study's `R/18_medicaid_expansion.R`.
 #'
 #' US territories (Puerto Rico, Guam, U.S. Virgin Islands, American Samoa,
-#' Northern Mariana Islands) sit outside the ACA state-expansion decision — they
-#' receive capped Medicaid block grants rather than the state expansion choice —
+#' Northern Mariana Islands) sit outside the ACA state-expansion decision -- they
+#' receive capped Medicaid block grants rather than the state expansion choice --
 #' so they never match the crosswalk and their added columns are `NA` (a warning
 #' lists them).
 #'

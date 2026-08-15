@@ -114,7 +114,7 @@ NULL
 #' The `openxlsx` package must be installed (it is listed in `Suggests`).
 #' Install with `install.packages("openxlsx")`.
 #'
-#' @return `invisible(file)` — the normalised absolute path to the written
+#' @return `invisible(file)` -- the normalised absolute path to the written
 #'   workbook, so the path can be captured and passed to downstream functions.
 #'
 #' @family reporting

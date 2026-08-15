@@ -64,7 +64,7 @@ block.
 }
 
 \examples{
-# Fake a mysterycall_logistic_model object — no lme4 required.
+# Fake a mysterycall_logistic_model object -- no lme4 required.
 # The LRT refit will be caught by tryCatch (model = NULL) and lrt_p = NA.
 fake_or_table <- data.frame(
   term        = c("(Intercept)",

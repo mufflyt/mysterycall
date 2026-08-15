@@ -44,7 +44,7 @@ workbook's Creator property. Default \code{NULL} (uses the current system
 user via \code{\link[=Sys.info]{Sys.info()}}).}
 }
 \value{
-\code{invisible(file)} — the normalised absolute path to the written
+\code{invisible(file)} -- the normalised absolute path to the written
 workbook, so the path can be captured and passed to downstream functions.
 }
 \description{

@@ -107,7 +107,7 @@ NULL
 #' @export
 #'
 #' @examples
-#' # Mode 1: from a data frame (simplest) — requires an existing CSV file.
+#' # Mode 1: from a data frame (simplest) -- requires an existing CSV file.
 #' \dontrun{
 #' raw <- read.csv("ICVsPOPVsSUI_DATA_2026-06-23_1225.csv",
 #'                 stringsAsFactors = FALSE)
@@ -115,7 +115,7 @@ NULL
 #'                         title = "STROBE Flow - ICVs vs POP vs SUI Study")
 #' }
 #'
-#' # Mode 2: from a mysterycall_prepared object — requires prepare_calls() first.
+#' # Mode 2: from a mysterycall_prepared object -- requires prepare_calls() first.
 #' \dontrun{
 #' prepped <- mysterycall_prepare_calls(raw)
 #' mysterycall_strobe_flow(prepared = prepped)

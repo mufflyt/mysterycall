@@ -73,7 +73,7 @@ mysterycall_most_common_gender <- function(data) {
   }
 
   # Most common gender. Fold case/whitespace first so "Male" and "male" are one
-  # level, not two — otherwise the mode and its proportion split across casings
+  # level, not two -- otherwise the mode and its proportion split across casings
   # (e.g. "Male"/"male"/"female" reads as a 3-way tie instead of 2/3 male).
   # Matches mysterycall_prepare_table1_vars() and the lowercase output below.
   data_gender <- data
