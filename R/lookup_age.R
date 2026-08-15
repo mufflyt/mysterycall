@@ -189,10 +189,15 @@ mysterycall_lookup_age <- function(first_name, last_name, state,
 #' @return Character vector of upper-cased abbreviations.
 #' @family data integrity
 #' @keywords internal
+# state.abb/state.name are lazy-loaded data, not namespace exports, so they are
+# reached with `::` rather than @importFrom. R CMD check's suggested
+# importFrom("datasets", "state.abb", "state.name") is not valid here: datasets
+# exports nothing, and that directive fails at load with "object 'state.abb' is
+# not exported by 'namespace:datasets'".
 .mc_state_to_abbr <- function(state) {
   s  <- toupper(trimws(as.character(state)))
-  nm <- match(s, toupper(state.name))
-  out <- ifelse(!is.na(nm), state.abb[nm], s)
+  nm <- match(s, toupper(datasets::state.name))
+  out <- ifelse(!is.na(nm), datasets::state.abb[nm], s)
   out[is.na(out) | out == ""] <- NA_character_
   out
 }
