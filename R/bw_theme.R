@@ -7,7 +7,7 @@
 #' @param base_size Numeric. Base font size in points. Default \code{12}.
 #' @param title_rel Numeric. Title size as a multiple of \code{base_size}
 #'   via \code{ggplot2::rel()}. Default \code{1.1}.
-#'   (Tip from Rennie 2026 — use \code{rel()} so resizing the chart only
+#'   (Tip from Rennie 2026 -- use \code{rel()} so resizing the chart only
 #'   requires changing \code{base_size}.)
 #'
 #' @return A list of ggplot2 objects that can be added to a ggplot with \code{+}.

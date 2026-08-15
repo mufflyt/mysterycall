@@ -5,7 +5,7 @@ NULL
 
 #' Pearson-based overdispersion test with manuscript-ready sentence
 #'
-#' Computes Pearson chi-square–based dispersion statistics for a fitted
+#' Computes Pearson chi-square-based dispersion statistics for a fitted
 #' model (GLM or GLMER), categorises the result, and returns a
 #' manuscript-ready sentence. Suitable for Poisson and quasi-Poisson models
 #' as well as linear models (\code{lm}) which also expose
@@ -32,7 +32,7 @@ NULL
 #'   }
 #'
 #' @seealso [mysterycall_random_effect_variance()] for random-effect ICC;
-#'   [mysterycall_r2_sentence()] for R² interpretation.
+#'   [mysterycall_r2_sentence()] for R^2 interpretation.
 #' @family modeling helpers
 #' @export
 #' @importFrom stats df.residual residuals pchisq

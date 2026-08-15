@@ -8,12 +8,12 @@
 #' and **Medicare** shares:
 #'
 #' \describe{
-#'   \item{Private}{Table **B27002** — "With private health insurance".}
-#'   \item{Public}{Table **B27003** — "With public coverage".}
-#'   \item{Medicare}{Table **C27006** — "With Medicare coverage".}
-#'   \item{Medicaid}{Table **C27007** — "With Medicaid/means-tested public
+#'   \item{Private}{Table **B27002** -- "With private health insurance".}
+#'   \item{Public}{Table **B27003** -- "With public coverage".}
+#'   \item{Medicare}{Table **C27006** -- "With Medicare coverage".}
+#'   \item{Medicaid}{Table **C27007** -- "With Medicaid/means-tested public
 #'     coverage".}
-#'   \item{Uninsured}{Table **B27001** — "No health insurance coverage", plus the
+#'   \item{Uninsured}{Table **B27001** -- "No health insurance coverage", plus the
 #'     S2701 percent-uninsured estimate.}
 #' }
 #'
@@ -28,7 +28,7 @@
 #' \eqn{MOE_{sum} = \sqrt{\sum MOE_i^2}} (ACS Handbook Appendix 3); all MOEs are
 #' at the 90% confidence level.
 #'
-#' @param year Integer. ACS 5-year survey end-year (2012-2023). Required — no
+#' @param year Integer. ACS 5-year survey end-year (2012-2023). Required -- no
 #'   default, to keep results reproducible.
 #' @param states Character vector of two-letter state abbreviations, or `NULL`
 #'   for all states (slow). Default `NULL`.

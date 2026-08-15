@@ -6,7 +6,7 @@ NULL
 #' Compute the wait-time equalization point between two insurance groups
 #'
 #' Fits a simple linear regression of one insurance group's wait times against
-#' another (paired by physician), then solves for the crossover day — the number
+#' another (paired by physician), then solves for the crossover day -- the number
 #' of business days at which both groups predict the same wait time.  This
 #' mirrors the scatter-plot analysis from the ortho sports medicine mystery-caller
 #' Rmd, where Medicaid and BCBS wait times were plotted on log-log axes and the

@@ -25,7 +25,7 @@ mysterycall_clean_medicaid_col(
 "No answer, unable to determine if they accept Medicaid.")}.}
 
 \item{yes_value}{Character scalar. The value in the cleaned column that
-should be mapped to \code{1}; all other non-\code{NA} values → \code{0}.
+should be mapped to \code{1}; all other non-\code{NA} values -> \code{0}.
 Default \code{"Yes they accept Medicaid"}.}
 
 \item{out_col_cleaned}{Character scalar or \code{NULL}. Name for the cleaned

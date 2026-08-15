@@ -1,16 +1,16 @@
 # =============================================================================
-# missingness_mcar.R  —  Missingness table + Little's MCAR test
+# missingness_mcar.R  --  Missingness table + Little's MCAR test
 # -----------------------------------------------------------------------------
 # One call that produces (1) a per-variable missingness table and (2) Little's
 # MCAR test (naniar::mcar_test()), which returns a single chi-square / df /
 # p-value for the null "the data are Missing Completely At Random."
 #
 # The table SEPARATES two mechanistically different kinds of missingness:
-#   * item-level  — the variable applies to (essentially) every unit, so a
+#   * item-level  -- the variable applies to (essentially) every unit, so a
 #                   missing value is item non-response / a data gap. MCAR is a
 #                   meaningful question here, so ONLY these variables feed the
 #                   Little's test.
-#   * structural  — the variable is undefined by design for a subgroup. Its
+#   * structural  -- the variable is undefined by design for a subgroup. Its
 #                   "missingness" is informative, not random; including it in an
 #                   MCAR test is a category error, so it is reported but EXCLUDED.
 #
@@ -63,7 +63,7 @@ utils::globalVariables(c(
 #'     \item{missingness}{tibble: variable, label, missingness_type, n_total,
 #'       n_missing, pct_missing, n_unknown, n_informative, pct_informative.}
 #'     \item{mcar}{list: statistic, df, p.value, n_missing_patterns, vars_tested,
-#'       n_rows_tested, note — or \code{NULL} if not run/possible.}
+#'       n_rows_tested, note -- or \code{NULL} if not run/possible.}
 #'     \item{interpretation}{character: calibrated narrative (structural vs
 #'       item-level; large-N caveat).}
 #'     \item{gt}{a \code{gt_tbl} if \code{make_gt=TRUE} and gt is installed, else

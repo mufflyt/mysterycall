@@ -283,7 +283,7 @@ mysterycall_icc_sentence <- function(icc_result) {
 }
 
 
-# ── mysterycall_icc_report ────────────────────────────────────────────────────
+# -- mysterycall_icc_report ----------------------------------------------------
 
 #' Inter-caller reliability report for STROBE item 22
 #'

@@ -17,7 +17,7 @@
 #'   default), `"previous"` (the hit count of the stage defined immediately
 #'   before this one, giving a strict funnel), a single positive number, or a
 #'   character string naming the `label` of an earlier stage (whose hit count
-#'   becomes the denominator — e.g. reporting "share of offers" against an
+#'   becomes the denominator -- e.g. reporting "share of offers" against an
 #'   earlier "offered" stage).
 #' @param group Optional block label used to group related stages in the output
 #'   table (e.g. `"Access cascade"`, `"Reasons not accepting"`). Defaults to

@@ -31,7 +31,7 @@ A named list with:
 }
 }
 \description{
-Computes Pearson chi-square–based dispersion statistics for a fitted
+Computes Pearson chi-square-based dispersion statistics for a fitted
 model (GLM or GLMER), categorises the result, and returns a
 manuscript-ready sentence. Suitable for Poisson and quasi-Poisson models
 as well as linear models (\code{lm}) which also expose
@@ -44,7 +44,7 @@ cat(res$sentence)
 }
 \seealso{
 \code{\link[=mysterycall_random_effect_variance]{mysterycall_random_effect_variance()}} for random-effect ICC;
-\code{\link[=mysterycall_r2_sentence]{mysterycall_r2_sentence()}} for R² interpretation.
+\code{\link[=mysterycall_r2_sentence]{mysterycall_r2_sentence()}} for R^2 interpretation.
 
 Other modeling helpers:
 \code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}},

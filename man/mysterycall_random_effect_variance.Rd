@@ -63,7 +63,7 @@ cat(res$sentence)
 }
 }
 \seealso{
-\code{\link[=mysterycall_r2_sentence]{mysterycall_r2_sentence()}} for marginal and conditional R²;
+\code{\link[=mysterycall_r2_sentence]{mysterycall_r2_sentence()}} for marginal and conditional R^2;
 \code{\link[lme4:VarCorr]{lme4::VarCorr()}} for the underlying computation.
 
 Other modeling helpers:

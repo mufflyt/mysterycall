@@ -65,7 +65,7 @@ Overrides \code{fill} and the mean-line colour.  Default \code{FALSE}.
 
 \item{reorder_facets}{Logical. If \code{TRUE}, facet panels are reordered from
 highest to lowest median of \code{x_col} rather than alphabetically.
-(Rennie 2024 — order groups by a summary statistic.)  Default \code{FALSE}.}
+(Rennie 2024 -- order groups by a summary statistic.)  Default \code{FALSE}.}
 
 \item{dpi}{Integer.  Resolution for the saved PNG.  Default \code{150}.}
 

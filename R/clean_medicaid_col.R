@@ -17,7 +17,7 @@ NULL
 #'   \code{c("NA as this was a Blue Cross/Blue Shield call.",
 #'   "No answer, unable to determine if they accept Medicaid.")}.
 #' @param yes_value Character scalar. The value in the cleaned column that
-#'   should be mapped to \code{1}; all other non-\code{NA} values → \code{0}.
+#'   should be mapped to \code{1}; all other non-\code{NA} values -> \code{0}.
 #'   Default \code{"Yes they accept Medicaid"}.
 #' @param out_col_cleaned Character scalar or \code{NULL}. Name for the cleaned
 #'   character column. Defaults to \code{paste0("cleaned_", col)}.
@@ -101,7 +101,7 @@ mysterycall_clean_medicaid_col <- function(
 
   raw <- data[[col]]
 
-  # Recode na_values → NA
+  # Recode na_values -> NA
   cleaned <- ifelse(raw %in% na_values, NA_character_, as.character(raw))
 
   # Recode to 0/1/NA

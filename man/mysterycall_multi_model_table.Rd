@@ -91,7 +91,7 @@ warning is issued and each column name gains a type tag such as
 on their native scale (OR, IRR, or Beta).
 }
 \examples{
-# Build fake model objects with structure() — no package fitting required.
+# Build fake model objects with structure() -- no package fitting required.
 
 m_unadj <- structure(
   list(

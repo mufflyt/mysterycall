@@ -15,12 +15,12 @@ mysterycall_parse_redcap_labels(
 \item{labels}{Character vector of REDCap label strings. Each element is one
 field's choices in the canonical REDCap format:
 \code{"<code>, <label> | <code>, <label> | ..."}. Unnamed elements are
-assigned sequential field names (\code{field_1}, \code{field_2}, …); supply a
+assigned sequential field names (\code{field_1}, \code{field_2}, ...); supply a
 \strong{named} vector to control the \code{field} column in the output.}
 
 \item{sep_choice}{Character scalar. Separator between choices within a
 single label string. Default \code{" | "} (space-pipe-space). REDCap uses
-this consistently, but some exports omit the surrounding spaces — adjust
+this consistently, but some exports omit the surrounding spaces -- adjust
 as needed.}
 
 \item{sep_code}{Character scalar. Separator between the numeric code and
@@ -33,7 +33,7 @@ whitespace from codes and labels.}
 A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
 \describe{
 \item{\code{field}}{Field name, taken from the names of \code{labels}; defaults to
-\code{"field_1"}, \code{"field_2"}, … when \code{labels} is unnamed.}
+\code{"field_1"}, \code{"field_2"}, ... when \code{labels} is unnamed.}
 \item{\code{code}}{Raw choice code (character), as exported by REDCap.}
 \item{\code{label}}{Human-readable choice label (character).}
 }
@@ -42,8 +42,8 @@ Rows are ordered by field then by their original order within each field.
 \description{
 REDCap exports choice fields as pipe-delimited strings such as
 \code{"1, Yes | 2, No | 3, Prefer not to answer"}. This function converts one
-or more such strings — typically stored in the \code{select_choices_or_calculations}
-column of a REDCap data dictionary — into a tidy data frame with one row per
+or more such strings -- typically stored in the \code{select_choices_or_calculations}
+column of a REDCap data dictionary -- into a tidy data frame with one row per
 choice, making it easy to recode raw numeric codes to human-readable labels
 or to build factor variables.
 }

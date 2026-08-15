@@ -104,7 +104,7 @@ mysterycall_enrich_npi <- function(
     .msg("Step 2/4: gender already present or NPPES unavailable; skipping fill.")
   }
 
-  # Step 3: classify practice setting — takes a character vector, returns a
+  # Step 3: classify practice setting -- takes a character vector, returns a
   # vector of labels; add result as new column "practice_setting".
   if (!is.null(address_col) && address_col %in% names(data)) {
     .msg("Step 3/4: classifying practice setting...")

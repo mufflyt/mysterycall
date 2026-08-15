@@ -10,7 +10,7 @@ NULL
 #' "time" is the wait in days. Callers who never receive an appointment are
 #' right-censored at \code{max_days}. A log-rank test compares the groups.
 #' The optional plot is built manually with \pkg{ggplot2} (step functions +
-#' ribbon CI bands) — \pkg{survminer} is not required.
+#' ribbon CI bands) -- \pkg{survminer} is not required.
 #'
 #' @param data A \code{data.frame} containing the study data.
 #' @param time_col Character. Name of the column containing days until

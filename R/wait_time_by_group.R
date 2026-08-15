@@ -14,7 +14,7 @@
 #'   `outcome_col > 0` before computing statistics. Default `FALSE`.
 #' @param reorder Logical. If `TRUE`, result rows are sorted from highest to
 #'   lowest `median_days` so the group with the longest wait appears first.
-#'   (Rennie 2024 — order groups by a summary statistic.)  Default `FALSE`.
+#'   (Rennie 2024 -- order groups by a summary statistic.)  Default `FALSE`.
 #' @param output_dir Character scalar or `NULL`. Directory for CSV output.
 #'   `NULL` writes to a session temp directory via [mysterycall_tempdir()].
 #'   Pass `NA` to skip writing.

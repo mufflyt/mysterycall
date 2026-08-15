@@ -11,7 +11,7 @@ mysterycall_bw_theme(base_size = 12, title_rel = 1.1)
 
 \item{title_rel}{Numeric. Title size as a multiple of \code{base_size}
 via \code{ggplot2::rel()}. Default \code{1.1}.
-(Tip from Rennie 2026 — use \code{rel()} so resizing the chart only
+(Tip from Rennie 2026 -- use \code{rel()} so resizing the chart only
 requires changing \code{base_size}.)}
 }
 \value{

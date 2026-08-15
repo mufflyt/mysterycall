@@ -33,7 +33,7 @@ mysterycall_wait_time_by_group(
 
 \item{reorder}{Logical. If \code{TRUE}, result rows are sorted from highest to
 lowest \code{median_days} so the group with the longest wait appears first.
-(Rennie 2024 — order groups by a summary statistic.)  Default \code{FALSE}.}
+(Rennie 2024 -- order groups by a summary statistic.)  Default \code{FALSE}.}
 
 \item{output_dir}{Character scalar or \code{NULL}. Directory for CSV output.
 \code{NULL} writes to a session temp directory via \code{\link[=mysterycall_tempdir]{mysterycall_tempdir()}}.

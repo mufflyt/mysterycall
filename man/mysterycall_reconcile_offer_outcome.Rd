@@ -59,7 +59,7 @@ An object of class \code{"mysterycall_offer_reconciliation"}: a list with
 Call logs often record the same appointment fact twice: a coarse binary
 "appointment offered" flag and a richer categorical disposition (e.g.
 \code{"With sampled physician"}, \code{"No appointment offered"}). These drift apart
-during data entry. This function finds — and optionally fixes — the two kinds
+during data entry. This function finds -- and optionally fixes -- the two kinds
 of contradiction:
 }
 \details{

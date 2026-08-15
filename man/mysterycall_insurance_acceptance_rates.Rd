@@ -48,8 +48,8 @@ other non-contact reason is excluded as unreachable). Default
 
 \item{digits}{Integer. Decimal places for rates. Default \code{1}.}
 
-\item{output_dir}{Character scalar or \code{NULL}. \code{NULL} → session temp dir.
-\code{NA} → skip writing.}
+\item{output_dir}{Character scalar or \code{NULL}. \code{NULL} -> session temp dir.
+\code{NA} -> skip writing.}
 
 \item{filename}{Character scalar. Output CSV file name.}
 }

@@ -3,7 +3,7 @@
 #' Call logs often record the same appointment fact twice: a coarse binary
 #' "appointment offered" flag and a richer categorical disposition (e.g.
 #' `"With sampled physician"`, `"No appointment offered"`). These drift apart
-#' during data entry. This function finds — and optionally fixes — the two kinds
+#' during data entry. This function finds -- and optionally fixes -- the two kinds
 #' of contradiction:
 #'
 #' * **flag understates** the outcome: the disposition names an appointment that

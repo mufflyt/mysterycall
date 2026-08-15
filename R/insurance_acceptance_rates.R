@@ -44,8 +44,8 @@
 #' @param medicaid_label Character scalar. Default `"Medicaid"`.
 #' @param bcbs_label Character scalar. Default `"Blue Cross/Blue Shield"`.
 #' @param digits Integer. Decimal places for rates. Default `1`.
-#' @param output_dir Character scalar or `NULL`. `NULL` → session temp dir.
-#'   `NA` → skip writing.
+#' @param output_dir Character scalar or `NULL`. `NULL` -> session temp dir.
+#'   `NA` -> skip writing.
 #' @param filename Character scalar. Output CSV file name.
 #'
 #' @return A named list:

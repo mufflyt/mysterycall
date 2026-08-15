@@ -1,7 +1,7 @@
 #' Write a reproducibility snapshot at analysis end
 #'
-#' Records the R session state — timestamp, R version, loaded package versions,
-#' any named seeds used during the analysis, and optional free-text notes — to a
+#' Records the R session state -- timestamp, R version, loaded package versions,
+#' any named seeds used during the analysis, and optional free-text notes -- to a
 #' structured plain-text file.  Call this once at the very end of a script to
 #' capture everything needed to reproduce the run.
 #'
@@ -21,7 +21,7 @@
 #' @param quiet Logical scalar.  If `FALSE` (default), emits a
 #'   [base::message()] reporting the output path on success.
 #'
-#' @return `invisible(file)` — the output path — with S3 class
+#' @return `invisible(file)` -- the output path -- with S3 class
 #'   `"mysterycall_snapshot"`.  When the return value is printed explicitly,
 #'   the file path and first 20 lines of the snapshot are displayed.
 #'
@@ -51,7 +51,7 @@
 #' @examples
 #' snap <- tempfile(fileext = ".txt")
 #'
-#' # Basic usage — seeds and notes
+#' # Basic usage -- seeds and notes
 #' mysterycall_session_snapshot(
 #'   file  = snap,
 #'   seeds = c(bootstrap = 42L, imputation = 123L),

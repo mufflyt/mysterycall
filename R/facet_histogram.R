@@ -30,7 +30,7 @@
 #'   `theme_light()`.  Default `12`.  (Rennie 2026.)
 #' @param reorder_facets Logical. If `TRUE`, facet panels are reordered from
 #'   highest to lowest median of `x_col` rather than alphabetically.
-#'   (Rennie 2024 — order groups by a summary statistic.)  Default `FALSE`.
+#'   (Rennie 2024 -- order groups by a summary statistic.)  Default `FALSE`.
 #' @param dpi Integer.  Resolution for the saved PNG.  Default `150`.
 #' @param output_dir Character, `NULL`, or `NA`.  Directory for PNG output.
 #'   `NULL` (default) writes to a session temp directory via
@@ -134,7 +134,7 @@ mysterycall_facet_histogram <- function(
     mean_line_col  <- "red"
   }
 
-  # Optional facet reordering by median (Rennie 2024 — order groups by stat)
+  # Optional facet reordering by median (Rennie 2024 -- order groups by stat)
   if (isTRUE(reorder_facets)) {
     med_by_grp <- tapply(data[[x_col]], data[[facet_col]], stats::median, na.rm = TRUE)
     lvls        <- names(sort(med_by_grp, decreasing = TRUE))
