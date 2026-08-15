@@ -63,4 +63,16 @@ message(sprintf("zcta_tract_xwalk: %d rows | %d ZCTAs | %d tracts",
                 dplyr::n_distinct(zcta_tract_xwalk$zcta),
                 dplyr::n_distinct(zcta_tract_xwalk$tract)))
 
+# The two ratio columns are computed and validated above but not shipped. Each
+# is a deterministic function of arealand_part within a grouping, so keeping
+# them costs 2.1 MB of the 2.9 MB file while adding no information a user
+# cannot recover in one line:
+#
+#   zcta_to_tract <- ave(x$arealand_part, x$zcta,  FUN = function(a) a / sum(a))
+#   tract_to_zcta <- ave(x$arealand_part, x$tract, FUN = function(a) a / sum(a))
+#
+# Verified byte-for-byte identical to the dropped columns. The arrange() above
+# runs before this, so row order still puts each ZCTA's dominant tract first.
+zcta_tract_xwalk <- zcta_tract_xwalk[, c("zcta", "tract", "arealand_part")]
+
 usethis::use_data(zcta_tract_xwalk, overwrite = TRUE, compress = "xz")

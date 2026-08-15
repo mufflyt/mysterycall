@@ -5,21 +5,15 @@
 \alias{zcta_tract_xwalk}
 \title{ZCTA to Census Tract crosswalk (area-weighted)}
 \format{
-A data frame with about 168,000 rows and 5 columns:
+A data frame with about 168,000 rows and 3 columns:
 \describe{
 \item{zcta}{Five-digit ZIP Code Tabulation Area (2020), character with
 leading zeros.}
 \item{tract}{Eleven-digit 2020 Census tract GEOID (state+county+tract),
 character.}
 \item{arealand_part}{Land area of the ZCTA-by-tract intersection, in square
-metres (Census \code{AREALAND_PART}).}
-\item{zcta_to_tract}{Fraction of the ZCTA's intersected land that falls in
-this tract. Sums to 1 across tracts within a ZCTA -- use this to spread a
-ZIP-level quantity across tracts, or to pick the dominant tract for a
-ZIP.}
-\item{tract_to_zcta}{Fraction of the tract's intersected land that falls in
-this ZCTA. Sums to 1 across ZCTAs within a tract -- use this to aggregate
-tract-level measures up to a ZIP.}
+metres (Census \code{AREALAND_PART}). Both allocation weights are derived
+from this column; see below.}
 }
 }
 \source{
@@ -53,6 +47,35 @@ Because both indices in this package (\code{\link{adi_zcta}},
 for genuinely tract-level work -- e.g. joining an external tract-level measure
 to practice ZIPs via \code{tract_to_zcta}.
 }
+\section{Allocation weights}{
+
+Earlier versions shipped two derived ratio columns, \code{zcta_to_tract} and
+\code{tract_to_zcta}. They were removed because each is a deterministic
+function of \code{arealand_part} within a grouping, and together they cost
+2.1 MB of a 2.9 MB file while adding nothing that cannot be recovered in one
+line. Rows are unchanged, and row order still puts each ZCTA's dominant
+tract first.
+
+To spread a ZIP-level quantity across tracts, or to pick the dominant tract
+for a ZIP, recompute the ZCTA-to-tract weight (sums to 1 within a ZCTA):
+
+\preformatted{
+x <- mysterycall::zcta_tract_xwalk
+x$zcta_to_tract <- ave(x$arealand_part, x$zcta,
+                       FUN = function(a) a / sum(a))
+}
+
+To aggregate tract-level measures up to a ZIP, recompute the tract-to-ZCTA
+weight (sums to 1 within a tract):
+
+\preformatted{
+x$tract_to_zcta <- ave(x$arealand_part, x$tract,
+                       FUN = function(a) a / sum(a))
+}
+
+Both reproduce the removed columns exactly.
+}
+
 \examples{
 data(zcta_tract_xwalk)
 
