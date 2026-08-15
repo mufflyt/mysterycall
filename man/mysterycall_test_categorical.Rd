@@ -66,9 +66,9 @@ res <- mysterycall_test_categorical(df, "offered", "payer", posthoc = TRUE)
 res
 }
 \seealso{
-Other categorical: 
-\code{\link{mysterycall_cmh_test}()},
-\code{\link{mysterycall_compare_ranks}()},
-\code{\link{mysterycall_prevalence_ci}()}
+Other categorical:
+\code{\link[=mysterycall_cmh_test]{mysterycall_cmh_test()}},
+\code{\link[=mysterycall_compare_ranks]{mysterycall_compare_ranks()}},
+\code{\link[=mysterycall_prevalence_ci]{mysterycall_prevalence_ci()}}
 }
 \concept{categorical}

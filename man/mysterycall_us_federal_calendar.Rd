@@ -45,9 +45,9 @@ bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day -> FALSE
 \seealso{
 \code{\link[=mysterycall_business_days]{mysterycall_business_days()}}, \code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}}
 
-Other business days: 
-\code{\link{mysterycall_appointment_obtained}()},
-\code{\link{mysterycall_business_days}()},
-\code{\link{mysterycall_count_business_days}()}
+Other business days:
+\code{\link[=mysterycall_appointment_obtained]{mysterycall_appointment_obtained()}},
+\code{\link[=mysterycall_business_days]{mysterycall_business_days()}},
+\code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}}
 }
 \concept{business days}

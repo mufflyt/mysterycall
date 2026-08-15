@@ -22,7 +22,7 @@ mysterycall_clean_medicaid_col(
 
 \item{na_values}{Character vector. Values to recode as \code{NA}. Default:
 \code{c("NA as this was a Blue Cross/Blue Shield call.",
-  "No answer, unable to determine if they accept Medicaid.")}.}
+"No answer, unable to determine if they accept Medicaid.")}.}
 
 \item{yes_value}{Character scalar. The value in the cleaned column that
 should be mapped to \code{1}; all other non-\code{NA} values → \code{0}.
@@ -75,11 +75,11 @@ result[, c("cleaned_does_the_physician_accept_medicaid",
 \seealso{
 \code{\link[=mysterycall_check_normality]{mysterycall_check_normality()}} for downstream variable checks.
 
-Other quality control: 
-\code{\link{mysterycall_dedup_by_insurance}()},
-\code{\link{mysterycall_flag_excluded_with_appointments}()},
-\code{\link{mysterycall_flag_exclusion_discrepancy}()},
-\code{\link{mysterycall_flag_included_na_appointments}()},
-\code{\link{mysterycall_flag_repeat_physicians}()}
+Other quality control:
+\code{\link[=mysterycall_dedup_by_insurance]{mysterycall_dedup_by_insurance()}},
+\code{\link[=mysterycall_flag_excluded_with_appointments]{mysterycall_flag_excluded_with_appointments()}},
+\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}},
+\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}},
+\code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}}
 }
 \concept{quality control}

@@ -89,7 +89,7 @@ dated <- healthgrades_ages[healthgrades_ages$age_source != "goba_merged_hg", ]
 \code{\link{mysterycall_parse_physician_name}} for the name parser
 used to build this table.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

@@ -111,9 +111,9 @@ Randomization Trials in Health Research}. Arnold: London.
 \seealso{
 \code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}}, \code{\link[=mysterycall_poisson_power]{mysterycall_poisson_power()}}
 
-Other power analysis: 
-\code{\link{mysterycall_cochran_n}()},
-\code{\link{mysterycall_equation_figure}()},
-\code{\link{mysterycall_poisson_power}()}
+Other power analysis:
+\code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}},
+\code{\link[=mysterycall_equation_figure]{mysterycall_equation_figure()}},
+\code{\link[=mysterycall_poisson_power]{mysterycall_poisson_power()}}
 }
 \concept{power analysis}

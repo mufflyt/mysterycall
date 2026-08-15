@@ -62,7 +62,7 @@ session temp directories via \code{\link{mysterycall_tempdir}}.}
 
 \item{steps}{Character vector.  Which analysis steps to run.  Any subset of
 \code{c("qc","dedup","clean_medicaid","demographics","scenarios",
-  "acceptance_rates","wait_times","poisson","sensitivity")}.
+"acceptance_rates","wait_times","poisson","sensitivity")}.
 Default runs all nine steps.}
 
 \item{verbose}{Logical.  If \code{TRUE} (default), emit progress messages
@@ -116,11 +116,6 @@ and a sensitivity analysis into a single reproducible call.  Each step is
 wrapped in error handling so that a failure in one step does not abort the
 rest of the pipeline.
 }
-\seealso{
-\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} builds and
-cleans the call log this analyzes; together they form the
-collection -> analysis pipeline.
-}
 \examples{
 \dontrun{
 set.seed(1)
@@ -146,5 +141,9 @@ result <- mysterycall_run_analysis(df, output_dir = NA)
 cat(result$demographics$summary_sentence)
 print(result$poisson$irr_table)
 }
+}
+\seealso{
+\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} builds and cleans the call log this
+analyzes; together they form the collection -> analysis pipeline.
 }
 \concept{workflow helpers}

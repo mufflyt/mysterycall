@@ -58,13 +58,13 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 \code{\link[=mysterycall_paired_wait_within_practice]{mysterycall_paired_wait_within_practice()}},
 \code{\link[=mysterycall_plot_raincloud]{mysterycall_plot_raincloud()}}
 
-Other visualization: 
-\code{\link{mysterycall_acceptance_waffle}()},
-\code{\link{mysterycall_bw_theme}()},
-\code{\link{mysterycall_flowchart}()},
-\code{\link{mysterycall_plot_density}()},
-\code{\link{mysterycall_plot_line}()},
-\code{\link{mysterycall_plot_raincloud}()},
-\code{\link{mysterycall_plot_scatter}()}
+Other visualization:
+\code{\link[=mysterycall_acceptance_waffle]{mysterycall_acceptance_waffle()}},
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}},
+\code{\link[=mysterycall_plot_raincloud]{mysterycall_plot_raincloud()}},
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}}
 }
 \concept{visualization}

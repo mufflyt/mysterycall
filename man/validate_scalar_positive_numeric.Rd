@@ -20,11 +20,11 @@ The validated object (invisibly).
 Validate a Scalar Positive Numeric Value
 }
 \seealso{
-Other validation: 
+Other validation:
 \code{\link{.audit_volatile_fields}},
-\code{\link{.load_nanp_lookup}()},
-\code{\link{validate_dataframe}()},
-\code{\link{validate_required_columns}()}
+\code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
+\code{\link[=validate_dataframe]{validate_dataframe()}},
+\code{\link[=validate_required_columns]{validate_required_columns()}}
 }
 \concept{validation}
 \keyword{internal}

@@ -36,7 +36,7 @@ mysterycall:::mysterycall_check_academic_name_patterns(c("Johns Hopkins Hospital
 \seealso{
 \code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}}
 
-Other academic-indicators: 
+Other academic-indicators:
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
 \code{\link{ACGME_PROGRAM_INDICATORS}},
 \code{\link{COTH_TEACHING_INDICATORS}},
@@ -45,7 +45,7 @@ Other academic-indicators:
 \code{\link{MEDICARE_GME_INDICATORS}},
 \code{\link{NCI_CANCER_CENTERS}},
 \code{\link{NIH_CTSA_HUBS}},
-\code{\link{mysterycall_classify_academic_affiliation}()},
-\code{\link{mysterycall_get_academic_indicators_summary}()}
+\code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}},
+\code{\link[=mysterycall_get_academic_indicators_summary]{mysterycall_get_academic_indicators_summary()}}
 }
 \concept{academic-indicators}

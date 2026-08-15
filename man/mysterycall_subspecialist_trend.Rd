@@ -12,7 +12,7 @@ mysterycall_subspecialist_trend(
   count_col = "count",
   pop_year_col = "year",
   pop_col = "population",
-  per = 1e5,
+  per = 1e+05,
   title = "OB-GYN Subspecialists per 100,000 Women",
   show_year_range = TRUE,
   y_lab = "Subspecialists per 100,000 women",
@@ -63,14 +63,14 @@ Defaults \code{"year"}, \code{"population"}.}
 \item{title}{Character. Plot title. The observed year range is appended when
 \code{show_year_range = TRUE}.}
 
-\item{show_year_range}{Logical. Append \verb{, <min>-<max>} to \code{title}.
+\item{show_year_range}{Logical. Append \code{", <min>-<max>"} to \code{title}.
 Default \code{TRUE}.}
 
 \item{y_lab, x_lab}{Axis labels. \code{x_lab} defaults to \code{NULL} (no label, since
 the axis shows years).}
 
 \item{palette}{Optional character vector of colours, one per subspecialty
-(passed to \code{\link[ggplot2:scale_manual]{ggplot2::scale_colour_manual()}}). \code{NULL} uses the ggplot2
+(passed to \code{\link[ggplot2:scale_colour_manual]{ggplot2::scale_colour_manual()}}). \code{NULL} uses the ggplot2
 default.}
 
 \item{label_ends}{Logical. Label each line at its final year and hide the
@@ -78,16 +78,16 @@ legend (\code{TRUE}, default) instead of showing a legend.}
 
 \item{point_size, line_width}{Numeric point size and line width.}
 
-\item{conf_level}{Numeric in \code{(0, 1)} or \code{NULL}. When set (e.g. \code{0.95}), an
+\item{conf_level}{Numeric in \verb{(0, 1)} or \code{NULL}. When set (e.g. \code{0.95}), an
 exact Poisson confidence interval is computed for each rate and drawn as a
-shaded band per subspecialty; the limits are added to \code{$data} as
+shaded band per subspecialty; the limits are added to \verb{$data} as
 \code{density_low} / \code{density_high}. \code{NULL} (default) draws no interval. Treats
 each count as Poisson given its year's population denominator.}
 
 \item{trend_test}{\code{FALSE} (default), \code{TRUE}, \code{"poisson"}, or
 \code{"quasipoisson"}. When enabled, fits a per-subspecialty log-linear
-regression of count on year with an offset of \code{log(population)} -- i.e. a
-model of the rate's annual change -- and attaches the tidy result as
+regression of count on year with an offset of \code{log(population)} — i.e. a
+model of the rate's annual change — and attaches the tidy result as
 \code{attr(p, "trend_test")} (annual rate ratio, CI, percent change per year and
 over the span, and the year-term p-value). \code{TRUE} uses Poisson (Wald);
 \code{"quasipoisson"} uses a t-test on the overdispersion-scaled SE. The CI uses
@@ -128,12 +128,13 @@ carrying the record and the per-point density table. Default \code{TRUE}.}
 \item{dpi}{Integer. Resolution for raster output. Default \code{300}.}
 }
 \value{
-A ggplot2 object (invisibly). Its \code{$data} holds the computed density
+A ggplot2 object (invisibly). Its \verb{$data} holds the computed density
 table (\code{subspecialty}, \code{year}, \code{count}, \code{population}, \code{density}, plus
 \code{density_low} / \code{density_high} when \code{conf_level} is set). When
 \code{trend_test} is enabled, \code{attr(p, "trend_test")} holds the per-subspecialty
-trend statistics (and they are folded into the JSON/txt provenance sidecars).
-\code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record (metric,
+trend statistics (and they are folded into the JSON/txt provenance
+sidecars). \code{attr(p, "provenance")} holds a \code{mysterycall_provenance} record
+(metric,
 computation, numerator/denominator sources, package version, access date,
 and creation timestamp). When saved, \verb{<output>.provenance.txt} and (if
 \pkg{jsonlite} is installed) \verb{<output>.provenance.json} sidecars are written
@@ -181,8 +182,29 @@ mysterycall_subspecialist_trend(counts, population = fem_pop)
 (start -> end) infographic version.
 
 Other manuscript:
-\code{\link{mysterycall_flow_diagram}()},
-\code{\link{mysterycall_strobe_flow}()},
-\code{\link{mysterycall_subspecialist_infographic}()}
+\code{\link[=mysterycall_combined_results_table]{mysterycall_combined_results_table()}},
+\code{\link[=mysterycall_export_results_docx]{mysterycall_export_results_docx()}},
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}},
+\code{\link[=mysterycall_format_results_table]{mysterycall_format_results_table()}},
+\code{\link[=mysterycall_literature_table]{mysterycall_literature_table()}},
+\code{\link[=mysterycall_materials_methods]{mysterycall_materials_methods()}},
+\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}},
+\code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}},
+\code{\link[=mysterycall_multi_model_table]{mysterycall_multi_model_table()}},
+\code{\link[=mysterycall_results_report]{mysterycall_results_report()}},
+\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
+\code{\link[=mysterycall_sensitivity_table]{mysterycall_sensitivity_table()}},
+\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}},
+\code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}},
+\code{\link[=mysterycall_subspecialist_infographic]{mysterycall_subspecialist_infographic()}},
+\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}},
+\code{\link[=mysterycall_table2]{mysterycall_table2()}},
+\code{\link[=print.mysterycall_materials_methods]{print.mysterycall_materials_methods()}},
+\code{\link[=print.mysterycall_model_comparison_table]{print.mysterycall_model_comparison_table()}},
+\code{\link[=print.mysterycall_multi_model_table]{print.mysterycall_multi_model_table()}},
+\code{\link[=print.mysterycall_results_report]{print.mysterycall_results_report()}},
+\code{\link[=print.mysterycall_strobe_checklist]{print.mysterycall_strobe_checklist()}},
+\code{\link[=print.mysterycall_table2]{print.mysterycall_table2()}}
 }
 \concept{manuscript}

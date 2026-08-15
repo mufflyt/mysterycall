@@ -36,9 +36,9 @@ ggplot(mtcars, aes(wt, mpg)) +
 \code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}, \code{\link[=mysterycall_theme_green_journal_faceted]{mysterycall_theme_green_journal_faceted()}},
 \code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}}
 
-Other green-journal-themes: 
-\code{\link{mysterycall_theme_green_journal_faceted}()},
-\code{\link{mysterycall_theme_green_journal_map}()}
+Other green-journal-themes:
+\code{\link[=mysterycall_theme_green_journal_faceted]{mysterycall_theme_green_journal_faceted()}},
+\code{\link[=mysterycall_theme_green_journal_map]{mysterycall_theme_green_journal_map()}}
 }
 \concept{green-journal-themes}
 \keyword{internal}

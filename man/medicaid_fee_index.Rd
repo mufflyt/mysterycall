@@ -58,7 +58,7 @@ attr(medicaid_fee_index, "national_average")
 \link{medicaid_expansion} and \link{kff_hhi} for other state/market policy
 covariates.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

@@ -40,7 +40,7 @@ may be matched (and thus excluded). Default \code{NULL} -> reads
 A data frame: the unmatched subset of \code{left}.
 }
 \description{
-Wraps \code{\link[dplyr:filter-joins]{dplyr::anti_join()}} (return left rows with \strong{no} match in right)
+Wraps \code{\link[dplyr:anti_join]{dplyr::anti_join()}} (return left rows with \strong{no} match in right)
 with key validation, type harmonization, and an optional cap on how many
 rows may be matched away.
 }
@@ -67,10 +67,10 @@ active <- mysterycall_safe_anti_join(
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}}, \code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
 \code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}, \code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}}
 
-Other safe-joins: 
-\code{\link{mysterycall_assert_unique_keys}()},
-\code{\link{mysterycall_safe_inner_join}()},
-\code{\link{mysterycall_safe_left_join}()},
-\code{\link{mysterycall_safe_semi_join}()}
+Other safe-joins:
+\code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}},
+\code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}},
+\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}
 }
 \concept{safe-joins}

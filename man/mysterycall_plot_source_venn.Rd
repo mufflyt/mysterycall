@@ -108,8 +108,8 @@ print(p)
 \seealso{
 \code{\link[ggforce:geom_circle]{ggforce::geom_circle()}}
 
-Other plotting: 
-\code{\link{mysterycall_plot_disparities}()},
-\code{\link{mysterycall_plot_emmeans}()}
+Other plotting:
+\code{\link[=mysterycall_plot_disparities]{mysterycall_plot_disparities()}},
+\code{\link[=mysterycall_plot_emmeans]{mysterycall_plot_emmeans()}}
 }
 \concept{plotting}

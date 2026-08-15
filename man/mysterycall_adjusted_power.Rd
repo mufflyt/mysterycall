@@ -89,8 +89,8 @@ if (requireNamespace("glmmTMB", quietly = TRUE)) {
 \code{\link[=mysterycall_marginal_power]{mysterycall_marginal_power()}}, \code{\link[=mysterycall_twopart_power]{mysterycall_twopart_power()}},
 \code{\link[=mysterycall_find_mde]{mysterycall_find_mde()}}
 
-Other power: 
-\code{\link{mysterycall_lm_interaction_power}()},
-\code{\link{mysterycall_ttest_power}()}
+Other power:
+\code{\link[=mysterycall_lm_interaction_power]{mysterycall_lm_interaction_power()}},
+\code{\link[=mysterycall_ttest_power]{mysterycall_ttest_power()}}
 }
 \concept{power}

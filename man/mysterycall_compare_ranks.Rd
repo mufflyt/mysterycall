@@ -33,9 +33,9 @@ df <- data.frame(
 mysterycall_compare_ranks(df, "price", "payer")
 }
 \seealso{
-Other categorical: 
-\code{\link{mysterycall_cmh_test}()},
-\code{\link{mysterycall_prevalence_ci}()},
-\code{\link{mysterycall_test_categorical}()}
+Other categorical:
+\code{\link[=mysterycall_cmh_test]{mysterycall_cmh_test()}},
+\code{\link[=mysterycall_prevalence_ci]{mysterycall_prevalence_ci()}},
+\code{\link[=mysterycall_test_categorical]{mysterycall_test_categorical()}}
 }
 \concept{categorical}

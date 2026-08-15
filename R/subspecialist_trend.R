@@ -1,6 +1,7 @@
 #' Subspecialist-density trend (per 100,000 women, multi-year)
 #'
 #' @name subspecialist_trend
+#' @keywords internal
 NULL
 
 #' Trend of OB-GYN subspecialist density per 100,000 women over time

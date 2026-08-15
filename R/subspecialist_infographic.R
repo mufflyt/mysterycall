@@ -1,6 +1,7 @@
 #' Subspecialist-density infographic (per 100,000 women)
 #'
 #' @name subspecialist_infographic
+#' @keywords internal
 NULL
 
 #' Workforce-density infographic for OB-GYN subspecialists

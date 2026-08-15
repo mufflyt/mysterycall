@@ -72,7 +72,7 @@ data(zcta_tract_xwalk)
 \code{\link{adi_zcta}} and \code{\link{svi_zcta}}, which are already
 ZCTA-keyed and need no crosswalk for ZIP linkage.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

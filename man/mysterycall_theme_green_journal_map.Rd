@@ -22,7 +22,7 @@ A \code{\link[ggplot2:theme]{ggplot2::theme()}} object.
 Variant of \code{\link[=mysterycall_theme_green_journal]{mysterycall_theme_green_journal()}} for choropleth maps, isochrone
 coverage maps, and other spatial figures. Removes all axis elements,
 centers the title, and adds a framed legend. Use with
-\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} and \code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}} for equal-area projection.
+\code{\link[ggplot2:coord_sf]{ggplot2::coord_sf()}} and \code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}} for equal-area projection.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -36,9 +36,9 @@ ggplot(counties_sf) +
 \seealso{
 \code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}}, \code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}}
 
-Other green-journal-themes: 
-\code{\link{mysterycall_theme_green_journal}()},
-\code{\link{mysterycall_theme_green_journal_faceted}()}
+Other green-journal-themes:
+\code{\link[=mysterycall_theme_green_journal]{mysterycall_theme_green_journal()}},
+\code{\link[=mysterycall_theme_green_journal_faceted]{mysterycall_theme_green_journal_faceted()}}
 }
 \concept{green-journal-themes}
 \keyword{internal}

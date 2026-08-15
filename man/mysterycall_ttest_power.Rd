@@ -43,8 +43,8 @@ if (requireNamespace("pwr", quietly = TRUE)) {
 \seealso{
 \code{\link[=mysterycall_lm_interaction_power]{mysterycall_lm_interaction_power()}}, \code{\link[=mysterycall_power_curve]{mysterycall_power_curve()}}
 
-Other power: 
-\code{\link{mysterycall_adjusted_power}()},
-\code{\link{mysterycall_lm_interaction_power}()}
+Other power:
+\code{\link[=mysterycall_adjusted_power]{mysterycall_adjusted_power()}},
+\code{\link[=mysterycall_lm_interaction_power]{mysterycall_lm_interaction_power()}}
 }
 \concept{power}

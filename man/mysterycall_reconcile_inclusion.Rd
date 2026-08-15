@@ -103,10 +103,10 @@ rec$discrepancies
 \code{\link[=mysterycall_exclusion_crosswalk]{mysterycall_exclusion_crosswalk()}},
 \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}, \code{\link[=mysterycall_acceptance_rate_calc]{mysterycall_acceptance_rate_calc()}}
 
-Other data-preparation: 
-\code{\link{mysterycall_exclusion_crosswalk}()},
-\code{\link{mysterycall_prepare_calls}()},
-\code{\link{print.mysterycall_prepared}()},
-\code{\link{print.mysterycall_reconciliation}()}
+Other data-preparation:
+\code{\link[=mysterycall_exclusion_crosswalk]{mysterycall_exclusion_crosswalk()}},
+\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}},
+\code{\link[=print.mysterycall_prepared]{print.mysterycall_prepared()}},
+\code{\link[=print.mysterycall_reconciliation]{print.mysterycall_reconciliation()}}
 }
 \concept{data-preparation}

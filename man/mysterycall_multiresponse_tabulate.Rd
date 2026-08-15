@@ -58,9 +58,9 @@ res <- mysterycall_multiresponse_tabulate(calls, "options", group_var = "region"
 res$prevalence
 }
 \seealso{
-Other call-outcomes: 
-\code{\link{mysterycall_classify_call_outcome}()},
-\code{\link{mysterycall_ordinal_model}()},
-\code{\link{mysterycall_outcome_gradient}()}
+Other call-outcomes:
+\code{\link[=mysterycall_classify_call_outcome]{mysterycall_classify_call_outcome()}},
+\code{\link[=mysterycall_ordinal_model]{mysterycall_ordinal_model()}},
+\code{\link[=mysterycall_outcome_gradient]{mysterycall_outcome_gradient()}}
 }
 \concept{call-outcomes}

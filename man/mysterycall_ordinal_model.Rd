@@ -47,9 +47,9 @@ if (requireNamespace("MASS", quietly = TRUE)) {
 }
 }
 \seealso{
-Other call-outcomes: 
-\code{\link{mysterycall_classify_call_outcome}()},
-\code{\link{mysterycall_multiresponse_tabulate}()},
-\code{\link{mysterycall_outcome_gradient}()}
+Other call-outcomes:
+\code{\link[=mysterycall_classify_call_outcome]{mysterycall_classify_call_outcome()}},
+\code{\link[=mysterycall_multiresponse_tabulate]{mysterycall_multiresponse_tabulate()}},
+\code{\link[=mysterycall_outcome_gradient]{mysterycall_outcome_gradient()}}
 }
 \concept{call-outcomes}

@@ -39,9 +39,9 @@ cat(mysterycall_concordance_sentence(res, item = "advised_window",
                                      subject = "pharmacies"))
 }
 \seealso{
-Other concordance: 
-\code{\link{mysterycall_concordance_kappa}()},
-\code{\link{mysterycall_concordance_rubric}()},
-\code{\link{mysterycall_score_concordance}()}
+Other concordance:
+\code{\link[=mysterycall_concordance_kappa]{mysterycall_concordance_kappa()}},
+\code{\link[=mysterycall_concordance_rubric]{mysterycall_concordance_rubric()}},
+\code{\link[=mysterycall_score_concordance]{mysterycall_score_concordance()}}
 }
 \concept{concordance}

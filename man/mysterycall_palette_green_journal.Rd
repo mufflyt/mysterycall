@@ -41,9 +41,9 @@ Wong B (2011). Color blindness. \emph{Nature Methods}, 8(6), 441.
 \seealso{
 \code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}}, \code{\link[=mysterycall_scale_fill_green_journal]{mysterycall_scale_fill_green_journal()}}
 
-Other green-journal-colors: 
-\code{\link{mysterycall_scale_color_green_journal}()},
-\code{\link{mysterycall_scale_fill_green_journal}()}
+Other green-journal-colors:
+\code{\link[=mysterycall_scale_color_green_journal]{mysterycall_scale_color_green_journal()}},
+\code{\link[=mysterycall_scale_fill_green_journal]{mysterycall_scale_fill_green_journal()}}
 }
 \concept{green-journal-colors}
 \keyword{internal}

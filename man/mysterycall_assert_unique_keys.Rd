@@ -42,10 +42,10 @@ nrow(clean)  # 2
 
 }
 \seealso{
-Other safe-joins: 
-\code{\link{mysterycall_safe_anti_join}()},
-\code{\link{mysterycall_safe_inner_join}()},
-\code{\link{mysterycall_safe_left_join}()},
-\code{\link{mysterycall_safe_semi_join}()}
+Other safe-joins:
+\code{\link[=mysterycall_safe_anti_join]{mysterycall_safe_anti_join()}},
+\code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}},
+\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}
 }
 \concept{safe-joins}

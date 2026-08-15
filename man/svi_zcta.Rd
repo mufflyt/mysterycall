@@ -61,7 +61,7 @@ data(svi_zcta)
 \code{\link{adi_zcta}} for the companion Area Deprivation Index at
 the same geography.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

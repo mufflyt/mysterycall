@@ -96,9 +96,9 @@ if (requireNamespace("bizdays", quietly = TRUE)) {
 \code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}}, \code{\link[=mysterycall_business_days]{mysterycall_business_days()}},
 \code{\link[=mysterycall_hurdle_wait]{mysterycall_hurdle_wait()}}, \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}
 
-Other business days: 
-\code{\link{mysterycall_business_days}()},
-\code{\link{mysterycall_count_business_days}()},
-\code{\link{mysterycall_us_federal_calendar}()}
+Other business days:
+\code{\link[=mysterycall_business_days]{mysterycall_business_days()}},
+\code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}},
+\code{\link[=mysterycall_us_federal_calendar]{mysterycall_us_federal_calendar()}}
 }
 \concept{business days}
