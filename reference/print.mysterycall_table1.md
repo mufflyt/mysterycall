@@ -2,7 +2,7 @@
 
 Prints a formatted Table 1 with column sample sizes in the header and
 the underlying tibble displayed via
-[`tibble::print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
+[`print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
 
 ## Usage
 
@@ -21,7 +21,7 @@ print(x, ...)
 - ...:
 
   Additional arguments passed to
-  [`tibble::print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
+  [`print.tbl_df()`](https://tibble.tidyverse.org/reference/formatting.html).
 
 ## Value
 

@@ -23,8 +23,6 @@ alongside regenerated 2030-vintage datasets.
 
 Character scalars.
 
-An object of class `character` of length 1.
-
 ## See also
 
 Other data integrity:

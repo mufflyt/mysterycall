@@ -22,7 +22,7 @@ and plots for display consistency across the package.
 
 Other utilities:
 [`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
-`%>%()`,
+`%>%`,
 [`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),

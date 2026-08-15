@@ -10,10 +10,6 @@ here must NOT influence the content-addressable identity of an artifact.
 .audit_volatile_fields
 ```
 
-## Format
-
-An object of class `character` of length 7.
-
 ## Value
 
 Character vector of field names.

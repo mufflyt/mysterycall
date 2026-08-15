@@ -37,7 +37,7 @@ mysterycall_read_latest(
   [`list.files()`](https://rdrr.io/r/base/list.files.html)). `NULL`
   (default) matches every file. To match a literal string containing
   regex metacharacters, wrap it in
-  [`stringr::fixed()`](https://stringr.tidyverse.org/reference/modifiers.html)-style
+  [`fixed()`](https://stringr.tidyverse.org/reference/modifiers.html)-style
   escaping yourself or pass an anchored pattern such as
   `"^redcap_export_.*\\.csv$"`.
 
@@ -129,7 +129,7 @@ for constructing standard paths.
 
 Other utilities:
 [`.title_case()`](https://mufflyt.github.io/mysterycall/reference/dot-title_case.md),
-`%>%()`,
+`%>%`,
 [`format_phone_number()`](https://mufflyt.github.io/mysterycall/reference/format_phone_number.md),
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
@@ -169,6 +169,6 @@ Sys.setFileTime(old_file, Sys.time() - 3600)
 
 # Return just the path to the newest match
 mysterycall_read_latest(dir, "\\.csv$", read = FALSE)
-#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-13 02:01, 0.0 days ago); beat 1 other candidate(s).
-#> [1] "/tmp/RtmpJpiqZT/redcap_21a472669f4b/export_2026-07-20.csv"
+#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-15 04:56, 0.0 days ago); beat 1 other candidate(s).
+#> [1] "/tmp/RtmpkbpMri/redcap_20de57fd20d2/export_2026-07-20.csv"
 ```

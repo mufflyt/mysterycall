@@ -18,7 +18,7 @@ mysterycall_subspecialist_trend(
   count_col = "count",
   pop_year_col = "year",
   pop_col = "population",
-  per = 1e5,
+  per = 1e+05,
   title = "OB-GYN Subspecialists per 100,000 Women",
   show_year_range = TRUE,
   y_lab = "Subspecialists per 100,000 women",
@@ -87,7 +87,7 @@ mysterycall_subspecialist_trend(
 
 - show_year_range:
 
-  Logical. Append `, <min>-<max>` to `title`. Default `TRUE`.
+  Logical. Append `", <min>-<max>"` to `title`. Default `TRUE`.
 
 - y_lab, x_lab:
 
@@ -121,14 +121,13 @@ mysterycall_subspecialist_trend(
 
   `FALSE` (default), `TRUE`, `"poisson"`, or `"quasipoisson"`. When
   enabled, fits a per-subspecialty log-linear regression of count on
-  year with an offset of `log(population)` – i.e. a model of the rate's
-  annual change – and attaches the tidy result as
-  `attr(p, "trend_test")` (annual rate ratio, CI, percent change per
-  year and over the span, and the year-term p-value). `TRUE` uses
-  Poisson (Wald); `"quasipoisson"` uses a t-test on the
-  overdispersion-scaled SE. The CI uses `conf_level` when set, else 95%.
-  When `label_ends` is on, each line's label also shows the rate ratio
-  per year and a significance star.
+  year with an offset of `log(population)`, i.e. a model of the rate's
+  annual change, and attaches the tidy result as `attr(p, "trend_test")`
+  (annual rate ratio, CI, percent change per year and over the span, and
+  the year-term p-value). `TRUE` uses Poisson (Wald); `"quasipoisson"`
+  uses a t-test on the overdispersion-scaled SE. The CI uses
+  `conf_level` when set, else 95%. When `label_ends` is on, each line's
+  label also shows the rate ratio per year and a significance star.
 
 - numerator_source:
 
@@ -223,9 +222,30 @@ the U.S. Census ACS 1-year tables (variable `B01001_026E`,
 for the two-point (start -\> end) infographic version.
 
 Other manuscript:
+[`mysterycall_combined_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_combined_results_table.md),
+[`mysterycall_export_results_docx()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_results_docx.md),
 [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md),
+[`mysterycall_format_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_results_table.md),
+[`mysterycall_literature_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_literature_table.md),
+[`mysterycall_materials_methods()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_materials_methods.md),
+[`mysterycall_methods_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_methods_paragraph.md),
+[`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
+[`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md),
+[`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md),
+[`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
+[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
+[`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md),
+[`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md),
 [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md),
-[`mysterycall_subspecialist_infographic()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_infographic.md)
+[`mysterycall_subspecialist_infographic()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_subspecialist_infographic.md),
+[`mysterycall_summarize_demographics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_demographics.md),
+[`mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table2.md),
+[`print.mysterycall_materials_methods()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_materials_methods.md),
+[`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
+[`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
+[`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
+[`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
 ## Examples
 

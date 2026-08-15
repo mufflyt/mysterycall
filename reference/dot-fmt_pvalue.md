@@ -16,7 +16,7 @@ Format P-Value for Display
 
 ## Value
 
-Formatted character string (e.g., "\<0.001").
+Formatted character string (e.g., "\< 0.001").
 
 ## See also
 

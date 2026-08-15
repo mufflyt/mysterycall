@@ -75,7 +75,7 @@ A list of class `"mysterycall_overdispersion_test"` with elements:
 
 - `p_fmt`:
 
-  Character. Formatted p-value (e.g. `"<0.001"`).
+  Character. Formatted p-value (e.g. `"< 0.001"`).
 
 - `interpretation`:
 

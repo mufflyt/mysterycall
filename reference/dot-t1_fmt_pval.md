@@ -16,7 +16,7 @@ Format P-Value for Table 1
 
 ## Value
 
-Formatted character string (e.g., "\<0.001").
+Formatted character string (e.g., "\< 0.001").
 
 ## See also
 

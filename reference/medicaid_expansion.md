@@ -38,8 +38,8 @@ A data frame with 51 rows (50 states + DC) and 6 columns:
 ## Source
 
 Kaiser Family Foundation (KFF), "Status of State Medicaid Expansion
-Decisions: Interactive Map," verified June 2025.
-<https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/>
+Decisions," verified June 2025.
+<https://www.kff.org/medicaid/status-of-state-medicaid-expansion-decisions/>
 
 ## Details
 

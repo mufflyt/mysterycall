@@ -99,7 +99,7 @@ figure cannot disagree with its own numbers.</p>
 <span>  count_col <span class="op">=</span> <span class="st">"count"</span>,</span>
 <span>  pop_year_col <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>  pop_col <span class="op">=</span> <span class="st">"population"</span>,</span>
-<span>  per <span class="op">=</span> <span class="fl">1e5</span>,</span>
+<span>  per <span class="op">=</span> <span class="fl">1e+05</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"OB-GYN Subspecialists per 100,000 Women"</span>,</span>
 <span>  show_year_range <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  y_lab <span class="op">=</span> <span class="st">"Subspecialists per 100,000 women"</span>,</span>
@@ -165,7 +165,7 @@ Defaults <code>"year"</code>, <code>"population"</code>.</p></dd>
 
 
 <dt id="arg-show-year-range">show_year_range<a class="anchor" aria-label="anchor" href="#arg-show-year-range"></a></dt>
-<dd><p>Logical. Append <code>, &lt;min&gt;-&lt;max&gt;</code> to <code>title</code>.
+<dd><p>Logical. Append <code>", &lt;min&gt;-&lt;max&gt;"</code> to <code>title</code>.
 Default <code>TRUE</code>.</p></dd>
 
 
@@ -200,8 +200,8 @@ each count as Poisson given its year's population denominator.</p></dd>
 <dt id="arg-trend-test">trend_test<a class="anchor" aria-label="anchor" href="#arg-trend-test"></a></dt>
 <dd><p><code>FALSE</code> (default), <code>TRUE</code>, <code>"poisson"</code>, or
 <code>"quasipoisson"</code>. When enabled, fits a per-subspecialty log-linear
-regression of count on year with an offset of <code>log(population)</code> – i.e. a
-model of the rate's annual change – and attaches the tidy result as
+regression of count on year with an offset of <code>log(population)</code>, i.e. a
+model of the rate's annual change, and attaches the tidy result as
 <code>attr(p, "trend_test")</code> (annual rate ratio, CI, percent change per year and
 over the span, and the year-term p-value). <code>TRUE</code> uses Poisson (Wald);
 <code>"quasipoisson"</code> uses a t-test on the overdispersion-scaled SE. The CI uses
@@ -268,8 +268,9 @@ carrying the record and the per-point density table. Default <code>TRUE</code>.<
 table (<code>subspecialty</code>, <code>year</code>, <code>count</code>, <code>population</code>, <code>density</code>, plus
 <code>density_low</code> / <code>density_high</code> when <code>conf_level</code> is set). When
 <code>trend_test</code> is enabled, <code>attr(p, "trend_test")</code> holds the per-subspecialty
-trend statistics (and they are folded into the JSON/txt provenance sidecars).
-<code>attr(p, "provenance")</code> holds a <code>mysterycall_provenance</code> record (metric,
+trend statistics (and they are folded into the JSON/txt provenance
+sidecars). <code>attr(p, "provenance")</code> holds a <code>mysterycall_provenance</code> record
+(metric,
 computation, numerator/denominator sources, package version, access date,
 and creation timestamp). When saved, <code>&lt;output&gt;.provenance.txt</code> and (if
 <span class="pkg">jsonlite</span> is installed) <code>&lt;output&gt;.provenance.json</code> sidecars are written
@@ -299,9 +300,30 @@ per year:</p>
     <div class="dont-index"><p><code><a href="mysterycall_subspecialist_infographic.html">mysterycall_subspecialist_infographic()</a></code> for the two-point
 (start -&gt; end) infographic version.</p>
 <p>Other manuscript:
+<code><a href="mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code>,
+<code><a href="mysterycall_export_results_docx.html">mysterycall_export_results_docx()</a></code>,
 <code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
+<code><a href="mysterycall_format_results_table.html">mysterycall_format_results_table()</a></code>,
+<code><a href="mysterycall_literature_table.html">mysterycall_literature_table()</a></code>,
+<code><a href="mysterycall_materials_methods.html">mysterycall_materials_methods()</a></code>,
+<code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>,
+<code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>,
+<code><a href="mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code>,
+<code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>,
+<code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
+<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
+<code><a href="mysterycall_sensitivity_table.html">mysterycall_sensitivity_table()</a></code>,
+<code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code>,
 <code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>,
-<code><a href="mysterycall_subspecialist_infographic.html">mysterycall_subspecialist_infographic()</a></code></p></div>
+<code><a href="mysterycall_subspecialist_infographic.html">mysterycall_subspecialist_infographic()</a></code>,
+<code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code>,
+<code><a href="mysterycall_table2.html">mysterycall_table2()</a></code>,
+<code><a href="print.mysterycall_materials_methods.html">print.mysterycall_materials_methods()</a></code>,
+<code><a href="print.mysterycall_model_comparison_table.html">print.mysterycall_model_comparison_table()</a></code>,
+<code><a href="print.mysterycall_multi_model_table.html">print.mysterycall_multi_model_table()</a></code>,
+<code><a href="print.mysterycall_results_report.html">print.mysterycall_results_report()</a></code>,
+<code><a href="print.mysterycall_strobe_checklist.html">print.mysterycall_strobe_checklist()</a></code>,
+<code><a href="print.mysterycall_table2.html">print.mysterycall_table2()</a></code></p></div>
     </div>
 
     <div class="section level2">

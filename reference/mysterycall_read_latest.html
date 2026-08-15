@@ -119,7 +119,7 @@ warning.</p>
 <dd><p>Character scalar or <code>NULL</code>. Regular expression matched against
 file names (as in <code><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files()</a></code>). <code>NULL</code> (default) matches every file.
 To match a literal string containing regex metacharacters, wrap it in
-<code><a href="https://stringr.tidyverse.org/reference/modifiers.html" class="external-link">stringr::fixed()</a></code>-style escaping yourself or pass an anchored pattern such as
+<code><a href="https://stringr.tidyverse.org/reference/modifiers.html" class="external-link">fixed()</a></code>-style escaping yourself or pass an anchored pattern such as
 <code>"^redcap_export_.*\\.csv$"</code>.</p></dd>
 
 
@@ -202,7 +202,7 @@ bare <code>latest()</code> calls that only needed a filename.</p>
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code> for constructing standard paths.</p>
 <p>Other utilities:
 <code><a href="dot-title_case.html">.title_case()</a></code>,
-<code>%&gt;%()</code>,
+<code>%&gt;%</code>,
 <code><a href="format_phone_number.html">format_phone_number()</a></code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>,
@@ -242,8 +242,8 @@ bare <code>latest()</code> calls that only needed a filename.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Return just the path to the newest match</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_read_latest</span><span class="op">(</span><span class="va">dir</span>, <span class="st">"\\.csv$"</span>, read <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-13 02:01, 0.0 days ago); beat 1 other candidate(s).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpJpiqZT/redcap_21a472669f4b/export_2026-07-20.csv"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-15 04:56, 0.0 days ago); beat 1 other candidate(s).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpkbpMri/redcap_20de57fd20d2/export_2026-07-20.csv"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
