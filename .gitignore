@@ -1,26 +1,39 @@
+# --- R / RStudio session state ---
 .Rproj.user
 .Rhistory
+.RData
 .Rdata
+.Ruserdata
 .httr-oauth
 .DS_Store
-.cache/
+
+# --- Credentials ---
+.secrets
+.Renviron
+
+# --- Local-only sources (deliberately not published) ---
 R/geocode.R
 scripts/R/geocode.R
-docs
-!docs/
+
+# --- Generated output: pkgdown site (rebuilt by .github/workflows/pkgdown.yaml,
+#     deployed to the gh-pages branch; the built copy is not tracked here) ---
+/docs/
+
+# --- Generated output: vignette build artifacts ---
+/doc/
 /Meta/
-^\\.secrets$
-^\\.cache$
-^docs$
-!docs/.nojekyll
-.pdf
-*.tar.gz
-tests/testthat/_problems/
+
+# --- Generated output: local caches ---
+.cache/
+
+# --- Build and check artifacts ---
 *.Rcheck/
 ..Rcheck/
-/doc/
+*.tar.gz
+*.pdf
+tests/testthat/_problems/
 
-# Scratch/working summary files (already in .Rbuildignore)
+# --- Scratch/working summary files (also in .Rbuildignore) ---
 ASSUMPTIONS_REQUIRING_REAL_DATA_TESTING.md
 COMPREHENSIVE_ANALYSIS_SUMMARY.md
 FINAL_SESSION_SUMMARY.md
@@ -36,9 +49,7 @@ WEAKEST_LINKS_ANALYSIS.md
 index.md
 install_log.txt
 To_amany.R
-Rplots.pdf
 find_detached.py
 check_docs.R
 check_internal.R
 roxygen_tags_summary.txt
-mysterycall_*.tar.gz
