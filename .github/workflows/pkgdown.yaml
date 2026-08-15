@@ -60,9 +60,42 @@ jobs:
           cache: true
           cache-version: 2
 
+      # Retries ONLY on a segfault. pkgdown crashes intermittently inside xml2
+      # (exit 139 / SIGSEGV, "invalid permissions" or "recursive gc invocation")
+      # during build_home_index() or build_reference_index(); the same commit
+      # then builds cleanly on a re-run. Measured at roughly 1 run in 5.
+      #
+      # Any other non-zero exit is a real failure and fails the job immediately,
+      # without burning retries. That distinction matters: a genuine breakage
+      # here, such as topics missing from the _pkgdown.yml reference index,
+      # exits 1 and must stay loud. Blanket retries -- or continue-on-error --
+      # would turn this gate into one that cannot fail.
       - name: Build pkgdown site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0}
+        shell: bash
+        run: |
+          attempts=3
+          for attempt in $(seq 1 $attempts); do
+            code=0
+            Rscript -e 'pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)' || code=$?
+
+            if [ "$code" -eq 0 ]; then
+              [ "$attempt" -gt 1 ] && echo "::notice::pkgdown build succeeded on attempt $attempt"
+              exit 0
+            fi
+
+            if [ "$code" -ne 139 ]; then
+              echo "::error::pkgdown build failed with exit $code. Not a segfault, so this is a real failure and is not retried."
+              exit "$code"
+            fi
+
+            echo "::warning::pkgdown segfaulted (exit 139) on attempt $attempt of $attempts."
+            # A crashed run can leave a half-written docs/; start each retry clean.
+            rm -rf docs
+            sleep 5
+          done
+
+          echo "::error::pkgdown segfaulted on all $attempts attempts. Likely more than transient flakiness -- investigate."
+          exit 139
 
       - name: Add .nojekyll to prevent Jekyll processing
         run: touch docs/.nojekyll
