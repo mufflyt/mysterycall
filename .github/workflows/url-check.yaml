@@ -1,0 +1,51 @@
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly. Link rot is a slow process and external hosts rate-limit, so a
+    # scheduled sweep is a better fit than gating every push to main.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+name: url-check
+
+permissions:
+  contents: read
+
+concurrency:
+  group: url-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  url-check:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install urlchecker
+        run: install.packages("urlchecker")
+        shell: Rscript {0}
+
+      # Checks URLs in DESCRIPTION, README.md, NEWS.md, man/ and vignettes/ --
+      # the same set CRAN flags on submission.
+      #
+      # Not a hard gate: urlchecker reports 403s and timeouts from hosts that
+      # rate-limit CI runners, which are not real broken links. The summary is
+      # written to the job log and the step annotation so a human can judge.
+      - name: Check URLs
+        continue-on-error: true
+        run: |
+          res <- urlchecker::url_check(".")
+          print(res)
+          if (NROW(res) > 0) {
+            cat("::warning::urlchecker reported ", NROW(res), " URL(s) needing review\n", sep = "")
+          } else {
+            cat("All URLs OK\n")
+          }
+        shell: Rscript {0}
