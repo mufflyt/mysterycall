@@ -32,8 +32,10 @@ jobs:
       # aborts before checking a single URL.
       - uses: r-lib/actions/setup-pandoc@v2
 
+      # knitr is the package's VignetteBuilder. urlchecker refuses to scan
+      # vignettes without it, so it is a hard requirement here, not optional.
       - name: Install urlchecker
-        run: install.packages("urlchecker")
+        run: install.packages(c("urlchecker", "knitr"))
         shell: Rscript {0}
 
       # Checks URLs in DESCRIPTION, README.md, NEWS.md, man/ and vignettes/ --
