@@ -1,0 +1,89 @@
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly. Link rot is a slow process and external hosts rate-limit, so a
+    # scheduled sweep is a better fit than gating every push to main.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+name: url-check
+
+permissions:
+  contents: read
+
+concurrency:
+  group: url-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  url-check:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      # urlchecker reads Rmd vignettes through pandoc; without it url_check()
+      # aborts before checking a single URL.
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      # knitr is the package's VignetteBuilder. urlchecker refuses to scan
+      # vignettes without it, so it is a hard requirement here, not optional.
+      - name: Install urlchecker
+        run: install.packages(c("urlchecker", "knitr"))
+        shell: Rscript {0}
+
+      # Checks URLs in DESCRIPTION, README.md, NEWS.md, man/ and vignettes/ --
+      # the same set CRAN flags on submission.
+      #
+      # Findings are advisory: urlchecker reports 403s and timeouts from hosts
+      # that rate-limit CI runners, and those are not real broken links, so a
+      # human judges them from the annotation.
+      #
+      # Deliberately NOT continue-on-error at the step level. That would also
+      # swallow setup failures and report green having checked nothing, which
+      # is exactly what a missing pandoc did on the first run of this workflow.
+      # Only the findings are downgraded, inside the tryCatch below; anything
+      # that stops url_check() from running at all still fails the job.
+      - name: Check URLs
+        run: |
+          # Findings are advisory; anything that stops the check from running
+          # is fatal. Handling both is not belt-and-braces -- urlchecker
+          # changed how it signals findings. 1.0.1 RETURNS them, while the
+          # version currently on CRAN ABORTS with "Found N invalid URLs".
+          # Keying on only one of those silently breaks on the other.
+          advisory <- function(n) {
+            cat(
+              "::warning::urlchecker reported ", n,
+              " URL(s) needing review; see the annotated output above\n",
+              sep = ""
+            )
+            quit(status = 0L)
+          }
+
+          res <- tryCatch(
+            urlchecker::url_check("."),
+            error = function(e) {
+              msg <- conditionMessage(e)
+              hit <- regmatches(msg, regexpr("Found [0-9]+ invalid URLs?", msg))
+              if (length(hit)) {
+                # Findings, not a broken job. url_check() prints each offending
+                # URL with its file:line before aborting, so the detail is in
+                # the log already.
+                advisory(as.integer(gsub("[^0-9]", "", hit)))
+              }
+              # Missing pandoc, missing knitr, network stack failure: real.
+              cat("::error::urlchecker could not run: ", msg, "\n", sep = "")
+              quit(status = 1L)
+            }
+          )
+
+          print(res)
+          if (NROW(res) > 0) advisory(NROW(res))
+          cat("All URLs OK\n")
+        shell: Rscript {0}

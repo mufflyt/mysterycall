@@ -45,7 +45,7 @@ Imports:
     stringr,
     tibble,
     tools,
-    utils,
+    utils
 LazyData: true
 LazyDataCompression: xz
 Suggests:
