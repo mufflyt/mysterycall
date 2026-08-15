@@ -501,12 +501,6 @@ print.mysterycall_table1 <- function(x, ...) {
   invisible(x)
 }
 
-#' Convert a mysterycall_table1 to a flextable (internal)
-#'
-#' @param x A `mysterycall_table1` object.
-#' @param ... Passed to [flextable::flextable()].
-#' @return A `flextable` object.
-#' @keywords internal
 #' Coerce a mysterycall_table1 to a plain data frame
 #'
 #' @param x A `mysterycall_table1` object.
