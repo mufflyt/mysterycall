@@ -2,6 +2,20 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Internal / CI
+
+- [`mysterycall_forest_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_forest_plot.md)
+  now builds its horizontal error-bar layer inside an isolated
+  [`suppressWarnings()`](https://rdrr.io/r/base/warning.html), matching
+  [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md)
+  and
+  [`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md).
+  [`ggplot2::geom_errorbarh()`](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
+  is soft-deprecated in ggplot2 \>= 4.0.0; suppressing the lifecycle
+  warning at construction keeps the runnable example clean under
+  `R CMD check --run-donttest`, letting the `R-CMD-check` gate run with
+  `error-on: "warning"`.
+
 ### Documentation
 
 - Added `ARCHITECTURE.md`, a codebase-orientation guide for
