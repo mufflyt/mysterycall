@@ -1,7 +1,7 @@
 #' Confirm all traffic is routed through Tor
 #'
 #' Stops with an error if the Tor proxy is unreachable or the visible IP is
-#' not a Tor exit node — ensuring no requests are sent over your real IP.
+#' not a Tor exit node -- ensuring no requests are sent over your real IP.
 #'
 #' @param torPort Integer SOCKS5 proxy port (default 9150).
 #' @return Invisibly returns the detected Tor exit-node IP.
@@ -36,7 +36,7 @@ verify_tor <- function(torPort = 9150L) {
       call. = FALSE
     )
 
-  message(sprintf("[tor] Verified — exit node IP: %s", ip))
+  message(sprintf("[tor] Verified \u2014 exit node IP: %s", ip))
   invisible(ip)
 }
 
@@ -57,7 +57,7 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
     writeLines(sprintf('AUTHENTICATE "%s"', password), con)
     writeLines("SIGNAL NEWNYM", con)
     Sys.sleep(2)  # Tor needs ~2 s to build a new circuit
-    message("[tor] Circuit rotated — new exit node assigned")
+    message("[tor] Circuit rotated \u2014 new exit node assigned")
   }, error = function(e) {
     message(sprintf(
       "[tor] Circuit rotation skipped (%s)\n      Tip: enable the Tor control port or use the tor daemon instead of Tor Browser.",
@@ -71,25 +71,25 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #'
 #' Queries \code{https://api.abog.org/diplomate/{id}/verify} for each ID in
 #' \code{[startID, endID]}.  Every request is routed through a local Tor
-#' SOCKS5 proxy — your real IP address is never sent to the ABOG server.
+#' SOCKS5 proxy -- your real IP address is never sent to the ABOG server.
 #'
 #' Privacy protections (in order of importance):
 #' \enumerate{
-#'   \item \strong{Tor verification} — confirms a Tor exit node is in use
+#'   \item \strong{Tor verification} -- confirms a Tor exit node is in use
 #'         \emph{before} any scraping begins; aborts if the check fails.
-#'   \item \strong{Circuit rotation} — requests a new Tor exit node every
+#'   \item \strong{Circuit rotation} -- requests a new Tor exit node every
 #'         \code{rotate_tor_every} requests, limiting how much traffic any
 #'         single exit node sees.
-#'   \item \strong{Randomised timing} — each request waits a random interval
+#'   \item \strong{Randomised timing} -- each request waits a random interval
 #'         in \code{[sleep_min, sleep_max]} seconds, so traffic cannot be
 #'         fingerprinted by a fixed inter-request cadence.
-#'   \item \strong{Randomised User-Agent} — each request picks a different
+#'   \item \strong{Randomised User-Agent} -- each request picks a different
 #'         browser string so repeated requests look like different clients.
-#'   \item \strong{Transient-error retry} — 429 / 5xx and network errors are
+#'   \item \strong{Transient-error retry} -- 429 / 5xx and network errors are
 #'         retried with exponential back-off; only confirmed 404 / empty
 #'         responses are logged as genuinely not found.  This prevents
 #'         valid records from being silently lost.
-#'   \item \strong{Checkpoint saves} — results are written to disk every
+#'   \item \strong{Checkpoint saves} -- results are written to disk every
 #'         \code{checkpoint_every} records so no data is lost if the session
 #'         is interrupted.
 #' }
@@ -99,8 +99,8 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #' @param torPort Integer. Tor SOCKS5 proxy port.  Use \code{9150} (default)
 #'   for Tor Browser or \code{9050} for the \code{tor} daemon.
 #' @param tor_ports Integer vector of Tor SOCKS5 proxy ports (default
-#'   \code{9050}).  Supply multiple ports — e.g. \code{c(9050, 9052, 9054,
-#'   9056)} — to enable parallel scraping: the ID range is split into
+#'   \code{9050}).  Supply multiple ports -- e.g. \code{c(9050, 9052, 9054,
+#'   9056)} -- to enable parallel scraping: the ID range is split into
 #'   \code{length(tor_ports)} chunks and each chunk is scraped in its own
 #'   forked process through a different Tor circuit.  Requires the \code{tor}
 #'   daemon configured with one \code{SocksPort} per entry (see
@@ -109,10 +109,10 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #' @param tor_control_port Integer. Tor control port for circuit rotation
 #'   (default 9051).  Pass \code{NULL} to disable rotation entirely.
 #' @param tor_control_password Character. Control-port password (default
-#'   \code{""}, i.e. no password — typical for localhost-only setups).
+#'   \code{""}, i.e. no password -- typical for localhost-only setups).
 #' @param skip_ids_paths Optional character vector of paths to CSV or Parquet
 #'   files containing IDs to skip.  Each file may have a column named
-#'   \code{WrongIDs}, \code{UnknownIDs}, or \code{FailedIDs} — all are
+#'   \code{WrongIDs}, \code{UnknownIDs}, or \code{FailedIDs} -- all are
 #'   recognised automatically.  Pass the \code{UnknownIDs_*.csv} and/or
 #'   \code{FailedIDs_*.csv} files from a previous run to avoid re-querying
 #'   IDs that were already confirmed empty or that persistently failed.
@@ -130,10 +130,10 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #'   (default 25). Lower values mean more exit-node diversity at the cost
 #'   of slightly more delay (2 s per rotation).  Set to \code{Inf} to disable.
 #' @param max_skip_age_days Integer. Maximum age (in days) of a "confirmed empty"
-#'   record before the ID is re-queried (default 180 — six months).  Files with
+#'   record before the ID is re-queried (default 180 -- six months).  Files with
 #'   a \code{ConfirmedEmptyAt} column use per-row timestamps; older files
 #'   without that column are judged by their file modification date.  Set to
-#'   \code{Inf} to trust skip files forever (not recommended — newly certified
+#'   \code{Inf} to trust skip files forever (not recommended -- newly certified
 #'   physicians can fill previously empty IDs).
 #' @param descending Logical. If \code{TRUE}, iterate from \code{endID} down
 #'   to \code{startID} so the most recently issued (highest-numbered) IDs are
@@ -146,7 +146,6 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #'   ABOG JSON response plus \code{ID} and \code{ScrapedAt}.
 #'
 #' @importFrom httr GET content use_proxy add_headers timeout status_code
-#' @importFrom jsonlite fromJSON
 #' @importFrom dplyr bind_rows
 #'
 #' @examplesIf interactive()
@@ -156,7 +155,7 @@ rotate_tor_circuit <- function(control_port = 9051L, password = "") {
 #'   torPort    = 9150,
 #'   output_dir = "~/Desktop/abog_scrape"
 #' )
-#'
+#' @keywords internal
 scrape_physicians_data_with_tor <- function(
     startID,
     endID,
@@ -182,7 +181,7 @@ scrape_physicians_data_with_tor <- function(
   n_workers     <- length(tor_ports)
   .log <- function(...) if (verbose) message(...)
 
-  # ── Validate ───────────────────────────────────────────────────────────────
+  # -- Validate ---------------------------------------------------------------
   stopifnot(
     is.numeric(startID), is.numeric(endID), startID <= endID,
     all(tor_ports > 0L),
@@ -195,10 +194,10 @@ scrape_physicians_data_with_tor <- function(
 
   if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
 
-  # ── Verify all Tor ports before any scraping ───────────────────────────────
+  # -- Verify all Tor ports before any scraping -------------------------------
   for (p in tor_ports) verify_tor(p)
 
-  # ── Skip list (staleness-filtered) ────────────────────────────────────────
+  # -- Skip list (staleness-filtered) ----------------------------------------
   skip_col_names <- c("WrongIDs", "UnknownIDs", "FailedIDs")
   wrong_ids      <- integer(0)
   cutoff         <- Sys.time() - as.numeric(max_skip_age_days) * 86400
@@ -224,11 +223,11 @@ scrape_physicians_data_with_tor <- function(
       n_loaded  <- n_loaded + length(ids)
       wrong_ids <- unique(c(wrong_ids, ids))
     }
-    .log(sprintf("[abog] Skip list: %d fresh, %d stale-dropped → %d skipped",
+    .log(sprintf("[abog] Skip list: %d fresh, %d stale-dropped \u2192 %d skipped",
                  n_loaded, n_dropped, length(wrong_ids)))
   }
 
-  # ── Build ID list ──────────────────────────────────────────────────────────
+  # -- Build ID list ----------------------------------------------------------
   full_seq <- if (descending)
     seq.int(as.integer(endID), as.integer(startID), by = -1L)
   else
@@ -236,7 +235,7 @@ scrape_physicians_data_with_tor <- function(
   id_list <- setdiff(full_seq, wrong_ids)
   n_total <- length(id_list)
 
-  .log(sprintf("[abog] %s IDs | %d worker(s) | order: %s | sleep: %.1f–%.1f s (found), %.1f–%.1f s (not found)",
+  .log(sprintf("[abog] %s IDs | %d worker(s) | order: %s | sleep: %.1f\u2013%.1f s (found), %.1f\u2013%.1f s (not found)",
                format(n_total, big.mark = ","), n_workers,
                if (descending) "desc" else "asc",
                sleep_min, sleep_max, sleep_min_notfound, sleep_max_notfound))
@@ -248,7 +247,7 @@ scrape_physicians_data_with_tor <- function(
 
   timestamp_start <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
 
-  # ── Self-contained worker function ────────────────────────────────────────
+  # -- Self-contained worker function ----------------------------------------
   # Everything the worker needs is passed explicitly so it runs cleanly in a
   # forked process with no shared state.
   run_worker <- function(worker_id, chunk, proxy_str, base_url,
@@ -380,7 +379,7 @@ scrape_physicians_data_with_tor <- function(
          FailedIDs = FailedIDs, FailedTimestamps = FailedTimestamps)
   }
 
-  # ── Split IDs across workers and launch ───────────────────────────────────
+  # -- Split IDs across workers and launch -----------------------------------
   chunks <- split(id_list, cut(seq_along(id_list), n_workers, labels = FALSE))
 
   if (n_workers == 1L) {
@@ -410,11 +409,11 @@ scrape_physicians_data_with_tor <- function(
     )
   }
 
-  # ── Merge worker results ───────────────────────────────────────────────────
+  # -- Merge worker results ---------------------------------------------------
   ok <- vapply(results, is.list, logical(1))
   if (any(!ok)) {
     failed_workers <- which(!ok)
-    .log(sprintf("[abog] WARNING: %d worker(s) failed (W%s) — excluded from merged output; per-worker checkpoint CSVs are intact",
+    .log(sprintf("[abog] WARNING: %d worker(s) failed (W%s) \u2014 excluded from merged output; per-worker checkpoint CSVs are intact",
                  sum(!ok), paste(failed_workers, collapse = ", W")))
   }
   results <- results[ok]
@@ -424,7 +423,7 @@ scrape_physicians_data_with_tor <- function(
   FailedIDs         <- unlist(lapply(results, `[[`, "FailedIDs"))
   FailedTimestamps  <- do.call(c, lapply(results, `[[`, "FailedTimestamps"))
 
-  # ── Final merged save ──────────────────────────────────────────────────────
+  # -- Final merged save ------------------------------------------------------
   ext  <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
   tyler_write_table(Physicians,
     file.path(output_dir, paste0("Physicians_", startID, "-", endID, "_", timestamp_start, ext)),
@@ -436,7 +435,7 @@ scrape_physicians_data_with_tor <- function(
     file.path(output_dir, paste0("FailedIDs_", startID, "-", endID, "_", timestamp_start, ext)),
     format = output_format)
 
-  .log(sprintf("[abog] Done. %d found | %d not found | %d failed → %s",
+  .log(sprintf("[abog] Done. %d found | %d not found | %d failed \u2192 %s",
                nrow(Physicians), length(UnknownIDs), length(FailedIDs), output_dir))
 
   if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
@@ -452,7 +451,7 @@ scrape_physicians_data_with_tor <- function(
 #' reliably signals the end of the registry even when IDs are not perfectly
 #' contiguous.
 #'
-#' A binary search is NOT used here because ABOG IDs have gaps — an empty
+#' A binary search is NOT used here because ABOG IDs have gaps -- an empty
 #' response at ID N does not imply N+1 is also empty.
 #'
 #' @param seed_id Integer. A known valid ID to start scanning from (e.g. the
@@ -467,7 +466,7 @@ scrape_physicians_data_with_tor <- function(
 #'
 #' @examplesIf interactive()
 #' max_id <- find_max_abog_id(seed_id = 9046331, torPort = 9150)
-#'
+#' @keywords internal
 find_max_abog_id <- function(seed_id,
                               torPort                 = 9150L,
                               max_consecutive_misses  = 100L,
@@ -519,11 +518,11 @@ find_max_abog_id <- function(seed_id,
 }
 
 
-# ── Example usage ──────────────────────────────────────────────────────────────
+# -- Example usage --------------------------------------------------------------
 #
 # Make sure Tor Browser is open (port 9150) or the tor daemon is running (9050).
 #
-# Step 1 — find the current highest ID, then scrape downward from it:
+# Step 1 -- find the current highest ID, then scrape downward from it:
 #
 # max_id <- find_max_abog_id(seed_id = 9046331, torPort = 9150)
 #
