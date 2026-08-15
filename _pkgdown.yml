@@ -306,6 +306,7 @@ reference:
       - mysterycall_format_pct
       - mysterycall_format_results_table
       - print.mysterycall_table1
+      - as.data.frame.mysterycall_table1
 
   - title: "Manuscript Writing"
     desc: >
