@@ -28,6 +28,10 @@ jobs:
         with:
           use-public-rspm: true
 
+      # urlchecker reads Rmd vignettes through pandoc; without it url_check()
+      # aborts before checking a single URL.
+      - uses: r-lib/actions/setup-pandoc@v2
+
       - name: Install urlchecker
         run: install.packages("urlchecker")
         shell: Rscript {0}
@@ -35,16 +39,28 @@ jobs:
       # Checks URLs in DESCRIPTION, README.md, NEWS.md, man/ and vignettes/ --
       # the same set CRAN flags on submission.
       #
-      # Not a hard gate: urlchecker reports 403s and timeouts from hosts that
-      # rate-limit CI runners, which are not real broken links. The summary is
-      # written to the job log and the step annotation so a human can judge.
+      # Findings are advisory: urlchecker reports 403s and timeouts from hosts
+      # that rate-limit CI runners, and those are not real broken links, so a
+      # human judges them from the annotation.
+      #
+      # Deliberately NOT continue-on-error at the step level. That would also
+      # swallow setup failures and report green having checked nothing, which
+      # is exactly what a missing pandoc did on the first run of this workflow.
+      # Only the findings are downgraded, inside the tryCatch below; anything
+      # that stops url_check() from running at all still fails the job.
       - name: Check URLs
-        continue-on-error: true
         run: |
-          res <- urlchecker::url_check(".")
+          res <- tryCatch(
+            urlchecker::url_check("."),
+            error = function(e) {
+              cat("::error::urlchecker could not run: ", conditionMessage(e), "\n", sep = "")
+              quit(status = 1L)
+            }
+          )
           print(res)
-          if (NROW(res) > 0) {
-            cat("::warning::urlchecker reported ", NROW(res), " URL(s) needing review\n", sep = "")
+          n <- NROW(res)
+          if (n > 0) {
+            cat("::warning::urlchecker reported ", n, " URL(s) needing review\n", sep = "")
           } else {
             cat("All URLs OK\n")
           }
