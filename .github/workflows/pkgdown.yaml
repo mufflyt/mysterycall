@@ -52,13 +52,33 @@ jobs:
             libudunits2-dev libfftw3-dev libtiff5-dev \
             libjpeg-dev libpng-dev qpdf
 
+      # xml2 is pinned to 1.5.2, the release before 1.6.0 (2026-06-22).
+      #
+      # pkgdown 2.2.1 + xml2 1.6.0 segfault while inserting the homepage logo:
+      #
+      #   *** caught segfault ***
+      #   cause 'invalid permissions' / 'memory not mapped'
+      #   1: xml_add_sibling.xml_node(page_header, "img", src = logo, ...)
+      #   5: build_home_index(pkg, quiet = quiet)
+      #
+      # The crash address and cause vary run to run and the same commit both
+      # passed and failed, so it is a use-after-free whose outcome depends on
+      # heap layout, not a content problem in this package. It escalated from
+      # roughly 1 run in 5 to 3 of 3 attempts, which is what the retry below
+      # is reporting when it exhausts.
+      #
+      # Both packages are already at their CRAN latest, so there is no fixed
+      # version to move forward to; pinning back is the only lever. Revisit
+      # when xml2 > 1.6.0 ships: drop the pin, and if pkgdown stays green
+      # across several runs, leave it dropped.
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, any::xml2, local::.
+          extra-packages: any::pkgdown, xml2@1.5.2, local::.
           needs: website
           cache: true
-          cache-version: 2
+          # Bumped so the pin is not served from a cache built against 1.6.0.
+          cache-version: 3
 
       # Retries ONLY on a segfault. pkgdown crashes intermittently inside xml2
       # (exit 139 / SIGSEGV, "invalid permissions" or "recursive gc invocation")
