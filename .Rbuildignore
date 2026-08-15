@@ -1,5 +1,4 @@
 ^mysterycall\.Rproj$
-^mysterycall\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^revdep$
@@ -40,6 +39,9 @@
 
 # Hidden directories that shouldn't be in the package
 ^\.claude$
+
+# Coding-agent instructions (repo-only, not part of the package)
+^CLAUDE\.md$
 
 # Non-standard top-level files
 ^CHANGELOG\.md$
