@@ -67,8 +67,8 @@ NULL
 #'   each count as Poisson given its year's population denominator.
 #' @param trend_test `FALSE` (default), `TRUE`, `"poisson"`, or
 #'   `"quasipoisson"`. When enabled, fits a per-subspecialty log-linear
-#'   regression of count on year with an offset of `log(population)` — i.e. a
-#'   model of the rate's annual change — and attaches the tidy result as
+#'   regression of count on year with an offset of `log(population)`, i.e. a
+#'   model of the rate's annual change, and attaches the tidy result as
 #'   `attr(p, "trend_test")` (annual rate ratio, CI, percent change per year and
 #'   over the span, and the year-term p-value). `TRUE` uses Poisson (Wald);
 #'   `"quasipoisson"` uses a t-test on the overdispersion-scaled SE. The CI uses
@@ -190,7 +190,7 @@ mysterycall_subspecialist_trend <- function(
 
   years <- sort(unique(d$year))
   if (isTRUE(show_year_range))
-    title <- sprintf("%s, %d–%d", title, min(years), max(years))
+    title <- sprintf("%s, %d\u2013%d", title, min(years), max(years))
 
   # ---- optional per-subspecialty trend statistic -----------------------------
   do_test   <- !is.null(trend_test) && !isFALSE(trend_test)
@@ -283,7 +283,7 @@ mysterycall_subspecialist_trend <- function(
                     ifelse(m$p_value < 0.05, "*", ""))))
       ends$.lab <- ifelse(
         is.na(m$rr_per_year), ends$subspecialty,
-        sprintf("%s\n(×%.3f/yr%s)", ends$subspecialty, m$rr_per_year, star)
+        sprintf("%s\n(\u00d7%.3f/yr%s)", ends$subspecialty, m$rr_per_year, star)
       )
     }
     p <- p +
@@ -367,7 +367,7 @@ mysterycall_subspecialist_trend <- function(
 
 # Per-subspecialty trend test: a log-linear regression of count on year with an
 # offset of log(population), i.e. a model of the rate's annual change. Returns a
-# tidy data frame — one row per subspecialty — with the annual rate ratio
+# tidy data frame, one row per subspecialty, with the annual rate ratio
 # (exp(beta_year)), its CI, the implied percent change per year and over the
 # observed span, and the year-term p-value. `family` is "poisson" (Wald z) or
 # "quasipoisson" (t with residual df, robust to overdispersion). Subspecialties
