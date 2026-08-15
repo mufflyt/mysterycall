@@ -14,7 +14,27 @@ template:
       card: summary_large_image
 
 home:
-  strip_header: true
+  # Must stay false while a logo is present. pkgdown's tweak_homepage_html()
+  # does this:
+  #
+  #   if (strip_header) {
+  #     page_header <- xml2::xml_remove(header, free = TRUE)
+  #   } else {
+  #     page_header <- xml2::xml_add_parent(header, "div", class = "page-header")
+  #   }
+  #   ...
+  #   xml2::xml_add_sibling(page_header, "img", src = logo, ...)
+  #
+  # With strip_header: true the header node is removed *and freed*, and the
+  # freed node is then used as the anchor for the logo image. That is a
+  # use-after-free, and it segfaulted the pkgdown job (exit 139) at a rate that
+  # rose from about 1 run in 5 to every run, blocking every PR. The crash
+  # address and cause varied between runs because whether the freed memory is
+  # still readable depends on heap layout.
+  #
+  # It needs both conditions: strip_header true AND a logo (man/figures/logo.png).
+  # false takes the else branch, where page_header is a live node.
+  strip_header: false
   links:
     - text: Browse source code
       href: https://github.com/mufflyt/mysterycall
