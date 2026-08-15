@@ -86,8 +86,8 @@ each count as Poisson given its year's population denominator.}
 
 \item{trend_test}{\code{FALSE} (default), \code{TRUE}, \code{"poisson"}, or
 \code{"quasipoisson"}. When enabled, fits a per-subspecialty log-linear
-regression of count on year with an offset of \code{log(population)} — i.e. a
-model of the rate's annual change — and attaches the tidy result as
+regression of count on year with an offset of \code{log(population)}, i.e. a
+model of the rate's annual change, and attaches the tidy result as
 \code{attr(p, "trend_test")} (annual rate ratio, CI, percent change per year and
 over the span, and the year-term p-value). \code{TRUE} uses Poisson (Wald);
 \code{"quasipoisson"} uses a t-test on the overdispersion-scaled SE. The CI uses

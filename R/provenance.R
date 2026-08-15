@@ -63,7 +63,7 @@ NULL
   cap <- paste(parts, collapse = "; ")
   if (!is.na(prov$accessed) && nzchar(prov$accessed))
     cap <- paste0(cap, " (accessed ", prov$accessed, ")")
-  paste0("Source — ", cap, ".")
+  paste0("Source \u2014 ", cap, ".")
 }
 
 # Human-readable multi-line provenance block, optionally with a per-point table
@@ -73,9 +73,9 @@ NULL
     if (is.null(value) || (length(value) == 1L && is.na(value))) return(NULL)
     sprintf("%-15s %s", paste0(label, ":"), paste(value, collapse = ", "))
   }
-  yr <- if (is.null(prov$years)) NULL else paste(prov$years, collapse = "–")
+  yr <- if (is.null(prov$years)) NULL else paste(prov$years, collapse = "\u2013")
   head <- c(
-    "mysterycall — figure provenance",
+    "mysterycall \u2014 figure provenance",
     strrep("=", 34),
     ln("Metric",        prov$metric),
     ln("Computation",   prov$computation),
@@ -136,7 +136,7 @@ NULL
 }
 
 # Write the provenance next to `output_path` (same basename): always a
-# human-readable ".provenance.txt", and — when jsonlite is available — a
+# human-readable ".provenance.txt", plus (when jsonlite is available) a
 # machine-readable ".provenance.json". Returns the written paths invisibly.
 .write_provenance <- function(prov, output_path, data = NULL, extra = NULL) {
   base  <- tools::file_path_sans_ext(output_path)
