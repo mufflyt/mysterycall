@@ -1,6 +1,7 @@
 #' Total female population denominators from the Census ACS
 #'
 #' @name census_female_population
+#' @keywords internal
 NULL
 
 #' Fetch total female population by year (denominator for density figures)
