@@ -47,9 +47,9 @@ df <- data.frame(clinic, persona, offered = ifelse(offered == 1, "yes", "no"))
 mysterycall_cmh_test(df, "offered", "persona", "clinic")
 }
 \seealso{
-Other categorical: 
-\code{\link{mysterycall_compare_ranks}()},
-\code{\link{mysterycall_prevalence_ci}()},
-\code{\link{mysterycall_test_categorical}()}
+Other categorical:
+\code{\link[=mysterycall_compare_ranks]{mysterycall_compare_ranks()}},
+\code{\link[=mysterycall_prevalence_ci]{mysterycall_prevalence_ci()}},
+\code{\link[=mysterycall_test_categorical]{mysterycall_test_categorical()}}
 }
 \concept{categorical}

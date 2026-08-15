@@ -82,9 +82,9 @@ res <- mysterycall_score_concordance(calls, rub, group_col = "district",
 res$item_rates
 }
 \seealso{
-Other concordance: 
-\code{\link{mysterycall_concordance_kappa}()},
-\code{\link{mysterycall_concordance_rubric}()},
-\code{\link{mysterycall_concordance_sentence}()}
+Other concordance:
+\code{\link[=mysterycall_concordance_kappa]{mysterycall_concordance_kappa()}},
+\code{\link[=mysterycall_concordance_rubric]{mysterycall_concordance_rubric()}},
+\code{\link[=mysterycall_concordance_sentence]{mysterycall_concordance_sentence()}}
 }
 \concept{concordance}

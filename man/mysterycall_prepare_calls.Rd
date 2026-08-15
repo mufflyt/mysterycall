@@ -134,10 +134,10 @@ print(result)
 \code{\link[=mysterycall_logistic_model]{mysterycall_logistic_model()}}, \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}},
 \code{\link[=mysterycall_auto_model]{mysterycall_auto_model()}}
 
-Other data-preparation: 
-\code{\link{mysterycall_exclusion_crosswalk}()},
-\code{\link{mysterycall_reconcile_inclusion}()},
-\code{\link{print.mysterycall_prepared}()},
-\code{\link{print.mysterycall_reconciliation}()}
+Other data-preparation:
+\code{\link[=mysterycall_exclusion_crosswalk]{mysterycall_exclusion_crosswalk()}},
+\code{\link[=mysterycall_reconcile_inclusion]{mysterycall_reconcile_inclusion()}},
+\code{\link[=print.mysterycall_prepared]{print.mysterycall_prepared()}},
+\code{\link[=print.mysterycall_reconciliation]{print.mysterycall_reconciliation()}}
 }
 \concept{data-preparation}

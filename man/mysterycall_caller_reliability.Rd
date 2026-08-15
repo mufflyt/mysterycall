@@ -68,7 +68,7 @@ mysterycall_caller_reliability(df, "caller", "outcome", gold_col = "gold")
 \code{\link[=mysterycall_call_productivity]{mysterycall_call_productivity()}} for per-caller volume metrics;
 \code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}} for cross-wave outcome comparisons.
 
-Other caller-management: 
-\code{\link{print.mysterycall_reliability}()}
+Other caller-management:
+\code{\link[=print.mysterycall_reliability]{print.mysterycall_reliability()}}
 }
 \concept{caller-management}

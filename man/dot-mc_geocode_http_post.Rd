@@ -22,21 +22,21 @@ httr response object.
 HTTP POST seam for geocoding (single mock point)
 }
 \seealso{
-Other npi: 
-\code{\link{.mc_build_census_batch_request}()},
-\code{\link{.mc_census_batch}()},
-\code{\link{.mc_geocode_http_get}()},
-\code{\link{.mc_geocode_http_with_retry}()},
-\code{\link{.mc_geocode_one_fallback}()},
-\code{\link{.mc_normalize_sex}()},
-\code{\link{.mc_nppes_sex_one}()},
-\code{\link{.mc_parse_census_batch_response}()},
-\code{\link{mysterycall_enrich_npi}()},
-\code{\link{mysterycall_geocode_address}()},
-\code{\link{mysterycall_get_clinician_data}()},
-\code{\link{mysterycall_nppes_gender}()},
-\code{\link{mysterycall_search_and_process_npi}()},
-\code{\link{mysterycall_search_taxonomy}()}
+Other npi:
+\code{\link[=.mc_build_census_batch_request]{.mc_build_census_batch_request()}},
+\code{\link[=.mc_census_batch]{.mc_census_batch()}},
+\code{\link[=.mc_geocode_http_get]{.mc_geocode_http_get()}},
+\code{\link[=.mc_geocode_http_with_retry]{.mc_geocode_http_with_retry()}},
+\code{\link[=.mc_geocode_one_fallback]{.mc_geocode_one_fallback()}},
+\code{\link[=.mc_normalize_sex]{.mc_normalize_sex()}},
+\code{\link[=.mc_nppes_sex_one]{.mc_nppes_sex_one()}},
+\code{\link[=.mc_parse_census_batch_response]{.mc_parse_census_batch_response()}},
+\code{\link[=mysterycall_enrich_npi]{mysterycall_enrich_npi()}},
+\code{\link[=mysterycall_geocode_address]{mysterycall_geocode_address()}},
+\code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}},
+\code{\link[=mysterycall_nppes_gender]{mysterycall_nppes_gender()}},
+\code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}},
+\code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}}
 }
 \concept{npi}
 \keyword{internal}

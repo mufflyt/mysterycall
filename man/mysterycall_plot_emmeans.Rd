@@ -92,8 +92,8 @@ and \code{\link[=mysterycall_plot_emmeans_full]{mysterycall_plot_emmeans_full()}
 and optional file save). This function computes, plots, and saves a
 single-variable EMM figure.
 
-Other plotting: 
-\code{\link{mysterycall_plot_disparities}()},
-\code{\link{mysterycall_plot_source_venn}()}
+Other plotting:
+\code{\link[=mysterycall_plot_disparities]{mysterycall_plot_disparities()}},
+\code{\link[=mysterycall_plot_source_venn]{mysterycall_plot_source_venn()}}
 }
 \concept{plotting}

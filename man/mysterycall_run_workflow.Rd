@@ -171,15 +171,16 @@ Stage functions called by this workflow:
 \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}.
 Run \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} before starting to catch missing
 API keys and malformed inputs early.
-Feed the cleaned result into \code{\link[=mysterycall_run_analysis]{mysterycall_run_analysis()}} for the analysis phase.
+Feed the cleaned result into \code{\link[=mysterycall_run_analysis]{mysterycall_run_analysis()}} for the
+analysis phase.
 
 Other workflow:
-\code{\link{mysterycall_call_productivity}()},
-\code{\link{mysterycall_clean_phase1}()},
-\code{\link{mysterycall_clean_phase2}()},
-\code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_run_workflow_logged}()},
-\code{\link{mysterycall_split_and_save}()},
-\code{\link{mysterycall_verify_artifact}()}
+\code{\link[=mysterycall_call_productivity]{mysterycall_call_productivity()}},
+\code{\link[=mysterycall_clean_phase1]{mysterycall_clean_phase1()}},
+\code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}},
+\code{\link[=mysterycall_print_dashboard]{mysterycall_print_dashboard()}},
+\code{\link[=mysterycall_run_workflow_logged]{mysterycall_run_workflow_logged()}},
+\code{\link[=mysterycall_split_and_save]{mysterycall_split_and_save()}},
+\code{\link[=mysterycall_verify_artifact]{mysterycall_verify_artifact()}}
 }
 \concept{workflow}

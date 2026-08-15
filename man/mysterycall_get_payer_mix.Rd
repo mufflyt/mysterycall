@@ -92,18 +92,19 @@ for other ACS covariate builders;
 \code{\link[=mysterycall_summarize_county_enrollment]{mysterycall_summarize_county_enrollment()}} for the provider-supply and
 Medicare/Medicaid-enrollment covariates that pair with payer mix.
 
-Other census: 
-\code{\link{mysterycall_add_hhi}()},
-\code{\link{mysterycall_add_medicaid_expansion}()},
-\code{\link{mysterycall_get_acs_adults_18_90}()},
-\code{\link{mysterycall_get_acs_female_insurance}()},
-\code{\link{mysterycall_get_acs_women_18_90}()},
-\code{\link{mysterycall_get_census_data}()},
-\code{\link{mysterycall_get_county_provider_counts}()},
-\code{\link{mysterycall_plot_census_age}()},
-\code{\link{mysterycall_read_kff_hhi}()},
-\code{\link{mysterycall_summarize_census}()},
-\code{\link{mysterycall_summarize_county_enrollment}()},
-\code{\link{print.mysterycall_provider_counts}()}
+Other census:
+\code{\link[=mysterycall_add_hhi]{mysterycall_add_hhi()}},
+\code{\link[=mysterycall_add_medicaid_expansion]{mysterycall_add_medicaid_expansion()}},
+\code{\link[=mysterycall_census_female_population]{mysterycall_census_female_population()}},
+\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}},
+\code{\link[=mysterycall_get_acs_female_insurance]{mysterycall_get_acs_female_insurance()}},
+\code{\link[=mysterycall_get_acs_women_18_90]{mysterycall_get_acs_women_18_90()}},
+\code{\link[=mysterycall_get_census_data]{mysterycall_get_census_data()}},
+\code{\link[=mysterycall_get_county_provider_counts]{mysterycall_get_county_provider_counts()}},
+\code{\link[=mysterycall_plot_census_age]{mysterycall_plot_census_age()}},
+\code{\link[=mysterycall_read_kff_hhi]{mysterycall_read_kff_hhi()}},
+\code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}},
+\code{\link[=mysterycall_summarize_county_enrollment]{mysterycall_summarize_county_enrollment()}},
+\code{\link[=print.mysterycall_provider_counts]{print.mysterycall_provider_counts()}}
 }
 \concept{census}

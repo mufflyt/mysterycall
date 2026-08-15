@@ -35,9 +35,9 @@ raw <- c("Appointment offered in 12 days", "Needs a referral first",
 mysterycall_classify_call_outcome(raw)
 }
 \seealso{
-Other call-outcomes: 
-\code{\link{mysterycall_multiresponse_tabulate}()},
-\code{\link{mysterycall_ordinal_model}()},
-\code{\link{mysterycall_outcome_gradient}()}
+Other call-outcomes:
+\code{\link[=mysterycall_multiresponse_tabulate]{mysterycall_multiresponse_tabulate()}},
+\code{\link[=mysterycall_ordinal_model]{mysterycall_ordinal_model()}},
+\code{\link[=mysterycall_outcome_gradient]{mysterycall_outcome_gradient()}}
 }
 \concept{call-outcomes}

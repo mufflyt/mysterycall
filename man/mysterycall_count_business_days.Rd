@@ -42,9 +42,9 @@ mysterycall_count_business_days("2026-02-13", "2026-02-20")
 \seealso{
 \code{\link[=mysterycall_business_days]{mysterycall_business_days()}}, \code{\link[=mysterycall_us_federal_calendar]{mysterycall_us_federal_calendar()}}
 
-Other business days: 
-\code{\link{mysterycall_appointment_obtained}()},
-\code{\link{mysterycall_business_days}()},
-\code{\link{mysterycall_us_federal_calendar}()}
+Other business days:
+\code{\link[=mysterycall_appointment_obtained]{mysterycall_appointment_obtained()}},
+\code{\link[=mysterycall_business_days]{mysterycall_business_days()}},
+\code{\link[=mysterycall_us_federal_calendar]{mysterycall_us_federal_calendar()}}
 }
 \concept{business days}

@@ -42,9 +42,9 @@ df <- data.frame(
 mysterycall_prevalence_ci(df, "staff")
 }
 \seealso{
-Other categorical: 
-\code{\link{mysterycall_cmh_test}()},
-\code{\link{mysterycall_compare_ranks}()},
-\code{\link{mysterycall_test_categorical}()}
+Other categorical:
+\code{\link[=mysterycall_cmh_test]{mysterycall_cmh_test()}},
+\code{\link[=mysterycall_compare_ranks]{mysterycall_compare_ranks()}},
+\code{\link[=mysterycall_test_categorical]{mysterycall_test_categorical()}}
 }
 \concept{categorical}

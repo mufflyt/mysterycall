@@ -65,11 +65,11 @@ result
 \seealso{
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} for broader pre-analysis checks.
 
-Other quality control: 
-\code{\link{mysterycall_clean_medicaid_col}()},
-\code{\link{mysterycall_dedup_by_insurance}()},
-\code{\link{mysterycall_flag_excluded_with_appointments}()},
-\code{\link{mysterycall_flag_exclusion_discrepancy}()},
-\code{\link{mysterycall_flag_included_na_appointments}()}
+Other quality control:
+\code{\link[=mysterycall_clean_medicaid_col]{mysterycall_clean_medicaid_col()}},
+\code{\link[=mysterycall_dedup_by_insurance]{mysterycall_dedup_by_insurance()}},
+\code{\link[=mysterycall_flag_excluded_with_appointments]{mysterycall_flag_excluded_with_appointments()}},
+\code{\link[=mysterycall_flag_exclusion_discrepancy]{mysterycall_flag_exclusion_discrepancy()}},
+\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}}
 }
 \concept{quality control}

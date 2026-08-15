@@ -50,9 +50,9 @@ mysterycall_outcome_gradient(
 )
 }
 \seealso{
-Other call-outcomes: 
-\code{\link{mysterycall_classify_call_outcome}()},
-\code{\link{mysterycall_multiresponse_tabulate}()},
-\code{\link{mysterycall_ordinal_model}()}
+Other call-outcomes:
+\code{\link[=mysterycall_classify_call_outcome]{mysterycall_classify_call_outcome()}},
+\code{\link[=mysterycall_multiresponse_tabulate]{mysterycall_multiresponse_tabulate()}},
+\code{\link[=mysterycall_ordinal_model]{mysterycall_ordinal_model()}}
 }
 \concept{call-outcomes}

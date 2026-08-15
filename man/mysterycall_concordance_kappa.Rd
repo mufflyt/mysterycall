@@ -32,9 +32,9 @@ rub <- mysterycall_concordance_rubric("asked_age", type = "expected_present")
 mysterycall_concordance_kappa(r1, r2, rub)
 }
 \seealso{
-Other concordance: 
-\code{\link{mysterycall_concordance_rubric}()},
-\code{\link{mysterycall_concordance_sentence}()},
-\code{\link{mysterycall_score_concordance}()}
+Other concordance:
+\code{\link[=mysterycall_concordance_rubric]{mysterycall_concordance_rubric()}},
+\code{\link[=mysterycall_concordance_sentence]{mysterycall_concordance_sentence()}},
+\code{\link[=mysterycall_score_concordance]{mysterycall_score_concordance()}}
 }
 \concept{concordance}

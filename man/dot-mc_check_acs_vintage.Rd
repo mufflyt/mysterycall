@@ -33,22 +33,22 @@ Silence with \code{options(mysterycall.quiet_vintage = TRUE)} when the
 mismatch is intended (for example, a deliberately historical series).
 }
 \seealso{
-Other data integrity: 
-\code{\link{.mc_age_impute}()},
-\code{\link{.mc_age_key}()},
-\code{\link{.mc_data}()},
-\code{\link{.mc_geo_layer}()},
-\code{\link{.mc_geocode_point}()},
-\code{\link{.mc_healthgrades_ages}()},
-\code{\link{.mc_state_to_abbr}()},
+Other data integrity:
+\code{\link[=.mc_age_impute]{.mc_age_impute()}},
+\code{\link[=.mc_age_key]{.mc_age_key()}},
+\code{\link[=.mc_data]{.mc_data()}},
+\code{\link[=.mc_geo_layer]{.mc_geo_layer()}},
+\code{\link[=.mc_geocode_point]{.mc_geocode_point()}},
+\code{\link[=.mc_healthgrades_ages]{.mc_healthgrades_ages()}},
+\code{\link[=.mc_state_to_abbr]{.mc_state_to_abbr()}},
 \code{\link{mc-census-vintage}},
-\code{\link{mysterycall_assign_area_covariates}()},
-\code{\link{mysterycall_categorize_wait}()},
-\code{\link{mysterycall_clean_zip}()},
-\code{\link{mysterycall_flag_near_duplicate_keys}()},
-\code{\link{mysterycall_link_physicians}()},
-\code{\link{mysterycall_lookup_age}()},
-\code{\link{mysterycall_parse_duration}()}
+\code{\link[=mysterycall_assign_area_covariates]{mysterycall_assign_area_covariates()}},
+\code{\link[=mysterycall_categorize_wait]{mysterycall_categorize_wait()}},
+\code{\link[=mysterycall_clean_zip]{mysterycall_clean_zip()}},
+\code{\link[=mysterycall_flag_near_duplicate_keys]{mysterycall_flag_near_duplicate_keys()}},
+\code{\link[=mysterycall_link_physicians]{mysterycall_link_physicians()}},
+\code{\link[=mysterycall_lookup_age]{mysterycall_lookup_age()}},
+\code{\link[=mysterycall_parse_duration]{mysterycall_parse_duration()}}
 }
 \concept{data integrity}
 \keyword{internal}

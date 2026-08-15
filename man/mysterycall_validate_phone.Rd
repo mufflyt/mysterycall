@@ -82,9 +82,9 @@ mysterycall_validate_phone(c("2125551234", "0005551234"), practice_state = NULL)
 \code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}} for name-level quality checks;
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach validated phone data to a roster.
 
-Other data quality: 
-\code{\link{mysterycall_not_contacted_states}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()}
+Other data quality:
+\code{\link[=mysterycall_not_contacted_states]{mysterycall_not_contacted_states()}},
+\code{\link[=mysterycall_remove_constants]{mysterycall_remove_constants()}},
+\code{\link[=mysterycall_remove_near_zero]{mysterycall_remove_near_zero()}}
 }
 \concept{data quality}

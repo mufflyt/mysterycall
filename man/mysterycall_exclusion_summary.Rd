@@ -146,16 +146,16 @@ result3$total   # unique providers, not raw call rows
 \seealso{
 \code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}}, \code{\link[=mysterycall_flag_date_outliers]{mysterycall_flag_date_outliers()}}
 
-Other reporting: 
-\code{\link{mysterycall_abstract_numbers}()},
+Other reporting:
+\code{\link[=mysterycall_abstract_numbers]{mysterycall_abstract_numbers()}},
 \code{\link{mysterycall_direction_words}},
-\code{\link{mysterycall_irr_to_days}()},
-\code{\link{mysterycall_results_paragraph}()},
-\code{\link{mysterycall_session_snapshot}()},
-\code{\link{mysterycall_supplemental_tables}()},
-\code{\link{mysterycall_write_results_paragraph}()},
-\code{\link{print.mysterycall_abstract_numbers}()},
-\code{\link{print.mysterycall_irr_days}()},
-\code{\link{print.mysterycall_snapshot}()}
+\code{\link[=mysterycall_irr_to_days]{mysterycall_irr_to_days()}},
+\code{\link[=mysterycall_results_paragraph]{mysterycall_results_paragraph()}},
+\code{\link[=mysterycall_session_snapshot]{mysterycall_session_snapshot()}},
+\code{\link[=mysterycall_supplemental_tables]{mysterycall_supplemental_tables()}},
+\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}},
+\code{\link[=print.mysterycall_abstract_numbers]{print.mysterycall_abstract_numbers()}},
+\code{\link[=print.mysterycall_irr_days]{print.mysterycall_irr_days()}},
+\code{\link[=print.mysterycall_snapshot]{print.mysterycall_snapshot()}}
 }
 \concept{reporting}

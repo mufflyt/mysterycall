@@ -80,11 +80,11 @@ result
 \code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}} for duplicate-entry checks;
 \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} for broader pre-analysis validation.
 
-Other quality control: 
-\code{\link{mysterycall_clean_medicaid_col}()},
-\code{\link{mysterycall_dedup_by_insurance}()},
-\code{\link{mysterycall_flag_excluded_with_appointments}()},
-\code{\link{mysterycall_flag_included_na_appointments}()},
-\code{\link{mysterycall_flag_repeat_physicians}()}
+Other quality control:
+\code{\link[=mysterycall_clean_medicaid_col]{mysterycall_clean_medicaid_col()}},
+\code{\link[=mysterycall_dedup_by_insurance]{mysterycall_dedup_by_insurance()}},
+\code{\link[=mysterycall_flag_excluded_with_appointments]{mysterycall_flag_excluded_with_appointments()}},
+\code{\link[=mysterycall_flag_included_na_appointments]{mysterycall_flag_included_na_appointments()}},
+\code{\link[=mysterycall_flag_repeat_physicians]{mysterycall_flag_repeat_physicians()}}
 }
 \concept{quality control}

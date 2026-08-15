@@ -65,7 +65,7 @@ head(big[order(-big$hhi), c("msa", "hhi", "largest_system")])
 \code{hhi_k} / \code{hhi_cat}; \code{\link[=mysterycall_read_kff_hhi]{mysterycall_read_kff_hhi()}} to read/crosswalk the raw
 KFF workbook; \link{medicaid_expansion} for another state-policy covariate.
 
-Other datasets: 
+Other datasets:
 \code{\link{acgme}},
 \code{\link{acog_districts}},
 \code{\link{acog_presidents}},

@@ -78,10 +78,10 @@ cw[cw$in_logistic & !cw$label_included, c("code", "code_label")]
 \code{\link[=mysterycall_reconcile_inclusion]{mysterycall_reconcile_inclusion()}},
 \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}, \code{\link[=mysterycall_exclusion_summary]{mysterycall_exclusion_summary()}}
 
-Other data-preparation: 
-\code{\link{mysterycall_prepare_calls}()},
-\code{\link{mysterycall_reconcile_inclusion}()},
-\code{\link{print.mysterycall_prepared}()},
-\code{\link{print.mysterycall_reconciliation}()}
+Other data-preparation:
+\code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}},
+\code{\link[=mysterycall_reconcile_inclusion]{mysterycall_reconcile_inclusion()}},
+\code{\link[=print.mysterycall_prepared]{print.mysterycall_prepared()}},
+\code{\link[=print.mysterycall_reconciliation]{print.mysterycall_reconciliation()}}
 }
 \concept{data-preparation}

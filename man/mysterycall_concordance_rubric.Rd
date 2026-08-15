@@ -86,9 +86,9 @@ mysterycall_concordance_rubric(
 \seealso{
 \code{\link[=mysterycall_score_concordance]{mysterycall_score_concordance()}}
 
-Other concordance: 
-\code{\link{mysterycall_concordance_kappa}()},
-\code{\link{mysterycall_concordance_sentence}()},
-\code{\link{mysterycall_score_concordance}()}
+Other concordance:
+\code{\link[=mysterycall_concordance_kappa]{mysterycall_concordance_kappa()}},
+\code{\link[=mysterycall_concordance_sentence]{mysterycall_concordance_sentence()}},
+\code{\link[=mysterycall_score_concordance]{mysterycall_score_concordance()}}
 }
 \concept{concordance}

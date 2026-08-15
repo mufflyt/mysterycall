@@ -31,7 +31,7 @@ mysterycall_no_longer_in_service(
 }
 \arguments{
 \item{data}{Optional data frame containing phone-number columns. If \code{NULL},
-\code{csv_path} is read with \code{\link[utils:read.table]{utils::read.csv()}}.}
+\code{csv_path} is read with \code{\link[utils:read.csv]{utils::read.csv()}}.}
 
 \item{csv_path}{Optional CSV path used when \code{data} is \code{NULL}.}
 

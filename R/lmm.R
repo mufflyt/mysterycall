@@ -509,6 +509,13 @@ mysterycall_lmm <- function(data,
 }
 
 
+# Unit label for wait-time quantities: on the log1p scale when the model was
+# log-transformed, otherwise raw days. Shared by print() and plot() so their
+# axis/summary units cannot drift apart.
+.lmm_time_unit <- function(log_transformed) {
+  if (isTRUE(log_transformed)) "log1p(days)" else "days"
+}
+
 #' Print method for mysterycall_lmm objects
 #'
 #' Displays a formatted console summary: sample size, physician count,
@@ -520,13 +527,6 @@ mysterycall_lmm <- function(data,
 #' @param ... Ignored.
 #' @return `invisible(x)`.
 #' @family outcomes
-# Unit label for wait-time quantities: on the log1p scale when the model was
-# log-transformed, otherwise raw days. Shared by print() and plot() so their
-# axis/summary units cannot drift apart.
-.lmm_time_unit <- function(log_transformed) {
-  if (isTRUE(log_transformed)) "log1p(days)" else "days"
-}
-
 #' @export
 print.mysterycall_lmm <- function(x, digits = 2, ...) {
   reml_label <- if (x$REML) "REML" else "ML"

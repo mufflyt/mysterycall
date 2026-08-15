@@ -54,13 +54,13 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 \seealso{
 \code{\link[=mysterycall_plot_paired_slope]{mysterycall_plot_paired_slope()}}, \code{\link[=mysterycall_plot_distribution]{mysterycall_plot_distribution()}}
 
-Other visualization: 
-\code{\link{mysterycall_acceptance_waffle}()},
-\code{\link{mysterycall_bw_theme}()},
-\code{\link{mysterycall_flowchart}()},
-\code{\link{mysterycall_plot_density}()},
-\code{\link{mysterycall_plot_line}()},
-\code{\link{mysterycall_plot_paired_slope}()},
-\code{\link{mysterycall_plot_scatter}()}
+Other visualization:
+\code{\link[=mysterycall_acceptance_waffle]{mysterycall_acceptance_waffle()}},
+\code{\link[=mysterycall_bw_theme]{mysterycall_bw_theme()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}},
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}},
+\code{\link[=mysterycall_plot_paired_slope]{mysterycall_plot_paired_slope()}},
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}}
 }
 \concept{visualization}

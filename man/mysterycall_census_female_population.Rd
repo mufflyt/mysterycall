@@ -43,8 +43,8 @@ A year-named numeric vector, or a \code{data.frame(year, population)}.
 Downloads the \strong{total female population} (ACS table B01001, variable
 \code{B01001_026E}, "Estimate!!Total!!Female") for one geography across a range of
 years, returning a denominator ready to pass to the \code{population} argument of
-\code{\link{mysterycall_subspecialist_trend}()} or
-\code{\link{mysterycall_subspecialist_infographic}()}. Wraps \code{\link[tidycensus:get_acs]{tidycensus::get_acs()}}, so
+\code{\link[=mysterycall_subspecialist_trend]{mysterycall_subspecialist_trend()}} or
+\code{\link[=mysterycall_subspecialist_infographic]{mysterycall_subspecialist_infographic()}}. Wraps \code{\link[tidycensus:get_acs]{tidycensus::get_acs()}}, so
 a Census API key (env var \code{CENSUS_API_KEY}) and an internet connection are
 required.
 }
@@ -53,7 +53,7 @@ The ACS 1-year table was \strong{not released for 2020}; \code{fill_2020} contro
 that year is handled when \code{survey = "acs1"}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Requires CENSUS_API_KEY and internet.
 fem_pop <- mysterycall_census_female_population(2013:2023, survey = "acs5")
 # feed straight into the trend figure:
@@ -61,10 +61,22 @@ fem_pop <- mysterycall_census_female_population(2013:2023, survey = "acs5")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{mysterycall_subspecialist_trend}()},
-\code{\link{mysterycall_subspecialist_infographic}()}
+\code{\link[=mysterycall_subspecialist_trend]{mysterycall_subspecialist_trend()}},
+\code{\link[=mysterycall_subspecialist_infographic]{mysterycall_subspecialist_infographic()}}
 
 Other census:
-\code{\link{mysterycall_get_acs_women_18_90}()}
+\code{\link[=mysterycall_add_hhi]{mysterycall_add_hhi()}},
+\code{\link[=mysterycall_add_medicaid_expansion]{mysterycall_add_medicaid_expansion()}},
+\code{\link[=mysterycall_get_acs_adults_18_90]{mysterycall_get_acs_adults_18_90()}},
+\code{\link[=mysterycall_get_acs_female_insurance]{mysterycall_get_acs_female_insurance()}},
+\code{\link[=mysterycall_get_acs_women_18_90]{mysterycall_get_acs_women_18_90()}},
+\code{\link[=mysterycall_get_census_data]{mysterycall_get_census_data()}},
+\code{\link[=mysterycall_get_county_provider_counts]{mysterycall_get_county_provider_counts()}},
+\code{\link[=mysterycall_get_payer_mix]{mysterycall_get_payer_mix()}},
+\code{\link[=mysterycall_plot_census_age]{mysterycall_plot_census_age()}},
+\code{\link[=mysterycall_read_kff_hhi]{mysterycall_read_kff_hhi()}},
+\code{\link[=mysterycall_summarize_census]{mysterycall_summarize_census()}},
+\code{\link[=mysterycall_summarize_county_enrollment]{mysterycall_summarize_county_enrollment()}},
+\code{\link[=print.mysterycall_provider_counts]{print.mysterycall_provider_counts()}}
 }
 \concept{census}

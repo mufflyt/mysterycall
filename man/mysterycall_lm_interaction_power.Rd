@@ -54,8 +54,8 @@ if (requireNamespace("pwr", quietly = TRUE)) {
 \seealso{
 \code{\link[=mysterycall_ttest_power]{mysterycall_ttest_power()}}, \code{\link[=mysterycall_joint_test]{mysterycall_joint_test()}}
 
-Other power: 
-\code{\link{mysterycall_adjusted_power}()},
-\code{\link{mysterycall_ttest_power}()}
+Other power:
+\code{\link[=mysterycall_adjusted_power]{mysterycall_adjusted_power()}},
+\code{\link[=mysterycall_ttest_power]{mysterycall_ttest_power()}}
 }
 \concept{power}
