@@ -171,14 +171,23 @@ mysterycall_forest_plot <- function(x,
     }
   }
 
-  p <- p +
-    ggplot2::geom_vline(xintercept = reference_line, linetype = "dashed",
-                        color = "grey50", linewidth = 0.6) +
+  # geom_errorbarh() is deprecated in ggplot2 >= 4.0.0; build the layer in an
+  # isolated suppressWarnings() so the lifecycle warning does not surface (it
+  # would otherwise trip "checking examples ... WARNING" under --run-donttest).
+  # Migrate to geom_errorbar(orientation = "horizontal") once ggplot2 >= 4.0.0
+  # is a hard dependency.
+  errorbarh_layer <- suppressWarnings(
     ggplot2::geom_errorbarh(
       ggplot2::aes(xmin = .data$ci_lower, xmax = .data$ci_upper,
                    linetype = .data$sig),
       height = 0.25, linewidth = 0.8, color = "black"
-    ) +
+    )
+  )
+
+  p <- p +
+    ggplot2::geom_vline(xintercept = reference_line, linetype = "dashed",
+                        color = "grey50", linewidth = 0.6) +
+    errorbarh_layer +
     ggplot2::geom_point(
       ggplot2::aes(shape = .data$sig),
       size = 3.5, color = "black", fill = "black"
