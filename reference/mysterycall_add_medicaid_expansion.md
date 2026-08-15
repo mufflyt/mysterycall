@@ -78,9 +78,9 @@ correctly classified as non-expansion at the call date. The static
 ported from the `consolidation` study's `R/18_medicaid_expansion.R`.
 
 US territories (Puerto Rico, Guam, U.S. Virgin Islands, American Samoa,
-Northern Mariana Islands) sit outside the ACA state-expansion decision —
+Northern Mariana Islands) sit outside the ACA state-expansion decision –
 they receive capped Medicaid block grants rather than the state
-expansion choice — so they never match the crosswalk and their added
+expansion choice – so they never match the crosswalk and their added
 columns are `NA` (a warning lists them).
 
 ## See also

@@ -21,7 +21,7 @@ mysterycall_bw_theme(base_size = 12, title_rel = 1.1)
 
   Numeric. Title size as a multiple of `base_size` via
   [`ggplot2::rel()`](https://ggplot2.tidyverse.org/reference/element.html).
-  Default `1.1`. (Tip from Rennie 2026 — use
+  Default `1.1`. (Tip from Rennie 2026 – use
   [`rel()`](https://ggplot2.tidyverse.org/reference/element.html) so
   resizing the chart only requires changing `base_size`.)
 

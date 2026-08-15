@@ -55,7 +55,7 @@ mysterycall_clean_phase1(
   `"Blue Cross/Blue Shield"` and the duplicated rows `"Medicaid"`. A
   `processing_flag_is_duplicate` column tracks which rows are
   duplicates. If `FALSE`, the original number of rows is kept and **no
-  insurance is assigned** — the `insurance` column is set to `NA` (with
+  insurance is assigned** – the `insurance` column is set to `NA` (with
   a warning), because there is no paired design from which to derive it.
   Set `insurance` yourself from a real input column in that mode.
   (Earlier versions assigned insurance by row-number parity here, i.e.

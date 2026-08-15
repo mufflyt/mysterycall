@@ -1,8 +1,8 @@
 # Write a reproducibility snapshot at analysis end
 
-Records the R session state — timestamp, R version, loaded package
+Records the R session state – timestamp, R version, loaded package
 versions, any named seeds used during the analysis, and optional
-free-text notes — to a structured plain-text file. Call this once at the
+free-text notes – to a structured plain-text file. Call this once at the
 very end of a script to capture everything needed to reproduce the run.
 
 ## Usage
@@ -48,7 +48,7 @@ mysterycall_session_snapshot(
 
 ## Value
 
-`invisible(file)` — the output path — with S3 class
+`invisible(file)` – the output path – with S3 class
 `"mysterycall_snapshot"`. When the return value is printed explicitly,
 the file path and first 20 lines of the snapshot are displayed.
 
@@ -95,7 +95,7 @@ Other reporting:
 ``` r
 snap <- tempfile(fileext = ".txt")
 
-# Basic usage — seeds and notes
+# Basic usage -- seeds and notes
 mysterycall_session_snapshot(
   file  = snap,
   seeds = c(bootstrap = 42L, imputation = 123L),
@@ -106,11 +106,11 @@ mysterycall_session_snapshot(
 # Inspect what was written
 out <- mysterycall_session_snapshot(file = snap, append = TRUE, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/Rtmptm2ZMF/file2119267972e0.txt
+#> Session snapshot: /tmp/RtmpWGPVET/file20e226630597.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-08-15 14:47:01 UTC
+#> Date/Time: 2026-08-15 15:14:13 UTC
 #> R Version: R version 4.6.1 (2026-06-24)
 #> Platform:  x86_64-pc-linux-gnu
 #> 

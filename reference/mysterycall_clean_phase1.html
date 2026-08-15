@@ -130,7 +130,7 @@ is duplicated to build the paired insurance design: the original rows are
 labelled <code>"Blue Cross/Blue Shield"</code> and the duplicated rows <code>"Medicaid"</code>.
 A <code>processing_flag_is_duplicate</code> column tracks which rows are duplicates.
 If <code>FALSE</code>, the original number of rows is kept and <strong>no insurance is
-assigned</strong> — the <code>insurance</code> column is set to <code>NA</code> (with a warning), because
+assigned</strong> – the <code>insurance</code> column is set to <code>NA</code> (with a warning), because
 there is no paired design from which to derive it. Set <code>insurance</code> yourself
 from a real input column in that mode. (Earlier versions assigned insurance
 by row-number parity here, i.e. by alphabetical sort position, which was

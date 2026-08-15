@@ -22,7 +22,7 @@ mysterycall_get_payer_mix(
 
 - year:
 
-  Integer. ACS 5-year survey end-year (2012-2023). Required — no
+  Integer. ACS 5-year survey end-year (2012-2023). Required – no
   default, to keep results reproducible.
 
 - states:
@@ -79,23 +79,23 @@ A tibble with one row per geography and columns:
 
 - Private:
 
-  Table **B27002** — "With private health insurance".
+  Table **B27002** – "With private health insurance".
 
 - Public:
 
-  Table **B27003** — "With public coverage".
+  Table **B27003** – "With public coverage".
 
 - Medicare:
 
-  Table **C27006** — "With Medicare coverage".
+  Table **C27006** – "With Medicare coverage".
 
 - Medicaid:
 
-  Table **C27007** — "With Medicaid/means-tested public coverage".
+  Table **C27007** – "With Medicaid/means-tested public coverage".
 
 - Uninsured:
 
-  Table **B27001** — "No health insurance coverage", plus the S2701
+  Table **B27001** – "No health insurance coverage", plus the S2701
   percent-uninsured estimate.
 
 Because a person may hold more than one coverage type (e.g. dual

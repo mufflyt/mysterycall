@@ -64,7 +64,7 @@ mysterycall_get_county_provider_counts(
 
   Character or `NULL`. When supplied (e.g. `"women"`), it is appended to
   the density column name so it self-documents the denominator you
-  passed via `pop_col` — for example `providers_per_100k_women` when
+  passed via `pop_col` – for example `providers_per_100k_women` when
   `population` holds a female count. `NULL` (default) keeps the generic
   `providers_per_100k`. This changes only the column name, not the
   arithmetic.

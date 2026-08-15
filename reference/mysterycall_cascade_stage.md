@@ -42,7 +42,7 @@ mysterycall_cascade_stage(
   (the hit count of the stage defined immediately before this one,
   giving a strict funnel), a single positive number, or a character
   string naming the `label` of an earlier stage (whose hit count becomes
-  the denominator — e.g. reporting "share of offers" against an earlier
+  the denominator – e.g. reporting "share of offers" against an earlier
   "offered" stage).
 
 - group:

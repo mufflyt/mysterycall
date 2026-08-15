@@ -319,7 +319,7 @@ value by hand.  Useful for manual overrides or non-REDCap data.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Mode 1: from a data frame (simplest) — requires an existing CSV file.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Mode 1: from a data frame (simplest) -- requires an existing CSV file.</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"ICVsPOPVsSUI_DATA_2026-06-23_1225.csv"</span>,</span></span>
 <span class="r-in"><span>                stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
@@ -327,7 +327,7 @@ value by hand.  Useful for manual overrides or non-REDCap data.</p></li>
 <span class="r-in"><span>                        title <span class="op">=</span> <span class="st">"STROBE Flow - ICVs vs POP vs SUI Study"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Mode 2: from a mysterycall_prepared object — requires prepare_calls() first.</span></span></span>
+<span class="r-in"><span><span class="co"># Mode 2: from a mysterycall_prepared object -- requires prepare_calls() first.</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">prepped</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_prepare_calls.html">mysterycall_prepare_calls</a></span><span class="op">(</span><span class="va">raw</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_strobe_flow</span><span class="op">(</span>prepared <span class="op">=</span> <span class="va">prepped</span><span class="op">)</span></span></span>

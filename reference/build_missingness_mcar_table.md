@@ -75,7 +75,7 @@ A list with:
 - mcar:
 
   list: statistic, df, p.value, n_missing_patterns, vars_tested,
-  n_rows_tested, note — or `NULL` if not run/possible.
+  n_rows_tested, note – or `NULL` if not run/possible.
 
 - interpretation:
 

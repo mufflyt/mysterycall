@@ -3,7 +3,7 @@
 A quality-control check that finds records where `reason_for_exclusions`
 indicates the call was NOT successfully completed (i.e. not
 `"Able to contact"`) but `business_days_until_appointment` is
-nonetheless non-negative — a logical discrepancy suggesting a data-entry
+nonetheless non-negative – a logical discrepancy suggesting a data-entry
 error.
 
 ## Usage
@@ -77,7 +77,7 @@ Returns a zero-row tibble (invisibly) when no discrepancies are found.
 If a call is logged as excluded (e.g.
 `reason_for_exclusions == "Physician not available"`) but also has a
 non-negative `business_days_until_appointment`, the record is
-contradictory — an excluded call should not have a valid appointment
+contradictory – an excluded call should not have a valid appointment
 wait time. These rows must be resolved before analysis.
 
 ## See also

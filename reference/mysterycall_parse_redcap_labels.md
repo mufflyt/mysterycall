@@ -2,8 +2,8 @@
 
 REDCap exports choice fields as pipe-delimited strings such as
 `"1, Yes | 2, No | 3, Prefer not to answer"`. This function converts one
-or more such strings — typically stored in the
-`select_choices_or_calculations` column of a REDCap data dictionary —
+or more such strings – typically stored in the
+`select_choices_or_calculations` column of a REDCap data dictionary –
 into a tidy data frame with one row per choice, making it easy to recode
 raw numeric codes to human-readable labels or to build factor variables.
 
@@ -25,14 +25,14 @@ mysterycall_parse_redcap_labels(
   Character vector of REDCap label strings. Each element is one field's
   choices in the canonical REDCap format:
   `"<code>, <label> | <code>, <label> | ..."`. Unnamed elements are
-  assigned sequential field names (`field_1`, `field_2`, …); supply a
+  assigned sequential field names (`field_1`, `field_2`, ...); supply a
   **named** vector to control the `field` column in the output.
 
 - sep_choice:
 
   Character scalar. Separator between choices within a single label
   string. Default `" | "` (space-pipe-space). REDCap uses this
-  consistently, but some exports omit the surrounding spaces — adjust as
+  consistently, but some exports omit the surrounding spaces – adjust as
   needed.
 
 - sep_code:
@@ -54,7 +54,7 @@ with columns:
 - `field`:
 
   Field name, taken from the names of `labels`; defaults to `"field_1"`,
-  `"field_2"`, … when `labels` is unnamed.
+  `"field_2"`, ... when `labels` is unnamed.
 
 - `code`:
 

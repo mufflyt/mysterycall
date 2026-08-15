@@ -79,7 +79,7 @@ A named list with:
 ## See also
 
 [`mysterycall_r2_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_r2_sentence.md)
-for marginal and conditional R²;
+for marginal and conditional R^2;
 [`lme4::VarCorr()`](https://rdrr.io/pkg/nlme/man/VarCorr.html) for the
 underlying computation.
 

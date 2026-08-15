@@ -89,7 +89,7 @@ mailing ZIP.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with about 168,000 rows and 5 columns:</p><dl><dt>zcta</dt>
+    <p>A data frame with about 168,000 rows and 3 columns:</p><dl><dt>zcta</dt>
 <dd><p>Five-digit ZIP Code Tabulation Area (2020), character with
 leading zeros.</p></dd>
 
@@ -99,18 +99,8 @@ character.</p></dd>
 
 <dt>arealand_part</dt>
 <dd><p>Land area of the ZCTA-by-tract intersection, in square
-metres (Census <code>AREALAND_PART</code>).</p></dd>
-
-<dt>zcta_to_tract</dt>
-<dd><p>Fraction of the ZCTA's intersected land that falls in
-this tract. Sums to 1 across tracts within a ZCTA – use this to spread a
-ZIP-level quantity across tracts, or to pick the dominant tract for a
-ZIP.</p></dd>
-
-<dt>tract_to_zcta</dt>
-<dd><p>Fraction of the tract's intersected land that falls in
-this ZCTA. Sums to 1 across ZCTAs within a tract – use this to aggregate
-tract-level measures up to a ZIP.</p></dd>
+metres (Census <code>AREALAND_PART</code>). Both allocation weights are derived
+from this column; see below.</p></dd>
 
 
 </dl></div>
@@ -137,6 +127,31 @@ any tract (all water) are dropped.</p>
 <code><a href="svi_zcta.html">svi_zcta</a></code>) are already ZCTA-keyed, this crosswalk is needed only
 for genuinely tract-level work – e.g. joining an external tract-level measure
 to practice ZIPs via <code>tract_to_zcta</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="allocation-weights">Allocation weights<a class="anchor" aria-label="anchor" href="#allocation-weights"></a></h2>
+
+
+<p>Earlier versions shipped two derived ratio columns, <code>zcta_to_tract</code> and
+<code>tract_to_zcta</code>. They were removed because each is a deterministic
+function of <code>arealand_part</code> within a grouping, and together they cost
+2.1 MB of a 2.9 MB file while adding nothing that cannot be recovered in one
+line. Rows are unchanged, and row order still puts each ZCTA's dominant
+tract first.</p>
+<p>To spread a ZIP-level quantity across tracts, or to pick the dominant tract
+for a ZIP, recompute the ZCTA-to-tract weight (sums to 1 within a ZCTA):</p>
+<div class="sourceCode"><pre><code><span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">::</span><span class="va"><a href="../reference/zcta_tract_xwalk.html">zcta_tract_xwalk</a></span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">zcta_to_tract</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ave.html" class="external-link">ave</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">arealand_part</span>, <span class="va">x</span><span class="op">$</span><span class="va">zcta</span>,</span>
+<span>                       FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="va">a</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+
+<p>To aggregate tract-level measures up to a ZIP, recompute the tract-to-ZCTA
+weight (sums to 1 within a tract):</p>
+<div class="sourceCode"><pre><code><span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">tract_to_zcta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ave.html" class="external-link">ave</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">arealand_part</span>, <span class="va">x</span><span class="op">$</span><span class="va">tract</span>,</span>
+<span>                       FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="va">a</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+
+<p>Both reproduce the removed columns exactly.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

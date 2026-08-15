@@ -100,7 +100,7 @@ mysterycall_facet_histogram(
 - reorder_facets:
 
   Logical. If `TRUE`, facet panels are reordered from highest to lowest
-  median of `x_col` rather than alphabetically. (Rennie 2024 — order
+  median of `x_col` rather than alphabetically. (Rennie 2024 – order
   groups by a summary statistic.) Default `FALSE`.
 
 - dpi:

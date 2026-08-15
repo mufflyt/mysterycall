@@ -38,7 +38,7 @@ mysterycall_clean_medicaid_col(
 - yes_value:
 
   Character scalar. The value in the cleaned column that should be
-  mapped to `1`; all other non-`NA` values → `0`. Default
+  mapped to `1`; all other non-`NA` values -\> `0`. Default
   `"Yes they accept Medicaid"`.
 
 - out_col_cleaned:

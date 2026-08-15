@@ -71,7 +71,7 @@ mysterycall_supplemental_tables(
 
 ## Value
 
-`invisible(file)` — the normalised absolute path to the written
+`invisible(file)` – the normalised absolute path to the written
 workbook, so the path can be captured and passed to downstream
 functions.
 

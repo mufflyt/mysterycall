@@ -137,7 +137,7 @@ Other manuscript:
 ## Examples
 
 ``` r
-# Build fake model objects with structure() — no package fitting required.
+# Build fake model objects with structure() -- no package fitting required.
 
 m_unadj <- structure(
   list(

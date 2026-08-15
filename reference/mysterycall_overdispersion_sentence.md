@@ -1,6 +1,6 @@
 # Test for overdispersion and generate an interpretive sentence
 
-Computes Pearson chi-square–based dispersion statistics for a fitted
+Computes Pearson chi-square-based dispersion statistics for a fitted
 model (GLM or GLMER), categorises the result, and returns a
 manuscript-ready sentence. Suitable for Poisson and quasi-Poisson models
 as well as linear models (`lm`) which also expose
@@ -71,7 +71,7 @@ A named list with:
 [`mysterycall_random_effect_variance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_random_effect_variance.md)
 for random-effect ICC;
 [`mysterycall_r2_sentence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_r2_sentence.md)
-for R² interpretation.
+for R^2 interpretation.
 
 Other modeling helpers:
 [`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),

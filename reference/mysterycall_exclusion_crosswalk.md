@@ -100,7 +100,7 @@ The integer logistic set (`logistic_include_codes`, default
 `c(0, 7, 9, 10)`) keeps codes 7 (referral required), 9 (not accepting
 new patients), and 10 (must see midlevel first) as *included* calls with
 an appointment-not-offered outcome. The label path classifies those same
-calls as **exclusions** — they are never `"Able to contact"`. Rows where
+calls as **exclusions** – they are never `"Able to contact"`. Rows where
 `in_logistic` is `TRUE` but `label_included` is `FALSE` are exactly that
 gap.
 

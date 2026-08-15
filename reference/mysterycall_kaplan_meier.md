@@ -5,7 +5,7 @@ studies. In this framing the "event" is receiving an appointment and
 "time" is the wait in days. Callers who never receive an appointment are
 right-censored at `max_days`. A log-rank test compares the groups. The
 optional plot is built manually with ggplot2 (step functions + ribbon CI
-bands) — survminer is not required.
+bands) – survminer is not required.
 
 ## Usage
 

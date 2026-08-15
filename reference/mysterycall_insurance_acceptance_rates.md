@@ -87,7 +87,7 @@ mysterycall_insurance_acceptance_rates(
 
 - output_dir:
 
-  Character scalar or `NULL`. `NULL` → session temp dir. `NA` → skip
+  Character scalar or `NULL`. `NULL` -\> session temp dir. `NA` -\> skip
   writing.
 
 - filename:
