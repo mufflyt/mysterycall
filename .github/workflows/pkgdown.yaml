@@ -54,23 +54,32 @@ jobs:
 
       # xml2 is pinned to 1.5.2, the release before 1.6.0 (2026-06-22).
       #
-      # pkgdown 2.2.1 + xml2 1.6.0 segfault while inserting the homepage logo:
+      # PARTIAL MITIGATION, NOT A FIX. The pin was tried on the hypothesis that
+      # xml2 1.6.0 introduced the crash. It did not hold. With 1.5.2 actually
+      # installed, pkgdown still segfaulted on attempts 1 and 2 and only passed
+      # on attempt 3, with the same signature:
       #
       #   *** caught segfault ***
       #   cause 'invalid permissions' / 'memory not mapped'
       #   1: xml_add_sibling.xml_node(page_header, "img", src = logo, ...)
       #   5: build_home_index(pkg, quiet = quiet)
       #
-      # The crash address and cause vary run to run and the same commit both
-      # passed and failed, so it is a use-after-free whose outcome depends on
-      # heap layout, not a content problem in this package. It escalated from
-      # roughly 1 run in 5 to 3 of 3 attempts, which is what the retry below
-      # is reporting when it exhausts.
+      # So xml2 1.6.0 is not the cause, and the retry below -- not this pin --
+      # is what currently gets the build green. The pin is kept only because
+      # the crash rate looked lower with 1.5.2 (2 of 3 attempts versus 3 of 3),
+      # which is well inside noise for a nondeterministic fault and should not
+      # be read as evidence.
       #
-      # Both packages are already at their CRAN latest, so there is no fixed
-      # version to move forward to; pinning back is the only lever. Revisit
-      # when xml2 > 1.6.0 ships: drop the pin, and if pkgdown stays green
-      # across several runs, leave it dropped.
+      # The crash address and cause vary run to run and the same commit both
+      # passes and fails, so it is a use-after-free whose outcome depends on
+      # heap layout, not a content problem in this package.
+      #
+      # Every traceback so far dies at the same call: inserting the homepage
+      # logo. That, not the xml2 version, is the next thing to attack --
+      # dropping home.logo from _pkgdown.yml would avoid the code path
+      # entirely. Raising the retry count is the cheaper alternative.
+      #
+      # Drop this pin whenever it is convenient; nothing depends on it.
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
