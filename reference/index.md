@@ -415,6 +415,8 @@ stacked bars.
   : Format an IRR table for manuscript display
 - [`print(`*`<mysterycall_table1>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
   : Print a mysterycall_table1 object
+- [`as.data.frame(`*`<mysterycall_table1>`*`)`](https://mufflyt.github.io/mysterycall/reference/as.data.frame.mysterycall_table1.md)
+  : Coerce a mysterycall_table1 to a plain data frame
 
 ## Manuscript Writing
 

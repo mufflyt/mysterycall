@@ -1,6 +1,6 @@
-# Convert a mysterycall_table1 to a flextable (internal)
+# Coerce a mysterycall_table1 to a plain data frame
 
-Convert a mysterycall_table1 to a flextable (internal)
+Coerce a mysterycall_table1 to a plain data frame
 
 ## Usage
 
@@ -20,7 +20,5 @@ as.data.frame(x, ...)
   Ignored.
 
 ## Value
-
-A `flextable` object.
 
 A data frame.
