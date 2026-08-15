@@ -21,8 +21,8 @@ for all other states.}
 }
 \source{
 Kaiser Family Foundation (KFF), "Status of State Medicaid Expansion
-Decisions: Interactive Map," verified June 2025.
-\url{https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/}
+Decisions," verified June 2025.
+\url{https://www.kff.org/medicaid/status-of-state-medicaid-expansion-decisions/}
 }
 \description{
 Adoption status of the Affordable Care Act (ACA) Medicaid expansion for all

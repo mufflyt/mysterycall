@@ -1,7 +1,7 @@
 ## Medicaid Expansion Status by State
 ##
 ## Source: Kaiser Family Foundation (KFF) "Status of State Medicaid Expansion Decisions"
-## https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/
+## https://www.kff.org/medicaid/status-of-state-medicaid-expansion-decisions/
 ## Verified: June 2025
 ##
 ## Covers all 50 US states + District of Columbia.

@@ -34,8 +34,8 @@
 #' expansion; \code{expanded} is \code{FALSE}.
 #'
 #' @source Kaiser Family Foundation (KFF), "Status of State Medicaid Expansion
-#'   Decisions: Interactive Map," verified June 2025.
-#'   \url{https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/}
+#'   Decisions," verified June 2025.
+#'   \url{https://www.kff.org/medicaid/status-of-state-medicaid-expansion-decisions/}
 #'
 #' @examples
 #' data(medicaid_expansion)
