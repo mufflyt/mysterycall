@@ -297,7 +297,10 @@ jobs:
             "test-study-schema.R",
             "test-study-roster-identity.R",
             "test-study-joins-and-arms.R",
-            "test-study-callers-exclusions.R"
+            "test-study-callers-exclusions.R",
+            "test-study-outcome-and-wait.R",
+            "test-study-models.R",
+            "test-study-invariance-and-rng.R"
           )
           bad <- 0L; total <- 0L
           for (f in files) {
@@ -319,8 +322,8 @@ jobs:
                 "fixture update.\n", sep = "")
             quit(status = 1L)
           }
-          if (total < 200L) {
-            cat("::error::only ", total, " assertions ran; expected 200+. ",
+          if (total < 450L) {
+            cat("::error::only ", total, " assertions ran; expected 450+. ",
                 "A test file was probably not discovered.\n", sep = "")
             quit(status = 1L)
           }
