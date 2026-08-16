@@ -93,7 +93,7 @@ STUDY_TESTS <- list.files("tests/testthat",
 # Pinned to the actual count, not a loose floor. A threshold set below the
 # real number tolerates exactly the loss it exists to catch: with ten files and
 # a floor of eight, two could vanish and this would still report ok.
-EXPECTED_STUDY_TESTS <- 10L
+EXPECTED_STUDY_TESTS <- 11L
 if (length(STUDY_TESTS) < EXPECTED_STUDY_TESTS) {
   bad("only ", length(STUDY_TESTS), " study-integrity test file(s) found; ",
       "expected ", EXPECTED_STUDY_TESTS, ". A renamed or deleted file would ",
