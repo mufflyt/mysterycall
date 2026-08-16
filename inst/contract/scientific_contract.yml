@@ -30,47 +30,79 @@ status: "DRAFT -- reverse-engineered from code and fixtures; unresolved fields r
 
 # --- population and frame ----------------------------------------------------
 target_provider_population:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Which physicians is this study making a claim about? State specialty,
-    credential, and any board-certification requirement.
+  why_per_study: >-
+    Every study defines its own population; there is no package-level answer.
+  format: >-
+    Specialty, credential, and any age or practice-type restriction, as the protocol defined it.
+
 
 target_practice_population:
-  status: UNRESOLVED
-  release_blocking: false
-  question: Which practices/sites are in scope, and are solo and group practices treated alike?
+  status: PER_STUDY
+  value_type: free_text
+  release_blocking: true
+  why_per_study: >-
+    Depends entirely on the sampling design of the individual study.
+  format: >-
+    Practice types in scope, and whether health-system sites are treated separately.
+
 
 sampling_frame:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Which roster, which snapshot, and which version defines the universe from
-    which providers were sampled?
+  why_per_study: >-
+    The frame is a study artefact with its own vintage and provenance.
+  format: >-
+    Name the roster or registry, its vintage, and how it was obtained.
+
 
 sampling_date:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: Date the frame was drawn. Section 97 requires source dates be explicit, not implicit.
+  why_per_study: >-
+    A property of when the study was fielded.
+  format: >-
+    ISO date or range on which the frame was drawn.
+
 
 inclusion_criteria:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: Eligibility evaluated BEFORE any outcome is known. Distinct from the post-call exclusion reasons below.
+  why_per_study: >-
+    Protocol-specific, and must be fixed before outcomes are observed.
+  format: >-
+    The criteria applied BEFORE any outcome was known.
+
 
 exclusion_criteria_prespecified:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Which exclusions were prespecified rather than decided after seeing data?
-    Section 85 requires each exclusion record whether it was prespecified.
+  why_per_study: >-
+    Protocol-specific; the prespecified/post-hoc distinction is what makes it reviewable.
+  format: >-
+    Exclusions declared in advance, distinguished from those added later.
+
 
 # --- units -------------------------------------------------------------------
 # Section 6 treats confusion between these as a primary failure mode.
 unit_of_sampling:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: Is a sampled unit the physician, the practice, or the practice-location?
+  why_per_study: >-
+    Section 6. Which entity was drawn from the frame. A study sampling practices and one sampling physicians produce different denominators from identical calls.
+  allowed_values:
+    - physician
+    - practice
+    - practice_location
+    - phone_number
+
 
 unit_of_calling:
   status: DERIVED
@@ -82,39 +114,56 @@ unit_of_calling:
   release_blocking: true
 
 unit_of_analysis:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: >-
-    Call, provider, or practice? The fixture freezes call-level denominators
-    (acceptance_analytic_n = 23 rows), but that does not by itself establish
-    that inference is at the call level. Section 41 makes this a release gate.
+  why_per_study: >-
+    Section 6. The row the primary estimate treats as one observation. Confusing this with the call count is the single most common way a denominator inflates.
+  allowed_values:
+    - call
+    - physician
+    - practice
+    - matched_pair
+
 
 randomization_unit:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: >-
-    What was randomized -- provider, practice, or call? The fixture shows P14
-    receiving a Medicaid arm only, so the design is not strictly paired-by-provider.
+  why_per_study: >-
+    Section 10. What the arm was assigned to. If assignment was per physician the design is paired; if per call it is not, and the same data supports different analyses.
+  allowed_values:
+    - physician
+    - practice
+    - call
+    - not_randomized
+
 
 clustering_unit:
-  status: UNRESOLVED
+  status: PER_STUDY
   release_blocking: true
-  partially_derived:
-    evidence: "R/auto_model.R:31-32 -- `random_intercept`, 'Grouping column for the physician random intercept'"
-    detail: >-
-      The model takes the grouping column as a CALLER-SUPPLIED parameter; it is
-      not fixed in code. Repository-wide the most common formula term is
-      (1 | state), with (1 | physician) and Matched_Pair_ID also present.
-  question: >-
-    Which grouping variable does the PRIMARY analysis cluster on? A parameter
-    with several values in use is not a contract.
-  recommendation: >-
-    Not decidable from code: (1 | state), (1 | physician) and Matched_Pair_ID
-    are all present, and they encode three different designs. If the same
-    physician received both arms, the randomisation unit is the physician and
-    clustering on state would understate the correlation that pairing induces.
-    This is a design fact, not a modelling preference, so it is left for the
-    investigator.
+  why_per_study: >-
+    Section 41. The correct grouping is a fact about the design, not a modelling
+    preference. If the same physician received both arms, the physician is the
+    randomisation unit and clustering on state understates the correlation that
+    pairing induces. If several sampled physicians share one scheduling line,
+    the practice is the dependence unit regardless of how randomisation worked.
+  allowed_values:
+    - physician
+    - practice
+    - matched_pair
+    - state
+    - none_independent_calls
+  observed_in_code: >-
+    R/auto_model.R takes the grouping column as a caller-supplied
+    `random_intercept`. Repository-wide, (1 | state) is the most common formula
+    term, with (1 | physician) and Matched_Pair_ID also present. Three different
+    designs are therefore expressible, and the code does not choose between them.
+  consequence_if_wrong: >-
+    Clustering on the wrong unit changes the standard error but not the point
+    estimate, so the effect looks unchanged while its confidence interval and
+    p-value are wrong. Nothing in the output announces this.
+
 
 # --- arms and scripts --------------------------------------------------------
 experimental_arms:
@@ -124,18 +173,24 @@ experimental_arms:
   release_blocking: true
 
 arm_differences_authorized:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Section 12: the two scripts must differ ONLY in authorized payer language.
-    List every field authorized to differ so the equivalence test can assert it.
+  why_per_study: >-
+    Depends on what the two scripts actually say, which lives with the protocol, not the package.
+  format: >-
+    The exact fields permitted to differ between arm scripts. Everything else differing is confounding built into the protocol.
+
 
 script_versions:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Section 13: approved script version identifiers and their SHA-256s. Every
-    call record must reference the script version used.
+  why_per_study: >-
+    Scripts are study documents and are not in this repository at all, so this cannot be derived here.
+  format: >-
+    Version identifier and SHA-256 for each arm script, so a call can name the script it was conducted under.
+
 
 # --- outcomes ----------------------------------------------------------------
 primary_outcome:
@@ -209,11 +264,28 @@ holiday_calendar_version:
   release_blocking: false
 
 appointment_definition:
-  status: UNRESOLVED
+  status: PER_STUDY
   release_blocking: true
-  question: >-
-    Section 26: EARLIEST OFFERED, appointment chosen, or appointment booked?
-    These differ whenever a caller declines the first offer.
+  why_per_study: >-
+    Section 26. A protocol that measures the soonest access a patient could
+    obtain freezes the EARLIEST OFFERED slot. A protocol measuring what a
+    patient actually received freezes the BOOKED one. Both are defensible and
+    they differ whenever a caller declines the first offer, so a single global
+    answer would be wrong for every study that chose the other.
+  allowed_values:
+    - earliest_offered
+    - appointment_chosen_by_caller
+    - appointment_booked
+  recommended: earliest_offered
+  recommendation_basis: >-
+    An access study asks how soon care was available, not which slot the caller
+    preferred. Booked date is also the easier field to identify, which is
+    exactly why it gets substituted by accident.
+  consequence_if_wrong: >-
+    Substituting booked for earliest offered inflates every wait by the caller's
+    own scheduling preference, and does so asymmetrically if callers behaved
+    differently across arms.
+
 
 secondary_outcomes:
   status: DERIVED
@@ -234,51 +306,99 @@ secondary_outcomes:
 
 # --- acceptance and status semantics ----------------------------------------
 payer_acceptance_definition:
-  status: UNRESOLVED
+  status: PER_STUDY
   release_blocking: true
-  question: >-
-    Section 15: does "accepts Medicaid" mean the PRACTICE accepts it or the
-    NAMED PHYSICIAN accepts it? These must not collapse into one binary unless
-    this contract says so explicitly.
+  why_per_study: >-
+    Section 15. "Our office accepts Medicaid" and "Dr. X accepts Medicaid" are
+    different claims, and which one a study measures depends on whether the
+    sampling unit was the practice or the named physician. Collapsing them into
+    one binary is only legitimate if the protocol says so explicitly.
+  allowed_values:
+    - named_physician_accepts
+    - practice_accepts
+    - either_counts_as_acceptance
+    - named_physician_with_referral_counts
+  recommended: named_physician_accepts
+  recommendation_basis: >-
+    The roster samples physicians, and the call asks for a named physician, so
+    the practice-level answer measures a different population than the one
+    sampled.
+  consequence_if_wrong: >-
+    Counting practice acceptance as physician acceptance overstates access
+    wherever a practice takes the payer but the sampled physician does not,
+    which is precisely the case an access study exists to detect.
+
 
 named_vs_alternate_provider:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: >-
-    Section 16: if the named physician is unavailable but a partner or APP is,
-    does that count as access? The primary endpoint must not silently substitute.
+  why_per_study: >-
+    Section 16. Whether a partner or APP appointment counts as access to the sampled physician. These measure different things and both are legitimate study designs.
+  allowed_values:
+    - named_physician_only
+    - named_or_partner
+    - named_or_any_clinician_including_app
+
 
 provider_active_definition:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: Section 17-19. What evidence establishes "active at listed location", and what remains unresolved?
+  why_per_study: >-
+    Sections 17-19. What evidence establishes that the sampled physician still practises where the roster said. Studies differ in what they can obtain.
+  allowed_values:
+    - office_confirms_at_listed_location
+    - office_confirms_anywhere_in_system
+    - any_directory_evidence
+    - scheduling_confirms_only
+
 
 listed_location_definition:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: Does "not confirmed at listed location" ever equal "inactive provider"? It must not by default.
+  why_per_study: >-
+    Section 17. How closely the reached office must match the listed one. "Not confirmed at the listed location" must never default to "inactive provider".
+  allowed_values:
+    - exact_listed_address
+    - same_practice_any_site
+    - same_health_system
+    - same_city
+
 
 # --- protocol ----------------------------------------------------------------
 call_attempt_policy:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Section 21-22: maximum attempts, minimum separation, permitted hours.
-    Attempt intensity must be symmetric across arms or effort becomes a
-    second, unmeasured treatment.
+  why_per_study: >-
+    Attempt budgets are a protocol decision and differ widely between studies.
+  format: >-
+    Maximum attempts, minimum separation, and permitted hours. Must be symmetric across arms or effort becomes a second treatment.
+
 
 callback_policy:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: free_text
   release_blocking: true
-  question: >-
-    Section 23: does the access clock start at first attempt, first successful
-    contact, callback, or scheduling decision? The code must not pick whichever
-    date is easiest to compute.
+  why_per_study: >-
+    Where the clock starts is a definitional choice each protocol makes.
+  format: >-
+    Whether the access clock starts at first attempt, first contact, callback, or scheduling decision.
+
 
 voicemail_policy:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: How is voicemail dispositioned, and does it consume an attempt?
+  why_per_study: >-
+    Section 23. Whether reaching voicemail spends one of the permitted attempts. This changes effective attempt intensity, which must be symmetric across arms.
+  allowed_values:
+    - voicemail_consumes_an_attempt
+    - voicemail_does_not_consume_an_attempt
+    - voicemail_ends_the_protocol
+
 
 # --- denominators, missingness, exclusions ----------------------------------
 exclusion_vocabulary:
@@ -317,19 +437,19 @@ missingness_states:
   release_blocking: true
 
 analysis_population:
-  status: UNRESOLVED
+  status: PER_STUDY
+  value_type: enumerated
   release_blocking: true
-  question: >-
-    Section 67: intention-to-call, successfully contacted, provider-confirmed,
-    payer-evaluable, appointment-evaluable, or paired-complete? Numerator and
-    denominator must not silently use different populations.
-  recommendation: >-
-    The frozen fixture already implies two distinct populations, and naming them
-    is what stops them being used interchangeably: payer-evaluable for the
-    acceptance endpoint (n = 23, reached with a resolved outcome) and
-    appointment-evaluable for the wait endpoint (n = 20, offered with a recorded
-    date). Confirm these are the intended populations rather than an artefact of
-    how the fixture was built.
+  why_per_study: >-
+    Section 67. Which rows the primary estimate runs on. Numerator and denominator drawn from different populations is a silent error, so the population is named once and reused.
+  allowed_values:
+    - intention_to_call
+    - successfully_contacted
+    - provider_confirmed
+    - payer_evaluable
+    - appointment_evaluable
+    - paired_complete
+
 
 # --- inference ---------------------------------------------------------------
 model_family:
