@@ -1,10 +1,33 @@
-# Nightly regression test — runs the full test suite including slow/stress tests,
-# checks snapshot drift, and reports coverage drops.
-# Inspired by: https://github.com/r-lib/actions/tree/v2/examples
+# Comprehensive nightly verification for mysterycall.
+#
+# Runs at 21:17 America/Denver every night, year-round.
+#
+# GitHub cron is UTC only and has no DST handling, so a single expression
+# cannot hold a fixed local time: 21:17 MST is 04:17 UTC, but 21:17 MDT is
+# 03:17 UTC. Both are scheduled, and the `gate` job below drops whichever one
+# did not land on the 21:00 hour in Denver. The cost is one no-op run per day;
+# the benefit is that the suite fires at the same local time in July as in
+# January, instead of sliding an hour twice a year.
+#
+# Every job is independent and reports its own result. The `summary` job
+# aggregates them, writes a table to the run summary, and opens a single
+# GitHub issue when anything fails, rather than one issue per job.
+#
+# Advisory jobs (lint, spelling) are marked as such and do not fail the run,
+# but their results still appear in the summary table -- they are visible, not
+# silenced. Nothing here is continue-on-error at the step level, because that
+# hides setup failures and produces a check that cannot fail.
+
 on:
   schedule:
-    - cron: '0 2 * * *'   # 2am UTC every night
-  workflow_dispatch:       # allow manual trigger from Actions tab
+    - cron: '17 3 * * *'   # 21:17 MDT (summer, UTC-6)
+    - cron: '17 4 * * *'   # 21:17 MST (winter, UTC-7)
+  workflow_dispatch:
+    inputs:
+      skip_gate:
+        description: 'Run regardless of local time (manual runs always run)'
+        type: boolean
+        default: true
 
 name: nightly
 
@@ -12,69 +35,172 @@ permissions:
   contents: read
   issues: write
 
-jobs:
-  nightly:
-    runs-on: ubuntu-latest
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: false
 
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+  R_KEEP_PKG_SOURCE: yes
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 0. Scheduling gate: keep only the cron that fired at 21:00 in Denver.
+  # ---------------------------------------------------------------------------
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.decide.outputs.run }}
+      local_time: ${{ steps.decide.outputs.local_time }}
+    steps:
+      - id: decide
+        shell: bash
+        run: |
+          local_time=$(TZ=America/Denver date '+%Y-%m-%d %H:%M %Z')
+          hour=$(TZ=America/Denver date '+%H')
+          echo "local_time=$local_time" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "Manual run; gate bypassed. Local time: $local_time"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Match the hour, not the minute: GitHub can start a scheduled run
+          # several minutes late, which would defeat an exact 21:17 comparison.
+          if [ "$hour" = "21" ]; then
+            echo "Firing: local time is $local_time"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping: local time is $local_time, not the 21:00 hour."
+            echo "This is the off-season cron; the other one will fire correctly."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # 1. R CMD check, wider than the push matrix: adds oldrel-2 and non-Linux
+  #    oldrel, and runs --as-cran --run-donttest with warnings fatal.
+  # ---------------------------------------------------------------------------
+  check:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ${{ matrix.config.os }}
+    name: check ${{ matrix.config.os }} (${{ matrix.config.r }})
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'oldrel-2'}
+          - {os: macos-latest,   r: 'release'}
+          - {os: macos-latest,   r: 'oldrel-1'}
+          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'oldrel-1'}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+          cache-version: 3
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          args: 'c("--no-manual", "--as-cran", "--run-donttest")'
+          error-on: '"warning"'
+
+  # ---------------------------------------------------------------------------
+  # 2. Full test suite with the slow gates unlocked.
+  # ---------------------------------------------------------------------------
+  tests:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
-      # Unlock slow test gates
       TEST_PERFORMANCE: 'true'
       TEST_SCALABILITY: 'true'
       TEST_STRESS: 'true'
-
+      NOT_CRAN: 'true'
     steps:
       - uses: actions/checkout@v5
-
       - uses: r-lib/actions/setup-pandoc@v2
-
       - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
-            libgit2-dev libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
-            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
-
+        with: {use-public-rspm: true}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::covr, any::xml2, any::testthat, any::devtools
-          cache: true
+          extra-packages: any::devtools, any::testthat
           needs: check
+          cache-version: 3
 
-      # ── 1. Full test suite (stricter than PR check) ────────────────────────
-      - name: Run full test suite
+      - name: Run the full suite
         run: |
           devtools::load_all()
-          results <- devtools::test(reporter = testthat::ProgressReporter$new())
-          df <- as.data.frame(results)
-          failures <- df[df$failed > 0 | df$error, ]
-          if (nrow(failures) > 0) {
-            message("FAILURES:\n", paste(failures$test, collapse = "\n"))
-            quit(status = 1)
+          res <- devtools::test(reporter = testthat::ProgressReporter$new())
+          df  <- as.data.frame(res)
+          bad <- df[df$failed > 0 | df$error, ]
+          cat(sprintf("\nfiles=%d  failed=%d  warnings=%d  skipped=%d  passed=%d\n",
+                      nrow(df), sum(df$failed), sum(df$warning), sum(df$skipped),
+                      sum(df$passed)))
+          if (nrow(bad)) {
+            cat("\nFAILING:\n"); print(bad[, c("file", "test", "failed", "error")])
+            quit(status = 1L)
           }
         shell: Rscript {0}
 
-      # ── 2. Snapshot drift detection ────────────────────────────────────────
-      - name: Check for snapshot drift
+      - name: Snapshot drift
+        if: always()
         run: |
-          git diff --exit-code tests/testthat/_snaps/ || \
-            (echo "Snapshot drift detected — run devtools::test() locally and commit updated snapshots." && exit 1)
+          git diff --exit-code tests/testthat/_snaps/ \
+            || { echo "::error::Snapshot drift. Run devtools::test() locally and commit the updated snapshots."; exit 1; }
 
-      # ── 3. Coverage report (fail if < 60%) ────────────────────────────────
-      - name: Check test coverage
+  # ---------------------------------------------------------------------------
+  # 3. Coverage, with a floor.
+  # ---------------------------------------------------------------------------
+  coverage:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      NOT_CRAN: 'true'
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::covr, any::xml2
+          needs: coverage
+          cache-version: 3
+
+      - name: Measure coverage
         run: |
           cov <- covr::package_coverage(quiet = FALSE)
           pct <- covr::percent_coverage(cov)
-          message(sprintf("Coverage: %.1f%%", pct))
+          cat(sprintf("Coverage: %.2f%%\n", pct))
           covr::to_cobertura(cov, filename = "cobertura.xml")
-          if (pct < 60) {
-            message(sprintf("Coverage %.1f%% is below 60%% threshold.", pct))
-            quit(status = 1)
+
+          # Worst-covered files, so a drop is actionable rather than a number.
+          by_file <- covr::coverage_to_list(cov)$filecoverage
+          worst   <- utils::head(sort(by_file), 15)
+          cat("\nLowest-covered files:\n")
+          for (i in seq_along(worst))
+            cat(sprintf("  %6.1f%%  %s\n", worst[[i]], names(worst)[i]))
+
+          floor_pct <- 60
+          if (pct < floor_pct) {
+            cat(sprintf("::error::Coverage %.2f%% is below the %d%% floor.\n", pct, floor_pct))
+            quit(status = 1L)
           }
         shell: Rscript {0}
 
@@ -87,26 +213,437 @@ jobs:
           slug: mufflyt/mysterycall
           fail_ci_if_error: false
 
-      # ── 4. Upload artifacts for inspection ────────────────────────────────
-      - name: Upload coverage report
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: cobertura.xml
           retention-days: 30
 
-      # ── 5. Open a GitHub issue on failure ─────────────────────────────────
-      - name: Create issue on failure
-        if: failure()
+  # ---------------------------------------------------------------------------
+  # 4. Generated-file drift. Regenerating roxygen must be a no-op.
+  #    This catches doc blocks bound to the wrong object, missing topic pages,
+  #    and NAMESPACE changes that were never committed -- three separate real
+  #    defects were found this way while man/ was stale.
+  # ---------------------------------------------------------------------------
+  doc-drift:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::roxygen2, any::devtools
+          needs: check
+          cache-version: 3
+      - name: Regenerate and diff
+        run: Rscript .github/scripts/check-doc-drift.R
+
+  # ---------------------------------------------------------------------------
+  # 5. Bundled data integrity.
+  # ---------------------------------------------------------------------------
+  data-integrity:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools
+          needs: check
+          cache-version: 3
+      - name: Validate datasets
+        run: Rscript .github/scripts/check-data-integrity.R
+
+  # ---------------------------------------------------------------------------
+  # 6. Source portability: encoding, line endings, stray files.
+  # ---------------------------------------------------------------------------
+  portability:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Check portability
+        run: Rscript .github/scripts/check-portability.R
+
+  # ---------------------------------------------------------------------------
+  # 7. Dependency hygiene: DESCRIPTION vs NAMESPACE vs actual usage.
+  # ---------------------------------------------------------------------------
+  dependencies:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::jsonlite
+          needs: check
+          cache-version: 3
+      - name: Check dependency declarations
+        run: Rscript .github/scripts/check-dependencies.R
+
+  # ---------------------------------------------------------------------------
+  # 8. Every vignette builds.
+  # ---------------------------------------------------------------------------
+  vignettes:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      NOT_CRAN: 'true'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev \
+            libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::knitr, any::rmarkdown
+          needs: check
+          cache-version: 3
+      - name: Build vignettes
+        run: |
+          vigs <- list.files("vignettes", pattern = "[.]Rmd$", full.names = TRUE)
+          cat("Building", length(vigs), "vignettes\n")
+          devtools::build_vignettes()
+          built <- list.files("doc", pattern = "[.]html$")
+          cat("Built:", length(built), "HTML files\n")
+          if (length(built) < length(vigs)) {
+            cat(sprintf("::error::%d vignettes but only %d HTML outputs.\n",
+                        length(vigs), length(built)))
+            quit(status = 1L)
+          }
+        shell: Rscript {0}
+
+  # ---------------------------------------------------------------------------
+  # 9. pkgdown site, with the segfault-only retry.
+  # ---------------------------------------------------------------------------
+  pkgdown:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev \
+            libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, any::xml2, local::.
+          needs: website
+          cache-version: 3
+      # Retries only on SIGSEGV, matching the pkgdown.yaml gate. Any other
+      # non-zero exit is a real failure -- topics missing from the reference
+      # index exit 1 and must stay loud.
+      - name: Build site
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            code=0
+            Rscript -e 'pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)' || code=$?
+            if [ "$code" -eq 0 ]; then
+              [ "$attempt" -gt 1 ] && echo "::notice::pkgdown succeeded on attempt $attempt"
+              exit 0
+            fi
+            if [ "$code" -ne 139 ]; then
+              echo "::error::pkgdown failed with exit $code. Not a segfault, so not retried."
+              exit "$code"
+            fi
+            echo "::warning::pkgdown segfaulted (139) on attempt $attempt of 3."
+            rm -rf docs
+            sleep 5
+          done
+          echo "::error::pkgdown segfaulted on all 3 attempts."
+          exit 139
+
+  # ---------------------------------------------------------------------------
+  # 10. URLs. Findings are advisory; anything that stops the check is fatal.
+  # ---------------------------------------------------------------------------
+  urls:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-pandoc@v2
+      - name: Install urlchecker
+        run: install.packages(c("urlchecker", "knitr"))
+        shell: Rscript {0}
+      - name: Check URLs
+        run: |
+          advisory <- function(n) {
+            cat("::warning::urlchecker reported ", n, " URL(s) needing review\n", sep = "")
+            quit(status = 0L)
+          }
+          res <- tryCatch(urlchecker::url_check("."), error = function(e) {
+            msg <- conditionMessage(e)
+            hit <- regmatches(msg, regexpr("Found [0-9]+ invalid URLs?", msg))
+            if (length(hit)) advisory(as.integer(gsub("[^0-9]", "", hit)))
+            cat("::error::urlchecker could not run: ", msg, "\n", sep = "")
+            quit(status = 1L)
+          })
+          print(res)
+          if (NROW(res) > 0) advisory(NROW(res))
+          cat("All URLs OK\n")
+        shell: Rscript {0}
+
+  # ---------------------------------------------------------------------------
+  # 11. Repo hygiene (same gate the PR workflow runs).
+  # ---------------------------------------------------------------------------
+  hygiene:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install jsonlite
+        run: install.packages("jsonlite")
+        shell: Rscript {0}
+      - name: Check repo hygiene
+        run: Rscript .github/scripts/check-repo-hygiene.R
+
+  # ---------------------------------------------------------------------------
+  # 12. Clean-room install from the built tarball.
+  # ---------------------------------------------------------------------------
+  install-clean:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev \
+            libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          needs: check
+          cache-version: 3
+      - name: Build, install into an empty library, smoke-test
+        shell: bash
+        run: |
+          set -eo pipefail
+          R CMD build --no-build-vignettes --no-manual .
+          tarball=$(ls -1 mysterycall_*.tar.gz | head -1)
+          echo "Built $tarball"
+          mkdir -p "$RUNNER_TEMP/cleanlib"
+          R CMD INSTALL --library="$RUNNER_TEMP/cleanlib" "$tarball"
+          Rscript -e '
+            .libPaths(c(Sys.getenv("RUNNER_TEMP_LIB"), .libPaths()))
+            library(mysterycall)
+            n <- length(getNamespaceExports("mysterycall"))
+            cat("Loaded mysterycall", as.character(packageVersion("mysterycall")),
+                "with", n, "exports\n")
+            if (n < 50) { cat("::error::Suspiciously few exports\n"); quit(status = 1L) }
+          '
+        env:
+          RUNNER_TEMP_LIB: ${{ runner.temp }}/cleanlib
+
+  # ---------------------------------------------------------------------------
+  # 13. Advisory: spelling. Reported, never fatal.
+  # ---------------------------------------------------------------------------
+  spelling:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install spelling
+        run: install.packages("spelling")
+        shell: Rscript {0}
+      - name: Spell check
+        run: |
+          # Advisory: a package full of clinical and statistical vocabulary
+          # produces many false positives, so this informs rather than gates.
+          # It still runs to completion; a failure to run at all is fatal.
+          res <- tryCatch(
+            spelling::spell_check_package("."),
+            error = function(e) {
+              cat("::error::spell_check_package could not run: ",
+                  conditionMessage(e), "\n", sep = "")
+              quit(status = 1L)
+            }
+          )
+          n <- NROW(res)
+          if (n > 0) {
+            print(res)
+            cat("::warning::", n, " potentially misspelled word(s). ",
+                "Add real terms to inst/WORDLIST.\n", sep = "")
+          } else {
+            cat("No spelling issues\n")
+          }
+        shell: Rscript {0}
+
+  # ---------------------------------------------------------------------------
+  # 14. Advisory: lintr. Reported, never fatal.
+  # ---------------------------------------------------------------------------
+  lint:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::lintr
+          needs: lint
+          cache-version: 3
+      - name: Lint
+        run: |
+          # Advisory. There is no .lintr config and 258 R files, so a first
+          # run surfaces a large backlog; gating on it would just get ignored.
+          lints <- tryCatch(lintr::lint_package(), error = function(e) {
+            cat("::error::lintr could not run: ", conditionMessage(e), "\n", sep = "")
+            quit(status = 1L)
+          })
+          n <- length(lints)
+          cat("lintr findings:", n, "\n")
+          if (n > 0) {
+            print(utils::head(lints, 50))
+            cat("::warning::", n, " lintr finding(s); showing the first 50.\n", sep = "")
+          }
+        shell: Rscript {0}
+
+  # ---------------------------------------------------------------------------
+  # 15. Aggregate. One issue per failed night, not one per job.
+  # ---------------------------------------------------------------------------
+  summary:
+    needs: [gate, check, tests, coverage, doc-drift, data-integrity,
+            portability, dependencies, vignettes, pkgdown, urls, hygiene,
+            install-clean, spelling, lint]
+    if: always() && needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build summary table
+        id: table
+        shell: bash
+        run: |
+          {
+            echo "## Nightly verification"
+            echo ""
+            echo "Local time at trigger: \`${{ needs.gate.outputs.local_time }}\`"
+            echo ""
+            echo "| Job | Result | Gating |"
+            echo "|---|---|---|"
+            echo "| R CMD check (8 platforms) | ${{ needs.check.result }} | yes |"
+            echo "| Full test suite | ${{ needs.tests.result }} | yes |"
+            echo "| Coverage | ${{ needs.coverage.result }} | yes |"
+            echo "| Doc / NAMESPACE drift | ${{ needs['doc-drift'].result }} | yes |"
+            echo "| Data integrity | ${{ needs['data-integrity'].result }} | yes |"
+            echo "| Portability | ${{ needs.portability.result }} | yes |"
+            echo "| Dependencies | ${{ needs.dependencies.result }} | yes |"
+            echo "| Vignettes | ${{ needs.vignettes.result }} | yes |"
+            echo "| pkgdown | ${{ needs.pkgdown.result }} | yes |"
+            echo "| URLs | ${{ needs.urls.result }} | yes |"
+            echo "| Repo hygiene | ${{ needs.hygiene.result }} | yes |"
+            echo "| Clean install | ${{ needs['install-clean'].result }} | yes |"
+            echo "| Spelling | ${{ needs.spelling.result }} | advisory |"
+            echo "| lintr | ${{ needs.lint.result }} | advisory |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          failed=""
+          for pair in \
+            "R CMD check:${{ needs.check.result }}" \
+            "tests:${{ needs.tests.result }}" \
+            "coverage:${{ needs.coverage.result }}" \
+            "doc-drift:${{ needs['doc-drift'].result }}" \
+            "data-integrity:${{ needs['data-integrity'].result }}" \
+            "portability:${{ needs.portability.result }}" \
+            "dependencies:${{ needs.dependencies.result }}" \
+            "vignettes:${{ needs.vignettes.result }}" \
+            "pkgdown:${{ needs.pkgdown.result }}" \
+            "urls:${{ needs.urls.result }}" \
+            "hygiene:${{ needs.hygiene.result }}" \
+            "install-clean:${{ needs['install-clean'].result }}"; do
+            name="${pair%%:*}"; result="${pair##*:}"
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
+              failed="$failed $name"
+            fi
+          done
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+
+      - name: Open an issue if a gating job failed
+        if: steps.table.outputs.failed != ''
         uses: actions/github-script@v7
         with:
           script: |
-            const date = new Date().toISOString().split('T')[0];
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Nightly CI failure — ${date}`,
-              body: `The nightly regression test failed.\n\n**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nCheck the logs for snapshot drift, test failures, or coverage drops.`,
-              labels: ['ci', 'bug']
+            const failed = `${{ steps.table.outputs.failed }}`.trim();
+            const localTime = `${{ needs.gate.outputs.local_time }}`;
+            const date = localTime.split(' ')[0];
+            const url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const title = `Nightly failure ${date}: ${failed.split(' ').filter(Boolean).join(', ')}`;
+
+            // Reuse an open issue for the same failing set rather than opening
+            // a new one every night while a problem persists.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'nightly'
             });
+            const match = existing.data.find(i => i.title.endsWith(failed.split(' ').filter(Boolean).join(', ')));
+
+            const body = [
+              `Nightly verification failed.`, ``,
+              `**Failing jobs:** ${failed.split(' ').filter(Boolean).join(', ')}`,
+              `**Local time:** ${localTime}`,
+              `**Run:** ${url}`, ``,
+              `Advisory jobs (spelling, lintr) never appear here; check the run summary for those.`
+            ].join('\n');
+
+            if (match) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: match.number, body: `Still failing.\n\n${body}`
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['ci', 'nightly']
+              });
+            }
+
+      - name: Fail the run if a gating job failed
+        if: steps.table.outputs.failed != ''
+        run: |
+          echo "::error::Gating jobs failed:${{ steps.table.outputs.failed }}"
+          exit 1

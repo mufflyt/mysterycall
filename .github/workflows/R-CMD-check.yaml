@@ -86,9 +86,17 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
           args: 'c("--no-manual", "--as-cran", "--run-donttest")'
-          # Automatic gate (push / PR) fails only on ERRORs -- real breakage --
-          # so a benign --as-cran WARNING doesn't permanently block merges.
-          # A manual `workflow_dispatch` run keeps the strict warning-level
-          # check for on-demand CRAN-readiness auditing.
-          error-on: ${{ github.event_name == 'workflow_dispatch' && '"warning"' || '"error"' }}
+          # Strict gate: any --as-cran WARNING, not just an ERROR, fails the
+          # check on every event.
+          #
+          # This was previously relaxed to error-only because a standing
+          # WARNING would otherwise have blocked all merges. That WARNING was
+          # "checking code files for non-ASCII characters", and it is fixed:
+          # R CMD check went from 1 WARNING + 6 NOTEs to 6 NOTEs. With nothing
+          # left to suppress, the gate can be strict again.
+          #
+          # If a new WARNING appears and is genuinely benign, fix it or
+          # document why rather than relaxing this back -- a gate that has been
+          # loosened once tends to stay loose.
+          error-on: '"warning"'
 

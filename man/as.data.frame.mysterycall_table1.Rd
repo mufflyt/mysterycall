@@ -2,7 +2,7 @@
 % Please edit documentation in R/table1.R
 \name{as.data.frame.mysterycall_table1}
 \alias{as.data.frame.mysterycall_table1}
-\title{Convert a mysterycall_table1 to a flextable (internal)}
+\title{Coerce a mysterycall_table1 to a plain data frame}
 \usage{
 \method{as.data.frame}{mysterycall_table1}(x, ...)
 }
@@ -12,18 +12,8 @@
 \item{...}{Ignored.}
 }
 \value{
-A \code{flextable} object.
-
 A data frame.
 }
 \description{
-Convert a mysterycall_table1 to a flextable (internal)
+Coerce a mysterycall_table1 to a plain data frame
 }
-\keyword{Coerce}
-\keyword{a}
-\keyword{data}
-\keyword{frame}
-\keyword{internal}
-\keyword{mysterycall_table1}
-\keyword{plain}
-\keyword{to}
