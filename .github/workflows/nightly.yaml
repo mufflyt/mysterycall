@@ -471,19 +471,34 @@ jobs:
           extra-packages: any::devtools, any::knitr, any::rmarkdown
           needs: check
           cache-version: 3
+      # Built via R CMD build, not devtools::build_vignettes(). The latter was
+      # deprecated in devtools 2.5.0 and additionally requires the `remotes`
+      # package, which is not a declared dependency here -- it failed in 0.6s
+      # having touched no vignette, while the same 23 built cleanly on a
+      # machine that happened to have remotes installed. R CMD build is also
+      # what CRAN actually runs, so a pass here means more.
       - name: Build vignettes
+        shell: bash
         run: |
-          vigs <- list.files("vignettes", pattern = "[.]Rmd$", full.names = TRUE)
-          cat("Building", length(vigs), "vignettes\n")
-          devtools::build_vignettes()
-          built <- list.files("doc", pattern = "[.]html$")
-          cat("Built:", length(built), "HTML files\n")
-          if (length(built) < length(vigs)) {
-            cat(sprintf("::error::%d vignettes but only %d HTML outputs.\n",
-                        length(vigs), length(built)))
-            quit(status = 1L)
-          }
-        shell: Rscript {0}
+          set -eo pipefail
+          n_rmd=$(ls vignettes/*.Rmd 2>/dev/null | wc -l | tr -d ' ')
+          echo "vignettes to build: $n_rmd"
+
+          R CMD build --no-manual . 2>&1 | tee build.log
+          tarball=$(ls -1 mysterycall_*.tar.gz | head -1)
+          [ -n "$tarball" ] || { echo "::error::R CMD build produced no tarball"; exit 1; }
+
+          # A vignette that errors stops the build, so reaching here means they
+          # all ran. Confirm the outputs actually shipped inside the tarball
+          # rather than trusting the exit code alone.
+          n_built=$(tar tzf "$tarball" | grep -c '^mysterycall/inst/doc/.*\.html$' || true)
+          echo "vignette HTML inside the tarball: $n_built of $n_rmd"
+
+          if [ "$n_built" -lt "$n_rmd" ]; then
+            echo "::error::only $n_built of $n_rmd vignettes produced HTML."
+            grep -iE "error|warning" build.log | tail -20 || true
+            exit 1
+          fi
 
   # ---------------------------------------------------------------------------
   # 9. pkgdown site, with the segfault-only retry.
