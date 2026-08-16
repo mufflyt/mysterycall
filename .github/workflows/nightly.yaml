@@ -134,11 +134,26 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+      # oldrel installs hard dependencies only, plus the test harness.
+      #
+      # The 57 Suggests are an optional universe that must COMPILE on whatever
+      # R is running, and on an old R several no longer do. glmmTMB pulls in
+      # Deriv, whose C++ calls R_ClosureFormals -- a symbol that does not exist
+      # before R 4.5 (verified against the R 4.4.2 headers). RSPM serves
+      # binaries built for current R, so an old runner falls back to compiling
+      # from source and dies there. That failure is upstream's, and it masks
+      # the only question oldrel is asked: does THIS package's code still work
+      # on an older R.
+      #
+      # testthat, withr and mockery are named explicitly because they are the
+      # harness rather than optional extras. Without them R CMD check would
+      # find no runnable tests and pass in silence, which is worse than failing.
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          dependencies: ${{ startsWith(matrix.config.r, 'oldrel') && '"hard"' || '"all"' }}
+          extra-packages: ${{ startsWith(matrix.config.r, 'oldrel') && 'any::rcmdcheck, any::testthat, any::withr, any::mockery' || 'any::rcmdcheck' }}
           needs: check
-          cache-version: 3
+          cache-version: 4
       - uses: r-lib/actions/check-r-package@v2
         env:
           # Suggests are optional by definition, but R CMD check requires them
@@ -154,8 +169,15 @@ jobs:
           _R_CHECK_FORCE_SUGGESTS_: ${{ startsWith(matrix.config.r, 'oldrel') && 'false' || 'true' }}
         with:
           upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-          args: 'c("--no-manual", "--as-cran", "--run-donttest")'
+          # oldrel skips vignettes: they exercise the Suggests universe that is
+          # deliberately not installed above, and building them on macOS
+          # oldrel-1 segfaults in a way that reproduces on no other platform
+          # (macOS release, ubuntu oldrel-1 and windows oldrel-1 all build the
+          # same 23 vignettes cleanly). Vignette coverage is not lost: the
+          # release tier checks them and the dedicated `vignettes` job builds
+          # all 23 and fails if any is missing from the tarball.
+          build_args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--no-build-vignettes")' || 'c("--no-manual","--compact-vignettes=gs+qpdf")' }}
+          args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--as-cran", "--run-donttest", "--ignore-vignettes")' || 'c("--no-manual", "--as-cran", "--run-donttest")' }}
           error-on: '"warning"'
 
   # ---------------------------------------------------------------------------
