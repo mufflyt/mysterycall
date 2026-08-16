@@ -140,6 +140,18 @@ jobs:
           needs: check
           cache-version: 3
       - uses: r-lib/actions/check-r-package@v2
+        env:
+          # Suggests are optional by definition, but R CMD check requires them
+          # to be INSTALLABLE by default. Several exceed the declared
+          # R (>= 4.1.0): MASS needs R >= 4.4.0, and arrow, duckdb and
+          # gtsummary need >= 4.2. On an older R the check therefore fails on
+          # CRAN binary availability rather than on this package, which tells
+          # us nothing about the package.
+          #
+          # oldrel runs without forcing Suggests, so it tests what the package
+          # does rather than what CRAN currently ships. Current release keeps
+          # the strict behaviour, where a missing Suggests is a real signal.
+          _R_CHECK_FORCE_SUGGESTS_: ${{ startsWith(matrix.config.r, 'oldrel') && 'false' || 'true' }}
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
