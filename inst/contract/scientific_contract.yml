@@ -108,6 +108,13 @@ clustering_unit:
   question: >-
     Which grouping variable does the PRIMARY analysis cluster on? A parameter
     with several values in use is not a contract.
+  recommendation: >-
+    Not decidable from code: (1 | state), (1 | physician) and Matched_Pair_ID
+    are all present, and they encode three different designs. If the same
+    physician received both arms, the randomisation unit is the physician and
+    clustering on state would understate the correlation that pairing induces.
+    This is a design fact, not a modelling preference, so it is left for the
+    investigator.
 
 # --- arms and scripts --------------------------------------------------------
 experimental_arms:
@@ -168,6 +175,15 @@ wait_time_endpoint_inclusivity:
       A SATURDAY call seen the following Monday scores 0 business days --
       identical to a same-day appointment. If weekend call dates occur in the
       real study, those waits are undercounted.
+    consequence_verified: >-
+      Confirmed directly against the package, not inferred:
+        Sat 2026-03-07 -> Mon 2026-03-09 = 0
+        Sun 2026-03-08 -> Mon 2026-03-09 = 0
+        Mon 2026-03-09 -> Mon 2026-03-09 = 0   (a real same-day appointment)
+        Fri 2026-03-06 -> Mon 2026-03-09 = 1
+      A weekend-logged call and immediate access are therefore the same number.
+      Whether that is acceptable depends on whether weekend call dates exist in
+      the study, which the call log can answer directly.
   question: >-
     Ratify or change the observed rule. Specifically: should a call logged on a
     non-working day count the wait from the call date, or from the next working
@@ -175,11 +191,22 @@ wait_time_endpoint_inclusivity:
     case is reachable rather than hypothetical.
 
 holiday_calendar_version:
-  status: UNRESOLVED
+  status: DERIVED
+  value: >-
+    bizdays calendar "USFederal": all 11 US federal holidays; weekends are
+    Saturday and Sunday; fixed-date holidays shift to their observed weekday
+    (Friday if Saturday, Monday if Sunday); floating holidays (MLK, Presidents,
+    Memorial, Labor, Columbus, Thanksgiving) computed exactly. The year range is
+    a parameter of the calendar builder, not a constant.
+  evidence: >-
+    R/business_days.R -- bizdays::create.calendar(name = "USFederal",
+    weekdays = c("saturday","sunday")) and the observed-weekday shift documented
+    at R/business_days.R:55-74.
+  residual_risk: >-
+    The year range is still supplied by the caller. Pinning it is what makes a
+    calendar change reviewable rather than silent; until it is pinned, two runs
+    over different ranges can disagree without either being wrong.
   release_blocking: false
-  question: >-
-    R/business_days.R builds US federal holidays programmatically. Pin the year
-    range and rule set so a change to the calendar is a reviewable event.
 
 appointment_definition:
   status: UNRESOLVED
@@ -189,9 +216,21 @@ appointment_definition:
     These differ whenever a caller declines the first offer.
 
 secondary_outcomes:
-  status: UNRESOLVED
+  status: DERIVED
+  value: >-
+    Appointment acceptance rate (mysterycall_acceptance_rate,
+    mysterycall_insurance_acceptance_rates); wait-time distribution summaries
+    (mysterycall_wait_time_summary, _by_group, _crossover, _sentence); and the
+    calendar-day wait retained as the sensitivity comparator to the business-day
+    primary.
+  evidence: >-
+    Exported functions in R/; calendar-day comparator frozen in
+    tests/fixtures/canonical_study_expected.json -> wait_times.calendar_days.
+  constraint: >-
+    Section 68: these are computed alongside the primary endpoint and must never
+    overwrite it. The business-day wait is primary; the calendar-day wait is a
+    comparator and is frozen separately precisely so a silent swap fails.
   release_blocking: false
-  question: List secondary endpoints, so they cannot silently overwrite the primary one (section 68).
 
 # --- acceptance and status semantics ----------------------------------------
 payer_acceptance_definition:
@@ -284,6 +323,13 @@ analysis_population:
     Section 67: intention-to-call, successfully contacted, provider-confirmed,
     payer-evaluable, appointment-evaluable, or paired-complete? Numerator and
     denominator must not silently use different populations.
+  recommendation: >-
+    The frozen fixture already implies two distinct populations, and naming them
+    is what stops them being used interchangeably: payer-evaluable for the
+    acceptance endpoint (n = 23, reached with a resolved outcome) and
+    appointment-evaluable for the wait endpoint (n = 20, offered with a recorded
+    date). Confirm these are the intended populations rather than an artefact of
+    how the fixture was built.
 
 # --- inference ---------------------------------------------------------------
 model_family:
@@ -293,25 +339,53 @@ model_family:
   release_blocking: false
 
 confidence_interval_method:
-  status: UNRESOLVED
+  status: DERIVED
+  value: >-
+    Wald (stats::confint.default) on the log scale, exponentiated to the rate-
+    ratio / odds-ratio scale.
+  evidence: >-
+    R/insurance_wait_sentence.R:137 uses stats::confint.default on the primary
+    wait-time path. R/simple_poisson.R uses profile-likelihood stats::confint()
+    with an option to disable it for speed.
+  resolves_inconsistency: >-
+    These two are not the same interval. Until now the reported CI depended on
+    which function the caller happened to use, which is a defect independent of
+    this contract: the same data could yield two different published intervals.
+    Wald is recorded as the standard because it is what the primary path
+    already uses and because section 43 requires an independent reference to
+    reproduce it, which is straightforward for Wald and awkward for profile
+    likelihood.
+  required_followup: >-
+    R/simple_poisson.R should be brought onto the same convention, or the
+    contract amended to say which endpoints legitimately use profile intervals.
+    Leaving both in place means the contract is describing two studies.
   release_blocking: true
-  question: >-
-    Wald, profile likelihood, or bootstrap? Only confint.default (Wald) appears
-    in R/, and not clearly on the primary path. Section 43 requires an
-    independent reference implementation to agree with whatever is chosen.
 
 weighting_rules:
-  status: UNRESOLVED
+  status: DERIVED
+  value: "Unweighted. No sampling or post-stratification weight is applied anywhere."
+  evidence: >-
+    Repository-wide search finds no `weights =` argument on any model call, no
+    use of the survey package, and no svydesign object in R/. Every estimate is
+    an unweighted function of the analytic rows.
   release_blocking: false
-  question: Is any sampling weight applied? If none, state "unweighted" explicitly.
 
 sensitivity_analyses:
-  status: UNRESOLVED
+  status: DERIVED
   release_blocking: false
   partially_derived:
     evidence: "tests/fixtures/canonical_study_expected.json -> wait_times.calendar_days"
     detail: "Calendar-day recomputation is already frozen as a comparator."
-  question: Enumerate the full prespecified sensitivity set.
+  value: >-
+    Calendar-day versus business-day wait; both-insurance sensitivity
+    (R/sensitivity_both_insurance.R); the general sensitivity table
+    (R/sensitivity.R, R/sensitivity_table.R); and calendar sensitivity
+    (R/calendar_sensitivity.R).
+  evidence: "R/sensitivity.R, R/sensitivity_both_insurance.R, R/sensitivity_table.R, R/calendar_sensitivity.R"
+  status_note: >-
+    Derived from the sensitivity machinery that exists, which is not the same as
+    a prespecified set. If the protocol declared sensitivities that are not in
+    this list, the list is wrong rather than the protocol.
 
 # --- frozen qualitative conclusions -----------------------------------------
 # Section 81: exact statistics may move within tolerance; these may not.
