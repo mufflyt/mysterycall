@@ -1,0 +1,104 @@
+{
+  "_comment": "Frozen denominators and qualitative directions for the canonical synthetic study in canonical_study.R. Every number here was measured from that fixture, not asserted from intent. A code change that moves any of these has changed an analytic decision: either the change is wrong, or this file needs an intentional update in the same commit. Reviewing a diff to this file is reviewing a change to the study's denominators.",
+  "schema_version": "1.0.0",
+  "fixture": "tests/fixtures/canonical_study.R",
+
+  "roster": {
+    "_comment": "Provider-level counts. P13 repeats P01's NPI (same physician, two roster IDs); P16 has no NPI.",
+    "providers": 16,
+    "unique_npis": 14,
+    "duplicated_npis": 1,
+    "missing_npi": 1,
+    "academic_providers": 3,
+    "unique_phones": 16
+  },
+
+  "calls": {
+    "_comment": "One row per call. P04 has two office locations so contributes four calls; P14 has a Medicaid arm only, which is why the arms are 17/16 rather than balanced.",
+    "total": 33,
+    "by_arm": {
+      "Medicaid": 17,
+      "Blue Cross/Blue Shield": 16
+    },
+    "by_caller": {
+      "C1": 16,
+      "C2": 17
+    }
+  },
+
+  "exclusions": {
+    "_comment": "Reconciliation: contactable + excluded must equal total calls. Every excluded row carries a reason from the allowed vocabulary; no row is excluded with a blank reason.",
+    "contactable": 25,
+    "excluded": 8,
+    "by_reason": {
+      "Unable to contact office": 2,
+      "Wrong number": 2,
+      "Physician retired": 2,
+      "Physician moved practices": 2
+    },
+    "allowed_vocabulary": [
+      "Able to contact",
+      "Unable to contact office",
+      "Wrong number",
+      "Physician retired",
+      "Physician moved practices"
+    ]
+  },
+
+  "outcomes": {
+    "_comment": "appointment_offered is deliberately three-valued. The two NA rows (P11) are ambiguous outcomes that were reached but not resolved, and must never silently become FALSE.",
+    "offered_true": 22,
+    "offered_false": 9,
+    "offered_na": 2
+  },
+
+  "denominators": {
+    "_comment": "The analytic denominators. These are the numbers that vanish silently when an upstream change drops rows, which is the failure this fixture exists to catch.",
+    "acceptance_analytic_n": 23,
+    "acceptance_by_arm": {
+      "Medicaid": 12,
+      "Blue Cross/Blue Shield": 11
+    },
+    "wait_time_analytic_n": 20,
+    "wait_time_by_arm": {
+      "Medicaid": 10,
+      "Blue Cross/Blue Shield": 10
+    },
+    "wait_missing": 13,
+    "wait_present": 20
+  },
+
+  "acceptance": {
+    "_comment": "Proportions to 4 dp. P03 refused the Medicaid call, which is the single non-offer among contactable Medicaid rows.",
+    "Medicaid": 0.9167,
+    "Blue Cross/Blue Shield": 1.0
+  },
+
+  "wait_times": {
+    "_comment": "business_days_until_appointment is the primary outcome; calendar days are the sensitivity comparator. Freezing both guards against the two being swapped, which would leave every model still running and every p-value still plausible.",
+    "business_days": {
+      "Medicaid": {"n": 10, "mean": 12.9, "median": 13.5},
+      "Blue Cross/Blue Shield": {"n": 10, "mean": 6.2, "median": 6.0}
+    },
+    "calendar_days": {
+      "Medicaid": {"n": 10, "mean": 18.4, "median": 19.5},
+      "Blue Cross/Blue Shield": {"n": 10, "mean": 8.4, "median": 8.0}
+    }
+  },
+
+  "directions": {
+    "_comment": "Qualitative conclusions, deliberately not exact p-values. A code change that reverses one of these has changed the study's answer. Exact statistics are free to move within tolerance; the direction is not.",
+    "medicaid_wait_longer": true,
+    "medicaid_acceptance_lower": true,
+    "calendar_ge_business_every_row": true
+  },
+
+  "invariants": {
+    "_comment": "Relationships that must hold by construction, independent of the specific counts above.",
+    "contactable_plus_excluded_equals_total": true,
+    "offered_true_false_na_equals_total": true,
+    "wait_present_plus_missing_equals_total": true,
+    "every_excluded_row_has_a_reason": true,
+    "no_negative_waits": true
+  }
+}
