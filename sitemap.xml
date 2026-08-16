@@ -149,6 +149,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/export_results_docx.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/factor_utils.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/find_max_abog_id.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/fips.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/flow_diagram.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/forest_plot.html</loc></url>
@@ -622,6 +623,8 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/progress-bars.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/provenance.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/results_report.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/rotate_tor_circuit.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/specialty_utils.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/strip_suite.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/strobe_flow.html</loc></url>
@@ -636,6 +639,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_dataframe.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_required_columns.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/validate_scalar_positive_numeric.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/verify_tor.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/winsorize.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/zcta_tract_xwalk.html</loc></url>
 </urlset>
