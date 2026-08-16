@@ -1,0 +1,55 @@
+# Study contract template.
+#
+# Copy to inst/contract/studies/<study-id>.yml, answer every field, then run
+#
+#   Rscript tools/ci/check_scientific_contract.R --study <study-id> --update-hash
+#
+# and commit the .yml and .sha256 together. The package contract
+# (inst/contract/scientific_contract.yml) defines what MAY be chosen; this file
+# records what WAS chosen for one study. Enumerated fields must use one of the
+# allowed values exactly -- a study may choose, but not invent.
+#
+# Changing any answer here changes the study's estimand. The hash exists to
+# make that a reviewed event rather than a diff nobody opened.
+
+study_id: TEMPLATE
+description: >-
+  One line naming the study this contract governs.
+
+# --- what was sampled -------------------------------------------------------
+target_provider_population: ""      # specialty, credential, restrictions
+target_practice_population: ""      # practice types in scope
+sampling_frame: ""                  # roster/registry, vintage, provenance
+sampling_date: ""                   # ISO date or range
+inclusion_criteria: ""              # applied BEFORE outcomes were known
+exclusion_criteria_prespecified: "" # declared in advance
+unit_of_sampling: physician         # physician | practice | practice_location | phone_number
+
+# --- design -----------------------------------------------------------------
+randomization_unit: physician       # physician | practice | call | not_randomized
+unit_of_analysis: call              # call | physician | practice | matched_pair
+clustering_unit: physician          # physician | practice | matched_pair | state | none_independent_calls
+analysis_population: payer_evaluable
+# intention_to_call | successfully_contacted | provider_confirmed |
+# payer_evaluable | appointment_evaluable | paired_complete
+
+# --- protocol ---------------------------------------------------------------
+arm_differences_authorized: ""      # the ONLY fields permitted to differ
+script_versions: ""                 # id + SHA-256 per arm script
+call_attempt_policy: ""             # max attempts, separation, hours
+callback_policy: ""                 # where the access clock starts
+voicemail_policy: voicemail_consumes_an_attempt
+
+# --- outcome definitions ----------------------------------------------------
+appointment_definition: earliest_offered
+# earliest_offered | appointment_chosen_by_caller | appointment_booked
+
+payer_acceptance_definition: named_physician_accepts
+# named_physician_accepts | practice_accepts | either_counts_as_acceptance |
+# named_physician_with_referral_counts
+
+named_vs_alternate_provider: named_physician_only
+# named_physician_only | named_or_partner | named_or_any_clinician_including_app
+
+provider_active_definition: office_confirms_at_listed_location
+listed_location_definition: exact_listed_address
