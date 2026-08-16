@@ -1,7 +1,7 @@
 # Fill a column downward with the last non-NA value
 
-Uses [`tidyr::fill()`](https://tidyr.tidyverse.org/reference/fill.html)
-when available, falls back to
+Uses [`tidyr::fill()`](https://rdrr.io/pkg/tidyr/man/fill.html) when
+available, falls back to
 [`zoo::na.locf()`](https://rdrr.io/pkg/zoo/man/na.locf.html), then a
 pure-base-R forward-fill loop.
 

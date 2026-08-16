@@ -1,7 +1,7 @@
 # Interaction visualization via sjPlot
 
 Thin wrapper around
-[`sjPlot::plot_model()`](https://strengejacke.github.io/sjPlot/reference/plot_model.html)
+[`sjPlot::plot_model()`](https://rdrr.io/pkg/sjPlot/man/plot_model.html)
 with `type = "int"`. Returns a ggplot object that can be further
 customised with standard ggplot2 layers.
 
@@ -16,7 +16,7 @@ mysterycall_plot_sjplot_interaction(model, terms, title = NULL, ...)
 - model:
 
   A fitted model accepted by
-  [`sjPlot::plot_model()`](https://strengejacke.github.io/sjPlot/reference/plot_model.html).
+  [`sjPlot::plot_model()`](https://rdrr.io/pkg/sjPlot/man/plot_model.html).
 
 - terms:
 
@@ -30,7 +30,7 @@ mysterycall_plot_sjplot_interaction(model, terms, title = NULL, ...)
 - ...:
 
   Additional arguments forwarded to
-  [`sjPlot::plot_model()`](https://strengejacke.github.io/sjPlot/reference/plot_model.html).
+  [`sjPlot::plot_model()`](https://rdrr.io/pkg/sjPlot/man/plot_model.html).
 
 ## Value
 

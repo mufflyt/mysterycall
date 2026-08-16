@@ -492,7 +492,7 @@ ZIP only.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="va">roster</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    zip5 <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">addresses_postal_code</span>, <span class="fl">1L</span>, <span class="fl">5L</span><span class="op">)</span></span>
+<span>    zip5 <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">addresses_postal_code</span>, <span class="fl">1L</span>, <span class="fl">5L</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -1207,7 +1207,7 @@ standardization manually.</p>
 <span></span>
 <span><span class="co"># New columns added:</span></span>
 <span><span class="co"># age_imputed, age_category, gender_std, setting_std, region_std</span></span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">analysis_ready</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age_imputed</span>, <span class="va">age_category</span>,</span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pillar/man/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">analysis_ready</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age_imputed</span>, <span class="va">age_category</span>,</span>
 <span>                                                 <span class="va">gender_std</span>, <span class="va">setting_std</span>, <span class="va">region_std</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -1638,7 +1638,7 @@ during <code><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-l
 <h3 id="step-10-inspect-the-result">Step 10: Inspect the result<a class="anchor" aria-label="anchor" href="#step-10-inspect-the-result"></a>
 </h3>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">final_roster</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pillar/man/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">final_roster</span><span class="op">)</span></span></code></pre></div>
 <p>Expected output structure:</p>
 <pre><code>Rows: 300
 Columns: 14

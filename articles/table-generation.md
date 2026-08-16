@@ -316,7 +316,7 @@ preserved.
 is designed for **quick quality-assurance snapshots during data
 collection**, not for publication. It reads an RDS file (or a data
 frame), generates an
-[`arsenal::tableby()`](https://mayoverse.github.io/arsenal/reference/tableby.html)
+[`arsenal::tableby()`](https://rdrr.io/pkg/arsenal/man/tableby.html)
 summary, and writes a PDF to disk in a single call. It is the fastest
 way to answer the question “What does our dataset look like right now?”
 at the weekly coordinator check-in meeting.
@@ -576,7 +576,7 @@ openxlsx::write.xlsx(
 
 [`mysterycall_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table_pdf.md)
 takes an
-[`arsenal::tableby`](https://mayoverse.github.io/arsenal/reference/tableby.html)
+[`arsenal::tableby`](https://rdrr.io/pkg/arsenal/man/tableby.html)
 object (the internal representation produced by
 [`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md)
 and

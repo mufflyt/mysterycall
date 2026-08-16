@@ -2,8 +2,8 @@
 
 Extracts marginal (fixed-effects only) and conditional (fixed + random
 effects) R^2 values from a fitted mixed model using
-[`performance::r2()`](https://easystats.github.io/performance/reference/r2.html),
-then formats them into a manuscript-ready interpretive paragraph.
+[`performance::r2()`](https://rdrr.io/pkg/performance/man/r2.html), then
+formats them into a manuscript-ready interpretive paragraph.
 
 ## Usage
 
@@ -16,7 +16,7 @@ mysterycall_r2_sentence(model, digits = 3, digits_pct = 1)
 - model:
 
   A fitted mixed model (`glmerMod`, `lmerMod`, etc.) compatible with
-  [`performance::r2()`](https://easystats.github.io/performance/reference/r2.html).
+  [`performance::r2()`](https://rdrr.io/pkg/performance/man/r2.html).
   Pure fixed-effects models (e.g., `lm`, `glm`) are not supported and
   will trigger an error.
 
@@ -58,8 +58,8 @@ A named list with:
 
 [`mysterycall_random_effect_variance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_random_effect_variance.md)
 for ICC-based random-effect interpretation;
-[`performance::r2()`](https://easystats.github.io/performance/reference/r2.html)
-for the underlying computation.
+[`performance::r2()`](https://rdrr.io/pkg/performance/man/r2.html) for
+the underlying computation.
 
 Other modeling helpers:
 [`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),

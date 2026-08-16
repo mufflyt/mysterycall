@@ -76,7 +76,7 @@ with a combined "IRR (95% CI)" column and optional significance stars.'><meta pr
 
     <div class="ref-description section level2">
     <p>Formats a tibble of IRR estimates (typically the <code>$irr_table</code> slot from
-<code><a href="mysterycall_simple_poisson.html">mysterycall_simple_poisson()</a></code>) into a publication-ready <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table
+<code><a href="mysterycall_simple_poisson.html">mysterycall_simple_poisson()</a></code>) into a publication-ready <code><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt::gt()</a></code> table
 with a combined "IRR (95% CI)" column and optional significance stars.</p>
     </div>
 
@@ -110,13 +110,13 @@ for star assignment and <code>p_value_fmt</code> for display.</p></li>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
-<dd><p>Character scalar. Table title passed to <code><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">gt::tab_header()</a></code>.
+<dd><p>Character scalar. Table title passed to <code><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">gt::tab_header()</a></code>.
 Default <code>"Incidence Rate Ratios"</code>.</p></dd>
 
 
 <dt id="arg-subtitle">subtitle<a class="anchor" aria-label="anchor" href="#arg-subtitle"></a></dt>
 <dd><p>Character scalar or <code>NULL</code>. Optional subtitle passed to
-<code><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">gt::tab_header()</a></code>.</p></dd>
+<code><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">gt::tab_header()</a></code>.</p></dd>
 
 
 <dt id="arg-outcome-label">outcome_label<a class="anchor" aria-label="anchor" href="#arg-outcome-label"></a></dt>
@@ -136,7 +136,7 @@ estimate column. Default <code>"IRR (95% CI)"</code>.</p></dd>
 
 <dt id="arg-footnote">footnote<a class="anchor" aria-label="anchor" href="#arg-footnote"></a></dt>
 <dd><p>Character scalar. Source note appended via
-<code><a href="https://gt.rstudio.com/reference/tab_source_note.html" class="external-link">gt::tab_source_note()</a></code>. Default explains the star notation.</p></dd>
+<code><a href="https://rdrr.io/pkg/gt/man/tab_source_note.html" class="external-link">gt::tab_source_note()</a></code>. Default explains the star notation.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -151,7 +151,7 @@ estimate column. Default <code>"IRR (95% CI)"</code>.</p></dd>
 <li><p>P-value (display): <code>"p_value_fmt"</code> when present, otherwise the numeric
 <code>p_value</code> rounded to three decimal places.</p></li>
 </ul><p><strong>Significance stars</strong> – assigned from the numeric p-value:</p><table class="table table"><tr><td>p</td><td>Stars</td></tr><tr><td>&lt; 0.001</td><td><code>***</code></td></tr><tr><td>&lt; 0.01</td><td><code>**</code></td></tr><tr><td>&lt; 0.05</td><td><code>*</code></td></tr><tr><td>&gt;= 0.05</td><td><code>""</code></td></tr></table><p><strong>Bold rows</strong> – rows where <code>p_value &lt; 0.05</code> are styled with bold text via
-<code><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">gt::tab_style()</a></code>.</p>
+<code><a href="https://rdrr.io/pkg/gt/man/tab_style.html" class="external-link">gt::tab_style()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

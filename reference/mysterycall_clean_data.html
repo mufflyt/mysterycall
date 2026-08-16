@@ -216,7 +216,7 @@ values. Default <code>c("Yes" = "Yes, central scheduling")</code>.</p></dd>
 <dt id="arg-fill-cols">fill_cols<a class="anchor" aria-label="anchor" href="#arg-fill-cols"></a></dt>
 <dd><p>Character vector of column names to forward-fill
 (last-observation-carried-forward) before any recoding or renaming. Uses
-<code><a href="https://tidyr.tidyverse.org/reference/fill.html" class="external-link">tidyr::fill()</a></code> when the package is installed, then <code><a href="https://rdrr.io/pkg/zoo/man/na.locf.html" class="external-link">zoo::na.locf()</a></code>, then
+<code><a href="https://rdrr.io/pkg/tidyr/man/fill.html" class="external-link">tidyr::fill()</a></code> when the package is installed, then <code><a href="https://rdrr.io/pkg/zoo/man/na.locf.html" class="external-link">zoo::na.locf()</a></code>, then
 a pure-base-R loop. Columns absent from <code>data</code> are silently ignored.
 Default <code>c("academic_affiliation", "cbsatype10")</code>.</p></dd>
 

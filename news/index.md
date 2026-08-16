@@ -1356,7 +1356,7 @@ Released 2026-06-02.
   - Stripped `install.packages('X')` instructions from ~70 error
     messages.
   - Replaced
-    [`ggforce::geom_circle`](https://ggforce.data-imaginist.com/reference/geom_circle.html)
+    [`ggforce::geom_circle`](https://rdrr.io/pkg/ggforce/man/geom_circle.html)
     in
     [`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)
     with a base-ggplot2 `geom_polygon` implementation (no `ggforce`

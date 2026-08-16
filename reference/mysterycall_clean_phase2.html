@@ -121,7 +121,7 @@ Supported values are "csv" (default) and "parquet".</p></dd>
 
 
 <p>All input column names are converted to <strong>lowercase snake_case</strong> by
-<code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code> <strong>unconditionally</strong> before <code>required_strings</code>
+<code><a href="https://rdrr.io/pkg/janitor/man/clean_names.html" class="external-link">janitor::clean_names()</a></code> <strong>unconditionally</strong> before <code>required_strings</code>
 pattern matching. Transformation cannot be disabled. Common examples:</p><table class="table table"><tr><td><strong>Input column name</strong></td><td><strong>After <code>clean_names()</code></strong></td></tr><tr><td><code>"Physician Information"</code></td><td><code>"physician_information"</code></td></tr><tr><td><code>"NPI Number"</code></td><td><code>"npi_number"</code></td></tr><tr><td><code>"Q1-2023 Revenue"</code></td><td><code>"q1_2023_revenue"</code></td></tr><tr><td><code>"able_to_contact_office"</code></td><td><code>"able_to_contact_office"</code> (unchanged)</td></tr><tr><td><code>"ContactOfficeYN"</code></td><td><code>"contact_office_yn"</code></td></tr></table><p>To preview the exact names your data will have, run
 <code>names(janitor::clean_names(your_data))</code> before calling this function,
 then write <code>required_strings</code> to match those transformed names.</p>

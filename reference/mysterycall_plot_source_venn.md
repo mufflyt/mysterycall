@@ -122,7 +122,7 @@ are vectors of provider identifiers (typically NPI strings). Example:
 
 ## See also
 
-[`ggforce::geom_circle()`](https://ggforce.data-imaginist.com/reference/geom_circle.html)
+[`ggforce::geom_circle()`](https://rdrr.io/pkg/ggforce/man/geom_circle.html)
 
 Other plotting:
 [`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md),

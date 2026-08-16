@@ -1,13 +1,13 @@
 # Multiple imputation by chained equations for missing call outcomes
 
 Performs multiple imputation using
-[`mice::mice()`](https://amices.org/mice/reference/mice.html) to handle
+[`mice::mice()`](https://rdrr.io/pkg/mice/man/mice.html) to handle
 missing values in the binary outcome column, fits a multilevel logistic
 GLMM
 ([`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md))
 to each imputed dataset, and pools fixed-effect estimates across
 imputations using Rubin's rules. Because
-[`mice::pool()`](https://amices.org/mice/reference/pool.html) does not
+[`mice::pool()`](https://rdrr.io/pkg/mice/man/pool.html) does not
 support `glmerMod` objects, pooling is implemented manually.
 
 ## Usage
@@ -62,7 +62,7 @@ mysterycall_impute_calls(
 - seed:
 
   Integer. Random seed for
-  [`mice::mice()`](https://amices.org/mice/reference/mice.html)
+  [`mice::mice()`](https://rdrr.io/pkg/mice/man/mice.html)
   reproducibility. Default `42L`.
 
 - conf_level:
@@ -147,8 +147,8 @@ installed, the function stops with an informative message. Install with
 
 [`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
 which is called on each imputed dataset;
-[`mice::mice()`](https://amices.org/mice/reference/mice.html) for
-imputation engine documentation.
+[`mice::mice()`](https://rdrr.io/pkg/mice/man/mice.html) for imputation
+engine documentation.
 
 Other outcomes:
 [`.as_positive_logical()`](https://mufflyt.github.io/mysterycall/reference/dot-as_positive_logical.md),

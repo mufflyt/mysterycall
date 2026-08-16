@@ -37,7 +37,7 @@ mysterycall_read_latest(
   [`list.files()`](https://rdrr.io/r/base/list.files.html)). `NULL`
   (default) matches every file. To match a literal string containing
   regex metacharacters, wrap it in
-  [`fixed()`](https://stringr.tidyverse.org/reference/modifiers.html)-style
+  [`fixed()`](https://rdrr.io/pkg/stringr/man/modifiers.html)-style
   escaping yourself or pass an anchored pattern such as
   `"^redcap_export_.*\\.csv$"`.
 
@@ -169,6 +169,6 @@ Sys.setFileTime(old_file, Sys.time() - 3600)
 
 # Return just the path to the newest match
 mysterycall_read_latest(dir, "\\.csv$", read = FALSE)
-#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-16 15:06, 0.0 days ago); beat 1 other candidate(s).
-#> [1] "/tmp/Rtmp1krZn0/redcap_218074aa2e53/export_2026-07-20.csv"
+#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-16 15:31, 0.0 days ago); beat 1 other candidate(s).
+#> [1] "/tmp/RtmpjrrNf3/redcap_211734d0378b/export_2026-07-20.csv"
 ```

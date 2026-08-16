@@ -3,8 +3,8 @@
 Formats a tibble of IRR estimates (typically the `$irr_table` slot from
 [`mysterycall_simple_poisson()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_simple_poisson.md))
 into a publication-ready
-[`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table with a
-combined "IRR (95% CI)" column and optional significance stars.
+[`gt::gt()`](https://rdrr.io/pkg/gt/man/gt.html) table with a combined
+"IRR (95% CI)" column and optional significance stars.
 
 ## Usage
 
@@ -42,13 +42,13 @@ mysterycall_irr_table(
 - title:
 
   Character scalar. Table title passed to
-  [`gt::tab_header()`](https://gt.rstudio.com/reference/tab_header.html).
+  [`gt::tab_header()`](https://rdrr.io/pkg/gt/man/tab_header.html).
   Default `"Incidence Rate Ratios"`.
 
 - subtitle:
 
   Character scalar or `NULL`. Optional subtitle passed to
-  [`gt::tab_header()`](https://gt.rstudio.com/reference/tab_header.html).
+  [`gt::tab_header()`](https://rdrr.io/pkg/gt/man/tab_header.html).
 
 - outcome_label:
 
@@ -68,7 +68,7 @@ mysterycall_irr_table(
 - footnote:
 
   Character scalar. Source note appended via
-  [`gt::tab_source_note()`](https://gt.rstudio.com/reference/tab_source_note.html).
+  [`gt::tab_source_note()`](https://rdrr.io/pkg/gt/man/tab_source_note.html).
   Default explains the star notation.
 
 ## Value
@@ -99,8 +99,7 @@ order:
 | \>= 0.05 | `""`  |
 
 **Bold rows** – rows where `p_value < 0.05` are styled with bold text
-via
-[`gt::tab_style()`](https://gt.rstudio.com/reference/tab_style.html).
+via [`gt::tab_style()`](https://rdrr.io/pkg/gt/man/tab_style.html).
 
 ## See also
 

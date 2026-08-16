@@ -353,11 +353,10 @@ always know which release supplied the estimates. For example:
 ### Step 5: Join the Data to the Block Groups
 
 Load the block group shapefile with
-[`sf::st_read()`](https://r-spatial.github.io/sf/reference/st_read.html)
-and join it to the demographic table on the 12-character GEOID. Always
-join on GEOID rather than the human-readable `NAME` column, because name
-strings differ across ACS vintages (e.g. county name capitalization
-changes).
+[`sf::st_read()`](https://rdrr.io/pkg/sf/man/st_read.html) and join it
+to the demographic table on the 12-character GEOID. Always join on GEOID
+rather than the human-readable `NAME` column, because name strings
+differ across ACS vintages (e.g. county name capitalization changes).
 
 Use
 [`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
@@ -398,7 +397,7 @@ readr::write_rds(bg_sf, "data/block_groups_with_demographics.rds")
 The `B02001` (Race) and `B03002` (Hispanic or Latino origin by race) ACS
 tables augment the sex-by-age estimates with race/ethnicity breakdowns
 at the block group level. Fetch them with the same
-[`censusapi::getCensus()`](https://www.hrecht.com/censusapi/reference/getCensus.html)
+[`censusapi::getCensus()`](https://rdrr.io/pkg/censusapi/man/getCensus.html)
 pattern and join to the block group table on GEOID.
 
 ``` r

@@ -136,9 +136,8 @@ mysterycall_clean_data(
 
   Character vector of column names to forward-fill
   (last-observation-carried-forward) before any recoding or renaming.
-  Uses
-  [`tidyr::fill()`](https://tidyr.tidyverse.org/reference/fill.html)
-  when the package is installed, then
+  Uses [`tidyr::fill()`](https://rdrr.io/pkg/tidyr/man/fill.html) when
+  the package is installed, then
   [`zoo::na.locf()`](https://rdrr.io/pkg/zoo/man/na.locf.html), then a
   pure-base-R loop. Columns absent from `data` are silently ignored.
   Default `c("academic_affiliation", "cbsatype10")`.

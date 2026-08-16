@@ -3,7 +3,7 @@
 Transparently writes a data frame to disk using either
 [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
 or
-[`arrow::write_parquet()`](https://arrow.apache.org/docs/r/reference/write_parquet.html).
+[`arrow::write_parquet()`](https://rdrr.io/pkg/arrow/man/write_parquet.html).
 For CSV format, writes are performed atomically to a temporary file then
 renamed to reduce the risk of file corruption during concurrent access.
 

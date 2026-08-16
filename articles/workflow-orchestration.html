@@ -656,7 +656,7 @@ balanced calling burden.
 appears in exactly one workbook:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read all workbooks back and combine</span></span>
-<span><span class="va">all_workbooks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">workbooks</span><span class="op">$</span><span class="va">file_paths</span>, <span class="fu">readxl</span><span class="fu">::</span><span class="va"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">)</span></span>
+<span><span class="va">all_workbooks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">workbooks</span><span class="op">$</span><span class="va">file_paths</span>, <span class="fu">readxl</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/readxl/man/read_excel.html" class="external-link">read_excel</a></span><span class="op">)</span></span>
 <span><span class="va">combined</span>      <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">all_workbooks</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check 1: same number of rows as the input</span></span>

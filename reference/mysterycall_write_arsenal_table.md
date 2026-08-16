@@ -13,7 +13,7 @@ mysterycall_write_arsenal_table(object, filename, output_dir = NULL)
 - object:
 
   A data frame (e.g. the output of
-  [`arsenal::summary.tableby()`](https://mayoverse.github.io/arsenal/reference/summary.tableby.html))
+  [`arsenal::summary.tableby()`](https://rdrr.io/pkg/arsenal/man/summary.tableby.html))
   to write. Must be a data frame – the function will error otherwise.
 
 - filename:

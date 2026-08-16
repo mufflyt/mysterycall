@@ -120,7 +120,7 @@ Each stage is idempotent when re-run on already-flagged data.
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
 applied to the same input with the same parameters always produces
 byte-identical output. Column reordering, name normalization via
-[`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html),
+[`janitor::clean_names()`](https://rdrr.io/pkg/janitor/man/clean_names.html),
 and NPI formatting are all deterministic.
 
 **Snapshot-based replay:**
