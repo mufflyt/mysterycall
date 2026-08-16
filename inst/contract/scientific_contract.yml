@@ -1,0 +1,325 @@
+# =============================================================================
+# mysterycall SCIENTIFIC CONTRACT
+# =============================================================================
+# The machine-readable estimand. Spec section 3.
+#
+# Every field carries a `status`:
+#
+#   DERIVED     The definition is already pinned somewhere in this repository.
+#               `evidence` cites the file that pins it. Changing the code
+#               without changing this file is a contract violation.
+#
+#   UNRESOLVED  The code does not pin this, or pins it only as a caller-supplied
+#               parameter. `question` states exactly what must be decided. These
+#               are STUDY DESIGN decisions and are deliberately left blank:
+#               inventing one here would fabricate the study's science, which is
+#               the failure this contract exists to prevent.
+#
+# `release_blocking: true` marks fields that section 103 makes a release gate.
+# tools/ci/check_scientific_contract.R fails while any of those is UNRESOLVED.
+#
+# Changing this file changes the study. The recorded SHA-256 in
+# inst/contract/scientific_contract.sha256 must be updated in the same commit,
+# which is what forces a contract change to be reviewed as a scientific change
+# rather than a refactor.
+# =============================================================================
+
+contract_version: "0.1.0"
+schema_version: "1.0.0"
+status: "DRAFT -- reverse-engineered from code and fixtures; unresolved fields require investigator decisions"
+
+# --- population and frame ----------------------------------------------------
+target_provider_population:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Which physicians is this study making a claim about? State specialty,
+    credential, and any board-certification requirement.
+
+target_practice_population:
+  status: UNRESOLVED
+  release_blocking: false
+  question: Which practices/sites are in scope, and are solo and group practices treated alike?
+
+sampling_frame:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Which roster, which snapshot, and which version defines the universe from
+    which providers were sampled?
+
+sampling_date:
+  status: UNRESOLVED
+  release_blocking: true
+  question: Date the frame was drawn. Section 97 requires source dates be explicit, not implicit.
+
+inclusion_criteria:
+  status: UNRESOLVED
+  release_blocking: true
+  question: Eligibility evaluated BEFORE any outcome is known. Distinct from the post-call exclusion reasons below.
+
+exclusion_criteria_prespecified:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Which exclusions were prespecified rather than decided after seeing data?
+    Section 85 requires each exclusion record whether it was prespecified.
+
+# --- units -------------------------------------------------------------------
+# Section 6 treats confusion between these as a primary failure mode.
+unit_of_sampling:
+  status: UNRESOLVED
+  release_blocking: true
+  question: Is a sampled unit the physician, the practice, or the practice-location?
+
+unit_of_calling:
+  status: DERIVED
+  value: "call"
+  evidence: "tests/fixtures/canonical_study_expected.json -> calls._comment"
+  detail: >-
+    One row per call. A provider with two office locations contributes a call
+    per location per arm: the fixture's P04 yields four calls.
+  release_blocking: true
+
+unit_of_analysis:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Call, provider, or practice? The fixture freezes call-level denominators
+    (acceptance_analytic_n = 23 rows), but that does not by itself establish
+    that inference is at the call level. Section 41 makes this a release gate.
+
+randomization_unit:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    What was randomized -- provider, practice, or call? The fixture shows P14
+    receiving a Medicaid arm only, so the design is not strictly paired-by-provider.
+
+clustering_unit:
+  status: UNRESOLVED
+  release_blocking: true
+  partially_derived:
+    evidence: "R/auto_model.R:31-32 -- `random_intercept`, 'Grouping column for the physician random intercept'"
+    detail: >-
+      The model takes the grouping column as a CALLER-SUPPLIED parameter; it is
+      not fixed in code. Repository-wide the most common formula term is
+      (1 | state), with (1 | physician) and Matched_Pair_ID also present.
+  question: >-
+    Which grouping variable does the PRIMARY analysis cluster on? A parameter
+    with several values in use is not a contract.
+
+# --- arms and scripts --------------------------------------------------------
+experimental_arms:
+  status: DERIVED
+  value: ["Medicaid", "Blue Cross/Blue Shield"]
+  evidence: "tests/fixtures/canonical_study_expected.json -> calls.by_arm"
+  release_blocking: true
+
+arm_differences_authorized:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 12: the two scripts must differ ONLY in authorized payer language.
+    List every field authorized to differ so the equivalence test can assert it.
+
+script_versions:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 13: approved script version identifiers and their SHA-256s. Every
+    call record must reference the script version used.
+
+# --- outcomes ----------------------------------------------------------------
+primary_outcome:
+  status: DERIVED
+  value: "business_days_until_appointment"
+  evidence: "R/business_days.R:3-6; tests/fixtures/canonical_study_expected.json -> wait_times._comment"
+  detail: "The fixture states plainly that business days are primary and calendar days the sensitivity comparator."
+  release_blocking: true
+
+wait_time_definition:
+  status: DERIVED
+  value: "Mon-Fri working days, excluding US federal holidays, between the call date and the offered appointment date"
+  evidence: "R/business_days.R:4-6"
+  release_blocking: true
+
+business_or_calendar_day_convention:
+  status: DERIVED
+  value: "business days primary; calendar days retained as sensitivity comparator"
+  evidence: "tests/fixtures/canonical_study_expected.json -> wait_times (both frozen, to catch a silent swap)"
+  release_blocking: true
+
+wait_time_endpoint_inclusivity:
+  status: UNRESOLVED
+  release_blocking: true
+  partially_derived:
+    evidence: "tests/testthat/test-scientific-wait-time-reference.R -- verified against 400 random date pairs"
+    observed_rule: "wait = max(0, business days in the CLOSED interval [call, appt] - 1)"
+    detail: >-
+      Reverse-engineered, not documented: R/business_days.R says only "between
+      the call date and the offered appointment date", which does not
+      distinguish the candidate conventions. bizdays adjusts the start forward
+      and the end backward onto business days before counting, which is what the
+      identity above captures. The conventions agree whenever BOTH endpoints are
+      working days, so the ambiguity is invisible in ordinary data and only
+      appears when a call or appointment lands on a weekend or holiday.
+    consequence: >-
+      A SATURDAY call seen the following Monday scores 0 business days --
+      identical to a same-day appointment. If weekend call dates occur in the
+      real study, those waits are undercounted.
+  question: >-
+    Ratify or change the observed rule. Specifically: should a call logged on a
+    non-working day count the wait from the call date, or from the next working
+    day? Section 76 requires weekend/invalid call dates to be tested for, so the
+    case is reachable rather than hypothetical.
+
+holiday_calendar_version:
+  status: UNRESOLVED
+  release_blocking: false
+  question: >-
+    R/business_days.R builds US federal holidays programmatically. Pin the year
+    range and rule set so a change to the calendar is a reviewable event.
+
+appointment_definition:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 26: EARLIEST OFFERED, appointment chosen, or appointment booked?
+    These differ whenever a caller declines the first offer.
+
+secondary_outcomes:
+  status: UNRESOLVED
+  release_blocking: false
+  question: List secondary endpoints, so they cannot silently overwrite the primary one (section 68).
+
+# --- acceptance and status semantics ----------------------------------------
+payer_acceptance_definition:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 15: does "accepts Medicaid" mean the PRACTICE accepts it or the
+    NAMED PHYSICIAN accepts it? These must not collapse into one binary unless
+    this contract says so explicitly.
+
+named_vs_alternate_provider:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 16: if the named physician is unavailable but a partner or APP is,
+    does that count as access? The primary endpoint must not silently substitute.
+
+provider_active_definition:
+  status: UNRESOLVED
+  release_blocking: true
+  question: Section 17-19. What evidence establishes "active at listed location", and what remains unresolved?
+
+listed_location_definition:
+  status: UNRESOLVED
+  release_blocking: true
+  question: Does "not confirmed at listed location" ever equal "inactive provider"? It must not by default.
+
+# --- protocol ----------------------------------------------------------------
+call_attempt_policy:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 21-22: maximum attempts, minimum separation, permitted hours.
+    Attempt intensity must be symmetric across arms or effort becomes a
+    second, unmeasured treatment.
+
+callback_policy:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 23: does the access clock start at first attempt, first successful
+    contact, callback, or scheduling decision? The code must not pick whichever
+    date is easiest to compute.
+
+voicemail_policy:
+  status: UNRESOLVED
+  release_blocking: true
+  question: How is voicemail dispositioned, and does it consume an attempt?
+
+# --- denominators, missingness, exclusions ----------------------------------
+exclusion_vocabulary:
+  status: DERIVED
+  value:
+    - "Able to contact"
+    - "Unable to contact office"
+    - "Wrong number"
+    - "Physician retired"
+    - "Physician moved practices"
+  evidence: "tests/fixtures/canonical_study_expected.json -> exclusions.allowed_vocabulary"
+  detail: "Closed vocabulary. Every excluded row carries a reason; no row is excluded blank."
+  release_blocking: true
+
+denominator_rules:
+  status: DERIVED
+  value:
+    acceptance_analytic_n: 23
+    wait_time_analytic_n: 20
+    reconciliation: "contactable + excluded == total calls"
+  evidence: "tests/fixtures/canonical_study_expected.json -> denominators, invariants"
+  detail: >-
+    Frozen against the canonical fixture only. Section 44 additionally requires
+    every reported percentage to carry its numerator, denominator and
+    denominator definition.
+  release_blocking: true
+
+missingness_states:
+  status: DERIVED
+  value: "appointment_offered is three-valued: TRUE / FALSE / NA"
+  evidence: "tests/fixtures/canonical_study_expected.json -> outcomes._comment"
+  detail: >-
+    NA means reached but unresolved and must NEVER silently become FALSE.
+    Section 28 additionally requires wait = 0 (same-day) to stay distinct from
+    missing, refusal, unreachable and not-accepted.
+  release_blocking: true
+
+analysis_population:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Section 67: intention-to-call, successfully contacted, provider-confirmed,
+    payer-evaluable, appointment-evaluable, or paired-complete? Numerator and
+    denominator must not silently use different populations.
+
+# --- inference ---------------------------------------------------------------
+model_family:
+  status: DERIVED
+  value: "Poisson or negative binomial, selected by overdispersion"
+  evidence: "R/auto_model.R:48-50 -- poisson_phi, model_chosen"
+  release_blocking: false
+
+confidence_interval_method:
+  status: UNRESOLVED
+  release_blocking: true
+  question: >-
+    Wald, profile likelihood, or bootstrap? Only confint.default (Wald) appears
+    in R/, and not clearly on the primary path. Section 43 requires an
+    independent reference implementation to agree with whatever is chosen.
+
+weighting_rules:
+  status: UNRESOLVED
+  release_blocking: false
+  question: Is any sampling weight applied? If none, state "unweighted" explicitly.
+
+sensitivity_analyses:
+  status: UNRESOLVED
+  release_blocking: false
+  partially_derived:
+    evidence: "tests/fixtures/canonical_study_expected.json -> wait_times.calendar_days"
+    detail: "Calendar-day recomputation is already frozen as a comparator."
+  question: Enumerate the full prespecified sensitivity set.
+
+# --- frozen qualitative conclusions -----------------------------------------
+# Section 81: exact statistics may move within tolerance; these may not.
+frozen_directions:
+  status: DERIVED
+  value:
+    medicaid_wait_longer: true
+    medicaid_acceptance_lower: true
+    calendar_ge_business_every_row: true
+  evidence: "tests/fixtures/canonical_study_expected.json -> directions"
+  release_blocking: true
