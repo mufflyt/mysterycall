@@ -1,0 +1,127 @@
+# Tier A scientific gate. Runs on every pull request.
+#
+# The nightly suite already runs these checks, but a denominator change caught
+# at 21:17 is a denominator change that merged hours earlier and that someone
+# has already built on. This job exists to move the deterministic scientific
+# invariants to the point where they are cheap to act on.
+#
+# Deliberately excluded: the mutation campaign, which takes roughly 45 minutes
+# because it reruns the whole study-integrity suite thirteen times. Making that
+# a PR gate would push people to merge without waiting, which is worse than
+# running it nightly. Tier A is what can be checked in minutes; Tier B is what
+# needs an hour.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+name: scientific-pr-gate
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scientific-pr-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  contract:
+    name: scientific contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install yaml and digest
+        run: install.packages(c("yaml", "digest"))
+        shell: Rscript {0}
+      # Structure and hash. Editing the contract without re-recording its hash
+      # in the same commit fails here, which is what makes a change to the
+      # estimand a reviewed event rather than a diff nobody opened.
+      - name: Validate the scientific contract
+        run: Rscript tools/ci/check_scientific_contract.R
+
+      # Every study contract present in the repository must also validate: a
+      # study may choose from the allowed set, but not invent a value, and not
+      # leave a per-study field unanswered.
+      - name: Validate every study contract
+        shell: bash
+        run: |
+          shopt -s nullglob
+          found=0
+          for f in inst/contract/studies/*.yml; do
+            id=$(basename "$f" .yml)
+            [ "$id" = "TEMPLATE" ] && continue
+            found=$((found+1))
+            echo "--- $id ---"
+            Rscript tools/ci/check_scientific_contract.R --study "$id"
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "::notice::no study contracts yet; only the schema was validated"
+          fi
+
+  study-integrity:
+    name: study integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NOT_CRAN: 'true'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::testthat, any::jsonlite
+          needs: check
+          cache-version: 3
+
+      - name: Run the study-integrity contracts
+        run: |
+          devtools::load_all()
+          files <- c(
+            "test-canonical-study-denominators.R",
+            "test-phase-column-contract.R",
+            "test-study-schema.R",
+            "test-study-roster-identity.R",
+            "test-study-joins-and-arms.R",
+            "test-study-callers-exclusions.R",
+            "test-study-outcome-and-wait.R",
+            "test-study-models.R",
+            "test-study-invariance-and-rng.R"
+          )
+          bad <- 0L; total <- 0L; missing <- character(0)
+          for (f in files) {
+            path <- file.path("tests", "testthat", f)
+            if (!file.exists(path)) { missing <- c(missing, f); next }
+            r <- as.data.frame(testthat::test_file(path, reporter = "silent"))
+            cat(sprintf("  %-44s failed=%d error=%d passed=%d\n",
+                        f, sum(r$failed), sum(r$error), sum(r$passed)))
+            bad   <- bad + sum(r$failed) + sum(r$error)
+            total <- total + sum(r$passed)
+          }
+          if (length(missing)) {
+            cat("::error::study-integrity file(s) not found: ",
+                paste(missing, collapse = ", "), "\n", sep = "")
+            quit(status = 1L)
+          }
+          cat(sprintf("\nassertions passed: %d\n", total))
+          if (bad > 0L) {
+            cat("::error::", bad, " study-integrity failure(s). A denominator or ",
+                "contract change is either a defect or needs an intentional ",
+                "fixture update in the same commit.\n", sep = "")
+            quit(status = 1L)
+          }
+          # A file that stops being discovered must fail rather than look green.
+          if (total < 450L) {
+            cat("::error::only ", total, " assertions ran; expected 450+. ",
+                "A test file was probably not collected.\n", sep = "")
+            quit(status = 1L)
+          }
+        shell: Rscript {0}
