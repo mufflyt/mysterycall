@@ -209,9 +209,15 @@ jobs:
         with: {use-public-rspm: true}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr, any::xml2
+          extra-packages: any::covr, any::xml2, any::jsonlite
           needs: coverage
           cache-version: 3
+
+      # Regression guard runs first: a slow slide is caught while the number is
+      # still comfortably above the floor, and per-subsystem coverage is
+      # reported so "78% overall" cannot hide an untested exclusion path.
+      - name: Coverage regression guard
+        run: Rscript .github/scripts/check-coverage-regression.R
 
       - name: Measure coverage
         run: |
