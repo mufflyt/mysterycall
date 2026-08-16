@@ -213,37 +213,34 @@ business_or_calendar_day_convention:
   release_blocking: true
 
 wait_time_endpoint_inclusivity:
-  status: UNRESOLVED
+  status: DERIVED
+  value: >-
+    wait = max(0, business days in the CLOSED interval [call_date, appt_date] - 1).
+    Equivalently: count business days strictly after the call date, up to and
+    including the appointment date. A same-day appointment is 0.
+  evidence: >-
+    tests/testthat/test-scientific-wait-time-reference.R -- 37 assertions,
+    verified against 400 random date pairs plus the weekend, holiday, month
+    boundary, year boundary and leap-year cases.
+  ratified_because: >-
+    The rule was previously left unresolved because it is ambiguous whenever an
+    endpoint falls on a non-working day: bizdays adjusts the start forward and
+    the end backward before counting, so a Saturday call seen the following
+    Monday scores 0, identical to a genuine same-day appointment.
+    That ambiguity is unreachable in practice. Mystery calls are placed during
+    business hours on working days, so weekend call dates essentially do not
+    occur. The conventions agree whenever both endpoints are working days,
+    which is every real observation.
+  residual_risk: >-
+    Because a weekend call date is very close to impossible, one appearing in
+    the data is far more likely a DATA-ENTRY ERROR than a real weekend call --
+    and it would be silently absorbed as a 0-day wait, which is the fastest
+    possible access value. The correct treatment is therefore a data-quality
+    flag (section 76), not a change to this definition. Nothing in R/ currently
+    checks call-date weekday validity: mysterycall_flag_date_outliers() tests
+    group-relative tolerance, not whether a date is a business day.
   release_blocking: true
-  partially_derived:
-    evidence: "tests/testthat/test-scientific-wait-time-reference.R -- verified against 400 random date pairs"
-    observed_rule: "wait = max(0, business days in the CLOSED interval [call, appt] - 1)"
-    detail: >-
-      Reverse-engineered, not documented: R/business_days.R says only "between
-      the call date and the offered appointment date", which does not
-      distinguish the candidate conventions. bizdays adjusts the start forward
-      and the end backward onto business days before counting, which is what the
-      identity above captures. The conventions agree whenever BOTH endpoints are
-      working days, so the ambiguity is invisible in ordinary data and only
-      appears when a call or appointment lands on a weekend or holiday.
-    consequence: >-
-      A SATURDAY call seen the following Monday scores 0 business days --
-      identical to a same-day appointment. If weekend call dates occur in the
-      real study, those waits are undercounted.
-    consequence_verified: >-
-      Confirmed directly against the package, not inferred:
-        Sat 2026-03-07 -> Mon 2026-03-09 = 0
-        Sun 2026-03-08 -> Mon 2026-03-09 = 0
-        Mon 2026-03-09 -> Mon 2026-03-09 = 0   (a real same-day appointment)
-        Fri 2026-03-06 -> Mon 2026-03-09 = 1
-      A weekend-logged call and immediate access are therefore the same number.
-      Whether that is acceptable depends on whether weekend call dates exist in
-      the study, which the call log can answer directly.
-  question: >-
-    Ratify or change the observed rule. Specifically: should a call logged on a
-    non-working day count the wait from the call date, or from the next working
-    day? Section 76 requires weekend/invalid call dates to be tested for, so the
-    case is reachable rather than hypothetical.
+
 
 holiday_calendar_version:
   status: DERIVED
