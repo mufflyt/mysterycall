@@ -356,7 +356,7 @@ jobs:
             quit(status = 1L)
           }
           if (total < 470L) {
-            cat("::error::only ", total, " assertions ran; expected 450+. ",
+            cat("::error::only ", total, " assertions ran; expected 470+. ",
                 "A test file was probably not discovered.\n", sep = "")
             quit(status = 1L)
           }
