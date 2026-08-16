@@ -14,8 +14,8 @@ mysterycall_crs_albers_conus()
 
 ## Value
 
-An [`sf::st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) object
-(EPSG:5070).
+An [`sf::st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html)
+object (EPSG:5070).
 
 ## See also
 

@@ -3,7 +3,7 @@
 Transparently reads a dataset from disk using either
 [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
 or
-[`arrow::read_parquet()`](https://rdrr.io/pkg/arrow/man/read_parquet.html)
+[`arrow::read_parquet()`](https://arrow.apache.org/docs/r/reference/read_parquet.html)
 based on the file extension or the `format` argument. If an `npi` column
 is present and numeric, it is automatically coerced to character to
 prevent loss of leading zeros or precision.

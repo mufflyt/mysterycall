@@ -334,7 +334,7 @@ insurance type called. <code><a href="../reference/mysterycall_clean_phase1.html
 performs:</p>
 <ul>
 <li>Column name standardization via
-<code><a href="https://rdrr.io/pkg/janitor/man/clean_names.html" class="external-link">janitor::clean_names()</a></code>
+<code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code>
 </li>
 <li>Text squishing and phone formatting</li>
 <li>NPI preservation and random-ID generation for rows without NPIs</li>
@@ -532,7 +532,7 @@ subspecialty assignment.</p>
 <span>  <span class="va">phase1</span><span class="op">$</span><span class="va">phone_number</span>,</span>
 <span>  practice_state <span class="op">=</span> <span class="va">phase1</span><span class="op">$</span><span class="va">state_name</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">phase1</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">phase1</span>, <span class="va">phone_ok</span><span class="op">)</span></span>
+<span><span class="va">phase1</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">phase1</span>, <span class="va">phone_ok</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 4. Normalize addresses</span></span>
 <span><span class="va">phase1</span><span class="op">$</span><span class="va">addr1_clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">phase1</span>, <span class="op">{</span></span>

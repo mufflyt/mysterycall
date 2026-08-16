@@ -503,7 +503,7 @@
 <ul><li>
 <p><strong>CRAN-readiness fixes.</strong> <code>R CMD check --as-cran</code> now passes with zero errors, zero warnings, and only the standard “New submission” NOTE. Highlights:</p>
 <ul><li>Stripped <code>install.packages('X')</code> instructions from ~70 error messages.</li>
-<li>Replaced <code><a href="https://rdrr.io/pkg/ggforce/man/geom_circle.html" class="external-link">ggforce::geom_circle</a></code> in <code><a href="../reference/mysterycall_plot_source_venn.html">mysterycall_plot_source_venn()</a></code> with a base-ggplot2 <code>geom_polygon</code> implementation (no <code>ggforce</code> dep).</li>
+<li>Replaced <code><a href="https://ggforce.data-imaginist.com/reference/geom_circle.html" class="external-link">ggforce::geom_circle</a></code> in <code><a href="../reference/mysterycall_plot_source_venn.html">mysterycall_plot_source_venn()</a></code> with a base-ggplot2 <code>geom_polygon</code> implementation (no <code>ggforce</code> dep).</li>
 <li>Replaced <code><a href="https://rdrr.io/pkg/tigris/man/fips_codes.html" class="external-link">tigris::fips_codes</a></code> example with a hardcoded vector (no <code>tigris</code> dep).</li>
 <li>Fixed 301/404 URLs (HERE developer portal, ACGME, USDA ERS).</li>
 <li>Soft-fail in <code><a href="../reference/mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code> when optional Suggests are missing.</li>

@@ -1,7 +1,7 @@
 # Write an Arsenal table to a PDF file
 
 Utility wrapper around
-[`arsenal::write2pdf`](https://rdrr.io/pkg/arsenal/man/write2specific.html)
+[`arsenal::write2pdf`](https://mayoverse.github.io/arsenal/reference/write2specific.html)
 to save a table object as a PDF document.
 
 ## Usage

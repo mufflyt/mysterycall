@@ -72,7 +72,7 @@ A `data.frame` with columns:
 The data frame is suitable for passing directly to
 [`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html),
 [`flextable::flextable()`](https://davidgohel.github.io/flextable/reference/flextable.html),
-or [`gt::gt()`](https://rdrr.io/pkg/gt/man/gt.html) for Word/HTML
+or [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) for Word/HTML
 output.
 
 ## Details

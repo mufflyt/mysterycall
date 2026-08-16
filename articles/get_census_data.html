@@ -368,7 +368,7 @@ acs_vars &lt;- acs_vars %&gt;%
 <div class="section level5">
 <h5 id="race-and-ethnicity-variables">Race and Ethnicity Variables<a class="anchor" aria-label="anchor" href="#race-and-ethnicity-variables"></a>
 </h5>
-<pre><code><span><span class="va">acs_raceeth_vars</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/censusapi/man/listCensusMetadata.html" class="external-link">listCensusMetadata</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"acs/acs5"</span>, </span>
+<pre><code><span><span class="va">acs_raceeth_vars</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://www.hrecht.com/censusapi/reference/listCensusMetadata.html" class="external-link">listCensusMetadata</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"acs/acs5"</span>, </span>
 <span>      vintage <span class="op">=</span> <span class="fl">2019</span>, group <span class="op">=</span> <span class="st">"B03002"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="st">"data/acs_raceeth_vars.csv"</span><span class="op">)</span></span></code></pre>
 </div>
@@ -470,7 +470,7 @@ further analysis.<a class="anchor" aria-label="anchor" href="#step-4-the-functio
 <div class="section level3">
 <h3 id="step-5-join-the-data-to-the-block-groups">Step 5: Join the Data to the Block Groups<a class="anchor" aria-label="anchor" href="#step-5-join-the-data-to-the-block-groups"></a>
 </h3>
-<p>Load the block group shapefile with <code><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">sf::st_read()</a></code> and
+<p>Load the block group shapefile with <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> and
 join it to the demographic table on the 12-character GEOID. Always join
 on GEOID rather than the human-readable <code>NAME</code> column,
 because name strings differ across ACS vintages (e.g. county name
@@ -480,7 +480,7 @@ mismatches (integer vs. character) and to verify coverage — every block
 group in the demographic table should find a matching geometry.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the block group shapefile (replace path with your actual file)</span></span>
-<span><span class="va">bg_shape</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"data/shp/block_group/"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">bg_shape</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"data/shp/block_group/"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">GEOID</span>, <span class="va">geometry</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Coerce GEOID to character on both sides before joining</span></span>
@@ -498,10 +498,10 @@ group in the demographic table should find a matching geometry.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert the joined data frame to an sf object</span></span>
-<span><span class="va">bg_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">bg_with_geometry</span><span class="op">)</span></span>
+<span><span class="va">bg_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">bg_with_geometry</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the spatial object for the isochrone intersection step</span></span>
-<span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">bg_sf</span>, <span class="st">"data/block_groups_with_demographics.gpkg"</span>, delete_dsn <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">bg_sf</span>, <span class="st">"data/block_groups_with_demographics.gpkg"</span>, delete_dsn <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">write_rds</a></span><span class="op">(</span><span class="va">bg_sf</span>, <span class="st">"data/block_groups_with_demographics.rds"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -510,11 +510,11 @@ group in the demographic table should find a matching geometry.</p>
 <p>The <code>B02001</code> (Race) and <code>B03002</code> (Hispanic or
 Latino origin by race) ACS tables augment the sex-by-age estimates with
 race/ethnicity breakdowns at the block group level. Fetch them with the
-same <code><a href="https://rdrr.io/pkg/censusapi/man/getCensus.html" class="external-link">censusapi::getCensus()</a></code> pattern and join to the block
+same <code><a href="https://www.hrecht.com/censusapi/reference/getCensus.html" class="external-link">censusapi::getCensus()</a></code> pattern and join to the block
 group table on GEOID.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch race table for a single state (repeat across all FIPS codes)</span></span>
-<span><span class="va">race_raw</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/censusapi/man/getCensus.html" class="external-link">getCensus</a></span><span class="op">(</span></span>
+<span><span class="va">race_raw</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://www.hrecht.com/censusapi/reference/getCensus.html" class="external-link">getCensus</a></span><span class="op">(</span></span>
 <span>  name    <span class="op">=</span> <span class="st">"acs/acs5"</span>,</span>
 <span>  vintage <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  vars    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NAME"</span>,</span>
@@ -547,7 +547,7 @@ group table on GEOID.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Fetch Hispanic origin table (B03002)</span></span>
-<span><span class="va">hisp_raw</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/censusapi/man/getCensus.html" class="external-link">getCensus</a></span><span class="op">(</span></span>
+<span><span class="va">hisp_raw</span> <span class="op">&lt;-</span> <span class="fu">censusapi</span><span class="fu">::</span><span class="fu"><a href="https://www.hrecht.com/censusapi/reference/getCensus.html" class="external-link">getCensus</a></span><span class="op">(</span></span>
 <span>  name    <span class="op">=</span> <span class="st">"acs/acs5"</span>,</span>
 <span>  vintage <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  vars    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B03002_001E"</span>,   <span class="co"># total</span></span>

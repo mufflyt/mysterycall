@@ -39,7 +39,7 @@ mysterycall_table_overall(
 - label_translations:
 
   Optional named list mapping column names to display labels, passed to
-  [`arsenal::summary.tableby()`](https://rdrr.io/pkg/arsenal/man/summary.tableby.html).
+  [`arsenal::summary.tableby()`](https://mayoverse.github.io/arsenal/reference/summary.tableby.html).
 
 ## Value
 

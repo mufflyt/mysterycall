@@ -81,11 +81,11 @@ manually."><meta property="og:image" content="https://github.com/mufflyt/mystery
     </div>
 
     <div class="ref-description section level2">
-    <p>Performs multiple imputation using <code><a href="https://rdrr.io/pkg/mice/man/mice.html" class="external-link">mice::mice()</a></code> to handle missing values
+    <p>Performs multiple imputation using <code><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice::mice()</a></code> to handle missing values
 in the binary outcome column, fits a multilevel logistic GLMM
 (<code><a href="mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code>) to each imputed dataset, and pools
 fixed-effect estimates across imputations using Rubin's rules. Because
-<code><a href="https://rdrr.io/pkg/mice/man/pool.html" class="external-link">mice::pool()</a></code> does not support <code>glmerMod</code> objects, pooling is implemented
+<code><a href="https://amices.org/mice/reference/pool.html" class="external-link">mice::pool()</a></code> does not support <code>glmerMod</code> objects, pooling is implemented
 manually.</p>
     </div>
 
@@ -141,7 +141,7 @@ precision.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Integer. Random seed for <code><a href="https://rdrr.io/pkg/mice/man/mice.html" class="external-link">mice::mice()</a></code> reproducibility.
+<dd><p>Integer. Random seed for <code><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice::mice()</a></code> reproducibility.
 Default <code>42L</code>.</p></dd>
 
 
@@ -210,7 +210,7 @@ the function stops with an informative message. Install with
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code> which is called on each imputed
-dataset; <code><a href="https://rdrr.io/pkg/mice/man/mice.html" class="external-link">mice::mice()</a></code> for imputation engine documentation.</p>
+dataset; <code><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice::mice()</a></code> for imputation engine documentation.</p>
 <p>Other outcomes:
 <code><a href="dot-as_positive_logical.html">.as_positive_logical()</a></code>,
 <code><a href="dot-disp_rate_ci.html">.disp_rate_ci()</a></code>,

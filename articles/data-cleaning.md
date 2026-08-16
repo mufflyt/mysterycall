@@ -211,7 +211,7 @@ insurance type called.
 performs:
 
 - Column name standardization via
-  [`janitor::clean_names()`](https://rdrr.io/pkg/janitor/man/clean_names.html)
+  [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
 - Text squishing and phone formatting
 - NPI preservation and random-ID generation for rows without NPIs
 - Optional row duplication for insurance pairing
