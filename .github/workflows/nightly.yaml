@@ -263,6 +263,70 @@ jobs:
         run: Rscript .github/scripts/check-data-integrity.R
 
   # ---------------------------------------------------------------------------
+  # 5b. Study integrity: the canonical synthetic study and its contracts.
+  #     Schema, roster identity, NPI reconciliation, join conservation, call
+  #     identity, arm coding and balance, callers, reliability, exclusion
+  #     vocabulary and reconciliation, and the frozen denominators. These run
+  #     in the ordinary suite too; the separate job exists so a denominator
+  #     change is reported as its own failure rather than as one line inside a
+  #     12,000-assertion run.
+  # ---------------------------------------------------------------------------
+  study-integrity:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NOT_CRAN: 'true'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::testthat, any::jsonlite
+          needs: check
+          cache-version: 3
+      - name: Run study-integrity contracts
+        run: |
+          devtools::load_all()
+          files <- c(
+            "test-canonical-study-denominators.R",
+            "test-phase-column-contract.R",
+            "test-study-schema.R",
+            "test-study-roster-identity.R",
+            "test-study-joins-and-arms.R",
+            "test-study-callers-exclusions.R"
+          )
+          bad <- 0L; total <- 0L
+          for (f in files) {
+            path <- file.path("tests", "testthat", f)
+            if (!file.exists(path)) {
+              cat("::error::missing study-integrity file: ", f, "\n", sep = "")
+              bad <- bad + 1L; next
+            }
+            r <- as.data.frame(testthat::test_file(path, reporter = "silent"))
+            cat(sprintf("  %-44s failed=%d error=%d passed=%d\n",
+                        f, sum(r$failed), sum(r$error), sum(r$passed)))
+            bad   <- bad + sum(r$failed) + sum(r$error)
+            total <- total + sum(r$passed)
+          }
+          cat(sprintf("\nstudy-integrity assertions passed: %d\n", total))
+          if (bad > 0L) {
+            cat("::error::", bad, " study-integrity failure(s). A denominator or ",
+                "contract change is either a defect or needs an intentional ",
+                "fixture update.\n", sep = "")
+            quit(status = 1L)
+          }
+          if (total < 200L) {
+            cat("::error::only ", total, " assertions ran; expected 200+. ",
+                "A test file was probably not discovered.\n", sep = "")
+            quit(status = 1L)
+          }
+        shell: Rscript {0}
+
+  # ---------------------------------------------------------------------------
   # 6. Source portability: encoding, line endings, stray files.
   # ---------------------------------------------------------------------------
   portability:
@@ -549,7 +613,7 @@ jobs:
   # 15. Aggregate. One issue per failed night, not one per job.
   # ---------------------------------------------------------------------------
   summary:
-    needs: [gate, check, tests, coverage, doc-drift, data-integrity,
+    needs: [gate, check, tests, coverage, doc-drift, data-integrity, study-integrity,
             portability, dependencies, vignettes, pkgdown, urls, hygiene,
             install-clean, spelling, lint]
     if: always() && needs.gate.outputs.run == 'true'
@@ -571,6 +635,7 @@ jobs:
             echo "| Coverage | ${{ needs.coverage.result }} | yes |"
             echo "| Doc / NAMESPACE drift | ${{ needs['doc-drift'].result }} | yes |"
             echo "| Data integrity | ${{ needs['data-integrity'].result }} | yes |"
+            echo "| Study integrity | ${{ needs['study-integrity'].result }} | yes |"
             echo "| Portability | ${{ needs.portability.result }} | yes |"
             echo "| Dependencies | ${{ needs.dependencies.result }} | yes |"
             echo "| Vignettes | ${{ needs.vignettes.result }} | yes |"
@@ -589,6 +654,7 @@ jobs:
             "coverage:${{ needs.coverage.result }}" \
             "doc-drift:${{ needs['doc-drift'].result }}" \
             "data-integrity:${{ needs['data-integrity'].result }}" \
+            "study-integrity:${{ needs['study-integrity'].result }}" \
             "portability:${{ needs.portability.result }}" \
             "dependencies:${{ needs.dependencies.result }}" \
             "vignettes:${{ needs.vignettes.result }}" \
