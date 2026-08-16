@@ -153,9 +153,26 @@ business_or_calendar_day_convention:
 wait_time_endpoint_inclusivity:
   status: UNRESOLVED
   release_blocking: true
+  partially_derived:
+    evidence: "tests/testthat/test-scientific-wait-time-reference.R -- verified against 400 random date pairs"
+    observed_rule: "wait = max(0, business days in the CLOSED interval [call, appt] - 1)"
+    detail: >-
+      Reverse-engineered, not documented: R/business_days.R says only "between
+      the call date and the offered appointment date", which does not
+      distinguish the candidate conventions. bizdays adjusts the start forward
+      and the end backward onto business days before counting, which is what the
+      identity above captures. The conventions agree whenever BOTH endpoints are
+      working days, so the ambiguity is invisible in ordinary data and only
+      appears when a call or appointment lands on a weekend or holiday.
+    consequence: >-
+      A SATURDAY call seen the following Monday scores 0 business days --
+      identical to a same-day appointment. If weekend call dates occur in the
+      real study, those waits are undercounted.
   question: >-
-    Is the call date counted, the appointment date counted, both, or neither?
-    A same-day appointment must be 0 -- confirm which convention produces that.
+    Ratify or change the observed rule. Specifically: should a call logged on a
+    non-working day count the wait from the call date, or from the next working
+    day? Section 76 requires weekend/invalid call dates to be tested for, so the
+    case is reachable rather than hypothetical.
 
 holiday_calendar_version:
   status: UNRESOLVED
