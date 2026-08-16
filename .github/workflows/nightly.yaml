@@ -417,6 +417,46 @@ jobs:
         run: Rscript .github/scripts/check-scientific-mutations.R
 
   # ---------------------------------------------------------------------------
+  # 5d. Provenance, scientific diff, and CI-of-CI (spec sections 81, 83, 100).
+  #
+  #     Emits the manifest that makes a result attributable, diffs tonight's
+  #     headline numbers against the accepted baseline, and finally asserts
+  #     that the scientific machinery exists and is wired -- because a green
+  #     job is not evidence that anything was checked.
+  # ---------------------------------------------------------------------------
+  provenance-and-diff:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NOT_CRAN: 'true'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install jsonlite and digest
+        run: install.packages(c("jsonlite", "digest"))
+        shell: Rscript {0}
+
+      # Runs first: if the machinery is missing there is no point diffing.
+      - name: CI-of-CI
+        run: Rscript .github/scripts/check-ci-of-ci.R
+
+      - name: Emit provenance manifest
+        run: Rscript .github/scripts/emit-provenance.R provenance.json
+
+      - name: Scientific diff against the accepted baseline
+        run: Rscript .github/scripts/check-scientific-diff.R
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: provenance-manifest
+          path: provenance.json
+          retention-days: 90
+
+  # ---------------------------------------------------------------------------
   # 6. Source portability: encoding, line endings, stray files.
   # ---------------------------------------------------------------------------
   portability:
@@ -727,7 +767,7 @@ jobs:
   # 15. Aggregate. One issue per failed night, not one per job.
   # ---------------------------------------------------------------------------
   summary:
-    needs: [gate, scientific-contract, scientific-mutations, check, tests, coverage, doc-drift, data-integrity, study-integrity,
+    needs: [gate, scientific-contract, scientific-mutations, provenance-and-diff, check, tests, coverage, doc-drift, data-integrity, study-integrity,
             portability, dependencies, vignettes, pkgdown, urls, hygiene,
             install-clean, spelling, lint]
     if: always() && needs.gate.outputs.run == 'true'
@@ -753,6 +793,7 @@ jobs:
             echo "| Study integrity | ${{ needs['study-integrity'].result }} | yes |"
             echo "| Scientific contract | ${{ needs['scientific-contract'].result }} | yes |"
             echo "| Scientific mutations | ${{ needs['scientific-mutations'].result }} | yes |"
+            echo "| Provenance / diff / CI-of-CI | ${{ needs['provenance-and-diff'].result }} | yes |"
             echo "| Portability | ${{ needs.portability.result }} | yes |"
             echo "| Dependencies | ${{ needs.dependencies.result }} | yes |"
             echo "| Vignettes | ${{ needs.vignettes.result }} | yes |"
@@ -774,6 +815,7 @@ jobs:
             "study-integrity:${{ needs['study-integrity'].result }}" \
             "scientific-contract:${{ needs['scientific-contract'].result }}" \
             "scientific-mutations:${{ needs['scientific-mutations'].result }}" \
+            "provenance-and-diff:${{ needs['provenance-and-diff'].result }}" \
             "portability:${{ needs.portability.result }}" \
             "dependencies:${{ needs.dependencies.result }}" \
             "vignettes:${{ needs.vignettes.result }}" \

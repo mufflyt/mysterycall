@@ -1,0 +1,17 @@
+{
+  "providers": 16,
+  "calls": 33,
+  "contactable": 25,
+  "excluded": 8,
+  "acceptance_denominator": 23,
+  "wait_denominator": 20,
+  "acceptance_medicaid": 0.9167,
+  "acceptance_commercial": 1,
+  "wait_mean_medicaid": 12.9,
+  "wait_mean_commercial": 6.2,
+  "wait_median_medicaid": 13.5,
+  "wait_median_commercial": 6,
+  "irr_business_days": 2.0806,
+  "direction_medicaid_longer": true,
+  "direction_medicaid_lower_acceptance": true
+}
