@@ -49,6 +49,7 @@ jobs:
   # ---------------------------------------------------------------------------
   gate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       run: ${{ steps.decide.outputs.run }}
       local_time: ${{ steps.decide.outputs.local_time }}
@@ -78,6 +79,32 @@ jobs:
           fi
 
   # ---------------------------------------------------------------------------
+  # 0b. Scientific contract. The estimand must not change silently, so the
+  #     contract is structurally validated and its SHA-256 compared against the
+  #     recorded hash. Editing the contract without updating the hash in the
+  #     same commit fails here, which makes a change to the estimand a
+  #     reviewable event rather than a diff nobody opened.
+  #
+  #     This job exists because the checker was merged without one: a gate that
+  #     nothing invokes is decorative, which is the failure spec section 100
+  #     warns about.
+  # ---------------------------------------------------------------------------
+  scientific-contract:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Install yaml and digest
+        run: install.packages(c("yaml", "digest"))
+        shell: Rscript {0}
+      - name: Validate the scientific contract
+        run: Rscript tools/ci/check_scientific_contract.R
+
+  # ---------------------------------------------------------------------------
   # 1. R CMD check, wider than the push matrix: adds oldrel-2 and non-Linux
   #    oldrel, and runs --as-cran --run-donttest with warnings fatal.
   # ---------------------------------------------------------------------------
@@ -85,6 +112,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 60
     name: check ${{ matrix.config.os }} (${{ matrix.config.r }})
     strategy:
       fail-fast: false
@@ -125,6 +153,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     env:
       TEST_PERFORMANCE: 'true'
       TEST_SCALABILITY: 'true'
@@ -169,6 +198,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     env:
       NOT_CRAN: 'true'
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -230,6 +260,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2
@@ -250,6 +281,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -336,6 +368,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -350,6 +383,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -369,6 +403,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     env:
       NOT_CRAN: 'true'
     steps:
@@ -409,6 +444,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2
@@ -457,6 +493,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -490,6 +527,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -507,6 +545,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2
@@ -550,6 +589,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -587,6 +627,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
@@ -616,11 +657,12 @@ jobs:
   # 15. Aggregate. One issue per failed night, not one per job.
   # ---------------------------------------------------------------------------
   summary:
-    needs: [gate, check, tests, coverage, doc-drift, data-integrity, study-integrity,
+    needs: [gate, scientific-contract, check, tests, coverage, doc-drift, data-integrity, study-integrity,
             portability, dependencies, vignettes, pkgdown, urls, hygiene,
             install-clean, spelling, lint]
     if: always() && needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Build summary table
         id: table
@@ -639,6 +681,7 @@ jobs:
             echo "| Doc / NAMESPACE drift | ${{ needs['doc-drift'].result }} | yes |"
             echo "| Data integrity | ${{ needs['data-integrity'].result }} | yes |"
             echo "| Study integrity | ${{ needs['study-integrity'].result }} | yes |"
+            echo "| Scientific contract | ${{ needs['scientific-contract'].result }} | yes |"
             echo "| Portability | ${{ needs.portability.result }} | yes |"
             echo "| Dependencies | ${{ needs.dependencies.result }} | yes |"
             echo "| Vignettes | ${{ needs.vignettes.result }} | yes |"
@@ -658,6 +701,7 @@ jobs:
             "doc-drift:${{ needs['doc-drift'].result }}" \
             "data-integrity:${{ needs['data-integrity'].result }}" \
             "study-integrity:${{ needs['study-integrity'].result }}" \
+            "scientific-contract:${{ needs['scientific-contract'].result }}" \
             "portability:${{ needs.portability.result }}" \
             "dependencies:${{ needs.dependencies.result }}" \
             "vignettes:${{ needs.vignettes.result }}" \
