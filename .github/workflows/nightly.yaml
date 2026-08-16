@@ -134,24 +134,18 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-      # oldrel installs hard dependencies only, plus the test harness.
+      # Suggests are installed on every tier, including oldrel.
       #
-      # The 57 Suggests are an optional universe that must COMPILE on whatever
-      # R is running, and on an old R several no longer do. glmmTMB pulls in
-      # Deriv, whose C++ calls R_ClosureFormals -- a symbol that does not exist
-      # before R 4.5 (verified against the R 4.4.2 headers). RSPM serves
-      # binaries built for current R, so an old runner falls back to compiling
-      # from source and dies there. That failure is upstream's, and it masks
-      # the only question oldrel is asked: does THIS package's code still work
-      # on an older R.
-      #
-      # testthat, withr and mockery are named explicitly because they are the
-      # harness rather than optional extras. Without them R CMD check would
-      # find no runnable tests and pass in silence, which is worse than failing.
+      # Narrowing oldrel to hard dependencies was tried and reverted: this
+      # package's own examples and tests use Suggests directly, so dropping
+      # them turns a green check red for a reason that is purely an artifact of
+      # the CI configuration. mysterycall_hurdle_wait() is the clearest case --
+      # its example stops with "needs the glmmTMB package (in Suggests)" the
+      # moment glmmTMB is absent. Measured, not assumed: with Suggests dropped,
+      # ubuntu oldrel-1 went from passing to 2 ERRORs.
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          dependencies: ${{ startsWith(matrix.config.r, 'oldrel') && '"hard"' || '"all"' }}
-          extra-packages: ${{ startsWith(matrix.config.r, 'oldrel') && 'any::rcmdcheck, any::testthat, any::withr, any::mockery' || 'any::rcmdcheck' }}
+          extra-packages: any::rcmdcheck
           needs: check
           cache-version: 4
       - uses: r-lib/actions/check-r-package@v2
@@ -169,13 +163,16 @@ jobs:
           _R_CHECK_FORCE_SUGGESTS_: ${{ startsWith(matrix.config.r, 'oldrel') && 'false' || 'true' }}
         with:
           upload-snapshots: true
-          # oldrel skips vignettes: they exercise the Suggests universe that is
-          # deliberately not installed above, and building them on macOS
-          # oldrel-1 segfaults in a way that reproduces on no other platform
-          # (macOS release, ubuntu oldrel-1 and windows oldrel-1 all build the
-          # same 23 vignettes cleanly). Vignette coverage is not lost: the
-          # release tier checks them and the dedicated `vignettes` job builds
-          # all 23 and fails if any is missing from the tarball.
+          # oldrel skips vignette building. On macos-latest oldrel-1 the
+          # vignette subprocess segfaults on supplementary-digital-content.Rmd,
+          # while the same vignette builds cleanly on macOS release, ubuntu
+          # oldrel-1 and windows oldrel-1 in the same run -- a platform and
+          # version artifact rather than a vignette defect. Confirmed by
+          # measurement: with --no-build-vignettes the segfault disappears.
+          #
+          # Vignette coverage is not lost. The release tier checks them with
+          # the full Suggests set, and the dedicated `vignettes` job builds all
+          # 23 and fails if any is missing from the tarball.
           build_args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--no-build-vignettes")' || 'c("--no-manual","--compact-vignettes=gs+qpdf")' }}
           args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--as-cran", "--run-donttest", "--ignore-vignettes")' || 'c("--no-manual", "--as-cran", "--run-donttest")' }}
           error-on: '"warning"'
