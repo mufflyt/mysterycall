@@ -268,9 +268,13 @@ jobs:
         with: {use-public-rspm: true}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::roxygen2, any::devtools
+          # Pinned, not any::. man/ is byte-sensitive to the roxygen version
+          # that produced it: 8.1.0 formats differently from 8.0.0, so an
+          # unpinned install reports drift on a repository that has none. Must
+          # track Config/roxygen2/version in DESCRIPTION.
+          extra-packages: roxygen2@8.0.0, any::devtools
           needs: check
-          cache-version: 3
+          cache-version: 4
       - name: Regenerate and diff
         run: Rscript .github/scripts/check-doc-drift.R
 

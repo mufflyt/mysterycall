@@ -35,9 +35,16 @@ installed <- as.character(utils::packageVersion("roxygen2"))
 cat("roxygen2 installed:", installed, " declared:", declared %||% "none", "\n")
 
 if (!is.na(declared) && declared != installed) {
-  cat("::warning::DESCRIPTION declares roxygen2 ", declared,
-      " but ", installed, " is installed. A version mismatch produces ",
-      "formatting-only churn that looks like drift.\n", sep = "")
+  # Hard failure, not a warning. A version mismatch produces formatting-only
+  # churn that is indistinguishable from real drift in the diff, so continuing
+  # would report a drift failure whose cause is the toolchain rather than the
+  # repository -- and send whoever reads it looking for a doc bug that is not
+  # there.
+  fail("roxygen2 version mismatch: DESCRIPTION declares ", declared,
+       " but ", installed, " is installed.\n",
+       "      Any diff produced now reflects the version difference, not drift.\n",
+       "      Pin the CI install to ", declared, ", or update ",
+       "Config/roxygen2/version and regenerate in the same commit.")
 }
 
 before <- system2("git", c("status", "--porcelain"), stdout = TRUE)
