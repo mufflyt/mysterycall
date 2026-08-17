@@ -506,6 +506,7 @@ reference:
       - mysterycall_flag_exclusion_discrepancy
       - mysterycall_flag_included_na_appointments
       - mysterycall_flag_repeat_physicians
+      - mysterycall_guard_contaminated_wait
       - mysterycall_check_zero_inflation
       - mysterycall_missing_data_analysis
       - mysterycall_caller_drift

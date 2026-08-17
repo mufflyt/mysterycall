@@ -44,6 +44,7 @@ SCRIPTS <- c(
   ".github/scripts/check-coverage-regression.R",
   ".github/scripts/emit-provenance.R",
   ".github/scripts/check-scientific-diff.R",
+  ".github/scripts/check-cohort-freeze.R",
   "tools/ci/check_scientific_contract.R"
 )
 for (s in SCRIPTS) {
@@ -135,7 +136,8 @@ if (!file.exists(nf)) {
 } else {
   ntxt <- paste(readLines(nf, warn = FALSE), collapse = "\n")
   REQUIRED_JOBS <- c("scientific-contract", "scientific-mutations",
-                     "study-integrity", "doc-drift", "data-integrity")
+                     "study-integrity", "doc-drift", "data-integrity",
+                     "cohort-freeze")
   for (j in REQUIRED_JOBS) {
     declared <- grepl(paste0("\n  ", j, ":"), ntxt, fixed = TRUE)
     summarised <- grepl(paste0("needs['", j, "']"), ntxt, fixed = TRUE)

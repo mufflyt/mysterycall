@@ -190,6 +190,47 @@ MUTANTS <- list(
   ),
 
   list(
+    id = "wait_carried_forward_onto_excluded",
+    what = "Carry each wait down onto the excluded rows that follow it.",
+    why = paste("The defect that actually happened. A spreadsheet sorted so",
+                "that each answered call is followed by the calls that were",
+                "not, then filled down, gives every unreachable office the",
+                "wait of the last office that answered. Nothing errors, every",
+                "value is a plausible number of days, and the mean barely",
+                "moves -- 23.8 against an honest 23.0. It is only visible if",
+                "you ask which rows the numbers are attached to."),
+    kills = "zero vs missing / exclusion reconciliation",
+    f = function(d) {
+      w <- d$business_days_until_appointment
+      keep <- d$reason_for_exclusions == CONTACT
+      last <- NA_real_
+      for (i in seq_along(w)) {
+        if (keep[i] && !is.na(w[i])) last <- w[i] else w[i] <- last
+      }
+      d$business_days_until_appointment <- w
+      d
+    }
+  ),
+
+  list(
+    id = "banded_wait_substituted_for_numeric",
+    what = "Replace the numeric wait with its categorical band.",
+    why = paste("The same 2020 file carries both a numeric wait and a banded",
+                "one ('1 to 10 business days'). Swapping them silently turns",
+                "every arithmetic comparison into a string comparison, which",
+                "does not error -- it just stops meaning what it used to."),
+    kills = "schema contract / wait statistics",
+    f = function(d) {
+      w <- d$business_days_until_appointment
+      d$business_days_until_appointment <- cut(
+        w, breaks = c(-Inf, 10, 20, 30, Inf),
+        labels = c("1 to 10 business days", "11 to 20 business days",
+                   "21 to 30 business days", "over 30 business days"))
+      d
+    }
+  ),
+
+  list(
     id = "exclusion_applied_per_arm",
     what = "Exclude a provider on one arm only.",
     why = paste("Breaks the matched comparison silently: the provider",

@@ -125,3 +125,10 @@ jobs:
             quit(status = 1L)
           }
         shell: Rscript {0}
+
+      # The frozen-cohort record, checked at PR time for the same reason the
+      # contract is: a cohort that changes silently is a study that changes
+      # silently. This reuses the dependencies the step above already installed,
+      # so it costs seconds rather than another job.
+      - name: Frozen-cohort gate
+        run: Rscript .github/scripts/check-cohort-freeze.R
