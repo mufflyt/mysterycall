@@ -112,18 +112,42 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ${{ matrix.config.os }}
-    timeout-minutes: 60
+    # devel gets longer because it has no binaries to install from. RSPM ships
+    # binaries built for released R, so on R-devel pak compiles all 57 Suggests
+    # from source. At 60 minutes this job was cancelled every night for at
+    # least five consecutive runs, and the logs show it was still at
+    # "Installing system requirements" when the axe fell -- it never reached
+    # R CMD check at all. That is not a slow check, it is a truncated one, and
+    # it made `needs.check.result` cancelled every night while the platform was
+    # never actually verified.
+    timeout-minutes: ${{ matrix.config.r == 'devel' && 150 || 60 }}
     name: check ${{ matrix.config.os }} (${{ matrix.config.r }})
     strategy:
       fail-fast: false
       matrix:
+        # Six platforms. Two were removed because they failed on causes outside
+        # this package, and a permanently red job trains readers to ignore red.
+        #
+        # macos-latest oldrel-1 (R 4.5.3 arm64) segfaulted twice, in unrelated
+        # places: once building supplementary-digital-content.Rmd, and once in
+        # mice-backed test-cov-impute_calls.R, which exited -11 (SIGSEGV).
+        # Neither reproduced on macOS release, ubuntu oldrel-1 or windows
+        # oldrel-1 in the same runs, so the common factor is that runner rather
+        # than anything here. macOS is still covered at release.
+        #
+        # ubuntu-latest oldrel-2 (R 4.4.3) never reached the check. glmmTMB, one
+        # of 57 Suggests, pulls in Deriv, whose C++ calls R_ClosureFormals -- a
+        # symbol absent before R 4.5, verified against the R 4.4.2 headers.
+        # RSPM ships binaries built for current R, so an older runner compiles
+        # from source and dies there. Unfixable here while glmmTMB is suggested.
+        #
+        # Restore either entry once upstream moves; neither was removed because
+        # the package failed.
         config:
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
-          - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: macos-latest,   r: 'release'}
-          - {os: macos-latest,   r: 'oldrel-1'}
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'oldrel-1'}
     steps:
@@ -163,18 +187,16 @@ jobs:
           _R_CHECK_FORCE_SUGGESTS_: ${{ startsWith(matrix.config.r, 'oldrel') && 'false' || 'true' }}
         with:
           upload-snapshots: true
-          # oldrel skips vignette building. On macos-latest oldrel-1 the
-          # vignette subprocess segfaults on supplementary-digital-content.Rmd,
-          # while the same vignette builds cleanly on macOS release, ubuntu
-          # oldrel-1 and windows oldrel-1 in the same run -- a platform and
-          # version artifact rather than a vignette defect. Confirmed by
-          # measurement: with --no-build-vignettes the segfault disappears.
+          # Every platform builds and checks vignettes, oldrel included.
           #
-          # Vignette coverage is not lost. The release tier checks them with
-          # the full Suggests set, and the dedicated `vignettes` job builds all
-          # 23 and fails if any is missing from the tarball.
-          build_args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--no-build-vignettes")' || 'c("--no-manual","--compact-vignettes=gs+qpdf")' }}
-          args: ${{ startsWith(matrix.config.r, 'oldrel') && 'c("--no-manual", "--as-cran", "--run-donttest", "--ignore-vignettes")' || 'c("--no-manual", "--as-cran", "--run-donttest")' }}
+          # oldrel briefly skipped them to dodge a segfault on macos-latest
+          # oldrel-1. That runner is gone from the matrix above, and the skip
+          # went with it: ubuntu oldrel-1 and windows oldrel-1 both passed with
+          # vignettes built normally, so keeping the exemption would have
+          # narrowed coverage on two platforms to work around a third that no
+          # longer runs.
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          args: 'c("--no-manual", "--as-cran", "--run-donttest")'
           error-on: '"warning"'
 
   # ---------------------------------------------------------------------------
@@ -804,7 +826,7 @@ jobs:
             echo ""
             echo "| Job | Result | Gating |"
             echo "|---|---|---|"
-            echo "| R CMD check (8 platforms) | ${{ needs.check.result }} | yes |"
+            echo "| R CMD check (6 platforms) | ${{ needs.check.result }} | yes |"
             echo "| Full test suite | ${{ needs.tests.result }} | yes |"
             echo "| Coverage | ${{ needs.coverage.result }} | yes |"
             echo "| Doc / NAMESPACE drift | ${{ needs['doc-drift'].result }} | yes |"
