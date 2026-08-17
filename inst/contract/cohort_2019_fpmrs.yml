@@ -1,0 +1,160 @@
+# =============================================================================
+# FROZEN COHORT CONTRACT -- 2019 FPMRS mystery-caller study
+# =============================================================================
+# The reconstructed cohort flow, pinned so it cannot drift silently.
+#
+# This exists because the study's analytic cohort was, for a period, believed to
+# be n = 187. That number came from a branch whose wait-time column had been
+# fill-down contaminated; it was neither the original analysis nor a defensible
+# reconstruction. Nothing in the repository contradicted it, because nothing in
+# the repository recorded what the cohort was supposed to be. This file is that
+# record.
+#
+# Changing any number here changes the study. The recorded SHA-256 in
+# inst/contract/cohort_2019_fpmrs.sha256 must be updated in the same commit,
+# which forces a cohort change to be reviewed as a scientific change rather than
+# a refactor. .github/scripts/check-cohort-freeze.R enforces both.
+#
+# The source call data is NOT in this repository (it is private study data), so
+# this contract is a record and a tripwire, not a recomputation. The gate checks
+# internal consistency, the hash, that the contamination guard still works, and
+# that no retired number has crept back into prose.
+# =============================================================================
+
+contract_version: "1.0.0"
+schema_version: "1.0.0"
+status: "FROZEN"
+
+study:
+  name: "Wait Times in Female Pelvic Medicine and Reconstructive Surgery: A Mystery Caller Study"
+  design: "cross-sectional simulated-patient (mystery caller), single arm"
+  complaint: "uterine prolapse"
+  call_window_start: "2019-06-25"
+  call_window_end: "2019-07-19"
+  appointment_window_end: "2019-11-15"
+  payer_arms: 1
+  payer_arm_note: >
+    Single arm. This study has NO Medicaid-versus-commercial contrast. The only
+    insurance fields are whether insurance was asked before an appointment was
+    offered, and whether the practice accepts Medicare -- neither is a
+    randomised payer arm. A Medicaid-versus-Blue-Cross comparison belongs to the
+    separate orthopaedic-surgery cohort, not to this one.
+
+# -----------------------------------------------------------------------------
+# The three populations. These are deliberately NOT one object: the offer-stage
+# analysis needs the source denominator, because the original exclusion
+# vocabulary absorbed the no-offer outcome (95.3 percent of eligible clinics
+# obtained an appointment, so the eligible cohort has almost no offer-stage
+# variation to model).
+# -----------------------------------------------------------------------------
+populations:
+  source_denominator:
+    count: 430
+    unit: "clinic call"
+    physicians: 563
+    physicians_note: "430 clinic rows carry 563 physicians (430 + 88 + 34 + 8 + 3 in the extra-physician columns)"
+    appointment_obtained: 225
+    appointment_obtained_pct: 52.3
+    use: "offer-stage analysis, provenance denominator, flow diagram"
+
+  scientifically_eligible:
+    count: 232
+    with_npi: 184
+    appointment_obtained: 221
+    appointment_obtained_pct: 95.3
+    use: "eligibility-conditioned descriptives"
+
+  wait_analytic:
+    count: 221
+    with_npi: 175
+    use: "wait-time analysis among offices that offered an appointment"
+
+# -----------------------------------------------------------------------------
+# Outcomes, derived from source fields only.
+# -----------------------------------------------------------------------------
+outcomes:
+  wait:
+    variable: "business days from call date to appointment date"
+    calendar: "weekdays excluding US federal holidays"
+    holidays_2019: ["2019-07-04", "2019-09-02", "2019-10-14", "2019-11-11", "2019-11-28"]
+    validation: >
+      Reproduces the original bizdays() calculation on 214 of 216 comparable
+      records (99 percent) without using it. Weekday-only agreement is 42
+      percent; the residual is entirely the holiday calendar.
+    mean: 23.0
+    median: 18.0
+    modal_band: "(7,14] business days"
+    max: 95
+
+  appointment_obtained:
+    definition: "an appointment date is present in the source record"
+    note: "four cells hold non-date text ('4 weeks', 'need to see NP first', 'Require records first') and are not counted as dates"
+
+# -----------------------------------------------------------------------------
+# The primary published finding, reproduced from the frozen cohort.
+# -----------------------------------------------------------------------------
+primary_finding:
+  claim: "female providers have a longer wait than male providers"
+  female_count: 83
+  female_mean: 26.1
+  male_count: 126
+  male_mean: 20.0
+  difference: 6.1
+  ci_lower: 0.9
+  ci_upper: 11.2
+  p_welch: 0.022
+  p_wilcoxon: 0.012
+  published_claim: "5 day longer wait"
+  status: "REPRODUCED"
+  note: >
+    The original recoding folded ambiguous gender responses into the female
+    category, which could have manufactured this effect. In the source file
+    those categories do not exist (Male 126, Female 83, NA 12), so strict and
+    original recodings are identical and the finding does not depend on it.
+
+# -----------------------------------------------------------------------------
+# Numbers that are WRONG and must not reappear as cohort claims.
+# -----------------------------------------------------------------------------
+retired_values:
+  - value: 187
+    was: "analytic cohort"
+    reason: >
+      Product of the 2020 NPI-enrichment branch, whose wait column is fill-down
+      contaminated. Never the original analysis and not a defensible
+      reconstruction.
+  - value: 217
+    was: "analytic cohort"
+    reason: >
+      Terminal n of the original Exploratory.io pipeline. Correct for that
+      pipeline, but it ran on a workbook that had already shed rows the source
+      file still contains (University of Michigan among them).
+  - value: 227
+    was: "eligible cohort"
+    reason: "Same pipeline, same incomplete source, superseded by 232."
+
+unreconciled_claims:
+  - value: 417
+    source: "published abstract: 'each of the 417 unique offices was called once'"
+    observed: 430
+    status: "UNRECONCILED"
+    reason: >
+      The source file holds 430 rows with 430 unique clinic names. Removing the
+      3 raw duplicates and 1 non-US site gives 426; removing the 26 Kaiser and
+      military closed systems gives 404. No combination of documented exclusions
+      lands on 417. Resolving this needs the original AUGS "Find a Provider" /
+      Voices for Pelvic Floor Disease sampling frame as it stood in June 2019,
+      which is not in any repository searched.
+
+# -----------------------------------------------------------------------------
+# Variables that are known-bad and are kept ONLY as historical artefacts.
+# -----------------------------------------------------------------------------
+known_bad_variables:
+  - name: "Business_days_until_appointment"
+    file: "_mystery_caller_data_uploaded_4_9_mutate_90.csv"
+    defect: "fill-down (last observation carried forward) onto rows with no appointment"
+    evidence: >
+      Non-missing on all 352 rows including all 165 excluded ones; those rows
+      hold zero appointment dates and 116 were never contacted, yet 127 repeat
+      the wait of the nearest preceding included row.
+    guard: "mysterycall_guard_contaminated_wait()"
+    disposition: "KEEP, GUARDED -- do not delete, do not repair, never analyse"
