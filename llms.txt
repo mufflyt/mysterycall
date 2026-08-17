@@ -1049,6 +1049,8 @@ Flag outliers, exclusion discrepancies, and missing data patterns.
   : Flag "Included" Records with a Missing Wait Time
 - [`mysterycall_flag_repeat_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_repeat_physicians.md)
   : Flag Physicians Included More Than a Threshold Number of Times
+- [`mysterycall_guard_contaminated_wait()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_guard_contaminated_wait.md)
+  : Refuse to Analyse a Carry-Forward-Contaminated Wait-Time Variable
 - [`mysterycall_check_zero_inflation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_zero_inflation.md)
   : Test for zero-inflation in a fitted count model
 - [`mysterycall_missing_data_analysis()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_missing_data_analysis.md)
