@@ -303,7 +303,26 @@ jobs:
 
       - name: Measure coverage
         run: |
-          cov <- covr::package_coverage(quiet = FALSE)
+          # covr reports a test failure as a bare reference to a .Rout.fail file
+          # that lives in a temp directory the log never shows, so the job fails
+          # saying only that it failed. Surface the file. A gate that cannot
+          # explain itself sends the reader to reproduce the whole run by hand,
+          # which is what happened the first time this fired.
+          cov <- withCallingHandlers(
+            tryCatch(covr::package_coverage(quiet = FALSE), error = function(e) {
+              cat("::group::covr failure detail\n")
+              cat("covr error: ", conditionMessage(e), "\n\n", sep = "")
+              fails <- list.files(tempdir(), pattern = "[.]Rout[.]fail$",
+                                  recursive = TRUE, full.names = TRUE)
+              if (!length(fails)) cat("(no .Rout.fail found; the failure is upstream of the test run)\n")
+              for (f in fails) {
+                cat("---- ", f, " ----\n", sep = "")
+                writeLines(utils::tail(readLines(f, warn = FALSE), 80L))
+              }
+              cat("::endgroup::\n")
+              stop(e)
+            }),
+            warning = function(w) invokeRestart("muffleWarning"))
           pct <- covr::percent_coverage(cov)
           cat(sprintf("Coverage: %.2f%%\n", pct))
           covr::to_cobertura(cov, filename = "cobertura.xml")
