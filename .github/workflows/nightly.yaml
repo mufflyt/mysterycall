@@ -308,8 +308,7 @@ jobs:
           # saying only that it failed. Surface the file. A gate that cannot
           # explain itself sends the reader to reproduce the whole run by hand,
           # which is what happened the first time this fired.
-          cov <- withCallingHandlers(
-            tryCatch(covr::package_coverage(quiet = FALSE), error = function(e) {
+          cov <- tryCatch(covr::package_coverage(quiet = FALSE), error = function(e) {
               cat("::group::covr failure detail\n")
               cat("covr error: ", conditionMessage(e), "\n\n", sep = "")
               fails <- list.files(tempdir(), pattern = "[.]Rout[.]fail$",
@@ -321,8 +320,7 @@ jobs:
               }
               cat("::endgroup::\n")
               stop(e)
-            }),
-            warning = function(w) invokeRestart("muffleWarning"))
+            })
           pct <- covr::percent_coverage(cov)
           cat(sprintf("Coverage: %.2f%%\n", pct))
           covr::to_cobertura(cov, filename = "cobertura.xml")
