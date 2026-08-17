@@ -112,7 +112,15 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ${{ matrix.config.os }}
-    timeout-minutes: 60
+    # devel gets longer because it has no binaries to install from. RSPM ships
+    # binaries built for released R, so on R-devel pak compiles all 57 Suggests
+    # from source. At 60 minutes this job was cancelled every night for at
+    # least five consecutive runs, and the logs show it was still at
+    # "Installing system requirements" when the axe fell -- it never reached
+    # R CMD check at all. That is not a slow check, it is a truncated one, and
+    # it made `needs.check.result` cancelled every night while the platform was
+    # never actually verified.
+    timeout-minutes: ${{ matrix.config.r == 'devel' && 150 || 60 }}
     name: check ${{ matrix.config.os }} (${{ matrix.config.r }})
     strategy:
       fail-fast: false
@@ -818,7 +826,7 @@ jobs:
             echo ""
             echo "| Job | Result | Gating |"
             echo "|---|---|---|"
-            echo "| R CMD check (8 platforms) | ${{ needs.check.result }} | yes |"
+            echo "| R CMD check (6 platforms) | ${{ needs.check.result }} | yes |"
             echo "| Full test suite | ${{ needs.tests.result }} | yes |"
             echo "| Coverage | ${{ needs.coverage.result }} | yes |"
             echo "| Doc / NAMESPACE drift | ${{ needs['doc-drift'].result }} | yes |"
