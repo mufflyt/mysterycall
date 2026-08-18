@@ -24,6 +24,7 @@ concurrency:
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

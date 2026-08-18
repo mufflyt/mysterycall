@@ -23,6 +23,7 @@ jobs:
   # cross-platform matrix (macOS, Windows, Linux devel/release/oldrel-1).
   matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       config: ${{ steps.set.outputs.config }}
     steps:
@@ -38,6 +39,7 @@ jobs:
   R-CMD-check:
     needs: matrix
     runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 60
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
