@@ -12,6 +12,10 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # See the nightly coverage job: Config/testthat/parallel makes the suite
+      # fan out across callr subprocesses, and a worker that dies under covr
+      # takes the run down as an opaque .Rout.fail. Serial under coverage.
+      TESTTHAT_PARALLEL: 'FALSE'
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
