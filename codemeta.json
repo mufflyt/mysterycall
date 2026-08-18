@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "mysterycall",
-  "description": "Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.",
+  "description": "Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, validate and reconcile call logs, guard against contaminated outcome variables, fit two-part and mixed-effects models of appointment access and wait time, and generate publication-ready tables. Geocoding, drive-time isochrones, and mapping live in the companion mysterymaps package.",
   "name": "mysterycall: Mystery Caller Study Tools for Healthcare Access Research",
   "relatedLink": "https://mufflyt.github.io/mysterycall/",
   "codeRepository": "https://github.com/mufflyt/mysterycall",
@@ -744,6 +744,28 @@
     }
   ],
   "releaseNotes": "https://github.com/mufflyt/mysterycall/blob/main/NEWS.md",
-  "contIntegration": ["https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml", "https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml", "https://app.codecov.io/gh/mufflyt/mysterycall?branch=main"],
-  "developmentStatus": ["https://www.repostatus.org/#active", "https://lifecycle.r-lib.org/articles/stages.html#stable"]
+  "contIntegration": [
+    "https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml",
+    "https://github.com/mufflyt/mysterycall/actions/workflows/pkgdown.yaml",
+    "https://app.codecov.io/gh/mufflyt/mysterycall?branch=main"
+  ],
+  "developmentStatus": [
+    "https://www.repostatus.org/#active",
+    "https://lifecycle.r-lib.org/articles/stages.html#stable"
+  ],
+  "keywords": [
+    "mystery caller study",
+    "audit study",
+    "healthcare access",
+    "NPI registry",
+    "NPPES",
+    "physician workforce",
+    "obstetrics and gynecology",
+    "health disparities",
+    "Poisson regression",
+    "reproducible research",
+    "data integrity",
+    "R"
+  ],
+  "dateModified": "2026-08-17"
 }
