@@ -40,14 +40,6 @@ available through the companion `mysterymaps` package). The target users are cli
 researchers and health-services researchers who conduct mystery-caller or audit
 studies and need reproducible, auditable workflows rather than one-off scripts.
 
----
-
-**mysterycall** provides a toolkit for mystery caller and audit studies that evaluate
-patient access to healthcare. It handles the study workflow: finding providers
-in the NPI registry, validating their records, analyzing acceptance and
-wait-time disparities, and producing publication-ready tables. Geocoding,
-drive-time isochrones, and mapping live in the companion `mysterymaps` package.
-
 ## Installation
 
 ```r
@@ -275,6 +267,12 @@ with audit trails, coverage guards, and publication-ready output.
 | | `mysterycall_genderize()` | Estimate physician gender via the Genderize.io API |
 | **Census** | `mysterycall_get_census_data()` | ACS block-group demographics by state FIPS |
 | **Geospatial** | *(moved to [`mysterymaps`](https://github.com/mufflyt/mysterymaps))* | Geocoding, drive-time isochrones, isochrone/block-group overlap, and Leaflet/HRR maps |
+| **Analysis** | `mysterycall_hurdle_wait()` | Two-part model: whether an appointment was offered, then the wait among offers |
+| | `mysterycall_lmm()` | Mixed-effects wait-time model with practice/caller clustering |
+| **Data integrity** | `mysterycall_guard_contaminated_wait()` | Refuse to analyse a wait column that has been fill-down contaminated |
+| | `mysterycall_flag_exclusion_discrepancy()` | Find excluded calls that nonetheless carry a wait time |
+| | `mysterycall_reconcile_inclusion()` | Crosswalk REDCap exclusion codes against label strings |
+| | `mysterycall_flag_repeat_physicians()` | Detect duplicate-entry and repeat-call contamination |
 | **Tables** | `mysterycall_table_overall()` | Table 1 summary (via `arsenal`) |
 | | `mysterycall_table_percentages()` | Column-percentage tables |
 
@@ -289,7 +287,13 @@ with audit trails, coverage guards, and publication-ready output.
 | `fips` | State FIPS codes and abbreviations |
 | `city_state_to_lat_long` | City/state → lat/lon lookup table |
 | `acog_presidents` | Historical ACOG presidents data |
-| `census_summaries` | Pre-computed Census block-group demographics |
+| `adi_zcta` | Area Deprivation Index by ZCTA (33,774 rows; mean 100, SD 20) |
+| `svi_zcta` | CDC Social Vulnerability Index by ZCTA (33,774 rows) |
+| `zcta_tract_xwalk` | ZCTA to census-tract crosswalk with land-area weights (168,048 rows) |
+| `medicaid_expansion` | State ACA Medicaid-expansion status and adoption date (51 rows) |
+| `medicaid_fee_index` | KFF state Medicaid-to-Medicare fee index (51 rows) |
+| `kff_hhi` | KFF hospital-market concentration (HHI) by MSA (387 rows) |
+| `healthgrades_ages` | Physician age/credential records scraped from Healthgrades (88,416 rows) |
 
 ```r
 # Example: find all OBGYN taxonomy codes

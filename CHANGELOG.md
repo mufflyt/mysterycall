@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- mysterycall_guard_contaminated_wait(): hard guard that refuses to analyse a fill-down (LOCF) contaminated wait-time column; checks for waits with no appointment date, waits on excluded calls, and unjustified carry-forward runs
+- inst/contract/cohort_2019_fpmrs.yml: frozen cohort record for the 2019 FPMRS study (three nesting populations, the reproduced primary finding, retired figures, and the known-bad variable with its disposition), pinned behind a SHA-256
 - mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
 - mysterycall_calculate_spatial_density(): compute local clinic concentration using vectorized Haversine distance
 - mysterycall_model_zero_wait(): model same-day appointments (zero wait times) via binomial logistic regression
@@ -52,7 +54,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - p_adjust_method parameter added to univariate_lmm_screen, univariate_poisson_screen, and interaction_screen
 - Input validation uses checkmate assertions across all new functions
 
+### Fixed
+- README documented a `census_summaries` dataset that does not exist, and omitted seven that do (adi_zcta, svi_zcta, zcta_tract_xwalk, medicaid_expansion, medicaid_fee_index, kff_hhi, healthgrades_ages)
+- Non-deterministic coverage failures: DESCRIPTION sets Config/testthat/parallel, so the suite fans across callr subprocesses and a dead worker collapsed the covr run into an opaque .Rout.fail. Coverage workflows now set TESTTHAT_PARALLEL=FALSE; the `tests` job still exercises the parallel path
+- Nightly coverage job failed without reporting what failed; it now pins install_path and prints testthat.Rout.fail, matching test-coverage.yaml
+- Two pull-request checks hung 77 minutes on r-lib/actions/setup-r with no timeout-minutes, so GitHub's six-hour default applied
+
 ### Infrastructure
+- Frozen-cohort gate (.github/scripts/check-cohort-freeze.R): validates the cohort contract's structure and hash, re-proves that the contamination guard still rejects contaminated data and still passes honest data, and fails if a retired cohort figure reappears in prose. Wired into the nightly and the PR gate
+- Scientific mutation campaign extended to 14 mutants, all killed; the two new ones reproduce the fill-down defect and the banded/numeric wait substitution
+- Every job in every workflow now declares timeout-minutes (33 jobs across 9 files); the CI-of-CI assertion covers all workflows rather than only the nightly, and fails rather than warns
+- R-devel check timeout raised to 150 minutes: it had been cancelled at 60 for five consecutive runs while still installing dependencies, so the platform was never actually verified
+- Check matrix trimmed to six platforms; macos oldrel-1 (two unrelated segfaults) and ubuntu oldrel-2 (glmmTMB -> Deriv needs R >= 4.5) failed on causes outside this package
 - pkgdown site configured (_pkgdown.yml with 131 exports indexed)
 - covr test-coverage workflow added
 - Mystery Caller Workflow vignette renders end-to-end (12-section walkthrough)

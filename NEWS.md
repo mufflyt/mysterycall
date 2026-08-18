@@ -1,5 +1,43 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Data integrity
+
+- New `mysterycall_guard_contaminated_wait()` refuses to analyse a wait-time
+  column that has been fill-down (last-observation-carried-forward)
+  contaminated. Unlike `mysterycall_flag_exclusion_discrepancy()`, which returns
+  the offending rows for adjudication, this one stops. It checks three
+  signatures in decreasing order of certainty: a wait recorded with no
+  appointment date, a wait recorded on an excluded call, and consecutive
+  identical waits where the later row has no appointment of its own to justify
+  them.
+
+  The motivating defect was real. A 2020 enrichment of the 2019 FPMRS
+  mystery-caller data carried a numeric wait that was non-missing on all 352
+  rows, including all 165 excluded ones; those rows held zero appointment dates
+  and 116 were never contacted, yet 127 repeated the wait of the nearest
+  preceding included row. It does not look broken -- every value is a plausible
+  number of business days and the contaminated mean (23.8) sits close to the
+  honest one (23.0). The damage is only visible when you ask which rows the
+  numbers are attached to.
+
+  A non-numeric wait column is refused rather than passed, because the same file
+  also carries a banded categorical wait and reporting a clean bill of health
+  for a column the guard never examined is the false assurance it exists to
+  prevent. Repeated waits are only flagged when unjustified: three consecutive
+  10s each holding their own appointment date pass.
+
+## Documentation
+
+- README: corrected the built-in datasets table. It documented a
+  `census_summaries` dataset that does not exist and omitted seven that do
+  (`adi_zcta`, `svi_zcta`, `zcta_tract_xwalk`, `medicaid_expansion`,
+  `medicaid_fee_index`, `kff_hhi`, `healthgrades_ages`), now listed with row
+  counts.
+- README: added the data-integrity and analysis functions to the core-functions
+  table. Twenty exported functions in that family were previously invisible in
+  the README despite being the package's most distinctive capability.
+- README: removed a paragraph that restated the Statement of Need verbatim.
+
 ## Internal / CI
 
 - `mysterycall_forest_plot()` now builds its horizontal error-bar layer inside an

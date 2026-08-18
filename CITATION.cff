@@ -9,11 +9,13 @@ abstract: >
   assembly from the NPI registry (including taxonomy-based search that bypasses
   the 1,200-record API cap), NANP phone validation with state-geography checks,
   physician name parsing with credential and Vietnamese-surname disambiguation,
-  safe join wrappers that enforce coverage and uniqueness guarantees, address
-  geocoding, drive-time isochrone generation, Census demographic overlay,
-  Poisson mixed-effects modeling with incidence-rate ratio reporting, disparity
-  analysis with Wilson confidence intervals, and publication-ready table and
-  map export conforming to Obstetrics & Gynecology (Green Journal) guidelines.
+  safe join wrappers that enforce coverage and uniqueness guarantees, Census
+  demographic overlay, two-part hurdle and Poisson mixed-effects modeling with
+  incidence-rate ratio reporting, disparity analysis with Wilson confidence
+  intervals, data-integrity guards that refuse contaminated outcome variables,
+  and publication-ready table export conforming to Obstetrics & Gynecology
+  (Green Journal) guidelines. Address geocoding, drive-time isochrone
+  generation, and mapping live in the companion mysterymaps package.
 authors:
   - family-names: Muffly
     given-names: Tyler
