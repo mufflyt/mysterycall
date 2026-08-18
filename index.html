@@ -110,8 +110,6 @@
 </h2>
 <p>Measuring patient access to healthcare requires assembling a provider roster, placing calls under a standardized script, recording wait times and refusal rates, and then modelling disparities by insurance type, race, or geography. Each step involves bespoke data-engineering work that research teams currently solve ad hoc: custom scripts to loop around the NPI API’s 1,200-record cap, manual regular expressions to parse name fields, silent <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> calls that multiply rows when a lookup table has duplicates, and hand-crafted Poisson models that lack overdispersion diagnostics.</p>
 <p><strong>mysterycall</strong> consolidates this work into a single, tested, documented pipeline. It provides taxonomy-based NPI search that bypasses the record cap, NANP phone validation with state-geography checks, physician name parsing with credential and surname disambiguation, safe join wrappers that enforce coverage and uniqueness guarantees, Poisson mixed-effects modelling with IRR reporting, and publication-ready table export (drive-time isochrones and mapping are available through the companion <code>mysterymaps</code> package). The target users are clinical researchers and health-services researchers who conduct mystery-caller or audit studies and need reproducible, auditable workflows rather than one-off scripts.</p>
-<hr>
-<p><strong>mysterycall</strong> provides a toolkit for mystery caller and audit studies that evaluate patient access to healthcare. It handles the study workflow: finding providers in the NPI registry, validating their records, analyzing acceptance and wait-time disparities, and producing publication-ready tables. Geocoding, drive-time isochrones, and mapping live in the companion <code>mysterymaps</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -379,6 +377,36 @@
 <td>Geocoding, drive-time isochrones, isochrone/block-group overlap, and Leaflet/HRR maps</td>
 </tr>
 <tr>
+<td><strong>Analysis</strong></td>
+<td><code><a href="reference/mysterycall_hurdle_wait.html">mysterycall_hurdle_wait()</a></code></td>
+<td>Two-part model: whether an appointment was offered, then the wait among offers</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_lmm.html">mysterycall_lmm()</a></code></td>
+<td>Mixed-effects wait-time model with practice/caller clustering</td>
+</tr>
+<tr>
+<td><strong>Data integrity</strong></td>
+<td><code><a href="reference/mysterycall_guard_contaminated_wait.html">mysterycall_guard_contaminated_wait()</a></code></td>
+<td>Refuse to analyse a wait column that has been fill-down contaminated</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_flag_exclusion_discrepancy.html">mysterycall_flag_exclusion_discrepancy()</a></code></td>
+<td>Find excluded calls that nonetheless carry a wait time</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_reconcile_inclusion.html">mysterycall_reconcile_inclusion()</a></code></td>
+<td>Crosswalk REDCap exclusion codes against label strings</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_flag_repeat_physicians.html">mysterycall_flag_repeat_physicians()</a></code></td>
+<td>Detect duplicate-entry and repeat-call contamination</td>
+</tr>
+<tr>
 <td><strong>Tables</strong></td>
 <td><code><a href="reference/mysterycall_table_overall.html">mysterycall_table_overall()</a></code></td>
 <td>Table 1 summary (via <code>arsenal</code>)</td>
@@ -433,8 +461,32 @@
 <td>Historical ACOG presidents data</td>
 </tr>
 <tr>
-<td><code>census_summaries</code></td>
-<td>Pre-computed Census block-group demographics</td>
+<td><code>adi_zcta</code></td>
+<td>Area Deprivation Index by ZCTA (33,774 rows; mean 100, SD 20)</td>
+</tr>
+<tr>
+<td><code>svi_zcta</code></td>
+<td>CDC Social Vulnerability Index by ZCTA (33,774 rows)</td>
+</tr>
+<tr>
+<td><code>zcta_tract_xwalk</code></td>
+<td>ZCTA to census-tract crosswalk with land-area weights (168,048 rows)</td>
+</tr>
+<tr>
+<td><code>medicaid_expansion</code></td>
+<td>State ACA Medicaid-expansion status and adoption date (51 rows)</td>
+</tr>
+<tr>
+<td><code>medicaid_fee_index</code></td>
+<td>KFF state Medicaid-to-Medicare fee index (51 rows)</td>
+</tr>
+<tr>
+<td><code>kff_hhi</code></td>
+<td>KFF hospital-market concentration (HHI) by MSA (387 rows)</td>
+</tr>
+<tr>
+<td><code>healthgrades_ages</code></td>
+<td>Physician age/credential records scraped from Healthgrades (88,416 rows)</td>
 </tr>
 </tbody>
 </table>

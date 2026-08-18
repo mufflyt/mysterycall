@@ -72,12 +72,26 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.3.9000" id="mysterycall-1639000-development-version">mysterycall 1.6.3.9000 (development version)<a class="anchor" aria-label="anchor" href="#mysterycall-1639000-development-version"></a></h2>
 <div class="section level3">
+<h3 id="data-integrity-1-6-3-9000">Data integrity<a class="anchor" aria-label="anchor" href="#data-integrity-1-6-3-9000"></a></h3>
+<ul><li>
+<p>New <code><a href="../reference/mysterycall_guard_contaminated_wait.html">mysterycall_guard_contaminated_wait()</a></code> refuses to analyse a wait-time column that has been fill-down (last-observation-carried-forward) contaminated. Unlike <code><a href="../reference/mysterycall_flag_exclusion_discrepancy.html">mysterycall_flag_exclusion_discrepancy()</a></code>, which returns the offending rows for adjudication, this one stops. It checks three signatures in decreasing order of certainty: a wait recorded with no appointment date, a wait recorded on an excluded call, and consecutive identical waits where the later row has no appointment of its own to justify them.</p>
+<p>The motivating defect was real. A 2020 enrichment of the 2019 FPMRS mystery-caller data carried a numeric wait that was non-missing on all 352 rows, including all 165 excluded ones; those rows held zero appointment dates and 116 were never contacted, yet 127 repeated the wait of the nearest preceding included row. It does not look broken – every value is a plausible number of business days and the contaminated mean (23.8) sits close to the honest one (23.0). The damage is only visible when you ask which rows the numbers are attached to.</p>
+<p>A non-numeric wait column is refused rather than passed, because the same file also carries a banded categorical wait and reporting a clean bill of health for a column the guard never examined is the false assurance it exists to prevent. Repeated waits are only flagged when unjustified: three consecutive 10s each holding their own appointment date pass.</p>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-6-3-9000">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-6-3-9000"></a></h3>
+<ul><li>README: corrected the built-in datasets table. It documented a <code>census_summaries</code> dataset that does not exist and omitted seven that do (<code>adi_zcta</code>, <code>svi_zcta</code>, <code>zcta_tract_xwalk</code>, <code>medicaid_expansion</code>, <code>medicaid_fee_index</code>, <code>kff_hhi</code>, <code>healthgrades_ages</code>), now listed with row counts.</li>
+<li>README: added the data-integrity and analysis functions to the core-functions table. Twenty exported functions in that family were previously invisible in the README despite being the package’s most distinctive capability.</li>
+<li>README: removed a paragraph that restated the Statement of Need verbatim.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="internal--ci-1-6-3-9000">Internal / CI<a class="anchor" aria-label="anchor" href="#internal--ci-1-6-3-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/mysterycall_forest_plot.html">mysterycall_forest_plot()</a></code> now builds its horizontal error-bar layer inside an isolated <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code>, matching <code><a href="../reference/mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code> and <code><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities()</a></code>. <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">ggplot2::geom_errorbarh()</a></code> is soft-deprecated in ggplot2 &gt;= 4.0.0; suppressing the lifecycle warning at construction keeps the runnable example clean under <code>R CMD check --run-donttest</code>, letting the <code>R-CMD-check</code> gate run with <code>error-on: "warning"</code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-1-6-3-9000">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-6-3-9000"></a></h3>
+<h3 id="documentation-1-6-3-9000-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-6-3-9000-1"></a></h3>
 <ul><li>Added <code>ARCHITECTURE.md</code>, a codebase-orientation guide for contributors: the two-phase collection → analysis pipeline, the subsystem <code>@family</code> map, the documentation model (hand-checked-in <code>.Rd</code> + <code>devtools::document()</code>), the project-specific conventions (validation, optional-dependency guards, RNG hygiene, the phase-2 column contract), and where to start reading. Linked from the README and <code>CONTRIBUTING.md</code>.</li>
 <li>
 <code><a href="../reference/mysterycall_run_analysis.html">mysterycall_run_analysis()</a></code> and <code><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> now cross-link each other via <code>@seealso</code>, so the collection and analysis halves of the pipeline are discoverable from either help page.</li>
@@ -140,7 +154,7 @@
 <li><p><strong>ACS pulls warn when the requested year predates the bundled boundary vintage.</strong> <code><a href="../reference/mysterycall_get_acs_adults_18_90.html">mysterycall_get_acs_adults_18_90()</a></code>, <code><a href="../reference/mysterycall_get_acs_women_18_90.html">mysterycall_get_acs_women_18_90()</a></code>, and <code><a href="../reference/mysterycall_get_payer_mix.html">mysterycall_get_payer_mix()</a></code> accept years back to 2009/2012, but the bundled <code>adi_zcta</code>, <code>svi_zcta</code>, and <code>zcta_tract_xwalk</code> are 2020-vintage (2018–2022 ACS). Joining a pre-2022 pull at a boundary-sensitive geography to those datasets silently drops split, merged, or renumbered areas. Silence with <code>options(mysterycall.quiet_vintage = TRUE)</code> when the mismatch is intended. New internal helper <code><a href="../reference/dot-mc_check_acs_vintage.html">.mc_check_acs_vintage()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-1-6-3-9000-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-6-3-9000-1"></a></h3>
+<h3 id="documentation-1-6-3-9000-2">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-6-3-9000-2"></a></h3>
 <ul><li><p><code><a href="../reference/mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code> no longer claims a RUCA crosswalk is “bundled in this package” – none is, and the same help page already directed users to USDA ERS. Adds a vintage warning: 2010 RUCA files are keyed to 2010 tracts, which will not join cleanly to the 2020-vintage tract GEOIDs this package produces.</p></li>
 <li><p><code>CITATION.cff</code> and <code>codemeta.json</code> reported version 1.4.0 while <code>DESCRIPTION</code> and <code>NEWS.md</code> were at 1.6.3.9000. Synced.</p></li>
 </ul></div>
