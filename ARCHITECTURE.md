@@ -168,4 +168,4 @@ These are the non-obvious, project-specific rules — the things a newcomer trip
 - **Collection:** `R/run_mystery_caller_workflow.R` — the phase-1/phase-2 flow.
 
 Questions that aren't answered here belong in a
-[GitHub Discussion](https://github.com/mufflyt/mysterycall/discussions).
+[GitHub Issue](https://github.com/mufflyt/mysterycall/issues).
