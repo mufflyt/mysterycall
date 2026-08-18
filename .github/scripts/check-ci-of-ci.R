@@ -148,16 +148,29 @@ if (!file.exists(nf)) {
     else ok("wired: ", j)
   }
   # A job with no timeout can hang and burn the window while the summary says
-  # nothing.
-  nl      <- readLines(nf, warn = FALSE)
-  jobs_at <- which(grepl("^jobs:\\s*$", nl))[1]
-  keys    <- if (is.na(jobs_at)) integer(0) else
-    which(grepl("^  [a-z][a-z0-9-]*:\\s*$", nl))
-  n_jobs  <- sum(keys > (if (is.na(jobs_at)) 0L else jobs_at))
-  n_tmo   <- sum(grepl("^\\s*timeout-minutes:", nl))
-  if (n_tmo < n_jobs)
-    warn("nightly has ", n_jobs, " job block(s) but only ", n_tmo, " timeout(s)")
-  else ok("every nightly job declares a timeout")
+  # nothing. This is not hypothetical: url-check and R-CMD-check each sat on
+  # r-lib/actions/setup-r for 77 minutes on a pull request, blocking the merge,
+  # and would have kept sitting there until GitHub's 6-hour default. Every
+  # workflow is checked, not just the nightly, because the ones that hung were
+  # the ones nothing was checking.
+  wf_files <- list.files(".github/workflows", pattern = "[.]ya?ml$", full.names = TRUE)
+  untimed <- character(0)
+  for (wf in wf_files) {
+    nl      <- readLines(wf, warn = FALSE)
+    jobs_at <- which(grepl("^jobs:\\s*$", nl))[1]
+    if (is.na(jobs_at)) next
+    keys    <- which(grepl("^  [a-z][a-z0-9_-]*:\\s*$", nl))
+    n_jobs  <- sum(keys > jobs_at)
+    n_tmo   <- sum(grepl("^\\s*timeout-minutes:", nl))
+    if (n_tmo < n_jobs)
+      untimed <- c(untimed, sprintf("%s (%d job(s), %d timeout(s))",
+                                    basename(wf), n_jobs, n_tmo))
+  }
+  if (length(untimed))
+    bad("workflow(s) with untimed jobs: ", paste(untimed, collapse = "; "),
+        ". A job with no timeout-minutes hangs for six hours by default.")
+  else ok("every job in every workflow declares a timeout (",
+          length(wf_files), " workflow file(s))")
 }
 
 # ---------------------------------------------------------------------------

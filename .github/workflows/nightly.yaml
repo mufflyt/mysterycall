@@ -284,6 +284,15 @@ jobs:
     env:
       NOT_CRAN: 'true'
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # DESCRIPTION sets Config/testthat/parallel: true, which makes test_check()
+      # fan the suite out across callr subprocesses. Under covr that is a source
+      # of non-determinism rather than speed: a worker that dies takes the whole
+      # run down as an opaque .Rout.fail, which is exactly how this job failed
+      # once on code that passed on either side of it. The same signature --
+      # "testthat subprocess exited ... R session crashed with exit code -11" --
+      # was already seen from a parallel worker on macOS oldrel-1 earlier.
+      # Serial here. The `tests` job still exercises the parallel path.
+      TESTTHAT_PARALLEL: 'FALSE'
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2
@@ -303,7 +312,16 @@ jobs:
 
       - name: Measure coverage
         run: |
-          cov <- covr::package_coverage(quiet = FALSE)
+          # install_path is pinned so a failure leaves testthat.Rout.fail somewhere
+          # the next step can find it. Without it covr reports only a path into a
+          # temp directory the log never shows, and the job fails saying nothing
+          # about what failed. test-coverage.yaml already does this; the nightly
+          # was the one that did not.
+          cov <- covr::package_coverage(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
+          )
           pct <- covr::percent_coverage(cov)
           cat(sprintf("Coverage: %.2f%%\n", pct))
           covr::to_cobertura(cov, filename = "cobertura.xml")
@@ -319,6 +337,25 @@ jobs:
           if (pct < floor_pct) {
             cat(sprintf("::error::Coverage %.2f%% is below the %d%% floor.\n", pct, floor_pct))
             quit(status = 1L)
+          }
+        shell: Rscript {0}
+
+      # Same idiom as test-coverage.yaml: when covr stops, print the file that
+      # says why. A gate that fails without explaining itself costs an hour of
+      # somebody reproducing the run by hand.
+      - name: Show test failures
+        if: failure()
+        run: |
+          fail_files <- Sys.glob(file.path(
+            normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"),
+            "package/*/*-tests/testthat.Rout.fail"
+          ))
+          if (length(fail_files) == 0) {
+            cat("No testthat.Rout.fail found; the failure is upstream of the test run.\n")
+          }
+          for (f in fail_files) {
+            cat("-- failures from", f, "--\n")
+            cat(tail(readLines(f, warn = FALSE), 200), sep = "\n")
           }
         shell: Rscript {0}
 
