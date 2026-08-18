@@ -851,6 +851,8 @@ articles:
     contents:
       - data-quality
       - data-cleaning
+      - guarding-contaminated-outcomes
+      - cohort-provenance
 
   - title: "Demographics"
     navbar: Demographics
@@ -867,6 +869,7 @@ articles:
       - statistical-analysis
       - linear-mixed-models
       - logistic-model
+      - two-part-denominators
       - adding-covariates
       - power-analysis
       - table-generation
