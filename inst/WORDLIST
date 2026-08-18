@@ -68,8 +68,11 @@ ZCTA
 ZCTAs
 adrs
 af
+analysable
+artefact
 backfilling
 basemap
+behaviours
 bg
 callr
 censusapi
@@ -83,6 +86,7 @@ csv
 deduplicated
 deduplicates
 deduplication
+descriptives
 directionals
 enrichments
 enrl
@@ -101,6 +105,7 @@ ggspatial
 glmmTMB
 hereR
 incrementing
+interpretable
 io
 isochrone
 isochrones
@@ -110,11 +115,14 @@ isprs
 janky
 jitter
 jsonlite
+labelled
 leaflet
 lon
 magrittr
 memoization
 memoized
+modelled
+modelling
 mysterycall
 mysterycall's
 npi
@@ -138,6 +146,8 @@ th
 tibble
 tigris
 touchpoints
+unadjudicated
+uncontacted
 viridis
 xls
 xlsx
