@@ -34,6 +34,8 @@
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
+    <li><a class="dropdown-item" href="articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
+    <li><a class="dropdown-item" href="articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
@@ -46,6 +48,7 @@
     <li><a class="dropdown-item" href="articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
     <li><a class="dropdown-item" href="articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
@@ -73,7 +76,7 @@
 
 <p>All notable changes to this project will be documented in this file. The format is based on <a href="https://keepachangelog.com/en/1.1.0/" class="external-link">Keep a Changelog</a>.</p>
 <div class="section level2">
-<h2 id="unreleased"><a href="https://github.com/mufflyt/mysterycall/compare/v1.6.0...HEAD" class="external-link">Unreleased</a><a class="anchor" aria-label="anchor" href="#unreleased"></a></h2>
+<h2 id="unreleased"><a href="https://github.com/mufflyt/mysterycall/compare/v1.6.3...HEAD" class="external-link">Unreleased</a><a class="anchor" aria-label="anchor" href="#unreleased"></a></h2>
 <div class="section level3">
 <h3 id="added">Added<a class="anchor" aria-label="anchor" href="#added"></a></h3>
 <ul><li>mysterycall_guard_contaminated_wait(): hard guard that refuses to analyse a fill-down (LOCF) contaminated wait-time column; checks for waits with no appointment date, waits on excluded calls, and unjustified carry-forward runs</li>
@@ -145,9 +148,9 @@
 </ul></div>
 </div>
 <div class="section level2">
-<h2 id="id_160--2026-01-01">
-<a href="https://github.com/mufflyt/mysterycall/releases/tag/v1.6.0" class="external-link">1.6.0</a> — 2026-01-01<a class="anchor" aria-label="anchor" href="#id_160--2026-01-01"></a></h2>
-<ul><li>Initial tracked release</li>
+<h2 id="id_163--2026-07-19">
+<a href="https://github.com/mufflyt/mysterycall/releases/tag/v1.6.3" class="external-link">1.6.3</a> — 2026-07-19<a class="anchor" aria-label="anchor" href="#id_163--2026-07-19"></a></h2>
+<ul><li>Earliest tagged release in this repository (v1.6.1, v1.6.2 and v1.6.3 exist; there is no v1.6.0 tag)</li>
 </ul></div>
 </div>
 

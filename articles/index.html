@@ -34,6 +34,8 @@
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
+    <li><a class="dropdown-item" href="../articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
@@ -46,6 +48,7 @@
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
@@ -100,6 +103,10 @@
         <dd><p>How to validate NANP phone numbers, parse physician names into structured components, and perform audited joins that guard against row duplication and coverage loss.</p>
         </dd><dt><a href="data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></dt>
         <dd><p>End-to-end data cleaning for mystery caller studies: NPI validation, phone validation, address normalization, Phase 1 and Phase 2 log cleaning, duplicate detection, and clinician data retrieval.</p>
+        </dd><dt><a href="guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></dt>
+        <dd><p>How a wait-time column becomes fill-down contaminated, why the damage is invisible in summary statistics, and how to refuse the column outright instead of modelling it.</p>
+        </dd><dt><a href="cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></dt>
+        <dd><p>Why a mystery-caller study needs a source denominator, an eligible cohort and an analytic cohort kept as separate objects, how to audit the attrition between them, and how to adjudicate derived files that disagree.</p>
       </dd></dl></div>
     <div class="section ">
       <h3>Demographics</h3>
@@ -126,6 +133,8 @@
         <dd><p>When and how to use mysterycall_lmm() for appointment wait-time outcomes, including auto-log transforms, geometric mean ratios, Poisson sensitivity analysis, and the calendar vs. business-day comparison.</p>
         </dd><dt><a href="logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></dt>
         <dd>
+        </dd><dt><a href="two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></dt>
+        <dd><p>Access has two stages, whether an appointment is offered and how long the wait is among offers. Each stage needs its own denominator, and exclusion criteria that absorb the no-offer outcome will silently destroy the first stage.</p>
         </dd><dt><a href="adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></dt>
         <dd>
         </dd><dt><a href="power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></dt>

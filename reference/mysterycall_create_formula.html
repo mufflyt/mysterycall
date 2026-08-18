@@ -36,6 +36,8 @@ response variable, and optional random effect."><meta property="og:image" conten
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
+    <li><a class="dropdown-item" href="../articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
@@ -48,6 +50,7 @@ response variable, and optional random effect."><meta property="og:image" conten
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
@@ -135,7 +138,7 @@ internally.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Formula string with random effect: days ~ `age` + (1 | name )</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final formula object created: days ~ age + (1 | name)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> days ~ age + (1 | name)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564d16e41270&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558994e5b3f8&gt;</span>
 <span class="r-in"><span><span class="fu">mysterycall_create_formula</span><span class="op">(</span><span class="va">df</span>, <span class="st">"days"</span><span class="op">)</span>  <span class="co"># fixed-effects only</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating formula with response variable: days</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Predictor variables identified: age, name</span>
@@ -143,7 +146,7 @@ internally.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial formula string: days ~ `age` + `name`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final formula object created: days ~ age + name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> days ~ age + name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564d1ae5c2c8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558994d43038&gt;</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

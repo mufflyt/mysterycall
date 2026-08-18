@@ -5,10 +5,12 @@ articles:
   adding-covariates: adding-covariates.html
   aggregating_provider_data: aggregating_provider_data.html
   audit-study-tools: audit-study-tools.html
+  cohort-provenance: cohort-provenance.html
   data-cleaning: data-cleaning.html
   data-quality: data-quality.html
   get_census_data: get_census_data.html
   getting_started: getting_started.html
+  guarding-contaminated-outcomes: guarding-contaminated-outcomes.html
   linear-mixed-models: linear-mixed-models.html
   logistic-model: logistic-model.html
   matched-control-design: matched-control-design.html
@@ -23,9 +25,10 @@ articles:
   subspecialist-density: subspecialist-density.html
   supplementary-digital-content: supplementary-digital-content.html
   table-generation: table-generation.html
+  two-part-denominators: two-part-denominators.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-08-18T13:05Z
+last_built: 2026-08-18T13:31Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

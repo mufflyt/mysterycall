@@ -40,6 +40,8 @@ capture everything needed to reproduce the run."><meta property="og:image" conte
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
+    <li><a class="dropdown-item" href="../articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
@@ -52,6 +54,7 @@ capture everything needed to reproduce the run."><meta property="og:image" conte
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
@@ -188,11 +191,11 @@ single top-level call that collects them all in one place.</p>
 <span class="r-in"><span><span class="co"># Inspect what was written</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_session_snapshot</span><span class="op">(</span>file <span class="op">=</span> <span class="va">snap</span>, append <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Session snapshot: /tmp/RtmpcdRBCj/file216122c48456.txt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Session snapshot: /tmp/RtmpFhmQ3A/file210878e0c8a1.txt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ============================================================</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> === REPRODUCIBILITY SNAPSHOT ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ============================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Date/Time: 2026-08-18 13:12:24 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Date/Time: 2026-08-18 13:39:16 UTC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> R Version: R version 4.6.1 (2026-06-24)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Platform:  x86_64-pc-linux-gnu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

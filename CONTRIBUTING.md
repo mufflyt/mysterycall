@@ -166,6 +166,5 @@ Tests added or updated
 
 ## Questions?
 
-Open a [GitHub
-Discussion](https://github.com/mufflyt/mysterycall/discussions) or email
-the maintainer at <tyler.muffly@dhha.org>.
+Open a [GitHub Issue](https://github.com/mufflyt/mysterycall/issues) or
+email the maintainer at <tyler.muffly@dhha.org>.

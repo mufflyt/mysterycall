@@ -34,6 +34,8 @@
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><a class="dropdown-item" href="../articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
+    <li><a class="dropdown-item" href="../articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
@@ -46,6 +48,7 @@
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
+    <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
@@ -120,16 +123,16 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_tracker.html">mysterycall_progress_tracker</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Geocode"</span>, <span class="st">"Validate"</span><span class="op">)</span>, update_every <span class="op">=</span> <span class="fl">1e9</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_start.html">mysterycall_progress_start</a></span><span class="op">(</span><span class="va">tr</span>, <span class="st">"Geocode"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:12:00] Started Geocode</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:12:00] Progress: 0/2 steps complete (0.0%)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:38:49] Started Geocode</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:38:49] Progress: 0/2 steps complete (0.0%)</span>
 <span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu"><a href="mysterycall_progress_finish.html">mysterycall_progress_finish</a></span><span class="op">(</span><span class="va">tr</span>, <span class="st">"Geocode"</span>, score <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:12:00] Completed Geocode (high)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:12:00] Progress: 1/2 steps complete (50.0%)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:38:49] Completed Geocode (high)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [13:38:49] Progress: 1/2 steps complete (50.0%)</span>
 <span class="r-in"><span><span class="fu">mysterycall</span><span class="fu">:::</span><span class="fu">mysterycall_progress_summary</span><span class="op">(</span><span class="va">tr</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   step     status    started_at          finished_at         quality note </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Geocode  completed 2026-08-18 <span style="color: #949494;">13:12:00</span> 2026-08-18 <span style="color: #949494;">13:12:00</span> high    <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Geocode  completed 2026-08-18 <span style="color: #949494;">13:38:49</span> 2026-08-18 <span style="color: #949494;">13:38:49</span> high    <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Validate pending   <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
 </code></pre></div>
     </div>

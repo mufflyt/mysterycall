@@ -196,4 +196,4 @@ newcomer trips on:
   phase-1/phase-2 flow.
 
 Questions that aren’t answered here belong in a [GitHub
-Discussion](https://github.com/mufflyt/mysterycall/discussions).
+Issue](https://github.com/mufflyt/mysterycall/issues).

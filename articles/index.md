@@ -55,6 +55,21 @@
   phone validation, address normalization, Phase 1 and Phase 2 log
   cleaning, duplicate detection, and clinician data retrieval.
 
+- [Guarding Against a Contaminated Outcome
+  Variable](https://mufflyt.github.io/mysterycall/articles/guarding-contaminated-outcomes.md):
+
+  How a wait-time column becomes fill-down contaminated, why the damage
+  is invisible in summary statistics, and how to refuse the column
+  outright instead of modelling it.
+
+- [Cohort Provenance: Three Populations, One
+  Study](https://mufflyt.github.io/mysterycall/articles/cohort-provenance.md):
+
+  Why a mystery-caller study needs a source denominator, an eligible
+  cohort and an analytic cohort kept as separate objects, how to audit
+  the attrition between them, and how to adjudicate derived files that
+  disagree.
+
 ### Demographics
 
 - [Getting Data from the US Census Bureau for
@@ -99,6 +114,14 @@
 
 - [Logistic Model: Appointment Offered
   (Yes/No)](https://mufflyt.github.io/mysterycall/articles/logistic-model.md):
+
+- [The Two-Part Model and the Denominator
+  Trap](https://mufflyt.github.io/mysterycall/articles/two-part-denominators.md):
+
+  Access has two stages, whether an appointment is offered and how long
+  the wait is among offers. Each stage needs its own denominator, and
+  exclusion criteria that absorb the no-offer outcome will silently
+  destroy the first stage.
 
 - [Adding Physician Covariates to the Wait-Time
   Model](https://mufflyt.github.io/mysterycall/articles/adding-covariates.md):
