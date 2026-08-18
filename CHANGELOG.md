@@ -70,8 +70,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - covr test-coverage workflow added
 - Mystery Caller Workflow vignette renders end-to-end (12-section walkthrough)
 
-## [1.6.0] — 2026-01-01
-- Initial tracked release
+## [1.6.3] — 2026-07-19
+- Earliest tagged release in this repository (v1.6.1, v1.6.2 and v1.6.3 exist; there is no v1.6.0 tag)
 
-[Unreleased]: https://github.com/mufflyt/mysterycall/compare/v1.6.0...HEAD
-[1.6.0]: https://github.com/mufflyt/mysterycall/releases/tag/v1.6.0
+[Unreleased]: https://github.com/mufflyt/mysterycall/compare/v1.6.3...HEAD
+[1.6.3]: https://github.com/mufflyt/mysterycall/releases/tag/v1.6.3

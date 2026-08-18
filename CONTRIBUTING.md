@@ -129,5 +129,5 @@ Key tools used in this project:
 
 ## Questions?
 
-Open a [GitHub Discussion](https://github.com/mufflyt/mysterycall/discussions)
+Open a [GitHub Issue](https://github.com/mufflyt/mysterycall/issues)
 or email the maintainer at tyler.muffly@dhha.org.
