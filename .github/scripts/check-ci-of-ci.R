@@ -166,6 +166,25 @@ if (!file.exists(nf)) {
       untimed <- c(untimed, sprintf("%s (%d job(s), %d timeout(s))",
                                     basename(wf), n_jobs, n_tmo))
   }
+  # Actions must be pinned to an immutable commit, not a moving tag. A tag can
+  # be repointed under you, which is both a supply-chain exposure and a
+  # reproducibility one: the same workflow file stops meaning the same thing.
+  # r-lib/actions/setup-r hung four times in one session on this repository,
+  # and with a tag pin there is no way to say which revision was running.
+  unpinned <- character(0)
+  for (wf in wf_files) {
+    for (ln in grep("uses:\\s*\\S+@\\S+", readLines(wf, warn = FALSE), value = TRUE)) {
+      ref <- sub(".*@([^ #]+).*", "\\1", trimws(ln))
+      if (!grepl("^[0-9a-f]{40}$", ref))
+        unpinned <- c(unpinned, sprintf("%s: %s", basename(wf), trimws(ln)))
+    }
+  }
+  if (length(unpinned))
+    bad("action(s) pinned to a moving tag rather than a commit SHA:\n    ",
+        paste(unpinned, collapse = "\n    "),
+        "\n    Pin to the 40-character commit and keep the tag as a trailing comment.")
+  else ok("every action is pinned to a commit SHA")
+
   if (length(untimed))
     bad("workflow(s) with untimed jobs: ", paste(untimed, collapse = "; "),
         ". A job with no timeout-minutes hangs for six hours by default.")

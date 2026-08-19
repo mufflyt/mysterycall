@@ -164,6 +164,73 @@ if ((is.na(cff_ver) || identical(cff_ver, desc_ver)) &&
 }
 
 ## ---------------------------------------------------------------------------
+## 5. Every export and every vignette must appear in the pkgdown index.
+##
+## pkgdown fails the build for an unindexed topic ("1 topic missing from index")
+## and again for an unindexed article. Both have happened here, and both were
+## only discovered after a full pkgdown run had already burned several minutes,
+## because nothing cheaper looked. This check costs a second and reads the same
+## two lists pkgdown reads.
+##
+## Re-exported operators are excluded: pkgdown documents them through the
+## package that owns them, so requiring an index entry would be wrong.
+
+section("pkgdown index covers every export and vignette")
+
+if (!file.exists("_pkgdown.yml")) {
+  cat("  skip  no _pkgdown.yml\n")
+} else if (!requireNamespace("yaml", quietly = TRUE)) {
+  cat("  skip  yaml package not available\n")
+} else {
+  y <- yaml::read_yaml("_pkgdown.yml")
+
+  ref_idx <- unlist(lapply(y$reference, function(s) s$contents))
+  art_idx <- unlist(lapply(y$articles,  function(s) s$contents))
+  # selector helpers (starts_with(...) and friends) are not literal topic names
+  ref_idx <- ref_idx[!grepl("^(starts_with|ends_with|matches|contains|has_keyword|everything)\\(", ref_idx)]
+
+  ns <- tryCatch({
+    if (requireNamespace("pkgload", quietly = TRUE)) {
+      suppressMessages(pkgload::load_all(".", quiet = TRUE))
+      getNamespaceExports("mysterycall")
+    } else NULL
+  }, error = function(e) NULL)
+
+  if (is.null(ns)) {
+    cat("  skip  package would not load; export index not checked\n")
+  } else {
+    # operators such as %>% are re-exports documented upstream
+    exports <- ns[!grepl("^%.*%$", ns)]
+    missing_topics <- setdiff(exports, ref_idx)
+    if (length(missing_topics)) {
+      fail("export(s) missing from the _pkgdown.yml reference index: ",
+           paste(sort(missing_topics), collapse = ", "),
+           ". pkgdown fails the build for these; add them beside their @family.")
+    } else {
+      cat("  ok   ", length(exports), " exports all indexed\n", sep = "")
+    }
+  }
+
+  vigs <- sub("[.]Rmd$", "", list.files("vignettes", pattern = "[.]Rmd$"))
+  missing_articles <- setdiff(vigs, art_idx)
+  if (length(missing_articles)) {
+    fail("vignette(s) missing from the _pkgdown.yml articles index: ",
+         paste(sort(missing_articles), collapse = ", "),
+         ". pkgdown fails the build for these the same way it does for topics.")
+  } else {
+    cat("  ok   ", length(vigs), " vignettes all indexed\n", sep = "")
+  }
+
+  orphan_articles <- setdiff(art_idx, vigs)
+  if (length(orphan_articles)) {
+    fail("articles index names vignette(s) that do not exist: ",
+         paste(sort(orphan_articles), collapse = ", "))
+  } else {
+    cat("  ok   no orphaned article entries\n")
+  }
+}
+
+## ---------------------------------------------------------------------------
 
 cat("\n")
 if (length(failures)) {
