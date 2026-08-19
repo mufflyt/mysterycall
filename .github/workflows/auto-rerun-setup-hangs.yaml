@@ -1,0 +1,103 @@
+# Retry a run that was killed before it began doing any work.
+#
+# r-lib/actions/setup-r hung five times in a single day on this repository,
+# across four different branches, on every workflow that installs R. Each time
+# the job sat until something killed it: before job timeouts existed, that meant
+# GitHub's six-hour default; afterwards it meant the job's own timeout. Either
+# way a human then had to notice and press the button, which is exactly the
+# toil that required status checks are supposed to remove.
+#
+# The danger with any auto-retry is that it hides real breakage. A suite that
+# retries until it passes is worse than one that fails honestly, and this
+# repository has spent a lot of effort making sure its gates can fail. So the
+# discriminator here is deliberately narrow, and it is about WHERE the run died
+# rather than how often:
+#
+#   * the run's conclusion must be `cancelled`, not `failure`. A test that
+#     genuinely fails, a check that finds a NOTE, a script that exits non-zero
+#     -- all of those report `failure` and are never retried. `cancelled` is
+#     what a timeout kill looks like.
+#
+#   * every job that did not succeed must have died inside a setup step:
+#     checkout, setup-r, setup-pandoc, setup-r-dependencies, system
+#     dependencies. If a job got as far as running tests, building vignettes or
+#     checking the package, this workflow leaves it alone even if it was
+#     cancelled, because the cancellation may have interrupted a real failure.
+#
+#   * only the first attempt is retried. A second hang is a signal worth seeing,
+#     not something to paper over.
+#
+# In other words: retry only when CI never got to run the thing it was testing.
+
+name: auto-rerun-setup-hangs
+
+on:
+  workflow_run:
+    workflows:
+      - "R-CMD-check"
+      - "test-coverage"
+      - "pkgdown"
+      - "url-check"
+      - "repo-hygiene"
+      - "scientific-pr-gate"
+      - "nightly"
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  maybe-rerun:
+    # `cancelled` is the timeout signature. `failure` is never retried.
+    if: >
+      github.event.workflow_run.conclusion == 'cancelled' &&
+      github.event.workflow_run.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Decide whether this was a setup hang, and rerun if so
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            const run_id = context.payload.workflow_run.id;
+            const name   = context.payload.workflow_run.name;
+
+            const { data: { jobs } } = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner, repo: context.repo.repo,
+              run_id, per_page: 100
+            });
+
+            // Steps that mean "we had not started the real work yet".
+            const setupish = /^(Set up job|Run actions\/checkout@|Run r-lib\/actions\/setup-|Setup R|Install system dependencies|Install pandoc|Install TinyTeX|Install dependencies)/;
+
+            const notOk = jobs.filter(j => j.conclusion !== 'success' && j.conclusion !== 'skipped');
+            if (notOk.length === 0) {
+              core.info(`${name}: nothing unsuccessful to rerun.`);
+              return;
+            }
+
+            const verdicts = notOk.map(j => {
+              const stopped = (j.steps || []).find(
+                s => s.conclusion === 'cancelled' || s.conclusion === 'failure'
+              );
+              const where = stopped ? stopped.name : '(no step recorded)';
+              return { job: j.name, where, setup: stopped ? setupish.test(where) : false };
+            });
+
+            for (const v of verdicts) {
+              core.info(`${v.job}: stopped at "${v.where}" -> ${v.setup ? 'setup hang' : 'real work'}`);
+            }
+
+            if (!verdicts.every(v => v.setup)) {
+              core.notice(
+                `${name}: not rerunning. At least one job got past setup, so the ` +
+                `cancellation may have interrupted a genuine failure.`
+              );
+              return;
+            }
+
+            core.notice(`${name}: every unsuccessful job died in setup; rerunning failed jobs once.`);
+            await github.rest.actions.reRunWorkflowFailedJobs({
+              owner: context.repo.owner, repo: context.repo.repo, run_id
+            });
