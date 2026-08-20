@@ -169,6 +169,6 @@ Sys.setFileTime(old_file, Sys.time() - 3600)
 
 # Return just the path to the newest match
 mysterycall_read_latest(dir, "\\.csv$", read = FALSE)
-#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-18 13:38, 0.0 days ago); beat 1 other candidate(s).
-#> [1] "/tmp/RtmpFhmQ3A/redcap_21081a977421/export_2026-07-20.csv"
+#> mysterycall_read_latest: chose 'export_2026-07-20.csv' (modified 2026-08-20 13:03, 0.0 days ago); beat 1 other candidate(s).
+#> [1] "/tmp/Rtmp4rXLf2/redcap_20e419eb3f20/export_2026-07-20.csv"
 ```
