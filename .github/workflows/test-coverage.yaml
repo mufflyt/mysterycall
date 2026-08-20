@@ -18,11 +18,11 @@ jobs:
       # takes the run down as an opaque .Rout.fail. Serial under coverage.
       TESTTHAT_PARALLEL: 'FALSE'
     steps:
-      - uses: actions/checkout@v5
-      - uses: r-lib/actions/setup-r@v2
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
         with:
           use-public-rspm: true
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
         with:
           extra-packages: any::covr, any::xml2
           needs: coverage
@@ -66,7 +66,7 @@ jobs:
             cat(sprintf("Coverage: %.1f%%\n", pct))
           }
         shell: Rscript {0}
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5
         with:
           fail_ci_if_error: false
           files: ./cobertura.xml
