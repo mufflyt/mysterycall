@@ -151,6 +151,14 @@ jobs:
     # never actually verified.
     timeout-minutes: ${{ matrix.config.r == 'devel' && 150 || 60 }}
     name: check ${{ matrix.config.os }} (${{ matrix.config.r }})
+    env:
+      # DESCRIPTION sets Config/testthat/parallel: true, so test_check() fans the
+      # suite across callr subprocesses. A worker that dies takes the run down
+      # with an opaque traceback ending in parallel_event_loop_chunky. That has
+      # now happened twice on this repository -- once under covr, and once in
+      # R CMD check on windows oldrel-1 -- so it is set wherever the suite runs,
+      # not only where it was first observed.
+      TESTTHAT_PARALLEL: 'FALSE'
     strategy:
       fail-fast: false
       matrix:
@@ -241,6 +249,13 @@ jobs:
       TEST_SCALABILITY: 'true'
       TEST_STRESS: 'true'
       NOT_CRAN: 'true'
+      # DESCRIPTION sets Config/testthat/parallel: true, so test_check() fans the
+      # suite across callr subprocesses. A worker that dies takes the run down
+      # with an opaque traceback ending in parallel_event_loop_chunky. That has
+      # now happened twice on this repository -- once under covr, and once in
+      # R CMD check on windows oldrel-1 -- so it is set wherever the suite runs,
+      # not only where it was first observed.
+      TESTTHAT_PARALLEL: 'FALSE'
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2

@@ -51,6 +51,10 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # See nightly.yaml: a dying parallel testthat worker fails R CMD check
+      # with an opaque traceback ending in parallel_event_loop_chunky. The suite
+      # runs serially wherever R CMD check runs it.
+      TESTTHAT_PARALLEL: 'FALSE'
 
     steps:
       - uses: actions/checkout@v5
