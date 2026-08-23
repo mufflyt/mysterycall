@@ -41,6 +41,8 @@ SCRIPTS <- c(
   ".github/scripts/check-portability.R",
   ".github/scripts/check-dependencies.R",
   ".github/scripts/check-scientific-mutations.R",
+  ".github/scripts/verify-mutation-receipt.R",
+  ".github/scripts/check-scientific-semantics.R",
   ".github/scripts/check-coverage-regression.R",
   ".github/scripts/emit-provenance.R",
   ".github/scripts/check-scientific-diff.R",
@@ -136,6 +138,7 @@ if (!file.exists(nf)) {
 } else {
   ntxt <- paste(readLines(nf, warn = FALSE), collapse = "\n")
   REQUIRED_JOBS <- c("scientific-contract", "scientific-mutations",
+                     "scientific-semantics",
                      "study-integrity", "doc-drift", "data-integrity",
                      "cohort-freeze")
   for (j in REQUIRED_JOBS) {

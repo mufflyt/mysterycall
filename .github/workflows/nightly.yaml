@@ -134,6 +134,26 @@ jobs:
         run: Rscript .github/scripts/check-cohort-freeze.R
 
   # ---------------------------------------------------------------------------
+  # 0d. Scientific semantics.
+  #
+  # Fast source-level guard against known high-consequence scientific reporting
+  # regressions: signed day CIs, p-value formatting, paired sensitivity tests,
+  # and same-day wait handling. This runs before the package install so a bad
+  # source idiom fails as its own scientific problem.
+  # ---------------------------------------------------------------------------
+  scientific-semantics:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
+        with: {use-public-rspm: true}
+      - name: Check source-level scientific semantics
+        run: Rscript .github/scripts/check-scientific-semantics.R
+
+  # ---------------------------------------------------------------------------
   # 1. R CMD check, wider than the push matrix: adds oldrel-2 and non-Linux
   #    oldrel, and runs --as-cran --run-donttest with warnings fatal.
   # ---------------------------------------------------------------------------
@@ -532,11 +552,37 @@ jobs:
         with: {use-public-rspm: true}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::devtools, any::testthat
+          extra-packages: any::devtools, any::testthat, any::jsonlite
           needs: check
           cache-version: 3
       - name: Run the scientific mutation campaign
         run: Rscript .github/scripts/check-scientific-mutations.R
+
+      # The campaign's own exit code is not enough for the aggregator, which can
+      # only ever see "success". This asserts the three claims SEPARATELY from
+      # the receipt the campaign writes:
+      #
+      #   1. the adversarial test was actually executed  (full declared suite,
+      #      every declared mutant, real assertions -- not a campaign that ran
+      #      nothing and exited 0)
+      #   2. the UNPOISONED reference analysis passed    (without the control,
+      #      "the poisoned analysis failed" is not evidence of detection)
+      #   3. every poisoned analysis actually failed     (with per-mutant proof
+      #      of HOW, so a "killed" verdict cannot be bookkeeping)
+      #
+      # if: always() so that a campaign which dies mid-run is caught by the
+      # missing receipt rather than quietly skipping its own verification.
+      - name: Prove the campaign ran, the control passed, and every poison failed
+        if: always()
+        run: Rscript .github/scripts/verify-mutation-receipt.R
+
+      - name: Upload the mutation receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-receipt
+          path: mutation-receipt.json
+          if-no-files-found: warn
 
   # ---------------------------------------------------------------------------
   # 5d. Provenance, scientific diff, and CI-of-CI (spec sections 81, 83, 100).
@@ -889,7 +935,7 @@ jobs:
   # 15. Aggregate. One issue per failed night, not one per job.
   # ---------------------------------------------------------------------------
   summary:
-    needs: [gate, scientific-contract, cohort-freeze, scientific-mutations, provenance-and-diff, check, tests, coverage, doc-drift, data-integrity, study-integrity,
+    needs: [gate, scientific-contract, cohort-freeze, scientific-semantics, scientific-mutations, provenance-and-diff, check, tests, coverage, doc-drift, data-integrity, study-integrity,
             portability, dependencies, vignettes, pkgdown, urls, hygiene,
             install-clean, spelling, lint]
     if: always() && needs.gate.outputs.run == 'true'
@@ -915,6 +961,7 @@ jobs:
             echo "| Study integrity | ${{ needs['study-integrity'].result }} | yes |"
             echo "| Scientific contract | ${{ needs['scientific-contract'].result }} | yes |"
             echo "| Frozen cohort | ${{ needs['cohort-freeze'].result }} | yes |"
+            echo "| Scientific semantics | ${{ needs['scientific-semantics'].result }} | yes |"
             echo "| Scientific mutations | ${{ needs['scientific-mutations'].result }} | yes |"
             echo "| Provenance / diff / CI-of-CI | ${{ needs['provenance-and-diff'].result }} | yes |"
             echo "| Portability | ${{ needs.portability.result }} | yes |"
@@ -938,6 +985,7 @@ jobs:
             "study-integrity:${{ needs['study-integrity'].result }}" \
             "scientific-contract:${{ needs['scientific-contract'].result }}" \
             "cohort-freeze:${{ needs['cohort-freeze'].result }}" \
+            "scientific-semantics:${{ needs['scientific-semantics'].result }}" \
             "scientific-mutations:${{ needs['scientific-mutations'].result }}" \
             "provenance-and-diff:${{ needs['provenance-and-diff'].result }}" \
             "portability:${{ needs.portability.result }}" \

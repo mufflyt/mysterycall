@@ -53,3 +53,6 @@ find_detached.py
 check_docs.R
 check_internal.R
 roxygen_tags_summary.txt
+
+# Emitted by the scientific mutation campaign; proof of a run, not a source file.
+mutation-receipt.json

@@ -22,9 +22,10 @@
 
 suppressWarnings(suppressMessages({
   ok <- requireNamespace("testthat", quietly = TRUE) &&
-        requireNamespace("devtools", quietly = TRUE)
+        requireNamespace("devtools", quietly = TRUE) &&
+        requireNamespace("jsonlite", quietly = TRUE)
 }))
-if (!ok) { cat("::error::mutation campaign needs testthat and devtools\n"); quit(status = 1L) }
+if (!ok) { cat("::error::mutation campaign needs testthat, devtools and jsonlite\n"); quit(status = 1L) }
 
 if (!file.exists("DESCRIPTION")) {
   cat("::error::run from the repository root\n"); quit(status = 1L)
@@ -262,7 +263,22 @@ TEST_FILES <- c(
   "tests/testthat/test-study-callers-exclusions.R",
   "tests/testthat/test-study-outcome-and-wait.R"
 )
-TEST_FILES <- TEST_FILES[file.exists(TEST_FILES)]
+# A campaign that silently runs against half its declared suite is the most
+# dangerous failure mode here, because it still reports "all mutants killed".
+# Dropping missing files with file.exists() did exactly that: rename three of
+# the six and the remaining three may still kill every mutant, so the campaign
+# stays green while half the evidence base has quietly disappeared. Losing ALL
+# of them fails loudly (every mutant survives), but partial loss does not --
+# so the declared list is now a contract, not a wish.
+.missing <- TEST_FILES[!file.exists(TEST_FILES)]
+if (length(.missing)) {
+  cat("::error::the mutation campaign declares ", length(TEST_FILES),
+      " test files and ", length(.missing), " are missing:\n", sep = "")
+  for (f in .missing) cat("  ", f, "\n", sep = "")
+  cat("Renaming or deleting a study-integrity test silently shrinks what the\n")
+  cat("campaign can detect. Update TEST_FILES deliberately if this is intended.\n")
+  quit(status = 1L)
+}
 
 run_against <- function(mutated) {
   tmp <- tempfile(fileext = ".rds"); saveRDS(mutated, tmp)
@@ -306,21 +322,74 @@ if (base_run$failures > 0L) {
       "killed for the wrong reason. Fix the suite before trusting this campaign.\n", sep = "")
   quit(status = 1L)
 }
+# "Did not fail" and "ran" are different claims. A suite whose tests were all
+# skipped, or whose assertions never executed, reports zero failures and would
+# pass the guard above while proving nothing. The assertion count was already
+# being computed here and never checked.
+if (base_run$assertions <= 0L) {
+  cat("::error::the uncorrupted baseline produced ZERO passing assertions.\n")
+  cat("Zero failures then means the suite did not run, not that it agreed.\n")
+  quit(status = 1L)
+}
 
 survivors <- character(0)
+evidence  <- list()   # per-mutant proof, written to the receipt below
 for (m in MUTANTS) {
   r <- try(run_against(m$f(BASE)), silent = TRUE)
   if (inherits(r, "try-error")) {
     # An error is a kill: the corrupted data could not even be processed.
-    cat(sprintf("  KILLED   %-34s (errored)\n", m$id)); next
+    cat(sprintf("  KILLED   %-34s (errored)\n", m$id))
+    evidence[[m$id]] <- list(id = m$id, killed = TRUE, how = "errored",
+                             failing_assertions = NA_integer_)
+    next
   }
   if (r$failures > 0L) {
     cat(sprintf("  KILLED   %-34s (%d failing assertion(s))\n", m$id, r$failures))
+    evidence[[m$id]] <- list(id = m$id, killed = TRUE, how = "assertions_failed",
+                             failing_assertions = as.integer(r$failures))
   } else {
     cat(sprintf("  SURVIVED %-34s\n", m$id))
     survivors <- c(survivors, m$id)
+    evidence[[m$id]] <- list(id = m$id, killed = FALSE, how = "survived",
+                             failing_assertions = 0L)
   }
 }
+
+# ---------------------------------------------------------------------------
+# The receipt. A green job result is not evidence that the scientific failure
+# mode was exercised -- the aggregator can only see "success". So record the
+# three claims SEPARATELY, as data, and let a verifier assert each one:
+#
+#   executed        the campaign really ran: N test files, N assertions, N mutants
+#   control_passed  the UNPOISONED reference analysis passed with assertions > 0
+#   poison_failed   every poisoned analysis actually failed
+#
+# Without the control, "the tests failed" is not evidence the poison was
+# detected -- a suite that fails on everything would look perfect.
+RECEIPT <- "mutation-receipt.json"
+receipt <- list(
+  schema  = "mysterycall/mutation-receipt/v1",
+  fixture = FIXTURE,
+  executed = list(
+    test_files_declared = length(TEST_FILES),
+    test_files_run      = length(TEST_FILES),
+    mutants_declared    = length(MUTANTS),
+    mutants_run         = length(evidence),
+    baseline_assertions = as.integer(base_run$assertions)
+  ),
+  control_passed = list(
+    baseline_failures   = as.integer(base_run$failures),
+    baseline_assertions = as.integer(base_run$assertions),
+    passed = base_run$failures == 0L && base_run$assertions > 0L
+  ),
+  poison_failed = list(
+    mutants   = unname(evidence),
+    survivors = survivors,
+    all_killed = length(survivors) == 0L
+  )
+)
+jsonlite::write_json(receipt, RECEIPT, auto_unbox = TRUE, pretty = TRUE)
+cat(sprintf("\nreceipt written: %s\n", RECEIPT))
 
 score <- (length(MUTANTS) - length(survivors)) / length(MUTANTS) * 100
 cat(sprintf("\nscientific-core mutation score: %.1f%% (%d of %d killed)\n",
