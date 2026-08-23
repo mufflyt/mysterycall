@@ -42,6 +42,7 @@ SCRIPTS <- c(
   ".github/scripts/check-dependencies.R",
   ".github/scripts/check-scientific-mutations.R",
   ".github/scripts/verify-mutation-receipt.R",
+  ".github/scripts/verify-release-mutation-receipt.R",
   ".github/scripts/check-scientific-semantics.R",
   ".github/scripts/check-coverage-regression.R",
   ".github/scripts/emit-provenance.R",

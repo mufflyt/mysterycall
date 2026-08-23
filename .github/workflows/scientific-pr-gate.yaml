@@ -143,3 +143,31 @@ jobs:
       # so it costs seconds rather than another job.
       - name: Frozen-cohort gate
         run: Rscript .github/scripts/check-cohort-freeze.R
+
+      # Sentinel mutations: the per-PR tier of the adversarial campaign.
+      #
+      # The full campaign is 15 suite runs (~82s of compute) and stays nightly.
+      # Not because 82s is expensive, but because the per-PR gate has to stay
+      # small enough that nobody is ever tempted to weaken or bypass it -- a
+      # gate people route around protects nothing.
+      #
+      # These five are one per high-consequence attack class, chosen so a change
+      # that can defeat the scientific immune system trips at least one of them:
+      # reversing the exposure label, turning missing into a real zero, dropping
+      # records from the denominator, breaking the paired provider structure,
+      # and breaking call identity. The question a PR must answer is not "did we
+      # enumerate every attack" -- that is nightly's job -- but "can this change
+      # defeat the immune system at all?"
+      #
+      # Reuses the dependencies installed above, so it adds ~34s and no new job.
+      - name: Sentinel scientific mutations
+        run: Rscript .github/scripts/check-scientific-mutations.R --sentinel
+
+      # The campaign's exit code is not the evidence; the receipt is. Same three
+      # claims as nightly, proven separately: it executed, the unpoisoned control
+      # passed, and every poisoned analysis failed. if: always() so a campaign
+      # that dies mid-run is caught by the missing receipt rather than skipping
+      # its own verification.
+      - name: Prove the sentinel campaign ran and caught every poison
+        if: always()
+        run: Rscript .github/scripts/verify-mutation-receipt.R

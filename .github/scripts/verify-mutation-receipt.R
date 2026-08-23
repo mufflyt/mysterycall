@@ -47,7 +47,7 @@ if (!file.exists(RECEIPT)) {
 }
 
 r <- jsonlite::fromJSON(RECEIPT, simplifyVector = TRUE)
-if (!identical(r$schema, "mysterycall/mutation-receipt/v1")) {
+if (!identical(r$schema, "mysterycall/mutation-receipt/v2")) {
   cat("::error::unrecognised receipt schema: ", as.character(r$schema), "\n", sep = "")
   quit(status = 1L)
 }
@@ -59,10 +59,19 @@ ok  <- function(...) cat("  ok    ", paste0(...), "\n")
 # --- 1. EXECUTED --------------------------------------------------------------
 cat("\n== 1. the adversarial test was actually executed\n")
 ex <- r$executed
-# A floor, not a mirror of the current numbers: this must fail when the campaign
+MODE <- if (is.null(r$mode)) "full" else as.character(r$mode)
+if (!MODE %in% c("full", "sentinel")) {
+  cat("::error::unknown campaign mode: ", MODE, "\n", sep = ""); quit(status = 1L)
+}
+cat("  mode: ", MODE, "\n", sep = "")
+
+# Floors, not mirrors of the current numbers: these must fail when the campaign
 # shrinks, without needing an edit every time a mutant is legitimately added.
+# The sentinel tier has its own floor -- it is a smaller campaign on purpose,
+# and holding it to the full count would either fail every PR or force the full
+# floor down to 5, which would silently accept a gutted nightly campaign.
 MIN_TEST_FILES <- 6L
-MIN_MUTANTS    <- 14L
+MIN_MUTANTS    <- if (MODE == "sentinel") 5L else 14L
 MIN_ASSERTIONS <- 50L
 
 if (is.null(ex$test_files_run) || ex$test_files_run < MIN_TEST_FILES) {
@@ -126,6 +135,19 @@ if (!is.null(pf$mutants) && nrow(pf$mutants) > 0) {
   ok("every kill carries evidence of how")
 }
 
+# --- 4. PROVENANCE ------------------------------------------------------------
+# Not one of the three claims, but the thing that makes them transferable: a
+# receipt that cannot say WHICH tree it certifies cannot gate a release.
+cat("\n== 4. the receipt identifies what it certifies\n")
+pv <- r$provenance
+for (f in c("sha", "test_inventory_sha256", "source_data_manifest_sha256",
+            "mutation_inventory_sha256")) {
+  v <- pv[[f]]
+  if (is.null(v) || is.na(v) || !nzchar(as.character(v)))
+    bad("provenance field '", f, "' is absent; the receipt cannot be tied to a tree")
+  else ok(f, ": ", substr(as.character(v), 1, 16))
+}
+
 # --- verdict ------------------------------------------------------------------
 cat("\n")
 if (length(fails)) {
@@ -135,4 +157,4 @@ if (length(fails)) {
   cat("hold independently: executed, control passed, poison failed.\n")
   quit(status = 1L)
 }
-cat("adversarial campaign PROVEN: executed, control passed, every poison caught.\n")
+cat(sprintf("adversarial campaign PROVEN (%s): executed, control passed, every poison caught.\n", MODE))

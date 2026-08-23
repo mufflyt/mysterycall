@@ -23,13 +23,48 @@
 suppressWarnings(suppressMessages({
   ok <- requireNamespace("testthat", quietly = TRUE) &&
         requireNamespace("devtools", quietly = TRUE) &&
-        requireNamespace("jsonlite", quietly = TRUE)
+        requireNamespace("jsonlite", quietly = TRUE) &&
+        requireNamespace("digest", quietly = TRUE)
 }))
-if (!ok) { cat("::error::mutation campaign needs testthat, devtools and jsonlite\n"); quit(status = 1L) }
+if (!ok) { cat("::error::mutation campaign needs testthat, devtools, jsonlite and digest\n"); quit(status = 1L) }
 
 if (!file.exists("DESCRIPTION")) {
   cat("::error::run from the repository root\n"); quit(status = 1L)
 }
+
+# ---------------------------------------------------------------------------
+# Tiers. The full campaign is ~82s of compute for 15 suite runs, which is cheap
+# in isolation but is not the thing that makes a PR slow -- the R dependency
+# install is. So the split is not really about seconds; it is about keeping the
+# per-PR gate small enough that nobody is ever tempted to weaken or bypass it.
+#
+#   --sentinel   every PR. The highest-consequence, fastest attacks. Answers:
+#                "can this change defeat the scientific immune system at all?"
+#   (default)    nightly and release. The complete campaign. Answers:
+#                "how many ways can we manufacture a believable but
+#                 scientifically false access disparity from these calls, and
+#                 does mysterycall catch every one of them?"
+#
+# A sentinel run is NOT a substitute for the full campaign and its receipt says
+# so: the release gate refuses any receipt whose mode is not "full".
+#
+# The five sentinels are one per high-consequence attack class, chosen so that a
+# change which defeats the immune system trips at least one:
+#   payer_labels_reversed              reverses the exposure/group label -- the
+#                                      direction of the reported disparity
+#   missing_wait_becomes_zero          unresolved/missing becomes a real zero
+#   drop_unreachable_from_denominator  silently drops records from the denominator
+#   exclusion_applied_per_arm          breaks the paired provider structure
+#   deduplication_removed              breaks call identity, inflating N the way
+#                                      non-clustered inference does
+SENTINELS <- c(
+  "payer_labels_reversed",
+  "missing_wait_becomes_zero",
+  "drop_unreachable_from_denominator",
+  "exclusion_applied_per_arm",
+  "deduplication_removed"
+)
+MODE <- if ("--sentinel" %in% commandArgs(trailingOnly = TRUE)) "sentinel" else "full"
 
 FIXTURE <- "tests/fixtures/canonical_study.R"
 if (!file.exists(FIXTURE)) {
@@ -263,6 +298,20 @@ TEST_FILES <- c(
   "tests/testthat/test-study-callers-exclusions.R",
   "tests/testthat/test-study-outcome-and-wait.R"
 )
+ALL_MUTANTS    <- MUTANTS   # before any tier filtering
+ALL_MUTANT_IDS <- vapply(ALL_MUTANTS, function(m) m$id, character(1))
+if (MODE == "sentinel") {
+  # A sentinel id that no longer exists means the attack it stood for was
+  # renamed or deleted and the PR gate quietly stopped testing it.
+  .gone <- setdiff(SENTINELS, ALL_MUTANT_IDS)
+  if (length(.gone)) {
+    cat("::error::sentinel mutant(s) not found in the campaign: ",
+        paste(.gone, collapse = ", "), "\n", sep = "")
+    quit(status = 1L)
+  }
+  MUTANTS <- Filter(function(m) m$id %in% SENTINELS, MUTANTS)
+}
+
 # A campaign that silently runs against half its declared suite is the most
 # dangerous failure mode here, because it still reports "all mutants killed".
 # Dropping missing files with file.exists() did exactly that: rename three of
@@ -366,10 +415,50 @@ for (m in MUTANTS) {
 #
 # Without the control, "the tests failed" is not evidence the poison was
 # detected -- a suite that fails on everything would look perfect.
+# The provenance contract. A release must be able to prove that the campaign
+# which passed ran against THE RELEASE ITSELF -- otherwise:
+#   commit A -> full campaign passes -> commit B -> ordinary CI passes -> ship B
+# and B never faced the campaign at all. Binding the receipt to the SHA and to
+# hashes of what was actually exercised closes that.
+sha_of_files <- function(paths) {
+  paths <- sort(paths[file.exists(paths)])
+  if (!length(paths)) return(NA_character_)
+  digest::digest(paste(vapply(paths, function(f)
+    paste(f, digest::digest(file = f, algo = "sha256")), character(1)),
+    collapse = "\n"), algo = "sha256")
+}
+env_or <- function(v, alt) { x <- Sys.getenv(v); if (nzchar(x)) x else alt }
+git1 <- function(cmd, alt) {
+  out <- suppressWarnings(try(system(cmd, intern = TRUE, ignore.stderr = TRUE), silent = TRUE))
+  if (inherits(out, "try-error") || !length(out) || !nzchar(out[1])) alt else out[1]
+}
+
 RECEIPT <- "mutation-receipt.json"
 receipt <- list(
-  schema  = "mysterycall/mutation-receipt/v1",
+  schema  = "mysterycall/mutation-receipt/v2",
+  mode    = MODE,
   fixture = FIXTURE,
+  provenance = list(
+    repository = env_or("GITHUB_REPOSITORY",
+                        git1("git config --get remote.origin.url", NA_character_)),
+    sha        = env_or("GITHUB_SHA", git1("git rev-parse HEAD", NA_character_)),
+    workflow_run_id = env_or("GITHUB_RUN_ID", NA_character_),
+    workflow        = env_or("GITHUB_WORKFLOW", NA_character_),
+    timestamp       = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
+    # What was actually exercised. If a test file, the fixture, or a mutant
+    # definition changes, the corresponding hash changes and a receipt minted
+    # before that change no longer matches the tree it claims to certify.
+    test_inventory_sha256   = sha_of_files(TEST_FILES),
+    source_data_manifest_sha256 = sha_of_files(c(
+      FIXTURE, "tests/fixtures/canonical_study_expected.json")),
+    # Over the FULL declared attack surface, not the tier that ran: editing any
+    # mutant must invalidate every receipt, including sentinel ones.
+    mutation_inventory_sha256 = digest::digest(paste(vapply(ALL_MUTANTS, function(m)
+      paste(m$id, m$what, m$kills, collapse = "|"), character(1)),
+      collapse = "\n"), algo = "sha256"),
+    mutants_declared_ids = ALL_MUTANT_IDS,
+    sentinel_ids         = SENTINELS
+  ),
   executed = list(
     test_files_declared = length(TEST_FILES),
     test_files_run      = length(TEST_FILES),
@@ -383,9 +472,11 @@ receipt <- list(
     passed = base_run$failures == 0L && base_run$assertions > 0L
   ),
   poison_failed = list(
-    mutants   = unname(evidence),
-    survivors = survivors,
-    all_killed = length(survivors) == 0L
+    mutants           = unname(evidence),
+    mutants_attempted = length(evidence),
+    mutants_killed    = length(evidence) - length(survivors),
+    survivors         = survivors,
+    all_killed        = length(survivors) == 0L
   )
 )
 jsonlite::write_json(receipt, RECEIPT, auto_unbox = TRUE, pretty = TRUE)
