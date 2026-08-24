@@ -623,6 +623,13 @@ reference:
       - mysterycall_geocode_city_state
       - mysterycall_normalize_org_name
 
+  - title: "Randomization and Blinding"
+    desc: >
+      Assign record identifiers for a fielded design (e.g. a REDCap import) so that
+      the identifier itself does not encode the treatment arm.
+    contents:
+      - mysterycall_assign_blinded_slots
+
   - title: "Additional Models and Diagnostics"
     contents:
       - mysterycall_compare_count_families
