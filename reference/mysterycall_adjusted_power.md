@@ -122,10 +122,6 @@ if (requireNamespace("glmmTMB", quietly = TRUE)) {
     state_icc = 0.05, n_sim = 20, seed = 1
   )
 }
-#> Warning: package version mismatch: 
-#> glmmTMB was built with TMB package version 1.9.21
-#> Current TMB package version is 1.9.23
-#> Please re-install glmmTMB from source or restore original ‘TMB’ package (see '?reinstalling' for more information)
 #> # A tibble: 1 × 14
 #>   n_total n_rural n_urban power mean_log_effect mean_se median_se
 #>     <dbl>   <dbl>   <dbl> <dbl>           <dbl>   <dbl>     <dbl>

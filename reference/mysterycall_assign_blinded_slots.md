@@ -1,0 +1,106 @@
+# Assign blinded record slots that don't encode a matched pair's treatment arm
+
+Assigns each record in a two-arm matched-pairs design (e.g. a REDCap
+import) a slot number from `1:length(pair)` such that the slot's parity
+carries no information about which arm a record belongs to, and the two
+records making up a matched pair never land on consecutive slots.
+
+## Usage
+
+``` r
+mysterycall_assign_blinded_slots(
+  pair,
+  group,
+  seed = 20260824L,
+  max_tries = 1000L
+)
+```
+
+## Arguments
+
+- pair:
+
+  Vector (any type; coerced to character for grouping), one value per
+  record, identifying which matched pair a record belongs to. Every pair
+  must appear exactly twice.
+
+- group:
+
+  Vector the same length as `pair` giving each record's treatment arm.
+  Must have exactly 2 distinct values, and each arm's total count must
+  be even (required for exact parity balance).
+
+- seed:
+
+  Integer seed for the search over candidate permutations, set via
+  [`withr::local_seed()`](https://withr.r-lib.org/reference/with_seed.html)
+  so it does not disturb the caller's own random state. The result is
+  reproducible for a given `pair`, `group`, and `seed`, but — unlike a
+  sort on a visible column — cannot be re-derived without also knowing
+  `seed`, so callers must persist the returned slot assignment (the
+  crosswalk) if it needs to be recovered later.
+
+- max_tries:
+
+  Integer. Maximum number of random candidate permutations to try before
+  giving up. A candidate is accepted the first time no matched pair
+  lands on consecutive slots; parity balance is enforced by construction
+  on every candidate, not by retrying. Default `1000L`.
+
+## Value
+
+An integer vector the same length as `pair`, a permutation of
+`seq_along(pair)`: `result[i]` is the slot assigned to the `i`-th input
+record.
+
+## Details
+
+This exists because the naive approach — sorting records by
+`(pair, group)` and taking
+[`row_number()`](https://dplyr.tidyverse.org/reference/row_number.html)
+— silently defeats blinding in any two-arm matched-pairs mystery-caller
+study. If the arm labels sort consistently (e.g. "Non-PE" before "PE"
+alphabetically), every pair lands control-then-treatment in the sorted
+order, which makes slot parity a perfect predictor of the arm and puts
+the two members of a pair next to each other in whatever dropdown or
+call sheet the record ids populate. A masked/hidden field on the
+exposure column does not fix this, because the leak is the record id
+itself, not a visible field. This shipped undetected in one
+mystery-caller study until every per-state count turned out even.
+
+## Guarantees
+
+- Exact parity balance:
+
+  Each arm occupies exactly half the odd slots and half the even slots,
+  so slot parity carries zero information about the arm – not merely
+  little.
+
+- No pair adjacency:
+
+  The two records belonging to any one pair never occupy consecutive
+  slots in the returned ordering.
+
+Neither guarantee is probabilistic: both hold on the specific candidate
+permutation that is returned, checked before it is returned. Parity
+balance is exact by construction (each arm's shuffled members are split
+evenly across the two parity classes before slots are assigned);
+pair-adjacency is checked and the candidate discarded (up to `max_tries`
+times) if violated.
+
+## See also
+
+[`mysterycall_count_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.md)
+for the companion primary-outcome contract.
+
+Other study design:
+[`mysterycall_assign_scenarios()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_scenarios.md)
+
+## Examples
+
+``` r
+pair  <- rep(1:4, each = 2)
+group <- rep(c("treatment", "control"), 4)
+mysterycall_assign_blinded_slots(pair, group, seed = 1)
+#> [1] 3 5 4 6 7 1 8 2
+```

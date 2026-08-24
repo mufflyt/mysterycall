@@ -1265,6 +1265,15 @@ joins.
 - [`mysterycall_normalize_org_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_org_name.md)
   : Normalize an organization / practice name for matching
 
+## Randomization and Blinding
+
+Assign record identifiers for a fielded design (e.g. a REDCap import) so
+that the identifier itself does not encode the treatment arm.
+
+- [`mysterycall_assign_blinded_slots()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_blinded_slots.md)
+  : Assign blinded record slots that don't encode a matched pair's
+  treatment arm
+
 ## Additional Models and Diagnostics
 
 - [`mysterycall_compare_count_families()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_count_families.md)
