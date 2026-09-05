@@ -47,6 +47,25 @@ strings.
   "* p < 0.05; ** p < 0.01" ladder to match; pass `TRUE` for a journal whose
   house style requires stars.
 
+## Bug fixes
+
+- `mysterycall_geocode_address()` no longer loses coordinates, or dies, on a
+  ragged Census batch response. The API answers a matched address with twelve
+  fields and an unmatched one with three (`id`, `input_address`, `No_Match`).
+  The parser read that with `readr::read_csv()`, which sizes the frame from the
+  first row and ignores the remaining `col_names`, so behaviour depended on
+  which address happened to sort first: a batch led by a matched address was
+  fine, a batch led by an unmatched one came back with three columns and
+  silently discarded the coordinates of every matched address behind it, and an
+  all-unmatched batch left `lon_lat` absent entirely and errored with
+  "Can't recycle input of size 0 to size 1".
+
+  The silent case is the dangerous one, since an unmatched address is an
+  ordinary answer and nothing downstream could tell dropped coordinates from
+  genuinely unlocatable ones. Parsing now runs against the full twelve-column
+  superset with short rows padded, so the result no longer depends on row
+  order.
+
 ## Data integrity
 
 - New `mysterycall_guard_contaminated_wait()` refuses to analyse a wait-time
@@ -467,7 +486,6 @@ figures that were previously inline in the study's analysis scripts:
   `mysterycall_leave_one_out()`) rather than a Heckman correction. Returns
   odds-ratio and incidence-rate-ratio tables plus both fitted models, with
   `print()` and `as.data.frame()` methods.
-
 
 # mysterycall 1.6.3
 

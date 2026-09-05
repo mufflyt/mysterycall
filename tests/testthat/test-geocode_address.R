@@ -135,3 +135,62 @@ test_that("geocode_address end-to-end against Census (live)", {
   expect_true(abs(out$geo_lat - 39.7436) < 0.01)
   expect_equal(nchar(out$geo_tract), 11L)
 })
+
+# ---------------------------------------------------------------------------
+# Ragged Census batch responses (a No_Match row carries only three fields)
+# ---------------------------------------------------------------------------
+
+.mc_match_row   <- '2,"b",Match,Exact,"B ST","-104.9,39.7",x,L,08,031,004102,1000'
+.mc_nomatch_row <- '1,"a",No_Match'
+
+test_that("an all-unmatched batch parses to NA coordinates instead of erroring", {
+  out <- mysterycall:::.mc_parse_census_batch_response(
+    paste0(.mc_nomatch_row, "\n"), request_geographies = TRUE
+  )
+  expect_equal(nrow(out), 1L)
+  expect_equal(out$match, "No_Match")
+  expect_true(is.na(out$lat))
+  expect_true(is.na(out$lon))
+  expect_true(is.na(out$census_tract))
+})
+
+test_that("a matched address keeps its coordinates regardless of row order", {
+  both  <- paste0(.mc_match_row, "\n", .mc_nomatch_row, "\n")
+  flip  <- paste0(.mc_nomatch_row, "\n", .mc_match_row, "\n")
+
+  a <- mysterycall:::.mc_parse_census_batch_response(both, request_geographies = TRUE)
+  b <- mysterycall:::.mc_parse_census_batch_response(flip, request_geographies = TRUE)
+
+  expect_equal(nrow(a), 2L)
+  expect_equal(nrow(b), 2L)
+
+  # The matched row is id 2 in both; readr used to size the frame from the
+  # first row, so leading with No_Match discarded these coordinates entirely.
+  ma <- a[a$id == 2L, ]
+  mb <- b[b$id == 2L, ]
+  expect_equal(ma$lat, 39.7)
+  expect_equal(mb$lat, 39.7)
+  expect_equal(ma$lon, -104.9)
+  expect_equal(mb$lon, -104.9)
+  expect_equal(ma$census_tract, "08031004102")
+  expect_equal(mb$census_tract, "08031004102")
+
+  # and the unmatched row stays unmatched in both orderings
+  expect_true(is.na(a[a$id == 1L, ]$lat))
+  expect_true(is.na(b[b$id == 1L, ]$lat))
+})
+
+test_that("a location-only response (no geographies) still parses", {
+  out <- mysterycall:::.mc_parse_census_batch_response(
+    '1,"a",Match,Exact,"A ST","-104.9,39.7",x,L\n', request_geographies = FALSE
+  )
+  expect_equal(nrow(out), 1L)
+  expect_equal(out$lat, 39.7)
+  expect_true(is.na(out$census_tract))
+})
+
+test_that("an empty response yields a zero-row frame with the right columns", {
+  out <- mysterycall:::.mc_parse_census_batch_response("", request_geographies = TRUE)
+  expect_equal(nrow(out), 0L)
+  expect_true(all(c("id", "match", "lon", "lat", "census_tract") %in% names(out)))
+})
