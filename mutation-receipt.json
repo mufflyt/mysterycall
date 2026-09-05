@@ -1,0 +1,121 @@
+{
+  "schema": "mysterycall/mutation-receipt/v2",
+  "mode": "full",
+  "fixture": "tests/fixtures/canonical_study.R",
+  "provenance": {
+    "repository": "https://github.com/mufflyt/mysterycall.git",
+    "sha": "4c4cf8b55da55eea05eb5938aff023797c215e78",
+    "workflow_run_id": null,
+    "workflow": null,
+    "timestamp": "2026-08-23T14:48:22-0600",
+    "test_inventory_sha256": "f77313d08c1f8c40bee963b982bee1d617cb85bacc3e1a8a14f7e8cf59d7b367",
+    "source_data_manifest_sha256": "a5900d313f88ec63c01aa156ff5d12dc6a7363c68526cdbdd8e123425e51947d",
+    "mutation_inventory_sha256": "e1f4b9a2e8cf0f3e90a1219c028a453300b977a73add7242f15bbcd33467ffeb",
+    "mutants_declared_ids": ["unresolved_becomes_refusal", "unreached_becomes_refusal", "missing_wait_becomes_zero", "calendar_days_as_primary", "payer_labels_reversed", "payer_labels_reversed_one_caller", "drop_unreachable_from_denominator", "wrong_number_becomes_retired", "deduplication_removed", "longest_waits_trimmed", "ambiguous_becomes_offered", "wait_carried_forward_onto_excluded", "banded_wait_substituted_for_numeric", "exclusion_applied_per_arm"],
+    "sentinel_ids": ["payer_labels_reversed", "missing_wait_becomes_zero", "drop_unreachable_from_denominator", "exclusion_applied_per_arm", "deduplication_removed"]
+  },
+  "executed": {
+    "test_files_declared": 6,
+    "test_files_run": 6,
+    "mutants_declared": 14,
+    "mutants_run": 14,
+    "baseline_assertions": 252
+  },
+  "control_passed": {
+    "baseline_failures": 0,
+    "baseline_assertions": 252,
+    "passed": true
+  },
+  "poison_failed": {
+    "mutants": [
+      {
+        "id": "unresolved_becomes_refusal",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 14
+      },
+      {
+        "id": "unreached_becomes_refusal",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 26
+      },
+      {
+        "id": "missing_wait_becomes_zero",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 29
+      },
+      {
+        "id": "calendar_days_as_primary",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 5
+      },
+      {
+        "id": "payer_labels_reversed",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 21
+      },
+      {
+        "id": "payer_labels_reversed_one_caller",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 29
+      },
+      {
+        "id": "drop_unreachable_from_denominator",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 22
+      },
+      {
+        "id": "wrong_number_becomes_retired",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 3
+      },
+      {
+        "id": "deduplication_removed",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 32
+      },
+      {
+        "id": "longest_waits_trimmed",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 25
+      },
+      {
+        "id": "ambiguous_becomes_offered",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 13
+      },
+      {
+        "id": "wait_carried_forward_onto_excluded",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 31
+      },
+      {
+        "id": "banded_wait_substituted_for_numeric",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 20
+      },
+      {
+        "id": "exclusion_applied_per_arm",
+        "killed": true,
+        "how": "assertions_failed",
+        "failing_assertions": 18
+      }
+    ],
+    "mutants_attempted": 14,
+    "mutants_killed": 14,
+    "survivors": [],
+    "all_killed": true
+  }
+}

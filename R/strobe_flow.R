@@ -364,7 +364,14 @@ mysterycall_strobe_flow <- function(
     ggplot2::theme(
       plot.title  = ggplot2::element_text(hjust = 0.5, size = 12, face = "bold",
                                           margin = ggplot2::margin(b = 8)),
-      plot.margin = ggplot2::margin(14, 8, 8, 8)
+      plot.margin = ggplot2::margin(14, 8, 8, 8),
+      # theme_void() leaves the plot background blank, which ggsave() honours by
+      # writing an alpha channel. A STROBE diagram is black text and black box
+      # outlines, so on a transparent background it disappears against any dark
+      # viewer, dark-mode PDF reader, or journal proofing tool -- and the figure
+      # looks fine on a white page right up until it does not. Paint it white.
+      plot.background  = ggplot2::element_rect(fill = "white", colour = NA),
+      panel.background = ggplot2::element_rect(fill = "white", colour = NA)
     )
 
   # Box 1 - total
@@ -399,14 +406,15 @@ mysterycall_strobe_flow <- function(
   # ---- Save ------------------------------------------------------------------
   if (!is.null(output_path)) {
     fmt <- tolower(tools::file_ext(output_path))
-    ggplot2::ggsave(output_path, plot = p, width = width, height = height, dpi = dpi)
+    ggplot2::ggsave(output_path, plot = p, width = width, height = height,
+                    dpi = dpi, bg = "white")
     message("Saved: ", output_path)
     if (fmt %in% c("png", "tiff", "jpg", "jpeg")) {
       base  <- tools::file_path_sans_ext(output_path)
       other <- if (fmt == "png") paste0(base, ".tiff") else paste0(base, ".png")
       comp  <- if (grepl("\\.tiff?$", other)) "lzw" else NULL
       ggplot2::ggsave(other, plot = p, width = width, height = height, dpi = dpi,
-                      compression = comp)
+                      compression = comp, bg = "white")
       message("Also saved: ", other)
     }
   }
