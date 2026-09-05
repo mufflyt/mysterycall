@@ -124,7 +124,7 @@ mysterycall_write_results_paragraph <- function(
       "Compared with ", ref_group,
       ", callers presenting as ", level,
       " had an IRR of ", irr,
-      " (95% CI ", lo, "-", hi, "; ", p_fmt, ")",
+      " (95% CI ", lo, " to ", hi, "; ", p_fmt, ")",
       " for ", outcome_label, "."
     )
   }

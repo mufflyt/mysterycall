@@ -160,7 +160,7 @@ mysterycall_results_paragraph <- function(model_result,
 
     sentences[i] <- paste0(
       direction,
-      " (OR ", or_fmt, ", 95% CI ", lo_fmt, "-", hi_fmt, ", ", p_fmt, ")."
+      " (OR ", or_fmt, ", 95% CI ", lo_fmt, " to ", hi_fmt, ", ", p_fmt, ")."
     )
   }
 

@@ -263,7 +263,7 @@ mysterycall_format_results_table <- function(x,
   out <- data.frame(
     Term      = x$term,
     IRR       = sprintf(fmt, x$irr),
-    `95% CI`  = sprintf(paste0(fmt, "-", fmt), x$ci_lower, x$ci_upper),
+    `95% CI`  = sprintf(paste0(fmt, " to ", fmt), x$ci_lower, x$ci_upper),
     `p-value` = ifelse(is.na(x$p_value), NA_character_,
                   ifelse(x$p_value < 0.001, "< 0.001",
                          sprintf("%.3f", x$p_value))),

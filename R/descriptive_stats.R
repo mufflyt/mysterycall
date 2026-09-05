@@ -31,7 +31,7 @@ NULL
 #'   \item{`n`}{Number of non-NA observations.}
 #'   \item{`n_missing`}{Number of NA observations.}
 #'   \item{`sentence`}{Character string:
-#'     \code{"Median [column]: [median] (IQR: [q25]--[q75])."}}
+#'     \code{"Median [column]: [median] (IQR: [q25] to [q75])."}}
 #' }
 #'
 #' @family descriptive helpers
@@ -74,7 +74,7 @@ mysterycall_descriptive_stats <- function(
       q75       = NA_real_,
       n         = 0L,
       n_missing = n_missing,
-      sentence  = sprintf("Median %s: NA (IQR: NA-NA).", column)
+      sentence  = sprintf("Median %s: NA (IQR: NA to NA).", column)
     ))
   }
 
@@ -83,7 +83,7 @@ mysterycall_descriptive_stats <- function(
   q75 <- round(unname(stats::quantile(x, probs = 0.75, na.rm = TRUE)), digits_q)
 
   sentence <- sprintf(
-    "Median %s: %s (IQR: %s--%s).",
+    "Median %s: %s (IQR: %s to %s).",
     column,
     format(med, nsmall = digits),
     format(q25, nsmall = digits_q),

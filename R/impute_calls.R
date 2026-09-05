@@ -373,7 +373,7 @@ mysterycall_impute_calls <- function(data,
   ref_row  <- non_int[1L, , drop = FALSE]
 
   sentence <- sprintf(
-    "Results were robust to multiple imputation (m=%d): OR %.2f, 95%% CI %.2f-%.2f, p=%s, FMI=%.2f.",
+    "Results were robust to multiple imputation (m=%d): OR %.2f, 95%% CI %.2f to %.2f, p=%s, FMI=%.2f.",
     m,
     ref_row$or,
     ref_row$ci_lower,

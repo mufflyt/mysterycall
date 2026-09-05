@@ -318,13 +318,13 @@ print.mysterycall_disparities_table <- function(x, ...) {
     ci_fmt   <- if (is.na(lo) || is.na(hi)) {
       "NA"
     } else {
-      sprintf("%.1f%%-%.1f%%", lo * 100, hi * 100)
+      sprintf("%.1f%% to %.1f%%", lo * 100, hi * 100)
     }
     ad_fmt <- if (is_ref_i) "(ref)" else sprintf("%+.1f pp", row$abs_diff)
     rr_fmt <- if (is_ref_i || is.na(row$rr_lower)) {
       sprintf("%.2f (ref)", row$rel_risk)
     } else {
-      sprintf("%.2f (%.2f-%.2f)", row$rel_risk, row$rr_lower, row$rr_upper)
+      sprintf("%.2f (%.2f to %.2f)", row$rel_risk, row$rr_lower, row$rr_upper)
     }
     pv_fmt <- if (is_ref_i || is.na(row$p_value_fmt)) "(ref)" else row$p_value_fmt
 

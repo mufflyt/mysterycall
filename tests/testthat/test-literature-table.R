@@ -6,7 +6,7 @@
 #   3.  n_studies equals nrow(prior_studies) when current_study is NULL
 #   4.  n_studies equals nrow(prior_studies) + 1 when current_study supplied
 #   5.  $sentence is a character scalar
-#   6.  $or_range is character containing "-"
+#   6.  $or_range is character containing " to "
 #   7.  sort_by="year" produces rows in ascending year order
 #   8.  sort_by="or" produces rows in ascending OR order
 #   9.  current study Author cell ends with "***" when highlight_current=TRUE
@@ -120,14 +120,14 @@ test_that("$sentence includes current study OR when current_study is supplied", 
 })
 
 # ---------------------------------------------------------------------------
-# 6. $or_range is character containing "-"
+# 6. $or_range is character containing " to "
 # ---------------------------------------------------------------------------
 
-test_that("$or_range is a character scalar containing '-'", {
+test_that("$or_range is a character scalar containing ' to '", {
   result <- mysterycall_literature_table(make_prior())
   expect_type(result$or_range, "character")
   expect_length(result$or_range, 1L)
-  expect_match(result$or_range, "-", fixed = TRUE)
+  expect_match(result$or_range, " to ", fixed = TRUE)
 })
 
 # ---------------------------------------------------------------------------
@@ -146,7 +146,7 @@ test_that("sort_by='year' returns rows with Year in non-decreasing order", {
 
 test_that("sort_by='or' returns rows with OR in non-decreasing order", {
   result  <- mysterycall_literature_table(make_prior(), sort_by = "or")
-  # Parse the leading numeric value from strings like "0.38 (0.22-0.65)"
+  # Parse the leading numeric value from strings like "0.38 (0.22 to 0.65)"
   or_vals <- as.numeric(sub("^([0-9.]+).*", "\\1", result$table[["OR (95% CI)"]]))
   expect_equal(or_vals, sort(or_vals))
 })
@@ -296,19 +296,19 @@ test_that("Setting, Notes, Outcome absent from $table when not in prior_studies"
 # ---------------------------------------------------------------------------
 
 test_that("or_range excludes the current-study row", {
-  prior   <- make_prior()  # prior ORs: 0.38, 0.61, 0.45, 0.87 -> range 0.38-0.87
+  prior   <- make_prior()  # prior ORs: 0.38, 0.61, 0.45, 0.87 -> range 0.38 to 0.87
   current <- make_current()
   current$or       <- 0.10   # extreme value OUTSIDE the prior range
   current$ci_lower <- 0.05
   current$ci_upper <- 0.20
 
   res <- mysterycall_literature_table(prior, current_study = current)
-  expect_equal(res$or_range, "0.38-0.87")
+  expect_equal(res$or_range, "0.38 to 0.87")
   expect_false(grepl("0.10", res$or_range, fixed = TRUE))
 })
 
 test_that("or_range spans all rows when current_study is NULL", {
   prior <- make_prior()
   res   <- mysterycall_literature_table(prior, current_study = NULL)
-  expect_equal(res$or_range, "0.38-0.87")
+  expect_equal(res$or_range, "0.38 to 0.87")
 })

@@ -1,5 +1,45 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## New functions
+
+- `mysterycall_sampl_checklist()`: a fillable SAMPL (Statistical Analyses and
+  Methods in the Published Literature) reporting checklist. STROBE covers what
+  to report about the design; SAMPL covers how the numbers themselves are
+  reported -- an effect size with a confidence interval rather than a bare p
+  value, exact p values instead of inequalities, a denominator behind every
+  percentage, the test named and justified, the clustering unit stated. 27 items
+  across eight sections, tailored to the estimands a mystery-caller audit
+  produces (proportions, rate ratios, wait times, repeated calls to one
+  practice). Companion to `mysterycall_strobe_checklist()` and
+  `mysterycall_crisp_checklist()`.
+
+## Statistical reporting (SAMPL)
+
+The package now reports numbers the way SAMPL asks, which changes some output
+strings.
+
+- Confidence intervals, IQRs, and ranges separate their endpoints with " to "
+  instead of a hyphen, in all 31 formatters that build them (`table1`, `table2`,
+  `model_table`, `combined_results_table`, `multi_model_table`,
+  `manuscript_helpers`, `disparities_table`, `literature_table`, `forest_plot`,
+  `icc`, `outcome_analysis`, `descriptive_stats`, `abstract_numbers`,
+  `results_paragraph`, `write_results_paragraph`, `predicted_means`,
+  `acceptance_rate_calc`, `nb_power`, `impute_calls`, `categorical`,
+  `simple_poisson`, `prepare_calls`).
+
+  This fixes a real defect, not only a style rule. `mysterycall_multi_model_table()`
+  labels its column "Beta (95% CI)" for linear mixed models, and a negative
+  estimate rendered as `-0.28 (-0.45--0.12)`. It now reads
+  `-0.28 (-0.45 to -0.12)`. The same applied to the percentage-point differences
+  in `mysterycall_disparities_table()`.
+
+- `mysterycall_irr_table()` no longer adds significance stars by default
+  (`add_significance_stars` now defaults to `FALSE`). SAMPL asks for exact p
+  values rather than codes against alpha, and the confidence interval already
+  carries what the stars stand in for. The default footnote drops the
+  "* p < 0.05; ** p < 0.01" ladder to match; pass `TRUE` for a journal whose
+  house style requires stars.
+
 ## Data integrity
 
 - New `mysterycall_guard_contaminated_wait()` refuses to analyse a wait-time
