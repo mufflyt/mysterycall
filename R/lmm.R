@@ -462,8 +462,7 @@ mysterycall_lmm <- function(data,
 # ----- internal helpers -------------------------------------------------------
 
 .fmt_lmm_pval <- function(p) {
-  ifelse(is.na(p), NA_character_,
-         ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+  mysterycall_format_p(p)
 }
 
 .lmm_normality <- function(resids) {

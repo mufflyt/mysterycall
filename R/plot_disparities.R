@@ -200,9 +200,9 @@ mysterycall_plot_disparities <- function(
                                "(ref)", tbl_ord$p_value_fmt)
   } else if (show_p && "p_value" %in% names(tbl_ord)) {
     fmt_p <- function(p) {
-      ifelse(is.na(p), "(ref)",
-             ifelse(p < 0.001, "p < 0.001",
-                    paste0("p = ", formatC(p, digits = 3, format = "f"))))
+      out <- mysterycall_format_p(p, name = "p")
+      out[is.na(p)] <- "(ref)"
+      out
     }
     tbl_ord$.p_label <- fmt_p(tbl_ord$p_value)
     tbl_ord$.p_label[is_ref_row[match(tbl_ord$group, tbl$group)]] <- "(ref)"

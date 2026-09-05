@@ -323,10 +323,9 @@ print.mysterycall_missing_data <- function(x, ...) {
     cat("-- Statistical Tests (predictor vs. missingness) --\n")
     disp <- x$summary
     disp$statistic <- round(disp$statistic, 3)
-    disp$p_value   <- ifelse(
-      is.na(disp$p_value), "NA",
-      ifelse(disp$p_value < 0.001, "< 0.001", sprintf("%.3f", disp$p_value))
-    )
+    p_disp         <- mysterycall_format_p(disp$p_value)
+    p_disp[is.na(disp$p_value)] <- "NA"
+    disp$p_value   <- p_disp
     print(disp, row.names = FALSE)
     cat("\n")
   }

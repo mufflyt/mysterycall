@@ -11,7 +11,7 @@ NULL
 #' @noRd
 .fmt_st_pval <- function(p) {
   if (is.null(p) || length(p) == 0L || is.na(p)) return(NA_character_)
-  if (p < 0.001) "< 0.001" else sprintf("%.3f", p)
+  mysterycall_format_p(p)
 }
 
 #' Extract one exposure-term row from a fitted mysterycall model

@@ -13,6 +13,29 @@
   practice). Companion to `mysterycall_strobe_checklist()` and
   `mysterycall_crisp_checklist()`.
 
+## New functions
+
+- `mysterycall_format_ci()` and `mysterycall_format_p()` are now exported. They
+  were always the package's convention; they were just never available to
+  anyone. `format_ci()` takes a `sep` argument defaulting to
+  `getOption("mysterycall.ci_sep", " to ")` rather than hardcoding the
+  separator, following the pattern of `gtsummary`'s JAMA and Lancet journal
+  themes, which make the same "to" choice and expose it as a `ci.sep` setting.
+  `format_p()` takes `name` so one function serves both the bare `"< 0.001"` a
+  table cell wants and the `"p < 0.001"` prose wants.
+
+  Twenty-two internal sites reimplemented the same `if (p < 0.001)` branch, and
+  `.mc_format_p()` described itself as the single source of truth while being
+  the minority spelling. All twenty-two now route through the exported
+  function, so that comment is finally accurate. Output is unchanged
+  throughout, including `mysterycall_results_paragraph()`'s unspaced `"p="`,
+  which is pinned by its own `@return` docs.
+
+  Three sites deliberately do not route: `forest_plot()`'s AMA-style formatter
+  (capital `P`, no leading zero, two-tier digits) is a different convention
+  rather than a duplicate, and two others emit significance stars rather than
+  p-values.
+
 ## Statistical reporting (SAMPL)
 
 The package now reports numbers the way SAMPL asks, which changes some output

@@ -91,8 +91,7 @@ mysterycall_write_results_paragraph <- function(
   # ---- format p-value ---------------------------------------------------------
   .fmt_p <- function(p) {
     if (is.na(p)) return("p = NA")
-    if (p < 0.001) return("p < 0.001")
-    paste0("p = ", formatC(p, digits = p_digits, format = "f"))
+    mysterycall_format_p(p, digits = p_digits, name = "p")
   }
 
   # ---- build sentences --------------------------------------------------------

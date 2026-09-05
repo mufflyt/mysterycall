@@ -467,7 +467,7 @@ mysterycall_compare_ranks <- function(data, outcome_var, group_var) {
 
 .mc_fmt_p <- function(p) {
   if (is.na(p)) return("NA")
-  if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
+  mysterycall_format_p(p, name = "p")
 }
 
 #' Print a `mysterycall_categorical_test` object
