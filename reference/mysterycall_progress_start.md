@@ -56,6 +56,6 @@ Other logging:
 ``` r
 tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
 mysterycall:::mysterycall_progress_start(tr, "Geocode")
-#> [16:21:13] Started Geocode
-#> [16:21:13] Progress: 0/2 steps complete (0.0%)
+#> [16:46:22] Started Geocode
+#> [16:46:22] Progress: 0/2 steps complete (0.0%)
 ```
