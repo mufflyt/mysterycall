@@ -76,6 +76,8 @@ mysterycall_disparities_table(df, "accepted", "insurance")
 \code{\link[=mysterycall_table1_gtsummary]{mysterycall_table1_gtsummary()}}, \code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}}
 
 Other table helpers:
+\code{\link[=mysterycall_format_ci]{mysterycall_format_ci()}},
+\code{\link[=mysterycall_format_p]{mysterycall_format_p()}},
 \code{\link[=mysterycall_format_pct]{mysterycall_format_pct()}},
 \code{\link[=mysterycall_max_table]{mysterycall_max_table()}},
 \code{\link[=mysterycall_min_table]{mysterycall_min_table()}},
