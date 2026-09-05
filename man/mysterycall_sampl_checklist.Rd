@@ -36,6 +36,16 @@ It is a scaffold, not a substitute for the source guideline: the \code{reported}
 column is yours to complete (a page/section reference or \code{"n/a"}), and item
 wording should be confirmed against the published guidelines for a formal
 submission.
+
+The \code{reported} column is filled in by hand, which is the weakness of any
+checklist object: nothing ties an item to the code that satisfies it.
+rOpenSci's \pkg{srr} (Software Review Roclets, MIT) solves that properly and
+is the model to follow if these items ever need machine verification.
+Standards are tagged in roxygen at the code location that meets them
+(\verb{@srrstats}), unaddressed ones stay visible as \verb{@srrstatsTODO},
+inapplicable ones are justified with \verb{@srrstatsNA}, and a pre-submit check
+fails while any TODO remains. That anchors compliance to code rather than to
+a page number typed into a column.
 }
 \examples{
 cl <- mysterycall_sampl_checklist()
@@ -47,6 +57,10 @@ Lang TA, Altman DG. Basic statistical reporting for articles published in
 biomedical journals: the "Statistical Analyses and Methods in the Published
 Literature" or the SAMPL Guidelines. \emph{International Journal of Nursing
 Studies}. 2015;52(1):5-9. \doi{10.1016/j.ijnurstu.2014.09.006}
+
+rOpenSci Software Review Roclets (\pkg{srr}), the model for tying checklist
+items to the code that satisfies them:
+\url{https://github.com/ropensci-review-tools/srr}
 }
 \seealso{
 \code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}} for the design-reporting items and

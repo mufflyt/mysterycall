@@ -19,6 +19,16 @@
 #' wording should be confirmed against the published guidelines for a formal
 #' submission.
 #'
+#' The `reported` column is filled in by hand, which is the weakness of any
+#' checklist object: nothing ties an item to the code that satisfies it.
+#' rOpenSci's \pkg{srr} (Software Review Roclets, MIT) solves that properly and
+#' is the model to follow if these items ever need machine verification.
+#' Standards are tagged in roxygen at the code location that meets them
+#' (`@@srrstats`), unaddressed ones stay visible as `@@srrstatsTODO`,
+#' inapplicable ones are justified with `@@srrstatsNA`, and a pre-submit check
+#' fails while any TODO remains. That anchors compliance to code rather than to
+#' a page number typed into a column.
+#'
 #' @param reported Optional character vector, one entry per checklist item, used
 #'   to pre-fill the `reported` column (e.g. page numbers). Length must equal the
 #'   number of items (see `nrow()` of a default call). Default `NA`.
@@ -32,6 +42,10 @@
 #' biomedical journals: the "Statistical Analyses and Methods in the Published
 #' Literature" or the SAMPL Guidelines. *International Journal of Nursing
 #' Studies*. 2015;52(1):5-9. \doi{10.1016/j.ijnurstu.2014.09.006}
+#'
+#' rOpenSci Software Review Roclets (\pkg{srr}), the model for tying checklist
+#' items to the code that satisfies them:
+#' \url{https://github.com/ropensci-review-tools/srr}
 #'
 #' @family manuscript
 #' @seealso [mysterycall_strobe_checklist()] for the design-reporting items and
