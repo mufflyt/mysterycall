@@ -304,6 +304,8 @@ reference:
       - mysterycall_write_table_pdf
       - mysterycall_save_quality_table
       - mysterycall_format_pct
+      - mysterycall_format_ci
+      - mysterycall_format_p
       - mysterycall_format_results_table
       - print.mysterycall_table1
       - as.data.frame.mysterycall_table1
