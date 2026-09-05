@@ -153,7 +153,7 @@ mysterycall_insurance_wait_sentence <- function(
   direction <- if (pct_diff > 0) "longer" else if (pct_diff < 0) "shorter" else "similar"
 
   # 5. Build sentence
-  p_fmt <- if (p_value < 0.001) "< 0.001" else sprintf("%.*f", 3L, p_value)
+  p_fmt <- mysterycall_format_p(p_value)
 
   sentence <- sprintf(
     paste0(

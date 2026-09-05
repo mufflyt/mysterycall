@@ -239,9 +239,7 @@ mysterycall_wait_time_summary <- function(data,
             g, row$median, row$q1, row$q3, row$n)
   }, character(1L))
 
-  p_str <- if (!is.na(p_value)) {
-    if (p_value < 0.001) "p < 0.001" else sprintf("p = %.3f", p_value)
-  } else ""
+  p_str <- if (!is.na(p_value)) mysterycall_format_p(p_value, name = "p") else ""
 
   interpretation <- paste0(
     paste(parts, collapse = "; "),
@@ -447,9 +445,7 @@ mysterycall_acceptance_rate <- function(data,
             row$rate * 100, row$ci_lower * 100, row$ci_upper * 100)
   }, character(1L))
 
-  p_str <- if (!is.na(p_value)) {
-    if (p_value < 0.001) "p < 0.001" else sprintf("p = %.3f", p_value)
-  } else ""
+  p_str <- if (!is.na(p_value)) mysterycall_format_p(p_value, name = "p") else ""
 
   interpretation <- paste0(
     paste(parts, collapse = "; "),

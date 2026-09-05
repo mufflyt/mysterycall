@@ -161,8 +161,7 @@ mysterycall_simple_poisson <- function(data,
   }
 
   fmt_p <- function(p) {
-    ifelse(is.na(p), NA_character_,
-           ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+    mysterycall_format_p(p)
   }
 
   non_int <- names(cf)[names(cf) != "(Intercept)"]

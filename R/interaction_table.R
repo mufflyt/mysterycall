@@ -7,10 +7,7 @@ NULL
 # Internal helper: format a p-value for interaction table display
 # ---------------------------------------------------------------------------
 .fmt_interaction_pval <- function(p, digits = 3L) {
-  ifelse(
-    is.na(p), NA_character_,
-    ifelse(p < 0.001, "< 0.001", sprintf("%.*f", digits, p))
-  )
+  mysterycall_format_p(p, digits = digits)
 }
 
 #' Stratum-specific ORs and omnibus LRT for a fitted interaction term

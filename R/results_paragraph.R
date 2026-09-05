@@ -38,12 +38,12 @@ NULL
 #'   single space. Sentence form:
 #'   \itemize{
 #'     \item OR < 1: `"<Level> callers were <X>% less likely to be offered
-#'       <outcome_label> (OR <or>, 95% CI <lo>-<hi>, p=<p>)."`
+#'       <outcome_label> (OR <or>, 95% CI <lo> to <hi>, p=<p>)."`
 #'     \item OR > 1: `"<Level> callers were <X>% more likely to be offered
-#'       <outcome_label> (OR <or>, 95% CI <lo>-<hi>, p=<p>)."`
+#'       <outcome_label> (OR <or>, 95% CI <lo> to <hi>, p=<p>)."`
 #'     \item OR = 1: `"<Level> callers had similar odds of being offered
 #'       <outcome_label> compared with <ref_group> (OR 1.00, 95% CI
-#'       <lo>-<hi>, p=<p>)."`
+#'       <lo> to <hi>, p=<p>)."`
 #'   }
 #'   When `p < 0.001` the p-value is rendered as `"p < 0.001"`.
 #'
@@ -122,8 +122,11 @@ mysterycall_results_paragraph <- function(model_result,
 
   .fmt_p <- function(p) {
     if (is.na(p)) return("p = NA")
-    if (p < 0.001) return("p < 0.001")
-    paste0("p=", formatC(p, digits = p_digits, format = "f"))
+    v <- mysterycall_format_p(p, digits = p_digits)
+    # This one prints an unspaced "p=0.043" but a spaced "p < 0.001"; the
+    # inconsistency is pinned by tests and by the @return section, so only the
+    # threshold logic is shared, not the prefix.
+    if (startsWith(v, "< ")) paste0("p ", v) else paste0("p=", v)
   }
 
   sentences <- character(nrow(matched))

@@ -237,9 +237,7 @@ mysterycall_screen_predictors <- function(data,
 
   # Format p-value for display
   .fmt_p <- function(p) {
-    if (is.na(p)) return(NA_character_)
-    if (p < 0.001) return("< 0.001")
-    sprintf("%.3f", p)
+    mysterycall_format_p(p)
   }
 
   # Fit one model and extract IRR/OR + CI + p for the first non-intercept term
