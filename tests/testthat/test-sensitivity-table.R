@@ -212,7 +212,7 @@ test_that("exposure_term absent from all models yields em-dash cells, not an err
 
 # ── 12. Cell format contains parenthetical CI ────────────────────────────────
 
-test_that("exposure cell follows '<est> (<lo>-<hi>), p=<p>' pattern", {
+test_that("exposure cell follows '<est> (<lo> to <hi>), p=<p>' pattern", {
   m1 <- .fake_logistic(
     or          = 0.62,
     ci_lower    = 0.40,
@@ -226,7 +226,8 @@ test_that("exposure cell follows '<est> (<lo>-<hi>), p=<p>' pattern", {
     include_aic   = FALSE
   )
   cell <- out[["A"]][[1L]]
-  # Must match:  digits (open-paren) digits (en-dash) digits (close-paren) , p=
-  # Use the literal en-dash (U+2013) — PCRE2 on this R build rejects \u escapes.
-  expect_match(cell, "\\(.*–.*\\),\\s*p=", perl = TRUE)
+  # Must match:  est (lo to hi), p=   -- SAMPL asks for "to" between the
+  # endpoints so a negative lower bound cannot be read as a minus sign.
+  expect_match(cell, "\\(.* to .*\\),\\s*p=", perl = TRUE)
+  expect_false(grepl("–", cell, fixed = TRUE))
 })
