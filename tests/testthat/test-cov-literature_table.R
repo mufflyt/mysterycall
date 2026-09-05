@@ -190,7 +190,7 @@ test_that("mysterycall_literature_table() formats numbers with correct decimal p
   result_0 <- suppressMessages(
     mysterycall_literature_table(prior_studies = prior, digits = 0L)
   )
-  expect_true(grepl("0 \\(0-1\\)", result_0$table$`OR (95% CI)`[1]))
+  expect_true(grepl("0 \\(0 to 1\\)", result_0$table$`OR (95% CI)`[1]))
 
   result_3 <- suppressMessages(
     mysterycall_literature_table(prior_studies = prior, digits = 3L)

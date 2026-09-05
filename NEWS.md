@@ -27,6 +27,13 @@ strings.
   `acceptance_rate_calc`, `nb_power`, `impute_calls`, `categorical`,
   `simple_poisson`, `prepare_calls`).
 
+  A second pass caught eight more that used a Unicode en dash rather than an
+  ASCII hyphen, so the first sweep missed them: `wait_time_sentence`,
+  `insurance_wait_sentence`, `interaction_sentences`, and the three cells of
+  `sensitivity_table`. Year ranges (`2019-2021`) and wait-time band labels
+  (`"0-30"`) keep their dash; they are category names, not estimates, and
+  cannot take a negative endpoint.
+
   This fixes a real defect, not only a style rule. `mysterycall_multi_model_table()`
   labels its column "Beta (95% CI)" for linear mixed models, and a negative
   estimate rendered as `-0.28 (-0.45--0.12)`. It now reads

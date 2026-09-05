@@ -3,7 +3,7 @@
     Code
       result$sentence
     Output
-      [1] "Median business_days: 12.00 (IQR: 10--16)."
+      [1] "Median business_days: 12.00 (IQR: 10 to 16)."
 
 # mysterycall_distribution_summary sentence snapshot
 
@@ -52,14 +52,14 @@
     Code
       result$sentence
     Output
-      [1] "The median wait time across all insurance was 12 business days (IQR: 10–16). Specifically, the median wait time was 12 days (IQR: 10–15) for Blue Cross/Blue Shield, 12 days (IQR: 10–16) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.746."
+      [1] "The median wait time across all insurance was 12 business days (IQR: 10 to 16). Specifically, the median wait time was 12 days (IQR: 10 to 15) for Blue Cross/Blue Shield, 12 days (IQR: 10 to 16) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.746."
 
 # mysterycall_insurance_wait_sentence sentence snapshot
 
     Code
       result$sentence
     Output
-      [1] "Medicaid patients experienced a 2% longer wait compared to patients with Blue Cross/Blue Shield (Incidence Rate Ratio: 1.02; 95% CI: 0.89–1.18; p 0.746) with median wait times of 12 business days (IQR: 10–16) and 12 business days (IQR: 10–15) respectively."
+      [1] "Medicaid patients experienced a 2% longer wait compared to patients with Blue Cross/Blue Shield (Incidence Rate Ratio: 1.02; 95% CI: 0.89 to 1.18; p 0.746) with median wait times of 12 business days (IQR: 10 to 16) and 12 business days (IQR: 10 to 15) respectively."
 
 # mysterycall_scenario_summary sentence snapshot (generic levels)
 
