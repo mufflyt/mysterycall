@@ -12,9 +12,6 @@
   produces (proportions, rate ratios, wait times, repeated calls to one
   practice). Companion to `mysterycall_strobe_checklist()` and
   `mysterycall_crisp_checklist()`.
-
-## New functions
-
 - `mysterycall_format_ci()` and `mysterycall_format_p()` are now exported. They
   were always the package's convention; they were just never available to
   anyone. `format_ci()` takes a `sep` argument defaulting to
