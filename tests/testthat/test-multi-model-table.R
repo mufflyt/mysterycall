@@ -204,14 +204,14 @@ test_that("multi_model_table: non-reference estimate cells contain parentheses",
   )
 })
 
-test_that("multi_model_table: cell format matches 'est (lo-hi)' pattern", {
+test_that("multi_model_table: cell format matches 'est (lo to hi)' pattern", {
   out <- mysterycall_multi_model_table(models = two_logistic,
                                        include_n = FALSE, include_aic = FALSE)
   vals <- out[["Unadjusted"]]
   data_cells <- vals[!vals %in% c("Ref.", "", NA)]
   expect_true(
-    all(grepl("^[0-9.]+\\s*\\([0-9.]+-[0-9.]+\\)", data_cells)),
-    label = "cells start with estimate (lower-upper) pattern"
+    all(grepl("^[0-9.]+\\s*\\([0-9.]+ to [0-9.]+\\)", data_cells)),
+    label = "cells start with estimate (lower to upper) pattern"
   )
 })
 
@@ -267,4 +267,35 @@ test_that("multi_model_table: print output contains model column names", {
   combined <- paste(text, collapse = " ")
   expect_true(grepl("Unadjusted", combined))
   expect_true(grepl("Adjusted",   combined))
+})
+
+# ── Negative estimates stay readable (SAMPL: "to", never a hyphen) ────────────
+
+test_that("multi_model_table: a negative interval is not rendered as '--'", {
+  skip_if_not_installed("lme4")
+  set.seed(11)
+  df <- data.frame(
+    y   = rnorm(60, mean = 10),
+    grp = rep(c("a", "b"), each = 30),
+    id  = rep(paste0("p", 1:12), each = 5),
+    stringsAsFactors = FALSE
+  )
+  df$y[df$grp == "b"] <- df$y[df$grp == "b"] - 2   # forces a negative beta
+  df$cov <- rnorm(60)
+  fit_u <- suppressWarnings(suppressMessages(
+    mysterycall_lmm(df, outcome = "y", predictors = "grp", random_intercept = "id")
+  ))
+  fit_a <- suppressWarnings(suppressMessages(
+    mysterycall_lmm(df, outcome = "y", predictors = c("grp", "cov"),
+                    random_intercept = "id")
+  ))
+  out <- suppressWarnings(suppressMessages(
+    mysterycall_multi_model_table(models = list(Unadjusted = fit_u, Adjusted = fit_a),
+                                  include_n = FALSE, include_aic = FALSE)
+  ))
+  cells <- unlist(out[vapply(out, is.character, logical(1L))], use.names = FALSE)
+  cells <- cells[!is.na(cells) & grepl("(", cells, fixed = TRUE)]
+  expect_gt(length(cells), 0L)
+  expect_false(any(grepl("--", cells, fixed = TRUE)))
+  expect_true(all(grepl(" to ", cells, fixed = TRUE)))
 })

@@ -315,7 +315,7 @@ mysterycall_literature_table <- function(prior_studies,
   # ---------------------------------------------------------------------------
   fmt <- function(v) formatC(round(v, digits), format = "f", digits = digits)
 
-  or_ci_col <- sprintf("%s (%s-%s)",
+  or_ci_col <- sprintf("%s (%s to %s)",
                        fmt(combined$or),
                        fmt(combined$ci_lower),
                        fmt(combined$ci_upper))
@@ -356,7 +356,7 @@ mysterycall_literature_table <- function(prior_studies,
   or_source <- if (!is.null(current_study)) combined$or[!is_current_row] else combined$or
   or_min   <- min(or_source, na.rm = TRUE)
   or_max   <- max(or_source, na.rm = TRUE)
-  or_range <- paste0(fmt(or_min), "-", fmt(or_max))
+  or_range <- paste0(fmt(or_min), " to ", fmt(or_max))
 
   n_studies  <- nrow(combined)
 

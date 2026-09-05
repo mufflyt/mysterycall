@@ -26,7 +26,7 @@ NULL
 #' @noRd
 .fmt_est_ci <- function(est, lo, hi, digits) {
   fmt <- paste0("%.", digits, "f")
-  sprintf(paste0(fmt, " (", fmt, "-", fmt, ")"), est, lo, hi)
+  sprintf(paste0(fmt, " (", fmt, " to ", fmt, ")"), est, lo, hi)
 }
 
 #' Build the full abstract sentence from extracted model numbers

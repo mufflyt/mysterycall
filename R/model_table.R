@@ -66,7 +66,7 @@ mysterycall_model_table <- function(x,
 
   fmt <- function(v) formatC(round(v, digits), format = "f", digits = digits)
 
-  irr_ci <- sprintf("%s (%s-%s)",
+  irr_ci <- sprintf("%s (%s to %s)",
                     fmt(tbl$irr),
                     fmt(tbl$ci_lower),
                     fmt(tbl$ci_upper))

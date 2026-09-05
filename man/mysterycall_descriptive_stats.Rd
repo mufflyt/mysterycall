@@ -25,7 +25,7 @@ A named list with elements:
 \item{\code{n}}{Number of non-NA observations.}
 \item{\code{n_missing}}{Number of NA observations.}
 \item{\code{sentence}}{Character string:
-\code{"Median [column]: [median] (IQR: [q25]--[q75])."}}
+\code{"Median [column]: [median] (IQR: [q25] to [q75])."}}
 }
 }
 \description{

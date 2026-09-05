@@ -23,7 +23,9 @@
 #'   columns `section`, `item`, `recommendation`, `reported`.
 #'   [as.data.frame()] returns it plainly.
 #'
-#' @seealso [mysterycall_strobe_checklist()]
+#' @seealso [mysterycall_strobe_checklist()] for the design-reporting items
+#'   and [mysterycall_sampl_checklist()] for how the numbers themselves are
+#'   reported.
 #' @examples
 #' cl <- mysterycall_crisp_checklist()
 #' head(cl)

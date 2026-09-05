@@ -164,7 +164,7 @@ mysterycall_wait_time_summary <- function(data,
     s$n_missing <- n_missing
     s <- s[, c("n", "n_missing", "mean", "sd", "median", "q1", "q3", "min", "max")]
     interp <- sprintf(
-      "Median wait time: %g days (IQR %g-%g); mean %g days (SD %g); n = %d, %d missing.",
+      "Median wait time: %g days (IQR %g to %g); mean %g days (SD %g); n = %d, %d missing.",
       s$median, s$q1, s$q3, round(s$mean, 1), round(s$sd, 1), s$n, n_missing
     )
     return(list(
@@ -235,7 +235,7 @@ mysterycall_wait_time_summary <- function(data,
   # -- Interpretation sentence ------------------------------------------------
   parts <- vapply(groups, function(g) {
     row <- summary_tbl[summary_tbl[[group_by]] == g, , drop = FALSE]
-    sprintf("%s: median %g days (IQR %g-%g, n=%d)",
+    sprintf("%s: median %g days (IQR %g to %g, n=%d)",
             g, row$median, row$q1, row$q3, row$n)
   }, character(1L))
 
@@ -358,7 +358,7 @@ mysterycall_acceptance_rate <- function(data,
       ci_upper   = ci[[2L]]
     )
     interp <- sprintf(
-      "Acceptance rate: %d/%d (%.1f%%, %d%% CI %.1f%%-%.1f%%).",
+      "Acceptance rate: %d/%d (%.1f%%, %d%% CI %.1f%% to %.1f%%).",
       k, n, rate * 100, round(conf_level * 100),
       ci[[1L]] * 100, ci[[2L]] * 100
     )
@@ -442,7 +442,7 @@ mysterycall_acceptance_rate <- function(data,
   # -- Interpretation sentence ------------------------------------------------
   parts <- vapply(groups, function(g) {
     row <- summary_tbl[summary_tbl[[group_by]] == g, , drop = FALSE]
-    sprintf("%s: %d/%d (%.1f%%, 95%% CI %.1f%%-%.1f%%)",
+    sprintf("%s: %d/%d (%.1f%%, 95%% CI %.1f%% to %.1f%%)",
             g, row$n_accepted, row$n_total,
             row$rate * 100, row$ci_lower * 100, row$ci_upper * 100)
   }, character(1L))

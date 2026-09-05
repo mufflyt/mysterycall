@@ -190,7 +190,7 @@ test_that("mysterycall_literature_table() formats numbers with correct decimal p
   result_0 <- suppressMessages(
     mysterycall_literature_table(prior_studies = prior, digits = 0L)
   )
-  expect_true(grepl("0 \\(0-1\\)", result_0$table$`OR (95% CI)`[1]))
+  expect_true(grepl("0 \\(0 to 1\\)", result_0$table$`OR (95% CI)`[1]))
 
   result_3 <- suppressMessages(
     mysterycall_literature_table(prior_studies = prior, digits = 3L)
@@ -753,10 +753,10 @@ test_that("mysterycall_literature_table() builds complete formatted table", {
   )
 
   # Check formatting of OR (95% CI) column
-  expect_true(grepl("\\(.*-.*\\)", result$table$`OR (95% CI)`[1]))
+  expect_true(grepl("\\(.* to .*\\)", result$table$`OR (95% CI)`[1]))
 
   # Check OR range
-  expect_equal(result$or_range, "0.38-0.61")
+  expect_equal(result$or_range, "0.38 to 0.61")
 })
 
 
