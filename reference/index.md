@@ -411,6 +411,10 @@ stacked bars.
   : Save Quality Check Table
 - [`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md)
   : Format a Numeric Value as a Percentage
+- [`mysterycall_format_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_ci.md)
+  : Format a confidence interval for reporting
+- [`mysterycall_format_p()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_p.md)
+  : Format a p-value for reporting
 - [`mysterycall_format_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_results_table.md)
   : Format an IRR table for manuscript display
 - [`print(`*`<mysterycall_table1>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)

@@ -79,13 +79,13 @@ term matching `exposure_col`. Sentences are separated by a single space.
 Sentence form:
 
 - OR \< 1:
-  `"<Level> callers were <X>% less likely to be offered <outcome_label> (OR <or>, 95% CI <lo>-<hi>, p=<p>)."`
+  `"<Level> callers were <X>% less likely to be offered <outcome_label> (OR <or>, 95% CI <lo> to <hi>, p=<p>)."`
 
 - OR \> 1:
-  `"<Level> callers were <X>% more likely to be offered <outcome_label> (OR <or>, 95% CI <lo>-<hi>, p=<p>)."`
+  `"<Level> callers were <X>% more likely to be offered <outcome_label> (OR <or>, 95% CI <lo> to <hi>, p=<p>)."`
 
 - OR = 1:
-  `"<Level> callers had similar odds of being offered <outcome_label> compared with <ref_group> (OR 1.00, 95% CI <lo>-<hi>, p=<p>)."`
+  `"<Level> callers had similar odds of being offered <outcome_label> compared with <ref_group> (OR 1.00, 95% CI <lo> to <hi>, p=<p>)."`
 
 When `p < 0.001` the p-value is rendered as `"p < 0.001"`.
 
