@@ -52,6 +52,7 @@
     <li><a class="dropdown-item" href="../articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a></li>
     <li><a class="dropdown-item" href="../articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="../articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="../articles/subspecialist-density.html">Subspecialist density per 100,000 women</a></li>
@@ -82,6 +83,12 @@
 <p>Twenty-two internal sites reimplemented the same <code>if (p &lt; 0.001)</code> branch, and <code>.mc_format_p()</code> described itself as the single source of truth while being the minority spelling. All twenty-two now route through the exported function, so that comment is finally accurate. Output is unchanged throughout, including <code><a href="../reference/mysterycall_results_paragraph.html">mysterycall_results_paragraph()</a></code>’s unspaced <code>"p="</code>, which is pinned by its own <code>@return</code> docs.</p>
 <p>Three sites deliberately do not route: <code><a href="../reference/forest_plot.html">forest_plot()</a></code>’s AMA-style formatter (capital <code>P</code>, no leading zero, two-tier digits) is a different convention rather than a duplicate, and two others emit significance stars rather than p-values.</p>
 </li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-and-tooling-1-6-3-9000">Documentation and tooling<a class="anchor" aria-label="anchor" href="#documentation-and-tooling-1-6-3-9000"></a></h3>
+<ul><li><p><code><a href="../articles/reporting-conventions.html">vignette("reporting-conventions")</a></code>: an appendix recording how the package prints numbers and why. Covers the SAMPL items enforced mechanically, the two formatters that own the convention, how to change the house style with one option, the three checklists, and the three places the package deliberately departs from SAMPL (<code><a href="../reference/forest_plot.html">forest_plot()</a></code>’s AMA p-values, and two star-coded screening displays).</p></li>
+<li><p><code>.github/scripts/check-pkgdown-index.R</code>, wired into <code>repo-hygiene</code>: fails in about a second when a documented topic is missing from the pkgdown reference index. pkgdown already enforces this, but only at the end of a roughly fifteen-minute site build, which is how long it took to discover that <code><a href="../reference/mysterycall_format_ci.html">mysterycall_format_ci()</a></code> and <code><a href="../reference/mysterycall_format_p.html">mysterycall_format_p()</a></code> had been exported without being listed. Matches on <code>\alias{}</code> as pkgdown does, so a topic indexed under any of its aliases counts.</p></li>
+<li><p><code>tools/run-test-subset.R</code>: run only the test files matching a pattern, in one session. The full suite takes tens of minutes locally because many files fit <code>lme4</code> or <code>glmmTMB</code> models, which makes checking a narrow change expensive enough to skip.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="statistical-reporting-sampl-1-6-3-9000">Statistical reporting (SAMPL)<a class="anchor" aria-label="anchor" href="#statistical-reporting-sampl-1-6-3-9000"></a></h3>

@@ -80,6 +80,7 @@
     <li><a class="dropdown-item" href="articles/adding-covariates.html">Adding Physician Covariates to the Wait-Time Model</a></li>
     <li><a class="dropdown-item" href="articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
+    <li><a class="dropdown-item" href="articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a></li>
     <li><a class="dropdown-item" href="articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="articles/subspecialist-density.html">Subspecialist density per 100,000 women</a></li>
@@ -247,6 +248,52 @@
 </td>
 </tr>
 </table>
+</div>
+<div class="section level2">
+<h2 id="statistical-reporting">Statistical reporting<a class="anchor" aria-label="anchor" href="#statistical-reporting"></a>
+</h2>
+<p>STROBE says what to report about a study’s design. <strong>SAMPL</strong> (Statistical Analyses and Methods in the Published Literature) says how to report the numbers themselves. mysterycall follows it by default, so a methods section can cite the guideline rather than restate it.</p>
+<p><img src="reference/figures/fig-reporting-checklists.png" width="100%" alt="Bar chart of checklist items per section for the SAMPL and CRiSP reporting checklists shipped with mysterycall"></p>
+<p>Every interval and p-value in the package goes through one of two formatters, so the convention lives in one place instead of being retyped at each call site:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mysterycall_format_ci.html">mysterycall_format_ci</a></span><span class="op">(</span><span class="fl">1.05</span>, <span class="fl">1.57</span><span class="op">)</span>      <span class="co">#&gt; "1.05 to 1.57"</span></span>
+<span><span class="fu"><a href="reference/mysterycall_format_ci.html">mysterycall_format_ci</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.45</span>, <span class="op">-</span><span class="fl">0.12</span><span class="op">)</span>    <span class="co">#&gt; "-0.45 to -0.12"</span></span>
+<span><span class="fu"><a href="reference/mysterycall_format_p.html">mysterycall_format_p</a></span><span class="op">(</span><span class="fl">0.0004</span>, name <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span>  <span class="co">#&gt; "p &lt; 0.001"</span></span></code></pre></div>
+<p>SAMPL asks that interval endpoints be separated with “to” rather than a dash. That reads as typographic fussiness until an endpoint goes negative, where <code>-0.45--0.12</code> is genuinely ambiguous and <code>-0.45 to -0.12</code> is not. Ratio measures hide the problem because they cannot be negative; mixed-model betas and risk differences do not.</p>
+<p>House styles differ, so the separator is an argument rather than a constant, following the pattern of <code>gtsummary</code>’s JAMA and Lancet journal themes:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>mysterycall.ci_sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>   <span class="co"># one setting, whole document</span></span></code></pre></div>
+<p>Three fillable checklists ship for the supplementary file, and they do not overlap:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Checklist</th>
+<th>Covers</th>
+<th>Items</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code></td>
+<td>Observational design, auto-checked against a fitted model</td>
+<td>16</td>
+</tr>
+<tr>
+<td><code><a href="reference/mysterycall_crisp_checklist.html">mysterycall_crisp_checklist()</a></code></td>
+<td>Simulated-patient method: caller training, detection, ethics of deception</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code><a href="reference/mysterycall_sampl_checklist.html">mysterycall_sampl_checklist()</a></code></td>
+<td>How the numbers themselves are reported</td>
+<td>27</td>
+</tr>
+</tbody>
+</table>
+<p>See <code><a href="articles/reporting-conventions.html">vignette("reporting-conventions")</a></code> for the full appendix, including the three places the package deliberately departs from SAMPL and why.</p>
 </div>
 <div class="section level2">
 <h2 id="how-mysterycall-compares-to-alternatives">How mysterycall compares to alternatives<a class="anchor" aria-label="anchor" href="#how-mysterycall-compares-to-alternatives"></a>
@@ -419,6 +466,31 @@
 <td><code><a href="reference/mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code></td>
 <td>Column-percentage tables</td>
 </tr>
+<tr>
+<td><strong>Reporting</strong></td>
+<td><code><a href="reference/mysterycall_format_ci.html">mysterycall_format_ci()</a></code></td>
+<td>Interval string with a settable separator (SAMPL: “to”, not a dash)</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_format_p.html">mysterycall_format_p()</a></code></td>
+<td>Exact p-values, never “NS”; <code>name=</code> for prose</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_sampl_checklist.html">mysterycall_sampl_checklist()</a></code></td>
+<td>27-item statistical-reporting checklist</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_crisp_checklist.html">mysterycall_crisp_checklist()</a></code></td>
+<td>20-item simulated-patient methodology checklist</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code></td>
+<td>16-item STROBE checklist, auto-checked against a model</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -493,7 +565,7 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: find all OBGYN taxonomy codes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -518,12 +590,12 @@
 <p>Full documentation, function reference, and worked vignettes: <strong><a href="https://mufflyt.github.io/mysterycall/" class="uri">https://mufflyt.github.io/mysterycall/</a></strong></p>
 <p><strong>Getting started</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/my-vignette.html">Searching the NPI Database by Taxonomy</a> - <a href="https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html">Search &amp; Process NPI</a> - <a href="https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html">Workflow Orchestration</a></p>
 <p><strong>Data quality</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/data-quality.html">Phone Validation, Name Parsing, and Safe Joins</a></p>
-<p><strong>Analysis and reporting</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html">Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/provider-classification.html">Provider Classification (RUCA, practice setting, census region)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/table-generation.html">Table Generation</a> - <a href="https://mufflyt.github.io/mysterycall/articles/get_census_data.html">Get Census Data</a></p>
+<p><strong>Analysis and reporting</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html">Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/provider-classification.html">Provider Classification (RUCA, practice setting, census region)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/table-generation.html">Table Generation</a> - <a href="https://mufflyt.github.io/mysterycall/articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/get_census_data.html">Get Census Data</a></p>
 </div>
 <div class="section level2">
 <h2 id="citing-mysterycall">Citing mysterycall<a class="anchor" aria-label="anchor" href="#citing-mysterycall"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"mysterycall"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p>Muffly, T. (2026). <em>mysterycall: Mystery Caller Study Tools for Healthcare Access Research</em> (R package version 1.6.3.9000). <a href="https://github.com/mufflyt/mysterycall" class="external-link uri">https://github.com/mufflyt/mysterycall</a></p>

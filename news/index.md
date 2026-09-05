@@ -44,6 +44,33 @@
   a different convention rather than a duplicate, and two others emit
   significance stars rather than p-values.
 
+### Documentation and tooling
+
+- [`vignette("reporting-conventions")`](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.md):
+  an appendix recording how the package prints numbers and why. Covers
+  the SAMPL items enforced mechanically, the two formatters that own the
+  convention, how to change the house style with one option, the three
+  checklists, and the three places the package deliberately departs from
+  SAMPL
+  ([`forest_plot()`](https://mufflyt.github.io/mysterycall/reference/forest_plot.md)’s
+  AMA p-values, and two star-coded screening displays).
+
+- `.github/scripts/check-pkgdown-index.R`, wired into `repo-hygiene`:
+  fails in about a second when a documented topic is missing from the
+  pkgdown reference index. pkgdown already enforces this, but only at
+  the end of a roughly fifteen-minute site build, which is how long it
+  took to discover that
+  [`mysterycall_format_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_ci.md)
+  and
+  [`mysterycall_format_p()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_p.md)
+  had been exported without being listed. Matches on `\alias{}` as
+  pkgdown does, so a topic indexed under any of its aliases counts.
+
+- `tools/run-test-subset.R`: run only the test files matching a pattern,
+  in one session. The full suite takes tens of minutes locally because
+  many files fit `lme4` or `glmmTMB` models, which makes checking a
+  narrow change expensive enough to skip.
+
 ### Statistical reporting (SAMPL)
 
 The package now reports numbers the way SAMPL asks, which changes some

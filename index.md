@@ -122,6 +122,57 @@ mysterycall_irr_plot(fit)
 
 [TABLE]
 
+## Statistical reporting
+
+STROBE says what to report about a study’s design. **SAMPL**
+(Statistical Analyses and Methods in the Published Literature) says how
+to report the numbers themselves. mysterycall follows it by default, so
+a methods section can cite the guideline rather than restate it.
+
+![Bar chart of checklist items per section for the SAMPL and CRiSP
+reporting checklists shipped with
+mysterycall](reference/figures/fig-reporting-checklists.png)
+
+Every interval and p-value in the package goes through one of two
+formatters, so the convention lives in one place instead of being
+retyped at each call site:
+
+``` r
+
+mysterycall_format_ci(1.05, 1.57)      #> "1.05 to 1.57"
+mysterycall_format_ci(-0.45, -0.12)    #> "-0.45 to -0.12"
+mysterycall_format_p(0.0004, name = "p")  #> "p < 0.001"
+```
+
+SAMPL asks that interval endpoints be separated with “to” rather than a
+dash. That reads as typographic fussiness until an endpoint goes
+negative, where `-0.45--0.12` is genuinely ambiguous and
+`-0.45 to -0.12` is not. Ratio measures hide the problem because they
+cannot be negative; mixed-model betas and risk differences do not.
+
+House styles differ, so the separator is an argument rather than a
+constant, following the pattern of `gtsummary`’s JAMA and Lancet journal
+themes:
+
+``` r
+
+options(mysterycall.ci_sep = " - ")   # one setting, whole document
+```
+
+Three fillable checklists ship for the supplementary file, and they do
+not overlap:
+
+| Checklist | Covers | Items |
+|----|----|----|
+| [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md) | Observational design, auto-checked against a fitted model | 16 |
+| [`mysterycall_crisp_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crisp_checklist.md) | Simulated-patient method: caller training, detection, ethics of deception | 20 |
+| [`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md) | How the numbers themselves are reported | 27 |
+
+See
+[`vignette("reporting-conventions")`](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.md)
+for the full appendix, including the three places the package
+deliberately departs from SAMPL and why.
+
 ## How mysterycall compares to alternatives
 
 | Capability | mysterycall | `npi` package | `humaniformat` | Manual `dplyr` |
@@ -159,6 +210,11 @@ output.
 |  | [`mysterycall_flag_repeat_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_repeat_physicians.md) | Detect duplicate-entry and repeat-call contamination |
 | **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |
 |  | [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md) | Column-percentage tables |
+| **Reporting** | [`mysterycall_format_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_ci.md) | Interval string with a settable separator (SAMPL: “to”, not a dash) |
+|  | [`mysterycall_format_p()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_p.md) | Exact p-values, never “NS”; `name=` for prose |
+|  | [`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md) | 27-item statistical-reporting checklist |
+|  | [`mysterycall_crisp_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crisp_checklist.md) | 20-item simulated-patient methodology checklist |
+|  | [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md) | 16-item STROBE checklist, auto-checked against a model |
 
 ## Built-in datasets
 
@@ -222,6 +278,8 @@ CIs)](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html) 
 region)](https://mufflyt.github.io/mysterycall/articles/provider-classification.html) -
 [Table
 Generation](https://mufflyt.github.io/mysterycall/articles/table-generation.html) -
+[Appendix: Statistical Reporting Conventions
+(SAMPL)](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.html) -
 [Get Census
 Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
 

@@ -135,6 +135,13 @@
   Build Table 1 (baseline characteristics), percentage tables, disparity
   summaries, and export-ready PDFs from mystery-caller study data.
 
+- [Appendix: Statistical Reporting Conventions
+  (SAMPL)](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.md):
+
+  How mysterycall prints numbers, and why. The SAMPL guideline items the
+  package can enforce mechanically, the two formatters that own the
+  convention, and the three checklists that go in a supplementary file.
+
 - [Writing the Results
   Section](https://mufflyt.github.io/mysterycall/articles/writing-results-section.md):
 
