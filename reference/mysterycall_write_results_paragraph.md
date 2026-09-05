@@ -93,5 +93,5 @@ irr_tbl <- data.frame(
   stringsAsFactors = FALSE
 )
 mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance")
-#> [1] "In multivariable Poisson regression, insurance was significantly associated with appointment acceptance (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 0.72 (95% CI 0.60-0.86; p < 0.001) for appointment acceptance. Compared with commercial insurance, callers presenting as Uninsured had an IRR of 0.55 (95% CI 0.40-0.75; p < 0.001) for appointment acceptance."
+#> [1] "In multivariable Poisson regression, insurance was significantly associated with appointment acceptance (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 0.72 (95% CI 0.60 to 0.86; p < 0.001) for appointment acceptance. Compared with commercial insurance, callers presenting as Uninsured had an IRR of 0.55 (95% CI 0.40 to 0.75; p < 0.001) for appointment acceptance."
 ```

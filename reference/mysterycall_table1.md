@@ -168,6 +168,6 @@ result$table
 #> 2 gender    Male             3 (50.0%)     1 (33.3%)    2 (66.7%)        NA     
 #> 3 academic  Private Practice 3 (50.0%)     1 (33.3%)    2 (66.7%)        1.000  
 #> 4 academic  University       3 (50.0%)     2 (66.7%)    1 (33.3%)        NA     
-#> 5 wait_days Median [IQR]     17.5 [11.0-2… 25.0 [23.0-… 10.0 [8.5-12.0]  0.081  
+#> 5 wait_days Median [IQR]     17.5 [11.0 t… 25.0 [23.0 … 10.0 [8.5 to 12… 0.081  
 #> 6 wait_days Mean (SD)        17.8 (9.0)    25.3 (4.5)   10.3 (3.5)       NA     
 ```

@@ -872,6 +872,8 @@ Prepare call lists, STROBE checklists, and session snapshots.
   : STROBE reporting checklist for mystery-caller studies
 - [`mysterycall_crisp_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crisp_checklist.md)
   : Simulated-patient (CRiSP-style) reporting checklist
+- [`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md)
+  : SAMPL statistical-reporting checklist
 - [`mysterycall_model_equation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_equation.md)
   : Render a fitted model as a LaTeX equation
 - [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
@@ -1377,6 +1379,11 @@ print() and as.data.frame() methods for mysterycall result objects.
   :
 
   Print a `mysterycall_crisp_checklist` object
+
+- [`print(`*`<mysterycall_sampl_checklist>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md)
+  :
+
+  Print a `mysterycall_sampl_checklist` object
 
 - [`print(`*`<mysterycall_cumulative_access_curve>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_cumulative_access_curve.md)
   :

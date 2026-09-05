@@ -348,8 +348,8 @@ asymmetric Medicaid-only NA-screen.</p>
 <span class="r-in"><span>  insurance_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Blue Cross/Blue Shield"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Physicians accepted Medicaid at 100.0% vs Blue Cross/Blue Shield at 100.0%, a gap of 0.0 percentage points. </span>
 <span class="r-in"><span><span class="va">res</span><span class="op">$</span><span class="va">table</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                insurance n_total n_excluded n_numerator n_denominator rate_pct</span>
@@ -358,9 +358,9 @@ asymmetric Medicaid-only NA-screen.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ci_lower_pct ci_upper_pct</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     87.12711          100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     88.97446          100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                        sentence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           sentence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Without wait-time filter</span></span></span>
 <span class="r-in"><span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_acceptance_rate_calc</span><span class="op">(</span></span></span>
@@ -368,8 +368,8 @@ asymmetric Medicaid-only NA-screen.</p>
 <span class="r-in"><span>  wait_col  <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res2</span><span class="op">$</span><span class="va">sentences</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)"              </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

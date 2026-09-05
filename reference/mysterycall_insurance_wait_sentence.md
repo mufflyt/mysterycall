@@ -195,5 +195,5 @@ df <- data.frame(
 )
 res <- mysterycall_insurance_wait_sentence(df)
 cat(res$sentence)
-#> Medicaid patients experienced a 94% longer wait compared to patients with Blue Cross/Blue Shield (Incidence Rate Ratio: 1.94; 95% CI: 1.65–2.27; p < 0.001) with median wait times of 22 business days (IQR: 19–26) and 11 business days (IQR: 10–12) respectively.
+#> Medicaid patients experienced a 94% longer wait compared to patients with Blue Cross/Blue Shield (Incidence Rate Ratio: 1.94; 95% CI: 1.65 to 2.27; p < 0.001) with median wait times of 22 business days (IQR: 19 to 26) and 11 business days (IQR: 10 to 12) respectively.
 ```

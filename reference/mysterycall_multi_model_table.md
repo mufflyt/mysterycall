@@ -118,6 +118,7 @@ Other manuscript:
 [`mysterycall_methods_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_methods_paragraph.md),
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md),
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md),
@@ -131,6 +132,7 @@ Other manuscript:
 [`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
 [`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
 [`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md),
 [`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
 [`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
@@ -205,25 +207,25 @@ tbl <- mysterycall_multi_model_table(
 print(tbl)
 #> Multi-model regression table  [OR (95% CI)]
 #> ------------------------------------------------------------ 
-#>  Term                                     Unadjusted                
-#>  insuranceBCBS                            Ref.                      
-#>  insuranceMedicaid                        1.45 (1.02-2.05) | p=0.038
-#>  scenarioAppointment                      Ref.                      
-#>  scenarioNo appointment                   0.82 (0.61-1.10) | p=0.189
-#>  regionNorth                                                        
-#>  regionSouth                                                        
-#>  insuranceMedicaid:scenarioNo appointment                           
-#>  N                                        200                       
-#>  AIC                                      312.4                     
-#>  Adjusted                   + Interaction             
-#>  Ref.                       Ref.                      
-#>  1.38 (0.97-1.96) | p=0.072 1.41 (0.99-2.01) | p=0.059
-#>  Ref.                       Ref.                      
-#>  0.79 (0.58-1.07) | p=0.124 0.81 (0.59-1.09) | p=0.163
-#>  Ref.                       Ref.                      
-#>  1.21 (0.88-1.66) | p=0.238 1.19 (0.86-1.65) | p=0.272
-#>                             0.67 (0.41-1.09) | p=0.107
-#>  200                        200                       
-#>  308.1                      306.8                     
+#>  Term                                     Unadjusted                   
+#>  insuranceBCBS                            Ref.                         
+#>  insuranceMedicaid                        1.45 (1.02 to 2.05) | p=0.038
+#>  scenarioAppointment                      Ref.                         
+#>  scenarioNo appointment                   0.82 (0.61 to 1.10) | p=0.189
+#>  regionNorth                                                           
+#>  regionSouth                                                           
+#>  insuranceMedicaid:scenarioNo appointment                              
+#>  N                                        200                          
+#>  AIC                                      312.4                        
+#>  Adjusted                      + Interaction                
+#>  Ref.                          Ref.                         
+#>  1.38 (0.97 to 1.96) | p=0.072 1.41 (0.99 to 2.01) | p=0.059
+#>  Ref.                          Ref.                         
+#>  0.79 (0.58 to 1.07) | p=0.124 0.81 (0.59 to 1.09) | p=0.163
+#>  Ref.                          Ref.                         
+#>  1.21 (0.88 to 1.66) | p=0.238 1.19 (0.86 to 1.65) | p=0.272
+#>                                0.67 (0.41 to 1.09) | p=0.107
+#>  200                           200                          
+#>  308.1                         306.8                        
 #> ------------------------------------------------------------ 
 ```

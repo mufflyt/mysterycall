@@ -282,8 +282,8 @@ res <- mysterycall_acceptance_rate_calc(
   insurance_groups = c("Medicaid", "Blue Cross/Blue Shield")
 )
 print(res)
-#> Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)
-#> Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%) 
+#> Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)
+#> Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%) 
 #> Physicians accepted Medicaid at 100.0% vs Blue Cross/Blue Shield at 100.0%, a gap of 0.0 percentage points. 
 res$table
 #>                insurance n_total n_excluded n_numerator n_denominator rate_pct
@@ -292,9 +292,9 @@ res$table
 #>   ci_lower_pct ci_upper_pct
 #> 1     87.12711          100
 #> 2     88.97446          100
-#>                                                                        sentence
-#> 1               Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)
-#> 2 Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%)
+#>                                                                           sentence
+#> 1               Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)
+#> 2 Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%)
 
 ## Without wait-time filter
 res2 <- mysterycall_acceptance_rate_calc(
@@ -302,6 +302,6 @@ res2 <- mysterycall_acceptance_rate_calc(
   wait_col  = NULL
 )
 res2$sentences
-#> [1] "Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0%-100.0%)"
-#> [2] "Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1%-100.0%)"              
+#> [1] "Blue Cross/Blue Shield acceptance rate: 31/31 = 100.0% (95% CI: 89.0% to 100.0%)"
+#> [2] "Medicaid acceptance rate: 26/26 = 100.0% (95% CI: 87.1% to 100.0%)"              
 ```

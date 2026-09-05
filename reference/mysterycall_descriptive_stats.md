@@ -61,7 +61,7 @@ A named list with elements:
 
 - `sentence`:
 
-  Character string: `"Median [column]: [median] (IQR: [q25]--[q75])."`
+  Character string: `"Median [column]: [median] (IQR: [q25] to [q75])."`
 
 ## Details
 
@@ -103,6 +103,6 @@ mysterycall_descriptive_stats(df, "wait")
 #> [1] 1
 #> 
 #> $sentence
-#> [1] "Median wait: 4.00 (IQR: 2--6)."
+#> [1] "Median wait: 4.00 (IQR: 2 to 6)."
 #> 
 ```

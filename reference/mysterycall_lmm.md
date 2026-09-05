@@ -221,7 +221,7 @@ had, on average, **5.2 more wait days** than the reference group.
 **Log scale (`auto_log = TRUE`, skewness \> 1):** Coefficients are on
 the `log1p(days)` scale. Use `gmr_table` for interpretation: a GMR of
 `0.87` means the group waits ~13% fewer days (\* (days + 1)) than the
-reference. Report as: "GMR = 0.87 (95% CI 0.49-1.54), p = 0.631."
+reference. Report as: "GMR = 0.87 (95% CI 0.49 to 1.54), p = 0.631."
 
 ## R-squared
 

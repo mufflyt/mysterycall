@@ -65,5 +65,5 @@ mysterycall_cmh_test(df, "offered", "persona", "clinic")
 #> <mysterycall_cmh_test> 20 strata, n = 40
 #>   Mantel-Haenszel chi-squared test with continuity correction
 #>   statistic = 0.571, df = 1, p = 0.450
-#>   common OR = 0.400 (95% CI 0.078-2.062)
+#>   common OR = 0.400 (95% CI 0.078 to 2.062)
 ```

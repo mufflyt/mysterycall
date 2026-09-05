@@ -204,6 +204,6 @@ mysterycall_wait_time_summary(df, group_by = "insurance")
 #> [1] "Wilcoxon rank-sum (Mann-Whitney U)"
 #> 
 #> $interpretation
-#> [1] "BCBS: median 7.5 days (IQR 4.25-15, n=4); Medicaid: median 10.5 days (IQR 6-15.75, n=4). Wilcoxon rank-sum (Mann-Whitney U): p = 0.885"
+#> [1] "BCBS: median 7.5 days (IQR 4.25 to 15, n=4); Medicaid: median 10.5 days (IQR 6 to 15.75, n=4). Wilcoxon rank-sum (Mann-Whitney U): p = 0.885"
 #> 
 ```

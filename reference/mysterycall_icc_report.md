@@ -79,7 +79,7 @@ A list of class `mysterycall_icc_report` containing:
 - `sentence`:
 
   Character. Manuscript-ready one-sentence summary, e.g.
-  `"Inter-caller reliability was ICC=0.82 (95% CI: 0.71-0.91), indicating excellent agreement (kappa=0.82)."`
+  `"Inter-caller reliability was ICC=0.82 (95% CI: 0.71 to 0.91), indicating excellent agreement (kappa=0.82)."`
 
 - `table`:
 
@@ -238,7 +238,7 @@ rpt <- mysterycall_icc_report(df)
 print(rpt)
 #> Inter-Rater Reliability Report (STROBE Item 22)
 #> ================================================
-#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00-0.63), indicating poor agreement (kappa=0.00). 
+#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00 to 0.63), indicating poor agreement (kappa=0.00). 
 #> 
 #>   Callers : 3
 #>   Calls   : 60
@@ -249,17 +249,17 @@ print(rpt)
 #>     Bob      20        10        0.50
 #>   Carol      20        14        0.70
 cat(rpt$sentence, "\n")
-#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00-0.63), indicating poor agreement (kappa=0.00). 
+#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00 to 0.63), indicating poor agreement (kappa=0.00). 
 
 ## Stratified by insurance type
 rpt2 <- mysterycall_icc_report(df, group_col = "insurance")
 cat(rpt2$sentence, "\n")
-#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00-0.63), indicating poor agreement (kappa=0.00). 
+#> Inter-caller reliability was ICC=0.00 (95% CI: 0.00 to 0.63), indicating poor agreement (kappa=0.00). 
 lapply(rpt2$group_results, function(x) x$sentence)
 #> $BCBS
-#> [1] "Inter-caller reliability was ICC=0.00 (95% CI: 0.00-0.58), indicating poor agreement (kappa=0.00)."
+#> [1] "Inter-caller reliability was ICC=0.00 (95% CI: 0.00 to 0.58), indicating poor agreement (kappa=0.00)."
 #> 
 #> $Medicaid
-#> [1] "Inter-caller reliability was ICC=0.00 (95% CI: 0.00-0.68), indicating poor agreement (kappa=0.00)."
+#> [1] "Inter-caller reliability was ICC=0.00 (95% CI: 0.00 to 0.68), indicating poor agreement (kappa=0.00)."
 #> 
 ```

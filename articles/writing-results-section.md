@@ -74,7 +74,7 @@ acceptance <- mysterycall_results_paragraph(
   outcome_label = "a new-patient appointment"
 )
 cat(acceptance)
-#> Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41-0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63-1.23, p=0.451).
+#> Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41 to 0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63 to 1.23, p=0.451).
 ```
 
 The intro clause claims significance **only** when a level actually
@@ -92,7 +92,7 @@ wait_irr <- mysterycall_write_results_paragraph(
   outcome_label = "time to appointment"
 )
 cat(wait_irr)
-#> In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05-1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90-1.20; p = 0.590) for time to appointment.
+#> In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05 to 1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90 to 1.20; p = 0.590) for time to appointment.
 ```
 
 ### Translating IRRs to absolute days (signed CIs)
@@ -156,7 +156,7 @@ wt <- mysterycall_wait_time_sentence(
   reference = "Private"
 )
 cat(wt$sentence)
-#> The median wait time across all insurance was 14 business days (IQR: 12–16). Specifically, the median wait time was 15 days (IQR: 13–18) for Medicaid, 13 days (IQR: 10–15) for Private. The p-value for Medicaid vs Private was < 0.001.
+#> The median wait time across all insurance was 14 business days (IQR: 12 to 16). Specifically, the median wait time was 15 days (IQR: 13 to 18) for Medicaid, 13 days (IQR: 10 to 15) for Private. The p-value for Medicaid vs Private was < 0.001.
 ```
 
 ### Direction words tied to the data sign
@@ -206,9 +206,9 @@ results_section <- paste(
   sep = "\n\n"
 )
 cat(results_section)
-#> Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41-0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63-1.23, p=0.451).
+#> Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41 to 0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63 to 1.23, p=0.451).
 #> 
-#> In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05-1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90-1.20; p = 0.590) for time to appointment.
+#> In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05 to 1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90 to 1.20; p = 0.590) for time to appointment.
 #> 
 #> Medicaid-insured callers waited a mean of 5.9 more days compared with commercial insurance (95% CI +1.1 to +11.8 days; IRR 1.28; p = 0.014). Medicare-insured callers waited a mean of 0.8 more days compared with commercial insurance (95% CI -2.1 to +4.2 days; IRR 1.04; p = 0.590) (difference not statistically significant).
 ```
@@ -268,7 +268,7 @@ cat(mysterycall_overdispersion_sentence(fit))
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] gtable_0.3.6       xfun_0.60          bslib_0.12.0       ggplot2_4.0.3     
-    #>  [5] htmlwidgets_1.6.4  insight_1.5.2      lattice_0.22-9     tzdb_0.5.0        
+    #>  [5] htmlwidgets_1.6.4  insight_1.5.3      lattice_0.22-9     tzdb_0.5.0        
     #>  [9] vctrs_0.7.3        tools_4.6.1        Rdpack_2.6.6       generics_0.1.4    
     #> [13] tibble_3.3.1       pkgconfig_2.0.3    Matrix_1.7-5       checkmate_2.3.4   
     #> [17] RColorBrewer_1.1-3 S7_0.2.2           desc_1.4.3         gt_1.3.0          
@@ -277,11 +277,11 @@ cat(mysterycall_overdispersion_sentence(fit))
     #> [29] sass_0.4.10        yaml_2.3.12        pillar_1.11.1      pkgdown_2.2.1     
     #> [33] nloptr_2.2.1       jquerylib_0.1.4    MASS_7.3-65        cachem_1.1.0      
     #> [37] reformulas_0.4.4   boot_1.3-32        nlme_3.1-169       npi_0.3.0         
-    #> [41] tidyselect_1.2.1   digest_0.6.39      performance_0.17.1 stringi_1.8.9     
+    #> [41] tidyselect_1.2.1   digest_0.6.39      performance_0.18.1 stringi_1.8.9     
     #> [45] dplyr_1.2.1        splines_4.6.1      fastmap_1.2.0      grid_4.6.1        
     #> [49] cli_3.6.6          magrittr_2.0.5     readr_2.2.0        scales_1.4.0      
-    #> [53] backports_1.5.1    lubridate_1.9.5    timechange_0.4.0   rmarkdown_2.31    
-    #> [57] httr_1.4.8         otel_0.2.0         lme4_2.0-6         ragg_1.5.2        
+    #> [53] backports_1.5.1    lubridate_1.9.5    timechange_0.4.0   rmarkdown_2.32    
+    #> [57] httr_1.4.9         otel_0.2.0         lme4_2.0-6         ragg_1.5.2        
     #> [61] hms_1.1.4          evaluate_1.0.5     knitr_1.51         rbibutils_2.4.1   
     #> [65] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         xml2_1.6.0        
     #> [69] minqa_1.2.8        jsonlite_2.0.0     R6_2.6.1           systemfonts_1.3.2 

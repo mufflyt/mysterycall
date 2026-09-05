@@ -141,6 +141,7 @@ Other manuscript:
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md),
 [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md),
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md),
@@ -154,6 +155,7 @@ Other manuscript:
 [`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
 [`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
 [`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md),
 [`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
 [`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
@@ -205,17 +207,17 @@ print(result)
 #>     Saloner et al. 2015 2015  Primary Care Medicaid vs. Private 1560
 #>          Kugelmass 2016 2016    Psychiatry Medicaid vs. Private  360
 #>      [Current study]*** 2025 Urogynecology Medicaid vs. Private  480
-#>       OR (95% CI)          Direction
-#>  0.38 (0.22-0.65) Disparity detected
-#>  0.61 (0.44-0.85) Disparity detected
-#>  0.87 (0.72-1.05)      Favors equity
-#>  0.45 (0.31-0.66) Disparity detected
-#>  0.62 (0.41-0.94) Disparity detected
+#>          OR (95% CI)          Direction
+#>  0.38 (0.22 to 0.65) Disparity detected
+#>  0.61 (0.44 to 0.85) Disparity detected
+#>  0.87 (0.72 to 1.05)      Favors equity
+#>  0.45 (0.31 to 0.66) Disparity detected
+#>  0.62 (0.41 to 0.94) Disparity detected
 #> 
-#> OR range: 0.38-0.87
+#> OR range: 0.38 to 0.87
 #> 
 #> Discussion sentence:
-#> Across 4 published mystery-caller studies, ORs for Medicaid vs. Private ranged from 0.38-0.87, consistent with our finding of OR = 0.62. 
+#> Across 4 published mystery-caller studies, ORs for Medicaid vs. Private ranged from 0.38 to 0.87, consistent with our finding of OR = 0.62. 
 result$sentence
-#> [1] "Across 4 published mystery-caller studies, ORs for Medicaid vs. Private ranged from 0.38-0.87, consistent with our finding of OR = 0.62."
+#> [1] "Across 4 published mystery-caller studies, ORs for Medicaid vs. Private ranged from 0.38 to 0.87, consistent with our finding of OR = 0.62."
 ```

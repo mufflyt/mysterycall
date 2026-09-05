@@ -331,7 +331,7 @@ mysterycall_cmh_test(d, outcome_var = "appointment_offered",
 #> <mysterycall_cmh_test> 4 strata, n = 280
 #>   Mantel-Haenszel chi-squared test with continuity correction
 #>   statistic = 5.222, df = 1, p = 0.022
-#>   common OR = 0.558 (95% CI 0.346-0.899)
+#>   common OR = 0.558 (95% CI 0.346 to 0.899)
 ```
 
 Wait times are skewed counts, so compare them with ranks — here across

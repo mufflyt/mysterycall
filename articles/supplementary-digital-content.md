@@ -95,13 +95,20 @@ tS1 <- mysterycall_multi_model_table(
 tS1
 #> Multi-model regression table  [OR (95% CI)]
 #> ------------------------------------------------------------ 
-#>  Term                Crude                      Adjusted                  
-#>  insuranceCommercial Ref.                       Ref.                      
-#>  insuranceMedicaid   0.49 (0.30-0.80) | p=0.005 0.49 (0.30-0.80) | p=0.005
-#>  areaMetro                                      Ref.                      
-#>  areaNonmetro                                   0.86 (0.52-1.41) | p=0.538
-#>  N                   300                        300                       
-#>  AIC                 372.4                      374.0                     
+#>  Term                Crude                        
+#>  insuranceCommercial Ref.                         
+#>  insuranceMedicaid   0.49 (0.30 to 0.80) | p=0.005
+#>  areaMetro                                        
+#>  areaNonmetro                                     
+#>  N                   300                          
+#>  AIC                 372.4                        
+#>  Adjusted                     
+#>  Ref.                         
+#>  0.49 (0.30 to 0.80) | p=0.005
+#>  Ref.                         
+#>  0.86 (0.52 to 1.41) | p=0.538
+#>  300                          
+#>  374.0                        
 #> ------------------------------------------------------------
 ```
 
@@ -115,8 +122,8 @@ tS2
 #> Disparity table -- 2 groups | ref: 'Commercial' | wilson 95% CI
 #> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
 #> ---------------------------------------------------------------------------------------------------- 
-#> Commercial                150    114    76.0%  68.6%-82.1%          (ref)  1.00 (ref)              (ref)
-#> Medicaid                  150     91    60.7%  52.7%-68.1%       -15.3 pp  0.80 (0.68-0.93)        0.004
+#> Commercial                150    114    76.0%  68.6% to 82.1%       (ref)  1.00 (ref)              (ref)
+#> Medicaid                  150     91    60.7%  52.7% to 68.1%    -15.3 pp  0.80 (0.68 to 0.93)     0.004
 ```
 
 **Table S3 — adjusted effect on the absolute scale.**
@@ -124,8 +131,10 @@ tS2
 ``` r
 
 mysterycall_combined_results_table(wait_model)
-#>                Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance
-#> 1 insuranceMedicaid 1.52  1.41-1.64 < 0.001      <NA>        <NA>            *
+#>                Term  IRR   IRR 95% CI p-value Days Diff Days 95% CI
+#> 1 insuranceMedicaid 1.52 1.41 to 1.64 < 0.001      <NA>        <NA>
+#>   Significance
+#> 1            *
 ```
 
 **Table S4 — this study against prior work.**
@@ -141,17 +150,17 @@ mysterycall_literature_table(prior)
 #> 
 #> -- Mystery-caller literature comparison (2 studies) --
 #> 
-#>        Author Year Specialty             Comparison    N      OR (95% CI)
-#>  Pollack 2016 2016   Urology Medicaid vs Commercial 1200 0.42 (0.35-0.51)
-#>   Sharma 2025 2025     OBGYN Medicaid vs Commercial  480 0.55 (0.40-0.75)
+#>        Author Year Specialty             Comparison    N         OR (95% CI)
+#>  Pollack 2016 2016   Urology Medicaid vs Commercial 1200 0.42 (0.35 to 0.51)
+#>   Sharma 2025 2025     OBGYN Medicaid vs Commercial  480 0.55 (0.40 to 0.75)
 #>           Direction
 #>  Disparity detected
 #>  Disparity detected
 #> 
-#> OR range: 0.42-0.55
+#> OR range: 0.42 to 0.55
 #> 
 #> Discussion sentence:
-#> Across 2 mystery-caller studies, ORs for Medicaid vs Commercial ranged from 0.42-0.55.
+#> Across 2 mystery-caller studies, ORs for Medicaid vs Commercial ranged from 0.42 to 0.55.
 ```
 
 ## 4. Missing-data analysis

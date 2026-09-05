@@ -4,7 +4,7 @@ Formats a tibble of IRR estimates (typically the `$irr_table` slot from
 [`mysterycall_simple_poisson()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_simple_poisson.md))
 into a publication-ready
 [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table with a
-combined "IRR (95% CI)" column and optional significance stars.
+combined "IRR (95% CI)" column and opt-in significance stars.
 
 ## Usage
 
@@ -15,8 +15,15 @@ mysterycall_irr_table(
   subtitle = NULL,
   outcome_label = "IRR (95% CI)",
   digits = 2L,
-  add_significance_stars = TRUE,
-  footnote = paste0("IRR = Incidence Rate Ratio. ", "* p<0.05; ** p<0.01; *** p<0.001.")
+  add_significance_stars = FALSE,
+  footnote = if (add_significance_stars) {
+     paste0("IRR = Incidence Rate Ratio. ",
+    "* p < 0.05; ** p < 0.01; *** p < 0.001.")
+ } else {
+    
+    paste0("IRR = Incidence Rate Ratio. Estimates are ",
+    "reported with 95% confidence intervals and ", "exact p values.")
+ }
 )
 ```
 
@@ -62,14 +69,18 @@ mysterycall_irr_table(
 
 - add_significance_stars:
 
-  Logical. If `TRUE` (default), appends a `Stars` column using
-  `***`/`**`/`*`/`""` thresholds.
+  Logical. If `TRUE`, appends a `Stars` column using `***`/`**`/`*`/`""`
+  thresholds. Default `FALSE`: SAMPL asks that p values be reported as
+  exact values rather than coded against alpha, and the confidence
+  interval already carries the precision the stars stand in for. Pass
+  `TRUE` when a journal's house style requires them.
 
 - footnote:
 
   Character scalar. Source note appended via
   [`gt::tab_source_note()`](https://gt.rstudio.com/reference/tab_source_note.html).
-  Default explains the star notation.
+  Defaults to the star ladder when `add_significance_stars = TRUE`, and
+  otherwise to a note that intervals and exact p values are reported.
 
 ## Value
 
@@ -657,29 +668,26 @@ if (requireNamespace("gt", quietly = TRUE)) {
 #>   <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 #>   <thead>
 #>     <tr class="gt_heading">
-#>       <td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Incidence Rate Ratios</td>
+#>       <td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Incidence Rate Ratios</td>
 #>     </tr>
 #>     
 #>     <tr class="gt_col_headings">
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Label">Predictor</th>
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="IRR_CI">IRR (95% CI)</th>
 #>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="P">p-value</th>
-#>       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Stars">Stars</th>
 #>     </tr>
 #>   </thead>
 #>   <tbody class="gt_table_body">
 #>     <tr><td headers="Label" class="gt_row gt_left">insuranceMedicaid</td>
 #> <td headers="IRR_CI" class="gt_row gt_right">0.97 (0.83--1.14)</td>
-#> <td headers="P" class="gt_row gt_right">0.722</td>
-#> <td headers="Stars" class="gt_row gt_right"></td></tr>
+#> <td headers="P" class="gt_row gt_right">0.722</td></tr>
 #>     <tr><td headers="Label" class="gt_row gt_left">insuranceMedicare</td>
 #> <td headers="IRR_CI" class="gt_row gt_right">0.98 (0.84--1.15)</td>
-#> <td headers="P" class="gt_row gt_right">0.813</td>
-#> <td headers="Stars" class="gt_row gt_right"></td></tr>
+#> <td headers="P" class="gt_row gt_right">0.813</td></tr>
 #>   </tbody>
 #>   <tfoot>
 #>     <tr class="gt_sourcenotes">
-#>       <td class="gt_sourcenote" colspan="4">IRR = Incidence Rate Ratio. * p&lt;0.05; ** p&lt;0.01; *** p&lt;0.001.</td>
+#>       <td class="gt_sourcenote" colspan="3">IRR = Incidence Rate Ratio. Estimates are reported with 95% confidence intervals and exact p values.</td>
 #>     </tr>
 #>   </tfoot>
 #> </table>

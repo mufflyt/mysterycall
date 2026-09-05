@@ -427,7 +427,7 @@ is closely related to
 [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
 but reports the numerator *N* and the proportion as a fraction
 side-by-side, rather than combining them into a formatted “60.2% (95%
-CI: 52.1-67.9%)” string. This format is required by some journals
+CI: 52.1% to 67.9%)” string. This format is required by some journals
 (particularly JAMA-network journals) that prefer separate columns for N
 and proportion.
 

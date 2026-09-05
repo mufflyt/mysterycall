@@ -62,11 +62,11 @@ print(t1)
 #> Table 1 (Overall N=4)
 #> 
 #> # A tibble: 4 × 3
-#>   variable level        Overall         
-#>   <chr>    <chr>        <chr>           
-#> 1 age      Median [IQR] 32.5 [28.8-36.2]
-#> 2 age      Mean (SD)    32.5 (6.5)      
-#> 3 sex      F            2 (50.0%)       
-#> 4 sex      M            2 (50.0%)       
+#>   variable level        Overall            
+#>   <chr>    <chr>        <chr>              
+#> 1 age      Median [IQR] 32.5 [28.8 to 36.2]
+#> 2 age      Mean (SD)    32.5 (6.5)         
+#> 3 sex      F            2 (50.0%)          
+#> 4 sex      M            2 (50.0%)          
 # }
 ```

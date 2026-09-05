@@ -24,8 +24,8 @@ mysterycall_physician_age(data, age_column)
 ## Value
 
 A single character string of the form
-`"The median age was XX.XX years (IQR: Q1.X--Q3.X years)."` where the
-median is rounded to 2 decimal places and IQR bounds to 1.
+`"The median age was XX.XX years (IQR: 25th percentile Q1.X to 75th percentile Q3.X)."`
+where the median is rounded to 2 decimal places and IQR bounds to 1.
 
 ## Details
 

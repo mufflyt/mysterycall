@@ -214,6 +214,6 @@ mysterycall_acceptance_rate(df, group_by = "insurance")
 #> [1] "Fisher's exact"
 #> 
 #> $interpretation
-#> [1] "BCBS: 1/4 (25.0%, 95% CI 4.6%-69.9%); Medicaid: 3/4 (75.0%, 95% CI 30.1%-95.4%). Fisher's exact: p = 0.486"
+#> [1] "BCBS: 1/4 (25.0%, 95% CI 4.6% to 69.9%); Medicaid: 3/4 (75.0%, 95% CI 30.1% to 95.4%). Fisher's exact: p = 0.486"
 #> 
 ```

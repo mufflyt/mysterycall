@@ -134,7 +134,7 @@ mysterycall_disparities_table(df, "accepted", "insurance")
 #> Disparity table -- 3 groups | ref: 'Medicaid' | wilson 95% CI
 #> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
 #> ---------------------------------------------------------------------------------------------------- 
-#> Medicaid                   38     18    47.4%  32.5%-62.7%          (ref)  1.00 (ref)              (ref)
-#> Private                    44     21    47.7%  33.8%-62.1%        +0.4 pp  1.01 (0.64-1.59)        0.974
-#> Medicare                   38     18    47.4%  32.5%-62.7%        +0.0 pp  1.00 (0.62-1.61)        1.000
+#> Medicaid                   38     18    47.4%  32.5% to 62.7%       (ref)  1.00 (ref)              (ref)
+#> Private                    44     21    47.7%  33.8% to 62.1%     +0.4 pp  1.01 (0.64 to 1.59)     0.974
+#> Medicare                   38     18    47.4%  32.5% to 62.7%     +0.0 pp  1.00 (0.62 to 1.61)     1.000
 ```

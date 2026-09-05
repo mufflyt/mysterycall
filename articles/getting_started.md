@@ -206,7 +206,7 @@ mysterycall_write_results_paragraph(
   exposure_col = "insurance_scenario",
   outcome_label = "appointment acceptance"
 )
-#> [1] "In multivariable Poisson regression, insurance_scenario was significantly associated with appointment acceptance (see Table X). Compared with Private, callers presenting as Private had an IRR of 3.19 (95% CI 1.34-7.58; p = 0.009) for appointment acceptance."
+#> [1] "In multivariable Poisson regression, insurance_scenario was significantly associated with appointment acceptance (see Table X). Compared with Private, callers presenting as Private had an IRR of 3.19 (95% CI 1.34 to 7.58; p = 0.009) for appointment acceptance."
 ```
 
 ## Conclusion

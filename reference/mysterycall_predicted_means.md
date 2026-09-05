@@ -194,5 +194,5 @@ print(pmean)
 #>      BCBS           21.6 0.8     20.0     23.4
 #>  Medicaid           22.7 0.9     21.1     24.5
 #> 
-#> Predicted wait times ranged from 21.6 days (BCBS) to 22.7 days (Medicaid, 95% CI 21.1-24.5).
+#> Predicted wait times ranged from 21.6 days (BCBS) to 22.7 days (Medicaid, 95% CI 21.1 to 24.5).
 ```

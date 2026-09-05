@@ -69,7 +69,7 @@ print(result)
 #>   n_total                   412
 #>   OR                        0.62
 #>   OR_CI                     0.41-0.94
-#>   OR_full                   0.62 (0.41-0.94)
+#>   OR_full                   0.62 (0.41 to 0.94)
 #>   OR_p                      0.024
 #>   absolute_gap_pct          21%
 #>   ref_rate_pct              82%

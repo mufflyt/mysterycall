@@ -203,6 +203,7 @@ and insert into the manuscript.</p></li>
 <code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>,
 <code><a href="mysterycall_multi_model_table.html">mysterycall_multi_model_table()</a></code>,
 <code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>,
+<code><a href="mysterycall_sampl_checklist.html">mysterycall_sampl_checklist()</a></code>,
 <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
 <code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code>,
@@ -215,6 +216,7 @@ and insert into the manuscript.</p></li>
 <code><a href="print.mysterycall_model_comparison_table.html">print.mysterycall_model_comparison_table()</a></code>,
 <code><a href="print.mysterycall_multi_model_table.html">print.mysterycall_multi_model_table()</a></code>,
 <code><a href="print.mysterycall_results_report.html">print.mysterycall_results_report()</a></code>,
+<code><a href="print.mysterycall_sampl_checklist.html">print.mysterycall_sampl_checklist()</a></code>,
 <code><a href="print.mysterycall_strobe_checklist.html">print.mysterycall_strobe_checklist()</a></code>,
 <code><a href="print.mysterycall_table2.html">print.mysterycall_table2()</a></code></p></div>
     </div>
@@ -287,14 +289,14 @@ and insert into the manuscript.</p></li>
 <span class="r-in"><span>  digits        <span class="op">=</span> <span class="fl">2L</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Characteristic                Unadjusted                  Adjusted</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 insuranceMedicaid (OR) 0.62 (0.40–0.97), p=0.036 0.65 (0.42–1.01), p=0.055</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            Sample size                     N=160                     N=160</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                    AIC                     210.4                     208.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               + Interaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.68 (0.43–1.07), p=0.094</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                     N=160</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     209.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Characteristic                   Unadjusted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 insuranceMedicaid (OR) 0.62 (0.40 to 0.97), p=0.036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            Sample size                        N=160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                    AIC                        210.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       Adjusted                + Interaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.65 (0.42 to 1.01), p=0.055 0.68 (0.43 to 1.07), p=0.094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        N=160                        N=160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                        208.1                        209.7</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ---- Mixed model types: logistic + Poisson side by side -------------------</span></span></span>
 <span class="r-in"><span><span class="va">m_poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span></span></span>
@@ -321,10 +323,10 @@ and insert into the manuscript.</p></li>
 <span class="r-in"><span>  digits        <span class="op">=</span> <span class="fl">2L</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Characteristic         Offered appt (OR)           Wait days (IRR)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 insuranceMedicaid 0.65 (0.42–1.01), p=0.055 1.41 (1.08–1.84), p=0.012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       Sample size                     N=160                     N=145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               AIC                     208.1                     893.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Characteristic            Offered appt (OR)              Wait days (IRR)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 insuranceMedicaid 0.65 (0.42 to 1.01), p=0.055 1.41 (1.08 to 1.84), p=0.012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       Sample size                        N=160                        N=145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               AIC                        208.1                        893.6</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

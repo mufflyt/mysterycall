@@ -222,7 +222,7 @@ from your fitted models’ <code>$or_table</code> /
 <span>  outcome_label <span class="op">=</span> <span class="st">"a new-patient appointment"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">acceptance</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41-0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63-1.23, p=0.451).</span></span></code></pre></div>
+<span><span class="co">#&gt; Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41 to 0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63 to 1.23, p=0.451).</span></span></code></pre></div>
 <p>The intro clause claims significance <strong>only</strong> when a
 level actually clears <code>alpha</code>; the direction (“less likely” /
 “more likely” / “similar odds”) is chosen from whether each OR sits
@@ -239,7 +239,7 @@ below, above, or at 1.</p>
 <span>  outcome_label <span class="op">=</span> <span class="st">"time to appointment"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">wait_irr</span><span class="op">)</span></span>
-<span><span class="co">#&gt; In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05-1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90-1.20; p = 0.590) for time to appointment.</span></span></code></pre></div>
+<span><span class="co">#&gt; In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05 to 1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90 to 1.20; p = 0.590) for time to appointment.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="translating-irrs-to-absolute-days-signed-cis">Translating IRRs to absolute days (signed CIs)<a class="anchor" aria-label="anchor" href="#translating-irrs-to-absolute-days-signed-cis"></a>
@@ -294,7 +294,7 @@ insurance-specific wording with
 <span>  reference <span class="op">=</span> <span class="st">"Private"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">wt</span><span class="op">$</span><span class="va">sentence</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The median wait time across all insurance was 14 business days (IQR: 12–16). Specifically, the median wait time was 15 days (IQR: 13–18) for Medicaid, 13 days (IQR: 10–15) for Private. The p-value for Medicaid vs Private was &lt; 0.001.</span></span></code></pre></div>
+<span><span class="co">#&gt; The median wait time across all insurance was 14 business days (IQR: 12 to 16). Specifically, the median wait time was 15 days (IQR: 13 to 18) for Medicaid, 13 days (IQR: 10 to 15) for Private. The p-value for Medicaid vs Private was &lt; 0.001.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="direction-words-tied-to-the-data-sign">Direction words tied to the data sign<a class="anchor" aria-label="anchor" href="#direction-words-tied-to-the-data-sign"></a>
@@ -340,9 +340,9 @@ prose correctly.</p>
 <span>  sep <span class="op">=</span> <span class="st">"\n\n"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">results_section</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41-0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63-1.23, p=0.451).</span></span>
+<span><span class="co">#&gt; Medicaid callers were 38% less likely to be offered a new-patient appointment (OR 0.62, 95% CI 0.41 to 0.94, p=0.024). Medicare callers were 12% less likely to be offered a new-patient appointment (OR 0.88, 95% CI 0.63 to 1.23, p=0.451).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05-1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90-1.20; p = 0.590) for time to appointment.</span></span>
+<span><span class="co">#&gt; In multivariable Poisson regression, insurance was significantly associated with time to appointment (see Table X). Compared with commercial insurance, callers presenting as Medicaid had an IRR of 1.28 (95% CI 1.05 to 1.56; p = 0.014) for time to appointment. Compared with commercial insurance, callers presenting as Medicare had an IRR of 1.04 (95% CI 0.90 to 1.20; p = 0.590) for time to appointment.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Medicaid-insured callers waited a mean of 5.9 more days compared with commercial insurance (95% CI +1.1 to +11.8 days; IRR 1.28; p = 0.014). Medicare-insured callers waited a mean of 0.8 more days compared with commercial insurance (95% CI -2.1 to +4.2 days; IRR 1.04; p = 0.590) (difference not statistically significant).</span></span></code></pre></div>
 </div>
@@ -402,7 +402,7 @@ any model change so the Results text and the tables always agree.</li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6       xfun_0.60          bslib_0.12.0       ggplot2_4.0.3     </span></span>
-<span><span class="co">#&gt;  [5] htmlwidgets_1.6.4  insight_1.5.2      lattice_0.22-9     tzdb_0.5.0        </span></span>
+<span><span class="co">#&gt;  [5] htmlwidgets_1.6.4  insight_1.5.3      lattice_0.22-9     tzdb_0.5.0        </span></span>
 <span><span class="co">#&gt;  [9] vctrs_0.7.3        tools_4.6.1        Rdpack_2.6.6       generics_0.1.4    </span></span>
 <span><span class="co">#&gt; [13] tibble_3.3.1       pkgconfig_2.0.3    Matrix_1.7-5       checkmate_2.3.4   </span></span>
 <span><span class="co">#&gt; [17] RColorBrewer_1.1-3 S7_0.2.2           desc_1.4.3         gt_1.3.0          </span></span>
@@ -411,11 +411,11 @@ any model change so the Results text and the tables always agree.</li>
 <span><span class="co">#&gt; [29] sass_0.4.10        yaml_2.3.12        pillar_1.11.1      pkgdown_2.2.1     </span></span>
 <span><span class="co">#&gt; [33] nloptr_2.2.1       jquerylib_0.1.4    MASS_7.3-65        cachem_1.1.0      </span></span>
 <span><span class="co">#&gt; [37] reformulas_0.4.4   boot_1.3-32        nlme_3.1-169       npi_0.3.0         </span></span>
-<span><span class="co">#&gt; [41] tidyselect_1.2.1   digest_0.6.39      performance_0.17.1 stringi_1.8.9     </span></span>
+<span><span class="co">#&gt; [41] tidyselect_1.2.1   digest_0.6.39      performance_0.18.1 stringi_1.8.9     </span></span>
 <span><span class="co">#&gt; [45] dplyr_1.2.1        splines_4.6.1      fastmap_1.2.0      grid_4.6.1        </span></span>
 <span><span class="co">#&gt; [49] cli_3.6.6          magrittr_2.0.5     readr_2.2.0        scales_1.4.0      </span></span>
-<span><span class="co">#&gt; [53] backports_1.5.1    lubridate_1.9.5    timechange_0.4.0   rmarkdown_2.31    </span></span>
-<span><span class="co">#&gt; [57] httr_1.4.8         otel_0.2.0         lme4_2.0-6         ragg_1.5.2        </span></span>
+<span><span class="co">#&gt; [53] backports_1.5.1    lubridate_1.9.5    timechange_0.4.0   rmarkdown_2.32    </span></span>
+<span><span class="co">#&gt; [57] httr_1.4.9         otel_0.2.0         lme4_2.0-6         ragg_1.5.2        </span></span>
 <span><span class="co">#&gt; [61] hms_1.1.4          evaluate_1.0.5     knitr_1.51         rbibutils_2.4.1   </span></span>
 <span><span class="co">#&gt; [65] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         xml2_1.6.0        </span></span>
 <span><span class="co">#&gt; [69] minqa_1.2.8        jsonlite_2.0.0     R6_2.6.1           systemfonts_1.3.2 </span></span>

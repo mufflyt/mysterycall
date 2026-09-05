@@ -207,6 +207,7 @@ on their native scale (OR, IRR, or Beta).</p>
 <code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>,
 <code><a href="mysterycall_model_comparison_table.html">mysterycall_model_comparison_table()</a></code>,
 <code><a href="mysterycall_results_report.html">mysterycall_results_report()</a></code>,
+<code><a href="mysterycall_sampl_checklist.html">mysterycall_sampl_checklist()</a></code>,
 <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
 <code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_sensitivity_table.html">mysterycall_sensitivity_table()</a></code>,
@@ -220,6 +221,7 @@ on their native scale (OR, IRR, or Beta).</p>
 <code><a href="print.mysterycall_model_comparison_table.html">print.mysterycall_model_comparison_table()</a></code>,
 <code><a href="print.mysterycall_multi_model_table.html">print.mysterycall_multi_model_table()</a></code>,
 <code><a href="print.mysterycall_results_report.html">print.mysterycall_results_report()</a></code>,
+<code><a href="print.mysterycall_sampl_checklist.html">print.mysterycall_sampl_checklist()</a></code>,
 <code><a href="print.mysterycall_strobe_checklist.html">print.mysterycall_strobe_checklist()</a></code>,
 <code><a href="print.mysterycall_table2.html">print.mysterycall_table2()</a></code></p></div>
     </div>
@@ -294,26 +296,26 @@ on their native scale (OR, IRR, or Beta).</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Multi-model regression table  [OR (95% CI)]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------ </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Term                                     Unadjusted                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceBCBS                            Ref.                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceMedicaid                        1.45 (1.02-2.05) | p=0.038</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  scenarioAppointment                      Ref.                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  scenarioNo appointment                   0.82 (0.61-1.10) | p=0.189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  regionNorth                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  regionSouth                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceMedicaid:scenarioNo appointment                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  N                                        200                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  AIC                                      312.4                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Adjusted                   + Interaction             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                       Ref.                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.38 (0.97-1.96) | p=0.072 1.41 (0.99-2.01) | p=0.059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                       Ref.                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.79 (0.58-1.07) | p=0.124 0.81 (0.59-1.09) | p=0.163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                       Ref.                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.21 (0.88-1.66) | p=0.238 1.19 (0.86-1.65) | p=0.272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                             0.67 (0.41-1.09) | p=0.107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  200                        200                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  308.1                      306.8                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Term                                     Unadjusted                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceBCBS                            Ref.                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceMedicaid                        1.45 (1.02 to 2.05) | p=0.038</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  scenarioAppointment                      Ref.                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  scenarioNo appointment                   0.82 (0.61 to 1.10) | p=0.189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  regionNorth                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  regionSouth                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  insuranceMedicaid:scenarioNo appointment                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  N                                        200                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  AIC                                      312.4                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Adjusted                      + Interaction                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                          Ref.                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.38 (0.97 to 1.96) | p=0.072 1.41 (0.99 to 2.01) | p=0.059</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                          Ref.                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.79 (0.58 to 1.07) | p=0.124 0.81 (0.59 to 1.09) | p=0.163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Ref.                          Ref.                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.21 (0.88 to 1.66) | p=0.238 1.19 (0.86 to 1.65) | p=0.272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.67 (0.41 to 1.09) | p=0.107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  200                           200                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  308.1                         306.8                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------ </span>
 </code></pre></div>
     </div>

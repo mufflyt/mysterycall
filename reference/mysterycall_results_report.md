@@ -159,6 +159,7 @@ Other manuscript:
 [`mysterycall_methods_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_methods_paragraph.md),
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md),
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md),
@@ -172,6 +173,7 @@ Other manuscript:
 [`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
 [`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
 [`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md),
 [`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
 [`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
@@ -203,14 +205,14 @@ print(report)
 #> === Mystery-Caller Results Report ===
 #> 
 #> -- Combined Results Table --
-#>         Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance
-#>  insMedicaid 1.01  0.90-1.12   0.912      +0.1 -2.0 to 2.5             
+#>         Term  IRR   IRR 95% CI p-value Days Diff Days 95% CI Significance
+#>  insMedicaid 1.01 0.90 to 1.12   0.912      +0.1 -2.0 to 2.5             
 #> 
 #> -- Results Paragraph --
 #> In multivariable Poisson regression, ins was not significantly associated with
 #> appointment wait time (see Table X). Compared with BCBS, callers presenting as
-#> Medicaid had an IRR of 1.01 (95% CI 0.90-1.12; p = 0.912) for appointment wait
-#> time.
+#> Medicaid had an IRR of 1.01 (95% CI 0.90 to 1.12; p = 0.912) for appointment
+#> wait time.
 #> 
 #> 
 #> -- Absolute Day-Difference Sentences --

@@ -118,5 +118,5 @@ or_tbl <- data.frame(
   stringsAsFactors = FALSE
 )
 mysterycall_results_paragraph(or_tbl, "commercial insurance", "insurance")
-#> [1] "Medicaid callers were 38% less likely to be offered appointment acceptance (OR 0.62, 95% CI 0.41-0.94, p=0.024). Uninsured callers were 59% less likely to be offered appointment acceptance (OR 0.41, 95% CI 0.22-0.76, p < 0.001)."
+#> [1] "Medicaid callers were 38% less likely to be offered appointment acceptance (OR 0.62, 95% CI 0.41 to 0.94, p=0.024). Uninsured callers were 59% less likely to be offered appointment acceptance (OR 0.41, 95% CI 0.22 to 0.76, p < 0.001)."
 ```

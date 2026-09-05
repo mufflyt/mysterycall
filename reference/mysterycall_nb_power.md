@@ -217,5 +217,5 @@ result <- mysterycall_nb_power(
 print(result)
 #> NB Power Analysis
 #>   Physicians/group: 36  Total N: 72  Target IRR: 0.75  theta: 2.00
-#>   Estimated power: 41.0%  (95% CI: 34.4%-47.9%)  [200 simulations, alpha=0.050]
+#>   Estimated power: 41.0%  (95% CI: 34.4% to 47.9%)  [200 simulations, alpha=0.050]
 ```

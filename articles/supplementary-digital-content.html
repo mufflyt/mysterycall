@@ -188,13 +188,20 @@ coefficient to its term.</p>
 <span><span class="va">tS1</span></span>
 <span><span class="co">#&gt; Multi-model regression table  [OR (95% CI)]</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;  Term                Crude                      Adjusted                  </span></span>
-<span><span class="co">#&gt;  insuranceCommercial Ref.                       Ref.                      </span></span>
-<span><span class="co">#&gt;  insuranceMedicaid   0.49 (0.30-0.80) | p=0.005 0.49 (0.30-0.80) | p=0.005</span></span>
-<span><span class="co">#&gt;  areaMetro                                      Ref.                      </span></span>
-<span><span class="co">#&gt;  areaNonmetro                                   0.86 (0.52-1.41) | p=0.538</span></span>
-<span><span class="co">#&gt;  N                   300                        300                       </span></span>
-<span><span class="co">#&gt;  AIC                 372.4                      374.0                     </span></span>
+<span><span class="co">#&gt;  Term                Crude                        </span></span>
+<span><span class="co">#&gt;  insuranceCommercial Ref.                         </span></span>
+<span><span class="co">#&gt;  insuranceMedicaid   0.49 (0.30 to 0.80) | p=0.005</span></span>
+<span><span class="co">#&gt;  areaMetro                                        </span></span>
+<span><span class="co">#&gt;  areaNonmetro                                     </span></span>
+<span><span class="co">#&gt;  N                   300                          </span></span>
+<span><span class="co">#&gt;  AIC                 372.4                        </span></span>
+<span><span class="co">#&gt;  Adjusted                     </span></span>
+<span><span class="co">#&gt;  Ref.                         </span></span>
+<span><span class="co">#&gt;  0.49 (0.30 to 0.80) | p=0.005</span></span>
+<span><span class="co">#&gt;  Ref.                         </span></span>
+<span><span class="co">#&gt;  0.86 (0.52 to 1.41) | p=0.538</span></span>
+<span><span class="co">#&gt;  300                          </span></span>
+<span><span class="co">#&gt;  374.0                        </span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------</span></span></code></pre></div>
 <p><strong>Table S2 — the disparity, with confidence
 intervals.</strong></p>
@@ -205,14 +212,16 @@ intervals.</strong></p>
 <span><span class="co">#&gt; Disparity table -- 2 groups | ref: 'Commercial' | wilson 95% CI</span></span>
 <span><span class="co">#&gt; Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; Commercial                150    114    76.0%  68.6%-82.1%          (ref)  1.00 (ref)              (ref)</span></span>
-<span><span class="co">#&gt; Medicaid                  150     91    60.7%  52.7%-68.1%       -15.3 pp  0.80 (0.68-0.93)        0.004</span></span></code></pre></div>
+<span><span class="co">#&gt; Commercial                150    114    76.0%  68.6% to 82.1%       (ref)  1.00 (ref)              (ref)</span></span>
+<span><span class="co">#&gt; Medicaid                  150     91    60.7%  52.7% to 68.1%    -15.3 pp  0.80 (0.68 to 0.93)     0.004</span></span></code></pre></div>
 <p><strong>Table S3 — adjusted effect on the absolute
 scale.</strong></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_combined_results_table.html">mysterycall_combined_results_table</a></span><span class="op">(</span><span class="va">wait_model</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance</span></span>
-<span><span class="co">#&gt; 1 insuranceMedicaid 1.52  1.41-1.64 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;            *</span></span></code></pre></div>
+<span><span class="co">#&gt;                Term  IRR   IRR 95% CI p-value Days Diff Days 95% CI</span></span>
+<span><span class="co">#&gt; 1 insuranceMedicaid 1.52 1.41 to 1.64 &lt; 0.001      &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   Significance</span></span>
+<span><span class="co">#&gt; 1            *</span></span></code></pre></div>
 <p><strong>Table S4 — this study against prior work.</strong></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -224,17 +233,17 @@ scale.</strong></p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -- Mystery-caller literature comparison (2 studies) --</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Author Year Specialty             Comparison    N      OR (95% CI)</span></span>
-<span><span class="co">#&gt;  Pollack 2016 2016   Urology Medicaid vs Commercial 1200 0.42 (0.35-0.51)</span></span>
-<span><span class="co">#&gt;   Sharma 2025 2025     OBGYN Medicaid vs Commercial  480 0.55 (0.40-0.75)</span></span>
+<span><span class="co">#&gt;        Author Year Specialty             Comparison    N         OR (95% CI)</span></span>
+<span><span class="co">#&gt;  Pollack 2016 2016   Urology Medicaid vs Commercial 1200 0.42 (0.35 to 0.51)</span></span>
+<span><span class="co">#&gt;   Sharma 2025 2025     OBGYN Medicaid vs Commercial  480 0.55 (0.40 to 0.75)</span></span>
 <span><span class="co">#&gt;           Direction</span></span>
 <span><span class="co">#&gt;  Disparity detected</span></span>
 <span><span class="co">#&gt;  Disparity detected</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; OR range: 0.42-0.55</span></span>
+<span><span class="co">#&gt; OR range: 0.42 to 0.55</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Discussion sentence:</span></span>
-<span><span class="co">#&gt; Across 2 mystery-caller studies, ORs for Medicaid vs Commercial ranged from 0.42-0.55.</span></span></code></pre></div>
+<span><span class="co">#&gt; Across 2 mystery-caller studies, ORs for Medicaid vs Commercial ranged from 0.42 to 0.55.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="missing-data-analysis">4. Missing-data analysis<a class="anchor" aria-label="anchor" href="#missing-data-analysis"></a>

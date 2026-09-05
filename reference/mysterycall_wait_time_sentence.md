@@ -169,5 +169,5 @@ df <- data.frame(
 )
 res <- mysterycall_wait_time_sentence(df, group_col = "scenario")
 cat(res$sentence)
-#> The median wait time across all scenario was 16 business days (IQR: 8–19). Specifically, the median wait time was 7 days (IQR: 6–8) for BCBS, 16 days (IQR: 15–17) for Medicaid, 20 days (IQR: 18–22) for Self-Pay. The p-value for Medicaid vs BCBS was < 0.001. The p-value for Self-Pay vs BCBS was < 0.001.
+#> The median wait time across all scenario was 16 business days (IQR: 8 to 19). Specifically, the median wait time was 7 days (IQR: 6 to 8) for BCBS, 16 days (IQR: 15 to 17) for Medicaid, 20 days (IQR: 18 to 22) for Self-Pay. The p-value for Medicaid vs BCBS was < 0.001. The p-value for Self-Pay vs BCBS was < 0.001.
 ```

@@ -261,7 +261,7 @@ wt_sent <- suppressMessages(
   mysterycall_wait_time_sentence(df, group_col = "insurance")
 )
 cat(wt_sent$sentence, "\n")
-#> The median wait time across all insurance was 14 business days (IQR: 11–17). Specifically, the median wait time was 14 days (IQR: 12–17) for Blue Cross/Blue Shield, 14 days (IQR: 11–17) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.900.
+#> The median wait time across all insurance was 14 business days (IQR: 11 to 17). Specifically, the median wait time was 14 days (IQR: 12 to 17) for Blue Cross/Blue Shield, 14 days (IQR: 11 to 17) for Medicaid. The p-value for Medicaid vs Blue Cross/Blue Shield was 0.900.
 ```
 
 ## Poisson Model

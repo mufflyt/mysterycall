@@ -216,7 +216,7 @@ print(result)
 #>   Appointment offered: 3 (75.0%)   Not offered: 1 (25.0%)
 #> 
 #> Wait-time dataset (appt date present): n = 2
-#>   Calendar days: median=23  mean=23.0  range=22-24
+#>   Calendar days: median=23  mean=23.0  range=22 to 24
 #> 
 #> -- Exclusion Code Summary --
 #>  Code Freq                      Label

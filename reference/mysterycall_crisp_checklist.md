@@ -43,6 +43,9 @@ published checklist for a formal submission.
 ## See also
 
 [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md)
+for the design-reporting items and
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md)
+for how the numbers themselves are reported.
 
 ## Examples
 

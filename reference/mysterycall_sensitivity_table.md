@@ -140,6 +140,7 @@ Other manuscript:
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md),
 [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md),
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md),
@@ -152,6 +153,7 @@ Other manuscript:
 [`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
 [`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
 [`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md),
 [`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
 [`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
@@ -224,14 +226,14 @@ tbl <- mysterycall_sensitivity_table(
   digits        = 2L
 )
 print(tbl)
-#>           Characteristic                Unadjusted                  Adjusted
-#> 1 insuranceMedicaid (OR) 0.62 (0.40–0.97), p=0.036 0.65 (0.42–1.01), p=0.055
-#> 2            Sample size                     N=160                     N=160
-#> 3                    AIC                     210.4                     208.1
-#>               + Interaction
-#> 1 0.68 (0.43–1.07), p=0.094
-#> 2                     N=160
-#> 3                     209.7
+#>           Characteristic                   Unadjusted
+#> 1 insuranceMedicaid (OR) 0.62 (0.40 to 0.97), p=0.036
+#> 2            Sample size                        N=160
+#> 3                    AIC                        210.4
+#>                       Adjusted                + Interaction
+#> 1 0.65 (0.42 to 1.01), p=0.055 0.68 (0.43 to 1.07), p=0.094
+#> 2                        N=160                        N=160
+#> 3                        208.1                        209.7
 
 # ---- Mixed model types: logistic + Poisson side by side -------------------
 m_poisson <- structure(
@@ -258,8 +260,8 @@ tbl2 <- mysterycall_sensitivity_table(
   digits        = 2L
 )
 print(tbl2)
-#>      Characteristic         Offered appt (OR)           Wait days (IRR)
-#> 1 insuranceMedicaid 0.65 (0.42–1.01), p=0.055 1.41 (1.08–1.84), p=0.012
-#> 2       Sample size                     N=160                     N=145
-#> 3               AIC                     208.1                     893.6
+#>      Characteristic            Offered appt (OR)              Wait days (IRR)
+#> 1 insuranceMedicaid 0.65 (0.42 to 1.01), p=0.055 1.41 (1.08 to 1.84), p=0.012
+#> 2       Sample size                        N=160                        N=145
+#> 3               AIC                        208.1                        893.6
 ```

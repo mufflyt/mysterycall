@@ -66,7 +66,8 @@ A data frame with columns (in order):
 
 - `IRR 95% CI`:
 
-  en-dash separated CI string, e.g. `"1.05-1.56"`.
+  CI string with endpoints separated by " to ", e.g. `"1.05 to 1.56"`
+  (SAMPL: "to" keeps negative endpoints unambiguous).
 
 - `p-value`:
 
@@ -111,6 +112,7 @@ Other manuscript:
 [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md),
 [`mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multi_model_table.md),
 [`mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_results_report.md),
+[`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_sensitivity_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sensitivity_table.md),
@@ -124,6 +126,7 @@ Other manuscript:
 [`print.mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_comparison_table.md),
 [`print.mysterycall_multi_model_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_multi_model_table.md),
 [`print.mysterycall_results_report()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_results_report.md),
+[`print.mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_sampl_checklist.md),
 [`print.mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_strobe_checklist.md),
 [`print.mysterycall_table2()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table2.md)
 
@@ -141,7 +144,10 @@ irr_df <- data.frame(
 mysterycall_combined_results_table(irr_df, baseline_mean = 21,
                                    exposure_col = "insurance",
                                    ref_group    = "BCBS")
-#>                 Term  IRR IRR 95% CI p-value Days Diff Days 95% CI Significance
-#> 1  insuranceMedicaid 1.28  1.05-1.56   0.014      +5.9 1.1 to 11.8            *
-#> 2 insuranceUninsured 0.81  0.61-1.07   0.134      -4.0 -8.2 to 1.5             
+#>                 Term  IRR   IRR 95% CI p-value Days Diff Days 95% CI
+#> 1  insuranceMedicaid 1.28 1.05 to 1.56   0.014      +5.9 1.1 to 11.8
+#> 2 insuranceUninsured 0.81 0.61 to 1.07   0.134      -4.0 -8.2 to 1.5
+#>   Significance
+#> 1            *
+#> 2             
 ```

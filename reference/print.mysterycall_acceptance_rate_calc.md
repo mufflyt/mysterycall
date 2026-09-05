@@ -128,7 +128,7 @@ df <- data.frame(
 )
 res <- mysterycall_acceptance_rate_calc(df)
 print(res)
-#> Medicaid acceptance rate: 12/12 = 100.0% (95% CI: 75.8%-100.0%)
-#> Private acceptance rate: 12/12 = 100.0% (95% CI: 75.8%-100.0%) 
+#> Medicaid acceptance rate: 12/12 = 100.0% (95% CI: 75.8% to 100.0%)
+#> Private acceptance rate: 12/12 = 100.0% (95% CI: 75.8% to 100.0%) 
 #> Physicians accepted Medicaid at 100.0% vs Private at 100.0%, a gap of 0.0 percentage points. 
 ```
