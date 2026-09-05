@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- mysterycall_sampl_checklist(): 27-item fillable SAMPL (Statistical Analyses and Methods in the Published Literature) reporting checklist across eight sections, tailored to the estimands a mystery-caller audit produces; companion to the STROBE and CRiSP checklists
+- mysterycall_format_ci(): interval formatter with a `sep` argument defaulting to getOption("mysterycall.ci_sep", " to "), so the house style is one setting rather than 39 hardcoded call sites; follows gtsummary's JAMA/Lancet journal-theme pattern (MIT, cited in the docs)
+- mysterycall_format_p(): exact p-value formatter, never emits "NS"; `name=` yields the prefixed "p < 0.001" prose form alongside the bare table-cell form
+- vignette("reporting-conventions"): appendix documenting the SAMPL conventions the package enforces, the three places it deliberately departs from them, and the three reporting checklists
+- .github/scripts/check-pkgdown-index.R: fails in about a second when a documented topic is missing from the pkgdown reference index, instead of after a ~15 minute site build; wired into repo-hygiene
 - mysterycall_guard_contaminated_wait(): hard guard that refuses to analyse a fill-down (LOCF) contaminated wait-time column; checks for waits with no appointment date, waits on excluded calls, and unjustified carry-forward runs
 - inst/contract/cohort_2019_fpmrs.yml: frozen cohort record for the 2019 FPMRS study (three nesting populations, the reproduced primary finding, retired figures, and the known-bad variable with its disposition), pinned behind a SHA-256
 - mysterycall_medicaid_fee_index(): retrieve KFF state-level Medicaid-to-Medicare fee index ratios
@@ -49,12 +54,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - mysterycall_insurance_acceptance_rates(): compute Medicaid vs BCBS acceptance rates
 
 ### Changed
+- Confidence intervals, IQRs, and ranges now separate endpoints with " to " rather than a hyphen or en dash, across all 39 formatters that build them (tables, plots, sentence builders, print methods). Year ranges and wait-time band labels keep their dash: they are category names, not estimates, and cannot take a negative endpoint
+- mysterycall_irr_table() no longer adds significance stars by default (add_significance_stars = FALSE) and its default footnote drops the "* p < 0.05" ladder; SAMPL asks for exact p-values rather than codes against alpha. Pass TRUE for a journal that requires them
+- All 22 internal reimplementations of the `if (p < 0.001)` branch now route through mysterycall_format_p(); .mc_format_p() delegates to it, so its comment claiming to be the single source of truth is finally accurate. Output is unchanged, including results_paragraph()'s unspaced "p=", which is pinned by its own @return docs
 - Suppressed lme4 singular-fit warnings via withCallingHandlers in lmm functions
 - Pre-filter NA rows before ggplot construction in histogram functions
 - p_adjust_method parameter added to univariate_lmm_screen, univariate_poisson_screen, and interaction_screen
 - Input validation uses checkmate assertions across all new functions
 
 ### Fixed
+- mysterycall_multi_model_table() rendered a negative linear-mixed-model estimate as `-0.28 (-0.45--0.12)`, which is genuinely ambiguous. Now `-0.28 (-0.45 to -0.12)`. The same applied to percentage-point differences in mysterycall_disparities_table(); ratio measures hid the defect because they cannot be negative
+- mysterycall_geocode_address() silently discarded the coordinates of every matched address in any Census batch that began with a No_Match, and errored outright on an all-unmatched batch. The API returns ragged rows (twelve fields matched, three unmatched) and readr::read_csv() sizes the frame from the first row, so the result depended on which address happened to sort first. Parsing now runs against the full twelve-column superset with short rows padded
+- Stale roxygen in mysterycall_results_paragraph() still documented the confidence interval as `<lo>-<hi>` after the formatter changed to "<lo> to <hi>"
 - README documented a `census_summaries` dataset that does not exist, and omitted seven that do (adi_zcta, svi_zcta, zcta_tract_xwalk, medicaid_expansion, medicaid_fee_index, kff_hhi, healthgrades_ages)
 - Non-deterministic coverage failures: DESCRIPTION sets Config/testthat/parallel, so the suite fans across callr subprocesses and a dead worker collapsed the covr run into an opaque .Rout.fail. Coverage workflows now set TESTTHAT_PARALLEL=FALSE; the `tests` job still exercises the parallel path
 - Nightly coverage job failed without reporting what failed; it now pins install_path and prints testthat.Rout.fail, matching test-coverage.yaml
