@@ -119,7 +119,7 @@ mysterycall_wait_time_sentence <- function(
 
   # 5. Build sentence
   overall_clause <- sprintf(
-    "The median wait time across all %s was %g business days (IQR: %g\u2013%g).",
+    "The median wait time across all %s was %g business days (IQR: %g to %g).",
     group_col,
     ov_median, ov_q1, ov_q3
   )
@@ -131,7 +131,7 @@ mysterycall_wait_time_sentence <- function(
     q1_i  <- group_stats$q1[i]
     q3_i  <- group_stats$q3[i]
     per_group_parts[i] <- sprintf(
-      "%g days (IQR: %g\u2013%g) for %s",
+      "%g days (IQR: %g to %g) for %s",
       med_i, q1_i, q3_i, lvl
     )
   }

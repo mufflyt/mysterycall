@@ -266,7 +266,7 @@ mysterycall_interaction_sentences <- function(model,
       lcl <- r[[lcl_col]]
       ucl <- r[[ucl_col]]
       sprintf(
-        "%s patients: mean %s %s (95%% CI %s\u2013%s)",
+        "%s patients: mean %s %s (95%% CI %s to %s)",
         v2_ordered[i],
         .fmt(est),
         outcome_label,

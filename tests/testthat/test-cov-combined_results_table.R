@@ -154,8 +154,8 @@ test_that("mysterycall_combined_results_table: digits parameter controls formatt
 
   expect_equal(result_2dp$IRR, "1.23")
   expect_equal(result_3dp$IRR, "1.235")
-  expect_equal(result_2dp$`IRR 95% CI`, "1.05-1.57")
-  expect_equal(result_3dp$`IRR 95% CI`, "1.052-1.568")
+  expect_equal(result_2dp$`IRR 95% CI`, "1.05 to 1.57")
+  expect_equal(result_3dp$`IRR 95% CI`, "1.052 to 1.568")
 })
 
 

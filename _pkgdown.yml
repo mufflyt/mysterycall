@@ -556,6 +556,7 @@ reference:
     contents:
       - mysterycall_strobe_checklist
       - mysterycall_crisp_checklist
+      - mysterycall_sampl_checklist
       - mysterycall_model_equation
       - mysterycall_strobe_flow
       - mysterycall_prepare_calls
@@ -814,6 +815,7 @@ reference:
       - print.mysterycall_concordance
       - print.mysterycall_consistency_report
       - print.mysterycall_crisp_checklist
+      - print.mysterycall_sampl_checklist
       - print.mysterycall_cumulative_access_curve
       - print.mysterycall_exclusion_summary
       - print.mysterycall_hurdle_wait

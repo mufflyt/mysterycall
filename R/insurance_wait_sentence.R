@@ -158,9 +158,9 @@ mysterycall_insurance_wait_sentence <- function(
   sentence <- sprintf(
     paste0(
       "%s patients experienced a %s%% %s wait compared to patients with %s ",
-      "(Incidence Rate Ratio: %.*f; 95%% CI: %.*f\u2013%.*f; p %s) ",
-      "with median wait times of %g business days (IQR: %g\u2013%g) ",
-      "and %g business days (IQR: %g\u2013%g) respectively."
+      "(Incidence Rate Ratio: %.*f; 95%% CI: %.*f to %.*f; p %s) ",
+      "with median wait times of %g business days (IQR: %g to %g) ",
+      "and %g business days (IQR: %g to %g) respectively."
     ),
     medicaid_label,
     abs(pct_diff),

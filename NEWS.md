@@ -1,5 +1,52 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## New functions
+
+- `mysterycall_sampl_checklist()`: a fillable SAMPL (Statistical Analyses and
+  Methods in the Published Literature) reporting checklist. STROBE covers what
+  to report about the design; SAMPL covers how the numbers themselves are
+  reported -- an effect size with a confidence interval rather than a bare p
+  value, exact p values instead of inequalities, a denominator behind every
+  percentage, the test named and justified, the clustering unit stated. 27 items
+  across eight sections, tailored to the estimands a mystery-caller audit
+  produces (proportions, rate ratios, wait times, repeated calls to one
+  practice). Companion to `mysterycall_strobe_checklist()` and
+  `mysterycall_crisp_checklist()`.
+
+## Statistical reporting (SAMPL)
+
+The package now reports numbers the way SAMPL asks, which changes some output
+strings.
+
+- Confidence intervals, IQRs, and ranges separate their endpoints with " to "
+  instead of a hyphen, in all 31 formatters that build them (`table1`, `table2`,
+  `model_table`, `combined_results_table`, `multi_model_table`,
+  `manuscript_helpers`, `disparities_table`, `literature_table`, `forest_plot`,
+  `icc`, `outcome_analysis`, `descriptive_stats`, `abstract_numbers`,
+  `results_paragraph`, `write_results_paragraph`, `predicted_means`,
+  `acceptance_rate_calc`, `nb_power`, `impute_calls`, `categorical`,
+  `simple_poisson`, `prepare_calls`).
+
+  A second pass caught eight more that used a Unicode en dash rather than an
+  ASCII hyphen, so the first sweep missed them: `wait_time_sentence`,
+  `insurance_wait_sentence`, `interaction_sentences`, and the three cells of
+  `sensitivity_table`. Year ranges (`2019-2021`) and wait-time band labels
+  (`"0-30"`) keep their dash; they are category names, not estimates, and
+  cannot take a negative endpoint.
+
+  This fixes a real defect, not only a style rule. `mysterycall_multi_model_table()`
+  labels its column "Beta (95% CI)" for linear mixed models, and a negative
+  estimate rendered as `-0.28 (-0.45--0.12)`. It now reads
+  `-0.28 (-0.45 to -0.12)`. The same applied to the percentage-point differences
+  in `mysterycall_disparities_table()`.
+
+- `mysterycall_irr_table()` no longer adds significance stars by default
+  (`add_significance_stars` now defaults to `FALSE`). SAMPL asks for exact p
+  values rather than codes against alpha, and the confidence interval already
+  carries what the stars stand in for. The default footnote drops the
+  "* p < 0.05; ** p < 0.01" ladder to match; pass `TRUE` for a journal whose
+  house style requires stars.
+
 ## Bug fixes
 
 - `mysterycall_geocode_address()` no longer loses coordinates, or dies, on a
@@ -439,7 +486,6 @@ figures that were previously inline in the study's analysis scripts:
   `mysterycall_leave_one_out()`) rather than a Heckman correction. Returns
   odds-ratio and incidence-rate-ratio tables plus both fitted models, with
   `print()` and `as.data.frame()` methods.
-
 
 # mysterycall 1.6.3
 

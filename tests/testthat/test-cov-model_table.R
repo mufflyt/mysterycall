@@ -265,9 +265,9 @@ test_that("mysterycall_model_table formatting is correct", {
     mysterycall_model_table(result, digits = 2L)
   ))
 
-  # Check IRR column format: should be "X.XX (X.XX-X.XX)"
+  # Check IRR column format: should be "X.XX (X.XX to X.XX)"
   irr_col <- output[[2]][1]
-  expect_match(irr_col, "^[0-9.]+\\s\\([0-9.]+-[0-9.]+\\)$")
+  expect_match(irr_col, "^[0-9.]+\\s\\([0-9.]+ to [0-9.]+\\)$")
 
   # Check p-value column format: should be numeric-like or "< 0.001"
   p_col <- output[[3]][1]

@@ -27,7 +27,8 @@ NULL
 #' \describe{
 #'   \item{`Term`}{Model term name.}
 #'   \item{`IRR`}{Formatted IRR string.}
-#'   \item{`IRR 95% CI`}{en-dash separated CI string, e.g. `"1.05-1.56"`.}
+#'   \item{`IRR 95% CI`}{CI string with endpoints separated by " to ", e.g.
+#'     `"1.05 to 1.56"` (SAMPL: "to" keeps negative endpoints unambiguous).}
 #'   \item{`p-value`}{Formatted p-value string.}
 #'   \item{`Days Diff`}{Signed absolute day difference (`"+4.3"`), or `NA`
 #'     when `baseline_mean` is `NULL`.}
@@ -99,7 +100,7 @@ mysterycall_combined_results_table <- function(model_result,
 
   fmt      <- paste0("%.", digits, "f")
   irr_str  <- sprintf(fmt, as.numeric(raw$irr))
-  ci_str   <- sprintf(paste0(fmt, "-", fmt),
+  ci_str   <- sprintf(paste0(fmt, " to ", fmt),
                       as.numeric(raw$ci_lower),
                       as.numeric(raw$ci_upper))
 

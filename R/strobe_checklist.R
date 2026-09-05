@@ -43,7 +43,9 @@
 #' \doi{10.1016/S0140-6736(07)61602-X}
 #'
 #' @family manuscript
-#' @seealso [mysterycall_sensitivity()] for running sensitivity analyses;
+#' @seealso [mysterycall_sampl_checklist()] for the companion
+#'   statistical-reporting checklist; [mysterycall_sensitivity()] for running
+#'   sensitivity analyses;
 #'   [mysterycall_nb_model()] and [mysterycall_poisson_model()] for the model
 #'   objects this function inspects.
 #' @export
