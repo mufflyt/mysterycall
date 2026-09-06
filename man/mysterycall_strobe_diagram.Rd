@@ -11,7 +11,8 @@ mysterycall_strobe_diagram(
   width = 9,
   height = 7,
   dpi = 300,
-  base_size = 10
+  base_size = 10,
+  background = "white"
 )
 }
 \arguments{
@@ -27,6 +28,13 @@ device (\code{.png}, \code{.pdf}, \code{.svg}, ...). \code{NULL} returns the plo
 \item{dpi}{Integer. Raster resolution. Default 300.}
 
 \item{base_size}{Numeric. Base text size in points. Default 10.}
+
+\item{background}{Colour for the plot background. Default \code{"white"}.
+\code{\link[ggplot2:theme_void]{ggplot2::theme_void()}} leaves the background blank, which writes a
+TRANSPARENT PNG -- fine on a white web page, unpredictable once the figure
+is placed in a Word manuscript or on a coloured slide, where whatever is
+behind it shows through the boxes. Pass \code{NA} for a transparent background
+deliberately.}
 }
 \value{
 Invisibly, the \code{ggplot} object.

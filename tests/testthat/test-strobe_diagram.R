@@ -55,3 +55,33 @@ test_that("it writes a file without needing a headless browser", {
   expect_true(file.exists(f))
   expect_gt(file.info(f)$size, 1000)
 })
+
+test_that("the saved figure has an opaque white background by default", {
+  # theme_void() leaves the background blank, which wrote a fully transparent
+  # PNG (corner alpha 0). That is invisible on a white page and wrong the
+  # moment the figure lands in a Word manuscript or on a coloured slide.
+  skip_if_not_installed("png")
+  f <- tempfile(fileext = ".png")
+  on.exit(unlink(f), add = TRUE)
+  spec <- mysterycall_flow_spec(c("A" = 10, "B" = 8),
+                                exclusions = list("A" = c("gone" = 2)))
+  mysterycall_strobe_diagram(spec, output_path = f, width = 4, height = 3, dpi = 72)
+  px <- png::readPNG(f)
+  if (dim(px)[3] == 4L)
+    expect_equal(px[1, 1, 4], 1, info = "corner pixel must be opaque")
+  expect_equal(as.numeric(px[1, 1, 1:3]), c(1, 1, 1),
+               info = "corner pixel must be white")
+})
+
+test_that("background = NA still gives a deliberately transparent figure", {
+  skip_if_not_installed("png")
+  f <- tempfile(fileext = ".png")
+  on.exit(unlink(f), add = TRUE)
+  spec <- mysterycall_flow_spec(c("A" = 10, "B" = 8),
+                                exclusions = list("A" = c("gone" = 2)))
+  mysterycall_strobe_diagram(spec, output_path = f, width = 4, height = 3,
+                             dpi = 72, background = NA)
+  px <- png::readPNG(f)
+  expect_equal(dim(px)[3], 4L)
+  expect_equal(px[1, 1, 4], 0, info = "NA must stay transparent")
+})

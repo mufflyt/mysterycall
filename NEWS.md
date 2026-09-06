@@ -27,6 +27,12 @@
 - Tests follow the technique in `test-strobe-logistic-n.R` and assert on the
   DRAWN box labels, not only the computed values, because a diagram can derive
   every count correctly and still put the wrong one in a box.
+- The figure is saved on an opaque white background. `ggplot2::theme_void()`
+  leaves the background blank, which wrote a fully transparent PNG -- invisible
+  on a white page, and wrong the moment the figure is placed in a Word
+  manuscript or on a coloured slide, where whatever sits behind it shows
+  through the boxes. `background = NA` keeps a transparent figure for anyone
+  who wants one deliberately.
 
 ## New functions
 

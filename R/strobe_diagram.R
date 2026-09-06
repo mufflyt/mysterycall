@@ -22,6 +22,12 @@
 #' @param width,height Numeric. Inches. Defaults 9 and 7.
 #' @param dpi Integer. Raster resolution. Default 300.
 #' @param base_size Numeric. Base text size in points. Default 10.
+#' @param background Colour for the plot background. Default `"white"`.
+#'   [ggplot2::theme_void()] leaves the background blank, which writes a
+#'   TRANSPARENT PNG -- fine on a white web page, unpredictable once the figure
+#'   is placed in a Word manuscript or on a coloured slide, where whatever is
+#'   behind it shows through the boxes. Pass `NA` for a transparent background
+#'   deliberately.
 #'
 #' @return Invisibly, the `ggplot` object.
 #'
@@ -41,7 +47,8 @@ mysterycall_strobe_diagram <- function(spec,
                                        width = 9,
                                        height = 7,
                                        dpi = 300,
-                                       base_size = 10) {
+                                       base_size = 10,
+                                       background = "white") {
 
   if (!inherits(spec, "mysterycall_flow_spec"))
     stop("`spec` must come from mysterycall_flow_spec(), so the arithmetic is ",
@@ -144,11 +151,17 @@ mysterycall_strobe_diagram <- function(spec,
     ggplot2::scale_y_continuous(limits = c(0, 1.02), expand = ggplot2::expansion(0.02)) +
     ggplot2::labs(title = title) +
     ggplot2::theme_void(base_size = base_size) +
-    ggplot2::theme(plot.title = ggplot2::element_text(
-      hjust = 0.5, face = "bold", margin = ggplot2::margin(b = 6)))
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(
+        hjust = 0.5, face = "bold", margin = ggplot2::margin(b = 6)),
+      plot.background  = if (is.na(background)) ggplot2::element_blank() else
+        ggplot2::element_rect(fill = background, colour = NA),
+      panel.background = if (is.na(background)) ggplot2::element_blank() else
+        ggplot2::element_rect(fill = background, colour = NA))
 
   if (!is.null(output_path))
-    ggplot2::ggsave(output_path, p, width = width, height = height, dpi = dpi)
+    ggplot2::ggsave(output_path, p, width = width, height = height, dpi = dpi,
+                    bg = if (is.na(background)) "transparent" else background)
 
   invisible(p)
 }
