@@ -83,6 +83,9 @@ to validate paired generalist coverage before assigning scenarios;
 [`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md)
 for specialty harmonization.
 
+Other study design:
+[`mysterycall_assign_blinded_slots()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_blinded_slots.md)
+
 ## Examples
 
 ``` r

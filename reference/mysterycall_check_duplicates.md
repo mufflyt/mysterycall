@@ -50,7 +50,7 @@ df <- data.frame(
 )
 mysterycall_check_duplicates(df, id_col = "physician_id", max_calls = 2L)
 #>   physician_id  call_date n_calls
-#> 1            A 2026-09-05       3
-#> 2            A 2026-09-06       3
-#> 3            A 2026-09-07       3
+#> 1            A 2026-09-06       3
+#> 2            A 2026-09-07       3
+#> 3            A 2026-09-08       3
 ```

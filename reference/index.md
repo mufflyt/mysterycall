@@ -883,6 +883,11 @@ Prepare call lists, STROBE checklists, and session snapshots.
 - [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
   : Draw a STROBE-compliant flow diagram for mystery-caller
   (secret-shopper) studies
+- [`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+  [`print(`*`<mysterycall_flow_spec>`*`)`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+  : Validate a participant-flow specification
+- [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+  : Draw a validated STROBE participant-flow diagram
 - [`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md)
   : Prepare raw REDCap mystery-caller data for statistical analysis
 - [`mysterycall_session_snapshot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_session_snapshot.md)
