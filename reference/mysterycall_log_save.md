@@ -50,5 +50,5 @@ Other logging:
 
 ``` r
 mysterycall:::mysterycall_log_save(tempfile(fileext = ".csv"), n_rows = 42)
-#>   💾 Saved to: /tmp/RtmpSXAKcs/file20d96345d7e.csv (42 rows)
+#>   💾 Saved to: /tmp/RtmprMUkwO/file20d364b39994.csv (42 rows)
 ```
