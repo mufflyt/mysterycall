@@ -1,5 +1,20 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Continuous integration
+
+- R-devel is no longer in the per-push `R-CMD-check` matrix. RSPM ships
+  binaries built for released R, so on R-devel pak compiles all 57 Suggests
+  from source, which does not fit that workflow's 60-minute budget: the job was
+  cancelled on six of the last eight pushes to main, still inside "Installing
+  system requirements" when the timeout fired. It never reached `R CMD check`,
+  so those runs were not devel failing and being tolerated -- they were devel
+  never being tested, while the run reported "cancelled" and the platform went
+  unverified.
+- Coverage moves rather than disappears: `nightly.yaml` already runs devel with
+  `timeout-minutes: 150` for that platform, and the same diagnosis written out
+  beside it. Paying a two-and-a-half-hour source compile on every push to
+  reproduce a check that runs each night buys nothing.
+
 ## New functions
 
 - `mysterycall_flow_spec()` and `mysterycall_strobe_diagram()`: a participant
