@@ -82,5 +82,8 @@ mysterycall_assign_scenarios(
 \code{\link[=mysterycall_check_generalist_presence]{mysterycall_check_generalist_presence()}} to validate paired
 generalist coverage before assigning scenarios;
 \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for specialty harmonization.
+
+Other study design:
+\code{\link[=mysterycall_assign_blinded_slots]{mysterycall_assign_blinded_slots()}}
 }
 \concept{study design}
