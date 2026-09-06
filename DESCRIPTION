@@ -50,6 +50,7 @@ Imports:
 LazyData: true
 LazyDataCompression: xz
 Suggests:
+    png,
     magrittr,
     arsenal,
     arrow,

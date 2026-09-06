@@ -2,6 +2,40 @@
 
 ## New functions
 
+- `mysterycall_flow_spec()` and `mysterycall_strobe_diagram()`: a participant
+  flow that refuses to draw wrong numbers. Every R package for this problem --
+  `flowchart`, `consort`, `ggconsort`, `dtrackr`, `vtree` -- generates a
+  diagram from data, which keeps typed numbers out of the picture and then
+  stops. None checks that the boxes close. A spine reading 1,154 -> 1,106 with
+  a 48 exclusion is right; one reading 1,154 -> 1,100 with a 48 exclusion is a
+  reporting error no renderer will notice, because a renderer draws what it is
+  handed. `mysterycall_strobe_flow()` has the same gap: it accepts `n_total`,
+  `n_included` and `n_logistic` from the caller and draws them.
+- `mysterycall_flow_spec()` validates first: each spine step minus the
+  exclusions leaving it must equal the next step, every split's children must
+  sum to their parent, and no count may be negative, fractional, `NA` or
+  duplicated. Failure names the step -- "Screened (100) minus 5 excluded is 95,
+  but the next step Analysed is 90" -- rather than reporting that something,
+  somewhere, is off. Separating validation from drawing is the point: the same
+  check runs in a test suite, where a stale figure is actually caught, instead
+  of only at render time on the author's machine.
+- `mysterycall_strobe_diagram()` draws a validated spec and accepts nothing
+  else. ggplot2 only, no Graphviz or htmlwidget path, so writing a PNG needs no
+  headless browser and the diagram rebuilds in a plain CI container. Handles a
+  spine of any length, several exclusion reasons per step, and splits nested to
+  any depth, each child drawn beneath its own parent.
+- Tests follow the technique in `test-strobe-logistic-n.R` and assert on the
+  DRAWN box labels, not only the computed values, because a diagram can derive
+  every count correctly and still put the wrong one in a box.
+- The figure is saved on an opaque white background. `ggplot2::theme_void()`
+  leaves the background blank, which wrote a fully transparent PNG -- invisible
+  on a white page, and wrong the moment the figure is placed in a Word
+  manuscript or on a coloured slide, where whatever sits behind it shows
+  through the boxes. `background = NA` keeps a transparent figure for anyone
+  who wants one deliberately.
+
+## New functions
+
 - `mysterycall_sampl_checklist()`: a fillable SAMPL (Statistical Analyses and
   Methods in the Published Literature) reporting checklist. STROBE covers what
   to report about the design; SAMPL covers how the numbers themselves are

@@ -561,6 +561,8 @@ reference:
       - mysterycall_sampl_checklist
       - mysterycall_model_equation
       - mysterycall_strobe_flow
+      - mysterycall_flow_spec
+      - mysterycall_strobe_diagram
       - mysterycall_prepare_calls
       - mysterycall_session_snapshot
       - mysterycall_run_analysis
