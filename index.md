@@ -122,6 +122,15 @@ mysterycall_irr_plot(fit)
 
 [TABLE]
 
+**Participant flow** — validated before it is drawn; the arithmetic must
+close or
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+refuses (`mysterycall_strobe_diagram`)
+
+![STROBE participant flow diagram: 1,154 abstracts to 1,106 to 1,051,
+with two exclusion boxes and a nested published/not-published
+split](reference/figures/fig-strobe-flow-validated.png)
+
 ## Statistical reporting
 
 STROBE says what to report about a study’s design. **SAMPL**
@@ -210,6 +219,8 @@ output.
 |  | [`mysterycall_flag_repeat_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flag_repeat_physicians.md) | Detect duplicate-entry and repeat-call contamination |
 | **Tables** | [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md) | Table 1 summary (via `arsenal`) |
 |  | [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md) | Column-percentage tables |
+| **Participant flow** | [`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) | Validate that a STROBE/CONSORT flow closes; fails naming the step |
+|  | [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md) | Draw a validated flow spec; ggplot2 only, no Graphviz |
 | **Reporting** | [`mysterycall_format_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_ci.md) | Interval string with a settable separator (SAMPL: “to”, not a dash) |
 |  | [`mysterycall_format_p()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_p.md) | Exact p-values, never “NS”; `name=` for prose |
 |  | [`mysterycall_sampl_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sampl_checklist.md) | 27-item statistical-reporting checklist |
@@ -280,6 +291,8 @@ region)](https://mufflyt.github.io/mysterycall/articles/provider-classification.
 Generation](https://mufflyt.github.io/mysterycall/articles/table-generation.html) -
 [Appendix: Statistical Reporting Conventions
 (SAMPL)](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.html) -
+[Appendix: A Participant Flow That
+Closes](https://mufflyt.github.io/mysterycall/articles/participant-flow.html) -
 [Get Census
 Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
 

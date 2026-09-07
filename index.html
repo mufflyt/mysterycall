@@ -81,6 +81,7 @@
     <li><a class="dropdown-item" href="articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a></li>
+    <li><a class="dropdown-item" href="articles/participant-flow.html">Appendix: A Participant Flow That Closes</a></li>
     <li><a class="dropdown-item" href="articles/writing-results-section.html">Writing the Results Section</a></li>
     <li><a class="dropdown-item" href="articles/supplementary-digital-content.html">Assembling supplementary digital content</a></li>
     <li><a class="dropdown-item" href="articles/subspecialist-density.html">Subspecialist density per 100,000 women</a></li>
@@ -248,6 +249,8 @@
 </td>
 </tr>
 </table>
+<p><strong>Participant flow</strong> — validated before it is drawn; the arithmetic must close or <code><a href="reference/mysterycall_flow_spec.html">mysterycall_flow_spec()</a></code> refuses (<code>mysterycall_strobe_diagram</code>)</p>
+<p><img src="reference/figures/fig-strobe-flow-validated.png" width="100%" alt="STROBE participant flow diagram: 1,154 abstracts to 1,106 to 1,051, with two exclusion boxes and a nested published/not-published split"></p>
 </div>
 <div class="section level2">
 <h2 id="statistical-reporting">Statistical reporting<a class="anchor" aria-label="anchor" href="#statistical-reporting"></a>
@@ -467,6 +470,16 @@
 <td>Column-percentage tables</td>
 </tr>
 <tr>
+<td><strong>Participant flow</strong></td>
+<td><code><a href="reference/mysterycall_flow_spec.html">mysterycall_flow_spec()</a></code></td>
+<td>Validate that a STROBE/CONSORT flow closes; fails naming the step</td>
+</tr>
+<tr>
+<td></td>
+<td><code><a href="reference/mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code></td>
+<td>Draw a validated flow spec; ggplot2 only, no Graphviz</td>
+</tr>
+<tr>
 <td><strong>Reporting</strong></td>
 <td><code><a href="reference/mysterycall_format_ci.html">mysterycall_format_ci()</a></code></td>
 <td>Interval string with a settable separator (SAMPL: “to”, not a dash)</td>
@@ -590,7 +603,7 @@
 <p>Full documentation, function reference, and worked vignettes: <strong><a href="https://mufflyt.github.io/mysterycall/" class="uri">https://mufflyt.github.io/mysterycall/</a></strong></p>
 <p><strong>Getting started</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/my-vignette.html">Searching the NPI Database by Taxonomy</a> - <a href="https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html">Search &amp; Process NPI</a> - <a href="https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html">Workflow Orchestration</a></p>
 <p><strong>Data quality</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/data-quality.html">Phone Validation, Name Parsing, and Safe Joins</a></p>
-<p><strong>Analysis and reporting</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html">Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/provider-classification.html">Provider Classification (RUCA, practice setting, census region)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/table-generation.html">Table Generation</a> - <a href="https://mufflyt.github.io/mysterycall/articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/get_census_data.html">Get Census Data</a></p>
+<p><strong>Analysis and reporting</strong> - <a href="https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html">Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/provider-classification.html">Provider Classification (RUCA, practice setting, census region)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/table-generation.html">Table Generation</a> - <a href="https://mufflyt.github.io/mysterycall/articles/reporting-conventions.html">Appendix: Statistical Reporting Conventions (SAMPL)</a> - <a href="https://mufflyt.github.io/mysterycall/articles/participant-flow.html">Appendix: A Participant Flow That Closes</a> - <a href="https://mufflyt.github.io/mysterycall/articles/get_census_data.html">Get Census Data</a></p>
 </div>
 <div class="section level2">
 <h2 id="citing-mysterycall">Citing mysterycall<a class="anchor" aria-label="anchor" href="#citing-mysterycall"></a>

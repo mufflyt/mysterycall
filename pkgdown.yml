@@ -17,6 +17,7 @@ articles:
   matched-pair-analysis: matched-pair-analysis.html
   my-vignette: my-vignette.html
   mystery-caller-workflow: mystery-caller-workflow.html
+  participant-flow: participant-flow.html
   pipeline-guarantees: pipeline-guarantees.html
   power-analysis: power-analysis.html
   provider-classification: provider-classification.html
@@ -29,7 +30,7 @@ articles:
   two-part-denominators: two-part-denominators.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-09-06T13:58Z
+last_built: 2026-09-07T21:35Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

@@ -8,6 +8,22 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- mysterycall_flow_spec(): validates that a STROBE/CONSORT participant
+  flow closes before anything is drawn – each spine step minus its
+  exclusions equals the next step, every split sums to its parent, and
+  no count is negative, fractional, NA or duplicated. Failures are
+  collected and name the step (“Screened (100) minus 5 excluded is 95,
+  but the next step Analysed is 90”). Separating validation from
+  rendering is the point: the same call runs in a test suite, where a
+  stale figure is actually caught
+- mysterycall_strobe_diagram(): draws a validated spec and refuses
+  anything else. ggplot2 only, so no Graphviz or headless browser is
+  needed and the figure rebuilds in a plain CI container. Handles a
+  spine of any length, several exclusion reasons per step, and splits
+  nested to any depth
+- vignette(“participant-flow”): appendix on why a renderer cannot catch
+  a reporting error, what the validator checks, how to put that check in
+  a test suite, and how the four flow functions relate
 - mysterycall_sampl_checklist(): 27-item fillable SAMPL (Statistical
   Analyses and Methods in the Published Literature) reporting checklist
   across eight sections, tailored to the estimands a mystery-caller
@@ -166,6 +182,13 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Infrastructure
 
+- R-devel dropped from the per-push R-CMD-check matrix. RSPM ships
+  binaries for released R, so on devel pak compiled all 57 Suggests from
+  source and the job was cancelled on six of the last eight pushes to
+  main, still inside “Installing system requirements”. Those runs were
+  not devel failing and being tolerated; devel was never being tested
+  while the platform reported “cancelled”. Coverage moves to
+  nightly.yaml, which already allows it 150 minutes
 - Frozen-cohort gate (.github/scripts/check-cohort-freeze.R): validates
   the cohort contract’s structure and hash, re-proves that the
   contamination guard still rejects contaminated data and still passes

@@ -142,6 +142,13 @@
   package can enforce mechanically, the two formatters that own the
   convention, and the three checklists that go in a supplementary file.
 
+- [Appendix: A Participant Flow That
+  Closes](https://mufflyt.github.io/mysterycall/articles/participant-flow.md):
+
+  Validating a STROBE/CONSORT participant flow before drawing it. Why a
+  renderer cannot catch a reporting error, what mysterycall_flow_spec()
+  checks, and how to put that check in a test suite.
+
 - [Writing the Results
   Section](https://mufflyt.github.io/mysterycall/articles/writing-results-section.md):
 
