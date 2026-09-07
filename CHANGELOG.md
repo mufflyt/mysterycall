@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- mysterycall_flow_spec(): validates that a STROBE/CONSORT participant flow closes before anything is drawn -- each spine step minus its exclusions equals the next step, every split sums to its parent, and no count is negative, fractional, NA or duplicated. Failures are collected and name the step ("Screened (100) minus 5 excluded is 95, but the next step Analysed is 90"). Separating validation from rendering is the point: the same call runs in a test suite, where a stale figure is actually caught
+- mysterycall_strobe_diagram(): draws a validated spec and refuses anything else. ggplot2 only, so no Graphviz or headless browser is needed and the figure rebuilds in a plain CI container. Handles a spine of any length, several exclusion reasons per step, and splits nested to any depth
+- vignette("participant-flow"): appendix on why a renderer cannot catch a reporting error, what the validator checks, how to put that check in a test suite, and how the four flow functions relate
 - mysterycall_sampl_checklist(): 27-item fillable SAMPL (Statistical Analyses and Methods in the Published Literature) reporting checklist across eight sections, tailored to the estimands a mystery-caller audit produces; companion to the STROBE and CRiSP checklists
 - mysterycall_format_ci(): interval formatter with a `sep` argument defaulting to getOption("mysterycall.ci_sep", " to "), so the house style is one setting rather than 39 hardcoded call sites; follows gtsummary's JAMA/Lancet journal-theme pattern (MIT, cited in the docs)
 - mysterycall_format_p(): exact p-value formatter, never emits "NS"; `name=` yields the prefixed "p < 0.001" prose form alongside the bare table-cell form
@@ -72,6 +75,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Two pull-request checks hung 77 minutes on r-lib/actions/setup-r with no timeout-minutes, so GitHub's six-hour default applied
 
 ### Infrastructure
+- R-devel dropped from the per-push R-CMD-check matrix. RSPM ships binaries for released R, so on devel pak compiled all 57 Suggests from source and the job was cancelled on six of the last eight pushes to main, still inside "Installing system requirements". Those runs were not devel failing and being tolerated; devel was never being tested while the platform reported "cancelled". Coverage moves to nightly.yaml, which already allows it 150 minutes
 - Frozen-cohort gate (.github/scripts/check-cohort-freeze.R): validates the cohort contract's structure and hash, re-proves that the contamination guard still rejects contaminated data and still passes honest data, and fails if a retired cohort figure reappears in prose. Wired into the nightly and the PR gate
 - Scientific mutation campaign extended to 14 mutants, all killed; the two new ones reproduce the fill-down defect and the banded/numeric wait substitution
 - Every job in every workflow now declares timeout-minutes (33 jobs across 9 files); the CI-of-CI assertion covers all workflows rather than only the nightly, and fails rather than warns
