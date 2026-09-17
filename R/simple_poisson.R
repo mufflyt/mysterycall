@@ -161,8 +161,7 @@ mysterycall_simple_poisson <- function(data,
   }
 
   fmt_p <- function(p) {
-    ifelse(is.na(p), NA_character_,
-           ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+    mysterycall_format_p(p)
   }
 
   non_int <- names(cf)[names(cf) != "(Intercept)"]
@@ -209,7 +208,7 @@ mysterycall_simple_poisson <- function(data,
     lines <- c(lines, sprintf(
       paste0(
         "For %s compared to %s, the %s rate is approximately %.2f times %s ",
-        "(%.1f%% %s; 95%% CI: %.2f-%.2f, p %s)."
+        "(%.1f%% %s; 95%% CI: %.2f to %.2f, p %s)."
       ),
       row$level, reference, outcome_label,
       row$irr, row$direction,

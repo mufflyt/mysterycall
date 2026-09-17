@@ -304,6 +304,8 @@ reference:
       - mysterycall_write_table_pdf
       - mysterycall_save_quality_table
       - mysterycall_format_pct
+      - mysterycall_format_ci
+      - mysterycall_format_p
       - mysterycall_format_results_table
       - print.mysterycall_table1
       - as.data.frame.mysterycall_table1
@@ -556,8 +558,11 @@ reference:
     contents:
       - mysterycall_strobe_checklist
       - mysterycall_crisp_checklist
+      - mysterycall_sampl_checklist
       - mysterycall_model_equation
       - mysterycall_strobe_flow
+      - mysterycall_flow_spec
+      - mysterycall_strobe_diagram
       - mysterycall_prepare_calls
       - mysterycall_session_snapshot
       - mysterycall_run_analysis
@@ -814,6 +819,7 @@ reference:
       - print.mysterycall_concordance
       - print.mysterycall_consistency_report
       - print.mysterycall_crisp_checklist
+      - print.mysterycall_sampl_checklist
       - print.mysterycall_cumulative_access_curve
       - print.mysterycall_exclusion_summary
       - print.mysterycall_hurdle_wait
@@ -880,6 +886,8 @@ articles:
       - adding-covariates
       - power-analysis
       - table-generation
+      - reporting-conventions
+      - participant-flow
       - writing-results-section
       - supplementary-digital-content
       - subspecialist-density

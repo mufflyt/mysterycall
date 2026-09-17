@@ -39,5 +39,7 @@ head(cl)
 nrow(cl)
 }
 \seealso{
-\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}}
+\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}} for the design-reporting items
+and \code{\link[=mysterycall_sampl_checklist]{mysterycall_sampl_checklist()}} for how the numbers themselves are
+reported.
 }

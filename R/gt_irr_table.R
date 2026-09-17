@@ -2,7 +2,7 @@
 #'
 #' Formats a tibble of IRR estimates (typically the `$irr_table` slot from
 #' [mysterycall_simple_poisson()]) into a publication-ready [gt::gt()] table
-#' with a combined "IRR (95% CI)" column and optional significance stars.
+#' with a combined "IRR (95% CI)" column and opt-in significance stars.
 #'
 #' @param irr_data A data frame or tibble with at least the following columns
 #'   (exact names are detected flexibly):
@@ -21,10 +21,15 @@
 #'   estimate column. Default `"IRR (95% CI)"`.
 #' @param digits Integer. Number of decimal places for rounding `irr`,
 #'   `ci_lower`, and `ci_upper`. Default `2`.
-#' @param add_significance_stars Logical. If `TRUE` (default), appends a
-#'   `Stars` column using `***`/`**`/`*`/`""` thresholds.
+#' @param add_significance_stars Logical. If `TRUE`, appends a `Stars` column
+#'   using `***`/`**`/`*`/`""` thresholds. Default `FALSE`: SAMPL asks that
+#'   p values be reported as exact values rather than coded against alpha, and
+#'   the confidence interval already carries the precision the stars stand in
+#'   for. Pass `TRUE` when a journal's house style requires them.
 #' @param footnote Character scalar. Source note appended via
-#'   [gt::tab_source_note()]. Default explains the star notation.
+#'   [gt::tab_source_note()]. Defaults to the star ladder when
+#'   `add_significance_stars = TRUE`, and otherwise to a note that intervals and
+#'   exact p values are reported.
 #'
 #' @return A `gt_tbl` object ready for rendering or export.
 #'
@@ -71,11 +76,19 @@ mysterycall_irr_table <- function(irr_data,
                                    subtitle               = NULL,
                                    outcome_label          = "IRR (95% CI)",
                                    digits                 = 2L,
-                                   add_significance_stars = TRUE,
-                                   footnote               = paste0(
-                                     "IRR = Incidence Rate Ratio. ",
-                                     "* p<0.05; ** p<0.01; *** p<0.001."
-                                   )) {
+                                   add_significance_stars = FALSE,
+                                   footnote               = if (add_significance_stars) {
+                                     paste0(
+                                       "IRR = Incidence Rate Ratio. ",
+                                       "* p < 0.05; ** p < 0.01; *** p < 0.001."
+                                     )
+                                   } else {
+                                     paste0(
+                                       "IRR = Incidence Rate Ratio. Estimates are ",
+                                       "reported with 95% confidence intervals and ",
+                                       "exact p values."
+                                     )
+                                   }) {
 
   if (!requireNamespace("gt", quietly = TRUE))
     stop("Package 'gt' is required. Install with: install.packages('gt')",

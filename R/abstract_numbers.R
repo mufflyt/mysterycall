@@ -10,23 +10,20 @@ NULL
 #' @noRd
 .fmt_abstract_pval <- function(p, digits) {
   if (is.na(p)) return("")
-  if (p < 0.001) return("p < 0.001")
-  sprintf(paste0("p = %.", digits, "f"), p)
+  mysterycall_format_p(p, digits = digits, name = "p")
 }
 
 #' Format a p-value for a named slot (numbers_list / or_p etc.)
 #' @noRd
 .fmt_slot_pval <- function(p, digits) {
-  if (is.na(p)) return(NA_character_)
-  if (p < 0.001) return("< 0.001")
-  sprintf(paste0("%.", digits, "f"), p)
+  mysterycall_format_p(p, digits = digits)
 }
 
 #' Format estimate + CI as "est (lo-hi)"
 #' @noRd
 .fmt_est_ci <- function(est, lo, hi, digits) {
   fmt <- paste0("%.", digits, "f")
-  sprintf(paste0(fmt, " (", fmt, "-", fmt, ")"), est, lo, hi)
+  sprintf(paste0(fmt, " (", fmt, " to ", fmt, ")"), est, lo, hi)
 }
 
 #' Build the full abstract sentence from extracted model numbers

@@ -38,3 +38,8 @@ jobs:
 
       - name: Check repo hygiene
         run: Rscript .github/scripts/check-repo-hygiene.R
+
+      # pkgdown enforces this too, but only after a ~15 minute site build.
+      # Catching it here turns that into a one-second failure.
+      - name: Check every documented topic is in the pkgdown index
+        run: Rscript .github/scripts/check-pkgdown-index.R

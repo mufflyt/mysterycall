@@ -197,9 +197,19 @@ mysterycall_geocode_address <- function(data,
                 "lon_lat", "tiger_line_id", "tiger_side")
   col_names <- if (request_geographies) cols_geo else cols_loc
 
+  # The Census batch API answers with ragged rows: a matched address carries
+  # all twelve fields, an unmatched one carries only id, input_address, and
+  # "No_Match". readr sizes the frame from the first row and ignores the extra
+  # col_names, so a batch that merely STARTS with an unmatched address came
+  # back with three columns and silently discarded the coordinates of every
+  # matched address behind it; an all-unmatched batch left `lon_lat` absent
+  # entirely and the parse below died recycling logical(0) into a one-row
+  # frame. Read against the full twelve-column superset instead, padding short
+  # rows, so the result never depends on which address happened to sort first.
   result <- tryCatch(
-    readr::read_csv(I(content_text), col_names = col_names,
-                    col_types = readr::cols(.default = readr::col_character())),
+    utils::read.csv(text = content_text, header = FALSE, quote = "\"",
+                    colClasses = "character", fill = TRUE,
+                    col.names = cols_geo, stringsAsFactors = FALSE),
     error = function(e) {
       warning(sprintf("Failed to parse Census batch CSV: %s", conditionMessage(e)),
               call. = FALSE)
@@ -213,8 +223,13 @@ mysterycall_geocode_address <- function(data,
                       lat = numeric(0), census_tract = character(0),
                       stringsAsFactors = FALSE))
   }
+  # read.csv pads with "" rather than NA; the checks below expect NA.
+  for (nm in names(result)) {
+    result[[nm]][!nzchar(result[[nm]])] <- NA_character_
+  }
 
-  valid <- grepl("^-?[0-9.]+,-?[0-9.]+$", result$lon_lat)
+  valid <- !is.na(result$lon_lat) &
+    grepl("^-?[0-9.]+,-?[0-9.]+$", result$lon_lat)
   parts <- stringr::str_split_fixed(dplyr::coalesce(result$lon_lat, ""), ",", 2)
   result$lon <- dplyr::if_else(valid, suppressWarnings(as.numeric(parts[, 1])), NA_real_)
   result$lat <- dplyr::if_else(valid, suppressWarnings(as.numeric(parts[, 2])), NA_real_)

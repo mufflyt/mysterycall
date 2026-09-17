@@ -118,7 +118,7 @@ mysterycall_forest_plot <- function(x,
   # ---- Significance & annotations --------------------------------------------
   if (!"p_value" %in% names(tbl)) tbl$p_value <- NA_real_
   tbl$sig       <- as.character(!is.na(tbl$p_value) & tbl$p_value < sig_threshold)
-  tbl$irr_label <- sprintf("%.2f (%.2f-%.2f)", tbl$irr, tbl$ci_lower, tbl$ci_upper)
+  tbl$irr_label <- sprintf("%.2f (%.2f to %.2f)", tbl$irr, tbl$ci_lower, tbl$ci_upper)
   tbl$p_str     <- .fmt_ama_pvalue(tbl$p_value)
   tbl$annotation <- ifelse(nzchar(tbl$p_str),
                             paste0(tbl$irr_label, "; ", tbl$p_str),

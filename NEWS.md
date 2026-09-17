@@ -1,5 +1,162 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Continuous integration
+
+- R-devel is no longer in the per-push `R-CMD-check` matrix. RSPM ships
+  binaries built for released R, so on R-devel pak compiles all 57 Suggests
+  from source, which does not fit that workflow's 60-minute budget: the job was
+  cancelled on six of the last eight pushes to main, still inside "Installing
+  system requirements" when the timeout fired. It never reached `R CMD check`,
+  so those runs were not devel failing and being tolerated -- they were devel
+  never being tested, while the run reported "cancelled" and the platform went
+  unverified.
+- Coverage moves rather than disappears: `nightly.yaml` already runs devel with
+  `timeout-minutes: 150` for that platform, and the same diagnosis written out
+  beside it. Paying a two-and-a-half-hour source compile on every push to
+  reproduce a check that runs each night buys nothing.
+
+## New functions
+
+- `mysterycall_flow_spec()` and `mysterycall_strobe_diagram()`: a participant
+  flow that refuses to draw wrong numbers. Every R package for this problem --
+  `flowchart`, `consort`, `ggconsort`, `dtrackr`, `vtree` -- generates a
+  diagram from data, which keeps typed numbers out of the picture and then
+  stops. None checks that the boxes close. A spine reading 1,154 -> 1,106 with
+  a 48 exclusion is right; one reading 1,154 -> 1,100 with a 48 exclusion is a
+  reporting error no renderer will notice, because a renderer draws what it is
+  handed. `mysterycall_strobe_flow()` has the same gap: it accepts `n_total`,
+  `n_included` and `n_logistic` from the caller and draws them.
+- `mysterycall_flow_spec()` validates first: each spine step minus the
+  exclusions leaving it must equal the next step, every split's children must
+  sum to their parent, and no count may be negative, fractional, `NA` or
+  duplicated. Failure names the step -- "Screened (100) minus 5 excluded is 95,
+  but the next step Analysed is 90" -- rather than reporting that something,
+  somewhere, is off. Separating validation from drawing is the point: the same
+  check runs in a test suite, where a stale figure is actually caught, instead
+  of only at render time on the author's machine.
+- `mysterycall_strobe_diagram()` draws a validated spec and accepts nothing
+  else. ggplot2 only, no Graphviz or htmlwidget path, so writing a PNG needs no
+  headless browser and the diagram rebuilds in a plain CI container. Handles a
+  spine of any length, several exclusion reasons per step, and splits nested to
+  any depth, each child drawn beneath its own parent.
+- Tests follow the technique in `test-strobe-logistic-n.R` and assert on the
+  DRAWN box labels, not only the computed values, because a diagram can derive
+  every count correctly and still put the wrong one in a box.
+- The figure is saved on an opaque white background. `ggplot2::theme_void()`
+  leaves the background blank, which wrote a fully transparent PNG -- invisible
+  on a white page, and wrong the moment the figure is placed in a Word
+  manuscript or on a coloured slide, where whatever sits behind it shows
+  through the boxes. `background = NA` keeps a transparent figure for anyone
+  who wants one deliberately.
+
+## New functions
+
+- `mysterycall_sampl_checklist()`: a fillable SAMPL (Statistical Analyses and
+  Methods in the Published Literature) reporting checklist. STROBE covers what
+  to report about the design; SAMPL covers how the numbers themselves are
+  reported -- an effect size with a confidence interval rather than a bare p
+  value, exact p values instead of inequalities, a denominator behind every
+  percentage, the test named and justified, the clustering unit stated. 27 items
+  across eight sections, tailored to the estimands a mystery-caller audit
+  produces (proportions, rate ratios, wait times, repeated calls to one
+  practice). Companion to `mysterycall_strobe_checklist()` and
+  `mysterycall_crisp_checklist()`.
+- `mysterycall_format_ci()` and `mysterycall_format_p()` are now exported. They
+  were always the package's convention; they were just never available to
+  anyone. `format_ci()` takes a `sep` argument defaulting to
+  `getOption("mysterycall.ci_sep", " to ")` rather than hardcoding the
+  separator, following the pattern of `gtsummary`'s JAMA and Lancet journal
+  themes, which make the same "to" choice and expose it as a `ci.sep` setting.
+  `format_p()` takes `name` so one function serves both the bare `"< 0.001"` a
+  table cell wants and the `"p < 0.001"` prose wants.
+
+  Twenty-two internal sites reimplemented the same `if (p < 0.001)` branch, and
+  `.mc_format_p()` described itself as the single source of truth while being
+  the minority spelling. All twenty-two now route through the exported
+  function, so that comment is finally accurate. Output is unchanged
+  throughout, including `mysterycall_results_paragraph()`'s unspaced `"p="`,
+  which is pinned by its own `@return` docs.
+
+  Three sites deliberately do not route: `forest_plot()`'s AMA-style formatter
+  (capital `P`, no leading zero, two-tier digits) is a different convention
+  rather than a duplicate, and two others emit significance stars rather than
+  p-values.
+
+## Documentation and tooling
+
+- `vignette("reporting-conventions")`: an appendix recording how the package
+  prints numbers and why. Covers the SAMPL items enforced mechanically, the two
+  formatters that own the convention, how to change the house style with one
+  option, the three checklists, and the three places the package deliberately
+  departs from SAMPL (`forest_plot()`'s AMA p-values, and two star-coded
+  screening displays).
+
+- `.github/scripts/check-pkgdown-index.R`, wired into `repo-hygiene`: fails in
+  about a second when a documented topic is missing from the pkgdown reference
+  index. pkgdown already enforces this, but only at the end of a roughly
+  fifteen-minute site build, which is how long it took to discover that
+  `mysterycall_format_ci()` and `mysterycall_format_p()` had been exported
+  without being listed. Matches on `\alias{}` as pkgdown does, so a topic
+  indexed under any of its aliases counts.
+
+- `tools/run-test-subset.R`: run only the test files matching a pattern, in one
+  session. The full suite takes tens of minutes locally because many files fit
+  `lme4` or `glmmTMB` models, which makes checking a narrow change expensive
+  enough to skip.
+
+## Statistical reporting (SAMPL)
+
+The package now reports numbers the way SAMPL asks, which changes some output
+strings.
+
+- Confidence intervals, IQRs, and ranges separate their endpoints with " to "
+  instead of a hyphen, in all 31 formatters that build them (`table1`, `table2`,
+  `model_table`, `combined_results_table`, `multi_model_table`,
+  `manuscript_helpers`, `disparities_table`, `literature_table`, `forest_plot`,
+  `icc`, `outcome_analysis`, `descriptive_stats`, `abstract_numbers`,
+  `results_paragraph`, `write_results_paragraph`, `predicted_means`,
+  `acceptance_rate_calc`, `nb_power`, `impute_calls`, `categorical`,
+  `simple_poisson`, `prepare_calls`).
+
+  A second pass caught eight more that used a Unicode en dash rather than an
+  ASCII hyphen, so the first sweep missed them: `wait_time_sentence`,
+  `insurance_wait_sentence`, `interaction_sentences`, and the three cells of
+  `sensitivity_table`. Year ranges (`2019-2021`) and wait-time band labels
+  (`"0-30"`) keep their dash; they are category names, not estimates, and
+  cannot take a negative endpoint.
+
+  This fixes a real defect, not only a style rule. `mysterycall_multi_model_table()`
+  labels its column "Beta (95% CI)" for linear mixed models, and a negative
+  estimate rendered as `-0.28 (-0.45--0.12)`. It now reads
+  `-0.28 (-0.45 to -0.12)`. The same applied to the percentage-point differences
+  in `mysterycall_disparities_table()`.
+
+- `mysterycall_irr_table()` no longer adds significance stars by default
+  (`add_significance_stars` now defaults to `FALSE`). SAMPL asks for exact p
+  values rather than codes against alpha, and the confidence interval already
+  carries what the stars stand in for. The default footnote drops the
+  "* p < 0.05; ** p < 0.01" ladder to match; pass `TRUE` for a journal whose
+  house style requires stars.
+
+## Bug fixes
+
+- `mysterycall_geocode_address()` no longer loses coordinates, or dies, on a
+  ragged Census batch response. The API answers a matched address with twelve
+  fields and an unmatched one with three (`id`, `input_address`, `No_Match`).
+  The parser read that with `readr::read_csv()`, which sizes the frame from the
+  first row and ignores the remaining `col_names`, so behaviour depended on
+  which address happened to sort first: a batch led by a matched address was
+  fine, a batch led by an unmatched one came back with three columns and
+  silently discarded the coordinates of every matched address behind it, and an
+  all-unmatched batch left `lon_lat` absent entirely and errored with
+  "Can't recycle input of size 0 to size 1".
+
+  The silent case is the dangerous one, since an unmatched address is an
+  ordinary answer and nothing downstream could tell dropped coordinates from
+  genuinely unlocatable ones. Parsing now runs against the full twelve-column
+  superset with short rows padded, so the result no longer depends on row
+  order.
+
 ## Data integrity
 
 - New `mysterycall_guard_contaminated_wait()` refuses to analyse a wait-time
@@ -420,7 +577,6 @@ figures that were previously inline in the study's analysis scripts:
   `mysterycall_leave_one_out()`) rather than a Heckman correction. Returns
   odds-ratio and incidence-rate-ratio tables plus both fitted models, with
   `print()` and `as.data.frame()` methods.
-
 
 # mysterycall 1.6.3
 

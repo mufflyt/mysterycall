@@ -11,7 +11,7 @@ NULL
 #' @noRd
 .fmt_st_pval <- function(p) {
   if (is.null(p) || length(p) == 0L || is.na(p)) return(NA_character_)
-  if (p < 0.001) "< 0.001" else sprintf("%.3f", p)
+  mysterycall_format_p(p)
 }
 
 #' Extract one exposure-term row from a fitted mysterycall model
@@ -43,7 +43,7 @@ NULL
     if (is.null(pf) || is.na(pf) || !nzchar(pf))
       pf <- .fmt_st_pval(r$p_value[[1L]])
     list(
-      cell = sprintf("%s (%s\u2013%s), p=%s",
+      cell = sprintf("%s (%s to %s), p=%s",
                      fmt(r$or[[1L]]), fmt(r$ci_lower[[1L]]),
                      fmt(r$ci_upper[[1L]]), pf),
       n    = n, aic = aic, type = "OR"
@@ -60,7 +60,7 @@ NULL
     if (is.null(pf) || is.na(pf) || !nzchar(pf))
       pf <- .fmt_st_pval(r$p_value[[1L]])
     list(
-      cell = sprintf("%s (%s\u2013%s), p=%s",
+      cell = sprintf("%s (%s to %s), p=%s",
                      fmt(r$irr[[1L]]), fmt(r$ci_lower[[1L]]),
                      fmt(r$ci_upper[[1L]]), pf),
       n    = n, aic = aic, type = "IRR"
@@ -77,7 +77,7 @@ NULL
     if (is.null(pf) || is.na(pf) || !nzchar(pf))
       pf <- .fmt_st_pval(r$p_value[[1L]])
     list(
-      cell = sprintf("%s (%s\u2013%s), p=%s",
+      cell = sprintf("%s (%s to %s), p=%s",
                      fmt(r$estimate[[1L]]), fmt(r$ci_lower[[1L]]),
                      fmt(r$ci_upper[[1L]]), pf),
       n    = n, aic = aic, type = "beta"

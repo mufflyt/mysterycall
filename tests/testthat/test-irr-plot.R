@@ -108,10 +108,11 @@ test_that("model_table: custom column names respected", {
   expect_equal(names(out), c("Predictor", "IRR [CI]", "P"))
 })
 
-test_that("model_table: IRR column contains dash separator", {
+test_that("model_table: IRR column separates the interval with 'to'", {
   out <- mysterycall:::mysterycall_model_table(model_res)
-  # Combined IRR (95% CI) column uses em-dash
-  expect_true(all(grepl("–", out[["IRR (95% CI)"]]) | grepl("\\(", out[["IRR (95% CI)"]])))
+  # SAMPL: endpoints are joined with " to ", never a hyphen or dash
+  expect_true(all(grepl(" to ", out[["IRR (95% CI)"]], fixed = TRUE)))
+  expect_false(any(grepl("–", out[["IRR (95% CI)"]], fixed = TRUE)))
 })
 
 test_that("model_table: p-value column matches p_value_fmt from irr_table", {

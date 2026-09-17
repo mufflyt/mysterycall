@@ -20,7 +20,22 @@ concurrency:
 jobs:
   # Pick the matrix by event: a pull request gets a fast single-platform gate
   # (ubuntu-release); push(main) and manual workflow_dispatch runs get the full
-  # cross-platform matrix (macOS, Windows, Linux devel/release/oldrel-1).
+  # cross-platform matrix (macOS, Windows, Linux release/oldrel-1).
+  #
+  # R-devel is deliberately NOT here. RSPM ships binaries built for released R,
+  # so on R-devel pak compiles all 57 Suggests from source, which does not fit
+  # in this workflow's 60-minute budget: the job was cancelled on six of the
+  # last eight pushes to main, still inside "Installing system requirements"
+  # when the timeout fired. It never reached R CMD check, so those runs were
+  # not a devel failure being tolerated -- they were devel never being tested,
+  # while the run reported "cancelled" and the platform went unverified.
+  #
+  # nightly.yaml already runs devel properly, with timeout-minutes 150 for that
+  # platform specifically and the same reasoning written out beside it. Paying
+  # a two-and-a-half-hour source compile on every push to reproduce a check
+  # that runs each night buys nothing, so devel coverage moves there rather
+  # than being dropped. If devel is ever wanted here again, the timeout has to
+  # come with it.
   matrix:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -33,7 +48,7 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo 'config=[{"os":"ubuntu-latest","r":"release"}]' >> "$GITHUB_OUTPUT"
           else
-            echo 'config=[{"os":"macos-latest","r":"release"},{"os":"windows-latest","r":"release"},{"os":"ubuntu-latest","r":"devel","http-user-agent":"release"},{"os":"ubuntu-latest","r":"release"},{"os":"ubuntu-latest","r":"oldrel-1"}]' >> "$GITHUB_OUTPUT"
+            echo 'config=[{"os":"macos-latest","r":"release"},{"os":"windows-latest","r":"release"},{"os":"ubuntu-latest","r":"release"},{"os":"ubuntu-latest","r":"oldrel-1"}]' >> "$GITHUB_OUTPUT"
           fi
 
   R-CMD-check:

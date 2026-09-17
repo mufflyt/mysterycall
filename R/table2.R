@@ -91,7 +91,7 @@ mysterycall_table2 <- function(data,
     Group = as.character(s[[group_col]]),
     N     = s$n_total,
     `Accepted, n (%)` = sprintf("%d (%.1f%%)", s$n_accepted, s$rate * 100),
-    `95% CI` = sprintf("%.1f%%-%.1f%%", s$ci_lower * 100, s$ci_upper * 100),
+    `95% CI` = sprintf("%.1f%% to %.1f%%", s$ci_lower * 100, s$ci_upper * 100),
     stringsAsFactors = FALSE,
     check.names = FALSE
   )

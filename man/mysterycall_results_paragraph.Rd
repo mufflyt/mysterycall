@@ -51,9 +51,9 @@ A single character string. One sentence is produced per
 non-intercept term matching \code{exposure_col}. Sentences are separated by a
 single space. Sentence form:
 \itemize{
-\item OR < 1: \code{"<Level> callers were <X>\% less likely to be offered <outcome_label> (OR <or>, 95\% CI <lo>-<hi>, p=<p>)."}
-\item OR > 1: \code{"<Level> callers were <X>\% more likely to be offered <outcome_label> (OR <or>, 95\% CI <lo>-<hi>, p=<p>)."}
-\item OR = 1: \code{"<Level> callers had similar odds of being offered <outcome_label> compared with <ref_group> (OR 1.00, 95\% CI <lo>-<hi>, p=<p>)."}
+\item OR < 1: \code{"<Level> callers were <X>\% less likely to be offered <outcome_label> (OR <or>, 95\% CI <lo> to <hi>, p=<p>)."}
+\item OR > 1: \code{"<Level> callers were <X>\% more likely to be offered <outcome_label> (OR <or>, 95\% CI <lo> to <hi>, p=<p>)."}
+\item OR = 1: \code{"<Level> callers had similar odds of being offered <outcome_label> compared with <ref_group> (OR 1.00, 95\% CI <lo> to <hi>, p=<p>)."}
 }
 When \code{p < 0.001} the p-value is rendered as \code{"p < 0.001"}.
 }

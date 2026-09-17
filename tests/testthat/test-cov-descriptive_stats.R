@@ -73,7 +73,7 @@ test_that("mysterycall_descriptive_stats all-NA edge case", {
   expect_true(is.na(result$median))
   expect_true(is.na(result$q25))
   expect_true(is.na(result$q75))
-  expect_true(grepl("NA \\(IQR: NA-NA\\)", result$sentence))
+  expect_true(grepl("NA \\(IQR: NA to NA\\)", result$sentence))
 })
 
 test_that("mysterycall_descriptive_stats zero-row data frame", {

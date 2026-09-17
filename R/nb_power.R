@@ -171,7 +171,7 @@ print.mysterycall_nb_power <- function(x, ...) {
     x$n_physicians, x$total_n, x$irr, x$theta
   ))
   cat(sprintf(
-    "  Estimated power: %.1f%%  (95%% CI: %.1f%%-%.1f%%)  [%d simulations, alpha=%.3f]\n",
+    "  Estimated power: %.1f%%  (95%% CI: %.1f%% to %.1f%%)  [%d simulations, alpha=%.3f]\n",
     x$power * 100, x$ci[1] * 100, x$ci[2] * 100, x$n_sim, x$alpha
   ))
   invisible(x)

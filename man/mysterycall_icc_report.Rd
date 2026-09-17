@@ -43,7 +43,7 @@ Landis & Koch (1977) thresholds are used for the interpretation label.}
 \item{\code{n_calls}}{Integer. Total calls analysed (complete cases only).}
 \item{\code{n_per_caller}}{Named integer vector. Call counts per caller.}
 \item{\code{sentence}}{Character. Manuscript-ready one-sentence summary, e.g.
-\code{"Inter-caller reliability was ICC=0.82 (95\% CI: 0.71-0.91), indicating excellent agreement (kappa=0.82)."}}
+\code{"Inter-caller reliability was ICC=0.82 (95\% CI: 0.71 to 0.91), indicating excellent agreement (kappa=0.82)."}}
 \item{\code{table}}{data.frame. Per-caller call count, offers, and acceptance
 rate (\code{caller}, \code{n_calls}, \code{n_offered}, \code{accept_rate}).}
 \item{\code{group_results}}{Named list of \code{mysterycall_icc_report} objects (one

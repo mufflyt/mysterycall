@@ -55,7 +55,7 @@ test_that("stars are *** for p = 0.0001", {
   skip_if_not_installed("gt")
   d <- make_irr_data()
   d$p_value <- c(0.0001, 0.5)
-  tbl <- mysterycall_irr_table(d)
+  tbl <- mysterycall_irr_table(d, add_significance_stars = TRUE)
   # extract underlying data
   built <- gt::as_raw_html(tbl)
   expect_match(built, "\\*\\*\\*", all = FALSE)
@@ -68,7 +68,7 @@ test_that("stars are ** for p = 0.01", {
   skip_if_not_installed("gt")
   d <- make_irr_data()
   d$p_value <- c(0.01, 0.5)
-  tbl <- mysterycall_irr_table(d)
+  tbl <- mysterycall_irr_table(d, add_significance_stars = TRUE)
   built <- gt::as_raw_html(tbl)
   expect_match(built, "\\*\\*", all = FALSE)
 })
@@ -80,7 +80,7 @@ test_that("stars are * for p = 0.04", {
   skip_if_not_installed("gt")
   d <- make_irr_data()
   d$p_value <- c(0.04, 0.5)
-  tbl <- mysterycall_irr_table(d)
+  tbl <- mysterycall_irr_table(d, add_significance_stars = TRUE)
   built <- gt::as_raw_html(tbl)
   expect_match(built, "\\*", all = FALSE)
 })
@@ -212,4 +212,27 @@ test_that("accepts p_value_fmt when numeric p_value absent", {
   d$p_value <- NULL
   tbl <- mysterycall_irr_table(d)
   expect_s3_class(tbl, "gt_tbl")
+})
+
+# ---------------------------------------------------------------------------
+# Significance stars are opt-in (SAMPL: report exact p values, not alpha codes)
+# ---------------------------------------------------------------------------
+
+test_that("significance stars are off by default", {
+  skip_if_not_installed("gt")
+  d <- make_irr_data()
+  d$p_value <- c(0.0001, 0.5)
+  built <- gt::as_raw_html(mysterycall_irr_table(d))
+  expect_false(grepl("Stars", built, fixed = TRUE))
+  expect_false(grepl("*** p", built, fixed = TRUE))
+})
+
+test_that("the default footnote drops the alpha ladder when stars are off", {
+  skip_if_not_installed("gt")
+  d <- make_irr_data()
+  off <- gt::as_raw_html(mysterycall_irr_table(d))
+  on  <- gt::as_raw_html(mysterycall_irr_table(d, add_significance_stars = TRUE))
+  expect_true(grepl("exact p values", off, fixed = TRUE))
+  expect_false(grepl("p &lt; 0.05", off, fixed = TRUE) || grepl("p < 0.05", off, fixed = TRUE))
+  expect_true(grepl("p &lt; 0.05", on, fixed = TRUE) || grepl("p < 0.05", on, fixed = TRUE))
 })

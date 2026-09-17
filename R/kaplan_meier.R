@@ -337,8 +337,7 @@ mysterycall_kaplan_meier <- function(
 #' @noRd
 .km_fmt_pvalue <- function(p) {
   if (is.na(p)) return("p = NA")
-  if (p < 0.001) return("p < 0.001")
-  paste0("p = ", formatC(p, digits = 3, format = "f"))
+  mysterycall_format_p(p, name = "p")
 }
 
 #' Build the KM ggplot (internal)

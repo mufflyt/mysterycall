@@ -108,7 +108,7 @@ NULL
 #' **Log scale (`auto_log = TRUE`, skewness > 1):** Coefficients are on the
 #' `log1p(days)` scale. Use `gmr_table` for interpretation: a GMR of `0.87`
 #' means the group waits ~13% fewer days (* (days + 1)) than the reference.
-#' Report as: "GMR = 0.87 (95% CI 0.49-1.54), p = 0.631."
+#' Report as: "GMR = 0.87 (95% CI 0.49 to 1.54), p = 0.631."
 #'
 #' @section R-squared:
 #' Marginal R^2 reflects variance explained by fixed effects alone;
@@ -462,8 +462,7 @@ mysterycall_lmm <- function(data,
 # ----- internal helpers -------------------------------------------------------
 
 .fmt_lmm_pval <- function(p) {
-  ifelse(is.na(p), NA_character_,
-         ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+  mysterycall_format_p(p)
 }
 
 .lmm_normality <- function(resids) {

@@ -1089,9 +1089,9 @@ results_text <- mysterycall_write_results_paragraph(
 cat(results_text)
 #> We received 200 calls per insurance type (800 total calls; 40 physicians).
 #> The overall appointment-offered rate was 91.0% (95% Wilson CI: 86.0%-94.5%)
-#> for privately insured callers, compared with 64.0% (95% CI: 57.2%-70.3%)
-#> for Medicaid callers, 84.0% (95% CI: 78.1%-88.8%) for Medicare callers,
-#> and 54.0% (95% CI: 47.1%-60.8%) for uninsured callers. Medicaid callers
+#> for privately insured callers, compared with 64.0% (95% CI: 57.2% to 70.3%)
+#> for Medicaid callers, 84.0% (95% CI: 78.1% to 88.8%) for Medicare callers,
+#> and 54.0% (95% CI: 47.1% to 60.8%) for uninsured callers. Medicaid callers
 #> were offered appointments at a rate 27.0 percentage points lower than
 #> privately insured callers (relative risk 0.70; 95% BCa bootstrap CI:
 #> -34.9 to -19.1 pp; Holm-adjusted p < .001). Uninsured callers had the
@@ -1107,9 +1107,9 @@ cat(results_text)
 #> overdispersion ratio was 1.08, indicating adequate model fit. Medicaid
 #> callers waited 42% longer than privately insured callers (incidence rate
 #> ratio [IRR] 1.42; 95% profile-likelihood CI: 1.18-1.70; p < .001).
-#> Uninsured callers waited 29% longer (IRR 1.29; 95% CI: 1.06-1.57; p = .012).
+#> Uninsured callers waited 29% longer (IRR 1.29; 95% CI: 1.06 to 1.57; p = .012).
 #> No statistically significant wait-time difference was observed for Medicare
-#> callers (IRR 1.08; 95% CI: 0.89-1.31; p = .441).
+#> callers (IRR 1.08; 95% CI: 0.89 to 1.31; p = .441).
 ```
 
 **APA-style formatting conventions used:**
@@ -1459,11 +1459,11 @@ cat(results_para)
 #> (4 calls per physician, one per insurance type). Of calls to privately
 #> insured patients (reference group), 92.5% resulted in an offered appointment
 #> (95% Wilson CI: 80.2%-97.7%). Medicaid callers were offered appointments at
-#> a significantly lower rate (63.8%; 95% CI: 48.3%-76.9%), representing a
+#> a significantly lower rate (63.8%; 95% CI: 48.3% to 76.9%), representing a
 #> 28.8 percentage-point absolute deficit and a relative risk of 0.69
 #> (Holm-Bonferroni-adjusted p < .001; BCa bootstrap 95% CI for rate
 #> difference: -36.3 to -18.9 pp). Uninsured callers had the lowest
-#> appointment-offered rate (55.0%; 95% CI: 39.6%-69.7%), 37.5 percentage
+#> appointment-offered rate (55.0%; 95% CI: 39.6% to 69.7%), 37.5 percentage
 #> points below the privately insured rate (RR 0.60; Holm-adjusted p < .001).
 #> Medicare callers had a 7.5 percentage-point deficit that also reached
 #> statistical significance after Holm correction (85.0%; RR 0.92;
@@ -1476,7 +1476,7 @@ cat(results_para)
 #> coefficient 0.073). The Pearson chi-squared overdispersion ratio was 1.12,
 #> indicating acceptable model fit. Medicaid callers waited 40% longer than
 #> privately insured callers (IRR 1.40; 95% profile-likelihood CI: 1.12-1.74;
-#> p = .003). Uninsured callers waited 28% longer (IRR 1.28; 95% CI: 1.01-1.62;
+#> p = .003). Uninsured callers waited 28% longer (IRR 1.28; 95% CI: 1.01 to 1.62;
 #> p = .042). No statistically significant wait-time difference was observed for
 #> Medicare callers compared with privately insured callers (IRR 1.08; 95% CI:
 #> 0.87-1.35; p = .481).

@@ -347,7 +347,7 @@ mysterycall_acceptance_rate_calc <- function(
       )
     } else {
       sprintf(
-        "%s acceptance rate: %d/%d = %.1f%% (%d%% CI: %.1f%%-%.1f%%)",
+        "%s acceptance rate: %d/%d = %.1f%% (%d%% CI: %.1f%% to %.1f%%)",
         grp_label, k, n,
         rate * 100,
         ci_pct_label,

@@ -126,8 +126,8 @@ test_that("mysterycall_results_paragraph respects ci_digits parameter", {
   )
   result_2 <- mysterycall_results_paragraph(or_tbl, "ref", "insurance", ci_digits = 2L)
   result_3 <- mysterycall_results_paragraph(or_tbl, "ref", "insurance", ci_digits = 3L)
-  expect_match(result_2, "1.11-1.33")
-  expect_match(result_3, "1.111-1.333")
+  expect_match(result_2, "1.11 to 1.33")
+  expect_match(result_3, "1.111 to 1.333")
 })
 
 test_that("mysterycall_results_paragraph respects p_digits parameter", {

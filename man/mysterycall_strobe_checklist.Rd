@@ -86,7 +86,9 @@ studies. \emph{Lancet}. 2007;370(9596):1453-1457.
 \doi{10.1016/S0140-6736(07)61602-X}
 }
 \seealso{
-\code{\link[=mysterycall_sensitivity]{mysterycall_sensitivity()}} for running sensitivity analyses;
+\code{\link[=mysterycall_sampl_checklist]{mysterycall_sampl_checklist()}} for the companion
+statistical-reporting checklist; \code{\link[=mysterycall_sensitivity]{mysterycall_sensitivity()}} for running
+sensitivity analyses;
 \code{\link[=mysterycall_nb_model]{mysterycall_nb_model()}} and \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} for the model
 objects this function inspects.
 
@@ -101,6 +103,7 @@ Other manuscript:
 \code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}},
 \code{\link[=mysterycall_multi_model_table]{mysterycall_multi_model_table()}},
 \code{\link[=mysterycall_results_report]{mysterycall_results_report()}},
+\code{\link[=mysterycall_sampl_checklist]{mysterycall_sampl_checklist()}},
 \code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
 \code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
 \code{\link[=mysterycall_sensitivity_table]{mysterycall_sensitivity_table()}},
@@ -113,6 +116,7 @@ Other manuscript:
 \code{\link[=print.mysterycall_model_comparison_table]{print.mysterycall_model_comparison_table()}},
 \code{\link[=print.mysterycall_multi_model_table]{print.mysterycall_multi_model_table()}},
 \code{\link[=print.mysterycall_results_report]{print.mysterycall_results_report()}},
+\code{\link[=print.mysterycall_sampl_checklist]{print.mysterycall_sampl_checklist()}},
 \code{\link[=print.mysterycall_strobe_checklist]{print.mysterycall_strobe_checklist()}},
 \code{\link[=print.mysterycall_table2]{print.mysterycall_table2()}}
 }

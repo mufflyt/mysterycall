@@ -189,8 +189,9 @@ mysterycall_calendar_sensitivity <- function(
             round(est, digits), round(lo, digits), round(hi, digits))
   }
   .fmt_p <- function(p) {
-    ifelse(is.na(p), "NA",
-           ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+    out <- mysterycall_format_p(p)
+    out[is.na(p)] <- "NA"
+    out
   }
 
   summary_table <- data.frame(

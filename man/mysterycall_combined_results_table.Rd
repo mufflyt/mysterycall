@@ -38,7 +38,8 @@ A data frame with columns (in order):
 \describe{
 \item{\code{Term}}{Model term name.}
 \item{\code{IRR}}{Formatted IRR string.}
-\item{\verb{IRR 95\% CI}}{en-dash separated CI string, e.g. \code{"1.05-1.56"}.}
+\item{\verb{IRR 95\% CI}}{CI string with endpoints separated by " to ", e.g.
+\code{"1.05 to 1.56"} (SAMPL: "to" keeps negative endpoints unambiguous).}
 \item{\code{p-value}}{Formatted p-value string.}
 \item{\verb{Days Diff}}{Signed absolute day difference (\code{"+4.3"}), or \code{NA}
 when \code{baseline_mean} is \code{NULL}.}
@@ -83,6 +84,7 @@ Other manuscript:
 \code{\link[=mysterycall_model_comparison_table]{mysterycall_model_comparison_table()}},
 \code{\link[=mysterycall_multi_model_table]{mysterycall_multi_model_table()}},
 \code{\link[=mysterycall_results_report]{mysterycall_results_report()}},
+\code{\link[=mysterycall_sampl_checklist]{mysterycall_sampl_checklist()}},
 \code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}},
 \code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}},
 \code{\link[=mysterycall_sensitivity_table]{mysterycall_sensitivity_table()}},
@@ -96,6 +98,7 @@ Other manuscript:
 \code{\link[=print.mysterycall_model_comparison_table]{print.mysterycall_model_comparison_table()}},
 \code{\link[=print.mysterycall_multi_model_table]{print.mysterycall_multi_model_table()}},
 \code{\link[=print.mysterycall_results_report]{print.mysterycall_results_report()}},
+\code{\link[=print.mysterycall_sampl_checklist]{print.mysterycall_sampl_checklist()}},
 \code{\link[=print.mysterycall_strobe_checklist]{print.mysterycall_strobe_checklist()}},
 \code{\link[=print.mysterycall_table2]{print.mysterycall_table2()}}
 }

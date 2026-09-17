@@ -113,19 +113,19 @@ test_that("or is rounded to digits_or decimal places", {
 })
 
 # ---------------------------------------------------------------------------
-# 5. or_ci contains parentheses and a dash
+# 5. or_ci contains parentheses and a SAMPL-style "to" separator
 # ---------------------------------------------------------------------------
 
-test_that("or_ci contains parentheses and dash", {
+test_that("or_ci contains parentheses and a 'to' separator", {
   result <- mysterycall_abstract_numbers(
     logistic_fit  = fake_logistic,
     exposure_term = "insuranceMedicaid"
   )
   expect_type(result$or_ci, "character")
   expect_match(result$or_ci, "\\(")
-  expect_match(result$or_ci, "-")
-  # Full format: "0.62 (0.41-0.94)"
-  expect_match(result$or_ci, "^0\\.62 \\(0\\.41-0\\.94\\)$")
+  expect_match(result$or_ci, " to ", fixed = TRUE)
+  # Full format: "0.62 (0.41 to 0.94)"
+  expect_match(result$or_ci, "^0\\.62 \\(0\\.41 to 0\\.94\\)$")
 })
 
 # ---------------------------------------------------------------------------
@@ -246,7 +246,7 @@ test_that("irr is extracted from poisson_fit when provided", {
   expect_equal(result$irr, round(1.40, 2))
   expect_true("IRR" %in% names(result$numbers_list))
   expect_match(result$irr_ci, "\\(")
-  expect_match(result$irr_ci, "-")
+  expect_match(result$irr_ci, " to ", fixed = TRUE)
 })
 
 # ---------------------------------------------------------------------------

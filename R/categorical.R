@@ -467,7 +467,7 @@ mysterycall_compare_ranks <- function(data, outcome_var, group_var) {
 
 .mc_fmt_p <- function(p) {
   if (is.na(p)) return("NA")
-  if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
+  mysterycall_format_p(p, name = "p")
 }
 
 #' Print a `mysterycall_categorical_test` object
@@ -508,7 +508,7 @@ print.mysterycall_cmh_test <- function(x, ...) {
   cat(sprintf("  statistic = %.3f, df = %g, %s\n",
               x$statistic, x$df, .mc_fmt_p(x$p_value)))
   if (!is.na(x$estimate)) {
-    cat(sprintf("  common OR = %.3f (95%% CI %.3f-%.3f)\n",
+    cat(sprintf("  common OR = %.3f (95%% CI %.3f to %.3f)\n",
                 x$estimate, x$conf_int[1], x$conf_int[2]))
   }
   invisible(x)

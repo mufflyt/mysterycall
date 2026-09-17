@@ -351,7 +351,7 @@ mysterycall_multi_model_table <- function(
   }
 
   .fmt_cell <- function(est, lo, hi, p) {
-    body <- sprintf("%s (%s-%s)", .fmt(est), .fmt(lo), .fmt(hi))
+    body <- sprintf("%s (%s to %s)", .fmt(est), .fmt(lo), .fmt(hi))
     sep <- if (cell_layout == "inline") ", p=" else "\np="
     paste0(body, sep, p)
   }

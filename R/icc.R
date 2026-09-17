@@ -267,7 +267,7 @@ mysterycall_icc_sentence <- function(icc_result) {
   }
   pct <- round(icc_result$icc * 100, 1)
   ci_clause <- if (!is.na(icc_result$ci[1])) {
-    sprintf(" (95%% bootstrap CI %.3f-%.3f)",
+    sprintf(" (95%% bootstrap CI %.3f to %.3f)",
             icc_result$ci[1], icc_result$ci[2])
   } else {
     ""
@@ -336,7 +336,7 @@ mysterycall_icc_sentence <- function(icc_result) {
 #'   \item{`n_calls`}{Integer. Total calls analysed (complete cases only).}
 #'   \item{`n_per_caller`}{Named integer vector. Call counts per caller.}
 #'   \item{`sentence`}{Character. Manuscript-ready one-sentence summary, e.g.
-#'     `"Inter-caller reliability was ICC=0.82 (95% CI: 0.71-0.91), indicating
+#'     `"Inter-caller reliability was ICC=0.82 (95% CI: 0.71 to 0.91), indicating
 #'     excellent agreement (kappa=0.82)."`}
 #'   \item{`table`}{data.frame. Per-caller call count, offers, and acceptance
 #'     rate (`caller`, `n_calls`, `n_offered`, `accept_rate`).}
@@ -502,7 +502,7 @@ mysterycall_icc_report <- function(data,
 
   # ---- Manuscript sentence ---------------------------------------------------
   ci_str   <- if (!is.na(ci[1])) {
-    sprintf("%.2f-%.2f", ci[1], ci[2])
+    sprintf("%.2f to %.2f", ci[1], ci[2])
   } else {
     "NA-NA"
   }

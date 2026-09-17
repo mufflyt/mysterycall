@@ -128,7 +128,7 @@ mysterycall_check_normality <- function(data, variable,
 
   # -- Summary statistics -------------------------------------------------------
   w_fmt <- sprintf("%.3f", w_statistic)
-  p_fmt <- if (p_value < 0.001) "< 0.001" else sprintf("%.3f", p_value)
+  p_fmt <- mysterycall_format_p(p_value)
 
   if (is_normal) {
     mean_val <- mean(data_var, na.rm = TRUE)

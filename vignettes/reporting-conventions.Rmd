@@ -1,0 +1,169 @@
+---
+title: "Appendix: Statistical Reporting Conventions (SAMPL)"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    df_print: kable
+description: >
+  How mysterycall prints numbers, and why. The SAMPL guideline items the
+  package can enforce mechanically, the two formatters that own the
+  convention, and the three checklists that go in a supplementary file.
+vignette: >
+  %\VignetteIndexEntry{Appendix: Statistical Reporting Conventions (SAMPL)}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(mysterycall)
+```
+
+## Why this appendix exists
+
+STROBE says what to report about an observational study's design. SAMPL
+(Statistical Analyses and Methods in the Published Literature, Lang and Altman)
+says how to report the numbers themselves: give an effect size with a
+confidence interval rather than a bare p-value, name the test and why it fits,
+give the denominator behind every percentage, report p-values exactly rather
+than as inequalities against alpha.
+
+The practical consequence for a mystery-caller manuscript is that reporting
+
+> OR 0.31, 95% CI 0.05 to 1.9
+
+instead of
+
+> p = .21
+
+is a deliberate choice backed by a published guideline, not a way to dodge a
+null result. A reviewer who knows the guideline can see that immediately. This
+appendix records which of those choices the package makes for you, so that a
+methods section can cite them rather than restate them.
+
+## The interval separator is not cosmetic
+
+SAMPL asks that interval endpoints be separated with "to" rather than a hyphen
+or a dash. This reads as a typographic nicety until an endpoint goes negative:
+
+```{r}
+lo <- -0.45
+hi <- -0.12
+
+# what a hyphen produces
+sprintf("%.2f-%.2f", lo, hi)
+
+# what the package produces
+mysterycall_format_ci(lo, hi)
+```
+
+The first string is genuinely ambiguous, and it was what
+`mysterycall_multi_model_table()` printed for every linear mixed model, whose
+column is labelled `Beta (95% CI)` and whose estimates are routinely negative.
+Ratio measures hid the problem, because an odds ratio or an incidence rate
+ratio cannot be negative and so always read correctly.
+
+## The two formatters
+
+Every interval and every p-value in the package goes through one of two
+exported functions. They exist so the convention lives in one place rather than
+being retyped at each call site.
+
+```{r}
+mysterycall_format_ci(1.05, 1.57)
+mysterycall_format_ci(c(1.05, NA), c(1.57, 2.00))
+
+mysterycall_format_p(c(0.0431, 0.0004, NA))
+mysterycall_format_p(0.0431, name = "p")
+```
+
+`format_p()` takes `name` because both shapes are needed: the bare value for a
+table cell, the prefixed form for prose.
+
+### Changing the house style
+
+The separator is an argument, not a constant, because journals disagree. This
+follows the pattern set by `gtsummary`'s JAMA and Lancet journal themes, which
+make the same "to" choice and expose it as a `ci.sep` theme setting.
+
+```{r}
+# per call
+mysterycall_format_ci(1.05, 1.57, sep = " - ")
+
+# for a whole document
+withr::with_options(
+  list(mysterycall.ci_sep = " to "),
+  mysterycall_format_ci(1.05, 1.57)
+)
+```
+
+Set `options(mysterycall.ci_sep = )` once in a setup chunk and every table,
+plot label, and generated sentence follows.
+
+## What the package decides for you
+
+| SAMPL item | How the package handles it |
+|---|---|
+| Interval endpoints separated with "to" | `mysterycall_format_ci()`, used by every table and sentence builder |
+| p-values reported exactly, never as "NS" | `mysterycall_format_p()`; collapses only below `threshold` |
+| No coding against alpha | `mysterycall_irr_table()` has `add_significance_stars = FALSE` by default |
+| Effect size with an interval, not a bare p | Model tables emit estimate and interval together |
+| Denominator behind each percentage | Acceptance-rate helpers print `n/N` alongside the percentage |
+
+Three places deliberately depart from this and are not bugs:
+
+- `mysterycall_forest_plot()` uses AMA house style for p-values, meaning a
+  capital `P`, no leading zero, and a two-tier digit rule. That is a different
+  published convention rather than a lapse.
+- `mysterycall_multiple_comparison()` and `mysterycall_subspecialist_trend()`
+  emit significance stars, because their output is a screening display rather
+  than a reported estimate.
+- Year ranges and wait-time band labels keep a dash. They are category names,
+  not estimates, and cannot take a negative endpoint.
+
+## The three checklists
+
+The package ships three fillable reporting checklists, meant to be bound
+together into one supplementary file. They do not overlap.
+
+```{r}
+sampl <- mysterycall_sampl_checklist()
+nrow(sampl)
+table(sampl$section)
+```
+
+| Checklist | Covers | Items |
+|---|---|---|
+| `mysterycall_strobe_checklist()` | Observational study design, auto-checked against a fitted model | 16 |
+| `mysterycall_crisp_checklist()` | Simulated-patient methodology: caller training, detection, ethics of deception | 20 |
+| `mysterycall_sampl_checklist()` | How the numbers themselves are reported | 27 |
+
+The `reported` column is yours to fill with a page or section reference:
+
+```{r}
+head(sampl[, c("section", "item")], 4)
+```
+
+### A known limitation
+
+Filling `reported` by hand is the weak point. Nothing ties a checklist item to
+the code that satisfies it, so the column records a claim rather than a fact.
+rOpenSci's [srr](https://github.com/ropensci-review-tools/srr) solves this
+properly: standards are tagged in roxygen at the code location that meets them,
+and a pre-submit check fails while any remain unaddressed. That is the model to
+follow if these items ever need machine verification.
+
+## References
+
+Lang TA, Altman DG. Basic statistical reporting for articles published in
+biomedical journals: the "Statistical Analyses and Methods in the Published
+Literature" or the SAMPL Guidelines. *International Journal of Nursing
+Studies*. 2015;52(1):5-9. <https://doi.org/10.1016/j.ijnurstu.2014.09.006>
+
+von Elm E, Altman DG, Egger M, Pocock SJ, Gotzsche PC, Vandenbroucke JP.
+The Strengthening the Reporting of Observational Studies in Epidemiology
+(STROBE) statement. *Lancet*. 2007;370(9596):1453-1457.
+
+The SAMPL guidelines are hosted by the EQUATOR Network at
+<https://www.equator-network.org/reporting-guidelines/sampl/>.

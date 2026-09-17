@@ -384,7 +384,7 @@ test_that("mysterycall_sensitivity_table respects digits parameter", {
     exposure_term = "insuranceMedicaid",
     digits        = 0L
   ))
-  expect_match(result_0[1, 2], "1 \\(0–1\\)")
+  expect_match(result_0[1, 2], "1 \\(0 to 1\\)")
 
   # 3 digits
   result_3 <- suppressMessages(mysterycall_sensitivity_table(
@@ -392,7 +392,7 @@ test_that("mysterycall_sensitivity_table respects digits parameter", {
     exposure_term = "insuranceMedicaid",
     digits        = 3L
   ))
-  expect_match(result_3[1, 2], "0.623 \\(0.400–0.988\\)")
+  expect_match(result_3[1, 2], "0.623 \\(0.400 to 0.988\\)")
 })
 
 # Test 10: NA values in model metadata (n, aic)

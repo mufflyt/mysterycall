@@ -6,8 +6,7 @@ NULL
 #' Format a p-value for imputed results display
 #' @noRd
 .fmt_impute_pval <- function(p) {
-  ifelse(is.na(p), NA_character_,
-         ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p)))
+  mysterycall_format_p(p)
 }
 
 #' Multiple imputation by chained equations for missing call outcomes
@@ -373,7 +372,7 @@ mysterycall_impute_calls <- function(data,
   ref_row  <- non_int[1L, , drop = FALSE]
 
   sentence <- sprintf(
-    "Results were robust to multiple imputation (m=%d): OR %.2f, 95%% CI %.2f-%.2f, p=%s, FMI=%.2f.",
+    "Results were robust to multiple imputation (m=%d): OR %.2f, 95%% CI %.2f to %.2f, p=%s, FMI=%.2f.",
     m,
     ref_row$or,
     ref_row$ci_lower,

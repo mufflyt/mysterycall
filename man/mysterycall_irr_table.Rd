@@ -10,8 +10,15 @@ mysterycall_irr_table(
   subtitle = NULL,
   outcome_label = "IRR (95\% CI)",
   digits = 2L,
-  add_significance_stars = TRUE,
-  footnote = paste0("IRR = Incidence Rate Ratio. ", "* p<0.05; ** p<0.01; *** p<0.001.")
+  add_significance_stars = FALSE,
+  footnote = if (add_significance_stars) {
+     paste0("IRR = Incidence Rate Ratio. ",
+    "* p < 0.05; ** p < 0.01; *** p < 0.001.")
+ } else {
+    
+    paste0("IRR = Incidence Rate Ratio. Estimates are ",
+    "reported with 95\% confidence intervals and ", "exact p values.")
+ }
 )
 }
 \arguments{
@@ -39,11 +46,16 @@ estimate column. Default \code{"IRR (95\% CI)"}.}
 \item{digits}{Integer. Number of decimal places for rounding \code{irr},
 \code{ci_lower}, and \code{ci_upper}. Default \code{2}.}
 
-\item{add_significance_stars}{Logical. If \code{TRUE} (default), appends a
-\code{Stars} column using \verb{***}/\verb{**}/\code{*}/\code{""} thresholds.}
+\item{add_significance_stars}{Logical. If \code{TRUE}, appends a \code{Stars} column
+using \verb{***}/\verb{**}/\code{*}/\code{""} thresholds. Default \code{FALSE}: SAMPL asks that
+p values be reported as exact values rather than coded against alpha, and
+the confidence interval already carries the precision the stars stand in
+for. Pass \code{TRUE} when a journal's house style requires them.}
 
 \item{footnote}{Character scalar. Source note appended via
-\code{\link[gt:tab_source_note]{gt::tab_source_note()}}. Default explains the star notation.}
+\code{\link[gt:tab_source_note]{gt::tab_source_note()}}. Defaults to the star ladder when
+\code{add_significance_stars = TRUE}, and otherwise to a note that intervals and
+exact p values are reported.}
 }
 \value{
 A \code{gt_tbl} object ready for rendering or export.
@@ -51,7 +63,7 @@ A \code{gt_tbl} object ready for rendering or export.
 \description{
 Formats a tibble of IRR estimates (typically the \verb{$irr_table} slot from
 \code{\link[=mysterycall_simple_poisson]{mysterycall_simple_poisson()}}) into a publication-ready \code{\link[gt:gt]{gt::gt()}} table
-with a combined "IRR (95\% CI)" column and optional significance stars.
+with a combined "IRR (95\% CI)" column and opt-in significance stars.
 }
 \details{
 \strong{Column detection} -- the function looks for these column names in order:

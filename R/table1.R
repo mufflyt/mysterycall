@@ -67,7 +67,7 @@ NULL
   if (!length(x)) return(NA_character_)
   qs <- stats::quantile(x, probs = c(0.25, 0.75), na.rm = FALSE)
   fmt <- paste0("%.", digits, "f")
-  sprintf(paste0(fmt, " [", fmt, "-", fmt, "]"),
+  sprintf(paste0(fmt, " [", fmt, " to ", fmt, "]"),
           stats::median(x), qs[[1L]], qs[[2L]])
 }
 
