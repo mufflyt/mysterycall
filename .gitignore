@@ -53,3 +53,6 @@ find_detached.py
 check_docs.R
 check_internal.R
 roxygen_tags_summary.txt
+
+# Mutation-testing receipt emitted by .github/scripts/check-scientific-mutations.R
+mutation-receipt.json
