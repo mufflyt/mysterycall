@@ -97,10 +97,12 @@ Other data integrity:
 # \donttest{
 df <- data.frame(lat = 39.7392, long = -104.9903)  # Denver
 mysterycall_assign_area_covariates(df)
-#> ADI coverage: 0/1 (0%)
-#> SVI coverage: 0/1 (0%)
-#> HHI coverage: 0/1 (0%)
-#>       lat      long zcta tract  msa adi svi hhi hhi_cat
-#> 1 39.7392 -104.9903 <NA>  <NA> <NA>  NA  NA  NA    <NA>
+#> ADI coverage: 1/1 (100%)
+#> SVI coverage: 1/1 (100%)
+#> HHI coverage: 1/1 (100%)
+#>       lat      long  zcta       tract                        msa      adi
+#> 1 39.7392 -104.9903 80202 08031002000 Denver-Aurora-Lakewood, CO 72.74838
+#>      svi      hhi hhi_cat
+#> 1 0.5327 2231.737    high
 # }
 ```

@@ -48,11 +48,11 @@ Other reporting:
 snap <- tempfile(fileext = ".txt")
 out  <- mysterycall_session_snapshot(file = snap, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/RtmptFU6W5/file2042786fc212.txt
+#> Session snapshot: /tmp/RtmpLT0VeX/file235e542bd110.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-09-07 21:42:52 UTC
+#> Date/Time: 2026-09-18 00:31:59 UTC
 #> R Version: R version 4.6.1 (2026-06-24)
 #> Platform:  x86_64-pc-linux-gnu
 #> 
@@ -68,6 +68,6 @@ print(out)
 #> === FULL SESSION INFO ===
 #> R version 4.6.1 (2026-06-24)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.4 LTS
+#> Running under: Ubuntu 24.04.5 LTS
 #> ... (87 more lines not shown)
 ```

@@ -78,6 +78,6 @@ mysterycall_check_dependencies(c("dplyr", "sf"), install = FALSE)
 #>   package installed version install_command              
 #>   <chr>   <lgl>     <chr>   <chr>                        
 #> 1 dplyr   TRUE      1.2.1   "install.packages(\"dplyr\")"
-#> 2 sf      TRUE      1.1-2   "install.packages(\"sf\")"   
+#> 2 sf      TRUE      1.1-3   "install.packages(\"sf\")"   
 # }
 ```
