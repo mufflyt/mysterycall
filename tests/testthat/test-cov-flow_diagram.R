@@ -181,3 +181,28 @@ test_that("mysterycall_flow_diagram with complete exclusion_reasons", {
   ))
   expect_s3_class(result, "ggplot")
 })
+
+# Regression: theme_void() left the background blank, which ggsave() wrote as a
+# fully transparent PNG (corner alpha 0) that vanishes on any dark viewer. The
+# theme now paints white and ggsave() is passed bg = "white".
+test_that("the saved flow diagram has an opaque white background", {
+  skip_if_not_installed("png")
+  f <- tempfile(fileext = ".png")
+  on.exit(unlink(f), add = TRUE)
+  suppressMessages(suppressWarnings(
+    mysterycall_flow_diagram(
+      n_identified = 500,
+      n_contacted  = 420,
+      n_completed  = 369,
+      n_analysed   = 360,
+      output_path  = f,
+      width        = 4,
+      height       = 3
+    )
+  ))
+  px <- png::readPNG(f)
+  if (dim(px)[3] == 4L)
+    expect_equal(px[1, 1, 4], 1, info = "corner pixel must be opaque")
+  expect_equal(as.numeric(px[1, 1, 1:3]), c(1, 1, 1),
+               info = "corner pixel must be white")
+})
