@@ -1,5 +1,16 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Bug fixes
+
+- `mysterycall_flow_diagram()` now paints an opaque white background instead of
+  the transparent one `theme_void()` produced. The CONSORT diagram is black text
+  and box outlines, so the previously transparent PNG disappeared against dark
+  viewers, dark-mode PDF readers, and journal proofing tools. The theme now
+  fills `plot.background`/`panel.background` white and `ggsave()` is passed
+  `bg = "white"`, matching `mysterycall_strobe_flow()` and
+  `mysterycall_strobe_diagram()`. A regression test checks the saved PNG's
+  corner pixel is opaque white.
+
 ## Continuous integration
 
 - R-devel is no longer in the per-push `R-CMD-check` matrix. RSPM ships
