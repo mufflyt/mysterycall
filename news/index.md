@@ -2,6 +2,22 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Bug fixes
+
+- [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+  now paints an opaque white background instead of the transparent one
+  [`theme_void()`](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+  produced. The CONSORT diagram is black text and box outlines, so the
+  previously transparent PNG disappeared against dark viewers, dark-mode
+  PDF readers, and journal proofing tools. The theme now fills
+  `plot.background`/`panel.background` white and
+  [`ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html) is
+  passed `bg = "white"`, matching
+  [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+  and
+  [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md).
+  A regression test checks the saved PNG’s corner pixel is opaque white.
+
 ### Continuous integration
 
 - R-devel is no longer in the per-push `R-CMD-check` matrix. RSPM ships

@@ -56,9 +56,9 @@ Other logging:
 ``` r
 tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
 mysterycall:::mysterycall_progress_start(tr, "Geocode")
-#> [00:31:17] Started Geocode
-#> [00:31:17] Progress: 0/1 steps complete (0.0%)
+#> [21:00:18] Started Geocode
+#> [21:00:18] Progress: 0/1 steps complete (0.0%)
 mysterycall:::mysterycall_tracker_fail(tr, "Geocode", reason = "API timeout")
-#> [00:31:17] Failed Geocode: API timeout
-#> [00:31:17] Progress: 0/1 steps complete (0.0%)
+#> [21:00:18] Failed Geocode: API timeout
+#> [21:00:18] Progress: 0/1 steps complete (0.0%)
 ```
