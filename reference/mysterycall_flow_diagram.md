@@ -7,6 +7,19 @@ object can be saved with
 [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
 or embedded in R Markdown / Quarto reports.
 
+The numbers are checked before drawing. A count that grows down the
+flow, or an itemised exclusion larger than the step it leaves, is
+impossible and raises an error. An itemised exclusion whose count does
+not reconcile the two boxes it sits between is a warning: the diagram is
+still drawn, but the contradiction is surfaced rather than silently
+rendered. Unexplained drops are permitted – a bare
+`identified -> analysed` diagram is fine – so the check fires only on
+numbers that are itemised and disagree. For a flow that must be fully
+arithmetically closed, build a
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+and draw it with
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md).
+
 ## Usage
 
 ``` r
@@ -109,6 +122,10 @@ is saved and the path is messaged to the console.
 
 ## See also
 
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+and
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+for a fully validated, arithmetically-closed participant flow;
 [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md)
 which flags when a flow diagram is missing;
 [`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md)

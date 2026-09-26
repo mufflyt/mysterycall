@@ -2,6 +2,23 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Validation
+
+- [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+  now checks its numbers before drawing, so a flow diagram cannot be
+  silently rendered with figures that disagree with the study. A
+  participant count that grows down the flow, or an itemised exclusion
+  larger than the step it leaves, is now an error; an itemised exclusion
+  whose count does not reconcile the two boxes it sits between is a
+  warning (the diagram is still drawn). Unexplained drops remain allowed
+  – a bare `identified -> analysed` diagram is unaffected – so the check
+  fires only on numbers that are itemised and contradict each other.
+  This brings the count-taking diagram in line with the arithmetic
+  guarantee
+  [`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+  gives
+  [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md).
+
 ### Bug fixes
 
 - [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)

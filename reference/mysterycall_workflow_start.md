@@ -57,7 +57,7 @@ Other logging:
 mysterycall:::mysterycall_workflow_start("Demo Workflow", total_steps = 3)
 #> ============================================================
 #>   Demo Workflow
-#>   Started: 2026-09-25 21:00:29
+#>   Started: 2026-09-26 00:56:27
 #>   Total Steps: 3
 #> ============================================================
 #> 
