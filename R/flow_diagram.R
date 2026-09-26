@@ -10,6 +10,16 @@ NULL
 #' counts and optional reasons. The returned ggplot2 object can be saved with
 #' [ggplot2::ggsave()] or embedded in R Markdown / Quarto reports.
 #'
+#' The numbers are checked before drawing. A count that grows down the flow, or
+#' an itemised exclusion larger than the step it leaves, is impossible and
+#' raises an error. An itemised exclusion whose count does not reconcile the two
+#' boxes it sits between is a warning: the diagram is still drawn, but the
+#' contradiction is surfaced rather than silently rendered. Unexplained drops
+#' are permitted -- a bare `identified -> analysed` diagram is fine -- so the
+#' check fires only on numbers that are itemised and disagree. For a flow that
+#' must be fully arithmetically closed, build a [mysterycall_flow_spec()] and
+#' draw it with [mysterycall_strobe_diagram()].
+#'
 #' @param n_identified Integer. Physicians in the initial sampling frame
 #'   (e.g. from NPI lookup).
 #' @param n_contacted Integer or `NULL`. Physicians where a mystery call was
@@ -45,8 +55,10 @@ NULL
 #'   the file is saved and the path is messaged to the console.
 #'
 #' @family manuscript
-#' @seealso [mysterycall_strobe_checklist()] which flags when a flow diagram
-#'   is missing; [mysterycall_table1()] for the baseline characteristics table.
+#' @seealso [mysterycall_flow_spec()] and [mysterycall_strobe_diagram()] for a
+#'   fully validated, arithmetically-closed participant flow;
+#'   [mysterycall_strobe_checklist()] which flags when a flow diagram is
+#'   missing; [mysterycall_table1()] for the baseline characteristics table.
 #' @export
 #'
 #' @examples
@@ -99,6 +111,52 @@ mysterycall_flow_diagram <- function(n_identified,
 
   reason_contact  <- exclusion_reasons[["contact"]]
   reason_complete <- exclusion_reasons[["complete"]]
+
+  # ---- Validate the numbers before drawing -----------------------------------
+  # A renderer draws what it is handed, so a flow diagram can be internally
+  # plausible and still disagree with the study it describes (see flow_spec.R).
+  # Two things are impossible and error; one is a reporting error and warns:
+  #   * a participant count that grows down the flow (a funnel only shrinks);
+  #   * an itemised exclusion larger than the step it leaves;
+  #   * an itemised exclusion whose count does not reconcile the two boxes it
+  #     sits between -> warning, because the diagram is still drawable but the
+  #     numbers contradict each other.
+  # Unexplained drops are allowed: flow_diagram() does not require every stage
+  # change to be itemised, so a bare identified -> analysed diagram is fine.
+  active <- c(
+    n_identified,
+    if (!is.null(n_contacted)) n_contacted,
+    if (!is.null(n_completed)) n_completed,
+    n_analysed
+  )
+  if (any(diff(active) > 0))
+    stop("participant counts cannot increase down the flow ",
+         "(identified >= contacted >= completed >= analysed); check the ",
+         "stage numbers.", call. = FALSE)
+
+  if (!is.null(n_excluded_contact)) {
+    if (n_excluded_contact > n_identified)
+      stop("`n_excluded_contact` (", n_excluded_contact,
+           ") exceeds `n_identified` (", n_identified, ").", call. = FALSE)
+    if (!is.null(n_contacted) &&
+        n_identified - n_excluded_contact != n_contacted)
+      warning("flow does not close: ", n_identified, " identified minus ",
+              n_excluded_contact, " excluded is ",
+              n_identified - n_excluded_contact, ", but `n_contacted` is ",
+              n_contacted, ".", call. = FALSE)
+  }
+  if (!is.null(n_excluded_complete) && !is.null(n_contacted)) {
+    if (n_excluded_complete > n_contacted)
+      stop("`n_excluded_complete` (", n_excluded_complete,
+           ") exceeds `n_contacted` (", n_contacted, ").", call. = FALSE)
+    next_n  <- if (!is.null(n_completed)) n_completed else n_analysed
+    next_nm <- if (!is.null(n_completed)) "n_completed" else "n_analysed"
+    if (n_contacted - n_excluded_complete != next_n)
+      warning("flow does not close: ", n_contacted, " contacted minus ",
+              n_excluded_complete, " excluded is ",
+              n_contacted - n_excluded_complete, ", but `", next_nm, "` is ",
+              next_n, ".", call. = FALSE)
+  }
 
   # Layout constants
   bw  <- 0.28   # box half-width (centred at x=0.5)

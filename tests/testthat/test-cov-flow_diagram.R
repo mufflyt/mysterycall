@@ -206,3 +206,51 @@ test_that("the saved flow diagram has an opaque white background", {
   expect_equal(as.numeric(px[1, 1, 1:3]), c(1, 1, 1),
                info = "corner pixel must be white")
 })
+
+# --- Validation: impossible values are errors, contradictions are warnings ---
+
+test_that("a participant count that grows down the flow is an error", {
+  expect_error(
+    mysterycall_flow_diagram(
+      n_identified = 400,
+      n_contacted  = 500,
+      n_analysed   = 300
+    ),
+    "cannot increase"
+  )
+})
+
+test_that("an exclusion larger than the step it leaves is an error", {
+  expect_error(
+    mysterycall_flow_diagram(
+      n_identified       = 500,
+      n_excluded_contact = 600,
+      n_analysed         = 400
+    ),
+    "exceeds"
+  )
+})
+
+test_that("an itemised exclusion that contradicts its boxes warns", {
+  # 500 - 70 = 430, but n_contacted is 420: the numbers disagree.
+  expect_warning(
+    mysterycall_flow_diagram(
+      n_identified       = 500,
+      n_contacted        = 420,
+      n_excluded_contact = 70,
+      n_analysed         = 420
+    ),
+    "does not close"
+  )
+})
+
+test_that("an unexplained drop is allowed and does not warn", {
+  # No itemised exclusion accounts for 500 -> 400, and that is fine: the check
+  # fires only on numbers that are itemised and disagree.
+  expect_no_warning(
+    mysterycall_flow_diagram(
+      n_identified = 500,
+      n_analysed   = 400
+    )
+  )
+})

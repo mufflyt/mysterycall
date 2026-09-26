@@ -75,6 +75,16 @@ Produces a CONSORT/STROBE-style flow diagram using ggplot2 (no DiagrammeR
 dependency). Boxes show N at each stage; side branches display exclusion
 counts and optional reasons. The returned ggplot2 object can be saved with
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} or embedded in R Markdown / Quarto reports.
+
+The numbers are checked before drawing. A count that grows down the flow, or
+an itemised exclusion larger than the step it leaves, is impossible and
+raises an error. An itemised exclusion whose count does not reconcile the two
+boxes it sits between is a warning: the diagram is still drawn, but the
+contradiction is surfaced rather than silently rendered. Unexplained drops
+are permitted -- a bare \code{identified -> analysed} diagram is fine -- so the
+check fires only on numbers that are itemised and disagree. For a flow that
+must be fully arithmetically closed, build a \code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} and
+draw it with \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}}.
 }
 \examples{
 mysterycall_flow_diagram(
@@ -91,8 +101,10 @@ mysterycall_flow_diagram(
 )
 }
 \seealso{
-\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}} which flags when a flow diagram
-is missing; \code{\link[=mysterycall_table1]{mysterycall_table1()}} for the baseline characteristics table.
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} and \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} for a
+fully validated, arithmetically-closed participant flow;
+\code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}} which flags when a flow diagram is
+missing; \code{\link[=mysterycall_table1]{mysterycall_table1()}} for the baseline characteristics table.
 
 Other manuscript:
 \code{\link[=mysterycall_combined_results_table]{mysterycall_combined_results_table()}},
