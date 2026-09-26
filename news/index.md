@@ -19,6 +19,15 @@
   gives
   [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md).
 
+- [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+  now validates its waterfall before drawing. Each exclusion box is a
+  derived difference (`n_total - n_calldate`, `n_calldate - n_included`,
+  `n_logistic - n_waittime`), so an inconsistent set of counts
+  previously drew a *negative* exclusion. A count that grows down the
+  waterfall is now an error; a per-code `excl_detail` breakdown that
+  sums to more than the screening total it decomposes is a warning (a
+  partial breakdown that sums to less is still allowed).
+
 ### Bug fixes
 
 - [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)

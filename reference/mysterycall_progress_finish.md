@@ -70,9 +70,9 @@ Other logging:
 ``` r
 tr <- mysterycall:::mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
 mysterycall:::mysterycall_progress_start(tr, "Geocode")
-#> [00:55:30] Started Geocode
-#> [00:55:30] Progress: 0/1 steps complete (0.0%)
+#> [01:27:32] Started Geocode
+#> [01:27:32] Progress: 0/1 steps complete (0.0%)
 mysterycall:::mysterycall_progress_finish(tr, "Geocode", score = 0.92)
-#> [00:55:30] Completed Geocode (high)
-#> [00:55:30] Progress: 1/1 steps complete (100.0%)
+#> [01:27:32] Completed Geocode (high)
+#> [01:27:32] Progress: 1/1 steps complete (100.0%)
 ```

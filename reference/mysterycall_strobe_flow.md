@@ -230,8 +230,20 @@ via `output_path`.
 
 - Code NA - Exclusion code pending review
 
+**Validation.** Each exclusion box is a derived difference, so the
+numbers are checked before drawing. A count that grows down the
+waterfall (which would make an exclusion negative) is impossible and
+raises an error. A per-code `excl_detail` breakdown that sums to *more*
+than the screening total it decomposes is a warning: the diagram still
+draws, but the contradiction is surfaced. A partial breakdown that sums
+to less than the total is allowed.
+
 ## See also
 
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+and
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+for a fully validated, arithmetically-closed participant flow;
 [`mysterycall_prepare_calls()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_calls.md),
 [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md),
 [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md)

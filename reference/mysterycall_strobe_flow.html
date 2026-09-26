@@ -290,10 +290,18 @@ value by hand.  Useful for manual overrides or non-REDCap data.</p></li>
 <li><p>Code 9 - Not accepting new patients</p></li>
 <li><p>Code 10 - Must see midlevel provider first</p></li>
 <li><p>Code NA - Exclusion code pending review</p></li>
-</ul></div>
+</ul><p><strong>Validation.</strong> Each exclusion box is a derived difference, so the numbers are
+checked before drawing. A count that grows down the waterfall (which would
+make an exclusion negative) is impossible and raises an error. A per-code
+<code>excl_detail</code> breakdown that sums to <em>more</em> than the screening total it
+decomposes is a warning: the diagram still draws, but the contradiction is
+surfaced. A partial breakdown that sums to less than the total is allowed.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="mysterycall_prepare_calls.html">mysterycall_prepare_calls()</a></code>, <code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
+    <div class="dont-index"><p><code><a href="mysterycall_flow_spec.html">mysterycall_flow_spec()</a></code> and <code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code> for a
+fully validated, arithmetically-closed participant flow;
+<code><a href="mysterycall_prepare_calls.html">mysterycall_prepare_calls()</a></code>, <code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
 <code><a href="mysterycall_strobe_checklist.html">mysterycall_strobe_checklist()</a></code></p>
 <p>Other manuscript:
 <code><a href="mysterycall_combined_results_table.html">mysterycall_combined_results_table()</a></code>,
