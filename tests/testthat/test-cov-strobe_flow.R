@@ -107,3 +107,54 @@ test_that("mysterycall_strobe_flow rejects invalid prepared object", {
     "mysterycall_prepared"
   )
 })
+
+# --- Validation: impossible waterfalls error, over-itemised details warn ------
+
+test_that("a count that grows down the waterfall is an error", {
+  # n_included (98) exceeds n_calldate (95): the screening exclusion would be
+  # negative. A funnel only shrinks.
+  expect_error(
+    mysterycall_strobe_flow(
+      n_total    = 100,
+      n_calldate = 95,
+      n_included = 98,
+      n_waittime = 40
+    ),
+    "cannot increase"
+  )
+})
+
+test_that("an excl_detail that sums to more than the screening total warns", {
+  # screening total = n_calldate - n_included = 82 - 70 = 12, but the itemised
+  # codes sum to 18: the parts exceed the whole.
+  expect_warning(
+    mysterycall_strobe_flow(
+      n_total     = 100,
+      n_calldate  = 82,
+      n_included  = 70,
+      n_waittime  = 45,
+      excl_detail = c("1" = 10L, "2" = 8L)
+    ),
+    "exceed the total"
+  )
+})
+
+test_that("a partial excl_detail (sums to less than the total) does not warn", {
+  # 5 + 3 = 8 of the 22 screening exclusions itemised: a partial breakdown is
+  # allowed and must not raise the over-count warning.
+  seen <- character(0)
+  withCallingHandlers(
+    suppressMessages(mysterycall_strobe_flow(
+      n_total     = 100,
+      n_calldate  = 82,
+      n_included  = 60,
+      n_waittime  = 45,
+      excl_detail = c("1" = 5L, "2" = 3L)
+    )),
+    warning = function(cnd) {
+      seen <<- c(seen, conditionMessage(cnd))
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_false(any(grepl("exceed the total", seen)))
+})
