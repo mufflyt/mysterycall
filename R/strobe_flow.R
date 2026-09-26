@@ -37,6 +37,13 @@ NULL
 #'   \item Code NA - Exclusion code pending review
 #' }
 #'
+#' **Validation.** Each exclusion box is a derived difference, so the numbers are
+#' checked before drawing. A count that grows down the waterfall (which would
+#' make an exclusion negative) is impossible and raises an error. A per-code
+#' `excl_detail` breakdown that sums to *more* than the screening total it
+#' decomposes is a warning: the diagram still draws, but the contradiction is
+#' surfaced. A partial breakdown that sums to less than the total is allowed.
+#'
 #' @param data A data frame (raw REDCap export) **or** a character string
 #'   giving the path to a CSV file.  When supplied, [mysterycall_prepare_calls()]
 #'   is called internally using `col_calldate`, `col_exclusions`, and
@@ -102,7 +109,9 @@ NULL
 #'   usual method (`print()` / [grid::grid.draw()]) or saved via `output_path`.
 #'
 #' @family manuscript
-#' @seealso [mysterycall_prepare_calls()], [mysterycall_flow_diagram()],
+#' @seealso [mysterycall_flow_spec()] and [mysterycall_strobe_diagram()] for a
+#'   fully validated, arithmetically-closed participant flow;
+#'   [mysterycall_prepare_calls()], [mysterycall_flow_diagram()],
 #'   [mysterycall_strobe_checklist()]
 #' @export
 #'
@@ -225,6 +234,23 @@ mysterycall_strobe_flow <- function(
   n_waittime       <- as.integer(n_waittime)
   excl_no_calldate <- as.integer(excl_no_calldate %||% (n_total - n_calldate))
 
+  # ---- Validate the waterfall before drawing ---------------------------------
+  # Every exclusion box below is a derived difference (n_total - n_calldate,
+  # n_calldate - n_included, n_logistic - n_waittime). If the input counts are
+  # inconsistent that subtraction goes negative and a negative count is drawn.
+  # A participant waterfall only shrinks, so a step larger than the one above it
+  # is impossible and errors -- the arithmetic guarantee mysterycall_flow_spec()
+  # gives mysterycall_strobe_diagram(), applied to the mystery-caller waterfall.
+  sf_spine <- c(n_total, n_calldate, n_included, n_logistic, n_waittime)
+  sf_names <- c("n_total", "n_calldate", "n_included", "n_logistic", "n_waittime")
+  sf_grew  <- which(diff(sf_spine) > 0)
+  if (length(sf_grew))
+    stop("STROBE flow counts cannot increase down the waterfall: ",
+         paste(sprintf("%s (%s) exceeds %s (%s)",
+                       sf_names[sf_grew + 1L], sf_spine[sf_grew + 1L],
+                       sf_names[sf_grew], sf_spine[sf_grew]),
+               collapse = "; "), ".", call. = FALSE)
+
   # ---- Build exclusion labels -------------------------------------------------
   code_labels <- c(
     "1"  = "Closed medical system",
@@ -248,6 +274,20 @@ mysterycall_strobe_flow <- function(
     warning("`excl_detail` must be a named integer vector (code -> count); ",
             "ignoring the unnamed value.", call. = FALSE)
     excl_detail <- NULL
+  }
+
+  # The per-code breakdown decomposes the screening total (n_calldate -
+  # n_included). A partial itemisation (some codes omitted) is fine, so only an
+  # over-count -- itemised codes summing to MORE than the total -- is a problem.
+  # It is a warning, not an error: the diagram still draws, but the numbers
+  # contradict each other. (unlist() so a named list or vector both sum.)
+  if (!is.null(excl_detail)) {
+    itemised_screen <- sum(unlist(excl_detail), na.rm = TRUE)
+    if (itemised_screen > excl_total_screen)
+      warning("`excl_detail` sums to ", itemised_screen, ", more than the ",
+              excl_total_screen, " screening exclusions ",
+              "(n_calldate - n_included); the itemised codes exceed the total.",
+              call. = FALSE)
   }
 
   if (!is.null(excl_detail)) {

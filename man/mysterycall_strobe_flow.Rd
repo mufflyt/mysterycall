@@ -157,6 +157,13 @@ value by hand.  Useful for manual overrides or non-REDCap data.
 \item Code 10 - Must see midlevel provider first
 \item Code NA - Exclusion code pending review
 }
+
+\strong{Validation.} Each exclusion box is a derived difference, so the numbers are
+checked before drawing. A count that grows down the waterfall (which would
+make an exclusion negative) is impossible and raises an error. A per-code
+\code{excl_detail} breakdown that sums to \emph{more} than the screening total it
+decomposes is a warning: the diagram still draws, but the contradiction is
+surfaced. A partial breakdown that sums to less than the total is allowed.
 }
 \examples{
 # Mode 1: from a data frame (simplest) -- requires an existing CSV file.
@@ -182,6 +189,8 @@ mysterycall_strobe_flow(
 )
 }
 \seealso{
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} and \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} for a
+fully validated, arithmetically-closed participant flow;
 \code{\link[=mysterycall_prepare_calls]{mysterycall_prepare_calls()}}, \code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}},
 \code{\link[=mysterycall_strobe_checklist]{mysterycall_strobe_checklist()}}
 
