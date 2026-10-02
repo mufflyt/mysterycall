@@ -33,7 +33,9 @@ NULL
 #'   svg_text <- DiagrammeRsvg::export_svg(diagram)
 #'   rsvg::rsvg_pdf(chartr("\n", "", svg_text), "consort.pdf")
 #'   ```
-#' @seealso [mysterycall_flowchart()] for a generic multi-step flowchart;
+#' @seealso [mysterycall_flow_spec()] and [mysterycall_strobe_diagram()] for a
+#'   validated, arithmetically-closed participant flow;
+#'   [mysterycall_flowchart()] for a generic multi-step flowchart;
 #'   [mysterycall_acceptance_rate()] to compute the counts that feed this diagram.
 #' @family outcomes
 #' @export

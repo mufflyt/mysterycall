@@ -37,7 +37,10 @@ NULL
 #'   `rsvg::rsvg_pdf()` to save to PDF.
 #'
 #' @family visualization
-#' @seealso [mysterycall_poisson_model()]
+#' @seealso [mysterycall_flow_spec()] and [mysterycall_strobe_diagram()] for a
+#'   validated, arithmetically-closed participant flow;
+#'   [mysterycall_plot_inclexcl()] for a CONSORT inclusion/exclusion flowchart;
+#'   [mysterycall_flow_diagram()], [mysterycall_strobe_flow()].
 #' @export
 #'
 #' @examplesIf requireNamespace("DiagrammeR", quietly = TRUE)
