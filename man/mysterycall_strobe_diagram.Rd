@@ -59,5 +59,9 @@ p <- mysterycall_strobe_diagram(spec, title = "Participant flow")
 
 }
 \seealso{
-\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}}
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} to build and validate the \code{spec} this
+draws (together they are the recommended participant-flow pair). The
+count-taking alternatives: \code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}},
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}}, \code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}},
+\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}}.
 }

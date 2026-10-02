@@ -1,5 +1,19 @@
 # mysterycall 1.6.3.9000 (development version)
 
+## Documentation
+
+- The participant-flow / STROBE diagram help pages now point to a single
+  recommended entry point. `?mysterycall_flow_spec` gains a "Choosing a
+  participant-flow function" section that explains when to use each of the five
+  drawers and names the validated `mysterycall_flow_spec()` +
+  `mysterycall_strobe_diagram()` pair as the recommended path. Every drawer
+  (`mysterycall_strobe_flow()`, `mysterycall_flow_diagram()`,
+  `mysterycall_flowchart()`, `mysterycall_plot_inclexcl()`,
+  `mysterycall_strobe_diagram()`) now carries a consistent `@seealso` that
+  cross-links the others and the recommended pair, so a reader landing on any
+  one of them is no longer left to choose blindly. (`mysterycall_flowchart()`'s
+  `@seealso` previously pointed only at an unrelated model function.)
+
 ## Validation
 
 - `mysterycall_flow_diagram()` now checks its numbers before drawing, so a flow

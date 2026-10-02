@@ -73,6 +73,8 @@ mysterycall_plot_inclexcl(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} and \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} for a
+validated, arithmetically-closed participant flow;
 \code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}} for a generic multi-step flowchart;
 \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}} to compute the counts that feed this diagram.
 

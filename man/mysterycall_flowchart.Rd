@@ -67,7 +67,10 @@ mysterycall_flowchart(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}}
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} and \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} for a
+validated, arithmetically-closed participant flow;
+\code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}} for a CONSORT inclusion/exclusion flowchart;
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}}, \code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}}.
 
 Other visualization:
 \code{\link[=mysterycall_acceptance_waffle]{mysterycall_acceptance_waffle()}},

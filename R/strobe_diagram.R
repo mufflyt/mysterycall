@@ -39,7 +39,11 @@
 #' )
 #' p <- mysterycall_strobe_diagram(spec, title = "Participant flow")
 #'
-#' @seealso [mysterycall_flow_spec()]
+#' @seealso [mysterycall_flow_spec()] to build and validate the `spec` this
+#'   draws (together they are the recommended participant-flow pair). The
+#'   count-taking alternatives: [mysterycall_strobe_flow()],
+#'   [mysterycall_flow_diagram()], [mysterycall_flowchart()],
+#'   [mysterycall_plot_inclexcl()].
 #' @export
 mysterycall_strobe_diagram <- function(spec,
                                        title = NULL,

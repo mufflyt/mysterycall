@@ -42,6 +42,20 @@
 #' @return An object of class `mysterycall_flow_spec`: a list with `spine`,
 #'   `exclusions`, `splits` and `closed`.
 #'
+#' @section Choosing a participant-flow function:
+#' Several functions in this package draw a participant flow; they differ in how
+#' the counts are supplied and whether the arithmetic is validated. For a flow
+#' whose boxes must be guaranteed to add up, build a spec with
+#' `mysterycall_flow_spec()` and draw it with [mysterycall_strobe_diagram()]:
+#' this is the only path that validates full closure, and the same check can run
+#' in a test suite. The count-taking drawers are quicker for a one-off figure and
+#' validate what they can: [mysterycall_strobe_flow()] (the mystery-caller
+#' call-log waterfall, errors on an impossible count),
+#' [mysterycall_flow_diagram()] (a fixed four-stage CONSORT diagram, errors on
+#' impossible counts and warns on itemised contradictions),
+#' [mysterycall_flowchart()] and [mysterycall_plot_inclexcl()] (generic and
+#' CONSORT flowcharts drawn with DiagrammeR/Graphviz).
+#'
 #' @examples
 #' # The AAGL abstract-publication cohort (mufflyt/abstract_lifetime).
 #' spec <- mysterycall_flow_spec(
@@ -68,8 +82,10 @@
 #'   exclusions = list("Screened" = c("Ineligible" = 5))
 #' ))
 #'
-#' @seealso [mysterycall_strobe_diagram()] to draw a validated spec,
-#'   [mysterycall_strobe_flow()] for the mystery-caller-specific diagram.
+#' @seealso [mysterycall_strobe_diagram()] to draw a validated spec (the
+#'   recommended pair). The count-taking alternatives:
+#'   [mysterycall_strobe_flow()], [mysterycall_flow_diagram()],
+#'   [mysterycall_flowchart()], [mysterycall_plot_inclexcl()].
 #' @export
 mysterycall_flow_spec <- function(spine,
                                   exclusions = list(),

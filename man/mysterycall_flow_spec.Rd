@@ -54,6 +54,22 @@ describes. Validating separately from drawing means the same check can run
 in a test suite, where a stale figure is actually caught, rather than only
 at render time on someone's laptop.
 }
+\section{Choosing a participant-flow function}{
+
+Several functions in this package draw a participant flow; they differ in how
+the counts are supplied and whether the arithmetic is validated. For a flow
+whose boxes must be guaranteed to add up, build a spec with
+\code{mysterycall_flow_spec()} and draw it with \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}}:
+this is the only path that validates full closure, and the same check can run
+in a test suite. The count-taking drawers are quicker for a one-off figure and
+validate what they can: \code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}} (the mystery-caller
+call-log waterfall, errors on an impossible count),
+\code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}} (a fixed four-stage CONSORT diagram, errors on
+impossible counts and warns on itemised contradictions),
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}} and \code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}} (generic and
+CONSORT flowcharts drawn with DiagrammeR/Graphviz).
+}
+
 \examples{
 # The AAGL abstract-publication cohort (mufflyt/abstract_lifetime).
 spec <- mysterycall_flow_spec(
@@ -82,6 +98,8 @@ try(mysterycall_flow_spec(
 
 }
 \seealso{
-\code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} to draw a validated spec,
-\code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}} for the mystery-caller-specific diagram.
+\code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} to draw a validated spec (the
+recommended pair). The count-taking alternatives:
+\code{\link[=mysterycall_strobe_flow]{mysterycall_strobe_flow()}}, \code{\link[=mysterycall_flow_diagram]{mysterycall_flow_diagram()}},
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}}, \code{\link[=mysterycall_plot_inclexcl]{mysterycall_plot_inclexcl()}}.
 }
