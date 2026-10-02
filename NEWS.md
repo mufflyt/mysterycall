@@ -7,6 +7,10 @@
   inline `format(..., big.mark = ",")` calls in `mysterycall_flow_diagram()` and
   `mysterycall_plot_inclexcl()` were replaced with it. Box counts still read
   "1,234" exactly as before; this only removes duplicated formatting logic.
+- The opaque white background that `mysterycall_flow_diagram()` and
+  `mysterycall_strobe_flow()` (ggplot2 engine) each set inline is now a single
+  shared helper (`.mc_flow_white_bg()`), added as one `+ theme()` layer. The
+  rendered figures are unchanged; this removes the duplicated theme code.
 
 ## Documentation
 
