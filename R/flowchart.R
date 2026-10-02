@@ -11,6 +11,11 @@ NULL
 #' labelled box with a count; optional exclusion side-boxes branch off to the
 #' right. Requires the `DiagrammeR` package (listed in Suggests).
 #'
+#' For a static, arithmetic-validated participant flow, prefer the
+#' [mysterycall_flow_spec()] + [mysterycall_strobe_diagram()] pair; this
+#' function draws an interactive DiagrammeR/Graphviz flowchart and remains fully
+#' supported for that purpose.
+#'
 #' @param steps Named character vector (or named list coercible to character).
 #'   Each name is a step label and each value is the formatted count to display.
 #'   Steps are rendered top-to-bottom in the order supplied. Example:

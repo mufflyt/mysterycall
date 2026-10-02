@@ -48,6 +48,11 @@ Produces a top-to-bottom DiagrammeR DOT flow diagram showing the sequential
 inclusion and exclusion of providers from the analysis. Each step is a
 labelled box with a count; optional exclusion side-boxes branch off to the
 right. Requires the \code{DiagrammeR} package (listed in Suggests).
+
+For a static, arithmetic-validated participant flow, prefer the
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} + \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} pair; this
+function draws an interactive DiagrammeR/Graphviz flowchart and remains fully
+supported for that purpose.
 }
 \examples{
 \dontshow{if (requireNamespace("DiagrammeR", quietly = TRUE)) withAutoprint(\{ # examplesIf}

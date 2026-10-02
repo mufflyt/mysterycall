@@ -47,6 +47,11 @@ Builds a DiagrammeR DOT diagram tailored to mystery-caller study reporting.
 Unlike the generic \code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}}, this function understands the
 standard mystery-caller study phases (identification, screening, enrollment,
 analysis) and lays out exclusion boxes on the right side with dashed arrows.
+
+For a static, arithmetic-validated participant flow, prefer the
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} + \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} pair; this
+function draws a CONSORT inclusion/exclusion flowchart with
+DiagrammeR/Graphviz and remains fully supported for that purpose.
 }
 \details{
 Optionally appends a subspecialty distribution table in the final node.

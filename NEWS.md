@@ -25,6 +25,13 @@
   cross-links the others and the recommended pair, so a reader landing on any
   one of them is no longer left to choose blindly. (`mysterycall_flowchart()`'s
   `@seealso` previously pointed only at an unrelated model function.)
+- The descriptions of `mysterycall_strobe_flow()`, `mysterycall_flowchart()`,
+  and `mysterycall_plot_inclexcl()` now state, up front, that the validated
+  `mysterycall_flow_spec()` + `mysterycall_strobe_diagram()` pair is preferred
+  when a participant flow's arithmetic must be guaranteed to close. Each notes
+  it remains fully supported for its own niche (the mystery-caller waterfall,
+  and the DiagrammeR/Graphviz flowcharts) -- this is a doc-only steer, no
+  runtime deprecation warning and no behaviour change.
 
 ## Validation
 
