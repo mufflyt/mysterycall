@@ -2,6 +2,19 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Internal
+
+- The participant-flow functions now share a single count formatter
+  (`.fmt_count()`):
+  [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)’s
+  private `.fmt_n()` and the inline `format(..., big.mark = ",")` calls
+  in
+  [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+  and
+  [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
+  were replaced with it. Box counts still read “1,234” exactly as
+  before; this only removes duplicated formatting logic.
+
 ### Documentation
 
 - The participant-flow / STROBE diagram help pages now point to a single
