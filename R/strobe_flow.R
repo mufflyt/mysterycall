@@ -404,15 +404,11 @@ mysterycall_strobe_flow <- function(
     ggplot2::theme(
       plot.title  = ggplot2::element_text(hjust = 0.5, size = 12, face = "bold",
                                           margin = ggplot2::margin(b = 8)),
-      plot.margin = ggplot2::margin(14, 8, 8, 8),
-      # theme_void() leaves the plot background blank, which ggsave() honours by
-      # writing an alpha channel. A STROBE diagram is black text and black box
-      # outlines, so on a transparent background it disappears against any dark
-      # viewer, dark-mode PDF reader, or journal proofing tool -- and the figure
-      # looks fine on a white page right up until it does not. Paint it white.
-      plot.background  = ggplot2::element_rect(fill = "white", colour = NA),
-      panel.background = ggplot2::element_rect(fill = "white", colour = NA)
-    )
+      plot.margin = ggplot2::margin(14, 8, 8, 8)
+    ) +
+    # Opaque white background (see .mc_flow_white_bg()): a transparent STROBE
+    # diagram disappears against any dark viewer or dark-mode PDF reader.
+    .mc_flow_white_bg()
 
   # Box 1 - total
   p <- .mbox(p, cx, y1, bw, bh, box_labels$total, bold = TRUE)
@@ -470,6 +466,20 @@ mysterycall_strobe_flow <- function(
 # Count formatting is shared across the flow functions: see .fmt_count() in
 # flow_spec.R (format with a thousands separator). Kept as one helper so every
 # box reads "1,234" the same way.
+
+# Opaque white background shared by the ggplot2 flow diagrams. theme_void()
+# leaves plot.background blank, which ggsave() writes as a transparent alpha
+# channel; a black-text diagram then disappears against any dark viewer or
+# dark-mode PDF reader. Painting both backgrounds white in the theme keeps the
+# plot object opaque in every output path. Added as one `+ theme()` layer, which
+# merges element-wise with the diagram's own theme(). Used by
+# mysterycall_strobe_flow() and mysterycall_flow_diagram().
+.mc_flow_white_bg <- function() {
+  ggplot2::theme(
+    plot.background  = ggplot2::element_rect(fill = "white", colour = NA),
+    panel.background = ggplot2::element_rect(fill = "white", colour = NA)
+  )
+}
 
 # Gmisc grid-grob renderer for mysterycall_strobe_flow().
 #

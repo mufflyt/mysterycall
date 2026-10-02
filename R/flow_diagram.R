@@ -191,16 +191,11 @@ mysterycall_flow_diagram <- function(n_identified,
     ggplot2::theme_void() +
     ggplot2::theme(
       plot.title = ggplot2::element_text(hjust = 0.5, size = 13, face = "bold"),
-      plot.margin = ggplot2::margin(10, 10, 10, 10),
-      # theme_void() leaves the plot background blank, which ggsave() honours by
-      # writing an alpha channel. A CONSORT diagram is black text and black box
-      # outlines, so on a transparent background it disappears against any dark
-      # viewer, dark-mode PDF reader, or journal proofing tool. Paint it white
-      # in the theme so the plot object is white in every output path (matching
-      # mysterycall_strobe_flow() and mysterycall_strobe_diagram()).
-      plot.background  = ggplot2::element_rect(fill = "white", colour = NA),
-      panel.background = ggplot2::element_rect(fill = "white", colour = NA)
-    )
+      plot.margin = ggplot2::margin(10, 10, 10, 10)
+    ) +
+    # Opaque white background (see .mc_flow_white_bg()): a transparent CONSORT
+    # diagram disappears against any dark viewer or dark-mode PDF reader.
+    .mc_flow_white_bg()
 
   .add_box <- function(p, y, label, x = cx) {
     p +
