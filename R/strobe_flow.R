@@ -299,24 +299,24 @@ mysterycall_strobe_flow <- function(
                           sprintf("  - %s: %d", code_labels[[code]], as.integer(n)))
     }
     excl_screen_lbl <- paste0(
-      label_excl_screen, " (n = ", .fmt_n(excl_total_screen), ")\n",
+      label_excl_screen, " (n = ", .fmt_count(excl_total_screen), ")\n",
       paste(detail_lines, collapse = "\n")
     )
   } else {
-    excl_screen_lbl <- sprintf("%s\n(n = %s)", label_excl_screen, .fmt_n(excl_total_screen))
+    excl_screen_lbl <- sprintf("%s\n(n = %s)", label_excl_screen, .fmt_count(excl_total_screen))
   }
 
   excl_waittime <- n_logistic - n_waittime
-  excl_ncd_lbl  <- sprintf("%s\n(n = %s)", label_excl_calldate, .fmt_n(excl_no_calldate))
-  excl_wt_lbl   <- sprintf("%s\n(n = %s)", label_excl_waittime, .fmt_n(excl_waittime))
+  excl_ncd_lbl  <- sprintf("%s\n(n = %s)", label_excl_calldate, .fmt_count(excl_no_calldate))
+  excl_wt_lbl   <- sprintf("%s\n(n = %s)", label_excl_waittime, .fmt_count(excl_waittime))
 
   # Main-column box labels (single source of truth shared by both engines).
   box_labels <- list(
-    total    = paste0(label_total,    "\n(N = ", .fmt_n(n_total),    ")"),
-    calldate = paste0(label_calldate, "\n(n = ", .fmt_n(n_calldate), ")"),
-    included = paste0(label_included, "\n(n = ", .fmt_n(n_included), ")"),
-    logistic = paste0(label_logistic, "\n(n = ", .fmt_n(n_logistic), ")"),
-    waittime = paste0(label_waittime, "\n(n = ", .fmt_n(n_waittime), ")")
+    total    = paste0(label_total,    "\n(N = ", .fmt_count(n_total),    ")"),
+    calldate = paste0(label_calldate, "\n(n = ", .fmt_count(n_calldate), ")"),
+    included = paste0(label_included, "\n(n = ", .fmt_count(n_included), ")"),
+    logistic = paste0(label_logistic, "\n(n = ", .fmt_count(n_logistic), ")"),
+    waittime = paste0(label_waittime, "\n(n = ", .fmt_count(n_waittime), ")")
   )
 
   # ---- Alternate engine: Gmisc grid grobs ------------------------------------
@@ -467,7 +467,9 @@ mysterycall_strobe_flow <- function(
 
 `%||%` <- function(a, b) if (!is.null(a)) a else b
 
-.fmt_n <- function(n) format(as.integer(n), big.mark = ",")
+# Count formatting is shared across the flow functions: see .fmt_count() in
+# flow_spec.R (format with a thousands separator). Kept as one helper so every
+# box reads "1,234" the same way.
 
 # Gmisc grid-grob renderer for mysterycall_strobe_flow().
 #
