@@ -88,7 +88,7 @@ mysterycall_plot_inclexcl <- function(counts,
 
   # -- Main-box labels ----------------------------------------------------------
   labels <- mapply(function(nm, ct) {
-    paste0(.esc(nm), "\\n(n = ", format(as.integer(ct), big.mark = ","), ")")
+    paste0(.esc(nm), "\\n(n = ", .fmt_count(ct), ")")
   }, names(counts), counts, USE.NAMES = FALSE)
 
   # Append subspecialty breakdown to final box

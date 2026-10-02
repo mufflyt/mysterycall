@@ -179,7 +179,7 @@ mysterycall_flow_diagram <- function(n_identified,
   names(ypos) <- stages
 
   .box_label <- function(header, n, reason = NULL) {
-    lbl <- sprintf("%s\nN = %s", header, format(n, big.mark = ","))
+    lbl <- sprintf("%s\nN = %s", header, .fmt_count(n))
     if (!is.null(reason)) lbl <- paste0(lbl, "\n(", reason, ")")
     lbl
   }
