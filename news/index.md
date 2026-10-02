@@ -2,6 +2,27 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Documentation
+
+- The participant-flow / STROBE diagram help pages now point to a single
+  recommended entry point.
+  [`?mysterycall_flow_spec`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md)
+  gains a “Choosing a participant-flow function” section that explains
+  when to use each of the five drawers and names the validated
+  [`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
+  [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+  pair as the recommended path. Every drawer
+  ([`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md),
+  [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md),
+  [`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md),
+  [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md),
+  [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md))
+  now carries a consistent `@seealso` that cross-links the others and
+  the recommended pair, so a reader landing on any one of them is no
+  longer left to choose blindly.
+  ([`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)’s
+  `@seealso` previously pointed only at an unrelated model function.)
+
 ### Validation
 
 - [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)

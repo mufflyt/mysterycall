@@ -70,12 +70,35 @@ study it describes. Validating separately from drawing means the same
 check can run in a test suite, where a stale figure is actually caught,
 rather than only at render time on someone's laptop.
 
+## Choosing a participant-flow function
+
+Several functions in this package draw a participant flow; they differ
+in how the counts are supplied and whether the arithmetic is validated.
+For a flow whose boxes must be guaranteed to add up, build a spec with
+`mysterycall_flow_spec()` and draw it with
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md):
+this is the only path that validates full closure, and the same check
+can run in a test suite. The count-taking drawers are quicker for a
+one-off figure and validate what they can:
+[`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+(the mystery-caller call-log waterfall, errors on an impossible count),
+[`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+(a fixed four-stage CONSORT diagram, errors on impossible counts and
+warns on itemised contradictions),
+[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
+and
+[`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
+(generic and CONSORT flowcharts drawn with DiagrammeR/Graphviz).
+
 ## See also
 
 [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
-to draw a validated spec,
-[`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
-for the mystery-caller-specific diagram.
+to draw a validated spec (the recommended pair). The count-taking
+alternatives:
+[`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md),
+[`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md),
+[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md),
+[`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md).
 
 ## Examples
 

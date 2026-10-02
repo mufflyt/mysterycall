@@ -153,9 +153,28 @@ in a test suite, where a stale figure is actually caught, rather than only
 at render time on someone's laptop.</p>
     </div>
     <div class="section level2">
+    <h2 id="choosing-a-participant-flow-function">Choosing a participant-flow function<a class="anchor" aria-label="anchor" href="#choosing-a-participant-flow-function"></a></h2>
+
+
+<p>Several functions in this package draw a participant flow; they differ in how
+the counts are supplied and whether the arithmetic is validated. For a flow
+whose boxes must be guaranteed to add up, build a spec with
+<code>mysterycall_flow_spec()</code> and draw it with <code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code>:
+this is the only path that validates full closure, and the same check can run
+in a test suite. The count-taking drawers are quicker for a one-off figure and
+validate what they can: <code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code> (the mystery-caller
+call-log waterfall, errors on an impossible count),
+<code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code> (a fixed four-stage CONSORT diagram, errors on
+impossible counts and warns on itemised contradictions),
+<code><a href="mysterycall_flowchart.html">mysterycall_flowchart()</a></code> and <code><a href="mysterycall_plot_inclexcl.html">mysterycall_plot_inclexcl()</a></code> (generic and
+CONSORT flowcharts drawn with DiagrammeR/Graphviz).</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code> to draw a validated spec,
-<code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code> for the mystery-caller-specific diagram.</p></div>
+    <div class="dont-index"><p><code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code> to draw a validated spec (the
+recommended pair). The count-taking alternatives:
+<code><a href="mysterycall_strobe_flow.html">mysterycall_strobe_flow()</a></code>, <code><a href="mysterycall_flow_diagram.html">mysterycall_flow_diagram()</a></code>,
+<code><a href="mysterycall_flowchart.html">mysterycall_flowchart()</a></code>, <code><a href="mysterycall_plot_inclexcl.html">mysterycall_plot_inclexcl()</a></code>.</p></div>
     </div>
 
     <div class="section level2">
