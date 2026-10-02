@@ -14,6 +14,13 @@
   [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
   were replaced with it. Box counts still read “1,234” exactly as
   before; this only removes duplicated formatting logic.
+- The opaque white background that
+  [`mysterycall_flow_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_diagram.md)
+  and
+  [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md)
+  (ggplot2 engine) each set inline is now a single shared helper
+  (`.mc_flow_white_bg()`), added as one `+ theme()` layer. The rendered
+  figures are unchanged; this removes the duplicated theme code.
 
 ### Documentation
 

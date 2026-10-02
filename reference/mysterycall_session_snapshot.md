@@ -106,11 +106,11 @@ mysterycall_session_snapshot(
 # Inspect what was written
 out <- mysterycall_session_snapshot(file = snap, append = TRUE, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/Rtmp7bBoim/file2097710563a6.txt
+#> Session snapshot: /tmp/RtmpbbceQ5/file208266fafd74.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-10-02 16:35:38 UTC
+#> Date/Time: 2026-10-02 17:13:39 UTC
 #> R Version: R version 4.6.1 (2026-06-24)
 #> Platform:  x86_64-pc-linux-gnu
 #> 
