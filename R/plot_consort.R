@@ -12,6 +12,11 @@ NULL
 #'
 #' Optionally appends a subspecialty distribution table in the final node.
 #'
+#' For a static, arithmetic-validated participant flow, prefer the
+#' [mysterycall_flow_spec()] + [mysterycall_strobe_diagram()] pair; this
+#' function draws a CONSORT inclusion/exclusion flowchart with
+#' DiagrammeR/Graphviz and remains fully supported for that purpose.
+#'
 #' @param counts Named integer vector. Names are phase labels shown in the main
 #'   boxes; values are physician counts at each phase. At least 2 phases are
 #'   required.

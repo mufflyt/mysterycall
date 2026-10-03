@@ -44,6 +44,11 @@ NULL
 #' decomposes is a warning: the diagram still draws, but the contradiction is
 #' surfaced. A partial breakdown that sums to less than the total is allowed.
 #'
+#' For a hand-specified flow whose boxes are validated to add up, see the
+#' [mysterycall_flow_spec()] + [mysterycall_strobe_diagram()] pair; this function
+#' remains the mystery-caller-specific entry point that derives its counts from a
+#' call log or a `mysterycall_prepared` object.
+#'
 #' @param data A data frame (raw REDCap export) **or** a character string
 #'   giving the path to a CSV file.  When supplied, [mysterycall_prepare_calls()]
 #'   is called internally using `col_calldate`, `col_exclusions`, and

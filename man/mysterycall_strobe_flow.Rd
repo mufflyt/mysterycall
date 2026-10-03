@@ -130,6 +130,11 @@ using ggplot2.  The diagram shows the complete filtering waterfall from the
 raw call log to the two downstream analysis populations (logistic model and
 wait-time model), with a right-side exclusion branch that lists each
 exclusion-code category and its count.
+
+For a hand-specified flow whose boxes are validated to add up, see the
+\code{\link[=mysterycall_flow_spec]{mysterycall_flow_spec()}} + \code{\link[=mysterycall_strobe_diagram]{mysterycall_strobe_diagram()}} pair; this function
+remains the mystery-caller-specific entry point that derives its counts from a
+call log or a \code{mysterycall_prepared} object.
 }
 \details{
 \strong{Three input modes - use whichever is most convenient:}
