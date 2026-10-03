@@ -42,6 +42,19 @@
   longer left to choose blindly.
   ([`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)’s
   `@seealso` previously pointed only at an unrelated model function.)
+- The descriptions of
+  [`mysterycall_strobe_flow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_flow.md),
+  [`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md),
+  and
+  [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
+  now state, up front, that the validated
+  [`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
+  [`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+  pair is preferred when a participant flow’s arithmetic must be
+  guaranteed to close. Each notes it remains fully supported for its own
+  niche (the mystery-caller waterfall, and the DiagrammeR/Graphviz
+  flowcharts) – this is a doc-only steer, no runtime deprecation warning
+  and no behaviour change.
 
 ### Validation
 
