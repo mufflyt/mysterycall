@@ -34,10 +34,11 @@ will notice, because a renderer draws what it is handed. The figure will look
 professional and be wrong, and the error will be discovered by a reviewer or
 not at all.
 
-`mysterycall_strobe_flow()` has exactly this gap: it takes `n_total`,
-`n_included` and `n_logistic` from the caller and draws them. The two functions
-in this appendix are the layer underneath it. Validate first, render second,
-and make the validation reusable.
+`mysterycall_strobe_flow()` closes part of this gap — it now rejects a
+waterfall whose counts grow down the page instead of shrinking — but it still
+will not tell you that two independently counted boxes fail to add up. The two
+functions in this appendix are the layer underneath it. Validate first, render
+second, and make the validation reusable.
 
 ## Validation is a separate step on purpose
 
@@ -151,15 +152,20 @@ figure is what you actually want.
 
 ## Relationship to the other flow functions
 
-| Function | Use it when |
-|---|---|
-| `mysterycall_flow_spec()` | You want the arithmetic checked, in a test or before drawing |
-| `mysterycall_strobe_diagram()` | You have a validated spec and want a ggplot |
-| `mysterycall_strobe_flow()` | Older, simpler entry point; takes counts and draws them without validating |
-| `mysterycall_flow_diagram()` | Fixed-shape CONSORT-style diagram for the standard audit pipeline |
+| Function | Use it when | What it checks |
+|---|---|---|
+| `mysterycall_flow_spec()` | You want the arithmetic checked, in a test or before drawing | **Full closure**: spine, exclusions and splits must add up exactly |
+| `mysterycall_strobe_diagram()` | You have a validated spec and want a ggplot | Draws a `flow_spec`; inherits its guarantee |
+| `mysterycall_strobe_flow()` | Mystery-caller counts straight from a call log or a `prepared` object | Rejects a waterfall that grows; warns when itemised exclusions over-count. No closure check |
+| `mysterycall_flow_diagram()` | A compact CONSORT-style diagram for the standard audit pipeline | Rejects impossible counts and over-large exclusions; warns on itemised contradictions. Unexplained drops allowed |
+| `mysterycall_flowchart()` | An interactive DiagrammeR/Graphviz htmlwidget | Renders only; no arithmetic check |
+| `mysterycall_plot_inclexcl()` | A quick DiagrammeR inclusion/exclusion cascade | Renders only; no arithmetic check |
 
-New work should prefer the `flow_spec()` and `strobe_diagram()` pair, because
-it is the only one of the four that can tell you the numbers are wrong.
+New work should prefer the `flow_spec()` + `strobe_diagram()` pair. The
+count-taking drawers now reject numbers that are *impossible* — a cohort that
+grows, an exclusion larger than the step it leaves — but this pair is still the
+only one that verifies every box **closes**: that the figure adds up to the
+dataset behind it.
 
 ## See also
 
