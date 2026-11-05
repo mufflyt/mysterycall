@@ -45,7 +45,20 @@ env:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # 0. Scheduling gate: keep only the cron that fired at 21:00 in Denver.
+  # 0. Scheduling gate: keep only the cron that is 21:17 in Denver today.
+  #
+  # Decide by the cron that FIRED and the current DST offset, not by the hour
+  # the job happens to run. GitHub starts scheduled runs whenever it has
+  # capacity -- routinely hours late. Observed ~7h: the gate for a 03:17/04:17
+  # UTC cron ran at 11:00 UTC (04:00 MST). The old gate matched the execution
+  # hour against 21:00 Denver, so that never held, and every heavy job below
+  # silently skipped for weeks -- a nightly that could not fail.
+  #
+  # The triggering cron is fixed no matter how late the run starts, so gate on
+  # it. Denver is UTC-6 in summer (MDT) and UTC-7 in winter (MST):
+  #   MDT -> 21:17 local is the 03:17 UTC cron ('17 3 * * *').
+  #   MST -> 21:17 local is the 04:17 UTC cron ('17 4 * * *').
+  # Fire whichever matches today's offset; the other is the off-season cron.
   # ---------------------------------------------------------------------------
   gate:
     runs-on: ubuntu-latest
@@ -56,9 +69,10 @@ jobs:
     steps:
       - id: decide
         shell: bash
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
         run: |
           local_time=$(TZ=America/Denver date '+%Y-%m-%d %H:%M %Z')
-          hour=$(TZ=America/Denver date '+%H')
           echo "local_time=$local_time" >> "$GITHUB_OUTPUT"
 
           if [ "${{ github.event_name }}" != "schedule" ]; then
@@ -67,16 +81,19 @@ jobs:
             exit 0
           fi
 
-          # Match the hour, not the minute: GitHub can start a scheduled run
-          # several minutes late, which would defeat an exact 21:17 comparison.
-          if [ "$hour" = "21" ]; then
-            echo "Firing: local time is $local_time"
-            echo "run=true" >> "$GITHUB_OUTPUT"
+          offset=$(TZ=America/Denver date '+%z')
+          run=false
+          case "$offset" in
+            -0600) [ "$SCHEDULE" = "17 3 * * *" ] && run=true ;;  # MDT (summer)
+            -0700) [ "$SCHEDULE" = "17 4 * * *" ] && run=true ;;  # MST (winter)
+          esac
+
+          if [ "$run" = "true" ]; then
+            echo "Firing: cron '$SCHEDULE' is the 21:17 Denver trigger for offset $offset (local time now: $local_time)."
           else
-            echo "Skipping: local time is $local_time, not the 21:00 hour."
-            echo "This is the off-season cron; the other one will fire correctly."
-            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping: cron '$SCHEDULE' is the off-season trigger for offset $offset (local time now: $local_time); the DST-matching cron fires separately."
           fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
 
   # ---------------------------------------------------------------------------
   # 0b. Scientific contract. The estimand must not change silently, so the
