@@ -23,6 +23,8 @@ Validate a Scalar Positive Numeric Value
 Other validation:
 \code{\link{.audit_volatile_fields}},
 \code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
+\code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}}
 }

@@ -18,18 +18,17 @@
 #' lons <- c(-83.49, -80.32, -74.52)
 #' mysterycall_calculate_spatial_density(lats, lons, radius = 15)
 mysterycall_calculate_spatial_density <- function(lats, lons, target_lats = NULL, target_lons = NULL, radius = 15) {
-  if (length(lats) != length(lons)) {
-    stop("lats and lons must be of the same length.")
-  }
-  
+  validate_coordinates(lats, lons, "lats", "lons")
+  validate_scalar_positive_numeric(radius, "radius", allow_null = FALSE)
+
   if (is.null(target_lats) || is.null(target_lons)) {
     target_lats <- lats
     target_lons <- lons
     self_adjust <- TRUE
   } else {
-    if (length(target_lats) != length(target_lons)) {
-      stop("target_lats and target_lons must be of the same length.")
-    }
+    validate_coordinates(
+      target_lats, target_lons, "target_lats", "target_lons"
+    )
     self_adjust <- FALSE
   }
   
@@ -37,12 +36,38 @@ mysterycall_calculate_spatial_density <- function(lats, lons, target_lats = NULL
   n_points <- length(lats)
   n_targets <- length(target_lats)
   counts <- integer(n_points)
-  
+
+  # A point with a missing coordinate has an unknown density, not a density
+  # of zero: counting it as 0 is indistinguishable from a genuinely isolated
+  # practice and silently biases any model that uses the result.
+  missing_point <- is.na(lats) | is.na(lons)
+  if (any(missing_point)) {
+    base::message(sprintf(
+      paste0("mysterycall_calculate_spatial_density(): %d of %d point(s) ",
+             "have a missing coordinate; returning NA for those."),
+      sum(missing_point), n_points
+    ))
+  }
+
+  n_missing_target <- sum(is.na(target_lats) | is.na(target_lons))
+  if (n_missing_target) {
+    base::message(sprintf(
+      paste0("mysterycall_calculate_spatial_density(): %d of %d target ",
+             "point(s) have a missing coordinate and are not counted."),
+      n_missing_target, n_targets
+    ))
+  }
+
   # Convert degrees to radians for target list
   t_lat_rad <- target_lats * pi / 180
   t_lon_rad <- target_lons * pi / 180
   
   for (i in seq_len(n_points)) {
+    if (missing_point[i]) {
+      counts[i] <- NA_integer_
+      next
+    }
+
     lat_rad <- lats[i] * pi / 180
     lon_rad <- lons[i] * pi / 180
     
@@ -84,6 +109,7 @@ mysterycall_calculate_hq_distance <- function(lats, lons, platforms, matched_pai
   if (length(lats) != length(lons) || length(lats) != length(platforms)) {
     stop("lats, lons, and platforms must be of the same length.")
   }
+  validate_coordinates(lats, lons, "lats", "lons")
   
   # Define regional HQ coordinates
   hq_coords <- list(

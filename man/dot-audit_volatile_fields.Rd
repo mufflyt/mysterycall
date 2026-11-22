@@ -21,6 +21,8 @@ and \code{mysterycall_clean_phase1()} use identical canonicalization logic.
 \seealso{
 Other validation:
 \code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
+\code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}

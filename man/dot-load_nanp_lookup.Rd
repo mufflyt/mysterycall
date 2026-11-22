@@ -18,6 +18,8 @@ Loads and caches the mapping between US area codes and states.
 \seealso{
 Other validation:
 \code{\link{.audit_volatile_fields}},
+\code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}

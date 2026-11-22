@@ -139,3 +139,116 @@ validate_required_columns <- function(x, required, name = "data") {
 
   invisible(x)
 }
+
+
+#' Check One Coordinate Axis
+#'
+#' @param x Numeric vector of decimal degrees.
+#' @param name Character scalar naming the argument for error messages.
+#' @param limit Numeric scalar. Maximum permitted absolute value (90 for
+#'   latitude, 180 for longitude).
+#'
+#' @return `invisible(TRUE)`. Called for the error side effect.
+#' @family validation
+#' @keywords internal
+.mc_check_coord_axis <- function(x, name, limit) {
+  if (!is.numeric(x)) {
+    stop(sprintf(
+      "`%s` must be a numeric vector of decimal degrees; received %s.",
+      name, paste(class(x), collapse = "/")
+    ), call. = FALSE)
+  }
+
+  n_nan <- sum(is.nan(x))
+  if (n_nan) {
+    stop(sprintf(
+      paste0("`%s` contains %d NaN value(s); NaN is not a coordinate. ",
+             "Use NA for a missing position."),
+      name, n_nan
+    ), call. = FALSE)
+  }
+
+  infinite <- !is.na(x) & !is.finite(x)
+  if (any(infinite)) {
+    stop(sprintf(
+      "`%s` contains %d infinite value(s) at position(s) %s.",
+      name, sum(infinite),
+      paste(utils::head(which(infinite), 3L), collapse = ", ")
+    ), call. = FALSE)
+  }
+
+  out <- !is.na(x) & abs(x) > limit
+  if (any(out)) {
+    idx <- utils::head(which(out), 3L)
+    stop(sprintf(
+      paste0("`%s` must lie within [%g, %g] decimal degrees; %d value(s) ",
+             "are outside it, including %s at position(s) %s. Check that ",
+             "latitude and longitude have not been swapped."),
+      name, -limit, limit, sum(out),
+      paste(signif(x[idx], 7L), collapse = ", "),
+      paste(idx, collapse = ", ")
+    ), call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
+
+#' Validate Geographic Coordinates
+#'
+#' Checks that latitude and longitude are numeric, equal in length, free of
+#' `NaN` and infinite values, and inside the geographic domain (latitude
+#' `[-90, 90]`, longitude `[-180, 180]`).
+#'
+#' Out-of-domain values are a hard error rather than a warning because they
+#' do not fail loudly downstream: a latitude of 500 still yields a finite
+#' haversine distance, so an unchecked coordinate produces a plausible-looking
+#' but wrong result. Values inside the domain are *not* thereby valid provider
+#' locations -- plausibility of the location itself (right country, right
+#' state) is a separate check this function does not make, and no coordinate
+#' pair is ever silently reordered.
+#'
+#' Missing (`NA`) values are permitted by default and must be handled
+#' explicitly by the caller.
+#'
+#' @param lat Numeric vector of latitudes in decimal degrees (WGS84).
+#' @param lon Numeric vector of longitudes in decimal degrees (WGS84).
+#' @param lat_name Character scalar naming the latitude argument in errors.
+#' @param lon_name Character scalar naming the longitude argument in errors.
+#' @param allow_missing Logical flag. When `FALSE`, `NA` values are rejected.
+#'
+#' @return `invisible(TRUE)`. Called for the error side effect.
+#' @family validation
+#' @keywords internal
+validate_coordinates <- function(lat,
+                                 lon,
+                                 lat_name = "lats",
+                                 lon_name = "lons",
+                                 allow_missing = TRUE) {
+  checkmate::assert_string(lat_name, min.chars = 1, .var.name = "lat_name")
+  checkmate::assert_string(lon_name, min.chars = 1, .var.name = "lon_name")
+  checkmate::assert_flag(allow_missing, .var.name = "allow_missing")
+
+  .mc_check_coord_axis(lat, lat_name, 90)
+  .mc_check_coord_axis(lon, lon_name, 180)
+
+  if (length(lat) != length(lon)) {
+    stop(sprintf(
+      "`%s` and `%s` must be the same length; received %d and %d.",
+      lat_name, lon_name, length(lat), length(lon)
+    ), call. = FALSE)
+  }
+
+  if (!allow_missing) {
+    n_na <- sum(is.na(lat) | is.na(lon))
+    if (n_na) {
+      stop(sprintf(
+        paste0("`%s`/`%s` must not contain missing coordinates; ",
+               "%d of %d pair(s) are incomplete."),
+        lat_name, lon_name, n_na, length(lat)
+      ), call. = FALSE)
+    }
+  }
+
+  invisible(TRUE)
+}
