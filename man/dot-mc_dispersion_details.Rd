@@ -11,7 +11,8 @@
   df,
   n,
   n_parameters,
-  df_engine = NA_real_
+  df_engine = NA_real_,
+  n_pearson_na = NA_integer_
 )
 }
 \arguments{
@@ -29,6 +30,10 @@
 
 \item{df_engine}{Numeric scalar. The engine's own residual df, for
 comparison. \code{NA_real_} when the engine does not report one.}
+
+\item{n_pearson_na}{Integer scalar. Pearson residuals that could not be
+computed. A non-zero value makes the statistic uninterpretable, and all
+of them being \code{NA} previously summed to a dispersion of exactly zero.}
 }
 \value{
 A named list describing the diagnostic.

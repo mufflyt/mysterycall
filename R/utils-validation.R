@@ -277,13 +277,21 @@ validate_coordinates <- function(lat,
 #' @param name Character scalar naming the column for error messages.
 #' @param check_positive Logical flag. When `FALSE`, only the `NaN` check
 #'   runs, for use on the supplied column before complete-case filtering.
+#' @param row_ids Optional integer vector mapping positions in `x` back to
+#'   rows of the caller's data frame, so that a reported row number refers
+#'   to the record the analyst can actually look up. Supply this whenever
+#'   `x` is a filtered cohort rather than the original column.
 #'
 #' @return `invisible(TRUE)`. Called for the error side effect.
 #' @family validation
 #' @keywords internal
-validate_log_offset <- function(x, name, check_positive = TRUE) {
+validate_log_offset <- function(x, name, check_positive = TRUE,
+                                row_ids = NULL) {
   checkmate::assert_string(name, min.chars = 1, .var.name = "name")
   checkmate::assert_flag(check_positive, .var.name = "check_positive")
+  if (!is.null(row_ids) && length(row_ids) != length(x)) {
+    stop("`row_ids` must be the same length as `x`.", call. = FALSE)
+  }
 
   if (!is.numeric(x)) {
     stop(sprintf(
@@ -311,7 +319,9 @@ validate_log_offset <- function(x, name, check_positive = TRUE) {
 
   bad <- !is.na(x) & (!is.finite(x) | x <= 0)
   if (any(bad)) {
-    idx <- utils::head(which(bad), 3L)
+    pos <- which(bad)
+    idx <- utils::head(pos, 3L)
+    reported <- if (is.null(row_ids)) idx else row_ids[idx]
     stop(sprintf(
       paste0("`%s` (offset_col) must be strictly positive and finite to be ",
              "used as log(%s); %d of %d value(s) are not, including %s at ",
@@ -319,7 +329,7 @@ validate_log_offset <- function(x, name, check_positive = TRUE) {
              "small constant: drop or correct those rows explicitly."),
       name, name, sum(bad), length(x),
       paste(signif(x[idx], 7L), collapse = ", "),
-      paste(idx, collapse = ", ")
+      paste(reported, collapse = ", ")
     ), call. = FALSE)
   }
 
@@ -358,7 +368,17 @@ assert_model_cohort <- function(model, n_expected, fn_name) {
     )
   )
 
-  if (is.na(n_used) || n_used == as.integer(n_expected)) {
+  if (is.na(n_used)) {
+    stop(sprintf(
+      paste0("%s(): could not determine how many rows the fitted model ",
+             "used, so the reported cohort cannot be verified. Neither ",
+             "stats::model.frame() nor stats::nobs() worked on an object of ",
+             "class %s."),
+      fn_name, paste(class(model), collapse = "/")
+    ), call. = FALSE)
+  }
+
+  if (n_used == as.integer(n_expected)) {
     return(invisible(n_used))
   }
 
@@ -418,8 +438,11 @@ summarise_fit_warnings <- function(x, max_shown = 10L) {
   c(
     conv,
     other[seq_len(max_shown)],
+    # Deliberately keyword-free: this sentinel is itself part of the
+    # returned vector, and any convergence keyword in it would make the
+    # caller classify a clean fit as non-convergent.
     sprintf(
-      "... and %d further distinct non-convergence warning(s).",
+      "... and %d more distinct warning(s) of other kinds.",
       length(other) - max_shown
     )
   )

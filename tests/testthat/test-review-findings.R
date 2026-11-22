@@ -131,8 +131,14 @@ test_that("summary() reports coefficients for every fitted class", {
     mysterycall_logistic_model(d, "offered", "ins", "phys")))
   lmm <- suppressMessages(suppressWarnings(
     mysterycall_lmm(d, "wait", "ins", "phys")))
+  fits <- list(pois, logi, lmm)
+  if (requireNamespace("glmmTMB", quietly = TRUE)) {
+    d$wait_od <- stats::rnbinom(nrow(d), mu = 12, size = 4)
+    fits <- c(fits, list(suppressMessages(suppressWarnings(
+      mysterycall_nb_model(d, "wait_od", "ins", "phys")))))
+  }
 
-  for (fit in list(pois, logi, lmm)) {
+  for (fit in fits) {
     s <- base::summary(fit)
     expect_s3_class(s, "mysterycall_model_summary")
     expect_false(is.null(s$coefficients))
@@ -187,10 +193,95 @@ test_that("subset and na.action are refused with an actionable message", {
 test_that("other dots arguments still reach the engine", {
   skip_if_not_installed("lme4")
   d <- mc_rf_counts()
-  # nAGQ is a named formal, control goes through dots.
+
+  # Assert the argument actually arrived, not merely that the fit ran: the
+  # optimizer name is recorded on the fitted object, so a dropped `...`
+  # would show the lme4 default instead.
   fit <- fit_pois(d, "wait", "ins", "phys",
-                  control = lme4::glmerControl(optimizer = "bobyqa"))
-  expect_equal(fit$n, nrow(d))
+                  control = lme4::glmerControl(optimizer = "Nelder_Mead"))
+  expect_equal(fit$model@optinfo$optimizer, "Nelder_Mead")
+
+  fit2 <- fit_pois(d, "wait", "ins", "phys",
+                   control = lme4::glmerControl(optimizer = "bobyqa"))
+  expect_equal(fit2$model@optinfo$optimizer, "bobyqa")
+})
+
+test_that("partial argument matching cannot bypass the dots guard", {
+  skip_if_not_installed("lme4")
+  d <- mc_rf_counts()
+
+  # R matches arguments partially, so `subs =` reaches lme4::glmer()'s
+  # `subset` formal. An exact-name check waved it through, and the cohort
+  # assertion then blamed the offset.
+  expect_error(
+    mysterycall_poisson_model(d, "wait", "ins", "phys",
+                              subs = rep(c(TRUE, FALSE), nrow(d) / 2L)),
+    "does not accept `subs`"
+  )
+  expect_error(
+    mysterycall_poisson_model(d, "wait", "ins", "phys",
+                              na.ac = stats::na.exclude),
+    "does not accept `na.ac`"
+  )
+})
+
+test_that("a clean fit stays converged however many warnings it emits", {
+  skip_if_not_installed("lme4")
+  # More than 10 distinct non-convergence warnings, which overflows the cap
+  # in summarise_fit_warnings(). The overflow sentinel used to contain the
+  # word "convergence" and so re-entered the convergence set, making the
+  # convergence verdict depend on how many distinct warnings fired.
+  set.seed(3)
+  n <- 240L
+  d <- data.frame(
+    phys = rep(sprintf("P%02d", seq_len(40)), each = 6L),
+    ins = rep(c("BCBS", "Medicaid"), length.out = n),
+    stringsAsFactors = FALSE
+  )
+  d$wait <- stats::rpois(n, 12) + 0.5
+
+  fit <- fit_pois(d, "wait", "ins", "phys")
+
+  expect_equal(fit$model@optinfo$conv$opt, 0L)
+  expect_length(fit$model@optinfo$conv$lme4$messages, 0L)
+  expect_true(fit$convergence$converged)
+  expect_gt(length(fit$fit_warnings), 10L)
+})
+
+test_that("an all-NA dispersion statistic is NA, never zero", {
+  skip_if_not_installed("glmmTMB")
+  d <- mc_rf_counts()
+  d$wait_od <- stats::rnbinom(nrow(d), mu = 12, size = 4)
+
+  # A non-constant dispformula makes sigma() return NA, so every Pearson
+  # residual is NA. sum(na.rm = TRUE) then gave exactly 0, which reads as
+  # extreme underdispersion.
+  fit <- suppressMessages(suppressWarnings(mysterycall_nb_model(
+    d, "wait_od", "ins", "phys", dispformula = ~ins)))
+
+  expect_true(is.na(fit$overdispersion))
+  expect_gt(fit$dispersion_details$n_pearson_na, 0L)
+})
+
+test_that("the dispersion assumptions disclose the zero-inflation limit", {
+  skip_if_not_installed("lme4")
+  fit <- fit_pois(mc_rf_counts(), "wait", "ins", "phys")
+  expect_match(fit$dispersion_details$assumptions, "zero-inflat")
+  expect_false(is.na(fit$dispersion_details$n_pearson_na))
+})
+
+test_that("an offset error names rows in the caller's frame", {
+  skip_if_not_installed("lme4")
+  d <- mc_rf_counts()
+  d$exposure[1:5] <- NA_real_
+  d$exposure[6] <- 0
+
+  # Row 6 is the real offender. Validating the filtered cohort made the
+  # message say "row 1", which is an NA row in the caller's data.
+  expect_error(
+    fit_pois(d, "wait", "ins", "phys", offset_col = "exposure"),
+    "row\\(s\\) 6"
+  )
 })
 
 # -- Validation order must not reject legitimately excluded rows ------------
@@ -233,11 +324,13 @@ test_that("NaN exposure errors even though complete.cases would drop it", {
   )
 })
 
-test_that("an infinite outcome on an already-excluded row does not abort", {
+test_that("a NaN outcome is refused rather than counted as missing", {
   skip_if_not_installed("lme4")
   d <- mc_rf_counts()
-  # Inf is never NA, so it cannot be an excluded row by missingness; check
-  # the NaN case, which complete.cases() does drop.
+  # complete.cases() cannot tell NaN from NA, so without this check a NaN
+  # outcome would be excluded silently and reported as missing data. The
+  # asymmetry with the offset is deliberate: an invalid outcome is never a
+  # declared exclusion, so it is refused wherever it appears.
   d$wait[5L] <- NaN
   expect_error(
     fit_pois(d, "wait", "ins", "phys"),
@@ -261,8 +354,13 @@ test_that("the adversarial NB fixture yields a converged, usable fit", {
   expect_equal(fit$model$fit$convergence, 0L)
   expect_true(isTRUE(fit$model$sdr$pdHess))
   expect_true(is.finite(fit$aic))
-  # theta is identifiable and near the simulated value of 4.
-  expect_true(fit$theta > 1 && fit$theta < 20)
+  # theta is identifiable and finite. The fixture simulates size = 30, and
+  # theta-hat for a mildly overdispersed sample of 180 is noisy, so the
+  # bound is loose on purpose: what matters is that it is estimable at all,
+  # which it was not when the fixture generated Poisson counts.
+  expect_true(is.finite(fit$theta))
+  expect_gt(fit$theta, 1)
+  expect_lt(fit$theta, 1e4)
 })
 
 test_that("the adversarial Poisson fixture also converges", {

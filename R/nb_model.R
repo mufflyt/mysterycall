@@ -177,7 +177,8 @@ mysterycall_nb_model <- function(data,
   }
 
   if (!is.null(offset_col)) {
-    validate_log_offset(data_cc[[offset_col]], offset_col)
+    validate_log_offset(data_cc[[offset_col]], offset_col,
+                        row_ids = which(cc_mask))
   }
 
   # -- Degrees-of-freedom check ------------------------------------------------
@@ -306,8 +307,23 @@ mysterycall_nb_model <- function(data,
   y_hat       <- tryCatch(fitted(model), error = function(e) rep(NA_real_, length(y_obs)))
   df_resid_nb <- max(nrow(data_cc) - nrow(irr_table), 1L)
   pearson_nb  <- (y_obs - y_hat) / sqrt(y_hat + y_hat^2 / max(theta, 0.001))
+  n_pearson_na_nb  <- sum(!is.finite(pearson_nb))
   pearson_chisq_nb <- sum(pearson_nb^2, na.rm = TRUE)
-  overdispersion   <- pearson_chisq_nb / df_resid_nb
+
+  # With theta = NA (a non-constant dispformula) or a failed fitted(), every
+  # residual is NA and na.rm = TRUE would sum to zero, reporting a dispersion
+  # of exactly 0 -- read as extreme underdispersion.
+  overdispersion <- if (n_pearson_na_nb == length(pearson_nb)) {
+    NA_real_
+  } else {
+    pearson_chisq_nb / df_resid_nb
+  }
+  if (n_pearson_na_nb > 0L) {
+    message(sprintf(
+      "%d of %d Pearson residual(s) are not finite; the dispersion statistic is unreliable.",
+      n_pearson_na_nb, length(pearson_nb)
+    ))
+  }
 
   dispersion_details <- .mc_dispersion_details(
     method        = "NB2 Pearson chi-square / (n - p_fixed)",
@@ -317,6 +333,7 @@ mysterycall_nb_model <- function(data,
     df            = df_resid_nb,
     n             = nrow(data_cc),
     n_parameters  = nrow(irr_table),
+    n_pearson_na  = n_pearson_na_nb,
     df_engine     = tryCatch(
       as.numeric(stats::df.residual(model)),
       error = function(e) NA_real_
@@ -328,7 +345,7 @@ mysterycall_nb_model <- function(data,
       "Extreme overdispersion: theta = %.2f (< 1). NB may still underfit. Consider a zero-inflated negative binomial model.",
       theta
     ), call. = FALSE)
-  } else if (overdispersion > 2) {
+  } else if (!is.na(overdispersion) && overdispersion > 2) {
     warning(sprintf(
       "Residual overdispersion phi = %.2f after NB fit. The negative binomial may not fully account for the excess variance. Check for zero-inflation or outliers.",
       overdispersion

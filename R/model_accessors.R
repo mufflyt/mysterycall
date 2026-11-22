@@ -626,6 +626,9 @@ print.mysterycall_model_summary <- function(x, ...) {
 #' @param n_parameters Integer scalar. Parameters debited by `df`.
 #' @param df_engine Numeric scalar. The engine's own residual df, for
 #'   comparison. `NA_real_` when the engine does not report one.
+#' @param n_pearson_na Integer scalar. Pearson residuals that could not be
+#'   computed. A non-zero value makes the statistic uninterpretable, and all
+#'   of them being `NA` previously summed to a dispersion of exactly zero.
 #'
 #' @return A named list describing the diagnostic.
 #' @family model-accessors
@@ -636,7 +639,8 @@ print.mysterycall_model_summary <- function(x, ...) {
                                    df,
                                    n,
                                    n_parameters,
-                                   df_engine = NA_real_) {
+                                   df_engine = NA_real_,
+                                   n_pearson_na = NA_integer_) {
   list(
     method        = method,
     formula       = formula,
@@ -651,8 +655,16 @@ print.mysterycall_model_summary <- function(x, ...) {
       "effects are estimated; the denominator debits fixed-effect ",
       "parameters only, not random-effect variance components (compare ",
       "`df_engine`). Values near 1 indicate no evidence of over- or ",
-      "under-dispersion; values below 1 indicate underdispersion."
-    )
+      "under-dispersion. ",
+      "This statistic assumes the fitted mean and the variance function ",
+      "refer to the same model. It is NOT valid for a zero-inflated fit ",
+      "(a `ziformula` passed through `...`): there fitted() is the ",
+      "zero-inflation-marginal mean while the variance term used here is ",
+      "the conditional NB2 variance, which inflates the statistic. Treat ",
+      "`overdispersion` as uninterpretable when `n_pearson_na > 0` or the ",
+      "model is zero-inflated."
+    ),
+    n_pearson_na  = as.integer(n_pearson_na)
   )
 }
 
@@ -671,7 +683,17 @@ print.mysterycall_model_summary <- function(x, ...) {
 #' @family model-accessors
 #' @keywords internal
 .mc_reject_cohort_altering_args <- function(dots, fn_name) {
-  blocked <- intersect(names(dots), c("subset", "na.action"))
+  nms <- names(dots)
+  if (is.null(nms)) {
+    return(invisible(TRUE))
+  }
+
+  # pmatch(), not intersect(): R matches arguments partially, so `subs = `
+  # reaches lme4::glmer()'s `subset` formal and an exact-name check would
+  # wave it through.
+  targets <- c("subset", "na.action")
+  hit <- !is.na(pmatch(nms, targets, duplicates.ok = TRUE))
+  blocked <- nms[hit]
   if (!length(blocked)) {
     return(invisible(TRUE))
   }

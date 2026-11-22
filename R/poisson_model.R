@@ -228,7 +228,8 @@ mysterycall_poisson_model <- function(data,
   }
 
   if (!is.null(offset_col)) {
-    validate_log_offset(data_cc[[offset_col]], offset_col)
+    validate_log_offset(data_cc[[offset_col]], offset_col,
+                        row_ids = which(cc_mask))
   }
 
   # -- Reference levels for factor/character predictors -------------------------
@@ -299,8 +300,13 @@ mysterycall_poisson_model <- function(data,
   conv_warn    <- grepl(conv_pattern, fit_warnings, ignore.case = TRUE)
   conv_msg_bad <- grepl(conv_pattern, conv_msgs, ignore.case = TRUE)
 
+  # The optimizer code is consulted directly as well as its warning text: a
+  # user-supplied optimizer via control = glmerControl(optimizer = ) could
+  # set a non-zero code without emitting a warning.
+  opt_code    <- model@optinfo$conv$opt
+  opt_ok      <- is.null(opt_code) || isTRUE(opt_code == 0L)
   is_singular <- lme4::isSingular(model)
-  converged   <- !any(conv_msg_bad) && !any(conv_warn)
+  converged   <- opt_ok && !any(conv_msg_bad) && !any(conv_warn)
 
   if (!converged) {
     all_msgs <- c(conv_msgs[conv_msg_bad], fit_warnings[conv_warn])
@@ -341,11 +347,26 @@ mysterycall_poisson_model <- function(data,
   re_df <- as.data.frame(lme4::VarCorr(model))
 
   pearson_resid  <- stats::residuals(model, type = "pearson")
+  n_pearson_na   <- sum(!is.finite(pearson_resid))
   pearson_chisq  <- sum(pearson_resid^2, na.rm = TRUE)
   n_fixed        <- length(lme4::fixef(model))
   df_resid       <- nrow(data_cc) - n_fixed
   df_used        <- max(df_resid, 1L)
-  overdispersion <- pearson_chisq / df_used
+
+  # If no residual could be computed, na.rm = TRUE would sum to zero and the
+  # object would report a dispersion of exactly 0 -- read as extreme
+  # underdispersion. Report it as unknown instead.
+  overdispersion <- if (n_pearson_na == length(pearson_resid)) {
+    NA_real_
+  } else {
+    pearson_chisq / df_used
+  }
+  if (n_pearson_na > 0L) {
+    message(sprintf(
+      "%d of %d Pearson residual(s) are not finite; the dispersion statistic is unreliable.",
+      n_pearson_na, length(pearson_resid)
+    ))
+  }
 
   dispersion_details <- .mc_dispersion_details(
     method        = "Pearson chi-square / (n - p_fixed)",
@@ -355,13 +376,15 @@ mysterycall_poisson_model <- function(data,
     df            = df_used,
     n             = nrow(data_cc),
     n_parameters  = n_fixed,
+    n_pearson_na  = n_pearson_na,
     df_engine     = tryCatch(
       as.numeric(stats::df.residual(model)),
       error = function(e) NA_real_
     )
   )
 
-  if (overdispersion > mysterycall_overdispersion_threshold()) {
+  if (!is.na(overdispersion) &&
+      overdispersion > mysterycall_overdispersion_threshold()) {
     warning(sprintf(
       "Overdispersion detected (phi = %.2f > %.2f). Standard errors may be underestimated. Consider a negative binomial model.",
       overdispersion, mysterycall_overdispersion_threshold()

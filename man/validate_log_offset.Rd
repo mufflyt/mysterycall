@@ -4,7 +4,7 @@
 \alias{validate_log_offset}
 \title{Validate an Exposure Column Used as a Log Offset}
 \usage{
-validate_log_offset(x, name, check_positive = TRUE)
+validate_log_offset(x, name, check_positive = TRUE, row_ids = NULL)
 }
 \arguments{
 \item{x}{Numeric vector of exposures.}
@@ -13,6 +13,11 @@ validate_log_offset(x, name, check_positive = TRUE)
 
 \item{check_positive}{Logical flag. When \code{FALSE}, only the \code{NaN} check
 runs, for use on the supplied column before complete-case filtering.}
+
+\item{row_ids}{Optional integer vector mapping positions in \code{x} back to
+rows of the caller's data frame, so that a reported row number refers
+to the record the analyst can actually look up. Supply this whenever
+\code{x} is a filtered cohort rather than the original column.}
 }
 \value{
 \code{invisible(TRUE)}. Called for the error side effect.

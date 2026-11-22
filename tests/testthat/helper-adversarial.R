@@ -29,9 +29,14 @@ mc_adv_calls <- function(seed = 6291L) {
   # binomial dispersion is unidentifiable, glmmTMB returns optimizer code 1
   # with a non-positive-definite Hessian, and every nb assertion in this
   # suite would be validated against standard errors from that broken fit.
-  # size = 4 gives mild, identifiable overdispersion.
+  #
+  # One outcome has to serve both arms, so size trades off between them:
+  # size = 4 leaves the Poisson arm at phi 3.1, well over the package's 1.5
+  # warning threshold. size = 30 keeps the NB dispersion identifiable
+  # (optimizer code 0, positive-definite Hessian) while the Poisson arm sits
+  # at phi 1.2, so neither arm is validated against a misspecified fit.
   base::data.frame(
-    wait_days = stats::rnbinom(n, mu = base::exp(log_mean), size = 4),
+    wait_days = stats::rnbinom(n, mu = base::exp(log_mean), size = 30),
     insurance = insurance,
     physician = physician,
     exposure = base::rep(1, n),

@@ -109,7 +109,10 @@ test_that("summarise_fit_warnings dedupes and caps the message flood", {
   many <- sprintf("non-integer x = %f", seq_len(120))
   out <- summarise_fit_warnings(many, max_shown = 10L)
   expect_length(out, 11L)
-  expect_match(out[[11L]], "110 further distinct non-convergence warning")
+  expect_match(out[[11L]], "110 more distinct warning\\(s\\) of other kinds")
+  # The sentinel must not itself read as a convergence warning.
+  expect_false(grepl(.mc_conv_warning_pattern(), out[[11L]],
+                     ignore.case = TRUE))
 })
 
 test_that("a convergence warning is never discarded by the cap", {
