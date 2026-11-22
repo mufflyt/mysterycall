@@ -138,6 +138,7 @@ mysterycall_poisson_model <- function(data,
     stop(sprintf("`%s` contains negative values; Poisson requires counts >= 0.", outcome),
          call. = FALSE)
   }
+  warn_non_integer_counts(data[[outcome]], outcome)
   if (!is.character(random_intercept) || length(random_intercept) != 1L) {
     stop("`random_intercept` must be a single column name.", call. = FALSE)
   }
@@ -207,6 +208,10 @@ mysterycall_poisson_model <- function(data,
     ), call. = FALSE)
   }
 
+  if (!is.null(offset_col)) {
+    validate_log_offset(data_cc[[offset_col]], offset_col)
+  }
+
   # -- Reference levels for factor/character predictors -------------------------
   factor_refs <- Filter(Negate(is.null), lapply(
     setNames(predictors, predictors),
@@ -255,10 +260,15 @@ mysterycall_poisson_model <- function(data,
     }
   )
 
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(model, nrow(data_cc), "mysterycall_poisson_model")
+
   # -- Convergence / singularity -------------------------------------------------
-  conv_msgs   <- model@optinfo$conv$lme4$messages
-  is_singular <- lme4::isSingular(model)
-  converged   <- is.null(conv_msgs) && !length(warnings_captured)
+  conv_msgs         <- model@optinfo$conv$lme4$messages
+  warnings_captured <- summarise_fit_warnings(warnings_captured)
+  is_singular       <- lme4::isSingular(model)
+  converged         <- is.null(conv_msgs) && !length(warnings_captured)
 
   if (!converged) {
     all_msgs <- c(conv_msgs, warnings_captured)

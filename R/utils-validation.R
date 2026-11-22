@@ -252,3 +252,164 @@ validate_coordinates <- function(lat,
 
   invisible(TRUE)
 }
+
+
+#' Validate an Exposure Column Used as a Log Offset
+#'
+#' A log offset requires a strictly positive, finite exposure: `log(0)` is
+#' `-Inf` and `log(x)` for `x < 0` is `NaN`. Either value makes the model
+#' frame unusable, and the fitting engine drops the affected rows silently,
+#' so the model is estimated on a smaller cohort than the caller is told
+#' about. This check refuses the input instead.
+#'
+#' The offending values are never replaced with a small positive constant;
+#' choosing such a constant is a study-specific decision that belongs to the
+#' analyst, not to this function.
+#'
+#' @param x Numeric vector of exposures, after complete-case filtering.
+#' @param name Character scalar naming the column for error messages.
+#'
+#' @return `invisible(TRUE)`. Called for the error side effect.
+#' @family validation
+#' @keywords internal
+validate_log_offset <- function(x, name) {
+  checkmate::assert_string(name, min.chars = 1, .var.name = "name")
+
+  if (!is.numeric(x)) {
+    stop(sprintf(
+      "`%s` (offset_col) must be numeric; received %s.",
+      name, paste(class(x), collapse = "/")
+    ), call. = FALSE)
+  }
+
+  bad <- !is.na(x) & (!is.finite(x) | x <= 0)
+  if (any(bad)) {
+    idx <- utils::head(which(bad), 3L)
+    stop(sprintf(
+      paste0("`%s` (offset_col) must be strictly positive and finite to be ",
+             "used as log(%s); %d of %d value(s) are not, including %s at ",
+             "row(s) %s. Zero or negative exposure is not replaced with a ",
+             "small constant: drop or correct those rows explicitly."),
+      name, name, sum(bad), length(x),
+      paste(signif(x[idx], 7L), collapse = ", "),
+      paste(idx, collapse = ", ")
+    ), call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
+
+#' Assert That a Fitted Model Used the Expected Number of Rows
+#'
+#' Model fitting engines apply their own `na.action` to the model frame, so a
+#' value that only becomes unusable inside the formula -- `log()` of a
+#' non-positive offset, for instance -- is dropped by the engine without
+#' passing through the caller's complete-case filter. The returned object then
+#' reports a cohort size that the model never used, which silently changes the
+#' denominator of every downstream result.
+#'
+#' @param model A fitted model object supporting [stats::nobs()].
+#' @param n_expected Integer scalar. Rows supplied to the fitting call.
+#' @param fn_name Character scalar naming the calling function in the error.
+#'
+#' @return `invisible(n_used)`, the row count the model reports using.
+#' @family validation
+#' @keywords internal
+assert_model_cohort <- function(model, n_expected, fn_name) {
+  checkmate::assert_string(fn_name, min.chars = 1, .var.name = "fn_name")
+
+  n_used <- tryCatch(
+    as.integer(stats::nobs(model)),
+    error = function(e) NA_integer_
+  )
+
+  if (is.na(n_used) || n_used == as.integer(n_expected)) {
+    return(invisible(n_used))
+  }
+
+  stop(sprintf(
+    paste0("%s(): the fitted model used %d row(s) but %d complete case(s) ",
+           "were supplied. The fitting engine dropped %d row(s) on its own, ",
+           "so the reported cohort would not match the model. Check the ",
+           "outcome, predictors and any offset for values that become ",
+           "undefined inside the model formula."),
+    fn_name, n_used, as.integer(n_expected),
+    as.integer(n_expected) - n_used
+  ), call. = FALSE)
+}
+
+
+#' Summarise Captured Model-Fitting Warnings
+#'
+#' A single data problem can make a fitting engine emit one warning per
+#' observation; a non-integer Poisson outcome produces one `"non-integer x ="`
+#' warning per row. Storing every one of them on the result object makes the
+#' diagnostic unreadable and the object large, so keep the distinct warnings
+#' and count the rest.
+#'
+#' @param x Character vector of captured warning messages.
+#' @param max_shown Integer scalar. Distinct messages to retain.
+#'
+#' @return Character vector of at most `max_shown + 1` messages.
+#' @family validation
+#' @keywords internal
+summarise_fit_warnings <- function(x, max_shown = 10L) {
+  if (!length(x)) {
+    return(character(0L))
+  }
+  checkmate::assert_character(x, .var.name = "x")
+  checkmate::assert_int(max_shown, lower = 1L, .var.name = "max_shown")
+
+  distinct <- unique(x)
+  if (length(distinct) <= max_shown) {
+    return(distinct)
+  }
+
+  c(
+    distinct[seq_len(max_shown)],
+    sprintf(
+      "... and %d further distinct warning(s) of the same kind.",
+      length(distinct) - max_shown
+    )
+  )
+}
+
+
+#' Warn When a Count Outcome Is Not Integer-Valued
+#'
+#' Poisson and negative binomial likelihoods are defined on non-negative
+#' integers. A non-integer outcome still fits -- the quasi-likelihood is
+#' well defined -- but it is almost always a unit error (hours recorded as
+#' days, a mean carried forward from an aggregate), and left unchecked it
+#' surfaces only as a flood of per-observation engine warnings that look
+#' like a convergence failure.
+#'
+#' @param x Numeric vector. The outcome values.
+#' @param name Character scalar naming the outcome column.
+#' @param tol Numeric scalar. Tolerance for the integer comparison.
+#'
+#' @return `invisible(TRUE)`. Called for the warning side effect.
+#' @family validation
+#' @keywords internal
+warn_non_integer_counts <- function(x, name, tol = 1e-8) {
+  if (!is.numeric(x)) {
+    return(invisible(TRUE))
+  }
+
+  non_int <- !is.na(x) & is.finite(x) & abs(x - round(x)) > tol
+  if (any(non_int)) {
+    idx <- utils::head(which(non_int), 3L)
+    warning(sprintf(
+      paste0("`%s` is not integer-valued: %d of %d value(s) have a ",
+             "fractional part, including %s at row(s) %s. Count models ",
+             "expect whole counts; the fit will proceed on the ",
+             "quasi-likelihood but check the units of `%s`."),
+      name, sum(non_int), length(x),
+      paste(signif(x[idx], 7L), collapse = ", "),
+      paste(idx, collapse = ", "), name
+    ), call. = FALSE)
+  }
+
+  invisible(TRUE)
+}

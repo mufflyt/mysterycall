@@ -122,6 +122,7 @@ mysterycall_nb_model <- function(data,
     stop(sprintf("`%s` contains negative values; negative binomial requires counts >= 0.", outcome),
          call. = FALSE)
   }
+  warn_non_integer_counts(data[[outcome]], outcome)
   if (!is.character(random_intercept) || length(random_intercept) != 1L) {
     stop("`random_intercept` must be a single column name.", call. = FALSE)
   }
@@ -158,6 +159,10 @@ mysterycall_nb_model <- function(data,
   }
   if (!nrow(data_cc)) {
     stop("No complete cases remain after removing rows with missing values.", call. = FALSE)
+  }
+
+  if (!is.null(offset_col)) {
+    validate_log_offset(data_cc[[offset_col]], offset_col)
   }
 
   # -- Degrees-of-freedom check ------------------------------------------------
@@ -227,9 +232,15 @@ mysterycall_nb_model <- function(data,
     }
   )
 
-  conv_code <- model$fit$convergence
-  pd_hess   <- isTRUE(model$sdr$pdHess)
-  converged <- (conv_code == 0L) && pd_hess && !length(warnings_captured)
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(model, nrow(data_cc), "mysterycall_nb_model")
+
+  conv_code         <- model$fit$convergence
+  pd_hess           <- isTRUE(model$sdr$pdHess)
+  warnings_captured <- summarise_fit_warnings(warnings_captured)
+  converged         <- (conv_code == 0L) && pd_hess &&
+    !length(warnings_captured)
 
   if (!converged) {
     msg_parts <- character(0L)
