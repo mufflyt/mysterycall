@@ -176,10 +176,18 @@ vcov.mysterycall_logistic_model <- function(object, ...) {
 
 #' Wald Confidence Intervals for a mysterycall Model
 #'
-#' Intervals are **Wald** intervals on the link scale,
-#' \eqn{\hat\beta \pm z_{1-\alpha/2} \cdot \mathrm{SE}(\hat\beta)}, computed
-#' from [vcov()]. They are the same intervals the package reports in
-#' `object$irr_table` (which exponentiates them), so the two never disagree.
+#' Intervals are **Wald** intervals on the link scale, computed from
+#' [vcov()]. They use the same critical-value convention the fitter itself
+#' used, so they agree with the interval the object already reports:
+#' a normal quantile for the count and logistic models, and the
+#' Satterthwaite \eqn{t} quantile with the per-term degrees of freedom for
+#' `mysterycall_lmm`, where a normal quantile would be anticonservative at
+#' small residual df.
+#'
+#' `level` defaults to the `conf_level` the model was **fitted** with, not to
+#' `0.95`. A model fitted at 90% therefore reports a 90% interval here, which
+#' is what `object$irr_table` (or `$coef_table` / `$or_table`) contains.
+#' Passing `level` explicitly recomputes the interval at that level.
 #'
 #' These are not profile-likelihood or bootstrap intervals. For a
 #' profile-likelihood interval on a mixed model, call
@@ -188,33 +196,34 @@ vcov.mysterycall_logistic_model <- function(object, ...) {
 #'
 #' @param object A mysterycall fitted-model object.
 #' @param parm Optional character or numeric selection of parameters.
-#' @param level Numeric scalar. Confidence level, default `0.95`.
+#' @param level Numeric scalar confidence level. Defaults to the level the
+#'   model was fitted with.
 #' @param ... Ignored, present for generic compatibility.
 #'
 #' @return Numeric matrix with two columns of link-scale interval bounds.
 #' @rdname confint.mysterycall
 #' @family model-accessors
 #' @export
-confint.mysterycall_poisson_model <- function(object, parm, level = 0.95,
+confint.mysterycall_poisson_model <- function(object, parm, level = NULL,
                                               ...) {
   .mc_wald_confint(object, parm, level, "confint")
 }
 
 #' @rdname confint.mysterycall
 #' @export
-confint.mysterycall_nb_model <- function(object, parm, level = 0.95, ...) {
+confint.mysterycall_nb_model <- function(object, parm, level = NULL, ...) {
   .mc_wald_confint(object, parm, level, "confint")
 }
 
 #' @rdname confint.mysterycall
 #' @export
-confint.mysterycall_lmm <- function(object, parm, level = 0.95, ...) {
+confint.mysterycall_lmm <- function(object, parm, level = NULL, ...) {
   .mc_wald_confint(object, parm, level, "confint")
 }
 
 #' @rdname confint.mysterycall
 #' @export
-confint.mysterycall_logistic_model <- function(object, parm, level = 0.95,
+confint.mysterycall_logistic_model <- function(object, parm, level = NULL,
                                                ...) {
   .mc_wald_confint(object, parm, level, "confint")
 }
@@ -231,6 +240,12 @@ confint.mysterycall_logistic_model <- function(object, parm, level = 0.95,
 #' @family model-accessors
 #' @keywords internal
 .mc_wald_confint <- function(object, parm, level, call_name) {
+  if (is.null(level)) {
+    level <- object[["conf_level"]]
+    if (is.null(level)) {
+      level <- 0.95
+    }
+  }
   if (!is.numeric(level) || length(level) != 1L ||
       level <= 0 || level >= 1) {
     stop("`level` must be a single number strictly between 0 and 1.",
@@ -240,9 +255,17 @@ confint.mysterycall_logistic_model <- function(object, parm, level = 0.95,
   fit <- .mc_engine_fit(object, call_name)
   est <- .mc_fixed_effects(fit)
   se  <- sqrt(diag(.mc_fixed_vcov(fit)))
-  z   <- stats::qnorm(1 - (1 - level) / 2)
 
-  out <- cbind(est - z * se, est + z * se)
+  # Match the fitter's own critical value, so the interval here cannot
+  # disagree with the one the object already reports.
+  df   <- .mc_fixed_effect_df(object, names(est))
+  crit <- if (is.null(df)) {
+    stats::qnorm(1 - (1 - level) / 2)
+  } else {
+    stats::qt(1 - (1 - level) / 2, df = df)
+  }
+
+  out <- cbind(est - crit * se, est + crit * se)
   dimnames(out) <- list(
     names(est),
     sprintf("%g %%", c((1 - level) / 2, 1 - (1 - level) / 2) * 100)
@@ -269,6 +292,7 @@ confint.mysterycall_logistic_model <- function(object, parm, level = 0.95,
 #' @return Integer scalar count of fitted observations.
 #' @rdname nobs.mysterycall
 #' @family model-accessors
+#' @importFrom stats nobs
 #' @export
 nobs.mysterycall_poisson_model <- function(object, ...) {
   stats::nobs(.mc_engine_fit(object, "nobs"))
@@ -489,11 +513,14 @@ summary.mysterycall_logistic_model <- function(object, ...) {
       n_dropped      = object[["n_dropped"]],
       n_clusters     = object[["n_clusters"]],
       nobs_engine    = stats::nobs(fit),
-      coefficients   = object[["irr_table"]],
+      coefficients   = .mc_coefficient_table(object),
       overdispersion = object[["overdispersion"]],
       dispersion     = object[["dispersion_details"]],
       convergence    = object[["convergence"]],
+      # NULL, not 0: a class that does not record fit warnings separately
+      # must not be reported as having had none.
       fit_warnings   = object[["fit_warnings"]],
+      has_fit_warnings = !is.null(object[["fit_warnings"]]),
       aic            = object[["aic"]],
       bic            = object[["bic"]]
     ),
@@ -541,10 +568,19 @@ print.mysterycall_model_summary <- function(x, ...) {
 
   conv <- x$convergence
   if (!is.null(conv)) {
+    warn_txt <- if (isTRUE(x$has_fit_warnings)) {
+      as.character(length(x$fit_warnings))
+    } else {
+      "not recorded separately"
+    }
+    singular_txt <- if (is.null(conv$singular)) {
+      "not reported"
+    } else {
+      as.character(isTRUE(conv$singular))
+    }
     cat(sprintf(
-      "Optimizer converged: %s   Singular: %s   Fit warnings: %d\n",
-      isTRUE(conv$converged), isTRUE(conv$singular),
-      length(x$fit_warnings)
+      "Optimizer converged: %s   Singular: %s   Fit warnings: %s\n",
+      isTRUE(conv$converged), singular_txt, warn_txt
     ))
   }
 
@@ -618,4 +654,83 @@ print.mysterycall_model_summary <- function(x, ...) {
       "under-dispersion; values below 1 indicate underdispersion."
     )
   )
+}
+
+
+#' Refuse Arguments That Would Change the Fitted Cohort
+#'
+#' `subset` and `na.action` make the engine fit a different set of rows than
+#' the complete-case cohort the fitter assembled and reports. The cohort
+#' assertion would then fire with a message about undefined values, which
+#' misdiagnoses the cause. Refuse them by name instead, and say what to do.
+#'
+#' @param dots A list of the `...` arguments the fitter received.
+#' @param fn_name Character scalar naming the calling function.
+#'
+#' @return `invisible(TRUE)`. Called for the error side effect.
+#' @family model-accessors
+#' @keywords internal
+.mc_reject_cohort_altering_args <- function(dots, fn_name) {
+  blocked <- intersect(names(dots), c("subset", "na.action"))
+  if (!length(blocked)) {
+    return(invisible(TRUE))
+  }
+
+  stop(sprintf(
+    paste0("%s() does not accept `%s` through `...`: the engine would fit a ",
+           "different set of rows than the cohort this function reports as ",
+           "`n`. Filter `data` before calling instead, so the exclusion is ",
+           "visible and counted."),
+    fn_name, paste(blocked, collapse = "`, `")
+  ), call. = FALSE)
+}
+
+
+#' Per-Term Denominator Degrees of Freedom, When the Fitter Uses Them
+#'
+#' `mysterycall_lmm()` reports Satterthwaite \eqn{t} intervals with a
+#' per-term `df` column. Every other fitted class uses a normal quantile, so
+#' this returns `NULL` for them and the caller falls back to `qnorm()`.
+#'
+#' @param object A mysterycall fitted-model object.
+#' @param terms Character vector of fixed-effect names, in matrix order.
+#'
+#' @return Numeric vector of degrees of freedom aligned to `terms`, or
+#'   `NULL` when the class does not use a \eqn{t} reference distribution.
+#' @family model-accessors
+#' @keywords internal
+.mc_fixed_effect_df <- function(object, terms) {
+  tbl <- object[["coef_table"]]
+  if (is.null(tbl) || is.null(tbl[["df"]]) || is.null(tbl[["term"]])) {
+    return(NULL)
+  }
+  df <- tbl[["df"]][match(terms, tbl[["term"]])]
+  if (anyNA(df)) {
+    return(NULL)
+  }
+  as.numeric(df)
+}
+
+
+#' Resolve the Coefficient Table of a mysterycall Model Object
+#'
+#' The fitted classes do not share one name for it: the count models store
+#' `irr_table`, `mysterycall_lmm` stores `coef_table` and
+#' `mysterycall_logistic_model` stores `or_table`. Reading only `irr_table`
+#' makes a summary silently omit the coefficients for two of the four
+#' classes.
+#'
+#' @param object A mysterycall fitted-model object.
+#'
+#' @return The coefficient table, or `NULL` when the object has none.
+#' @family model-accessors
+#' @keywords internal
+.mc_coefficient_table <- function(object) {
+  for (nm in c("irr_table", "coef_table", "or_table")) {
+    tbl <- object[[nm]]
+    if (!is.null(tbl)) {
+      return(tbl)
+    }
+  }
+  NULL
 }

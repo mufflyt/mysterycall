@@ -35,13 +35,16 @@ rate ratios reported in \code{object$irr_table$irr}.
 }
 \seealso{
 Other model-accessors:
+\code{\link[=.mc_coefficient_table]{.mc_coefficient_table()}},
 \code{\link[=.mc_dispersion_details]{.mc_dispersion_details()}},
 \code{\link[=.mc_engine_fit]{.mc_engine_fit()}},
 \code{\link[=.mc_fitted_model_classes]{.mc_fitted_model_classes()}},
+\code{\link[=.mc_fixed_effect_df]{.mc_fixed_effect_df()}},
 \code{\link[=.mc_fixed_effects]{.mc_fixed_effects()}},
 \code{\link[=.mc_fixed_vcov]{.mc_fixed_vcov()}},
 \code{\link[=.mc_model_formula]{.mc_model_formula()}},
 \code{\link[=.mc_model_summary]{.mc_model_summary()}},
+\code{\link[=.mc_reject_cohort_altering_args]{.mc_reject_cohort_altering_args()}},
 \code{\link[=.mc_wald_confint]{.mc_wald_confint()}},
 \code{\link[=confint.mysterycall_poisson_model]{confint.mysterycall_poisson_model()}},
 \code{\link[=fitted.mysterycall_poisson_model]{fitted.mysterycall_poisson_model()}},

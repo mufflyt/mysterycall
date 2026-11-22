@@ -109,7 +109,32 @@ test_that("summarise_fit_warnings dedupes and caps the message flood", {
   many <- sprintf("non-integer x = %f", seq_len(120))
   out <- summarise_fit_warnings(many, max_shown = 10L)
   expect_length(out, 11L)
-  expect_match(out[[11L]], "110 further distinct warning\\(s\\)")
+  expect_match(out[[11L]], "110 further distinct non-convergence warning")
+})
+
+test_that("a convergence warning is never discarded by the cap", {
+  # The failure this guards: one data problem emits a warning per
+  # observation, and the single warning that matters -- glmmTMB's
+  # "extreme or very small eigenvalues detected", the only signal for a
+  # numerically singular covariance when the optimizer code is 0 -- arrives
+  # last and was dropped, leaving the object claiming the fit converged.
+  flood <- sprintf("non-integer x = %f", seq_len(120) + 0.5)
+  conv <- "Model convergence problem; extreme or very small eigenvalues"
+
+  out <- summarise_fit_warnings(c(flood, conv), max_shown = 10L)
+
+  expect_true(any(grepl("eigenvalue", out, fixed = TRUE)))
+  # Convergence messages come first, so a reader sees them.
+  expect_match(out[[1L]], "eigenvalue")
+})
+
+test_that("the convergence pattern excludes singularity by design", {
+  pat <- .mc_conv_warning_pattern()
+  expect_false(grepl(pat, "boundary (singular) fit", ignore.case = TRUE))
+  expect_true(grepl(pat, "failed to converge", ignore.case = TRUE))
+  expect_true(grepl(pat, "non-positive-definite Hessian", ignore.case = TRUE))
+  expect_true(grepl(pat, "extreme or very small eigenvalues",
+                    ignore.case = TRUE))
 })
 
 # -- The cohort defect, end to end -------------------------------------------
@@ -164,7 +189,7 @@ test_that("missing exposure is dropped by the documented route and counted", {
 
 # -- Non-integer outcome ------------------------------------------------------
 
-test_that("a non-integer count outcome warns once, naming the column", {
+test_that("a non-integer count outcome warns, naming the column", {
   skip_if_not_installed("lme4")
   d <- make_calls()
   d$wait <- d$wait + 0.5
@@ -328,6 +353,13 @@ test_that("a character predictor and its factor give the same fit", {
 # reports a cohort size a reader would quote, not only the two count models:
 # mysterycall_lmm(), mysterycall_logistic_model() and mysterycall_gee() all
 # return an `n` and all delegate to an engine that applies its own na.action.
+#
+# Scope note: these assertions exercise the invariant's satisfied path. No
+# public input to these three fitters can now make an engine drop a row --
+# cohort-altering arguments are refused by name and the offset is validated
+# -- so removing the three call sites would not make these tests fail. The
+# helper's detecting behaviour is covered directly by the two
+# assert_model_cohort() unit tests above, which a mutation does break.
 
 test_that("mysterycall_lmm reports the cohort the engine fitted", {
   skip_if_not_installed("lme4")

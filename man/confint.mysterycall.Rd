@@ -7,20 +7,21 @@
 \alias{confint.mysterycall_logistic_model}
 \title{Wald Confidence Intervals for a mysterycall Model}
 \usage{
-\method{confint}{mysterycall_poisson_model}(object, parm, level = 0.95, ...)
+\method{confint}{mysterycall_poisson_model}(object, parm, level = NULL, ...)
 
-\method{confint}{mysterycall_nb_model}(object, parm, level = 0.95, ...)
+\method{confint}{mysterycall_nb_model}(object, parm, level = NULL, ...)
 
-\method{confint}{mysterycall_lmm}(object, parm, level = 0.95, ...)
+\method{confint}{mysterycall_lmm}(object, parm, level = NULL, ...)
 
-\method{confint}{mysterycall_logistic_model}(object, parm, level = 0.95, ...)
+\method{confint}{mysterycall_logistic_model}(object, parm, level = NULL, ...)
 }
 \arguments{
 \item{object}{A mysterycall fitted-model object.}
 
 \item{parm}{Optional character or numeric selection of parameters.}
 
-\item{level}{Numeric scalar. Confidence level, default \code{0.95}.}
+\item{level}{Numeric scalar confidence level. Defaults to the level the
+model was fitted with.}
 
 \item{...}{Ignored, present for generic compatibility.}
 }
@@ -28,12 +29,20 @@
 Numeric matrix with two columns of link-scale interval bounds.
 }
 \description{
-Intervals are \strong{Wald} intervals on the link scale,
-\eqn{\hat\beta \pm z_{1-\alpha/2} \cdot \mathrm{SE}(\hat\beta)}, computed
-from \code{\link[=vcov]{vcov()}}. They are the same intervals the package reports in
-\code{object$irr_table} (which exponentiates them), so the two never disagree.
+Intervals are \strong{Wald} intervals on the link scale, computed from
+\code{\link[=vcov]{vcov()}}. They use the same critical-value convention the fitter itself
+used, so they agree with the interval the object already reports:
+a normal quantile for the count and logistic models, and the
+Satterthwaite \eqn{t} quantile with the per-term degrees of freedom for
+\code{mysterycall_lmm}, where a normal quantile would be anticonservative at
+small residual df.
 }
 \details{
+\code{level} defaults to the \code{conf_level} the model was \strong{fitted} with, not to
+\code{0.95}. A model fitted at 90\% therefore reports a 90\% interval here, which
+is what \code{object$irr_table} (or \verb{$coef_table} / \verb{$or_table}) contains.
+Passing \code{level} explicitly recomputes the interval at that level.
+
 These are not profile-likelihood or bootstrap intervals. For a
 profile-likelihood interval on a mixed model, call
 \code{stats::confint(object$model, method = "profile")} directly and expect it
@@ -41,13 +50,16 @@ to be considerably slower.
 }
 \seealso{
 Other model-accessors:
+\code{\link[=.mc_coefficient_table]{.mc_coefficient_table()}},
 \code{\link[=.mc_dispersion_details]{.mc_dispersion_details()}},
 \code{\link[=.mc_engine_fit]{.mc_engine_fit()}},
 \code{\link[=.mc_fitted_model_classes]{.mc_fitted_model_classes()}},
+\code{\link[=.mc_fixed_effect_df]{.mc_fixed_effect_df()}},
 \code{\link[=.mc_fixed_effects]{.mc_fixed_effects()}},
 \code{\link[=.mc_fixed_vcov]{.mc_fixed_vcov()}},
 \code{\link[=.mc_model_formula]{.mc_model_formula()}},
 \code{\link[=.mc_model_summary]{.mc_model_summary()}},
+\code{\link[=.mc_reject_cohort_altering_args]{.mc_reject_cohort_altering_args()}},
 \code{\link[=.mc_wald_confint]{.mc_wald_confint()}},
 \code{\link[=coef.mysterycall_poisson_model]{coef.mysterycall_poisson_model()}},
 \code{\link[=fitted.mysterycall_poisson_model]{fitted.mysterycall_poisson_model()}},

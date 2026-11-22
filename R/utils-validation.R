@@ -266,14 +266,24 @@ validate_coordinates <- function(lat,
 #' choosing such a constant is a study-specific decision that belongs to the
 #' analyst, not to this function.
 #'
-#' @param x Numeric vector of exposures, after complete-case filtering.
+#' `NA` exposures are permitted: they are a declared exclusion that the
+#' caller's complete-case filter removes and reports. The positivity check is
+#' therefore applied to the complete-case cohort, so that a row excluded for
+#' an unrelated reason cannot abort an otherwise valid analysis. The `NaN`
+#' check is separate and runs on the supplied column, because
+#' `complete.cases()` cannot tell `NaN` from `NA`.
+#'
+#' @param x Numeric vector of exposures.
 #' @param name Character scalar naming the column for error messages.
+#' @param check_positive Logical flag. When `FALSE`, only the `NaN` check
+#'   runs, for use on the supplied column before complete-case filtering.
 #'
 #' @return `invisible(TRUE)`. Called for the error side effect.
 #' @family validation
 #' @keywords internal
-validate_log_offset <- function(x, name) {
+validate_log_offset <- function(x, name, check_positive = TRUE) {
   checkmate::assert_string(name, min.chars = 1, .var.name = "name")
+  checkmate::assert_flag(check_positive, .var.name = "check_positive")
 
   if (!is.numeric(x)) {
     stop(sprintf(
@@ -293,6 +303,10 @@ validate_log_offset <- function(x, name) {
              "or set those rows to NA to exclude them explicitly."),
       name, n_nan
     ), call. = FALSE)
+  }
+
+  if (!check_positive) {
+    return(invisible(TRUE))
   }
 
   bad <- !is.na(x) & (!is.finite(x) | x <= 0)
@@ -332,9 +346,16 @@ validate_log_offset <- function(x, name) {
 assert_model_cohort <- function(model, n_expected, fn_name) {
   checkmate::assert_string(fn_name, min.chars = 1, .var.name = "fn_name")
 
+  # Row count, not nobs(): the two differ by engine. stats::nobs.glm() counts
+  # observations with non-zero prior weights and glmmTMB counts non-missing
+  # responses, so a legitimately zero-weighted row would look like a dropped
+  # one. The model frame is the cohort the engine actually assembled.
   n_used <- tryCatch(
-    as.integer(stats::nobs(model)),
-    error = function(e) NA_integer_
+    as.integer(nrow(stats::model.frame(model))),
+    error = function(e) tryCatch(
+      as.integer(stats::nobs(model)),
+      error = function(e2) NA_integer_
+    )
   )
 
   if (is.na(n_used) || n_used == as.integer(n_expected)) {
@@ -361,10 +382,21 @@ assert_model_cohort <- function(model, n_expected, fn_name) {
 #' diagnostic unreadable and the object large, so keep the distinct warnings
 #' and count the rest.
 #'
-#' @param x Character vector of captured warning messages.
-#' @param max_shown Integer scalar. Distinct messages to retain.
+#' Convergence-related warnings are **never** discarded by the cap. A single
+#' data problem can emit hundreds of per-observation warnings, and if the cap
+#' were applied in arrival order the one warning that matters -- glmmTMB's
+#' "extreme or very small eigenvalues detected", which is the only signal for
+#' a numerically singular covariance when the optimizer code is 0 and the
+#' Hessian is nominally positive-definite -- could be dropped, leaving the
+#' object claiming the fit converged.
 #'
-#' @return Character vector of at most `max_shown + 1` messages.
+#' @param x Character vector of captured warning messages.
+#' @param max_shown Integer scalar. Distinct non-convergence messages to
+#'   retain. Convergence-related messages are retained regardless.
+#'
+#' @return Character vector: every distinct convergence-related message,
+#'   then up to `max_shown` other distinct messages, then a count of any
+#'   remainder.
 #' @family validation
 #' @keywords internal
 summarise_fit_warnings <- function(x, max_shown = 10L) {
@@ -375,16 +407,40 @@ summarise_fit_warnings <- function(x, max_shown = 10L) {
   checkmate::assert_int(max_shown, lower = 1L, .var.name = "max_shown")
 
   distinct <- unique(x)
-  if (length(distinct) <= max_shown) {
-    return(distinct)
+  is_conv  <- grepl(.mc_conv_warning_pattern(), distinct, ignore.case = TRUE)
+  conv     <- distinct[is_conv]
+  other    <- distinct[!is_conv]
+
+  if (length(other) <= max_shown) {
+    return(c(conv, other))
   }
 
   c(
-    distinct[seq_len(max_shown)],
+    conv,
+    other[seq_len(max_shown)],
     sprintf(
-      "... and %d further distinct warning(s) of the same kind.",
-      length(distinct) - max_shown
+      "... and %d further distinct non-convergence warning(s).",
+      length(other) - max_shown
     )
+  )
+}
+
+
+#' Pattern Matching Convergence-Related Diagnostic Text
+#'
+#' Used to tell an optimizer or numerical problem apart from a warning about
+#' something else, such as a non-integer outcome. Singularity is deliberately
+#' **not** in this pattern: a boundary-singular random-effect variance is a
+#' property of the data, reported separately in `$convergence$singular`, and
+#' a singular fit whose optimizer returned code 0 has converged.
+#'
+#' @return Character scalar regular expression.
+#' @family validation
+#' @keywords internal
+.mc_conv_warning_pattern <- function() {
+  paste0(
+    "converge|convergence|hessian|gradient|eigenvalue|",
+    "failed to|not positive|pdHess"
   )
 }
 

@@ -51,8 +51,9 @@ test_that("mysterycall_poisson_model fits basic model with valid inputs", {
   # unrelated fitting warnings.
   expect_named(result, c(
     "model", "irr_table", "random_effects", "factor_refs",
-    "formula", "n", "n_dropped", "n_clusters", "overdispersion",
-    "dispersion_details", "fit_warnings", "convergence", "aic", "bic"
+    "formula", "conf_level", "n", "n_dropped", "n_clusters",
+    "overdispersion", "dispersion_details", "fit_warnings",
+    "convergence", "aic", "bic"
   ))
   expect_s4_class(result$model, "glmerMod")
   expect_true(is.data.frame(result$irr_table))

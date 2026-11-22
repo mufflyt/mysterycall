@@ -43,6 +43,7 @@ Other validation:
 \code{\link{.audit_volatile_fields}},
 \code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
 \code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=.mc_conv_warning_pattern]{.mc_conv_warning_pattern()}},
 \code{\link[=assert_model_cohort]{assert_model_cohort()}},
 \code{\link[=summarise_fit_warnings]{summarise_fit_warnings()}},
 \code{\link[=validate_coordinates]{validate_coordinates()}},

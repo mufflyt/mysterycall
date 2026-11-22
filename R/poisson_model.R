@@ -159,11 +159,18 @@ mysterycall_poisson_model <- function(data,
     if (!is.numeric(data[[offset_col]])) {
       stop(sprintf("`%s` (offset_col) must be numeric.", offset_col), call. = FALSE)
     }
-    # Checked on the supplied column, before complete-case filtering: NaN is
-    # indistinguishable from NA to complete.cases(), so an invalid exposure
-    # would otherwise be swept into the missing-data count.
-    validate_log_offset(data[[offset_col]], offset_col)
+    # NaN is checked on the supplied column, because complete.cases() cannot
+    # tell it from NA and an invalid exposure would otherwise be swept into
+    # the missing-data count. Positivity is checked on the cohort below, so
+    # that a row excluded for an unrelated reason cannot abort the analysis.
+    validate_log_offset(data[[offset_col]], offset_col,
+                        check_positive = FALSE)
   }
+
+  # `subset` and `na.action` would let the engine fit a different cohort than
+  # the one reported, which assert_model_cohort() then refuses. Refuse them
+  # by name instead, with a message that says what to do.
+  .mc_reject_cohort_altering_args(list(...), "mysterycall_poisson_model")
 
   # Decompose any interaction/formula terms to actual column names for complete-case filtering
   decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
@@ -218,6 +225,10 @@ mysterycall_poisson_model <- function(data,
       "Low events-per-variable ratio: %d observations / %d model parameters = %.1f obs/param. Convention recommends >=10 per parameter. Consider removing low-priority predictors.",
       nrow(data_cc), est_df, epv
     ), call. = FALSE)
+  }
+
+  if (!is.null(offset_col)) {
+    validate_log_offset(data_cc[[offset_col]], offset_col)
   }
 
   # -- Reference levels for factor/character predictors -------------------------
@@ -278,16 +289,21 @@ mysterycall_poisson_model <- function(data,
   # failure, and previously any warning at all set this flag to FALSE.
   # Singularity is reported separately in `$singular`, and every captured
   # warning is kept in `$fit_warnings`.
+  # lme4 writes "boundary (singular) fit" into this same slot, so the
+  # messages are filtered on the convergence pattern rather than merely
+  # tested for emptiness: a singular fit whose optimizer returned code 0 has
+  # converged, and singularity is reported in `$singular` instead.
   conv_msgs    <- model@optinfo$conv$lme4$messages
   fit_warnings <- summarise_fit_warnings(warnings_captured)
-  conv_pattern <- "converge|hessian|gradient|eigenvalue|singular"
+  conv_pattern <- .mc_conv_warning_pattern()
   conv_warn    <- grepl(conv_pattern, fit_warnings, ignore.case = TRUE)
+  conv_msg_bad <- grepl(conv_pattern, conv_msgs, ignore.case = TRUE)
 
   is_singular <- lme4::isSingular(model)
-  converged   <- is.null(conv_msgs) && !any(conv_warn)
+  converged   <- !any(conv_msg_bad) && !any(conv_warn)
 
   if (!converged) {
-    all_msgs <- c(conv_msgs, fit_warnings[conv_warn])
+    all_msgs <- c(conv_msgs[conv_msg_bad], fit_warnings[conv_warn])
     message(sprintf(
       "Convergence issues detected:\n  %s\nConsider simplifying predictors or using nAGQ = 1.",
       paste(all_msgs, collapse = "\n  ")
@@ -366,6 +382,7 @@ mysterycall_poisson_model <- function(data,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
+      conf_level     = conf_level,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,

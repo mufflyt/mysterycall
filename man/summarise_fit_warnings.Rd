@@ -9,10 +9,13 @@ summarise_fit_warnings(x, max_shown = 10L)
 \arguments{
 \item{x}{Character vector of captured warning messages.}
 
-\item{max_shown}{Integer scalar. Distinct messages to retain.}
+\item{max_shown}{Integer scalar. Distinct non-convergence messages to
+retain. Convergence-related messages are retained regardless.}
 }
 \value{
-Character vector of at most \code{max_shown + 1} messages.
+Character vector: every distinct convergence-related message,
+then up to \code{max_shown} other distinct messages, then a count of any
+remainder.
 }
 \description{
 A single data problem can make a fitting engine emit one warning per
@@ -21,11 +24,21 @@ warning per row. Storing every one of them on the result object makes the
 diagnostic unreadable and the object large, so keep the distinct warnings
 and count the rest.
 }
+\details{
+Convergence-related warnings are \strong{never} discarded by the cap. A single
+data problem can emit hundreds of per-observation warnings, and if the cap
+were applied in arrival order the one warning that matters -- glmmTMB's
+"extreme or very small eigenvalues detected", which is the only signal for
+a numerically singular covariance when the optimizer code is 0 and the
+Hessian is nominally positive-definite -- could be dropped, leaving the
+object claiming the fit converged.
+}
 \seealso{
 Other validation:
 \code{\link{.audit_volatile_fields}},
 \code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
 \code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=.mc_conv_warning_pattern]{.mc_conv_warning_pattern()}},
 \code{\link[=assert_model_cohort]{assert_model_cohort()}},
 \code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},

@@ -210,6 +210,7 @@ mysterycall_logistic_model <- function(data,
 
   # The engine applies its own na.action, so confirm it used the cohort we
   # filtered rather than silently estimating on fewer rows.
+  .mc_reject_cohort_altering_args(list(...), "mysterycall_logistic_model")
   assert_model_cohort(model, nrow(data_cc), "mysterycall_logistic_model")
 
   # -- Convergence / singularity ------------------------------------------------
@@ -263,6 +264,7 @@ mysterycall_logistic_model <- function(data,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
+      conf_level     = conf_level,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,

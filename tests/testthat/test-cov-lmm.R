@@ -43,7 +43,8 @@ test_that("mysterycall_lmm fits a basic model with valid inputs", {
   expect_s3_class(fit, "mysterycall_lmm")
   expect_named(fit, c("model", "coef_table", "gmr_table", "log_transformed",
                       "outcome_original", "outcome_used", "random_effects",
-                      "factor_refs", "formula", "n", "n_dropped", "n_clusters",
+                      "factor_refs", "formula", "conf_level", "n",
+                      "n_dropped", "n_clusters",
                       "sigma", "r_squared", "normality", "convergence",
                       "aic", "bic", "REML", "sensitivity", "sensitivity_note"))
   expect_true(inherits(fit$model, "lmerMod"))

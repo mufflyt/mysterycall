@@ -4,12 +4,15 @@
 \alias{validate_log_offset}
 \title{Validate an Exposure Column Used as a Log Offset}
 \usage{
-validate_log_offset(x, name)
+validate_log_offset(x, name, check_positive = TRUE)
 }
 \arguments{
-\item{x}{Numeric vector of exposures, after complete-case filtering.}
+\item{x}{Numeric vector of exposures.}
 
 \item{name}{Character scalar naming the column for error messages.}
+
+\item{check_positive}{Logical flag. When \code{FALSE}, only the \code{NaN} check
+runs, for use on the supplied column before complete-case filtering.}
 }
 \value{
 \code{invisible(TRUE)}. Called for the error side effect.
@@ -25,12 +28,20 @@ about. This check refuses the input instead.
 The offending values are never replaced with a small positive constant;
 choosing such a constant is a study-specific decision that belongs to the
 analyst, not to this function.
+
+\code{NA} exposures are permitted: they are a declared exclusion that the
+caller's complete-case filter removes and reports. The positivity check is
+therefore applied to the complete-case cohort, so that a row excluded for
+an unrelated reason cannot abort an otherwise valid analysis. The \code{NaN}
+check is separate and runs on the supplied column, because
+\code{complete.cases()} cannot tell \code{NaN} from \code{NA}.
 }
 \seealso{
 Other validation:
 \code{\link{.audit_volatile_fields}},
 \code{\link[=.load_nanp_lookup]{.load_nanp_lookup()}},
 \code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=.mc_conv_warning_pattern]{.mc_conv_warning_pattern()}},
 \code{\link[=assert_model_cohort]{assert_model_cohort()}},
 \code{\link[=summarise_fit_warnings]{summarise_fit_warnings()}},
 \code{\link[=validate_coordinates]{validate_coordinates()}},

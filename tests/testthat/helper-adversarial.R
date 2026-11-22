@@ -25,8 +25,13 @@ mc_adv_calls <- function(seed = 6291L) {
   )
   log_mean <- base::log(12) + 0.24 * (insurance == "Medicaid") +
     cluster_effect
+  # rnbinom, not rpois: with Poisson counts and unit exposure the negative
+  # binomial dispersion is unidentifiable, glmmTMB returns optimizer code 1
+  # with a non-positive-definite Hessian, and every nb assertion in this
+  # suite would be validated against standard errors from that broken fit.
+  # size = 4 gives mild, identifiable overdispersion.
   base::data.frame(
-    wait_days = stats::rpois(n, lambda = base::exp(log_mean)),
+    wait_days = stats::rnbinom(n, mu = base::exp(log_mean), size = 4),
     insurance = insurance,
     physician = physician,
     exposure = base::rep(1, n),

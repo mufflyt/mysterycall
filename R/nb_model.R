@@ -143,11 +143,14 @@ mysterycall_nb_model <- function(data,
     if (!is.numeric(data[[offset_col]])) {
       stop(sprintf("`%s` (offset_col) must be numeric.", offset_col), call. = FALSE)
     }
-    # Checked on the supplied column, before complete-case filtering: NaN is
-    # indistinguishable from NA to complete.cases(), so an invalid exposure
-    # would otherwise be swept into the missing-data count.
-    validate_log_offset(data[[offset_col]], offset_col)
+    # NaN is checked on the supplied column, because complete.cases() cannot
+    # tell it from NA and an invalid exposure would otherwise be swept into
+    # the missing-data count. Positivity is checked on the cohort below.
+    validate_log_offset(data[[offset_col]], offset_col,
+                        check_positive = FALSE)
   }
+
+  .mc_reject_cohort_altering_args(list(...), "mysterycall_nb_model")
 
   # Decompose any interaction/formula terms to actual column names for complete-case filtering
   decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
@@ -171,6 +174,10 @@ mysterycall_nb_model <- function(data,
   }
   if (!nrow(data_cc)) {
     stop("No complete cases remain after removing rows with missing values.", call. = FALSE)
+  }
+
+  if (!is.null(offset_col)) {
+    validate_log_offset(data_cc[[offset_col]], offset_col)
   }
 
   # -- Degrees-of-freedom check ------------------------------------------------
@@ -247,17 +254,25 @@ mysterycall_nb_model <- function(data,
   # `converged` reports the optimizer and the Hessian only. Warnings about
   # anything else -- a non-integer outcome, say -- are data problems, not
   # optimizer failures, and are kept separately in `$fit_warnings`.
+  # isTRUE() guards a NULL convergence code: glmmTMB leaves it NULL for some
+  # optimizers reachable through `...`, and `NULL == 0L` is logical(0), which
+  # would make `converged` NA and the branch below error.
   conv_code    <- model$fit$convergence
   pd_hess      <- isTRUE(model$sdr$pdHess)
   fit_warnings <- summarise_fit_warnings(warnings_captured)
-  conv_pattern <- "converge|hessian|gradient|eigenvalue|singular"
+  conv_pattern <- .mc_conv_warning_pattern()
   conv_warn    <- grepl(conv_pattern, fit_warnings, ignore.case = TRUE)
 
-  converged <- (conv_code == 0L) && pd_hess && !any(conv_warn)
+  converged <- isTRUE(conv_code == 0L) && pd_hess && !any(conv_warn)
 
   if (!converged) {
     msg_parts <- character(0L)
-    if (conv_code != 0L)  msg_parts <- c(msg_parts, sprintf("optimizer code %d", conv_code))
+    if (!isTRUE(conv_code == 0L)) {
+      msg_parts <- c(msg_parts, sprintf(
+        "optimizer code %s",
+        if (length(conv_code)) as.character(conv_code) else "unreported"
+      ))
+    }
     if (!pd_hess)         msg_parts <- c(msg_parts, "non-positive-definite Hessian")
     if (any(conv_warn))   msg_parts <- c(msg_parts, fit_warnings[conv_warn])
     warning(sprintf(
@@ -350,6 +365,7 @@ mysterycall_nb_model <- function(data,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
+      conf_level     = conf_level,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,
@@ -357,7 +373,7 @@ mysterycall_nb_model <- function(data,
       convergence    = list(
         converged = converged,
         messages  = c(
-          if (conv_code != 0L) sprintf("optimizer code %d", conv_code),
+          if (!isTRUE(conv_code == 0L)) "optimizer did not report success",
           if (!pd_hess) "non-positive-definite Hessian",
           fit_warnings
         )

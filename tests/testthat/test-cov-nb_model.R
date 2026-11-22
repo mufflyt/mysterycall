@@ -46,7 +46,7 @@ test_that("mysterycall_nb_model fits valid data and returns correct structure", 
   expect_true(is.list(result))
   expect_named(result, c("model", "irr_table", "theta", "overdispersion",
                          "dispersion_details", "random_effects",
-                         "factor_refs", "formula", "n",
+                         "factor_refs", "formula", "conf_level", "n",
                          "n_dropped", "n_clusters", "fit_warnings",
                          "convergence", "aic", "bic"))
   expect_s3_class(result$irr_table, "data.frame")
