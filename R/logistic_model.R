@@ -208,6 +208,10 @@ mysterycall_logistic_model <- function(data,
     }
   )
 
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(model, nrow(data_cc), "mysterycall_logistic_model")
+
   # -- Convergence / singularity ------------------------------------------------
   conv_msgs   <- model@optinfo$conv$lme4$messages
   is_singular <- lme4::isSingular(model)

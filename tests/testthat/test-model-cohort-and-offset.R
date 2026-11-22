@@ -321,3 +321,63 @@ test_that("a character predictor and its factor give the same fit", {
   expect_equal(fit$factor_refs, fit_fac$factor_refs)
   expect_equal(fit$irr_table$estimate, fit_fac$irr_table$estimate)
 })
+
+# -- The cohort invariant on the other engine-backed fitters ------------------
+#
+# assert_model_cohort() is a mandatory invariant for every fitter that
+# reports a cohort size a reader would quote, not only the two count models:
+# mysterycall_lmm(), mysterycall_logistic_model() and mysterycall_gee() all
+# return an `n` and all delegate to an engine that applies its own na.action.
+
+test_that("mysterycall_lmm reports the cohort the engine fitted", {
+  skip_if_not_installed("lme4")
+  d <- make_calls()
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_lmm(
+    d, "wait", "insurance", "physician")))
+
+  expect_equal(fit$n, as.integer(stats::nobs(fit$model)))
+})
+
+test_that("mysterycall_lmm cohort invariant survives missing predictors", {
+  skip_if_not_installed("lme4")
+  d <- make_calls()
+  d$insurance[1:4] <- NA_character_
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_lmm(
+    d, "wait", "insurance", "physician")))
+
+  expect_equal(fit$n, as.integer(stats::nobs(fit$model)))
+  expect_equal(fit$n + fit$n_dropped, nrow(d))
+})
+
+test_that("mysterycall_logistic_model reports the fitted cohort", {
+  skip_if_not_installed("lme4")
+  d <- make_calls()
+  d$offered <- as.integer(d$wait < stats::median(d$wait))
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_logistic_model(
+    d, "offered", "insurance", "physician")))
+
+  expect_equal(fit$n, as.integer(stats::nobs(fit$model)))
+  expect_equal(fit$n + fit$n_dropped, nrow(d))
+})
+
+test_that("mysterycall_gee reports a cohort consistent with its fit", {
+  skip_if_not_installed("geepack")
+  d <- make_calls()
+  d$offered <- as.integer(d$wait < stats::median(d$wait))
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_gee(
+    d, outcome = "offered", predictors = "insurance",
+    cluster = "physician")))
+
+  # geepack may not implement nobs(); the invariant degrades to a no-op
+  # rather than failing, so assert only what is actually knowable here.
+  n_engine <- tryCatch(as.integer(stats::nobs(fit$model)),
+                       error = function(e) NA_integer_)
+  if (!is.na(n_engine)) {
+    expect_equal(fit$n, n_engine)
+  }
+  expect_true(fit$n > 0L)
+})

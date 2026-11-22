@@ -102,6 +102,10 @@ mysterycall_gee <- function(data, outcome, predictors, cluster,
     id = df[[cluster]], corstr = corstr
   )
 
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(fit, nrow(df), "mysterycall_gee")
+
   s    <- summary(fit)
   co   <- s$coefficients
   z    <- stats::qnorm(1 - (1 - conf_level) / 2)
