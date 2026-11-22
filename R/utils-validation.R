@@ -282,6 +282,19 @@ validate_log_offset <- function(x, name) {
     ), call. = FALSE)
   }
 
+  # NaN is reported separately from NA: an NA exposure is a known-missing
+  # row that the complete-case filter removes and counts, whereas NaN is the
+  # residue of an invalid computation and must not be quietly dropped.
+  n_nan <- sum(is.nan(x))
+  if (n_nan) {
+    stop(sprintf(
+      paste0("`%s` (offset_col) contains %d NaN value(s). NaN is not a ",
+             "missing exposure; correct the computation that produced it, ",
+             "or set those rows to NA to exclude them explicitly."),
+      name, n_nan
+    ), call. = FALSE)
+  }
+
   bad <- !is.na(x) & (!is.finite(x) | x <= 0)
   if (any(bad)) {
     idx <- utils::head(which(bad), 3L)
@@ -385,14 +398,27 @@ summarise_fit_warnings <- function(x, max_shown = 10L) {
 #' surfaces only as a flood of per-observation engine warnings that look
 #' like a convergence failure.
 #'
+#' Whether a fractional outcome is an error depends on what the outcome
+#' means, which only the analyst knows. A *count of days until an
+#' appointment* is integer-valued by construction, so a fractional value is a
+#' data error. *Elapsed time measured in days* can legitimately carry
+#' decimals, but then a count distribution is the wrong model for it and a
+#' continuous-time model should be considered instead. The default is
+#' therefore a warning, with `strict = TRUE` available to refuse the fit.
+#'
+#' Offending values are never rounded or truncated.
+#'
 #' @param x Numeric vector. The outcome values.
 #' @param name Character scalar naming the outcome column.
+#' @param strict Logical flag. When `TRUE`, a fractional value is an error
+#'   rather than a warning.
 #' @param tol Numeric scalar. Tolerance for the integer comparison.
 #'
-#' @return `invisible(TRUE)`. Called for the warning side effect.
+#' @return `invisible(TRUE)`. Called for the warning or error side effect.
 #' @family validation
 #' @keywords internal
-warn_non_integer_counts <- function(x, name, tol = 1e-8) {
+warn_non_integer_counts <- function(x, name, strict = FALSE, tol = 1e-8) {
+  checkmate::assert_flag(strict, .var.name = "strict")
   if (!is.numeric(x)) {
     return(invisible(TRUE))
   }
@@ -400,14 +426,73 @@ warn_non_integer_counts <- function(x, name, tol = 1e-8) {
   non_int <- !is.na(x) & is.finite(x) & abs(x - round(x)) > tol
   if (any(non_int)) {
     idx <- utils::head(which(non_int), 3L)
-    warning(sprintf(
-      paste0("`%s` is not integer-valued: %d of %d value(s) have a ",
-             "fractional part, including %s at row(s) %s. Count models ",
-             "expect whole counts; the fit will proceed on the ",
-             "quasi-likelihood but check the units of `%s`."),
-      name, sum(non_int), length(x),
+    detail <- sprintf(
+      "%d of %d value(s) have a fractional part, including %s at row(s) %s",
+      sum(non_int), length(x),
       paste(signif(x[idx], 7L), collapse = ", "),
-      paste(idx, collapse = ", "), name
+      paste(idx, collapse = ", ")
+    )
+
+    if (strict) {
+      stop(sprintf(
+        paste0("`%s` is not integer-valued and `strict_counts = TRUE`: %s. ",
+               "A count model requires whole counts. Values are never ",
+               "rounded: correct `%s`, or model it as continuous time ",
+               "instead of a count."),
+        name, detail, name
+      ), call. = FALSE)
+    }
+
+    warning(sprintf(
+      paste0("`%s` is not integer-valued: %s. Count models expect whole ",
+             "counts; the fit will proceed on the quasi-likelihood but ",
+             "check the units of `%s`. Values are not rounded. Pass ",
+             "`strict_counts = TRUE` to refuse fractional counts."),
+      name, detail, name
+    ), call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
+
+#' Reject Non-Finite Values in a Count Outcome
+#'
+#' `NA` is a declared missing outcome: the fitters remove those rows through
+#' the complete-case filter and report the count. `NaN`, `Inf` and `-Inf` are
+#' not declared missingness -- they are the residue of an invalid computation,
+#' and `is.na(NaN)` being `TRUE` means a `NaN` outcome would otherwise be
+#' swept into the missing-data count and silently excluded.
+#'
+#' @param x Numeric vector. The outcome values.
+#' @param name Character scalar naming the outcome column.
+#'
+#' @return `invisible(TRUE)`. Called for the error side effect.
+#' @family validation
+#' @keywords internal
+validate_outcome_finite <- function(x, name) {
+  checkmate::assert_string(name, min.chars = 1, .var.name = "name")
+  if (!is.numeric(x)) {
+    return(invisible(TRUE))
+  }
+
+  n_nan <- sum(is.nan(x))
+  if (n_nan) {
+    stop(sprintf(
+      paste0("`%s` contains %d NaN value(s). NaN is not a missing outcome: ",
+             "correct the computation that produced it, or set those rows ",
+             "to NA so the exclusion is reported."),
+      name, n_nan
+    ), call. = FALSE)
+  }
+
+  infinite <- !is.na(x) & !is.finite(x)
+  if (any(infinite)) {
+    idx <- utils::head(which(infinite), 3L)
+    stop(sprintf(
+      paste0("`%s` contains %d infinite value(s) at row(s) %s. A count ",
+             "outcome must be finite."),
+      name, sum(infinite), paste(idx, collapse = ", ")
     ), call. = FALSE)
   }
 

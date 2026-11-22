@@ -4,17 +4,20 @@
 \alias{warn_non_integer_counts}
 \title{Warn When a Count Outcome Is Not Integer-Valued}
 \usage{
-warn_non_integer_counts(x, name, tol = 1e-08)
+warn_non_integer_counts(x, name, strict = FALSE, tol = 1e-08)
 }
 \arguments{
 \item{x}{Numeric vector. The outcome values.}
 
 \item{name}{Character scalar naming the outcome column.}
 
+\item{strict}{Logical flag. When \code{TRUE}, a fractional value is an error
+rather than a warning.}
+
 \item{tol}{Numeric scalar. Tolerance for the integer comparison.}
 }
 \value{
-\code{invisible(TRUE)}. Called for the warning side effect.
+\code{invisible(TRUE)}. Called for the warning or error side effect.
 }
 \description{
 Poisson and negative binomial likelihoods are defined on non-negative
@@ -23,6 +26,17 @@ well defined -- but it is almost always a unit error (hours recorded as
 days, a mean carried forward from an aggregate), and left unchecked it
 surfaces only as a flood of per-observation engine warnings that look
 like a convergence failure.
+}
+\details{
+Whether a fractional outcome is an error depends on what the outcome
+means, which only the analyst knows. A \emph{count of days until an
+appointment} is integer-valued by construction, so a fractional value is a
+data error. \emph{Elapsed time measured in days} can legitimately carry
+decimals, but then a count distribution is the wrong model for it and a
+continuous-time model should be considered instead. The default is
+therefore a warning, with \code{strict = TRUE} available to refuse the fit.
+
+Offending values are never rounded or truncated.
 }
 \seealso{
 Other validation:
@@ -34,6 +48,7 @@ Other validation:
 \code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_log_offset]{validate_log_offset()}},
+\code{\link[=validate_outcome_finite]{validate_outcome_finite()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
 }

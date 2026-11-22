@@ -52,6 +52,7 @@ Other validation:
 \code{\link[=summarise_fit_warnings]{summarise_fit_warnings()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_log_offset]{validate_log_offset()}},
+\code{\link[=validate_outcome_finite]{validate_outcome_finite()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}},
 \code{\link[=warn_non_integer_counts]{warn_non_integer_counts()}}

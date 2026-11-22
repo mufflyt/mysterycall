@@ -29,6 +29,7 @@ Other validation:
 \code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
 \code{\link[=validate_log_offset]{validate_log_offset()}},
+\code{\link[=validate_outcome_finite]{validate_outcome_finite()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
 \code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}},
 \code{\link[=warn_non_integer_counts]{warn_non_integer_counts()}}

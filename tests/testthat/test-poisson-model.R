@@ -91,7 +91,8 @@ test_that("poisson_model: return list has all expected names", {
   ))
   expect_named(res, c("model", "irr_table", "random_effects", "factor_refs",
                        "formula", "n", "n_dropped", "n_clusters",
-                       "overdispersion", "convergence", "aic", "bic"),
+                       "overdispersion", "dispersion_details",
+                       "fit_warnings", "convergence", "aic", "bic"),
                ignore.order = TRUE)
 })
 

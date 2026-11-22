@@ -27,6 +27,12 @@ NULL
 #'   the random intercept (e.g. `"npi"` for physician). A `(1 | column)`
 #'   term is added to the formula automatically.
 #' @param conf_level Confidence level for Wald CIs. Default `0.95`.
+#' @param strict_counts Logical flag, default `FALSE`. When `TRUE`, a
+#'   fractional `outcome` is an error instead of a warning. A count of days
+#'   is integer-valued by construction, so a fractional value is usually a
+#'   data error; elapsed time measured in days may legitimately carry
+#'   decimals, in which case a count distribution is the wrong model for it.
+#'   Values are never rounded or truncated under either setting.
 #' @param offset_col Optional character scalar naming a numeric column to use
 #'   as a log-offset. When supplied, `offset(log(offset_col))` is appended to
 #'   the fixed-effects formula.
@@ -98,6 +104,7 @@ mysterycall_nb_model <- function(data,
                                  random_intercept,
                                  conf_level = 0.95,
                                  offset_col = NULL,
+                                 strict_counts = FALSE,
                                  ...) {
 
   if (!requireNamespace("glmmTMB", quietly = TRUE)) {
@@ -118,11 +125,12 @@ mysterycall_nb_model <- function(data,
   if (!is.numeric(data[[outcome]])) {
     stop(sprintf("`%s` must be numeric (count of days).", outcome), call. = FALSE)
   }
+  validate_outcome_finite(data[[outcome]], outcome)
   if (any(data[[outcome]] < 0, na.rm = TRUE)) {
     stop(sprintf("`%s` contains negative values; negative binomial requires counts >= 0.", outcome),
          call. = FALSE)
   }
-  warn_non_integer_counts(data[[outcome]], outcome)
+  warn_non_integer_counts(data[[outcome]], outcome, strict = strict_counts)
   if (!is.character(random_intercept) || length(random_intercept) != 1L) {
     stop("`random_intercept` must be a single column name.", call. = FALSE)
   }
@@ -135,6 +143,10 @@ mysterycall_nb_model <- function(data,
     if (!is.numeric(data[[offset_col]])) {
       stop(sprintf("`%s` (offset_col) must be numeric.", offset_col), call. = FALSE)
     }
+    # Checked on the supplied column, before complete-case filtering: NaN is
+    # indistinguishable from NA to complete.cases(), so an invalid exposure
+    # would otherwise be swept into the missing-data count.
+    validate_log_offset(data[[offset_col]], offset_col)
   }
 
   # Decompose any interaction/formula terms to actual column names for complete-case filtering
@@ -159,10 +171,6 @@ mysterycall_nb_model <- function(data,
   }
   if (!nrow(data_cc)) {
     stop("No complete cases remain after removing rows with missing values.", call. = FALSE)
-  }
-
-  if (!is.null(offset_col)) {
-    validate_log_offset(data_cc[[offset_col]], offset_col)
   }
 
   # -- Degrees-of-freedom check ------------------------------------------------
@@ -236,17 +244,22 @@ mysterycall_nb_model <- function(data,
   # filtered rather than silently estimating on fewer rows.
   assert_model_cohort(model, nrow(data_cc), "mysterycall_nb_model")
 
-  conv_code         <- model$fit$convergence
-  pd_hess           <- isTRUE(model$sdr$pdHess)
-  warnings_captured <- summarise_fit_warnings(warnings_captured)
-  converged         <- (conv_code == 0L) && pd_hess &&
-    !length(warnings_captured)
+  # `converged` reports the optimizer and the Hessian only. Warnings about
+  # anything else -- a non-integer outcome, say -- are data problems, not
+  # optimizer failures, and are kept separately in `$fit_warnings`.
+  conv_code    <- model$fit$convergence
+  pd_hess      <- isTRUE(model$sdr$pdHess)
+  fit_warnings <- summarise_fit_warnings(warnings_captured)
+  conv_pattern <- "converge|hessian|gradient|eigenvalue|singular"
+  conv_warn    <- grepl(conv_pattern, fit_warnings, ignore.case = TRUE)
+
+  converged <- (conv_code == 0L) && pd_hess && !any(conv_warn)
 
   if (!converged) {
     msg_parts <- character(0L)
     if (conv_code != 0L)  msg_parts <- c(msg_parts, sprintf("optimizer code %d", conv_code))
     if (!pd_hess)         msg_parts <- c(msg_parts, "non-positive-definite Hessian")
-    if (length(warnings_captured)) msg_parts <- c(msg_parts, warnings_captured)
+    if (any(conv_warn))   msg_parts <- c(msg_parts, fit_warnings[conv_warn])
     warning(sprintf(
       "Convergence issues detected: %s\nConsider simplifying predictors or increasing iterations.",
       paste(msg_parts, collapse = "; ")
@@ -278,7 +291,22 @@ mysterycall_nb_model <- function(data,
   y_hat       <- tryCatch(fitted(model), error = function(e) rep(NA_real_, length(y_obs)))
   df_resid_nb <- max(nrow(data_cc) - nrow(irr_table), 1L)
   pearson_nb  <- (y_obs - y_hat) / sqrt(y_hat + y_hat^2 / max(theta, 0.001))
-  overdispersion <- sum(pearson_nb^2, na.rm = TRUE) / df_resid_nb
+  pearson_chisq_nb <- sum(pearson_nb^2, na.rm = TRUE)
+  overdispersion   <- pearson_chisq_nb / df_resid_nb
+
+  dispersion_details <- .mc_dispersion_details(
+    method        = "NB2 Pearson chi-square / (n - p_fixed)",
+    formula       = paste0("sum(((y - mu) / sqrt(mu + mu^2 / theta))^2) / ",
+                           "(n - nrow(irr_table))"),
+    pearson_chisq = pearson_chisq_nb,
+    df            = df_resid_nb,
+    n             = nrow(data_cc),
+    n_parameters  = nrow(irr_table),
+    df_engine     = tryCatch(
+      as.numeric(stats::df.residual(model)),
+      error = function(e) NA_real_
+    )
+  )
 
   if (!is.na(theta) && theta < 1) {
     warning(sprintf(
@@ -318,18 +346,20 @@ mysterycall_nb_model <- function(data,
       irr_table      = irr_table,
       theta          = theta,
       overdispersion = overdispersion,
+      dispersion_details = dispersion_details,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,
+      fit_warnings   = fit_warnings,
       convergence    = list(
         converged = converged,
         messages  = c(
           if (conv_code != 0L) sprintf("optimizer code %d", conv_code),
           if (!pd_hess) "non-positive-definite Hessian",
-          warnings_captured
+          fit_warnings
         )
       ),
       aic = AIC(model),
