@@ -1,7 +1,7 @@
 # Build a US federal holiday calendar
 
 Creates a
-[`bizdays::create.calendar()`](https://rdrr.io/pkg/bizdays/man/create.calendar.html)
+[`bizdays::create.calendar()`](http://wilsonfreitas.github.io/R-bizdays/reference/create.calendar.md)
 object covering all 11 US federal holidays for the requested year range.
 Fixed holidays are shifted to their observed weekday (Friday if they
 fall on Saturday, Monday if Sunday). Floating holidays (MLK Day,
@@ -32,8 +32,9 @@ mysterycall_us_federal_calendar(
 
 An S3 object of class `"calendar"` (from `bizdays`) named `"USFederal"`.
 Pass it to
-[`bizdays::bizdays()`](https://rdrr.io/pkg/bizdays/man/bizdays.html) or
-[`bizdays::is.bizday()`](https://rdrr.io/pkg/bizdays/man/is.bizday.html)
+[`bizdays::bizdays()`](http://wilsonfreitas.github.io/R-bizdays/reference/bizdays.md)
+or
+[`bizdays::is.bizday()`](http://wilsonfreitas.github.io/R-bizdays/reference/is.bizday.md)
 for date arithmetic. Contains one holiday entry per year from
 `start_year` to `end_year`, with fixed holidays observing the
 Saturday-to-Friday / Sunday-to-Monday shift rule.

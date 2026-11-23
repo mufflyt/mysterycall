@@ -195,7 +195,7 @@ print(model)
 #> Fixed effects (IRR with Wald CI):
 #>                        term   irr ci_lower ci_upper p_value_fmt
 #> 1               (Intercept) 0.259    0.124    0.544     < 0.001
-#> 2 insurance_scenarioPrivate 3.186    1.340    7.579       0.009
+#> 2 insurance_scenarioPrivate 3.186    1.339    7.580       0.009
 #> 
 #> Random intercept (subspecialty):  variance = 0.0000  SD = 0.0000
 

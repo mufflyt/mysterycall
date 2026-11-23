@@ -225,7 +225,7 @@ print(res)
 #> Sensitivity analysis (1 subsets, family = poisson)
 #> 
 #>  subset_name        term     IRR  ci_lower ci_upper   p_value model_type
-#>  Full sample insMedicaid 1.03022 0.9303437 1.140818 0.5671653    poisson
+#>  Full sample insMedicaid 1.03022 0.9303432 1.140819 0.5671672    poisson
 #>     Academic        <NA>      NA        NA       NA        NA       <NA>
 #>      Private        <NA>      NA        NA       NA        NA       <NA>
 ```

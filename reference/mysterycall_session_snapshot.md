@@ -106,12 +106,12 @@ mysterycall_session_snapshot(
 # Inspect what was written
 out <- mysterycall_session_snapshot(file = snap, append = TRUE, quiet = TRUE)
 print(out)
-#> Session snapshot: /tmp/Rtmp65LiTm/file217356ec54ed.txt
+#> Session snapshot: /tmp/RtmpDzXDKf/file21b847fbf37a.txt
 #> ============================================================
 #> === REPRODUCIBILITY SNAPSHOT ===
 #> ============================================================
-#> Date/Time: 2026-10-03 00:36:38 UTC
-#> R Version: R version 4.6.1 (2026-06-24)
+#> Date/Time: 2026-11-23 04:43:08 UTC
+#> R Version: R version 4.6.2 (2026-10-29)
 #> Platform:  x86_64-pc-linux-gnu
 #> 
 #> === SEEDS ===
@@ -119,13 +119,13 @@ print(out)
 #> imputation                     123
 #> 
 #> === LOADED PACKAGES ===
-#> Matrix                         1.7-5
-#> ggplot2                        4.0.3
+#> Matrix                         1.7-6
+#> ggplot2                        4.0.4
 #> mysterycall                    1.6.3.9000
 #> stringdist                     0.9.17
 #> 
 #> === FULL SESSION INFO ===
-#> R version 4.6.1 (2026-06-24)
+#> R version 4.6.2 (2026-10-29)
 #> Platform: x86_64-pc-linux-gnu
 #> ... (187 more lines not shown)
 ```
