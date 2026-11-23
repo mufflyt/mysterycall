@@ -303,10 +303,20 @@ mysterycall_nb_model <- function(data,
   theta <- tryCatch(sigma(model), error = function(e) NA_real_)
 
   # -- Overdispersion check for NB ---------------------------------------------
-  y_obs       <- data_cc[[outcome]]
-  y_hat       <- tryCatch(fitted(model), error = function(e) rep(NA_real_, length(y_obs)))
+  # Delegated to glmmTMB, which forms the Pearson residual from the variance
+  # of the model as actually fitted. The hand-rolled NB2 formula this
+  # replaces divided by sqrt(mu + mu^2/theta) -- the *conditional* variance --
+  # while taking the numerator from fitted(), which for a zero-inflated fit
+  # is the zero-inflation-marginal mean. On a zero-inflated sample that
+  # inflated the statistic by a factor of ~2.6, and the inflated value is
+  # read by the STROBE checklist and the model-comparison table. The two
+  # agree to machine precision for a model without zero-inflation, so no
+  # previously reported value changes.
   df_resid_nb <- max(nrow(data_cc) - nrow(irr_table), 1L)
-  pearson_nb  <- (y_obs - y_hat) / sqrt(y_hat + y_hat^2 / max(theta, 0.001))
+  pearson_nb  <- tryCatch(
+    stats::residuals(model, type = "pearson"),
+    error = function(e) rep(NA_real_, nrow(data_cc))
+  )
   n_pearson_na_nb  <- sum(!is.finite(pearson_nb))
   pearson_chisq_nb <- sum(pearson_nb^2, na.rm = TRUE)
 
@@ -326,8 +336,8 @@ mysterycall_nb_model <- function(data,
   }
 
   dispersion_details <- .mc_dispersion_details(
-    method        = "NB2 Pearson chi-square / (n - p_fixed)",
-    formula       = paste0("sum(((y - mu) / sqrt(mu + mu^2 / theta))^2) / ",
+    method        = "Pearson chi-square / (n - p_fixed), engine residuals",
+    formula       = paste0("sum(residuals(model, type = 'pearson')^2) / ",
                            "(n - nrow(irr_table))"),
     pearson_chisq = pearson_chisq_nb,
     df            = df_resid_nb,

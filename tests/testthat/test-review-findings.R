@@ -248,26 +248,98 @@ test_that("a clean fit stays converged however many warnings it emits", {
   expect_gt(length(fit$fit_warnings), 10L)
 })
 
-test_that("an all-NA dispersion statistic is NA, never zero", {
+test_that("a non-constant dispformula yields a usable dispersion", {
   skip_if_not_installed("glmmTMB")
   d <- mc_rf_counts()
   d$wait_od <- stats::rnbinom(nrow(d), mu = 12, size = 4)
 
-  # A non-constant dispformula makes sigma() return NA, so every Pearson
-  # residual is NA. sum(na.rm = TRUE) then gave exactly 0, which reads as
-  # extreme underdispersion.
+  # The hand-rolled NB2 formula divided by sqrt(mu + mu^2/theta), and
+  # sigma() returns NA when the dispersion is not a single scalar, so every
+  # residual came out NA and sum(na.rm = TRUE) reported a dispersion of
+  # exactly 0 -- read as extreme underdispersion. The engine's own Pearson
+  # residuals are computable here, so the statistic is real.
   fit <- suppressMessages(suppressWarnings(mysterycall_nb_model(
     d, "wait_od", "ins", "phys", dispformula = ~ins)))
 
-  expect_true(is.na(fit$overdispersion))
-  expect_gt(fit$dispersion_details$n_pearson_na, 0L)
+  expect_true(is.na(fit$theta))
+  expect_true(is.finite(fit$overdispersion))
+  expect_gt(fit$overdispersion, 0)
+  expect_equal(fit$dispersion_details$n_pearson_na, 0L)
+  # The NA guard remains for the case where no residual is computable at
+  # all; no public input reaches it now, so it is not asserted here.
 })
 
-test_that("the dispersion assumptions disclose the zero-inflation limit", {
+test_that("a zero-inflated fit reports the zero-inflated dispersion", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(11)
+  n <- 400L
+  d <- data.frame(
+    phys = rep(sprintf("P%02d", seq_len(50)), each = 8L),
+    ins = rep(c("BCBS", "Medicaid"), length.out = n),
+    stringsAsFactors = FALSE
+  )
+  mu0 <- exp(log(12) + 0.3 * (d$ins == "Medicaid"))
+  d$wait <- stats::rnbinom(n, mu = mu0, size = 5) * stats::rbinom(n, 1, 0.7)
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_nb_model(
+    d, "wait", "ins", "phys", ziformula = ~1)))
+
+  # Independent reference: the Pearson statistic formed from the
+  # zero-inflated mean and the zero-inflated variance.
+  m <- fit$model
+  p0 <- stats::predict(m, type = "zprob")
+  mu <- stats::predict(m, type = "conditional")
+  th <- stats::sigma(m)
+  var_zi <- (1 - p0) * mu * (1 + mu / th + p0 * mu)
+  reference <- sum(((d$wait - (1 - p0) * mu)^2) / var_zi) /
+    fit$dispersion_details$df
+
+  expect_gt(mean(p0), 0.1)
+  expect_equal(fit$overdispersion, reference, tolerance = 1e-8)
+  # The superseded conditional-variance formula inflated this to ~2.5.
+  expect_lt(fit$overdispersion, 1.5)
+})
+
+test_that("a model without zero-inflation is numerically unchanged", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(77)
+  n <- 300L
+  d <- data.frame(
+    phys = rep(sprintf("P%02d", seq_len(50)), each = 6L),
+    ins = rep(c("BCBS", "Medicaid", "Medicare"), length.out = n),
+    stringsAsFactors = FALSE
+  )
+  d$wait <- stats::rnbinom(
+    n, mu = exp(log(10) + 0.25 * (d$ins == "Medicaid")), size = 3)
+
+  fit <- suppressMessages(suppressWarnings(mysterycall_nb_model(
+    d, "wait", "ins", "phys")))
+
+  # The superseded hand-rolled NB2 formula, recomputed here: for a model
+  # with no zero-inflation it must agree exactly, so switching to the
+  # engine's residuals changed no previously reported value.
+  m <- fit$model
+  y <- d$wait
+  y_hat <- stats::fitted(m)
+  th <- stats::sigma(m)
+  superseded <- sum(((y - y_hat) /
+    sqrt(y_hat + y_hat^2 / max(th, 0.001)))^2, na.rm = TRUE) /
+    fit$dispersion_details$df
+
+  expect_equal(fit$overdispersion, superseded)
+})
+
+test_that("the dispersion details stay auditable", {
   skip_if_not_installed("lme4")
   fit <- fit_pois(mc_rf_counts(), "wait", "ins", "phys")
-  expect_match(fit$dispersion_details$assumptions, "zero-inflat")
-  expect_false(is.na(fit$dispersion_details$n_pearson_na))
+  det <- fit$dispersion_details
+
+  expect_false(is.na(det$n_pearson_na))
+  expect_true(nzchar(det$method))
+  expect_match(det$formula, "pearson")
+  # The identity the reader is invited to check must actually hold.
+  expect_equal(fit$overdispersion, det$pearson_chisq / det$df)
+  expect_match(det$assumptions, "ziformula|zero-inflat")
 })
 
 test_that("an offset error names rows in the caller's frame", {

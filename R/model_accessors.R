@@ -656,13 +656,12 @@ print.mysterycall_model_summary <- function(x, ...) {
       "parameters only, not random-effect variance components (compare ",
       "`df_engine`). Values near 1 indicate no evidence of over- or ",
       "under-dispersion. ",
-      "This statistic assumes the fitted mean and the variance function ",
-      "refer to the same model. It is NOT valid for a zero-inflated fit ",
-      "(a `ziformula` passed through `...`): there fitted() is the ",
-      "zero-inflation-marginal mean while the variance term used here is ",
-      "the conditional NB2 variance, which inflates the statistic. Treat ",
-      "`overdispersion` as uninterpretable when `n_pearson_na > 0` or the ",
-      "model is zero-inflated."
+      "The residuals come from the fitting engine, so the variance ",
+      "function matches the model as fitted, including a `ziformula` or ",
+      "`dispformula` supplied through `...`. The denominator does not ",
+      "debit the extra parameters such a model estimates, so for those ",
+      "fits the statistic is mildly anticonservative. Treat ",
+      "`overdispersion` as uninterpretable when `n_pearson_na > 0`."
     ),
     n_pearson_na  = as.integer(n_pearson_na)
   )
