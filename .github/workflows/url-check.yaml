@@ -25,13 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
-      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
         with:
           use-public-rspm: true
 
       # urlchecker reads Rmd vignettes through pandoc; without it url_check()
       # aborts before checking a single URL.
-      - uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      - uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
 
       # knitr is the package's VignetteBuilder. urlchecker refuses to scan
       # vignettes without it, so it is a hard requirement here, not optional.
