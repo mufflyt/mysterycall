@@ -441,6 +441,25 @@ reference:
       - mysterycall_interaction_screen
       - mysterycall_screen_predictors
 
+  - title: "Standard Model Accessors"
+    desc: >
+      S3 methods letting a fitted mysterycall model be handled like any other
+      fitted model. Each delegates to the underlying lme4 or glmmTMB fit.
+      Defined for mysterycall_poisson_model, mysterycall_nb_model,
+      mysterycall_lmm and mysterycall_logistic_model only -- not for the
+      table and report classes, which are formatted results rather than
+      fitted models.
+    contents:
+      - coef.mysterycall
+      - vcov.mysterycall
+      - confint.mysterycall
+      - nobs.mysterycall
+      - formula.mysterycall
+      - fitted.mysterycall
+      - residuals.mysterycall
+      - summary.mysterycall
+      - print.mysterycall_model_summary
+
   - title: "Model Interpretation"
     desc: >
       Interpret fitted models: ICC, overdispersion, IRR, power, and predictions.
@@ -880,6 +899,7 @@ articles:
       - matched-control-design
       - audit-study-tools
       - statistical-analysis
+      - model-objects
       - linear-mixed-models
       - logistic-model
       - two-part-denominators

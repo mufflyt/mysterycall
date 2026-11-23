@@ -286,6 +286,34 @@ overlap:
 See `vignette("reporting-conventions")` for the full appendix, including the
 three places the package deliberately departs from SAMPL and why.
 
+## Working with a fitted model
+
+A fitted model answers the usual R accessors, so it can be handled like any
+other model object. Each delegates to the underlying `lme4` or `glmmTMB` fit
+rather than recomputing anything:
+
+```r
+fit <- mysterycall_poisson_model(
+  calls, outcome = "business_days_until_appointment",
+  predictors = "insurance", random_intercept = "practice"
+)
+
+coef(fit)      # fixed effects on the log scale; exp() gives the IRRs
+confint(fit)   # Wald intervals, at the level the model was fitted with
+nobs(fit)      # rows the engine fitted -- asserted equal to fit$n
+summary(fit)   # cohort, dispersion, convergence and the IRR table
+```
+
+The denominator is guaranteed. Fitting engines apply their own `na.action`,
+so a value that only becomes undefined inside the model formula -- `log()` of
+a non-positive exposure, say -- used to be dropped by the engine while the
+object still reported the pre-fit cohort. Every fitter that reports an `n` now
+reconciles it against the rows the engine actually used and refuses a
+mismatch, so `fit$n` is the number to put in the manuscript and
+`fit$n + fit$n_dropped` is the number you supplied.
+
+See `vignette("model-objects")` for the full appendix.
+
 ## How mysterycall compares to alternatives
 
 | Capability | mysterycall | `npi` package | `humaniformat` | Manual `dplyr` |
@@ -296,6 +324,7 @@ three places the package deliberately departs from SAMPL and why.
 | Safe joins with coverage enforcement | ✅ | ❌ | ❌ | ❌ |
 | Drive-time isochrones + Census overlay (via companion `mysterymaps`) | ✅ | ❌ | ❌ | ❌ |
 | Poisson GLMM with IRR reporting | ✅ | ❌ | ❌ | ❌ |
+| Reported cohort reconciled against the fitted cohort | ✅ | ❌ | ❌ | ❌ |
 | Disparities table with Wilson CIs | ✅ | ❌ | ❌ | ❌ |
 | Green Journal–compliant figure export | ✅ | ❌ | ❌ | ❌ |
 
