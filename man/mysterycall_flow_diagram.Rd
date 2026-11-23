@@ -75,7 +75,8 @@ Produces a CONSORT/STROBE-style flow diagram using ggplot2 (no DiagrammeR
 dependency). Boxes show N at each stage; side branches display exclusion
 counts and optional reasons. The returned ggplot2 object can be saved with
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} or embedded in R Markdown / Quarto reports.
-
+}
+\details{
 The numbers are checked before drawing. A count that grows down the flow, or
 an itemised exclusion larger than the step it leaves, is impossible and
 raises an error. An itemised exclusion whose count does not reconcile the two
