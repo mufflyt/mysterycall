@@ -1,0 +1,100 @@
+[
+  {
+    "id": "M1-poisson-offset-positivity",
+    "expect": "poisson rejects every invalid finite offset",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 4 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M2-nb-offset-positivity",
+    "expect": "nb rejects every invalid finite offset",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M3-outcome-finiteness",
+    "expect": "a NaN outcome is refused rather than counted as missing",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M4-strict-counts-ignored",
+    "expect": "poisson strict count policy rejects fractions",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 1 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M5-converged-conflates-warnings",
+    "expect": "a clean fit stays converged however many warnings it emits",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M6-dispersion-details-dropped",
+    "expect": "poisson declared dispersion convention is reproducible",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M7-coef-returns-null",
+    "expect": "poisson accessors are real, not NULL fallbacks",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M8-cohort-assertion-neutered",
+    "expect": "assert_model_cohort errors when the engine dropped rows",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 1 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M9-s3-registration-removed",
+    "expect": "all fitted-model S3 methods are registered",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 3 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M10-nan-offset-accepted",
+    "expect": "NaN exposure errors even though complete.cases would drop it",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 3 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M11-pmatch-guard-weakened",
+    "expect": "partial argument matching cannot bypass the dots guard",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 1 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M12-confint-ignores-conf-level",
+    "expect": "confint() defaults to the level the model was fitted with",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 2 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M13-lmm-uses-z-not-t",
+    "expect": "confint() on an LMM uses the t quantile the fitter uses",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 1 failing",
+    "expected_test_failed": true
+  },
+  {
+    "id": "M14-dispersion-zero-not-na",
+    "expect": "the dispersion ratio is NA when no residual was computable",
+    "status": "DETECTED",
+    "summary": "15 files, 400 tests, 1 failing",
+    "expected_test_failed": true
+  }
+]

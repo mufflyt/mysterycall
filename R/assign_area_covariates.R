@@ -57,6 +57,7 @@ mysterycall_assign_area_covariates <- function(data,
 
   lat  <- as.numeric(data[[lat_col]])
   long <- as.numeric(data[[long_col]])
+  validate_coordinates(lat, long, lat_col, long_col)
 
   # Geocode each *unique* coordinate once, then map back to all rows.
   key   <- paste(round(long, 6), round(lat, 6), sep = "_")

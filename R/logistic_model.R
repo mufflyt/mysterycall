@@ -187,6 +187,8 @@ mysterycall_logistic_model <- function(data,
   message(sprintf("Fitting Logistic GLMER: %s", deparse(model_formula)))
 
   # -- Fit ----------------------------------------------------------------------
+  .mc_reject_cohort_altering_args(list(...), "mysterycall_logistic_model")
+
   warnings_captured <- character(0L)
 
   model <- tryCatch(
@@ -207,6 +209,10 @@ mysterycall_logistic_model <- function(data,
       stop(sprintf("glmer() failed to fit: %s", e$message), call. = FALSE)
     }
   )
+
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(model, nrow(data_cc), "mysterycall_logistic_model")
 
   # -- Convergence / singularity ------------------------------------------------
   conv_msgs   <- model@optinfo$conv$lme4$messages
@@ -259,6 +265,7 @@ mysterycall_logistic_model <- function(data,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
+      conf_level     = conf_level,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,

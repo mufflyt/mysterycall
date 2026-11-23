@@ -18,9 +18,17 @@ Loads and caches the mapping between US area codes and states.
 \seealso{
 Other validation:
 \code{\link{.audit_volatile_fields}},
+\code{\link[=.mc_check_coord_axis]{.mc_check_coord_axis()}},
+\code{\link[=.mc_conv_warning_pattern]{.mc_conv_warning_pattern()}},
+\code{\link[=assert_model_cohort]{assert_model_cohort()}},
+\code{\link[=summarise_fit_warnings]{summarise_fit_warnings()}},
+\code{\link[=validate_coordinates]{validate_coordinates()}},
 \code{\link[=validate_dataframe]{validate_dataframe()}},
+\code{\link[=validate_log_offset]{validate_log_offset()}},
+\code{\link[=validate_outcome_finite]{validate_outcome_finite()}},
 \code{\link[=validate_required_columns]{validate_required_columns()}},
-\code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}}
+\code{\link[=validate_scalar_positive_numeric]{validate_scalar_positive_numeric()}},
+\code{\link[=warn_non_integer_counts]{warn_non_integer_counts()}}
 }
 \concept{validation}
 \keyword{internal}

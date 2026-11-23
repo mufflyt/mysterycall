@@ -90,8 +90,9 @@ test_that("poisson_model: return list has all expected names", {
     mock, "wait_days", c("insurance", "gender"), "physician"
   ))
   expect_named(res, c("model", "irr_table", "random_effects", "factor_refs",
-                       "formula", "n", "n_dropped", "n_clusters",
-                       "overdispersion", "convergence", "aic", "bic"),
+                       "formula", "conf_level", "n", "n_dropped",
+                       "n_clusters", "overdispersion", "dispersion_details",
+                       "fit_warnings", "convergence", "aic", "bic"),
                ignore.order = TRUE)
 })
 

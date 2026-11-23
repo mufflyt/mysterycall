@@ -46,7 +46,7 @@ test_that("mysterycall_logistic_model: happy path with valid binary outcome", {
   expect_s3_class(fit, "mysterycall_logistic_model")
   expect_type(fit, "list")
   expect_named(fit, c("model", "or_table", "random_effects", "factor_refs",
-                      "formula", "n", "n_dropped", "n_clusters",
+                      "formula", "conf_level", "n", "n_dropped", "n_clusters",
                       "convergence", "aic", "bic"))
   expect_equal(fit$n, 80)
   expect_equal(fit$n_dropped, 0)

@@ -46,9 +46,13 @@ test_that("mysterycall_poisson_model fits basic model with valid inputs", {
 
   expect_s3_class(result, "mysterycall_poisson_model")
   expect_true(is.list(result))
+  # `dispersion_details` and `fit_warnings` were added when the dispersion
+  # diagnostic became auditable and optimizer convergence was separated from
+  # unrelated fitting warnings.
   expect_named(result, c(
     "model", "irr_table", "random_effects", "factor_refs",
-    "formula", "n", "n_dropped", "n_clusters", "overdispersion",
+    "formula", "conf_level", "n", "n_dropped", "n_clusters",
+    "overdispersion", "dispersion_details", "fit_warnings",
     "convergence", "aic", "bic"
   ))
   expect_s4_class(result$model, "glmerMod")

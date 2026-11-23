@@ -28,12 +28,17 @@ is_internal <- vapply(rd_files, function(f) {
   any(grepl("\\\\keyword\\{internal\\}", readLines(f, warn = FALSE)))
 }, logical(1L))
 
-# A topic is identified by all of its aliases; pkgdown accepts any one of them.
+# A topic is identified by its aliases, and pkgdown accepts any one of them.
+# The .Rd FILENAME is deliberately not treated as an alias: @rdname names the
+# file after the shared topic ("coef.mysterycall.Rd") while \name{} and
+# \alias{} carry the method names, and pkgdown::build_reference_index()
+# resolves by name/alias only. Accepting the filename here let
+# "- coef.mysterycall" satisfy this check and then fail the real site build
+# seven minutes later, which is the failure this script exists to prevent.
 aliases <- lapply(rd_files[!is_internal], function(f) {
   ln <- readLines(f, warn = FALSE)
   a  <- ln[grepl("^\\\\alias[{]", ln)]
-  unique(c(sub("[.]Rd$", "", basename(f)),
-           gsub("^\\\\alias[{](.*)[}][[:space:]]*$", "\\1", a)))
+  unique(gsub("^\\\\alias[{](.*)[}][[:space:]]*$", "\\1", a))
 })
 names(aliases) <- sub("[.]Rd$", "", basename(rd_files[!is_internal]))
 
@@ -58,4 +63,70 @@ if (length(missing) > 0L) {
   quit(status = 1L)
 }
 
+# The reverse direction: every plain topic listed must resolve to a real
+# alias. The forward check above cannot catch a typo or a stale entry, and
+# pkgdown aborts on one with "not a known topic name or alias".
+#
+# pkgdown's selector functions -- starts_with(), matches(), has_keyword() and
+# friends -- and exclusions beginning with "-" are passed through untouched,
+# as are article names, which live in a different index.
+all_aliases <- unique(unlist(lapply(rd_files, function(f) {
+  ln <- readLines(f, warn = FALSE)
+  a  <- ln[grepl("^\\\\alias[{]", ln)]
+  gsub("^\\\\alias[{](.*)[}][[:space:]]*$", "\\1", a)
+})))
+
+articles <- sub("[.][Rq]md$", "", basename(Sys.glob("vignettes/*.Rmd")))
+
+# Only entries inside a `contents:` block are topics. The forward check
+# above can afford a loose line scan -- extra strings only make matching
+# more permissive -- but this direction would otherwise flag navbar items
+# and "- title:" mappings as unknown topics. Tracked by indentation so the
+# script keeps its zero-dependency, sub-second behaviour.
+contents_entries <- character(0)
+in_contents <- FALSE
+contents_indent <- -1L
+indent_of <- function(x) nchar(sub("[^[:space:]].*$", "", x))
+
+for (ln in yml_lines) {
+  if (grepl("^[[:space:]]*contents:[[:space:]]*$", ln)) {
+    in_contents <- TRUE
+    contents_indent <- indent_of(ln)
+    next
+  }
+  if (!in_contents || !nzchar(trimws(ln))) next
+
+  is_item <- grepl("^[[:space:]]*-[[:space:]]", ln)
+  if (!is_item && indent_of(ln) <= contents_indent) {
+    in_contents <- FALSE
+    next
+  }
+  if (!is_item) next
+
+  item <- trimws(sub("^[[:space:]]*-[[:space:]]*", "", ln))
+  item <- gsub("[`\"']", "", item)
+  # "- title: x" and friends are mappings, not topics.
+  if (grepl(":", item)) next
+  contents_entries <- c(contents_entries, item)
+}
+
+plain <- unique(contents_entries[
+  !grepl("[()]", contents_entries) &
+    !startsWith(contents_entries, "-") &
+    nzchar(contents_entries)
+])
+unknown <- setdiff(plain, c(all_aliases, articles))
+
+if (length(unknown) > 0L) {
+  cat(sprintf("\nFAIL: %d entry(ies) in %s match no topic alias:\n\n",
+              length(unknown), yml))
+  cat(paste0("  - ", sort(unknown), collapse = "\n"), "\n\n")
+  cat("pkgdown::build_reference_index() aborts on these with\n")
+  cat("\"not a known topic name or alias\". An @rdname names the .Rd file,\n")
+  cat("not the topic: list the \\name{} or an \\alias{} instead.\n")
+  quit(status = 1L)
+}
+
+cat(sprintf("Reference entries checked: %d plain topic(s), all resolve.\n",
+            length(plain)))
 cat("OK: every documented topic is in the pkgdown reference index.\n")

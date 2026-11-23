@@ -39,6 +39,12 @@ NULL
 #'   fastest approximation; `1` uses the Laplace approximation; values `> 1`
 #'   use adaptive Gauss-Hermite quadrature (slower, more accurate for small
 #'   cluster sizes).
+#' @param strict_counts Logical flag, default `FALSE`. When `TRUE`, a
+#'   fractional `outcome` is an error instead of a warning. A count of days
+#'   is integer-valued by construction, so a fractional value is usually a
+#'   data error; elapsed time measured in days may legitimately carry
+#'   decimals, in which case a count distribution is the wrong model for it.
+#'   Values are never rounded or truncated under either setting.
 #' @param offset_col Optional character scalar naming a numeric column to use
 #'   as a log-offset (e.g. log(exposure time)). When supplied, the term
 #'   `offset(log(offset_col))` is appended to the fixed-effects formula.
@@ -112,6 +118,7 @@ mysterycall_poisson_model <- function(data,
                                       conf_level = 0.95,
                                       nAGQ       = 0L,
                                       offset_col = NULL,
+                                      strict_counts = FALSE,
                                       ...) {
 
   # -- Require lme4 -------------------------------------------------------------
@@ -134,10 +141,12 @@ mysterycall_poisson_model <- function(data,
   if (!is.numeric(data[[outcome]])) {
     stop(sprintf("`%s` must be numeric (count of days).", outcome), call. = FALSE)
   }
+  validate_outcome_finite(data[[outcome]], outcome)
   if (any(data[[outcome]] < 0, na.rm = TRUE)) {
     stop(sprintf("`%s` contains negative values; Poisson requires counts >= 0.", outcome),
          call. = FALSE)
   }
+  warn_non_integer_counts(data[[outcome]], outcome, strict = strict_counts)
   if (!is.character(random_intercept) || length(random_intercept) != 1L) {
     stop("`random_intercept` must be a single column name.", call. = FALSE)
   }
@@ -150,7 +159,18 @@ mysterycall_poisson_model <- function(data,
     if (!is.numeric(data[[offset_col]])) {
       stop(sprintf("`%s` (offset_col) must be numeric.", offset_col), call. = FALSE)
     }
+    # NaN is checked on the supplied column, because complete.cases() cannot
+    # tell it from NA and an invalid exposure would otherwise be swept into
+    # the missing-data count. Positivity is checked on the cohort below, so
+    # that a row excluded for an unrelated reason cannot abort the analysis.
+    validate_log_offset(data[[offset_col]], offset_col,
+                        check_positive = FALSE)
   }
+
+  # `subset` and `na.action` would let the engine fit a different cohort than
+  # the one reported, which assert_model_cohort() then refuses. Refuse them
+  # by name instead, with a message that says what to do.
+  .mc_reject_cohort_altering_args(list(...), "mysterycall_poisson_model")
 
   # Decompose any interaction/formula terms to actual column names for complete-case filtering
   decomposed_predictors <- unique(unlist(lapply(predictors, function(term) {
@@ -207,6 +227,11 @@ mysterycall_poisson_model <- function(data,
     ), call. = FALSE)
   }
 
+  if (!is.null(offset_col)) {
+    validate_log_offset(data_cc[[offset_col]], offset_col,
+                        row_ids = which(cc_mask))
+  }
+
   # -- Reference levels for factor/character predictors -------------------------
   factor_refs <- Filter(Negate(is.null), lapply(
     setNames(predictors, predictors),
@@ -255,16 +280,45 @@ mysterycall_poisson_model <- function(data,
     }
   )
 
+  # The engine applies its own na.action, so confirm it used the cohort we
+  # filtered rather than silently estimating on fewer rows.
+  assert_model_cohort(model, nrow(data_cc), "mysterycall_poisson_model")
+
   # -- Convergence / singularity -------------------------------------------------
-  conv_msgs   <- model@optinfo$conv$lme4$messages
+  # `converged` reports the optimizer only. A warning about something else --
+  # a non-integer outcome, say -- is a data problem, not an optimizer
+  # failure, and previously any warning at all set this flag to FALSE.
+  # Singularity is reported separately in `$singular`, and every captured
+  # warning is kept in `$fit_warnings`.
+  # lme4 writes "boundary (singular) fit" into this same slot, so the
+  # messages are filtered on the convergence pattern rather than merely
+  # tested for emptiness: a singular fit whose optimizer returned code 0 has
+  # converged, and singularity is reported in `$singular` instead.
+  conv_msgs    <- model@optinfo$conv$lme4$messages
+  fit_warnings <- summarise_fit_warnings(warnings_captured)
+  conv_pattern <- .mc_conv_warning_pattern()
+  conv_warn    <- grepl(conv_pattern, fit_warnings, ignore.case = TRUE)
+  conv_msg_bad <- grepl(conv_pattern, conv_msgs, ignore.case = TRUE)
+
+  # The optimizer code is consulted directly as well as its warning text: a
+  # user-supplied optimizer via control = glmerControl(optimizer = ) could
+  # set a non-zero code without emitting a warning.
+  opt_code    <- model@optinfo$conv$opt
+  opt_ok      <- is.null(opt_code) || isTRUE(opt_code == 0L)
   is_singular <- lme4::isSingular(model)
-  converged   <- is.null(conv_msgs) && !length(warnings_captured)
+  converged   <- opt_ok && !any(conv_msg_bad) && !any(conv_warn)
 
   if (!converged) {
-    all_msgs <- c(conv_msgs, warnings_captured)
+    all_msgs <- c(conv_msgs[conv_msg_bad], fit_warnings[conv_warn])
     message(sprintf(
       "Convergence issues detected:\n  %s\nConsider simplifying predictors or using nAGQ = 1.",
       paste(all_msgs, collapse = "\n  ")
+    ))
+  }
+  if (length(fit_warnings[!conv_warn])) {
+    message(sprintf(
+      "Fitting warning(s) unrelated to convergence:\n  %s",
+      paste(fit_warnings[!conv_warn], collapse = "\n  ")
     ))
   }
   if (is_singular) {
@@ -292,11 +346,43 @@ mysterycall_poisson_model <- function(data,
   # -- Random effects and overdispersion -----------------------------------------
   re_df <- as.data.frame(lme4::VarCorr(model))
 
-  pearson_resid  <- residuals(model, type = "pearson")
-  df_resid       <- nrow(data_cc) - length(lme4::fixef(model))
-  overdispersion <- sum(pearson_resid^2, na.rm = TRUE) / max(df_resid, 1L)
+  pearson_resid  <- stats::residuals(model, type = "pearson")
+  n_pearson_na   <- sum(!is.finite(pearson_resid))
+  pearson_chisq  <- sum(pearson_resid^2, na.rm = TRUE)
+  n_fixed        <- length(lme4::fixef(model))
+  df_resid       <- nrow(data_cc) - n_fixed
+  df_used        <- max(df_resid, 1L)
 
-  if (overdispersion > mysterycall_overdispersion_threshold()) {
+  # If no residual could be computed, na.rm = TRUE would sum to zero and the
+  # object would report a dispersion of exactly 0 -- read as extreme
+  # underdispersion. Report it as unknown instead.
+  overdispersion <- .mc_dispersion_ratio(
+    pearson_chisq, df_used, n_pearson_na, length(pearson_resid)
+  )
+  if (n_pearson_na > 0L) {
+    message(sprintf(
+      "%d of %d Pearson residual(s) are not finite; the dispersion statistic is unreliable.",
+      n_pearson_na, length(pearson_resid)
+    ))
+  }
+
+  dispersion_details <- .mc_dispersion_details(
+    method        = "Pearson chi-square / (n - p_fixed)",
+    formula       = paste0("sum(residuals(model, type = 'pearson')^2) / ",
+                           "(n - length(lme4::fixef(model)))"),
+    pearson_chisq = pearson_chisq,
+    df            = df_used,
+    n             = nrow(data_cc),
+    n_parameters  = n_fixed,
+    n_pearson_na  = n_pearson_na,
+    df_engine     = tryCatch(
+      as.numeric(stats::df.residual(model)),
+      error = function(e) NA_real_
+    )
+  )
+
+  if (!is.na(overdispersion) &&
+      overdispersion > mysterycall_overdispersion_threshold()) {
     warning(sprintf(
       "Overdispersion detected (phi = %.2f > %.2f). Standard errors may be underestimated. Consider a negative binomial model.",
       overdispersion, mysterycall_overdispersion_threshold()
@@ -317,14 +403,17 @@ mysterycall_poisson_model <- function(data,
       random_effects = re_df,
       factor_refs    = factor_refs,
       formula        = model_formula,
+      conf_level     = conf_level,
       n              = nrow(data_cc),
       n_dropped      = n_dropped,
       n_clusters     = n_clusters,
       overdispersion = overdispersion,
+      dispersion_details = dispersion_details,
+      fit_warnings   = fit_warnings,
       convergence    = list(
         converged = converged,
         singular  = is_singular,
-        messages  = c(conv_msgs, warnings_captured)
+        messages  = c(conv_msgs, fit_warnings)
       ),
       aic = AIC(model),
       bic = BIC(model)
