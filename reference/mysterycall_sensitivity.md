@@ -212,9 +212,6 @@ res <- mysterycall_sensitivity(
 )
 #> Fitting Poisson GLMER: wait ~ ins + (1 | phys)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=80, physicians=20, AIC=470.5, overdispersion=1.05
 #> Fitting Poisson GLMER: wait ~ ins + (1 | phys)

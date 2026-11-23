@@ -91,9 +91,6 @@ if (requireNamespace("lme4", quietly = TRUE)) {
 }
 #> Fitting Poisson GLMER: wait_days ~ insurance + (1 | physician)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=40, physicians=8, AIC=229.1, overdispersion=0.89
 #>                Term        IRR (95% CI) p-value

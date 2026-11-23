@@ -359,10 +359,16 @@ poisson_fit$irr_table
 - **IRR** — The incidence rate ratio relative to the reference group
   (Private insurance). An IRR of 1.42 for Medicaid means Medicaid
   patients waited 42 % longer than privately insured patients.
-- **CI_lower / CI_upper** — 95 % profile likelihood confidence intervals
-  on the IRR scale. These are preferred over Wald intervals because
-  profile likelihood CIs respect the asymmetry of the log-normal
-  approximation.
+- **CI_lower / CI_upper** — 95 % **Wald** confidence intervals on the
+  IRR scale, computed as `exp(estimate ± z × SE)` on the log scale and
+  then exponentiated. They are symmetric on the log scale and therefore
+  asymmetric on the IRR scale. They are *not* profile-likelihood
+  intervals; report them as Wald intervals.
+  [`confint()`](https://rdrr.io/r/stats/confint.html) on the fitted
+  object returns the same interval on the log scale, so the two cannot
+  disagree. If you need a profile-likelihood interval, call
+  `confint(poisson_fit$model, method = "profile")` on the underlying
+  `lme4` fit and expect it to be considerably slower.
 - **p_value** — Two-sided Wald z-test p-value for H₀: IRR = 1 (i.e., no
   difference from the reference group).
 
@@ -472,19 +478,27 @@ specified Poisson model, this ratio should be approximately 1.0:
 
 ``` r
 
-# The overdispersion statistic is stored in the fitted object
+# The ratio itself is a single number on the fitted object.
 poisson_fit$overdispersion
-#> $pearson_chisq
-#> [1] 207.4
-#>
-#> $residual_df
-#> [1] 192
-#>
-#> $ratio
-#> [1] 1.080
-#>
-#> $interpretation
-#> [1] "Adequate: ratio = 1.08 is below the 1.5 threshold. Poisson model is appropriate."
+#> [1] 1.080208
+
+# How it was computed is recorded next to it, so a reader can reproduce the
+# number instead of taking it on trust. `pearson_chisq / df` is exactly
+# `overdispersion`. `df_engine` records what stats::df.residual() would use
+# instead -- it also debits the random-effect variance components, so it is
+# smaller by one for a single random intercept.
+str(poisson_fit$dispersion_details)
+#> List of 9
+#>  $ method       : chr "Pearson chi-square / (n - p_fixed)"
+#>  $ formula      : chr "sum(residuals(model, type = 'pearson')^2) /"
+#>                        " (n - length(lme4::fixef(model)))"
+#>  $ pearson_chisq: num 207
+#>  $ df           : int 192
+#>  $ n            : int 196
+#>  $ n_parameters : int 4
+#>  $ df_engine    : num 191
+#>  $ assumptions  : chr "Approximate diagnostic. ..."
+#>  $ n_pearson_na : int 0
 
 # If overdispersion is detected (phi > 2), refit with the negative binomial model
 if (requireNamespace("glmmTMB", quietly = TRUE)) {
@@ -583,6 +597,76 @@ poisson_fit_offset$irr_table
 #>   Medicare    1.05      0.86      1.28   0.647
 #>   Uninsured   1.25      1.02      1.52   0.030
 ```
+
+------------------------------------------------------------------------
+
+### 3.9 Standard Model Accessors
+
+Fitted-model objects respond to the usual R accessors, so a
+`mysterycall_poisson_model` can be handled like any other fitted model.
+Each one delegates to the underlying `lme4` or `glmmTMB` fit rather than
+recomputing anything, and the same methods are available for
+[`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md),
+[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
+and
+[`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md).
+
+``` r
+
+# Fixed effects on the link (log) scale. exp(coef(fit)) matches
+# fit$irr_table$irr.
+coef(poisson_fit)
+#>        (Intercept)  insuranceMedicaid  insuranceMedicare
+#>         2.48490665         0.35065687         0.07696104
+#> insuranceUninsured
+#>         0.25464222
+
+# exp() recovers the IRRs in fit$irr_table: 1.42, 1.08, 1.29.
+exp(coef(poisson_fit))[-1]
+#>  insuranceMedicaid  insuranceMedicare insuranceUninsured
+#>           1.420000           1.080000           1.290000
+
+# Rows the model actually fitted. The fitters assert this equals `fit$n`, so
+# the denominator you report is the denominator the model used.
+nobs(poisson_fit)
+#> [1] 196
+
+# Wald intervals on the link scale, at the level the model was *fitted* with
+# rather than a hard-coded 0.95, so these cannot disagree with
+# fit$irr_table.
+confint(poisson_fit)
+#>                          2.5 %     97.5 %
+#> (Intercept)         2.41330170 2.55928740
+#> insuranceMedicaid   0.16551444 0.53062825
+#> insuranceMedicare  -0.11653382 0.27002714
+#> insuranceUninsured  0.05826891 0.45107562
+
+# These are the log-scale bounds of fit$irr_table's CI columns:
+# exp(0.16551444) = 1.18 and exp(0.53062825) = 1.70 for Medicaid.
+
+# Pass `level` explicitly to recompute at a different level.
+confint(poisson_fit, level = 0.90)
+
+# vcov(), formula(), fitted() and residuals() are also available.
+# fitted() and residuals() are conditional on the estimated random effects;
+# for marginal predictions use mysterycall_predicted_means().
+summary(poisson_fit)
+```
+
+For
+[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md),
+[`confint()`](https://rdrr.io/r/stats/confint.html) uses the
+Satterthwaite *t* quantile with the per-term degrees of freedom,
+matching the intervals in `fit$coef_table`; a normal quantile would be
+anticonservative at small residual df. These are Wald intervals, not
+profile-likelihood or bootstrap intervals. For a profile interval, call
+`confint(fit$model, method = "profile")` on the underlying fit and
+expect it to be considerably slower.
+
+These methods are defined only for the four classes that wrap a real
+fitted model. Calling them on a table or report object, or on a model
+object whose `$model` element has been removed, raises an explicit error
+rather than returning `NULL`.
 
 ------------------------------------------------------------------------
 
@@ -1220,7 +1304,7 @@ cat(results_text)
 #> intraclass correlation coefficient 0.089). The Pearson chi-squared
 #> overdispersion ratio was 1.08, indicating adequate model fit. Medicaid
 #> callers waited 42% longer than privately insured callers (incidence rate
-#> ratio [IRR] 1.42; 95% profile-likelihood CI: 1.18-1.70; p < .001).
+#> ratio [IRR] 1.42; 95% Wald CI: 1.18-1.70; p < .001).
 #> Uninsured callers waited 29% longer (IRR 1.29; 95% CI: 1.06 to 1.57; p = .012).
 #> No statistically significant wait-time difference was observed for Medicare
 #> callers (IRR 1.08; 95% CI: 0.89 to 1.31; p = .441).
@@ -1558,7 +1642,7 @@ knitr::kable(
 #> Absolute difference and relative risk are vs. Private insurance (reference).
 #> Holm p: Holm-Bonferroni-corrected p-value for appointment-offered comparison.
 #> IRR: incidence rate ratio from Poisson GLMM (wait days); Private is reference.
-#> IRR CI: 95% profile-likelihood CI.
+#> IRR CI: 95% Wald CI on the log scale, exponentiated.
 ```
 
 ### 9.8 Write the Results Paragraph
@@ -1596,7 +1680,7 @@ cat(results_para)
 #> intercept to account for within-physician clustering (intraclass correlation
 #> coefficient 0.073). The Pearson chi-squared overdispersion ratio was 1.12,
 #> indicating acceptable model fit. Medicaid callers waited 40% longer than
-#> privately insured callers (IRR 1.40; 95% profile-likelihood CI: 1.12-1.74;
+#> privately insured callers (IRR 1.40; 95% Wald CI: 1.12-1.74;
 #> p = .003). Uninsured callers waited 28% longer (IRR 1.28; 95% CI: 1.01 to 1.62;
 #> p = .042). No statistically significant wait-time difference was observed for
 #> Medicare callers compared with privately insured callers (IRR 1.08; 95% CI:

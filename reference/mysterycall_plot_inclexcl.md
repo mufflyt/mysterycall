@@ -7,12 +7,6 @@ this function understands the standard mystery-caller study phases
 (identification, screening, enrollment, analysis) and lays out exclusion
 boxes on the right side with dashed arrows.
 
-For a static, arithmetic-validated participant flow, prefer the
-[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
-[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
-pair; this function draws a CONSORT inclusion/exclusion flowchart with
-DiagrammeR/Graphviz and remains fully supported for that purpose.
-
 ## Usage
 
 ``` r
@@ -72,6 +66,12 @@ the RStudio Viewer and RMarkdown HTML output. To export to SVG or PDF:
 ## Details
 
 Optionally appends a subspecialty distribution table in the final node.
+
+For a static, arithmetic-validated participant flow, prefer the
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+pair; this function draws a CONSORT inclusion/exclusion flowchart with
+DiagrammeR/Graphviz and remains fully supported for that purpose.
 
 ## See also
 

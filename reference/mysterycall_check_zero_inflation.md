@@ -160,9 +160,6 @@ df <- data.frame(
 fit <- mysterycall_poisson_model(df, "wait", "ins", "phys")
 #> Fitting Poisson GLMER: wait ~ ins + (1 | phys)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=60, physicians=10, AIC=347.3, overdispersion=1.11
 mysterycall_check_zero_inflation(fit, plot = FALSE)

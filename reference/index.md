@@ -655,6 +655,58 @@ Fit LMMs, Poisson GLMMs, negative-binomial GLMMs, and logistic models.
 - [`mysterycall_screen_predictors()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_predictors.md)
   : Screen candidate predictors for a GLMM outcome
 
+## Standard Model Accessors
+
+S3 methods letting a fitted mysterycall model be handled like any other
+fitted model. Each delegates to the underlying lme4 or glmmTMB fit.
+Defined for mysterycall_poisson_model, mysterycall_nb_model,
+mysterycall_lmm and mysterycall_logistic_model only – not for the table
+and report classes, which are formatted results rather than fitted
+models.
+
+- [`coef(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/coef.mysterycall.md)
+  [`coef(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/coef.mysterycall.md)
+  [`coef(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/coef.mysterycall.md)
+  [`coef(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/coef.mysterycall.md)
+  : Fixed-Effect Coefficients of a mysterycall Model
+- [`vcov(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/vcov.mysterycall.md)
+  [`vcov(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/vcov.mysterycall.md)
+  [`vcov(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/vcov.mysterycall.md)
+  [`vcov(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/vcov.mysterycall.md)
+  : Variance-Covariance Matrix of a mysterycall Model
+- [`confint(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/confint.mysterycall.md)
+  [`confint(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/confint.mysterycall.md)
+  [`confint(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/confint.mysterycall.md)
+  [`confint(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/confint.mysterycall.md)
+  : Wald Confidence Intervals for a mysterycall Model
+- [`nobs(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/nobs.mysterycall.md)
+  [`nobs(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/nobs.mysterycall.md)
+  [`nobs(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/nobs.mysterycall.md)
+  [`nobs(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/nobs.mysterycall.md)
+  : Number of Observations Used by a mysterycall Model
+- [`formula(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/formula.mysterycall.md)
+  [`formula(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/formula.mysterycall.md)
+  [`formula(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/formula.mysterycall.md)
+  [`formula(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/formula.mysterycall.md)
+  : Model Formula of a mysterycall Model
+- [`fitted(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/fitted.mysterycall.md)
+  [`fitted(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/fitted.mysterycall.md)
+  [`fitted(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/fitted.mysterycall.md)
+  [`fitted(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/fitted.mysterycall.md)
+  : Fitted Values of a mysterycall Model
+- [`residuals(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/residuals.mysterycall.md)
+  [`residuals(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/residuals.mysterycall.md)
+  [`residuals(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/residuals.mysterycall.md)
+  [`residuals(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/residuals.mysterycall.md)
+  : Residuals of a mysterycall Model
+- [`summary(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/summary.mysterycall.md)
+  [`summary(`*`<mysterycall_nb_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/summary.mysterycall.md)
+  [`summary(`*`<mysterycall_lmm>`*`)`](https://mufflyt.github.io/mysterycall/reference/summary.mysterycall.md)
+  [`summary(`*`<mysterycall_logistic_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/summary.mysterycall.md)
+  : Summarise a mysterycall Model
+- [`print(`*`<mysterycall_model_summary>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_model_summary.md)
+  : Print a mysterycall Model Summary
+
 ## Model Interpretation
 
 Interpret fitted models: ICC, overdispersion, IRR, power, and

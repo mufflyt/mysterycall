@@ -8,6 +8,56 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Standard S3 accessors for the four fitted-model classes: coef(),
+  vcov(), confint(), nobs(), formula(), fitted(), residuals() and
+  summary() on mysterycall_poisson_model, mysterycall_nb_model,
+  mysterycall_lmm and mysterycall_logistic_model. Each delegates to the
+  underlying lme4 or glmmTMB fit. Previously coef(), fitted() and
+  residuals() fell through to the \*.default methods, found no matching
+  list element, and returned NULL with no error – a silent NULL where a
+  coefficient vector was expected. Not defined for the table and report
+  classes, which are formatted results rather than models
+- confint() reports Wald intervals at the level the model was fitted
+  with rather than a hard-coded 0.95, so it cannot disagree with the
+  interval already in irr_table / coef_table / or_table; for
+  mysterycall_lmm() it uses the Satterthwaite t quantile with the
+  per-term degrees of freedom, as the fitter does. conf_level is now
+  recorded on all four fitted-model objects
+- strict_counts argument on the count fitters: the default keeps the
+  existing warning for a fractional outcome, TRUE refuses the fit. A
+  count of days is integer-valued by construction, whereas elapsed time
+  in days may legitimately carry decimals – in which case a count
+  distribution is the wrong model. Values are never rounded or truncated
+  either way
+- dispersion_details on the count fitters: the method, the formula
+  verbatim, the Pearson chi-square, the denominator used, observation
+  and parameter counts, the engine’s own residual df for comparison, how
+  many residuals were not finite, and the assumptions – so the
+  dispersion statistic can be reproduced rather than taken on trust.
+  pearson_chisq / df equals overdispersion exactly
+- fit_warnings on the count fitters: every engine warning,
+  de-duplicated, separate from the convergence verdict
+- validate_coordinates() and validate_log_offset() internal guards, with
+  coordinate-domain validation wired into
+  mysterycall_calculate_spatial_density(),
+  mysterycall_calculate_hq_distance() and
+  mysterycall_assign_area_covariates()
+- vignette(“model-objects”): appendix on what a fitted object contains,
+  the accessors it answers, and the analytic-cohort invariants –
+  including why NA, NaN, Inf and fractional counts are each handled
+  differently
+- vignette(“statistical-analysis”) section 3.9 on the standard accessors
+- Direct tests for mysterycall_calculate_spatial_density(), which was
+  exported with none, including agreement with sf::st_distance() as an
+  independent geodesic reference; an analytic-cohort suite; a
+  review-findings suite; and an adversarial contract suite for the count
+  fitters that fails when a safety mechanism is absent rather than
+  confirming the functions merely run
+- srr/: first-pass assessment of all 285 rOpenSci statistical software
+  standards, with per-standard evidence and the downloaded standards
+  texts. Excluded from the package tarball
+- audit/: verification evidence for the above – the fault-injection
+  results and the invariants each test defends
 - mysterycall_flow_spec(): validates that a STROBE/CONSORT participant
   flow closes before anything is drawn – each spine step minus its
   exclusions equals the next step, every split sums to its parent, and
@@ -126,31 +176,76 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 - mysterycall_insurance_acceptance_rates(): compute Medicaid vs BCBS
   acceptance rates
 
-### Changed
-
-- Confidence intervals, IQRs, and ranges now separate endpoints with ”
-  to ” rather than a hyphen or en dash, across all 39 formatters that
-  build them (tables, plots, sentence builders, print methods). Year
-  ranges and wait-time band labels keep their dash: they are category
-  names, not estimates, and cannot take a negative endpoint
-- mysterycall_irr_table() no longer adds significance stars by default
-  (add_significance_stars = FALSE) and its default footnote drops the
-  “\* p \< 0.05” ladder; SAMPL asks for exact p-values rather than codes
-  against alpha. Pass TRUE for a journal that requires them
-- All 22 internal reimplementations of the `if (p < 0.001)` branch now
-  route through mysterycall_format_p(); .mc_format_p() delegates to it,
-  so its comment claiming to be the single source of truth is finally
-  accurate. Output is unchanged, including results_paragraph()’s
-  unspaced “p=”, which is pinned by its own @return docs
-- Suppressed lme4 singular-fit warnings via withCallingHandlers in lmm
-  functions
-- Pre-filter NA rows before ggplot construction in histogram functions
-- p_adjust_method parameter added to univariate_lmm_screen,
-  univariate_poisson_screen, and interaction_screen
-- Input validation uses checkmate assertions across all new functions
-
 ### Fixed
 
+- The reported analytic cohort could disagree with the cohort the model
+  used. Fitting engines apply their own na.action, so a value that only
+  becomes undefined inside the model formula – log() of a non-positive
+  offset – was dropped by the engine without passing through the
+  complete-case filter: a 120-row frame with three negative exposures
+  produced a model fitted on 117 rows while the object reported n = 120,
+  n_dropped = 0. Every denominator derived from that object was wrong by
+  three and nothing said so. All five fitters that report an n now
+  reconcile it against the rows the engine used and refuse a mismatch
+- A log offset of zero, negative or non-finite exposure is refused
+  before fitting, naming the column, the count, the offending values and
+  the rows in the caller’s data frame. Values are never replaced with a
+  small positive constant; that choice belongs to the analyst
+- NaN is distinguished from NA in outcomes and exposures. Because
+  is.na(NaN) is TRUE, a NaN was previously swept into the missing-data
+  count and excluded silently
+- A latitude of 500 was accepted by
+  mysterycall_calculate_spatial_density() and returned a plausible
+  neighbour count, because the haversine formula is finite for any real
+  argument. Coordinates outside \[-90, 90\] / \[-180, 180\], and
+  non-numeric, NaN or infinite values, are now refused. Latitude and
+  longitude are never silently reordered
+- mysterycall_calculate_spatial_density() returned a density of 0 for a
+  point with a missing coordinate, indistinguishable from a genuinely
+  isolated practice; it now returns NA_integer\_ and reports how many
+  points were affected
+- The negative binomial dispersion statistic was wrong for any fit that
+  was not a plain NB2. It took its numerator from fitted() and its
+  denominator from sqrt(mu + mu^2/theta), which are two different
+  models: for a zero-inflated fit, fitted() is the
+  zero-inflation-marginal mean while the variance term is the
+  conditional variance, inflating the statistic by about 2.6x on a
+  sample with 29% structural zeros. With a non-constant dispformula,
+  sigma() returns NA, every residual was NA, and sum(na.rm = TRUE)
+  reported a dispersion of exactly 0 – read as extreme underdispersion.
+  Both values reach a manuscript through mysterycall_strobe_checklist()
+  and mysterycall_model_comparison_table(). The Pearson residual now
+  comes from the fitting engine; a model without zero-inflation is
+  numerically unchanged, verified to machine precision
+- A non-integer count outcome produced roughly 1,900 muffled
+  per-observation engine warnings, stored them all on the result object,
+  and flipped convergence\$converged to FALSE, misfiling a units error
+  as an optimizer failure
+- A convergence warning could be discarded by the warning de-duplication
+  cap, leaving an object claiming a fit converged when glmmTMB’s
+  “extreme or very small eigenvalues detected” – the only signal for a
+  numerically singular covariance when the optimizer code is 0 – had
+  fired. Convergence-related warnings are never capped
+- subset and na.action passed through … are refused by name, because
+  they make the engine fit a different set of rows than the function
+  reports. The check uses pmatch(), so partial argument matching (subs
+  =) cannot slip past
+- vignette(“statistical-analysis”) described the confidence intervals in
+  irr_table as “95 % profile likelihood confidence intervals … preferred
+  over Wald intervals”. They are Wald intervals. The same mislabel
+  appeared in three illustrative manuscript sentences, any of which a
+  reader could have copied into a paper while stating a method the
+  package did not use. (mysterycall_simple_poisson() does compute
+  genuine profile intervals, so the label was wrong only for the GLMM
+  fitters; the package’s own prose generators emit a neutral “95% CI”
+  and were never affected)
+- vignette(“statistical-analysis”) documented \$overdispersion as a list
+  with \$pearson_chisq, \$residual_df, \$ratio and \$interpretation
+  elements. It is a numeric scalar; the computation lives in
+  \$dispersion_details
+- importFrom(stats, nobs) was missing. Because S3method(nobs, …) needs
+  the generic at load time, the package failed to load in any session
+  where stats was not already attached
 - mysterycall_multi_model_table() rendered a negative linear-mixed-model
   estimate as `-0.28 (-0.45--0.12)`, which is genuinely ambiguous. Now
   `-0.28 (-0.45 to -0.12)`. The same applied to percentage-point
@@ -179,6 +274,35 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
   test-coverage.yaml
 - Two pull-request checks hung 77 minutes on r-lib/actions/setup-r with
   no timeout-minutes, so GitHub’s six-hour default applied
+
+### Changed
+
+- convergence$`converged now reports the optimizer, and the Hessian for glmmTMB, rather than being cleared by any warning at all. A boundary-singular lme4 fit whose optimizer returned code 0 is reported as converged; singularity is a property of the data and continues to be reported in convergence`$singular.
+  \$convergence keeps its previous shape and the content of its
+  \$messages
+- Fitted-model objects gain conf_level, dispersion_details and
+  fit_warnings elements. Code reading named elements is unaffected; code
+  asserting an exact names() set will see them
+- Confidence intervals, IQRs, and ranges now separate endpoints with ”
+  to ” rather than a hyphen or en dash, across all 39 formatters that
+  build them (tables, plots, sentence builders, print methods). Year
+  ranges and wait-time band labels keep their dash: they are category
+  names, not estimates, and cannot take a negative endpoint
+- mysterycall_irr_table() no longer adds significance stars by default
+  (add_significance_stars = FALSE) and its default footnote drops the
+  “\* p \< 0.05” ladder; SAMPL asks for exact p-values rather than codes
+  against alpha. Pass TRUE for a journal that requires them
+- All 22 internal reimplementations of the `if (p < 0.001)` branch now
+  route through mysterycall_format_p(); .mc_format_p() delegates to it,
+  so its comment claiming to be the single source of truth is finally
+  accurate. Output is unchanged, including results_paragraph()’s
+  unspaced “p=”, which is pinned by its own @return docs
+- Suppressed lme4 singular-fit warnings via withCallingHandlers in lmm
+  functions
+- Pre-filter NA rows before ggplot construction in histogram functions
+- p_adjust_method parameter added to univariate_lmm_screen,
+  univariate_poisson_screen, and interaction_screen
+- Input validation uses checkmate assertions across all new functions
 
 ### Infrastructure
 

@@ -18,6 +18,7 @@ mysterycall_nb_model(
   random_intercept,
   conf_level = 0.95,
   offset_col = NULL,
+  strict_counts = FALSE,
   ...
 )
 ```
@@ -57,6 +58,15 @@ mysterycall_nb_model(
   Optional character scalar naming a numeric column to use as a
   log-offset. When supplied, `offset(log(offset_col))` is appended to
   the fixed-effects formula.
+
+- strict_counts:
+
+  Logical flag, default `FALSE`. When `TRUE`, a fractional `outcome` is
+  an error instead of a warning. A count of days is integer-valued by
+  construction, so a fractional value is usually a data error; elapsed
+  time measured in days may legitimately carry decimals, in which case a
+  count distribution is the wrong model for it. Values are never rounded
+  or truncated under either setting.
 
 - ...:
 

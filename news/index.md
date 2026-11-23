@@ -2,6 +2,198 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### New functions
+
+- Fitted-model objects now respond to the standard R accessors:
+  [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`vcov()`](https://rdrr.io/r/stats/vcov.html),
+  [`confint()`](https://rdrr.io/r/stats/confint.html),
+  [`nobs()`](https://rdrr.io/r/stats/nobs.html),
+  [`formula()`](https://rdrr.io/r/stats/formula.html),
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html),
+  [`residuals()`](https://rdrr.io/r/stats/residuals.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) are registered for
+  `mysterycall_poisson_model`, `mysterycall_nb_model`, `mysterycall_lmm`
+  and `mysterycall_logistic_model`. Each delegates to the underlying
+  `lme4` or `glmmTMB` fit rather than recomputing anything, so
+  [`coef()`](https://rdrr.io/r/stats/coef.html) returns the fixed
+  effects the engine reports
+  ([`stats::coef()`](https://rdrr.io/r/stats/coef.html) on a `merMod`
+  returns the per-group coefficient matrix instead, which is why these
+  are needed). Previously [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html) and
+  [`residuals()`](https://rdrr.io/r/stats/residuals.html) fell through
+  to the `*.default` methods, which look for list elements these objects
+  do not have and so returned `NULL` with no error – a silent `NULL` in
+  place of a coefficient vector.
+  [`summary()`](https://rdrr.io/r/base/summary.html) returns a classed
+  `mysterycall_model_summary` with a
+  [`print()`](https://rdrr.io/r/base/print.html) method. The methods are
+  deliberately *not* defined for the table and report classes, which are
+  formatted results rather than fitted models, and they raise an
+  explicit error on an object whose `$model` element is absent. See
+  [`vignette("statistical-analysis")`](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md),
+  section 3.9.
+- [`confint()`](https://rdrr.io/r/stats/confint.html) reports Wald
+  intervals at the confidence level the model was **fitted** with, not a
+  hard-coded 0.95, so it cannot disagree with the interval already in
+  `$irr_table` / `$coef_table` / `$or_table`. For
+  [`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
+  it uses the Satterthwaite *t* quantile with the per-term degrees of
+  freedom, matching the fitter; a normal quantile is anticonservative at
+  small residual df. `conf_level` is now recorded on all four
+  fitted-model objects to make this possible.
+
+### Data integrity
+
+- [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+  [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md),
+  [`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md),
+  [`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+  and
+  [`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md)
+  now assert that the number of rows the fitting engine used equals the
+  complete-case cohort they report as `n`. Fitting engines apply their
+  own `na.action`, so a value that only becomes undefined inside the
+  model formula was dropped by the engine without passing through the
+  complete-case filter: a 120-row frame with three negative exposures
+  produced a model fitted on 117 rows while the object reported
+  `n = 120`, `n_dropped = 0`. Every denominator derived from that object
+  was wrong by three and nothing said so.
+- An exposure column used as a log offset must now be strictly positive
+  and finite. `log(0)` is `-Inf` and `log(x)` for `x < 0` is `NaN`, and
+  the offending rows were silently dropped by the engine. The error
+  names the column, the count, the offending values and the rows **in
+  the caller’s data frame**. Values are never replaced with a small
+  positive constant; that choice belongs to the analyst.
+- `NaN` is now distinguished from `NA` in outcomes and exposures.
+  Because `is.na(NaN)` is `TRUE`, a `NaN` was previously swept into the
+  missing-data count and excluded silently. `NA` remains a declared
+  exclusion that is reported in `n_dropped`; `NaN` and infinite values
+  are refused.
+- `subset` and `na.action` are refused by name when passed through `...`
+  to the model fitters, because they make the engine fit a different set
+  of rows than the function reports. The check uses
+  [`pmatch()`](https://rdrr.io/r/base/pmatch.html), so R’s partial
+  argument matching (`subs =`) cannot slip past it. Filter `data` before
+  calling instead, so the exclusion is counted.
+- [`mysterycall_calculate_spatial_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_spatial_density.md),
+  [`mysterycall_calculate_hq_distance()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_hq_distance.md)
+  and
+  [`mysterycall_assign_area_covariates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_area_covariates.md)
+  now validate geographic coordinates. A latitude of 500 was accepted
+  and returned a plausible neighbour count, because the haversine
+  formula is finite for any real argument. Latitude must lie in
+  `[-90, 90]` and longitude in `[-180, 180]`; non-numeric input, `NaN`
+  and infinite values are refused with a message naming the argument,
+  the offending values and their positions. Latitude and longitude are
+  never silently reordered – a pair inside both domains cannot be known
+  to be transposed – so the error only suggests checking for a swap.
+
+### Bug fixes
+
+- [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md)
+  reported a wrong dispersion statistic for any fit that was not a plain
+  NB2. It formed the numerator from
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html) and the
+  denominator from `sqrt(mu + mu^2/theta)`, which are two different
+  models: for a zero-inflated fit (a `ziformula` through `...`)
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html) is the
+  zero-inflation-marginal mean while the variance term is the
+  conditional variance, inflating the statistic by a factor of about 2.6
+  on a sample with 29% structural zeros. With a non-constant
+  `dispformula`, [`sigma()`](https://rdrr.io/r/stats/sigma.html) returns
+  `NA`, every residual was `NA`, and `sum(na.rm = TRUE)` reported a
+  dispersion of exactly 0 – read as extreme underdispersion. Both values
+  reach a manuscript through
+  [`mysterycall_strobe_checklist()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.md),
+  [`mysterycall_model_comparison_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_comparison_table.md)
+  and [`print()`](https://rdrr.io/r/base/print.html). The Pearson
+  residual now comes from the fitting engine, which forms it from the
+  variance of the model as fitted. **A model without zero-inflation is
+  numerically unchanged**, verified to machine precision.
+- [`mysterycall_calculate_spatial_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_spatial_density.md)
+  returned a density of `0` for a point with a missing coordinate, which
+  is indistinguishable from a genuinely isolated practice and biases any
+  model built on the result. It now returns `NA_integer_` and reports
+  how many points and targets were affected.
+- A non-integer count outcome produced roughly 1,900 muffled
+  per-observation engine warnings, stored them all on the result object,
+  and flipped `convergence$converged` to `FALSE` – misfiling a units
+  error as an optimizer failure. It is now reported once, as the data
+  problem it is.
+
+### Breaking changes (with backward compatibility)
+
+- `convergence$converged` now reports the optimizer, and the Hessian for
+  `glmmTMB`, rather than being cleared by any warning at all. A warning
+  about something unrelated no longer makes a converged model look
+  failed, and a boundary-singular `lme4` fit whose optimizer returned
+  code 0 is now reported as converged – singularity is a property of the
+  data and continues to be reported separately in
+  `convergence$singular`. Every captured warning is available in the new
+  top-level `$fit_warnings`. `$convergence` keeps its previous shape and
+  the content of its `$messages`.
+- The count fitters gain `strict_counts = FALSE`. The default keeps the
+  existing warning for a fractional outcome; `TRUE` refuses the fit. A
+  count of days is integer-valued by construction, whereas elapsed time
+  measured in days may legitimately carry decimals – in which case a
+  count distribution is the wrong model for it. Values are never rounded
+  or truncated under either setting.
+- Fitted-model objects gain `conf_level`, `dispersion_details` and
+  `fit_warnings` elements. Code that reads named elements is unaffected;
+  code asserting an exact [`names()`](https://rdrr.io/r/base/names.html)
+  set will see the new fields.
+
+### Documentation
+
+- [`vignette("statistical-analysis")`](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md)
+  no longer describes the confidence intervals in
+  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)’s
+  `irr_table` as “95 % profile likelihood confidence intervals …
+  preferred over Wald intervals”. They are Wald intervals:
+  `exp(estimate ± z × SE)`. The mislabel appeared in the reading guide
+  for section 3.4 and in three illustrative manuscript sentences, any of
+  which a reader could have copied into a paper, stating a method the
+  package did not use.
+  ([`mysterycall_simple_poisson()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_simple_poisson.md)
+  does compute genuine profile intervals via
+  [`stats::confint()`](https://rdrr.io/r/stats/confint.html) on its
+  `glm`, with `use_profile_ci = TRUE` by default, and falls back to Wald
+  with a message – so the label was only wrong for the GLMM fitters.)
+  The package’s own prose generators were never affected: they emit a
+  neutral “95% CI” without naming a method.
+- [`vignette("statistical-analysis")`](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md)
+  gains section 3.9 on the standard model accessors, and its
+  overdispersion section now documents what the object actually holds.
+  It had shown `$overdispersion` as a list with `$pearson_chisq`,
+  `$residual_df`, `$ratio` and `$interpretation` elements; it is a
+  numeric scalar, and the computation is recorded separately in
+  `$dispersion_details`.
+- `$dispersion_details` records the method, the formula verbatim, the
+  Pearson chi-square, the denominator actually used, the observation and
+  parameter counts, the engine’s own residual df for comparison, how
+  many residuals were not finite, and the assumptions – so the statistic
+  can be reproduced rather than taken on trust. `pearson_chisq / df`
+  equals `overdispersion` exactly. The reported value is unchanged for a
+  plain fit; the two denominator conventions in use differ by the number
+  of random-effect variance components, which is why both are recorded.
+
+### Tests
+
+- New: direct tests for
+  [`mysterycall_calculate_spatial_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_spatial_density.md),
+  which had none despite being exported, including agreement with
+  [`sf::st_distance()`](https://r-spatial.github.io/sf/reference/geos_measures.html)
+  as an independent geodesic reference; a cohort-and-offset suite
+  covering the analytic-cohort invariant; a review-findings suite; and
+  an adversarial contract suite for the count fitters that fails when a
+  safety mechanism is absent rather than confirming the functions merely
+  run.
+- Fault injection confirms the suite detects the defects it claims to
+  prevent: 14 deliberate defects were injected one at a time and all 14
+  were caught by the test written for each.
+
 ### Internal
 
 - The participant-flow functions now share a single count formatter

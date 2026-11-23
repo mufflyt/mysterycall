@@ -104,6 +104,14 @@
   metrics across insurance types, bootstrap confidence intervals, and
   multiple- comparison adjustment for mystery-caller studies.
 
+- [Appendix: Model Objects and Cohort
+  Guarantees](https://mufflyt.github.io/mysterycall/articles/model-objects.md):
+
+  What a fitted mysterycall model object contains, the standard R
+  accessors it answers, and the invariants the fitters enforce so that
+  the cohort size a manuscript reports is the cohort the model actually
+  used.
+
 - [Linear Mixed Models for Wait-Time
   Analysis](https://mufflyt.github.io/mysterycall/articles/linear-mixed-models.md):
 

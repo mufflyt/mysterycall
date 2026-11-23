@@ -15,6 +15,7 @@ articles:
   logistic-model: logistic-model.html
   matched-control-design: matched-control-design.html
   matched-pair-analysis: matched-pair-analysis.html
+  model-objects: model-objects.html
   my-vignette: my-vignette.html
   mystery-caller-workflow: mystery-caller-workflow.html
   participant-flow: participant-flow.html
@@ -30,7 +31,7 @@ articles:
   two-part-denominators: two-part-denominators.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-11-23T04:37Z
+last_built: 2026-11-23T05:32Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

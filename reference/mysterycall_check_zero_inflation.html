@@ -52,6 +52,7 @@ objects."><meta property="og:image" content="https://github.com/mufflyt/mysteryc
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -237,9 +238,6 @@ overdispersion (but not zero-inflation).</p>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span><span class="va">df</span>, <span class="st">"wait"</span>, <span class="st">"ins"</span>, <span class="st">"phys"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting Poisson GLMER: wait ~ ins + (1 | phys)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Convergence issues detected:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   boundary (singular) fit: see help('isSingular')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider simplifying predictors or using nAGQ = 1.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Model fitted: n=60, physicians=10, AIC=347.3, overdispersion=1.11</span>
 <span class="r-in"><span><span class="fu">mysterycall_check_zero_inflation</span><span class="op">(</span><span class="va">fit</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>

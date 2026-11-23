@@ -73,6 +73,7 @@
     <li><a class="dropdown-item" href="articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -298,6 +299,23 @@
 <p>See <code><a href="articles/reporting-conventions.html">vignette("reporting-conventions")</a></code> for the full appendix, including the three places the package deliberately departs from SAMPL and why.</p>
 </div>
 <div class="section level2">
+<h2 id="working-with-a-fitted-model">Working with a fitted model<a class="anchor" aria-label="anchor" href="#working-with-a-fitted-model"></a>
+</h2>
+<p>A fitted model answers the usual R accessors, so it can be handled like any other model object. Each delegates to the underlying <code>lme4</code> or <code>glmmTMB</code> fit rather than recomputing anything:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">calls</span>, outcome <span class="op">=</span> <span class="st">"business_days_until_appointment"</span>,</span>
+<span>  predictors <span class="op">=</span> <span class="st">"insurance"</span>, random_intercept <span class="op">=</span> <span class="st">"practice"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>      <span class="co"># fixed effects on the log scale; exp() gives the IRRs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>   <span class="co"># Wald intervals, at the level the model was fitted with</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/nobs.html" class="external-link">nobs</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>      <span class="co"># rows the engine fitted -- asserted equal to fit$n</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>   <span class="co"># cohort, dispersion, convergence and the IRR table</span></span></code></pre></div>
+<p>The denominator is guaranteed. Fitting engines apply their own <code>na.action</code>, so a value that only becomes undefined inside the model formula – <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> of a non-positive exposure, say – used to be dropped by the engine while the object still reported the pre-fit cohort. Every fitter that reports an <code>n</code> now reconciles it against the rows the engine actually used and refuses a mismatch, so <code>fit$n</code> is the number to put in the manuscript and <code>fit$n + fit$n_dropped</code> is the number you supplied.</p>
+<p>See <code><a href="articles/model-objects.html">vignette("model-objects")</a></code> for the full appendix.</p>
+</div>
+<div class="section level2">
 <h2 id="how-mysterycall-compares-to-alternatives">How mysterycall compares to alternatives<a class="anchor" aria-label="anchor" href="#how-mysterycall-compares-to-alternatives"></a>
 </h2>
 <table class="table">
@@ -355,6 +373,13 @@
 </tr>
 <tr>
 <td>Poisson GLMM with IRR reporting</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Reported cohort reconciled against the fitted cohort</td>
 <td>✅</td>
 <td>❌</td>
 <td>❌</td>
@@ -577,7 +602,7 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: find all OBGYN taxonomy codes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -607,7 +632,7 @@
 <div class="section level2">
 <h2 id="citing-mysterycall">Citing mysterycall<a class="anchor" aria-label="anchor" href="#citing-mysterycall"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"mysterycall"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p>Muffly, T. (2026). <em>mysterycall: Mystery Caller Study Tools for Healthcare Access Research</em> (R package version 1.6.3.9000). <a href="https://github.com/mufflyt/mysterycall" class="external-link uri">https://github.com/mufflyt/mysterycall</a></p>

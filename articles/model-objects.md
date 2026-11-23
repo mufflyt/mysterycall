@@ -1,0 +1,264 @@
+# Appendix: Model Objects and Cohort Guarantees
+
+A mystery-caller analysis can execute without error and still be wrong.
+The model converges, the incidence rate ratio looks plausible, the
+paragraph generator produces a sentence — and the denominator in that
+sentence is not the number of calls the model was fitted on. This
+appendix documents the structure of a fitted model object, the accessors
+it answers, and the invariants the fitters enforce to make that
+particular failure impossible rather than merely unlikely.
+
+## 1. What a fitted object contains
+
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
+and
+[`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md)
+return a classed list. The elements a reader is most likely to want:
+
+| Element | What it holds |
+|----|----|
+| `model` | The underlying `glmerMod` or `glmmTMB` fit, untouched |
+| `irr_table` | One row per fixed effect: estimate, SE, z, p, IRR, CI bounds |
+| `n` | Rows the model was fitted on |
+| `n_dropped` | Rows the complete-case filter removed, with the reason |
+| `n_clusters` | Distinct values of the random-intercept grouping variable |
+| `conf_level` | The confidence level the intervals were computed at |
+| `factor_refs` | Reference level chosen for each factor predictor |
+| `formula` | The formula passed to the engine, including the offset term |
+| `overdispersion` | Pearson dispersion statistic (a single number) |
+| `dispersion_details` | How that statistic was computed (see section 4) |
+| `convergence` | `converged`, `singular`, and the diagnostic messages |
+| `fit_warnings` | Engine warnings, de-duplicated |
+| `aic`, `bic` | Information criteria |
+
+[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
+stores `coef_table` and `gmr_table` instead of `irr_table`;
+[`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+stores `or_table`. Everything else is the same.
+
+## 2. Standard accessors
+
+All four fitted-model classes answer the usual accessors, so they can be
+handled like any other fitted model. Each delegates to the engine rather
+than recomputing anything.
+
+``` r
+
+coef(fit)       # fixed effects on the link scale
+vcov(fit)       # fixed-effect covariance, as a base matrix
+confint(fit)    # Wald intervals, at the level the model was fitted with
+nobs(fit)       # rows the engine fitted
+formula(fit)
+fitted(fit)     # conditional on the estimated random effects
+residuals(fit)  # type = "pearson" available
+summary(fit)    # classed mysterycall_model_summary, with a print method
+```
+
+Three details are worth knowing.
+
+**[`coef()`](https://rdrr.io/r/stats/coef.html) returns fixed effects,
+not the random-effect matrix.**
+[`stats::coef()`](https://rdrr.io/r/stats/coef.html) on a `merMod`
+returns one row per group. These methods return
+[`lme4::fixef()`](https://rdrr.io/pkg/nlme/man/fixed.effects.html) — or
+the conditional component of
+[`glmmTMB::fixef()`](https://rdrr.io/pkg/nlme/man/fixed.effects.html) —
+so `exp(coef(fit))` reproduces `fit$irr_table$irr`.
+
+**[`confint()`](https://rdrr.io/r/stats/confint.html) cannot disagree
+with the table.** It defaults to the `conf_level` the model was *fitted*
+with rather than a hard-coded 0.95, so a model fitted at 90% reports a
+90% interval. For
+[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md)
+it uses the Satterthwaite $`t`$ quantile with the per-term degrees of
+freedom, matching `fit$coef_table`; a normal quantile would be
+anticonservative at small residual df. These are **Wald** intervals —
+not profile-likelihood, not bootstrap. For a profile interval, call
+`confint(fit$model, method = "profile")` on the engine fit directly.
+
+**[`fitted()`](https://rdrr.io/r/stats/fitted.values.html) is
+conditional, not marginal.** It includes the estimated random effects.
+For population-average predictions over a covariate profile, use
+[`mysterycall_predicted_means()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_predicted_means.md)
+or
+[`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md).
+
+These methods exist only for the four classes that wrap a real fit. The
+table and report classes are formatted results, not models, and do not
+answer them. An object whose `$model` element has been removed raises an
+explicit error rather than returning `NULL`.
+
+## 3. The analytic-cohort invariant
+
+This is the part that protects a published denominator.
+
+A fitting engine applies its own `na.action` to the model frame. A value
+that is fine in the data but becomes undefined *inside the formula* is
+therefore dropped by the engine, without ever passing through the
+package’s complete-case filter. The clearest case is a log offset:
+
+``` r
+
+# exposure contains three negative values
+calls$exposure[1:3] <- -1
+
+fit <- mysterycall_poisson_model(
+  calls, "wait_days", "insurance", "npi", offset_col = "exposure"
+)
+```
+
+`offset(log(exposure))` is `NaN` for those rows. `lme4` silently drops
+them, fits on 117 rows, and the object used to report `n = 120`,
+`n_dropped = 0`. Nothing in the output said otherwise, and every rate,
+percentage and denominator downstream was wrong by three.
+
+Two guarantees now stand between that data and a result.
+
+**Exposure is validated before fitting.** A column used as a log offset
+must be strictly positive and finite. The error names the column, how
+many values fail, the offending values, and the rows *in your data
+frame*:
+
+``` r
+
+#> Error: `exposure` (offset_col) must be strictly positive and finite to be
+#> used as log(exposure); 3 of 120 value(s) are not, including -1, -1, -1 at
+#> row(s) 1, 2, 3. Zero or negative exposure is not replaced with a small
+#> constant: drop or correct those rows explicitly.
+```
+
+Those rows are not quietly repaired. Substituting a small positive
+constant for a zero exposure is a study-specific decision with
+consequences for the estimand, and it belongs to the analyst.
+
+**The fitted cohort is reconciled against the reported one.** After
+fitting, every fitter that reports an `n` —
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md),
+[`mysterycall_lmm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_lmm.md),
+[`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+and
+[`mysterycall_gee()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_gee.md)
+— compares the rows the engine used against the complete-case count and
+refuses to return a mismatch:
+
+``` r
+
+#> Error: mysterycall_poisson_model(): the fitted model used 117 row(s) but
+#> 120 complete case(s) were supplied. The fitting engine dropped 3 row(s) on
+#> its own, so the reported cohort would not match the model.
+```
+
+So `fit$n` is the number the model used, and `fit$n + fit$n_dropped` is
+the number you supplied. A legitimate exclusion still happens through
+the documented route — the complete-case filter — which counts it and
+messages the count.
+
+For the same reason, `subset` and `na.action` are refused when passed
+through `...`. Both would make the engine fit a different set of rows
+than the function reports. Filter the data before calling instead, so
+the exclusion is visible and counted.
+
+### Missing, undefined, and invalid
+
+The three are not the same thing, and are handled differently on
+purpose.
+
+| Value | Treatment | Why |
+|----|----|----|
+| `NA` | Dropped, counted in `n_dropped` | A declared missing observation |
+| `NaN` | Refused | Would otherwise pass as declared missingness |
+| `Inf` | Refused | Not a finite count or exposure |
+| Negative count | Refused | Outside the support of the distribution |
+| Fractional | Warned; refused under `strict_counts = TRUE` | See below |
+
+`NaN` is refused rather than dropped because `is.na(NaN)` is `TRUE`:
+left alone it would be counted as a declared missing observation, when
+it is actually the residue of an invalid computation that nobody
+declared.
+
+A fractional outcome is ambiguous rather than wrong. A *count of days
+until an appointment* is integer-valued by construction, so a fractional
+value is a data error. *Elapsed time measured in days* may legitimately
+carry decimals — but then a count distribution is the wrong model for
+it, and a continuous-time model should be considered. The default warns;
+`strict_counts = TRUE` refuses the fit. Values are never rounded or
+truncated under either setting.
+
+## 4. Convergence, singularity, and dispersion
+
+`convergence$converged` reports the **optimizer** — and the Hessian, for
+`glmmTMB`. It is not cleared by a warning about something else, such as
+a non-integer outcome.
+
+`convergence$singular` is reported separately, because a
+boundary-singular random-effect variance is a property of the data
+rather than an optimizer failure. A singular fit whose optimizer
+returned code 0 has converged. This matters in mystery-caller designs,
+where a physician called only two or three times often supports no
+estimable random intercept.
+
+Every captured engine warning is in `fit_warnings`. Convergence-related
+warnings are never discarded, however many unrelated ones fired.
+
+`overdispersion` is a single number; `dispersion_details` records how it
+was reached, so a reader can reproduce it:
+
+``` r
+
+str(fit$dispersion_details)
+#> List of 9
+#>  $ method       : chr "Pearson chi-square / (n - p_fixed)"
+#>  $ formula      : chr "sum(residuals(model, type = 'pearson')^2) / ..."
+#>  $ pearson_chisq: num 207
+#>  $ df           : int 192
+#>  $ n            : int 196
+#>  $ n_parameters : int 4
+#>  $ df_engine    : num 191
+#>  $ assumptions  : chr "Approximate diagnostic. ..."
+#>  $ n_pearson_na : int 0
+```
+
+`pearson_chisq / df` equals `overdispersion` exactly. Two denominator
+conventions are in circulation: this one debits the fixed-effect
+parameters, while
+[`stats::df.residual()`](https://rdrr.io/r/stats/df.residual.html) also
+debits the random-effect variance components and is therefore smaller by
+one for a single random intercept. `df_engine` records the latter so the
+difference is visible rather than implicit. The statistic is approximate
+for a GLMM in any case — its reference chi-square distribution is
+asymptotic and does not hold exactly once random effects are estimated.
+
+The residuals come from the fitting engine, so the variance function
+matches the model as fitted. That matters when a `ziformula` or
+`dispformula` is supplied through `...`: a hand-written NB2 variance
+would be the wrong denominator for a zero-inflated fit, because the
+fitted values are then the zero-inflation-marginal mean.
+
+## 5. What to check before reporting
+
+``` r
+
+fit$n                      # the denominator to report
+fit$n_dropped              # exclusions, and the message said why
+fit$n + fit$n_dropped      # should equal nrow(your_data)
+fit$convergence$converged  # optimizer
+fit$convergence$singular   # data, not failure
+fit$overdispersion         # with dispersion_details to back it
+fit$factor_refs            # the comparison your IRRs are against
+fit$conf_level             # the level your intervals are at
+```
+
+`mysterycall_strobe_checklist(model_result = fit)` reads most of these
+and reports which items a methods section still needs.
+
+## See also
+
+- [`vignette("statistical-analysis")`](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md),
+  section 3.9, for the accessors in the context of a worked analysis
+- [`vignette("reporting-conventions")`](https://mufflyt.github.io/mysterycall/articles/reporting-conventions.md)
+  for how the numbers are formatted
+- [`vignette("participant-flow")`](https://mufflyt.github.io/mysterycall/articles/participant-flow.md)
+  for making the flow diagram’s arithmetic close
+- [`vignette("guarding-contaminated-outcomes")`](https://mufflyt.github.io/mysterycall/articles/guarding-contaminated-outcomes.md)
+  for the fill-down guard

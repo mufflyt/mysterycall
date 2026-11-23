@@ -6,12 +6,6 @@ step is a labelled box with a count; optional exclusion side-boxes
 branch off to the right. Requires the `DiagrammeR` package (listed in
 Suggests).
 
-For a static, arithmetic-validated participant flow, prefer the
-[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
-[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
-pair; this function draws an interactive DiagrammeR/Graphviz flowchart
-and remains fully supported for that purpose.
-
 ## Usage
 
 ``` r
@@ -64,6 +58,14 @@ mysterycall_flowchart(
 A `DiagrammeR` / `htmlwidget` object. Print it to view in the RStudio
 Viewer or a browser; use `DiagrammeRsvg::export_svg()` +
 `rsvg::rsvg_pdf()` to save to PDF.
+
+## Details
+
+For a static, arithmetic-validated participant flow, prefer the
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+pair; this function draws an interactive DiagrammeR/Graphviz flowchart
+and remains fully supported for that purpose.
 
 ## See also
 

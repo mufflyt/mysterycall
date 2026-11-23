@@ -54,6 +54,7 @@ incidence rate ratios (IRR) with Wald confidence intervals."><meta property="og:
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -100,6 +101,7 @@ incidence rate ratios (IRR) with Wald confidence intervals.</p>
 <span>  <span class="va">random_intercept</span>,</span>
 <span>  conf_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  offset_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  strict_counts <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -138,6 +140,15 @@ term is added to the formula automatically.</p></dd>
 <dd><p>Optional character scalar naming a numeric column to use
 as a log-offset. When supplied, <code>offset(log(offset_col))</code> is appended to
 the fixed-effects formula.</p></dd>
+
+
+<dt id="arg-strict-counts">strict_counts<a class="anchor" aria-label="anchor" href="#arg-strict-counts"></a></dt>
+<dd><p>Logical flag, default <code>FALSE</code>. When <code>TRUE</code>, a
+fractional <code>outcome</code> is an error instead of a warning. A count of days
+is integer-valued by construction, so a fractional value is usually a
+data error; elapsed time measured in days may legitimately carry
+decimals, in which case a count distribution is the wrong model for it.
+Values are never rounded or truncated under either setting.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -75,6 +75,7 @@
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -591,10 +592,17 @@ reference group (Private insurance). An IRR of 1.42 for Medicaid means
 Medicaid patients waited 42 % longer than privately insured
 patients.</li>
 <li>
-<strong>CI_lower / CI_upper</strong> — 95 % profile likelihood
-confidence intervals on the IRR scale. These are preferred over Wald
-intervals because profile likelihood CIs respect the asymmetry of the
-log-normal approximation.</li>
+<strong>CI_lower / CI_upper</strong> — 95 % <strong>Wald</strong>
+confidence intervals on the IRR scale, computed as
+<code>exp(estimate ± z × SE)</code> on the log scale and then
+exponentiated. They are symmetric on the log scale and therefore
+asymmetric on the IRR scale. They are <em>not</em> profile-likelihood
+intervals; report them as Wald intervals. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> on the
+fitted object returns the same interval on the log scale, so the two
+cannot disagree. If you need a profile-likelihood interval, call
+<code>confint(poisson_fit$model, method = "profile")</code> on the
+underlying <code>lme4</code> fit and expect it to be considerably
+slower.</li>
 <li>
 <strong>p_value</strong> — Two-sided Wald z-test p-value for H₀: IRR
 = 1 (i.e., no difference from the reference group).</li>
@@ -715,19 +723,27 @@ approximately 1.0:</p>
 </tbody>
 </table>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># The overdispersion statistic is stored in the fitted object</span></span>
+<code class="sourceCode R"><span><span class="co"># The ratio itself is a single number on the fitted object.</span></span>
 <span><span class="va">poisson_fit</span><span class="op">$</span><span class="va">overdispersion</span></span>
-<span><span class="co">#&gt; $pearson_chisq</span></span>
-<span><span class="co">#&gt; [1] 207.4</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $residual_df</span></span>
-<span><span class="co">#&gt; [1] 192</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $ratio</span></span>
-<span><span class="co">#&gt; [1] 1.080</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $interpretation</span></span>
-<span><span class="co">#&gt; [1] "Adequate: ratio = 1.08 is below the 1.5 threshold. Poisson model is appropriate."</span></span>
+<span><span class="co">#&gt; [1] 1.080208</span></span>
+<span></span>
+<span><span class="co"># How it was computed is recorded next to it, so a reader can reproduce the</span></span>
+<span><span class="co"># number instead of taking it on trust. `pearson_chisq / df` is exactly</span></span>
+<span><span class="co"># `overdispersion`. `df_engine` records what stats::df.residual() would use</span></span>
+<span><span class="co"># instead -- it also debits the random-effect variance components, so it is</span></span>
+<span><span class="co"># smaller by one for a single random intercept.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">$</span><span class="va">dispersion_details</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 9</span></span>
+<span><span class="co">#&gt;  $ method       : chr "Pearson chi-square / (n - p_fixed)"</span></span>
+<span><span class="co">#&gt;  $ formula      : chr "sum(residuals(model, type = 'pearson')^2) /"</span></span>
+<span><span class="co">#&gt;                        " (n - length(lme4::fixef(model)))"</span></span>
+<span><span class="co">#&gt;  $ pearson_chisq: num 207</span></span>
+<span><span class="co">#&gt;  $ df           : int 192</span></span>
+<span><span class="co">#&gt;  $ n            : int 196</span></span>
+<span><span class="co">#&gt;  $ n_parameters : int 4</span></span>
+<span><span class="co">#&gt;  $ df_engine    : num 191</span></span>
+<span><span class="co">#&gt;  $ assumptions  : chr "Approximate diagnostic. ..."</span></span>
+<span><span class="co">#&gt;  $ n_pearson_na : int 0</span></span>
 <span></span>
 <span><span class="co"># If overdispersion is detected (phi &gt; 2), refit with the negative binomial model</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"glmmTMB"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -824,6 +840,68 @@ model effectively estimates wait days <em>per unit panel size</em>.</p>
 <span><span class="co">#&gt;   Uninsured   1.25      1.02      1.52   0.030</span></span></code></pre></div>
 <hr>
 </div>
+<div class="section level3">
+<h3 id="standard-model-accessors">3.9 Standard Model Accessors<a class="anchor" aria-label="anchor" href="#standard-model-accessors"></a>
+</h3>
+<p>Fitted-model objects respond to the usual R accessors, so a
+<code>mysterycall_poisson_model</code> can be handled like any other
+fitted model. Each one delegates to the underlying <code>lme4</code> or
+<code>glmmTMB</code> fit rather than recomputing anything, and the same
+methods are available for <code><a href="../reference/mysterycall_nb_model.html">mysterycall_nb_model()</a></code>,
+<code><a href="../reference/mysterycall_lmm.html">mysterycall_lmm()</a></code> and
+<code><a href="../reference/mysterycall_logistic_model.html">mysterycall_logistic_model()</a></code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fixed effects on the link (log) scale. exp(coef(fit)) matches</span></span>
+<span><span class="co"># fit$irr_table$irr.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        (Intercept)  insuranceMedicaid  insuranceMedicare</span></span>
+<span><span class="co">#&gt;         2.48490665         0.35065687         0.07696104</span></span>
+<span><span class="co">#&gt; insuranceUninsured</span></span>
+<span><span class="co">#&gt;         0.25464222</span></span>
+<span></span>
+<span><span class="co"># exp() recovers the IRRs in fit$irr_table: 1.42, 1.08, 1.29.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="co">#&gt;  insuranceMedicaid  insuranceMedicare insuranceUninsured</span></span>
+<span><span class="co">#&gt;           1.420000           1.080000           1.290000</span></span>
+<span></span>
+<span><span class="co"># Rows the model actually fitted. The fitters assert this equals `fit$n`, so</span></span>
+<span><span class="co"># the denominator you report is the denominator the model used.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/nobs.html" class="external-link">nobs</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 196</span></span>
+<span></span>
+<span><span class="co"># Wald intervals on the link scale, at the level the model was *fitted* with</span></span>
+<span><span class="co"># rather than a hard-coded 0.95, so these cannot disagree with</span></span>
+<span><span class="co"># fit$irr_table.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                          2.5 %     97.5 %</span></span>
+<span><span class="co">#&gt; (Intercept)         2.41330170 2.55928740</span></span>
+<span><span class="co">#&gt; insuranceMedicaid   0.16551444 0.53062825</span></span>
+<span><span class="co">#&gt; insuranceMedicare  -0.11653382 0.27002714</span></span>
+<span><span class="co">#&gt; insuranceUninsured  0.05826891 0.45107562</span></span>
+<span></span>
+<span><span class="co"># These are the log-scale bounds of fit$irr_table's CI columns:</span></span>
+<span><span class="co"># exp(0.16551444) = 1.18 and exp(0.53062825) = 1.70 for Medicaid.</span></span>
+<span></span>
+<span><span class="co"># Pass `level` explicitly to recompute at a different level.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">poisson_fit</span>, level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># vcov(), formula(), fitted() and residuals() are also available.</span></span>
+<span><span class="co"># fitted() and residuals() are conditional on the estimated random effects;</span></span>
+<span><span class="co"># for marginal predictions use mysterycall_predicted_means().</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">poisson_fit</span><span class="op">)</span></span></code></pre></div>
+<p>For <code><a href="../reference/mysterycall_lmm.html">mysterycall_lmm()</a></code>, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> uses the
+Satterthwaite <em>t</em> quantile with the per-term degrees of freedom,
+matching the intervals in <code>fit$coef_table</code>; a normal quantile
+would be anticonservative at small residual df. These are Wald
+intervals, not profile-likelihood or bootstrap intervals. For a profile
+interval, call <code>confint(fit$model, method = "profile")</code> on
+the underlying fit and expect it to be considerably slower.</p>
+<p>These methods are defined only for the four classes that wrap a real
+fitted model. Calling them on a table or report object, or on a model
+object whose <code>$model</code> element has been removed, raises an
+explicit error rather than returning <code>NULL</code>.</p>
+<hr>
+</div>
 </div>
 <div class="section level2">
 <h2 id="wait-time-summary-tables">4. Wait-Time Summary Tables<a class="anchor" aria-label="anchor" href="#wait-time-summary-tables"></a>
@@ -842,7 +920,7 @@ manuscript.</li>
 ballpark (the IRR for Medicaid should be consistent with the ratio of
 median wait times in the summary table).</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize wait times by insurance type</span></span>
 <span><span class="va">wait_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data          <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -889,7 +967,7 @@ models the <em>conditional mean</em>, whereas the table shows the
 <div class="section level3">
 <h3 id="combining-the-summary-table-with-irr-results">Combining the Summary Table With IRR Results<a class="anchor" aria-label="anchor" href="#combining-the-summary-table-with-irr-results"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize at the insurance-type level (no subspecialty stratification)</span></span>
 <span><span class="va">wait_summ_top</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data         <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1000,7 +1078,7 @@ coverage guarantee matters (e.g., regulatory submissions). -
 Appropriate only when n ≥ 50 per group <em>and</em> the proportion is
 between 0.15 and 0.85. Included for compatibility with older literature
 but rarely recommended.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Build a representative disparities table from synthetic data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
 <span><span class="va">n_per</span>   <span class="op">&lt;-</span> <span class="fl">200L</span></span>
@@ -1025,7 +1103,7 @@ deficits.
 </div>
 <p><code><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities()</a></code> supports three metrics —
 switch with <code>metric</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities</a></span><span class="op">(</span><span class="va">disp_tbl</span>, metric <span class="op">=</span> <span class="st">"abs_diff"</span>,</span>
 <span>                              title <span class="op">=</span> <span class="st">"Absolute disparity (pp vs. Private)"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `height` was translated to `width`.</span></span></code></pre></div>
@@ -1036,7 +1114,7 @@ Private insurance. Negative values indicate lower appointment-offered
 rates.
 </p>
 </div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities</a></span><span class="op">(</span><span class="va">disp_tbl</span>, metric <span class="op">=</span> <span class="st">"rel_risk"</span>,</span>
 <span>                              title <span class="op">=</span> <span class="st">"Relative risk vs. Private"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `height` was translated to `width`.</span></span>
@@ -1053,7 +1131,7 @@ Values below 1 indicate lower rates for that group.
 <div class="section level3">
 <h3 id="basic-disparity-analysis">5.3 Basic Disparity Analysis<a class="anchor" aria-label="anchor" href="#basic-disparity-analysis"></a>
 </h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute disparity metrics for appointment_offered across insurance types</span></span>
 <span><span class="va">disparities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data       <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1095,7 +1173,7 @@ for Private, a 37-percentage-point absolute gap.</li>
 <div class="section level3">
 <h3 id="setting-a-custom-reference-group">5.4 Setting a Custom Reference Group<a class="anchor" aria-label="anchor" href="#setting-a-custom-reference-group"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use Medicaid as the reference group to compare others against it</span></span>
 <span><span class="va">disparities_med_ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data      <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1122,7 +1200,7 @@ emphasize.</p>
 <p>A frequent data-entry error is coding the outcome as 1/2 (e.g., 1 =
 “yes,” 2 = “no”) instead of 0/1. The function will catch this and return
 an informative error:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Wrong: appointment_offered coded as 1 or 2</span></span>
 <span><span class="va">bad_mc</span> <span class="op">&lt;-</span> <span class="va">mc_data</span></span>
 <span><span class="va">bad_mc</span><span class="op">$</span><span class="va">appointment_offered</span> <span class="op">&lt;-</span> <span class="va">bad_mc</span><span class="op">$</span><span class="va">appointment_offered</span> <span class="op">+</span> <span class="fl">1</span>  <span class="co"># now 1 or 2</span></span>
@@ -1197,7 +1275,7 @@ ordered test is:</p>
 <p>Holm-Bonferroni is uniformly more powerful than Bonferroni while
 still controlling the family-wise error rate. <strong>Prefer
 Holm-Bonferroni in almost all situations.</strong></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the raw p-values from the disparities table</span></span>
 <span><span class="va">raw_p</span> <span class="op">&lt;-</span> <span class="va">disparities</span><span class="op">$</span><span class="va">p_value</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">raw_p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">disparities</span><span class="op">$</span><span class="va">insurance</span><span class="op">[</span><span class="va">disparities</span><span class="op">$</span><span class="va">insurance</span> <span class="op">!=</span> <span class="st">"Private"</span><span class="op">]</span></span>
@@ -1237,7 +1315,7 @@ evidence across tests.</p>
 <div class="section level3">
 <h3 id="passing-the-full-disparities-table-directly">6.3 Passing the Full Disparities Table Directly<a class="anchor" aria-label="anchor" href="#passing-the-full-disparities-table-directly"></a>
 </h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convenience wrapper: pass the entire disparities table</span></span>
 <span><span class="va">adj_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust</a></span><span class="op">(</span></span>
 <span>  disparities_table <span class="op">=</span> <span class="va">disparities</span>,  <span class="co"># output of mysterycall_disparities_table()</span></span>
@@ -1308,7 +1386,7 @@ the bias-correction constant and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>a</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{a}</annotation></semantics></math>
 the acceleration constant estimated from jackknife leave-one-out
 statistics.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span><span class="va">n_phys</span>  <span class="op">&lt;-</span> <span class="fl">50L</span></span>
 <span><span class="va">boot_b</span>  <span class="op">&lt;-</span> <span class="fl">2000L</span></span>
@@ -1351,7 +1429,7 @@ the BCa 95 % CI endpoints are dashed.
 <div class="section level3">
 <h3 id="bootstrapping-the-difference-in-appointment-rates">7.3 Bootstrapping the Difference in Appointment Rates<a class="anchor" aria-label="anchor" href="#bootstrapping-the-difference-in-appointment-rates"></a>
 </h3>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set seed for reproducibility — always report this in your methods section</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span></span>
@@ -1394,7 +1472,7 @@ narrow).</p>
 <div class="section level3">
 <h3 id="bootstrapping-a-custom-statistic">7.4 Bootstrapping a Custom Statistic<a class="anchor" aria-label="anchor" href="#bootstrapping-a-custom-statistic"></a>
 </h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: bootstrap the ratio of median wait times (Medicaid / Private)</span></span>
 <span><span class="co"># This has no closed-form CI, making bootstrap ideal.</span></span>
 <span></span>
@@ -1440,7 +1518,7 @@ the most time-consuming parts of manuscript writing. The function
 objects and returns a formatted results paragraph following APA 7th
 edition style conventions and the reporting guidelines of JAMA and NEJM
 for observational health disparities research.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph</a></span><span class="op">(</span></span>
 <span>  poisson_model      <span class="op">=</span> <span class="va">poisson_fit</span>,</span>
 <span>  disparities_table  <span class="op">=</span> <span class="va">adj_full</span>,           <span class="co"># version with adjusted p-values</span></span>
@@ -1471,7 +1549,7 @@ for observational health disparities research.</p>
 <span><span class="co">#&gt; intraclass correlation coefficient 0.089). The Pearson chi-squared</span></span>
 <span><span class="co">#&gt; overdispersion ratio was 1.08, indicating adequate model fit. Medicaid</span></span>
 <span><span class="co">#&gt; callers waited 42% longer than privately insured callers (incidence rate</span></span>
-<span><span class="co">#&gt; ratio [IRR] 1.42; 95% profile-likelihood CI: 1.18-1.70; p &lt; .001).</span></span>
+<span><span class="co">#&gt; ratio [IRR] 1.42; 95% Wald CI: 1.18-1.70; p &lt; .001).</span></span>
 <span><span class="co">#&gt; Uninsured callers waited 29% longer (IRR 1.29; 95% CI: 1.06 to 1.57; p = .012).</span></span>
 <span><span class="co">#&gt; No statistically significant wait-time difference was observed for Medicare</span></span>
 <span><span class="co">#&gt; callers (IRR 1.08; 95% CI: 0.89 to 1.31; p = .441).</span></span></code></pre></div>
@@ -1495,7 +1573,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="build-the-synthetic-dataset">9.1 Build the Synthetic Dataset<a class="anchor" aria-label="anchor" href="#build-the-synthetic-dataset"></a>
 </h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Study design parameters</span></span>
@@ -1604,7 +1682,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="run-the-preflight-check">9.2 Run the Preflight Check<a class="anchor" aria-label="anchor" href="#run-the-preflight-check"></a>
 </h3>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">preflight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_preflight_check.html">mysterycall_preflight_check</a></span><span class="op">(</span><span class="va">mc_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">preflight</span><span class="op">)</span></span>
 <span><span class="co">#&gt; -- mysterycall preflight check ------------------------------------</span></span>
@@ -1625,7 +1703,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="disparity-analysis-for-appointment-offered-rate">9.3 Disparity Analysis for Appointment-Offered Rate<a class="anchor" aria-label="anchor" href="#disparity-analysis-for-appointment-offered-rate"></a>
 </h3>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Step 1: Compute raw disparity metrics ---</span></span>
 <span><span class="va">disparities_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data      <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1658,7 +1736,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="poisson-glmm-for-wait-time-disparities">9.4 Poisson GLMM for Wait-Time Disparities<a class="anchor" aria-label="anchor" href="#poisson-glmm-for-wait-time-disparities"></a>
 </h3>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit the Poisson GLMM (wait times among callers offered appointments)</span></span>
 <span><span class="va">poisson_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span></span>
 <span>  data         <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1698,7 +1776,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="wait-time-summary-table">9.5 Wait-Time Summary Table<a class="anchor" aria-label="anchor" href="#wait-time-summary-table"></a>
 </h3>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wait_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data     <span class="op">=</span> <span class="va">mc_data</span>,</span>
 <span>  wait_col <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
@@ -1717,7 +1795,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="bootstrap-ci-for-the-medicaidprivate-appointment-gap">9.6 Bootstrap CI for the Medicaid–Private Appointment Gap<a class="anchor" aria-label="anchor" href="#bootstrap-ci-for-the-medicaidprivate-appointment-gap"></a>
 </h3>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">boot_medicaid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_bootstrap_ci.html">mysterycall_bootstrap_ci</a></span><span class="op">(</span></span>
@@ -1747,7 +1825,7 @@ chunks.</p>
 </h3>
 <p>The following code assembles all the results into the structure of a
 “Table 2” suitable for direct inclusion in a manuscript.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Merge disparity metrics and Poisson IRRs into a single wide table</span></span>
 <span><span class="va">pub_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
 <span>  <span class="va">disparities_adj</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"n"</span>, <span class="st">"rate"</span>, <span class="st">"CI_lower"</span>, <span class="st">"CI_upper"</span>,</span>
@@ -1801,12 +1879,12 @@ chunks.</p>
 <span><span class="co">#&gt; Absolute difference and relative risk are vs. Private insurance (reference).</span></span>
 <span><span class="co">#&gt; Holm p: Holm-Bonferroni-corrected p-value for appointment-offered comparison.</span></span>
 <span><span class="co">#&gt; IRR: incidence rate ratio from Poisson GLMM (wait days); Private is reference.</span></span>
-<span><span class="co">#&gt; IRR CI: 95% profile-likelihood CI.</span></span></code></pre></div>
+<span><span class="co">#&gt; IRR CI: 95% Wald CI on the log scale, exponentiated.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="write-the-results-paragraph">9.8 Write the Results Paragraph<a class="anchor" aria-label="anchor" href="#write-the-results-paragraph"></a>
 </h3>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results_para</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph</a></span><span class="op">(</span></span>
 <span>  poisson_model     <span class="op">=</span> <span class="va">poisson_fit</span>,</span>
 <span>  disparities_table <span class="op">=</span> <span class="va">disparities_adj</span>,</span>
@@ -1838,7 +1916,7 @@ chunks.</p>
 <span><span class="co">#&gt; intercept to account for within-physician clustering (intraclass correlation</span></span>
 <span><span class="co">#&gt; coefficient 0.073). The Pearson chi-squared overdispersion ratio was 1.12,</span></span>
 <span><span class="co">#&gt; indicating acceptable model fit. Medicaid callers waited 40% longer than</span></span>
-<span><span class="co">#&gt; privately insured callers (IRR 1.40; 95% profile-likelihood CI: 1.12-1.74;</span></span>
+<span><span class="co">#&gt; privately insured callers (IRR 1.40; 95% Wald CI: 1.12-1.74;</span></span>
 <span><span class="co">#&gt; p = .003). Uninsured callers waited 28% longer (IRR 1.28; 95% CI: 1.01 to 1.62;</span></span>
 <span><span class="co">#&gt; p = .042). No statistically significant wait-time difference was observed for</span></span>
 <span><span class="co">#&gt; Medicare callers compared with privately insured callers (IRR 1.08; 95% CI:</span></span>
@@ -1866,7 +1944,7 @@ is the finite population size,
 (maximum variance, conservative), and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>e</mi><annotation encoding="application/x-tex">e</annotation></semantics></math>
 is the desired margin of error.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># How many providers needed from a state with N = 800 OB-GYNs,</span></span>
 <span><span class="co"># margin of error ±5 %?</span></span>
 <span><span class="va">result_cochran</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_cochran_n.html">mysterycall_cochran_n</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">800</span>, margin_of_error <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
@@ -1907,7 +1985,7 @@ reference-arm mean
 type I error, and whether each provider is called once (unpaired) or
 twice (paired with both insurance types):</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>0</mn></msub></mfrac></mstyle><mo>+</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>1</mn></msub></mfrac></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mtext mathvariant="normal">IRR</mtext><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}</annotation></semantics></math></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days</span></span>
 <span><span class="va">pw_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.40</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>                                    power <span class="op">=</span> <span class="fl">0.80</span>, both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -1977,7 +2055,7 @@ lambda_ref = 14 days.</caption>
 <div class="section level3">
 <h3 id="power-curve-across-a-range-of-irrs">10.3 Power Curve Across a Range of IRRs<a class="anchor" aria-label="anchor" href="#power-curve-across-a-range-of-irrs"></a>
 </h3>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">irr_seq</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.10</span>, <span class="fl">2.00</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="va">n_seq</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">irr_seq</span>, <span class="kw">function</span><span class="op">(</span><span class="va">irr</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
@@ -2036,7 +2114,7 @@ requires substantially more providers.
 <div class="section level2">
 <h2 id="session-information">Session Information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20 (64-bit)</span></span>

@@ -56,6 +56,7 @@ physicians. Fixed-effect results are returned as incidence rate ratios
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -104,6 +105,7 @@ physicians. Fixed-effect results are returned as incidence rate ratios
 <span>  conf_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  nAGQ <span class="op">=</span> <span class="fl">0L</span>,</span>
 <span>  offset_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  strict_counts <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -149,6 +151,15 @@ cluster sizes).</p></dd>
 <dd><p>Optional character scalar naming a numeric column to use
 as a log-offset (e.g. log(exposure time)). When supplied, the term
 <code>offset(log(offset_col))</code> is appended to the fixed-effects formula.</p></dd>
+
+
+<dt id="arg-strict-counts">strict_counts<a class="anchor" aria-label="anchor" href="#arg-strict-counts"></a></dt>
+<dd><p>Logical flag, default <code>FALSE</code>. When <code>TRUE</code>, a
+fractional <code>outcome</code> is an error instead of a warning. A count of days
+is integer-valued by construction, so a fractional value is usually a
+data error; elapsed time measured in days may legitimately carry
+decimals, in which case a count distribution is the wrong model for it.
+Values are never rounded or truncated under either setting.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -329,9 +340,6 @@ quasi-Poisson standard errors for inference.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting Poisson GLMER: wait_days ~ insurance + gender + (1 | physician)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Convergence issues detected:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   boundary (singular) fit: see help('isSingular')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider simplifying predictors or using nAGQ = 1.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Model fitted: n=40, physicians=8, AIC=230.8, overdispersion=0.90</span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">irr_table</span></span></span>

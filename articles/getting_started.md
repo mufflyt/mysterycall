@@ -180,16 +180,13 @@ model <- mysterycall_poisson_model(
 #> 24 row(s) have accepted = 0 (same-day appointments). Poisson handles zeros; verify these are intentional.
 #> Fitting Poisson GLMER: accepted ~ insurance_scenario + (1 | subspecialty)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=50, physicians=6, AIC=84.2, overdispersion=0.50
 
 # Print the incidence rate ratios (IRR)
 print(model)
 #> Poisson GLMER  n = 50  physicians = 6  AIC = 84.2  BIC = 89.9
-#>   Warning: convergence warnings; singular fit
+#>   Warning: singular fit
 #>   Reference levels: insurance_scenario='Medicaid'
 #> 
 #> Fixed effects (IRR with Wald CI):

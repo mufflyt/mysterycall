@@ -19,6 +19,7 @@ mysterycall_poisson_model(
   conf_level = 0.95,
   nAGQ = 0L,
   offset_col = NULL,
+  strict_counts = FALSE,
   ...
 )
 ```
@@ -65,6 +66,15 @@ mysterycall_poisson_model(
   Optional character scalar naming a numeric column to use as a
   log-offset (e.g. log(exposure time)). When supplied, the term
   `offset(log(offset_col))` is appended to the fixed-effects formula.
+
+- strict_counts:
+
+  Logical flag, default `FALSE`. When `TRUE`, a fractional `outcome` is
+  an error instead of a warning. A count of days is integer-valued by
+  construction, so a fractional value is usually a data error; elapsed
+  time measured in days may legitimately carry decimals, in which case a
+  count distribution is the wrong model for it. Values are never rounded
+  or truncated under either setting.
 
 - ...:
 
@@ -255,9 +265,6 @@ result <- mysterycall_poisson_model(
 )
 #> Fitting Poisson GLMER: wait_days ~ insurance + gender + (1 | physician)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=40, physicians=8, AIC=230.8, overdispersion=0.90
 result$irr_table

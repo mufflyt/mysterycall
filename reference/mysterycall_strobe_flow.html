@@ -3,19 +3,11 @@
 using ggplot2.  The diagram shows the complete filtering waterfall from the
 raw call log to the two downstream analysis populations (logistic model and
 wait-time model), with a right-side exclusion branch that lists each
-exclusion-code category and its count.
-For a hand-specified flow whose boxes are validated to add up, see the
-mysterycall_flow_spec() + mysterycall_strobe_diagram() pair; this function
-remains the mystery-caller-specific entry point that derives its counts from a
-call log or a mysterycall_prepared object."><meta property="og:description" content="Produces a publication-quality STROBE/CONSORT-style participant flow diagram
+exclusion-code category and its count."><meta property="og:description" content="Produces a publication-quality STROBE/CONSORT-style participant flow diagram
 using ggplot2.  The diagram shows the complete filtering waterfall from the
 raw call log to the two downstream analysis populations (logistic model and
 wait-time model), with a right-side exclusion branch that lists each
-exclusion-code category and its count.
-For a hand-specified flow whose boxes are validated to add up, see the
-mysterycall_flow_spec() + mysterycall_strobe_diagram() pair; this function
-remains the mystery-caller-specific entry point that derives its counts from a
-call log or a mysterycall_prepared object."><meta property="og:image" content="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57"><meta property="og:image:alt" content="mysterycall hex logo"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@mufflyt"><meta name="twitter:site" content="@mufflyt"></head><body>
+exclusion-code category and its count."><meta property="og:image" content="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57"><meta property="og:image:alt" content="mysterycall hex logo"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@mufflyt"><meta name="twitter:site" content="@mufflyt"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -62,6 +54,7 @@ call log or a mysterycall_prepared object."><meta property="og:image" content="h
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -97,10 +90,6 @@ using ggplot2.  The diagram shows the complete filtering waterfall from the
 raw call log to the two downstream analysis populations (logistic model and
 wait-time model), with a right-side exclusion branch that lists each
 exclusion-code category and its count.</p>
-<p>For a hand-specified flow whose boxes are validated to add up, see the
-<code><a href="mysterycall_flow_spec.html">mysterycall_flow_spec()</a></code> + <code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code> pair; this function
-remains the mystery-caller-specific entry point that derives its counts from a
-call log or a <code>mysterycall_prepared</code> object.</p>
     </div>
 
     <div class="section level2">
@@ -308,6 +297,10 @@ make an exclusion negative) is impossible and raises an error. A per-code
 <code>excl_detail</code> breakdown that sums to <em>more</em> than the screening total it
 decomposes is a warning: the diagram still draws, but the contradiction is
 surfaced. A partial breakdown that sums to less than the total is allowed.</p>
+<p>For a hand-specified flow whose boxes are validated to add up, see the
+<code><a href="mysterycall_flow_spec.html">mysterycall_flow_spec()</a></code> + <code><a href="mysterycall_strobe_diagram.html">mysterycall_strobe_diagram()</a></code> pair; this function
+remains the mystery-caller-specific entry point that derives its counts from a
+call log or a <code>mysterycall_prepared</code> object.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

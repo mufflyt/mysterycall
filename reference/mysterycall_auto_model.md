@@ -235,9 +235,6 @@ result <- mysterycall_auto_model(df, "wait", "ins", "phys")
 #> Step 1/3: Fitting Poisson GLMM to assess overdispersion...
 #> Fitting Poisson GLMER: wait ~ ins + (1 | phys)
 #> boundary (singular) fit: see help('isSingular')
-#> Convergence issues detected:
-#>   boundary (singular) fit: see help('isSingular')
-#> Consider simplifying predictors or using nAGQ = 1.
 #> Singular fit: random-intercept variance is ~0. The physician-level random effect explains little variation.
 #> Model fitted: n=60, physicians=10, AIC=340.4, overdispersion=0.86
 #> Poisson GLMM selected: phi = 0.86 <= 1.5 (no overdispersion detected). 
@@ -247,7 +244,7 @@ result <- mysterycall_auto_model(df, "wait", "ins", "phys")
 #> Model fitted: n=60, physicians=10, AIC=342.6, sigma=3.93, R2m=0.095, R2c=0.095
 print(result)
 #> Poisson GLMER  n = 60  physicians = 10  AIC = 340.4  BIC = 346.7
-#>   Warning: convergence warnings; singular fit
+#>   Warning: singular fit
 #>   Reference levels: ins='BCBS'
 #> 
 #> Fixed effects (IRR with Wald CI):

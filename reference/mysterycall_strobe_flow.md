@@ -6,12 +6,6 @@ waterfall from the raw call log to the two downstream analysis
 populations (logistic model and wait-time model), with a right-side
 exclusion branch that lists each exclusion-code category and its count.
 
-For a hand-specified flow whose boxes are validated to add up, see the
-[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
-[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
-pair; this function remains the mystery-caller-specific entry point that
-derives its counts from a call log or a `mysterycall_prepared` object.
-
 ## Usage
 
 ``` r
@@ -243,6 +237,12 @@ raises an error. A per-code `excl_detail` breakdown that sums to *more*
 than the screening total it decomposes is a warning: the diagram still
 draws, but the contradiction is surfaced. A partial breakdown that sums
 to less than the total is allowed.
+
+For a hand-specified flow whose boxes are validated to add up, see the
+[`mysterycall_flow_spec()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flow_spec.md) +
+[`mysterycall_strobe_diagram()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.md)
+pair; this function remains the mystery-caller-specific entry point that
+derives its counts from a call log or a `mysterycall_prepared` object.
 
 ## See also
 

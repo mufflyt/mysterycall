@@ -46,6 +46,7 @@
     <li><a class="dropdown-item" href="../articles/matched-control-design.html">Designing a matched-control mystery-caller audit</a></li>
     <li><a class="dropdown-item" href="../articles/audit-study-tools.html">Design, power, and cleaning tools from three audit studies</a></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/model-objects.html">Appendix: Model Objects and Cohort Guarantees</a></li>
     <li><a class="dropdown-item" href="../articles/linear-mixed-models.html">Linear Mixed Models for Wait-Time Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/logistic-model.html">Logistic Model: Appointment Offered (Yes/No)</a></li>
     <li><a class="dropdown-item" href="../articles/two-part-denominators.html">The Two-Part Model and the Denominator Trap</a></li>
@@ -2025,6 +2026,78 @@
 
         </dt>
         <dd>Screen candidate predictors for a GLMM outcome</dd>
+      </dl></div><div class="section level2">
+      <h2 id="standard-model-accessors">Standard Model Accessors<a class="anchor" aria-label="anchor" href="#standard-model-accessors"></a></h2>
+
+      <div class="section-desc"><p>S3 methods letting a fitted mysterycall model be handled like any other fitted model. Each delegates to the underlying lme4 or glmmTMB fit. Defined for mysterycall_poisson_model, mysterycall_nb_model, mysterycall_lmm and mysterycall_logistic_model only – not for the table and report classes, which are formatted results rather than fitted models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="coef.mysterycall.html">coef(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="coef.mysterycall.html">coef(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="coef.mysterycall.html">coef(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="coef.mysterycall.html">coef(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Fixed-Effect Coefficients of a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="vcov.mysterycall.html">vcov(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="vcov.mysterycall.html">vcov(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="vcov.mysterycall.html">vcov(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="vcov.mysterycall.html">vcov(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Variance-Covariance Matrix of a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="confint.mysterycall.html">confint(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="confint.mysterycall.html">confint(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="confint.mysterycall.html">confint(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="confint.mysterycall.html">confint(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Wald Confidence Intervals for a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="nobs.mysterycall.html">nobs(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="nobs.mysterycall.html">nobs(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="nobs.mysterycall.html">nobs(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="nobs.mysterycall.html">nobs(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Number of Observations Used by a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="formula.mysterycall.html">formula(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="formula.mysterycall.html">formula(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="formula.mysterycall.html">formula(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="formula.mysterycall.html">formula(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Model Formula of a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="fitted.mysterycall.html">fitted(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="fitted.mysterycall.html">fitted(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="fitted.mysterycall.html">fitted(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="fitted.mysterycall.html">fitted(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Fitted Values of a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="residuals.mysterycall.html">residuals(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="residuals.mysterycall.html">residuals(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="residuals.mysterycall.html">residuals(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="residuals.mysterycall.html">residuals(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Residuals of a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="summary.mysterycall.html">summary(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code> <code><a href="summary.mysterycall.html">summary(<i>&lt;mysterycall_nb_model&gt;</i>)</a></code> <code><a href="summary.mysterycall.html">summary(<i>&lt;mysterycall_lmm&gt;</i>)</a></code> <code><a href="summary.mysterycall.html">summary(<i>&lt;mysterycall_logistic_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Summarise a mysterycall Model</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_model_summary.html">print(<i>&lt;mysterycall_model_summary&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall Model Summary</dd>
       </dl></div><div class="section level2">
       <h2 id="model-interpretation">Model Interpretation<a class="anchor" aria-label="anchor" href="#model-interpretation"></a></h2>
 
