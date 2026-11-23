@@ -67,3 +67,7 @@
 ^check_internal\.R$
 ^roxygen_tags_summary\.txt$
 ^ARCHITECTURE\.md$
+
+# rOpenSci statistical-standards assessment: repo documentation, not part
+# of the package. R CMD check flags it as a non-standard top-level directory.
+^srr$
