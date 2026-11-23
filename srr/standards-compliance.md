@@ -971,3 +971,114 @@ of effort:
    `vdiffr` snapshots. Unlocks EA4.0, EA6.1, EA6.0d.
 5. **Write a prose Life Cycle Statement** and tag the 38 files whose internal
    helpers carry neither `@noRd` nor `@keywords internal`. Unlocks G1.2, G1.4a.
+
+---
+
+# Addendum — status changes from the remediation branch
+
+**Added 2026-11-23.** The assessment above was written against commit
+`55bf9cc`, before any code changed. The
+`srr-audit-and-coordinate-gate` branch then implemented several of the
+standards it had recorded as *feasible but not yet done*. This addendum
+records those status changes with evidence. The body of the assessment is
+left as written, because it is the dated baseline the work was planned
+against.
+
+## The headline proportions do not move
+
+This is the point worth stating plainly. The rOpenSci methodology scores
+*potential* compliance, so a standard that was achievable already counted as
+`Y`. Implementing it changes the already-done/feasible annotation, not the
+verdict. **General 66/68, EA 32/34, RE 43/48, SP 35/45 and ML 69/90 are
+unchanged**, and so is the category recommendation.
+
+What changed is the proportion of those `Y` verdicts that are now backed by
+code and a test rather than by a judgement that they could be.
+
+| Set | Y | Already-done before | Already-done now |
+|---|---|---|---|
+| General | 66 | 35 | 35 |
+| EDA | 32 | 18 | 18 |
+| Regression | 43 | 20 | **25** |
+| Spatial | 35 | 11 | **14** |
+| Machine Learning | 69 | 26 | 26 |
+
+Across all five sets, 110 of the 245 `Y` verdicts were already-done at
+`55bf9cc`; 118 are now.
+
+## Regression: five standards implemented
+
+| ID | Was | Now | Evidence |
+|---|---|---|---|
+| RE4.2 | feasible — "no `coef.mysterycall_*` method is registered" | already-done | `coef()` for all four fitted classes, `R/model_accessors.R`; returns `lme4::fixef()` or the conditional component of `glmmTMB::fixef()`, because `stats::coef()` on a `merMod` returns the per-group matrix |
+| RE4.3 | feasible — "no `confint` method registered" | already-done | `confint()` returns Wald intervals at the level the model was *fitted* with, so it cannot disagree with `irr_table`; Satterthwaite `t` with per-term df for `mysterycall_lmm` |
+| RE4.6 | feasible — "no `vcov` method on the wrappers" | already-done | `vcov()` coerces `lme4`'s `dpoMatrix` to a base matrix |
+| RE4.18 | feasible — "no `summary.*` method exists anywhere" | already-done | `summary()` returns a classed `mysterycall_model_summary` with a `print` method, resolving `irr_table`/`coef_table`/`or_table` per class |
+| RE7.3 | feasible — "grep for `coef(`/`confint(`/`nobs(`/`vcov(` returns no accessor tests" | already-done | `tests/testthat/test-review-findings.R` and `test-adversarial-count-models.R`, including numerical agreement with the engine and the `irr_table` |
+
+RE4.4 and RE4.5 were already-done and are now also reachable through
+`formula()` and `nobs()`.
+
+**Still feasible, not done:** RE1.0 (formula-first interface), RE2.1/RE2.2
+(an `na_action` contract — the complete-case filter is still hard-wired),
+RE2.3 (centring/scaling), RE2.4/RE2.4a/RE2.4b and RE7.0/RE7.0a/RE7.1
+(collinearity screening and the fixtures that would exercise it), RE3.2/RE3.3
+(documenting optimizer control), RE5.0 (a scaling/benchmark vignette), and
+RE6.0/RE6.1/RE6.2 — `plot()` is still registered only for
+`mysterycall_lmm`, so `plot()` on a Poisson fit still falls through even
+though `mysterycall_irr_plot()` accepts it.
+
+The two `N` verdicts stand. RE4.1 (an unfitted model object) still conflicts
+with a class contract defined by a completed fit, and RE7.1a still asks for a
+wall-clock assertion over third-party optimizers.
+
+## Spatial: three standards implemented
+
+| ID | Was | Now | Evidence |
+|---|---|---|---|
+| SP2.0b | feasible — "no coordinate-domain check; grep found no lat/lon range assertion anywhere in `R/`" | already-done | `validate_coordinates()` in `R/utils-validation.R`, called from both exported density/distance functions and `mysterycall_assign_area_covariates()`; rejects non-numeric, `NaN`, infinite and out-of-domain values, and never reorders a pair |
+| SP6.1b | feasible — "feasible by comparing `.mc_haversine_miles()` against `sf::st_distance()`" | already-done | `tests/testthat/test-spatial-density.R` brackets the package's cut-off against `sf::st_distance()` on EPSG:4326, with the tolerance justified as the sphere-vs-ellipsoid model difference |
+| SP6.3 | feasible — "`mysterycall_calculate_spatial_density()` has **zero tests**" | already-done | 14 test blocks / 28 assertions covering coincident points, an isolated point, radius boundaries, missing coordinates, target sets and an invalid radius |
+
+SP2.7 was already-done but was recorded with the caveat "coordinate-range
+check still absent"; that caveat no longer applies.
+
+**Still feasible, not done:** SP6.2 is the one to be careful about. The new
+tests reject *out-of-domain* coordinates (500, −91, 9999, −181); they do not
+exercise *valid* extremes — a point at exactly ±90, or a distance across the
+antimeridian — which is what SP6.2 asks for. It remains feasible and
+unimplemented. Likewise SP2.0/SP2.2/SP2.5 (accepting and returning `sf`),
+SP2.8 (one shared pre-processing routine — the haversine is still duplicated
+between `geocode_city_state.R` and `spatial_density.R`), SP3.1/SP3.2
+(weighted neighbourhoods), SP4.0b, SP5.0 and SP6.0/SP6.1/SP6.1a/SP6.4.
+
+The `N` verdict on SP3.3 stands, and the nine `NA` verdicts are unchanged.
+
+## General and EDA: strengthened, not reclassified
+
+No General or EDA standard moved from feasible to already-done, but two are
+materially stronger and the change is worth recording:
+
+- **G2.16** (handling `NaN`, `Inf`, `-Inf`) was "feasible — some checks but
+  not systematic". It is now enforced at the count-outcome, exposure and
+  coordinate boundaries, with `NaN` deliberately distinguished from `NA`
+  because `is.na(NaN)` is `TRUE` and a `NaN` would otherwise be counted as
+  declared missingness. It is still not package-wide, so the annotation stays
+  *feasible*.
+- **G5.2b** and **G5.3** are better served by the 146-assertion adversarial
+  suite and the fault-injection harness, which demonstrate that the tests
+  detect the defects they claim to prevent. Neither standard is thereby
+  complete.
+
+EA4.2 is unchanged and still the cheapest EDA win: `plot` remains
+unregistered for the table classes even though `mysterycall_plot_disparities()`
+produces the figure.
+
+## What this does not change
+
+The category recommendation stands: `eda` scores highest at 0.941 and
+`regression` is independently viable at 0.896, and the architectural argument
+in Task 3 is unaffected. Nothing here was re-derived from a fresh reading of
+all 285 standards — a full reassessment against the current code has not been
+run, and these are status corrections to the standards the branch touched,
+not a new assessment.
