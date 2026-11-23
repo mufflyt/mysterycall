@@ -450,14 +450,17 @@ reference:
       table and report classes, which are formatted results rather than
       fitted models.
     contents:
-      - coef.mysterycall
-      - vcov.mysterycall
-      - confint.mysterycall
-      - nobs.mysterycall
-      - formula.mysterycall
-      - fitted.mysterycall
-      - residuals.mysterycall
-      - summary.mysterycall
+      # pkgdown resolves these by \name{} / \alias{}, not by the .Rd
+      # filename that @rdname produces, so each entry is the topic's
+      # canonical name rather than "coef.mysterycall".
+      - coef.mysterycall_poisson_model
+      - vcov.mysterycall_poisson_model
+      - confint.mysterycall_poisson_model
+      - nobs.mysterycall_poisson_model
+      - formula.mysterycall_poisson_model
+      - fitted.mysterycall_poisson_model
+      - residuals.mysterycall_poisson_model
+      - summary.mysterycall_poisson_model
       - print.mysterycall_model_summary
 
   - title: "Model Interpretation"
