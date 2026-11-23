@@ -323,11 +323,9 @@ mysterycall_nb_model <- function(data,
   # With theta = NA (a non-constant dispformula) or a failed fitted(), every
   # residual is NA and na.rm = TRUE would sum to zero, reporting a dispersion
   # of exactly 0 -- read as extreme underdispersion.
-  overdispersion <- if (n_pearson_na_nb == length(pearson_nb)) {
-    NA_real_
-  } else {
-    pearson_chisq_nb / df_resid_nb
-  }
+  overdispersion <- .mc_dispersion_ratio(
+    pearson_chisq_nb, df_resid_nb, n_pearson_na_nb, length(pearson_nb)
+  )
   if (n_pearson_na_nb > 0L) {
     message(sprintf(
       "%d of %d Pearson residual(s) are not finite; the dispersion statistic is unreliable.",

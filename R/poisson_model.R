@@ -356,11 +356,9 @@ mysterycall_poisson_model <- function(data,
   # If no residual could be computed, na.rm = TRUE would sum to zero and the
   # object would report a dispersion of exactly 0 -- read as extreme
   # underdispersion. Report it as unknown instead.
-  overdispersion <- if (n_pearson_na == length(pearson_resid)) {
-    NA_real_
-  } else {
-    pearson_chisq / df_used
-  }
+  overdispersion <- .mc_dispersion_ratio(
+    pearson_chisq, df_used, n_pearson_na, length(pearson_resid)
+  )
   if (n_pearson_na > 0L) {
     message(sprintf(
       "%d of %d Pearson residual(s) are not finite; the dispersion statistic is unreliable.",

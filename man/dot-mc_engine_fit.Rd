@@ -21,6 +21,7 @@ Resolve the Engine Fit Stored on a mysterycall Model Object
 Other model-accessors:
 \code{\link[=.mc_coefficient_table]{.mc_coefficient_table()}},
 \code{\link[=.mc_dispersion_details]{.mc_dispersion_details()}},
+\code{\link[=.mc_dispersion_ratio]{.mc_dispersion_ratio()}},
 \code{\link[=.mc_fitted_model_classes]{.mc_fitted_model_classes()}},
 \code{\link[=.mc_fixed_effect_df]{.mc_fixed_effect_df()}},
 \code{\link[=.mc_fixed_effects]{.mc_fixed_effects()}},

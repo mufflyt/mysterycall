@@ -755,3 +755,29 @@ print.mysterycall_model_summary <- function(x, ...) {
   }
   NULL
 }
+
+
+#' Dispersion Ratio, Guarding the All-Missing Case
+#'
+#' Divides the Pearson chi-square by its degrees of freedom, except when no
+#' residual could be computed at all. In that case every residual is `NA`,
+#' `sum(na.rm = TRUE)` returns `0`, and a naive ratio reports a dispersion
+#' of exactly zero -- indistinguishable from genuine extreme
+#' underdispersion, and written through to the STROBE checklist. Report it
+#' as unknown instead.
+#'
+#' @param pearson_chisq Numeric scalar. Sum of squared Pearson residuals.
+#' @param df Numeric scalar. The denominator to divide by.
+#' @param n_na Integer scalar. Residuals that were not finite.
+#' @param n_total Integer scalar. Residuals in total.
+#'
+#' @return Numeric scalar dispersion, or `NA_real_` when no residual was
+#'   computable.
+#' @family model-accessors
+#' @keywords internal
+.mc_dispersion_ratio <- function(pearson_chisq, df, n_na, n_total) {
+  if (n_total > 0L && n_na >= n_total) {
+    return(NA_real_)
+  }
+  pearson_chisq / df
+}

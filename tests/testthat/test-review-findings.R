@@ -441,3 +441,27 @@ test_that("the adversarial Poisson fixture also converges", {
     mc_adv_fit(mc_adv_calls(), "poisson")))
   expect_true(fit$convergence$converged)
 })
+
+# -- The dispersion NA guard, testable at last ------------------------------
+#
+# This guard was inline in both fitters, so no public input could reach it
+# and a mutation that deleted it was not detected. It lives in a helper now
+# so the behaviour is asserted directly.
+
+test_that("the dispersion ratio is NA when no residual was computable", {
+  expect_true(is.na(.mc_dispersion_ratio(0, 178, 180L, 180L)))
+  # More NA than counted, which should not happen, still refuses to divide.
+  expect_true(is.na(.mc_dispersion_ratio(0, 178, 181L, 180L)))
+})
+
+test_that("the dispersion ratio divides normally otherwise", {
+  expect_equal(.mc_dispersion_ratio(178, 178, 0L, 180L), 1)
+  expect_equal(.mc_dispersion_ratio(89, 178, 0L, 180L), 0.5)
+  # A partial failure is still reported, with n_pearson_na recording it.
+  expect_equal(.mc_dispersion_ratio(89, 178, 3L, 180L), 0.5)
+})
+
+test_that("a zero-length residual vector does not become NA", {
+  # n_total == 0 cannot mean "all missing"; divide and let the result speak.
+  expect_true(is.nan(.mc_dispersion_ratio(0, 0, 0L, 0L)))
+})
