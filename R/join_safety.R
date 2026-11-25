@@ -21,7 +21,16 @@ NULL
 #' @return Numeric vector.
 #' @keywords internal
 .safe_divide <- function(numerator, denominator, default = NA_real_) {
-  if (is.na(denominator) || denominator == 0) default else numerator / denominator
+  # Elementwise, NOT scalar: the previous `if (is.na(denominator) || ...)`
+  # errored with "length = 2 in coercion to logical(1)" on any vector input
+  # longer than one. mufflyaccess::safe_divide() is the ecosystem SSOT; this
+  # copy exists because mysterycall does not depend on mufflyaccess, and it
+  # must implement the same core contract: `default` wherever the denominator
+  # is 0 or NA, the plain quotient everywhere else.
+  out <- numerator / denominator
+  bad <- is.na(denominator) | denominator == 0
+  out[bad] <- default
+  out
 }
 
 #' Resolve Join Keys

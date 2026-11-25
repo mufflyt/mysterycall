@@ -22,7 +22,11 @@ generate_valid_npi <- function(n = 1) {
     (10L - total %% 10L) %% 10L
   }
   vapply(seq_len(n), function(...) {
-    first_nine <- sprintf("%09d", sample(100000000:999999999, 1L))
+    # CMS has only ever issued NPIs beginning with 1 (and reserves 2): a
+    # checksum-valid string beginning 3-9 or 0 is not a valid NPI, and the
+    # validator now rejects it. The generator must respect the leading-digit
+    # format or it manufactures the exact false positives being tested against.
+    first_nine <- paste0(sample(1:2, 1L), sprintf("%08d", sample(0:99999999, 1L)))
     check_d <- luhn_check_digit(first_nine)
     paste0(first_nine, check_d)
   }, character(1L))
