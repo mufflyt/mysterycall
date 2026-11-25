@@ -10,7 +10,7 @@ like a convergence failure.
 ## Usage
 
 ``` r
-warn_non_integer_counts(x, name, strict = FALSE, tol = 1e-08)
+warn_non_integer_counts(x, name, strict = FALSE, tol = 0.00000001)
 ```
 
 ## Arguments

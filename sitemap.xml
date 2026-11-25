@@ -47,6 +47,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/MEDICAL_SCHOOL_INDICATORS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/MYSTERYCALL_GENERIC_ORG_TOKENS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/NCI_CANCER_CENTERS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/academic_indicators.html</loc></url>
@@ -279,6 +280,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_concordance_sentence.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_consistency_rule.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_count_meaningful_org_tokens.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_crisp_checklist.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.html</loc></url>
@@ -411,6 +413,8 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_nppes_gender.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_ordinal_model.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_org_names_agree.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_org_tokens.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_bounds.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_outcome_gradient.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_outcomes.html</loc></url>
@@ -523,6 +527,8 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_labels.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_palette.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_stratified_sample.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_key.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_checklist.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_strobe_diagram.html</loc></url>
@@ -569,6 +575,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_crossover.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_sentence.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_weighted_token_similarity.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_workflow_end.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/mysterycall_workflow_start.html</loc></url>

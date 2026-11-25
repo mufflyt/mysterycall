@@ -13,7 +13,7 @@ mysterycall_marginal_effects(
   term = NULL,
   data = NULL,
   type = c("response", "link"),
-  eps = 1e-07,
+  eps = 0.0000001,
   ...
 )
 ```

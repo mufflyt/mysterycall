@@ -17,7 +17,7 @@ mysterycall_get_county_provider_counts(
   population = NULL,
   pop_county_col = "fips_county",
   pop_col = "population",
-  per = 1e+05,
+  per = 100000,
   denominator_label = NULL
 )
 ```

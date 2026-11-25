@@ -459,6 +459,11 @@ state codes, ZIP extraction, and full data-frame normalization.
   : Remove Unit Designators from Address
 - [`mysterycall_normalize_address_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_address_df.md)
   : Normalize All Address Fields in a Data Frame
+- [`mysterycall_street_address_key()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_key.md)
+  : Street-address keys and agreement verdicts
+- [`mysterycall_street_address_agreement()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.md)
+  [`mysterycall_street_addresses_agree()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.md)
+  : Compare two street addresses
 
 ## Academic Classification
 
@@ -1431,6 +1436,16 @@ joins.
   : Look up latitude/longitude for city + state
 - [`mysterycall_normalize_org_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_org_name.md)
   : Normalize an organization / practice name for matching
+- [`MYSTERYCALL_GENERIC_ORG_TOKENS`](https://mufflyt.github.io/mysterycall/reference/MYSTERYCALL_GENERIC_ORG_TOKENS.md)
+  : Generic organization tokens used in weighted matching
+- [`mysterycall_org_tokens()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_org_tokens.md)
+  : Tokenize organization names for evidence comparison
+- [`mysterycall_count_meaningful_org_tokens()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_meaningful_org_tokens.md)
+  : Count non-generic organization tokens
+- [`mysterycall_weighted_token_similarity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_weighted_token_similarity.md)
+  : Weighted token similarity for organization names
+- [`mysterycall_org_names_agree()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_org_names_agree.md)
+  : Exact or meaningful-substring organization agreement
 
 ## Randomization and Blinding
 
