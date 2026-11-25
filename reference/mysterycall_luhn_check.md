@@ -15,13 +15,29 @@ mysterycall_luhn_check(npi)
 - npi:
 
   Character or numeric vector of NPI values. Non-10-digit values (after
-  coercing to character) are immediately invalid.
+  stripping punctuation/whitespace) are immediately invalid.
 
 ## Value
 
 Logical vector the same length as `npi`. `TRUE` means the NPI passes the
-CMS Luhn checksum; `FALSE` means it does not or is malformed. `NA`
-inputs return `FALSE`.
+CMS Luhn checksum and leading-digit format; `FALSE` means it does not or
+is malformed. `NA` inputs return `FALSE` (unlike
+[`mysterynpi::npi_luhn_ok()`](https://mufflyt.github.io/mysterynpi/reference/npi_luhn_ok.html),
+whose `NA`-in-`NA`-out contract serves a different caller – here absence
+must not propagate into
+[`filter()`](https://rdrr.io/r/stats/filter.html)).
+
+## Details
+
+THE LEADING DIGIT IS PART OF THE FORMAT. CMS has only ever issued NPIs
+beginning with 1 (and reserves 2); roughly one in ten arbitrary 10-digit
+strings passes the Luhn checksum by chance, so the checksum alone is a
+weak gate – "0103000788" satisfies the checksum yet cannot be an NPI.
+This mirrors
+[`mysterynpi::npi_luhn_ok()`](https://mufflyt.github.io/mysterynpi/reference/npi_luhn_ok.html),
+the ecosystem's canonical implementation; the two must never diverge,
+because state provider numbers that happen to satisfy the checksum
+otherwise join as phantom NPIs.
 
 ## See also
 

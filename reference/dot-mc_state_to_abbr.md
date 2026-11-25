@@ -1,8 +1,10 @@
 # Coerce US state names to two-letter USPS abbreviations
 
-Leaves valid two-letter codes untouched (upper-cased) and maps full
-state names via base R's `state.name`/`state.abb`. Unrecognised values
-pass through upper-cased so an exact-code match can still succeed.
+Thin wrapper over
+[`mufflyaccess::standardize_state_name()`](https://mufflyt.github.io/mufflyaccess/reference/standardize_state_name.html),
+the ecosystem's state-normalization SSOT: full names, two-letter codes
+(any case), DC and Puerto Rico all map to upper-cased abbreviations;
+unrecognised values are `NA`.
 
 ## Usage
 

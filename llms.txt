@@ -55,6 +55,20 @@ and need reproducible, auditable workflows rather than one-off scripts.
 pak::pkg_install("mufflyt/mysterycall")
 ```
 
+mysterycall hard-depends on two GitHub-only sibling packages, declared
+in `Remotes:` so `pak` installs them automatically:
+
+- **mufflyaccess** (`mufflyt/mufflyaccess`) — the ecosystem’s constants
+  and SSOT normalization utilities; mysterycall delegates state
+  normalization to its `standardize_state_name()`.
+- **mysterynpi** (`mufflyt/mysterynpi`) — the name-parsing and
+  NPI-validation SSOT; mysterycall’s physician-name parser and NPI
+  checksum share its canonical machinery so the implementations cannot
+  drift apart.
+
+This mirrors how `mysterymaps` and `mysterymedicaid` already depend on
+mysterycall itself.
+
 The package loads quickly. Heavier modelling and Census packages are
 optional and loaded only when first needed:
 

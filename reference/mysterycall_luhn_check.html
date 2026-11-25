@@ -97,14 +97,26 @@ computing the checksum, so this is not a generic Luhn check.</p>
 
 <dl><dt id="arg-npi">npi<a class="anchor" aria-label="anchor" href="#arg-npi"></a></dt>
 <dd><p>Character or numeric vector of NPI values. Non-10-digit values
-(after coercing to character) are immediately invalid.</p></dd>
+(after stripping punctuation/whitespace) are immediately invalid.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Logical vector the same length as <code>npi</code>. <code>TRUE</code> means the NPI
-passes the CMS Luhn checksum; <code>FALSE</code> means it does not or is malformed.
-<code>NA</code> inputs return <code>FALSE</code>.</p>
+passes the CMS Luhn checksum and leading-digit format; <code>FALSE</code> means it
+does not or is malformed. <code>NA</code> inputs return <code>FALSE</code> (unlike
+<code><a href="https://mufflyt.github.io/mysterynpi/reference/npi_luhn_ok.html" class="external-link">mysterynpi::npi_luhn_ok()</a></code>, whose <code>NA</code>-in-<code>NA</code>-out contract serves a
+different caller – here absence must not propagate into <code><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter()</a></code>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>THE LEADING DIGIT IS PART OF THE FORMAT. CMS has only ever issued NPIs
+beginning with 1 (and reserves 2); roughly one in ten arbitrary 10-digit
+strings passes the Luhn checksum by chance, so the checksum alone is a
+weak gate – "0103000788" satisfies the checksum yet cannot be an NPI.
+This mirrors <code><a href="https://mufflyt.github.io/mysterynpi/reference/npi_luhn_ok.html" class="external-link">mysterynpi::npi_luhn_ok()</a></code>, the ecosystem's canonical
+implementation; the two must never diverge, because state provider numbers
+that happen to satisfy the checksum otherwise join as phantom NPIs.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
