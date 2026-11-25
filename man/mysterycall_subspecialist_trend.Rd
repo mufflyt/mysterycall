@@ -12,7 +12,7 @@ mysterycall_subspecialist_trend(
   count_col = "count",
   pop_year_col = "year",
   pop_col = "population",
-  per = 1e+05,
+  per = 100000,
   title = "OB-GYN Subspecialists per 100,000 Women",
   show_year_range = TRUE,
   y_lab = "Subspecialists per 100,000 women",
