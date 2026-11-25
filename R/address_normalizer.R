@@ -370,25 +370,11 @@ normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); m
 mysterycall_normalize_zip5 <- function(zip) {
   if (is.null(zip)) return(NA_character_)
   if (length(zip) == 0L) return(character(0))
-  # A numeric ZIP with a leading zero (e.g. 7001 for "07001") has only four
-  # digits, so a bare "\\d{5}" extraction returns NA and blanks the ZIP for all
-  # of CT/MA/ME/NH/NJ/RI/VT/PR/VI. Left-pad numerics to 5 digits first.
-  if (is.numeric(zip)) {
-    raw <- ifelse(is.na(zip), NA_character_, sprintf("%05.0f", zip))
-  } else {
-    raw <- as.character(zip)
-  }
-  # Take the first run of digits, then left-pad (or truncate) to 5. This recovers
-  # a dropped leading zero for CHARACTER input too (e.g. "7001" -> "07001"), not
-  # just numeric input -- a bare "\\d{5}" match blanks "7001" to NA. Matches
-  # mysterycall_clean_zip()'s canonical 5-digit form.
-  vapply(raw, function(r) {
-    if (is.na(r)) return(NA_character_)
-    d <- stringr::str_extract(r, "\\d+")
-    if (is.na(d)) return(NA_character_)
-    if (nchar(d) >= 5L) substr(d, 1L, 5L)
-    else paste0(strrep("0", 5L - nchar(d)), d)
-  }, character(1L), USE.NAMES = FALSE)
+  # Thin contract wrapper over the shared core (see .zip5_core in clean_zip.R) --
+  # the numeric-input preconditioning and dropped-leading-zero recovery this
+  # variant was written for now live there, shared with mysterycall_clean_zip()
+  # and mysterycall_extract_zip5() so the three can never drift apart again.
+  .zip5_core(zip, min_digits = 1L)
 }
 
 #' Deprecated version of mysterycall_normalize_zip5

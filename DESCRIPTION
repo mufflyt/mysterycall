@@ -40,6 +40,8 @@ Imports:
     graphics,
     grDevices,
     methods,
+    mufflyaccess,
+    mysterynpi,
     npi (>= 0.2.0),
     rlang,
     stats,
@@ -109,8 +111,11 @@ Suggests:
     broom,
     withr
 VignetteBuilder: knitr
+Remotes:
+    mufflyt/mufflyaccess,
+    mufflyt/mysterynpi
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
 Config/Needs/website: pkgdown
 Config/Needs/coverage: covr

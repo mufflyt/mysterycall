@@ -13,9 +13,10 @@
 Character vector of upper-cased abbreviations.
 }
 \description{
-Leaves valid two-letter codes untouched (upper-cased) and maps full state
-names via base R's \code{state.name}/\code{state.abb}. Unrecognised values pass through
-upper-cased so an exact-code match can still succeed.
+Thin wrapper over \code{\link[mufflyaccess:standardize_state_name]{mufflyaccess::standardize_state_name()}}, the ecosystem's
+state-normalization SSOT: full names, two-letter codes (any case), DC and
+Puerto Rico all map to upper-cased abbreviations; unrecognised values are
+\code{NA}.
 }
 \seealso{
 Other data integrity:

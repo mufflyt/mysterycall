@@ -181,25 +181,24 @@ mysterycall_lookup_age <- function(first_name, last_name, state,
 
 #' Coerce US state names to two-letter USPS abbreviations
 #'
-#' Leaves valid two-letter codes untouched (upper-cased) and maps full state
-#' names via base R's `state.name`/`state.abb`. Unrecognised values pass through
-#' upper-cased so an exact-code match can still succeed.
+#' Thin wrapper over [mufflyaccess::standardize_state_name()], the ecosystem's
+#' state-normalization SSOT: full names, two-letter codes (any case), DC and
+#' Puerto Rico all map to upper-cased abbreviations; unrecognised values are
+#' `NA`.
 #'
 #' @param state Character vector of states.
 #' @return Character vector of upper-cased abbreviations.
 #' @family data integrity
 #' @keywords internal
-# state.abb/state.name are lazy-loaded data, not namespace exports, so they are
-# reached with `::` rather than @importFrom. R CMD check's suggested
-# importFrom("datasets", "state.abb", "state.name") is not valid here: datasets
-# exports nothing, and that directive fails at load with "object 'state.abb' is
-# not exported by 'namespace:datasets'".
 .mc_state_to_abbr <- function(state) {
-  s  <- toupper(trimws(as.character(state)))
-  nm <- match(s, toupper(datasets::state.name))
-  out <- ifelse(!is.na(nm), datasets::state.abb[nm], s)
-  out[is.na(out) | out == ""] <- NA_character_
-  out
+  # Delegated to the mufflyaccess SSOT: the hand-rolled state.name/state.abb
+  # lookup that used to live here knew nothing about DC or Puerto Rico, so
+  # "District of Columbia" and "Puerto Rico" passed through unconverted and
+  # silently failed to match reference rows keyed on "DC"/"PR". One contract
+  # change is deliberate: unrecognised values now become NA (which never
+  # matches in .mc_age_key) instead of passing through upper-cased, where a
+  # garbage code could in principle false-match garbage reference data.
+  mufflyaccess::standardize_state_name(state, output = "abbr")
 }
 
 #' Load the bundled healthgrades_ages reference

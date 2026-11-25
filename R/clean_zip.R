@@ -23,17 +23,53 @@
 #' @export
 mysterycall_clean_zip <- function(x) {
   x <- as.character(x)
+  # First ZIP when several are separated by comma / semicolon / slash --
+  # the one behavior this exported wrapper adds over the shared core.
+  first <- vapply(x, function(s) {
+    if (is.na(s)) return(NA_character_)
+    trimws(strsplit(trimws(s), "[,;/]")[[1L]][1L])
+  }, character(1L), USE.NAMES = FALSE)
+  .zip5_core(first, min_digits = 1L)
+}
+
+#' Canonical ZIP-5 extraction core
+#'
+#' The single implementation behind [mysterycall_clean_zip()],
+#' `mysterycall_extract_zip5()` and `mysterycall_normalize_zip5()`. All three
+#' used to re-implement extract-first-digit-run / truncate / left-pad
+#' independently, and the copies diverged in exactly the edge cases each was
+#' written to fix (a dropped leading zero survived in one copy and not
+#' another). The only contract difference that survives consolidation is
+#' `min_digits`: `extract_zip5` treats runs shorter than 3 digits as
+#' not-a-ZIP (`NA`), while the other two left-pad even a single digit.
+#'
+#' The first digit RUN -- not the first five digits of the concatenated digit
+#' string -- is what gets padded, because the hyphen in `"7001-1234"` is the
+#' only thing marking where the 5-digit part ends when its leading zero was
+#' dropped; concatenating first yields `"70011"` there.
+#'
+#' @param x Character or numeric vector.
+#' @param min_digits Minimum digit-run length accepted as a ZIP candidate.
+#' @return Character vector of 5-digit ZIPs or `NA`.
+#' @keywords internal
+.zip5_core <- function(x, min_digits = 1L) {
+  if (is.numeric(x)) {
+    # Numeric ZIPs are integer-valued identifiers, not measurements: format
+    # without scientific notation or decimal noise before digit extraction.
+    x <- ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+  } else {
+    x <- as.character(x)
+  }
   vapply(x, function(s) {
     if (is.na(s)) return(NA_character_)
     s <- trimws(s)
     if (!nzchar(s)) return(NA_character_)
-    # First ZIP when several are separated by comma / semicolon / slash.
-    s <- trimws(strsplit(s, "[,;/]")[[1]][1])
     m <- regmatches(s, regexpr("[0-9]+", s))
     if (length(m) == 0L) return(NA_character_)
-    d <- m[1]
+    d <- m[1L]
+    if (nchar(d) < min_digits) return(NA_character_)
     if (nchar(d) > 5L) d <- substr(d, 1L, 5L)   # ZIP+4 written without a dash
     if (nchar(d) < 5L) d <- paste0(strrep("0", 5L - nchar(d)), d)
     d
-  }, character(1), USE.NAMES = FALSE)
+  }, character(1L), USE.NAMES = FALSE)
 }

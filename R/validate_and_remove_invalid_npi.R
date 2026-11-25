@@ -99,11 +99,11 @@ mysterycall_validate_npi <- function(input_data) {
   }
 
   if (any(valid_format)) {
-    npi_df$npi_is_valid[valid_format] <- vapply(
-      npi_df$npi[valid_format],
-      npi::npi_is_valid,
-      logical(1)
-    )
+    # Delegate to the package's own checksum so this filter and
+    # mysterycall_luhn_check() can never disagree -- npi::npi_is_valid()
+    # ignores the CMS leading-digit format and accepted checksum-passing
+    # non-NPIs like "0103000788" that the canonical validator rejects.
+    npi_df$npi_is_valid[valid_format] <- mysterycall_luhn_check(npi_df$npi[valid_format])
   }
 
   n_luhn_fail <- sum(valid_format & !npi_df$npi_is_valid)

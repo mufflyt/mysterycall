@@ -95,24 +95,65 @@ NULL
   bad_input <- is.na(physician_name) | !nzchar(trimws(physician_name))
   if (any(bad_input)) physician_name[bad_input] <- "x x"
 
-  prepped <- physician_name |>
+  # -- mysterynpi canonical pipeline ------------------------------------------
+  # The ordering-critical decisions are delegated to mysterynpi, the
+  # ecosystem's name-parsing SSOT; this package's previous hand-rolled pipeline
+  # diverged from it in exactly the cases mysterynpi was built to fix:
+  #   * parentheticals were never stripped, so "Cynthia (Cindi) A. Smith"
+  #     parsed the nickname into middle_name and "Ann M. Barbaccia (Pollack),
+  #     M.D." parsed the maiden name as the SURNAME;
+  #   * generational suffixes were only captured when they followed a comma,
+  #     so "Robert Brown Jr." lost the suffix entirely.
+  # mysterynpi::parse_person() itself cannot be used verbatim here because it
+  # normalizes output through name_key() (uppercase) and reports only canonical
+  # generational suffixes, while this package's contract preserves input case
+  # and verbatim professional credentials. The pipeline below applies the same
+  # steps in the same order on the case-preserved string.
+
+  # 1. GENERATIONAL SUFFIX FIRST, before noise-stripping or comma logic can
+  #    absorb it. mysterynpi::extract_suffix() makes the detection decision
+  #    canonically (suffixes trail, never lead -- a leading "Sr." is the
+  #    religious title, not "Senior"); the verbatim token is recovered from the
+  #    original string because this package's contract keeps the recorded
+  #    spelling ("Jr.", not canonical "JR").
+  ex <- mysterynpi::extract_suffix(physician_name)
+  gen_verbatim <- vapply(seq_along(physician_name), function(i) {
+    if (is.na(ex$suffix[i])) return(NA_character_)
+    parts <- strsplit(physician_name[i], "[[:space:]]+")[[1L]]
+    parts <- parts[nzchar(parts)]
+    canon <- mysterynpi::normalize_suffix(gsub("[.,]", "", parts))
+    hit <- which(!is.na(canon) & canon == ex$suffix[i] & seq_along(parts) != 1L)
+    if (length(hit)) gsub("^,+|,+$", "", parts[max(hit)]) else ex$suffix[i]
+  }, character(1L), USE.NAMES = FALSE)
+
+  # 2. PARENTHETICALS STRIPPED before any comma decision: a nickname or maiden
+  #    name in brackets is never a name part, and leaving it in let
+  #    humaniformat assign it to middle or last name.
+  x2 <- mysterynpi::strip_parenthetical(ex$name)
+  x2[is.na(x2)] <- "x x"
+
+  prepped <- x2 |>
     .handle_do_credential() |>
     .handle_three_part_comma() |>
     stringr::str_replace_all("\\s+", " ") |>
     stringr::str_trim()
 
   # Split on comma, then decide whether the post-comma segment is a suffix /
-  # credential ("First Last, MD") or a given name ("Last, First"). For the
-  # documented "Last, First[, credential]" format, reorder to "First Last" so
-  # humaniformat parses the components correctly instead of treating the first
-  # name as a suffix.
+  # credential ("First Last, MD") or a given name ("Last, First"). The test is
+  # mysterynpi's canonical one -- a comma separates a reversal only when the
+  # post-comma segment still holds a name once credential noise is stripped --
+  # with .is_name_suffix() kept as a supplement because NAME_NOISE does not
+  # know every credential this package has met in the wild (MBBS, Esq).
+  .is_credential_segment <- function(seg) {
+    !nzchar(trimws(mysterynpi::strip_name_noise(seg))) || .is_name_suffix(seg)
+  }
   seg_list <- stringr::str_split(prepped, ",")
   reorg <- lapply(seg_list, function(segs) {
     segs <- stringr::str_trim(segs)
     segs <- segs[!is.na(segs)]
     if (length(segs) == 0L) return(list(primary = "", suffix = ""))
     if (length(segs) == 1L) return(list(primary = segs[[1L]], suffix = ""))
-    if (.is_name_suffix(segs[[2L]])) {
+    if (.is_credential_segment(segs[[2L]])) {
       # "First Last, MD[, FACOG]" -- everything after the first comma is suffix.
       list(primary = segs[[1L]],
            suffix  = paste(segs[-1L], collapse = ", "))
@@ -123,7 +164,13 @@ NULL
     }
   })
   primary  <- vapply(reorg, function(r) r$primary, character(1L))
-  suffixes <- vapply(reorg, function(r) r$suffix,  character(1L))
+  # Generational suffix precedes professional credentials, matching display
+  # convention ("John Smith Jr., MD").
+  suffixes <- vapply(seq_along(reorg), function(i) {
+    parts <- c(gen_verbatim[i], reorg[[i]]$suffix)
+    parts <- parts[!is.na(parts) & nzchar(parts)]
+    paste(parts, collapse = ", ")
+  }, character(1L))
 
   primary_safe <- ifelse(nzchar(primary), primary, "x x")
   parsed <- humaniformat::parse_names(primary_safe)

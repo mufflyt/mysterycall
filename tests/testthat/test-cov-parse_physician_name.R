@@ -201,11 +201,20 @@ test_that("mysterycall_validate_parsed_names happy path: require_last parameter"
 
 test_that("mysterycall_validate_parsed_names edge case: quality issues detected", {
   # "John MD" -> last_name="MD" -> last_name_is_credential
-  # "Jane Jr" -> last_name="Jr" -> last_name_is_suffix
   # Parser puts single words into first_name so "MD"/"Jr" alone don't trigger last_name checks
   parsed <- suppressMessages(suppressWarnings(
-    mysterycall_parse_physician_name(c("John Smith", "John MD", "Jane Jr", "Jan van der Berg"))
+    mysterycall_parse_physician_name(c("John Smith", "John MD", "Jan van der Berg"))
   ))
+  # The suffix-in-last-name artifact is injected by hand: "Jane Jr" no longer
+  # produces it because generational suffixes are now extracted correctly
+  # (suffix="Jr"), which is exactly the behavior this validator exists to
+  # catch when OTHER parsers make the mistake.
+  artifact <- parsed[1L, ]
+  artifact$first_name       <- "Jane"
+  artifact$middle_name      <- NA_character_
+  artifact$last_name        <- "Jr"
+  artifact$parse_confidence <- "medium"
+  parsed <- dplyr::bind_rows(parsed[1:2, ], artifact, parsed[3L, ])
   result <- suppressMessages(suppressWarnings(
     mysterycall_validate_parsed_names(parsed)
   ))

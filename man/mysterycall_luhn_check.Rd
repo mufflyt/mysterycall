@@ -8,17 +8,28 @@ mysterycall_luhn_check(npi)
 }
 \arguments{
 \item{npi}{Character or numeric vector of NPI values. Non-10-digit values
-(after coercing to character) are immediately invalid.}
+(after stripping punctuation/whitespace) are immediately invalid.}
 }
 \value{
 Logical vector the same length as \code{npi}. \code{TRUE} means the NPI
-passes the CMS Luhn checksum; \code{FALSE} means it does not or is malformed.
-\code{NA} inputs return \code{FALSE}.
+passes the CMS Luhn checksum and leading-digit format; \code{FALSE} means it
+does not or is malformed. \code{NA} inputs return \code{FALSE} (unlike
+\code{mysterynpi::npi_luhn_ok()}, whose \code{NA}-in-\code{NA}-out contract serves a
+different caller -- here absence must not propagate into \code{filter()}).
 }
 \description{
 Implements the CMS-specified Luhn algorithm for 10-digit National Provider
 Identifiers (NPI). The CMS prepends the constant "80840" to the NPI before
 computing the checksum, so this is not a generic Luhn check.
+}
+\details{
+THE LEADING DIGIT IS PART OF THE FORMAT. CMS has only ever issued NPIs
+beginning with 1 (and reserves 2); roughly one in ten arbitrary 10-digit
+strings passes the Luhn checksum by chance, so the checksum alone is a
+weak gate -- "0103000788" satisfies the checksum yet cannot be an NPI.
+This mirrors \code{mysterynpi::npi_luhn_ok()}, the ecosystem's canonical
+implementation; the two must never diverge, because state provider numbers
+that happen to satisfy the checksum otherwise join as phantom NPIs.
 }
 \examples{
 mysterycall:::mysterycall_luhn_check(c("1234567893", "9999999999", NA))

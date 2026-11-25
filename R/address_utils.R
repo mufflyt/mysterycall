@@ -30,20 +30,9 @@ NULL
 #' @examples
 #' mysterycall:::mysterycall_extract_zip5(c("80203-1234", " 80203 ", "8020", "abc", NA))
 mysterycall_extract_zip5 <- function(x) {
-  if (!is.character(x)) x <- as.character(x)
-
-  .extract_one <- function(s) {
-    if (is.na(s)) return(NA_character_)
-    # Drop a ZIP+4 suffix first, otherwise substr() crosses the 5/+4 boundary
-    # when the 5-digit part has already lost its leading zero (e.g.
-    # "7001-1234" -> "70011" instead of "07001").
-    s <- sub("-.*$", "", s)
-    digits <- gsub("[^0-9]", "", s)
-    if (nchar(digits) < 3L) return(NA_character_)
-    zip5 <- substr(digits, 1L, 5L)
-    # Left-pad to 5 digits (e.g. NJ zip "07001" stored as "7001")
-    formatC(as.integer(zip5), width = 5L, flag = "0")
-  }
-
-  vapply(x, .extract_one, character(1L), USE.NAMES = FALSE)
+  # Thin contract wrapper over the shared core (see .zip5_core in clean_zip.R):
+  # this variant alone treats a digit run shorter than 3 as not-a-ZIP, because
+  # a two-digit fragment in a free-text address is never a dropped-leading-zero
+  # ZIP, whereas padding it would fabricate one.
+  .zip5_core(x, min_digits = 3L)
 }
