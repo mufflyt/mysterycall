@@ -4,7 +4,7 @@
 \alias{warn_non_integer_counts}
 \title{Warn When a Count Outcome Is Not Integer-Valued}
 \usage{
-warn_non_integer_counts(x, name, strict = FALSE, tol = 1e-08)
+warn_non_integer_counts(x, name, strict = FALSE, tol = 0.00000001)
 }
 \arguments{
 \item{x}{Numeric vector. The outcome values.}

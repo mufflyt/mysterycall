@@ -129,6 +129,8 @@ reference:
       - mysterycall_normalize_zip5
       - mysterycall_strip_suite
       - mysterycall_normalize_address_df
+      - mysterycall_street_address_key
+      - mysterycall_street_address_agreement
 
   - title: "Academic Classification"
     desc: >
@@ -671,6 +673,11 @@ reference:
       - mysterycall_build_matched_controls
       - mysterycall_geocode_city_state
       - mysterycall_normalize_org_name
+      - MYSTERYCALL_GENERIC_ORG_TOKENS
+      - mysterycall_org_tokens
+      - mysterycall_count_meaningful_org_tokens
+      - mysterycall_weighted_token_similarity
+      - mysterycall_org_names_agree
 
   - title: "Randomization and Blinding"
     desc: >
