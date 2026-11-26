@@ -68,10 +68,12 @@ mysterycall_acceptance_rate_calc(
 - wait_col:
 
   Character scalar or `NULL`. Name of a numeric column holding days to
-  appointment. When non-`NULL`, only rows with `wait_col > 0` contribute
-  to the numerator (rows with `wait_col == 0` or `NA` are excluded from
-  the numerator but not from the denominator). Default
-  `"business_days_until_appointment"`.
+  appointment. When non-`NULL`, only rows with `wait_col >= 0`
+  contribute to the numerator: a same-day appointment is `0` and counts
+  as accepted, while a not-obtained appointment is `NA`, not `0` (see
+  [`mysterycall_count_business_days()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_business_days.md)).
+  Rows with `NA` are excluded from the numerator but not from the
+  denominator. Default `"business_days_until_appointment"`.
 
 - id_col:
 
@@ -157,11 +159,15 @@ intervals.
 All counts deduplicate on `id_col` via
 [`unique()`](https://rdrr.io/r/base/unique.html). Each physician is
 expected to appear at most once per insurance group; the deduplication
-step is a safeguard against duplicate call rows. A physician who has
-both a reachable and an unreachable row for the same insurance group
-will be counted in *both* the total and the excluded sets, which may
-undercount the denominator. Clean data with one row per physician per
-insurance group will not be affected.
+step is a safeguard against duplicate call rows. Reachability is a
+property of the physician, not the row: a physician with both a
+reachable and an unreachable row for the same insurance group was
+reached, so they count in the denominator (and the numerator when any
+row accepts) rather than being subtracted. The earlier row-level rule
+could leave the numerator larger than the denominator in exactly that
+case, which both produced impossible rates above 100% and crashed the
+Wilson-interval calculation outright. Clean data with one row per
+physician per insurance group is unaffected.
 
 ## See also
 

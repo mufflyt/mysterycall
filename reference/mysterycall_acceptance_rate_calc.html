@@ -148,8 +148,10 @@ vocabulary; override consistently across acceptance-rate functions.</p></dd>
 <dt id="arg-wait-col">wait_col<a class="anchor" aria-label="anchor" href="#arg-wait-col"></a></dt>
 <dd><p>Character scalar or <code>NULL</code>.  Name of a numeric column
 holding days to appointment.  When non-<code>NULL</code>, only rows with
-<code>wait_col &gt; 0</code> contribute to the numerator (rows with <code>wait_col == 0</code>
-or <code>NA</code> are excluded from the numerator but not from the denominator).
+<code>wait_col &gt;= 0</code> contribute to the numerator: a same-day appointment is
+<code>0</code> and counts as accepted, while a not-obtained appointment is <code>NA</code>,
+not <code>0</code> (see <code><a href="mysterycall_count_business_days.html">mysterycall_count_business_days()</a></code>). Rows with <code>NA</code> are
+excluded from the numerator but not from the denominator.
 Default <code>"business_days_until_appointment"</code>.</p></dd>
 
 
@@ -229,11 +231,14 @@ intervals.</p>
 
 <p>All counts deduplicate on <code>id_col</code> via <code><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique()</a></code>.  Each physician is
 expected to appear at most once per insurance group; the deduplication step
-is a safeguard against duplicate call rows.  A physician who has both a
-reachable and an unreachable row for the same insurance group will be
-counted in <em>both</em> the total and the excluded sets, which may
-undercount the denominator.  Clean data with one row per physician per
-insurance group will not be affected.</p>
+is a safeguard against duplicate call rows.  Reachability is a property of
+the physician, not the row: a physician with both a reachable and an
+unreachable row for the same insurance group was reached, so they count in
+the denominator (and the numerator when any row accepts) rather than being
+subtracted.  The earlier row-level rule could leave the numerator larger
+than the denominator in exactly that case, which both produced impossible
+rates above 100% and crashed the Wilson-interval calculation outright.
+Clean data with one row per physician per insurance group is unaffected.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
