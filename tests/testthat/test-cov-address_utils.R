@@ -53,13 +53,12 @@ test_that("mysterycall_extract_zip5 returns NA for unparseable inputs", {
   expect_true(is.na(result[5]))
 })
 
-# Test mysterycall_extract_zip5 - Takes first 5 digits
-test_that("mysterycall_extract_zip5 takes only first 5 digits from longer strings", {
+test_that("mysterycall_extract_zip5 extracts compact ZIP+4 and rejects longer runs", {
   result <- suppressMessages(suppressWarnings(mysterycall:::mysterycall_extract_zip5(c("802031234", "9999988888"))))
 
   expect_type(result, "character")
   expect_equal(result[1], "80203")
-  expect_equal(result[2], "99999")
+  expect_true(is.na(result[2]))
 })
 
 # Test mysterycall_extract_zip5 - Type coercion
