@@ -46,7 +46,11 @@ mysterycall_clean_zip <- function(x) {
 #' The first digit RUN -- not the first five digits of the concatenated digit
 #' string -- is what gets padded, because the hyphen in `"7001-1234"` is the
 #' only thing marking where the 5-digit part ends when its leading zero was
-#' dropped; concatenating first yields `"70011"` there.
+#' dropped; concatenating first yields `"70011"` there. Digit runs that are
+#' not a ZIP shape are `NA` rather than truncated: 6 or 10+ digits cannot be
+#' a ZIP or a lost-zero ZIP+4 (a phone number in the ZIP column used to
+#' become a ZIP), 7-8 digits are a ZIP+4 that lost its leading zero(s), and
+#' scientific notation is unrecoverable corruption, not digits.
 #'
 #' @param x Character or numeric vector.
 #' @param min_digits Minimum digit-run length accepted as a ZIP candidate.
@@ -64,12 +68,35 @@ mysterycall_clean_zip <- function(x) {
     if (is.na(s)) return(NA_character_)
     s <- trimws(s)
     if (!nzchar(s)) return(NA_character_)
+    # Scientific notation is a corrupted number, not a ZIP: there is no way
+    # to know which digits were dropped, so it is invalid rather than
+    # reassembled into a different valid-looking ZIP ("1.2e5" -> "00001").
+    if (grepl("[0-9][eE][+-]?[0-9]", s)) return(NA_character_)
     m <- regmatches(s, regexpr("[0-9]+", s))
     if (length(m) == 0L) return(NA_character_)
     d <- m[1L]
-    if (nchar(d) < min_digits) return(NA_character_)
-    if (nchar(d) > 5L) d <- substr(d, 1L, 5L)   # ZIP+4 written without a dash
-    if (nchar(d) < 5L) d <- paste0(strrep("0", 5L - nchar(d)), d)
+    len <- nchar(d)
+    if (len < min_digits) return(NA_character_)
+    d <- if (len <= 5L) {
+      # 1-2 digit runs are still padded per each wrapper's own min_digits
+      # contract; 3-4 digit runs are a ZIP that lost its leading zero(s)
+      paste0(strrep("0", 5L - len), d)
+    } else if (len == 6L) {
+      # Not a ZIP shape: no lost-zero chain lands here, and truncating used
+      # to fabricate a different valid-looking ZIP
+      return(NA_character_)
+    } else if (len <= 8L) {
+      # Unseparated ZIP+4 that ALSO lost its leading zero(s): pad back to 9
+      # digits, then keep the 5-digit part ("21011234" -> "02101", not
+      # "21011")
+      substr(paste0(strrep("0", 9L - len), d), 1L, 5L)
+    } else if (len == 9L) {
+      substr(d, 1L, 5L)   # ZIP+4 written without a dash
+    } else {
+      # 10+ digits: a phone number or other identifier typed into the ZIP
+      # column, never a ZIP -- invalid rather than truncated
+      return(NA_character_)
+    }
     d
   }, character(1L), USE.NAMES = FALSE)
 }
