@@ -112,6 +112,26 @@
   instead of re-implementing extract/truncate/pad independently
   ([\#283](https://github.com/mufflyt/mysterycall/issues/283)).
 
+### Error messages
+
+- Omitting a required argument from
+  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+  [`mysterycall_nb_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_nb_model.md)
+  or
+  [`mysterycall_logistic_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_logistic_model.md)
+  reported `argument "required" is missing, with no default`
+  ([\#289](https://github.com/mufflyt/mysterycall/issues/289)) – the
+  internal parameter name of
+  [`validate_required_columns()`](https://mufflyt.github.io/mysterycall/reference/validate_required_columns.md),
+  surfaced by lazy evaluation when the missing argument was finally
+  forced inside the validator. The error named neither the function’s
+  own argument nor the caller, so there was no way to tell which of
+  `outcome`, `predictors` or `random_intercept` had been left out. Each
+  is now checked with [`missing()`](https://rdrr.io/r/base/missing.html)
+  before validation runs, and the error names the argument and says what
+  to supply: “`random_intercept` is required: supply the grouping column
+  for the random intercept.”
+
 ### Infrastructure
 
 - The nightly portability gate was failing on two non-ASCII em-dashes in

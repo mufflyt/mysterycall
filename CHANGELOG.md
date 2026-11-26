@@ -222,6 +222,14 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 - .mc_state_to_abbr() recognised neither DC nor Puerto Rico and passed
   unrecognised values through (#283)
 - .safe_divide() was scalar-only and errored on vector input (#283)
+- Omitting a required argument from mysterycall_poisson_model(),
+  mysterycall_nb_model() or mysterycall_logistic_model() reported
+  ‘argument “required” is missing, with no default’ (#289) – the
+  internal parameter name of validate_required_columns(), surfaced by
+  lazy evaluation. The message named neither the argument nor the
+  caller, so there was no way to tell which of outcome, predictors or
+  random_intercept had been left out. Each is now checked with missing()
+  before validation runs and the error names it
 - Physician-name parsing never stripped parentheticals, so a nickname
   was parsed into middle_name and a maiden name as the surname, and
   generational suffixes were only captured after a comma (#283)
