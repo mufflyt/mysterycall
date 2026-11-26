@@ -129,6 +129,16 @@ mysterycall_poisson_model <- function(data,
     )
   }
 
+  if (missing(outcome)) {
+    stop("`outcome` is required: supply the name of the outcome column.", call. = FALSE)
+  }
+  if (missing(predictors)) {
+    stop("`predictors` is required: supply the predictor column name(s).", call. = FALSE)
+  }
+  if (missing(random_intercept)) {
+    stop("`random_intercept` is required: supply the grouping column for the random intercept.", call. = FALSE)
+  }
+
   # -- Validate inputs -----------------------------------------------------------
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
   validate_required_columns(data, outcome,          name = "data")
