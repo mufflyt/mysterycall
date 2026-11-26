@@ -23,11 +23,14 @@
 #' @section Deduplication:
 #' All counts deduplicate on `id_col` via `unique()`.  Each physician is
 #' expected to appear at most once per insurance group; the deduplication step
-#' is a safeguard against duplicate call rows.  A physician who has both a
-#' reachable and an unreachable row for the same insurance group will be
-#' counted in \emph{both} the total and the excluded sets, which may
-#' undercount the denominator.  Clean data with one row per physician per
-#' insurance group will not be affected.
+#' is a safeguard against duplicate call rows.  Reachability is a property of
+#' the physician, not the row: a physician with both a reachable and an
+#' unreachable row for the same insurance group was reached, so they count in
+#' the denominator (and the numerator when any row accepts) rather than being
+#' subtracted.  The earlier row-level rule could leave the numerator larger
+#' than the denominator in exactly that case, which both produced impossible
+#' rates above 100% and crashed the Wilson-interval calculation outright.
+#' Clean data with one row per physician per insurance group is unaffected.
 #'
 #' @param data data.frame containing at least the columns named by
 #'   `insurance_col`, `inclusion_col`, and `id_col`.
@@ -54,8 +57,10 @@
 #'   vocabulary; override consistently across acceptance-rate functions.
 #' @param wait_col Character scalar or `NULL`.  Name of a numeric column
 #'   holding days to appointment.  When non-`NULL`, only rows with
-#'   `wait_col > 0` contribute to the numerator (rows with `wait_col == 0`
-#'   or `NA` are excluded from the numerator but not from the denominator).
+#'   `wait_col >= 0` contribute to the numerator: a same-day appointment is
+#'   `0` and counts as accepted, while a not-obtained appointment is `NA`,
+#'   not `0` (see [mysterycall_count_business_days()]). Rows with `NA` are
+#'   excluded from the numerator but not from the denominator.
 #'   Default `"business_days_until_appointment"`.
 #' @param id_col Character scalar.  Column used to deduplicate physicians
 #'   (e.g. phone number or NPI).  Default `"phone"`.
@@ -302,10 +307,22 @@ mysterycall_acceptance_rate_calc <- function(
     # stays in the denominator; only non-contact reasons that are NOT one of
     # those reached-but-declined outcomes are excluded. This keeps the reached
     # set consistent with mysterycall_exclusion_summary()'s n_reached.
+    # Reachability is a property of the PHYSICIAN, not the row: with duplicate
+    # call rows, an office reached in any call was reached. The row-level rule
+    # that used to run here subtracted such a physician from the denominator
+    # while their accepting row kept them in the numerator -- the numerator
+    # could then exceed the denominator, and prop.test() inside the Wilson CI
+    # errored, crashing the whole calculation over one doubly-entered office.
+    reached_mask <- mask & !is.na(incl_vec) &
+      (incl_vec == inclusion_value | incl_vec %in% reached_declined_values)
+    ids_reached <- unique(id_vec[reached_mask & !is.na(id_vec)])
     excl_mask <- mask & !is.na(incl_vec) &
       incl_vec != inclusion_value &
       !(incl_vec %in% reached_declined_values)
-    ids_excl  <- unique(id_vec[excl_mask & !is.na(id_vec)])
+    ids_excl  <- setdiff(
+      unique(id_vec[excl_mask & !is.na(id_vec)]),
+      ids_reached
+    )
     n_excluded <- length(ids_excl)
 
     # denominator
