@@ -87,15 +87,19 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
       warning(sprintf(
         paste0(
           "%d NPI value(s) are stored as non-integer numeric (e.g. %g) and will be ",
-          "rounded to the nearest integer, which may produce invalid NPIs. ",
+          "treated as missing: rounding or concatenating their digits would fabricate ",
+          "a different NPI. ",
           "Save the source file with the NPI column as character type to prevent this."
         ),
         sum(non_integer), npi_vals[which(non_integer)[1L]]
       ), call. = FALSE)
+      npi_vals[non_integer] <- NA_real_
     }
-    out <- sprintf("%.0f", npi_vals)
-    out[is.na(npi_vals)] <- NA_character_
-    df[["npi"]] <- out
+    # Delegated to the ecosystem SSOT: the sprintf("%.0f") that lived here
+    # rounded fractional corruption into a different valid-looking NPI,
+    # printed Inf as "Inf", and emitted scientific-notation-scale digit
+    # strings as-is.
+    df[["npi"]] <- mufflyaccess::canon_npi(npi_vals, verbose = FALSE)
   }
   df
 }
