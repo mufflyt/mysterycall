@@ -1,4 +1,4 @@
-# strobe_diagram.R — draw a validated participant flow.
+# strobe_diagram.R -- draw a validated participant flow.
 #
 # Deliberately takes a mysterycall_flow_spec rather than loose counts, so the
 # arithmetic is checked before anything is drawn. mysterycall_strobe_flow()

@@ -131,6 +131,7 @@ reference:
       - mysterycall_normalize_address_df
       - mysterycall_street_address_key
       - mysterycall_street_address_agreement
+      - mysterycall_street_addresses_agree
 
   - title: "Academic Classification"
     desc: >
@@ -892,6 +893,7 @@ articles:
     navbar: Data Quality
     contents:
       - data-quality
+      - entity-agreement
       - data-cleaning
       - guarding-contaminated-outcomes
       - cohort-provenance

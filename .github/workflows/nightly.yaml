@@ -412,7 +412,7 @@ jobs:
           # that produced it: 8.1.0 formats differently from 8.0.0, so an
           # unpinned install reports drift on a repository that has none. Must
           # track Config/roxygen2/version in DESCRIPTION.
-          extra-packages: roxygen2@8.0.0, any::devtools
+          extra-packages: roxygen2@8.1.1, any::devtools
           needs: check
           cache-version: 4
       - name: Regenerate and diff
