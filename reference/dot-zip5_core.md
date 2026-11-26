@@ -38,4 +38,9 @@ Character vector of 5-digit ZIPs or `NA`.
 The first digit RUN – not the first five digits of the concatenated
 digit string – is what gets padded, because the hyphen in `"7001-1234"`
 is the only thing marking where the 5-digit part ends when its leading
-zero was dropped; concatenating first yields `"70011"` there.
+zero was dropped; concatenating first yields `"70011"` there. Digit runs
+that are not a ZIP shape are `NA` rather than truncated: 6 or 10+ digits
+cannot be a ZIP or a lost-zero ZIP+4 (a phone number in the ZIP column
+used to become a ZIP), 7-8 digits are a ZIP+4 that lost its leading
+zero(s), and scientific notation is unrecoverable corruption, not
+digits.
