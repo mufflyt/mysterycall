@@ -2,6 +2,133 @@
 
 ## mysterycall 1.6.3.9000 (development version)
 
+### Data integrity
+
+- [`mysterycall_acceptance_rate_calc()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate_calc.md)
+  computed reachability per call row rather than per physician
+  ([\#288](https://github.com/mufflyt/mysterycall/issues/288)). With
+  duplicate call rows, a physician who was reachable in one row and
+  unreachable in another was subtracted from the denominator, so the
+  numerator could exceed it – producing acceptance rates above 100%, and
+  crashing the whole calculation when
+  [`prop.test()`](https://rdrr.io/r/stats/prop.test.html) inside the
+  Wilson interval was handed `k > n`. One doubly-entered office was
+  enough. A physician with both a reachable and an unreachable row is
+  now treated as reached: they count in the denominator, and in the
+  numerator when any of their rows accepts. The stale `wait_col`
+  documentation is corrected to match the code, which counts a same-day
+  wait of `0` as accepted.
+- The ZIP-5 core fabricated valid-looking ZIPs out of corrupted input
+  ([\#287](https://github.com/mufflyt/mysterycall/issues/287)). It took
+  the first five digits of any run of six or more, so a ZIP+4 that had
+  lost its leading zero (`"21011234"`) became `21011` instead of
+  `02101`, scientific notation (`"1.2e5"`) was reassembled into `00001`,
+  and a phone number typed into the ZIP column became a ZIP. Digit runs
+  now have to match a shape a ZIP can actually have: 7-8 digits are a
+  lost-zero ZIP+4, padded back before truncating; 9 digits are an intact
+  unseparated ZIP+4; 6 or 10+ digits are missing rather than truncated.
+- [`read_table()`](https://readr.tidyverse.org/reference/read_table.html)’s
+  NPI coercion rounded fractional corruption into a different,
+  valid-looking NPI
+  ([\#287](https://github.com/mufflyt/mysterycall/issues/287)):
+  `sprintf("%.0f")` turned `123456789.5` into `123456790`, printed `Inf`
+  as `"Inf"`, and passed scientific-notation-scale digit strings through
+  unchanged. Coercion now goes through
+  [`mufflyaccess::canon_npi()`](https://mufflyt.github.io/mufflyaccess/reference/canon_npi.html),
+  and a fractional value becomes missing with a warning rather than a
+  neighbouring provider’s identifier.
+- [`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md)
+  accepted checksum-passing values that cannot be NPIs
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)). CMS
+  issues NPIs beginning 1 or 2, and roughly one in ten arbitrary
+  ten-digit strings passes the Luhn checksum by chance, so
+  `"0103000788"` was accepted – a state provider number that happens to
+  satisfy the checksum would otherwise join as a phantom NPI. The
+  leading-digit format is now enforced, and
+  [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)
+  delegates to this function instead of
+  [`npi::npi_is_valid()`](https://docs.ropensci.org/npi/reference/npi_is_valid.html)
+  so the two validation paths cannot disagree.
+- [`.mc_state_to_abbr()`](https://mufflyt.github.io/mysterycall/reference/dot-mc_state_to_abbr.md)
+  recognised neither DC nor Puerto Rico and passed unrecognised values
+  through unchanged
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)); it now
+  delegates to the `mufflyaccess` single source of truth.
+- [`.safe_divide()`](https://mufflyt.github.io/mysterycall/reference/dot-safe_divide.md)
+  was scalar-only and errored on any vector input
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)); it is
+  now elementwise.
+
+### New functions
+
+- Street-address agreement primitives
+  ([\#282](https://github.com/mufflyt/mysterycall/issues/282)):
+  [`mysterycall_street_address_key()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_key.md),
+  [`mysterycall_street_address_agreement()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.md)
+  and
+  [`mysterycall_street_addresses_agree()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.md).
+  They return a three-verdict vocabulary – `corroborates`, `conflicts`,
+  `uninformative` – so a missing address is recorded as evidence of
+  nothing rather than counted as disagreement. Unit designators are
+  dropped and roadway suffixes excluded before comparison, so
+  `"123 Main St"` cannot corroborate `"123 Oak St"` on the strength of
+  both being streets. Every verdict carries a reason from a closed
+  vocabulary, so a linkage decision can be audited afterwards.
+- Organization-name agreement primitives
+  ([\#282](https://github.com/mufflyt/mysterycall/issues/282)):
+  [`mysterycall_org_names_agree()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_org_names_agree.md),
+  [`mysterycall_org_tokens()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_org_tokens.md),
+  [`mysterycall_count_meaningful_org_tokens()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_count_meaningful_org_tokens.md),
+  [`mysterycall_weighted_token_similarity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_weighted_token_similarity.md)
+  and the exported `MYSTERYCALL_GENERIC_ORG_TOKENS` vocabulary. A
+  substring match alone is not enough: at least `min_meaningful_tokens`
+  non-generic tokens must appear on both sides, so “University Medical
+  Center” does not match “University Medical Center Hospital” on words
+  half the market shares.
+- [`vignette("entity-agreement")`](https://mufflyt.github.io/mysterycall/articles/entity-agreement.md):
+  appendix on the agreement primitives, the three-verdict vocabulary,
+  why absence is `uninformative` rather than a conflict, and how the
+  primitives relate to the safe-join guards. The eight new exports had
+  reference documentation but appeared in no vignette.
+
+### Changed
+
+- `mysterynpi` and `mufflyaccess` are now hard dependencies, declared in
+  `Imports` with `Remotes` so `pak` installs the GitHub-only siblings
+  automatically
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)). This
+  mirrors how `mysterymaps` and `mysterymedicaid` already depend on
+  `mysterycall`.
+- Physician-name parsing delegates its ordering-critical decisions to
+  `mysterynpi`
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)).
+  Parentheticals were never stripped, so a nickname was parsed into
+  `middle_name` and a maiden name was parsed as the surname, and
+  generational suffixes were only captured after a comma. The package’s
+  case-preserved, verbatim-credential output contract is unchanged.
+- The three ZIP-5 normalisers shared one
+  [`.zip5_core()`](https://mufflyt.github.io/mysterycall/reference/dot-zip5_core.md),
+  parameterised only by their documented minimum-digit contracts,
+  instead of re-implementing extract/truncate/pad independently
+  ([\#283](https://github.com/mufflyt/mysterycall/issues/283)).
+
+### Infrastructure
+
+- The nightly portability gate was failing on two non-ASCII em-dashes in
+  the first-line comments of `R/flow_spec.R` and `R/strobe_diagram.R`,
+  introduced with the participant-flow work in
+  [\#265](https://github.com/mufflyt/mysterycall/issues/265). Escapes
+  are not interpreted in comments, so these have to be ASCII.
+- [`mysterycall_street_addresses_agree()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_street_address_agreement.md)
+  was exported but absent from the pkgdown reference index, which failed
+  the repo-hygiene gate. Indexed beside its topic, as the repository
+  already does for eight other multi-alias topics.
+- The nightly roxygen pin moves to 8.1.1 to match
+  `Config/roxygen2/version`. The doc-drift gate compares generated
+  output against the checked-in files and reports a version mismatch
+  rather than drift when the two disagree, so the pin has to track
+  DESCRIPTION.
+
 ### New functions
 
 - Fitted-model objects now respond to the standard R accessors:

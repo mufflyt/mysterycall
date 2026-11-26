@@ -62,9 +62,17 @@ in `Remotes:` so `pak` installs them automatically:
   and SSOT normalization utilities; mysterycall delegates state
   normalization to its `standardize_state_name()`.
 - **mysterynpi** (`mufflyt/mysterynpi`) — the name-parsing and
-  NPI-validation SSOT; mysterycall’s physician-name parser and NPI
-  checksum share its canonical machinery so the implementations cannot
-  drift apart.
+  NPI-validation SSOT. The physician-name parser delegates its
+  ordering-critical decisions to `extract_suffix()`,
+  `strip_parenthetical()` and `strip_name_noise()`. The NPI checksum is
+  a vectorised *copy* of `npi_luhn_ok()` rather than a call to it,
+  because the two need different `NA` contracts — `NA` must not
+  propagate into a
+  [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) here —
+  so
+  [`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md)
+  carries a do-not-re-derive comment and the drift risk is managed
+  rather than eliminated.
 
 This mirrors how `mysterymaps` and `mysterymedicaid` already depend on
 mysterycall itself.

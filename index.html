@@ -60,6 +60,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
     <li><a class="dropdown-item" href="articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
+    <li><a class="dropdown-item" href="articles/entity-agreement.html">Appendix: Deciding When Two Records Are the Same Place</a></li>
     <li><a class="dropdown-item" href="articles/data-cleaning.html">Data Cleaning: A Complete Workflow for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="articles/guarding-contaminated-outcomes.html">Guarding Against a Contaminated Outcome Variable</a></li>
     <li><a class="dropdown-item" href="articles/cohort-provenance.html">Cohort Provenance: Three Populations, One Study</a></li>
@@ -127,7 +128,7 @@
 <li>
 <strong>mufflyaccess</strong> (<code>mufflyt/mufflyaccess</code>) — the ecosystem’s constants and SSOT normalization utilities; mysterycall delegates state normalization to its <code>standardize_state_name()</code>.</li>
 <li>
-<strong>mysterynpi</strong> (<code>mufflyt/mysterynpi</code>) — the name-parsing and NPI-validation SSOT; mysterycall’s physician-name parser and NPI checksum share its canonical machinery so the implementations cannot drift apart.</li>
+<strong>mysterynpi</strong> (<code>mufflyt/mysterynpi</code>) — the name-parsing and NPI-validation SSOT. The physician-name parser delegates its ordering-critical decisions to <code>extract_suffix()</code>, <code>strip_parenthetical()</code> and <code>strip_name_noise()</code>. The NPI checksum is a vectorised <em>copy</em> of <code>npi_luhn_ok()</code> rather than a call to it, because the two need different <code>NA</code> contracts — <code>NA</code> must not propagate into a <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> here — so <code><a href="reference/mysterycall_luhn_check.html">mysterycall_luhn_check()</a></code> carries a do-not-re-derive comment and the drift risk is managed rather than eliminated.</li>
 </ul>
 <p>This mirrors how <code>mysterymaps</code> and <code>mysterymedicaid</code> already depend on mysterycall itself.</p>
 <p>The package loads quickly. Heavier modelling and Census packages are optional and loaded only when first needed:</p>

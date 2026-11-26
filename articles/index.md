@@ -48,6 +48,13 @@
   structured components, and perform audited joins that guard against
   row duplication and coverage loss.
 
+- [Appendix: Deciding When Two Records Are the Same
+  Place](https://mufflyt.github.io/mysterycall/articles/entity-agreement.md):
+
+  The street-address and organization-name agreement primitives, the
+  three-verdict vocabulary they share, and why a missing field is
+  recorded as uninformative rather than counted as disagreement.
+
 - [Data Cleaning: A Complete Workflow for Mystery Caller
   Studies](https://mufflyt.github.io/mysterycall/articles/data-cleaning.md):
 

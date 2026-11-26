@@ -8,6 +8,7 @@ articles:
   cohort-provenance: cohort-provenance.html
   data-cleaning: data-cleaning.html
   data-quality: data-quality.html
+  entity-agreement: entity-agreement.html
   get_census_data: get_census_data.html
   getting_started: getting_started.html
   guarding-contaminated-outcomes: guarding-contaminated-outcomes.html
@@ -31,7 +32,7 @@ articles:
   two-part-denominators: two-part-denominators.html
   workflow-orchestration: workflow-orchestration.html
   writing-results-section: writing-results-section.html
-last_built: 2026-11-26T04:43Z
+last_built: 2026-11-26T05:38Z
 urls:
   reference: https://mufflyt.github.io/mysterycall/reference
   article: https://mufflyt.github.io/mysterycall/articles

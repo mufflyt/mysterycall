@@ -8,6 +8,26 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Street-address agreement primitives: mysterycall_street_address_key(),
+  mysterycall_street_address_agreement() and
+  mysterycall_street_addresses_agree() (#282). A three-verdict
+  vocabulary – corroborates, conflicts, uninformative – so a missing
+  address is evidence of nothing rather than a disagreement. Unit
+  designators dropped and roadway suffixes excluded before comparison,
+  so “123 Main St” cannot corroborate “123 Oak St” on the strength of
+  both being streets. Every verdict carries a reason from a closed
+  vocabulary
+- Organization-name agreement primitives: mysterycall_org_names_agree(),
+  mysterycall_org_tokens(), mysterycall_count_meaningful_org_tokens(),
+  mysterycall_weighted_token_similarity() and the exported
+  MYSTERYCALL_GENERIC_ORG_TOKENS (#282). A substring match alone is
+  insufficient: at least min_meaningful_tokens non-generic tokens must
+  appear on both sides, so “University Medical Center” does not match
+  “University Medical Center Hospital” on words half the market shares
+- vignette(“entity-agreement”): appendix on the agreement primitives,
+  the three-verdict vocabulary, why absence is uninformative rather than
+  a conflict, and how they relate to the safe-join guards. The eight new
+  exports had reference documentation but appeared in no vignette
 - Standard S3 accessors for the four fitted-model classes: coef(),
   vcov(), confint(), nobs(), formula(), fitted(), residuals() and
   summary() on mysterycall_poisson_model, mysterycall_nb_model,
@@ -178,6 +198,40 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- mysterycall_acceptance_rate_calc() computed reachability per call row
+  rather than per physician (#288). With duplicate call rows a physician
+  reachable in one row and unreachable in another was subtracted from
+  the denominator, so the numerator could exceed it – acceptance rates
+  above 100%, and a crash when prop.test() inside the Wilson interval
+  was handed k \> n. One doubly-entered office was enough
+- The ZIP-5 core fabricated valid-looking ZIPs from corruption (#287): a
+  ZIP+4 that had lost its leading zero (“21011234”) became 21011 instead
+  of 02101, scientific notation (“1.2e5”) was reassembled into 00001,
+  and a phone number in the ZIP column became a ZIP. Digit runs must now
+  match a shape a ZIP can have
+- read_table() NPI coercion rounded fractional corruption into a
+  different valid-looking NPI (#287): sprintf(“%.0f”) turned 123456789.5
+  into 123456790 and printed Inf as “Inf”. Coercion now goes through
+  mufflyaccess::canon_npi() and a fractional value becomes missing with
+  a warning
+- mysterycall_luhn_check() accepted checksum-passing values that cannot
+  be NPIs (#283): CMS issues NPIs beginning 1 or 2, and about one in ten
+  arbitrary ten-digit strings passes Luhn by chance, so “0103000788” was
+  accepted. mysterycall_validate_npi() now delegates to it rather than
+  npi::npi_is_valid(), so the two paths cannot disagree
+- .mc_state_to_abbr() recognised neither DC nor Puerto Rico and passed
+  unrecognised values through (#283)
+- .safe_divide() was scalar-only and errored on vector input (#283)
+- Physician-name parsing never stripped parentheticals, so a nickname
+  was parsed into middle_name and a maiden name as the surname, and
+  generational suffixes were only captured after a comma (#283)
+- The nightly portability gate failed on two non-ASCII em-dashes in
+  first-line comments of R/flow_spec.R and R/strobe_diagram.R,
+  introduced in \#265; escapes are not interpreted in comments
+- mysterycall_street_addresses_agree() was exported but missing from the
+  pkgdown reference index, failing repo-hygiene
+- The nightly roxygen pin lagged Config/roxygen2/version, which makes
+  doc-drift report a version mismatch instead of drift
 - The reported analytic cohort could disagree with the cohort the model
   used. Fitting engines apply their own na.action, so a value that only
   becomes undefined inside the model formula – log() of a non-positive
@@ -277,6 +331,12 @@ Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- mysterynpi and mufflyaccess are hard dependencies, in Imports with
+  Remotes so pak installs the GitHub-only siblings automatically (#283),
+  mirroring how mysterymaps and mysterymedicaid depend on mysterycall
+- The three ZIP-5 normalisers share one .zip5_core() parameterised by
+  their documented minimum-digit contracts rather than re-implementing
+  extract/truncate/pad independently (#283)
 - convergence$`converged now reports the optimizer, and the Hessian for glmmTMB, rather than being cleared by any warning at all. A boundary-singular lme4 fit whose optimizer returned code 0 is reported as converged; singularity is a property of the data and continues to be reported in convergence`$singular.
   \$convergence keeps its previous shape and the content of its
   \$messages
