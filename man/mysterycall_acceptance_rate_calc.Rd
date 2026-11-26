@@ -50,8 +50,10 @@ vocabulary; override consistently across acceptance-rate functions.}
 
 \item{wait_col}{Character scalar or \code{NULL}.  Name of a numeric column
 holding days to appointment.  When non-\code{NULL}, only rows with
-\code{wait_col > 0} contribute to the numerator (rows with \code{wait_col == 0}
-or \code{NA} are excluded from the numerator but not from the denominator).
+\code{wait_col >= 0} contribute to the numerator: a same-day appointment is
+\code{0} and counts as accepted, while a not-obtained appointment is \code{NA},
+not \code{0} (see \code{\link[=mysterycall_count_business_days]{mysterycall_count_business_days()}}). Rows with \code{NA} are
+excluded from the numerator but not from the denominator.
 Default \code{"business_days_until_appointment"}.}
 
 \item{id_col}{Character scalar.  Column used to deduplicate physicians
@@ -121,11 +123,14 @@ intervals.
 
 All counts deduplicate on \code{id_col} via \code{unique()}.  Each physician is
 expected to appear at most once per insurance group; the deduplication step
-is a safeguard against duplicate call rows.  A physician who has both a
-reachable and an unreachable row for the same insurance group will be
-counted in \emph{both} the total and the excluded sets, which may
-undercount the denominator.  Clean data with one row per physician per
-insurance group will not be affected.
+is a safeguard against duplicate call rows.  Reachability is a property of
+the physician, not the row: a physician with both a reachable and an
+unreachable row for the same insurance group was reached, so they count in
+the denominator (and the numerator when any row accepts) rather than being
+subtracted.  The earlier row-level rule could leave the numerator larger
+than the denominator in exactly that case, which both produced impossible
+rates above 100\% and crashed the Wilson-interval calculation outright.
+Clean data with one row per physician per insurance group is unaffected.
 }
 
 \examples{
