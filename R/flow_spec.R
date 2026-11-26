@@ -1,4 +1,4 @@
-# flow_spec.R — a participant-flow diagram that refuses to draw wrong numbers.
+# flow_spec.R -- a participant-flow diagram that refuses to draw wrong numbers.
 #
 # Every R package for this problem (flowchart, consort, ggconsort, dtrackr,
 # vtree) generates a diagram FROM data, which keeps typed numbers out of the

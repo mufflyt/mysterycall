@@ -1,0 +1,165 @@
+---
+title: "Appendix: Deciding When Two Records Are the Same Place"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    df_print: kable
+description: >
+  The street-address and organization-name agreement primitives, the
+  three-verdict vocabulary they share, and why a missing field is recorded as
+  uninformative rather than counted as disagreement.
+vignette: >
+  %\VignetteIndexEntry{Appendix: Deciding When Two Records Are the Same Place}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Linking a provider roster to a call log means deciding whether two records
+describe the same place. Get it wrong in one direction and the same practice
+is counted twice, inflating a denominator. Get it wrong in the other and two
+distinct practices are merged, so one practice's refusal is attributed to
+another. Neither error announces itself in a model summary.
+
+These primitives make that decision explicit and reviewable rather than
+leaving it to an ad-hoc `==` or a fuzzy-match threshold chosen once and
+forgotten.
+
+# 1. Three verdicts, not two
+
+A comparison returns one of three verdicts, not a logical:
+
+| Verdict | Meaning |
+|---|---|
+| `corroborates` | Positive evidence that the records are the same place |
+| `conflicts` | Positive evidence that they are *not* |
+| `uninformative` | No evidence either way |
+
+The third is the one that matters. A missing address is not a disagreement.
+If absence were scored as a conflict, every incompletely recorded practice
+would be split into two; if it were scored as a match, every blank field
+would merge unrelated practices. Both are the same mistake in opposite
+directions, and both are avoided by refusing to treat absence as data.
+
+```{r verdicts}
+mysterycall_street_address_agreement("123 Main Street Suite 200",
+                                     "123 N Main St")
+#>      verdict                     reason
+#> 1 corroborates street_number_and_token
+
+mysterycall_street_address_agreement("123 Main St", NA_character_)
+#>        verdict          reason
+#> 1 uninformative missing_address
+```
+
+Every verdict carries a `reason`, so a linkage decision can be audited after
+the fact instead of re-derived. The reasons are a closed vocabulary:
+`missing_address`, `po_box_not_street_address`, `missing_street_number`,
+`street_number_conflict`, `exact_normalized`, `street_number_and_token`,
+`no_shared_street_token`.
+
+`mysterycall_street_addresses_agree()` is the logical wrapper for callers who
+only need the positive case. It is `TRUE` only for `corroborates`, so an
+`uninformative` verdict never passes as a match.
+
+# 2. Street addresses
+
+`mysterycall_street_address_key()` decomposes an address into the parts that
+are safe to compare:
+
+```{r key}
+key <- mysterycall_street_address_key("123 North Main Street Suite 400")
+key$street_number   #> "123"
+key$street_tokens   #> "N" "MAIN"   -- no "STREET", and "NORTH" became "N"
+key$is_po_box       #> FALSE
+```
+
+Directionals are abbreviated, which is why `"123 Main Street Suite 200"` and
+`"123 N Main St"` corroborate: both reduce to a shared `MAIN` token on the
+same street number.
+
+Two design choices are worth knowing, because both prevent a specific false
+match.
+
+**Unit designators are dropped before tokenizing.** The same street address
+is routinely recorded with different suite, floor, room or department detail,
+so "Suite 400" must not make two records disagree.
+
+**Roadway suffixes are excluded from the comparison tokens.** `STREET`, `AVE`,
+`RD` and the rest of the USPS abbreviations are removed, so `"123 Main St"`
+cannot corroborate `"123 Oak St"` on the strength of both being streets. The
+shared token has to be distinctive.
+
+A PO box is `uninformative` rather than `conflicts`: it is a real mailing
+address, but it is not the street address of a practice, so it is evidence of
+nothing about location.
+
+The logic is deliberately conservative. Differing street numbers conflict.
+Equal street numbers corroborate only when the normalized strings match
+exactly or at least one non-suffix token is shared — equal numbers alone are
+not enough, because street numbers repeat across a city.
+
+# 3. Organization names
+
+Hospital names are a harder problem, because in a dense market almost every
+candidate contains the same institutional words.
+
+```{r generic}
+MYSTERYCALL_GENERIC_ORG_TOKENS
+#>  [1] "HOSPITAL" "MEDICAL" "CENTER" "UNIVERSITY" "HEALTH" "SYSTEM" ...
+```
+
+Those words stay in the normalized key — removing them would collapse
+genuinely distinct systems — but they are downweighted in scoring rather than
+counted like a distinctive proper noun.
+
+`mysterycall_org_names_agree()` requires a substring relationship **and** at
+least `min_meaningful_tokens` non-generic tokens on both sides:
+
+```{r org}
+mysterycall_org_names_agree("Rose Medical Center Denver",
+                            "Rose Medical Center Denver Hospital")
+#> TRUE   -- "ROSE" and "DENVER" are distinctive
+
+mysterycall_org_names_agree("University Medical Center",
+                            "University Medical Center Hospital")
+#> FALSE  -- every shared token is generic
+```
+
+The second case is the point of the threshold. One string is a substring of
+the other, so a naive matcher would accept it, but every word they share is a
+word that half the market shares. `min_meaningful_tokens = 2L` by default;
+raise it in a dense market, and pass your own `generic_tokens` vector when a
+local vocabulary needs it. `MYSTERYCALL_GENERIC_ORG_TOKENS` is exported so it
+can be inspected and extended rather than guessed at.
+
+`mysterycall_weighted_token_similarity()` and
+`mysterycall_count_meaningful_org_tokens()` expose the scoring parts for
+callers building their own rule.
+
+# 4. Using this in a linkage step
+
+Agreement primitives decide one comparison. They do not decide a linkage, and
+they are not a substitute for the join guards:
+
+```{r linkage}
+# Agreement answers "is this the same place?" for a candidate pair.
+# It does not answer "did my join multiply rows?" -- that is
+# mysterycall_safe_left_join(), which enforces coverage and uniqueness.
+```
+
+Record which verdict and reason drove each decision. A linkage that cannot
+say why two records were merged cannot be reviewed, and a reviewer asking
+"how many practices did you merge, and on what evidence?" is asking about a
+denominator.
+
+# See also
+
+- `vignette("model-objects")` for the analytic-cohort guarantees downstream
+- `vignette("pipeline-guarantees")` for the safe-join coverage contracts
+- `vignette("data-quality")` for name parsing and duplicate detection
+- `?mysterycall_safe_left_join` for the join-cardinality guards
